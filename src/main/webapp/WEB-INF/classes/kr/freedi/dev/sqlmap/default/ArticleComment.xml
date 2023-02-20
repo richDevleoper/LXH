@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ArticleComment">
+
+	<sql id="defCond">
+		<where>
+			<trim prefixOverrides="AND|OR">
+				<if test="articleKey != null and articleKey != ''">
+					AND T.ARTICLE_KEY = #{articleKey}
+				</if>
+				<if test="searchDeleteFlg != null and searchDeleteFlg != ''">
+					AND T.DELETE_FLG = #{searchDeleteFlg}
+				</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<sql id="fullCond">
+		<where>
+			<trim prefixOverrides="AND|OR">
+				<if test="articleKey != null and articleKey != ''">
+					AND T.ARTICLE_KEY = #{articleKey}
+				</if>
+				<if test="deleteFlg != null and deleteFlg != ''">
+					AND T.DELETE_FLG = #{deleteFlg}	
+				</if>
+			</trim>
+		</where>
+	</sql>
+
+	<select id="selectListCount" resultType="int">
+		SELECT COUNT(*) FROM TB_ARTICLE_COMMENT T 
+		<include refid="defCond"></include>
+	</select>
+
+	<select id="selectList" resultType="kr.freedi.dev.article.domain.ArticleCommentVO">
+		SELECT
+			T.ARTICLE_COMMENT_KEY
+			,T.ARTICLE_KEY
+			,T.FKEY
+			,T.PKEY
+			,T.OKEY
+			,T.GKEY
+			,T.CONTENT
+			,T.WRITER
+			,T.WRITER_PWD
+			,T.DELETE_FLG
+			,T.DELETE_TYP
+			,T.FRST_OPER_ID
+			,T.FRST_OPER_DT
+			,T.FRST_OPER_IP
+			,T.LAST_OPER_ID
+			,T.LAST_OPER_DT
+			,T.LAST_OPER_IP
+		FROM TB_ARTICLE_COMMENT T
+		<include refid="defCond"></include>
+		ORDER BY T.FKEY ASC, T.OKEY ASC
+		LIMIT #{firstRecordIndex}, #{recordCountPerPage}
+	</select>
+	
+	<select id="selectFullList" resultType="kr.freedi.dev.article.domain.ArticleCommentVO">
+		SELECT
+			T.ARTICLE_COMMENT_KEY
+			,T.ARTICLE_KEY
+			,T.FKEY
+			,T.PKEY
+			,T.OKEY
+			,T.GKEY
+			,T.CONTENT
+			,T.WRITER
+			,T.WRITER_PWD
+			,T.DELETE_FLG
+			,T.DELETE_TYP
+			,T.FRST_OPER_ID
+			,T.FRST_OPER_DT
+			,T.FRST_OPER_IP
+			,T.LAST_OPER_ID
+			,T.LAST_OPER_DT
+			,T.LAST_OPER_IP
+		FROM TB_ARTICLE_COMMENT T
+		<include refid="fullCond"></include>
+		ORDER BY T.FKEY ASC, T.OKEY ASC
+	</select>
+
+	<select id="select" resultType="kr.freedi.dev.article.domain.ArticleCommentVO">
+		SELECT 
+			T.ARTICLE_COMMENT_KEY articleCommentKey
+			,T.ARTICLE_KEY articleKey
+			,T.FKEY fkey
+			,T.PKEY pkey
+			,T.OKEY okey
+			,T.GKEY gkey
+			,T.CONTENT content
+			,T.WRITER writer
+			,T.WRITER_PWD writerPwd
+			,T.DELETE_FLG deleteFlg
+			,T.DELETE_TYP deleteTyp
+			,T.FRST_OPER_ID frstOperId
+			,T.FRST_OPER_DT frstOperDt
+			,T.FRST_OPER_IP frstOperIp
+			,T.LAST_OPER_ID lastOperId
+			,T.LAST_OPER_DT lastOperDt
+			,T.LAST_OPER_IP lastOperIp
+		FROM TB_ARTICLE_COMMENT T 
+		WHERE T.ARTICLE_COMMENT_KEY = #{articleCommentKey}
+	</select>
+
+	<select id="selectNextKey" resultType="int">
+		SELECT IFNULL(MAX(ARTICLE_COMMENT_KEY), 0) + 1 articleCommentKey FROM TB_ARTICLE_COMMENT
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO TB_ARTICLE_COMMENT (
+			ARTICLE_COMMENT_KEY
+			,ARTICLE_KEY
+			,FKEY
+			,PKEY
+			,OKEY
+			,GKEY
+			,CONTENT
+			,WRITER
+			,WRITER_PWD
+			,DELETE_FLG
+			,DELETE_TYP
+			,FRST_OPER_ID
+			,FRST_OPER_DT
+			,FRST_OPER_IP
+			,LAST_OPER_ID
+			,LAST_OPER_DT
+			,LAST_OPER_IP
+		) VALUES (
+			#{articleCommentKey}
+			,#{articleKey}
+			,#{fkey}
+			,#{pkey}
+			,#{okey}
+			,#{gkey}
+			,#{content}
+			,#{writer}
+			,#{writerPwd}
+			,'N'
+			,NULL
+			,#{frstOperId}
+			,SYSDATE()
+			,#{frstOperIp}
+			,NULL
+			,NULL
+			,NULL
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE TB_ARTICLE_COMMENT SET 
+			CONTENT = #{content}
+			,WRITER = #{writer}
+			<if test="writerPwd != null and writerPwd != ''">,WRITER_PWD = #{writerPwd}</if>
+			,LAST_OPER_ID = #{lastOperId}
+			,LAST_OPER_DT = SYSDATE()
+			,LAST_OPER_IP = #{lastOperIp}
+		WHERE ARTICLE_COMMENT_KEY = #{articleCommentKey}
+	</update>
+
+	<delete id="delete">
+		DELETE FROM TB_ARTICLE_COMMENT WHERE ARTICLE_COMMENT_KEY = #{articleCommentKey}
+	</delete>
+	
+	<delete id="deleteByArticleKey">
+		DELETE FROM TB_ARTICLE_COMMENT WHERE ARTICLE_COMMENT_KEY = #{articleKey}
+	</delete>
+	
+	
+	<select id="selectChildList" resultType="kr.freedi.dev.article.domain.ArticleCommentVO">
+		 SELECT * FROM TB_ARTICLE_COMMENT WHERE PKEY = #{articleCommentKey} ORDER BY OKEY
+	</select>
+	
+	<select id="selectByMaxOkey" resultType="kr.freedi.dev.article.domain.ArticleCommentVO">
+		SELECT * FROM (
+			SELECT * FROM TB_ARTICLE_COMMENT
+			WHERE PKEY = #{pkey}
+			ORDER BY OKEY DESC
+		)T
+		LIMIT 1
+	</select>
+	
+	<update id="updateOkey">
+		UPDATE TB_ARTICLE_COMMENT 
+		SET OKEY = OKEY + 1
+		WHERE FKEY = #{fkey} AND OKEY <![CDATA[>=]]> #{okey}
+	</update>
+	
+	<update id="disable">
+		UPDATE TB_ARTICLE_COMMENT SET 
+			DELETE_FLG = 'Y'
+			,DELETE_TYP = #{deleteTyp}
+			,LAST_OPER_ID = #{lastOperId}
+			,LAST_OPER_DT = SYSDATE()
+			,LAST_OPER_IP = #{lastOperIp}
+		WHERE ARTICLE_COMMENT_KEY = #{articleCommentKey}
+	</update>
+
+	<update id="recovery">
+		UPDATE TB_ARTICLE_COMMENT SET 
+			DELETE_FLG = 'N' 
+			,DELETE_TYP = #{deleteTyp}
+			,LAST_OPER_ID = #{lastOperId}
+			,LAST_OPER_DT = SYSDATE()
+			,LAST_OPER_IP = #{lastOperIp}
+		WHERE ARTICLE_COMMENT_KEY = #{articleCommentKey}
+	</update>
+</mapper>
+

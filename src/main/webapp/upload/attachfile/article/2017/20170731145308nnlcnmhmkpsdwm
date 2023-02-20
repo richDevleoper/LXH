@@ -1,0 +1,38 @@
+﻿
+xml
+	console ->csl	log4j.xml 제외
+	Console ->Csl
+
+java
+	console ->csl
+	Console ->Csl
+
+	파일명 Console ->Csl
+
+jsp
+	console ->csl
+	csl.log -> console.log
+	/webapp/editor/smart-editor-2.2.1/SmartEditor2Skin_console.html -> csl
+
+css
+	console ->csl
+
+
+디렉토리명
+	/webapp/console
+	/webapp/WEB-INF/jsp/각 모듈 하위
+
+
+----------
+db
+	tb_menu -> update tb_menu set url = replace(url, 'console', 'csl');
+
+
+
+
+
+
+
+
+
+

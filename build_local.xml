@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="makeJarFile" default="makeJar" basedir=".">
+
+	<property name="srcDir" location="target/classes" />
+	<property name="dstFile" location="lib/hd_const.jar" />
+
+	<target name="deleteOld">
+		<delete file="${dstFile}" />
+	</target>
+
+	<target name="makeJar" depends="deleteOld">
+		<jar destfile="${dstFile}" basedir="${srcDir}" includes="**/*.class" excludes="**/*.xml" />
+	</target>
+
+</project>

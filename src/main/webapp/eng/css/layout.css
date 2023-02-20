@@ -1,0 +1,32 @@
+@charset "utf-8";
+
+.frame {width:1200px;margin:0 auto;border:1px solid #ddd;}
+
+#header {padding:0;text-align:center;margin-bottom:20px;}
+#header > div{padding:8px 0;border-bottom:1px solid #efefef;}
+#header .logo {background:#eee; font-weight:bold;}
+#header .sitemap a{color:navy;}
+#header .userInfo a{color:crimson;}
+
+.container {overflow:hidden; position:relative;}
+
+.gnb {padding:4px 0; background:#ebf3f4;}
+.gnb .toggle{font-weight:bold;}
+.gnb li {text-align:left;margin:4px 0px 4px 50px; padding:2px;}
+.gnb li a {display:bolck;padding:4px 4px;}
+.gnb li a:hover {color:blue;}
+
+.locate-current{color:green;}
+.locate-history{color:blue;}
+
+.snb {float:left; position:absolute; width:250px; height:100%;background-color:#efefef;color:#fff;border:1px solid #}
+.snb a:hover {color:blue;}
+.snb li {text-align:left;margin:4px 0px 4px 20px; padding:2px;}
+.snb li a {display:bolck;padding:4px 4px;}
+
+.content-wrap {margin-left:260px; margin-right:10px; border:0px solid blue;}
+.content-body {width:100%; margin:0 0 60px 0; border:0px solid #efefef;}
+
+.footer {margin-top:20px;padding:20px 0;background-color:#efefef;text-align:center;border-top:1px solid #efefef;font-size:12px;}
+
+

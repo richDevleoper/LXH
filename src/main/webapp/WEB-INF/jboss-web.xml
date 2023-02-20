@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jboss-web>
+	<context-root>/</context-root>
+
+	<!-- <virtual-host>localhost</virtual-host> -->
+
+	<resource-ref>
+		<res-ref-name>jdbc/default</res-ref-name>
+		<jndi-name>java:jboss/datasources/defaultDS</jndi-name>
+	</resource-ref>
+
+	<!--
+	<symbolic-linking-enabled>true</symbolic-linking-enabled>
+	-->
+
+</jboss-web>

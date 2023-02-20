@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" 
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns:p="http://www.springframework.org/schema/p" 
+		xmlns:context="http://www.springframework.org/schema/context"
+		xmlns:task="http://www.springframework.org/schema/task"
+		xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+				http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+				http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd">
+
+	<bean id="statCreateTableJobDetail" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property name="jobClass" value="kr.freedi.dev.common.job.StatCreateTableJob" />
+		<property name="durability" value="true" />
+	</bean>
+	
+	<!--
+	<bean id="statCreateTableJobTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+		<property name="jobDetail" ref="statCreateTableJobDetail" />
+		<property name="startDelay" value="10000" />
+		<property name="repeatInterval" value="10000" />
+	</bean>
+	-->
+	 
+	<bean id="statCreateTableJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="statCreateTableJobDetail" />
+		<property name="cronExpression" value="0 30 14 * 12 ?"/>
+	</bean>
+
+	<bean id="statCreateTableJobQuartz" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="jobDetails">
+			<list>
+				<ref bean="statCreateTableJobDetail" />
+			</list>
+		</property>
+		<property name="triggers">
+			<list>
+				<ref bean="statCreateTableJobTrigger" />
+			</list>
+		</property>
+	</bean>
+	
+	<!-- <task:annotation-driven /> -->
+</beans>

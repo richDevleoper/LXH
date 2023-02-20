@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:ehcache="http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd 
+	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd			
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+	http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring
+	http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring/ehcache-spring-1.1.xsd">
+	<!-- 
+	<ehcache:annotation-driven />
+  	<ehcache:config cache-manager="cacheManager">
+    	<ehcache:evict-expired-elements interval="60" />
+  	</ehcache:config>  	
+ 	-->
+ 
+ 	<!-- 
+ 	ehcache 를 사용하려는 method 는 interface 를 상속받아 구현. 
+ 	ehcache 가 proxy 를 사용하기때문에 interface를 상속해 해당 서비스를 proxy 화 시켜야함
+ 	method 의 인자가 vo 객체인 경우 vo 객체에 hashCode 를 구현해줘야함.
+ 	그렇지 않으면 생성되는 cache의 키(HashCodeCacheKeyGenerator) 값이 달라져 계속 새로운 cache를 생성함
+ 	-->
+   	<ehcache:annotation-driven cache-manager="cacheManager"/>
+   	
+	<bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+		<property name="configLocation" value="classpath:/kr/freedi/dev/ehcache/ehcache.xml" />
+	</bean>
+
+</beans>	

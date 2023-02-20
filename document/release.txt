@@ -1,0 +1,110 @@
+##
+## freedi-dev(Maven Project)
+##
+
+
+## version
+1.0.0
+
+
+##encoding
+project = utf-8
+databse = utf-8
+
+
+## java SE
+jdk-1.7
+
+
+## java EE
+servlet-3.0
+jsp-2.2
+
+
+## was
+tomcat-7.0.x
+
+
+## jdbc
+ojdbc6-11.1.0.7.0.jar(oracle-11g)
+
+
+## erd 
+erwin 7.3
+
+
+## framework & library
+springframework-4.0.9.RELEASE		//
+egovframework-3.5.0					//
+net.sf.jxls.1.0.6					//
+net.sf.ehcache-2.4.5				//
+org.mybatis-3.2.8					//
+org.quartz-scheduler-1.8.6			//
+org.apache.logging.log4j-2.4.2		//
+opensymphony.sitemesh-2.4.2			//
+org.apache.poi-3.1.3				//
+javax.mail-1.5.0-b01				//
+org.codehaus.jackson-1.9.13			//
+...
+
+
+## third party library
+
+
+## script library
+jquery-1.12.4						//
+jquery-ui-1.12.1-custom				//
+validation-engine-2.6.2				//
+ChartJS-2.5.0						//
+blueimp-file-upload-9.19.1			//
+smart-editor-2.2.1					//
+...
+
+
+## dir
++ document					//document
+	+ source-generate			//심플 소스 생성
+	+ DEV_DEFAULT.erwin			//erd 파일
+	+ server.xml				//로컬 컨테이너 설정 샘플
+	+ reference.txt				//개발 참고사항
++ ext-lib					//third party library
++ src/extra					//extra
+	+ java						//마이그레이션 등 프로젝트 관련 extra 소스
++ src/main					//main
+	+ java						//java
+	+ profiles					//profiles
+		+ dev						//개발서버용 프로파일
+		+ local						//로컬pc용 프로파일
+		+ real						//운영서버용 프로파일
+	+ resources					//resources
+		+ kr.freedi.dev				//kr.freedi.dev
+			+ ehcache					//ehcache 설정파일
+			+ message					//message 설정파일
+			+ spring					//spring 설정파일
+			+ sqlmap					//sqlmap 설정파일 & query.xml
+	+ webapp							//webapp
+		+ _dev						//개발중 테스트용 파일, 운영서버 빌드시 제외
+		+ _html						//개발중 디자인 관련 파일, 운영서버 빌드시 제외
+		+ common					//공통 페이지 파일
+		+ csl						//관리자 페이지 전용 파일
+		+ def						//기본사이트 페이지 전용 파일
+		+ editor					//에디터
+		+ eng						//영문사이트 페이지 전용 파일
+		+ upload					//upload
+		+ WEB-INF					//WEB-INF
+			+ config					//config
+				+ sitemesh					//sitemesh 설정파일
+				+ springmvc					//dispatcher-servlet 설정파일
+				+ validator					//validator 설정파일
+			+ jsp						//jsp
+			+ template					//jxls, mail 등 template 파일
+			+ tld						//tld
+			+ web.xml					//web.xml
++ src/test/						//test
++ target/						//target
++ pom.xml						//pom.xml
+
+
+
+
+

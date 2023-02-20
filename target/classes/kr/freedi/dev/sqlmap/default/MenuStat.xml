@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="MenuStat">
+
+	<sql id="defCond">
+		<where>
+			<trim prefixOverrides="AND|OR">
+				<if test="statTyp != null and statTyp != ''">
+					AND STAT_TYP = #{statTyp}
+				</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<insert id="insert">
+		<selectKey keyProperty="menuStatKey" resultType="int"  order="BEFORE">
+			SELECT IFNULL(MAX(MENU_STAT_KEY), 0) + 1 menuStatKey FROM TB_MENU_STAT_${ym}
+		</selectKey>
+		INSERT INTO TB_MENU_STAT_${ym} (
+			MENU_STAT_KEY
+			,YEAR
+			,MONTH
+			,DAY
+			,HOUR
+			,MINUTE
+			,SECOND
+			,STAT_TYP
+			,SESSION_ID
+			,URL
+			,LOCALE
+			,LANG
+			,CNTRY
+			,DSPLY_LANG
+			,DSPLY_CNTRY
+			,IP
+			,REFERER
+			,USER_AGENT
+			,MENU_KEY
+		) VALUES (
+			#{menuStatKey}
+			,#{year}
+			,#{month}
+			,#{day}
+			,#{hour}
+			,#{minute}
+			,#{second}
+			,#{statTyp}
+			,#{sessionId}
+			,#{url}
+			,#{locale}
+			,#{lang}
+			,#{cntry}
+			,#{dsplyLang}
+			,#{dsplyCntry}
+			,#{ip}
+			,#{referer}
+			,#{userAgent}
+			,#{menuKey}
+		)
+	</insert>
+	
+	
+	<select id="statTopMenu" resultType="egovMap">
+		SELECT  
+			M.MENU_NM AS STAT_LABEL,
+			M.MENU_KEY AS MENU_KEY,
+			(
+				SELECT COUNT(*)
+				FROM TB_MENU_STAT_${ym} S 
+				WHERE S.MENU_KEY IN (
+	        			SELECT MENU_KEY
+	        			FROM TB_MENU 
+	        			START WITH MENU_KEY = M.MENU_KEY
+						CONNECT BY PRIOR MENU_KEY = PKEY
+					)
+			) AS STAT_DATA
+		FROM TB_MENU M
+		WHERE M.MENU_TYP = #{menuTyp}
+		AND M.NAVI_FLG = 'Y'
+		AND M.ACT_FLG = 'Y'
+		AND M.PKEY = 0
+		ORDER BY M.FKEY ASC
+	</select>
+	
+	<select id="statMenu" resultType="egovMap">
+		SELECT  
+			M.MENU_NM AS STAT_LABEL,
+			M.MENU_KEY AS MENU_KEY,
+	        (
+	        	SELECT COUNT(*) 
+	        	FROM TB_MENU_STAT_${ym} S 
+	        	WHERE S.MENU_KEY IN (
+	        			SELECT MENU_KEY
+	        			FROM TB_MENU 
+	        			START WITH MENU_KEY = M.MENU_KEY
+						CONNECT BY PRIOR MENU_KEY = PKEY
+	        		)
+	        ) AS STAT_DATA
+		FROM TB_MENU M
+		WHERE M.MENU_TYP = #{menuTyp}
+		AND M.PKEY = #{mnKey}
+		AND M.ACT_FLG = 'Y'
+		ORDER BY M.OKEY ASC
+	</select>
+	
+	
+	<!-- == job ==================================================== -->
+	<select id="createNextMonthTable">
+		${sql}
+	</select>
+	
+	<select id="isNextMonthTable" resultType="egovMap">
+		SELECT * from INFORMATION_SCHEMA.COLUMNS IC WHERE IC.TABLE_NAME = #{tableNm}
+	</select>
+</mapper>
+

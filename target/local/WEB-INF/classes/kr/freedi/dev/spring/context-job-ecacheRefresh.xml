@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" 
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns:p="http://www.springframework.org/schema/p" 
+		xmlns:context="http://www.springframework.org/schema/context"
+		xmlns:task="http://www.springframework.org/schema/task"
+		xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+				http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+				http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd">
+
+	<!-- ecache의 async를 담당(시스템 상황에 따라 적절히 사용 요함)-->
+	<!-- 관리자시스템과 사용자시스템의 machine이 다른 경우, 또는 HA시스템일 경우 사용함  -->
+	<!-- kr.freedi.dev.common.aop.EcacheAspect 와 세트 -->
+	
+	<bean id="ecacheRefreshJobDetail" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property name="jobClass" value="kr.freedi.dev.common.job.EcacheRefreshJob" />
+		<property name="durability" value="true" />
+	</bean>
+	
+	<bean id="ecacheRefreshJobTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
+		<property name="jobDetail" ref="ecacheRefreshJobDetail" />
+		<property name="startDelay" value="60000" />
+		<property name="repeatInterval" value="600000" />
+	</bean>
+
+	<bean id="ecacheRefreshJobQuartz" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="jobDetails">
+			<list>
+				<ref bean="ecacheRefreshJobDetail" />
+			</list>
+		</property>
+		<property name="triggers">
+			<list>
+				<ref bean="ecacheRefreshJobTrigger" />
+			</list>
+		</property>
+	</bean>
+	
+	<!-- <task:annotation-driven /> -->
+</beans>
