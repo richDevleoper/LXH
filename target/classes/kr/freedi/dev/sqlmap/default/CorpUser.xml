@@ -269,7 +269,7 @@
 			,#{regSt}
 			,#{authId}
 			,NULL
-			,SYSDATE()
+			,SYSDATE
 			,NULL
 		)
 	</insert>
@@ -299,7 +299,7 @@
 				,CORP_ADDR2 = #{corpAddr2}
 				,REG_ST = #{regSt}
 				,AUTH_ID = #{authId}
-				,LAST_OPER_DT = SYSDATE()
+				,LAST_OPER_DT = SYSDATE
 			</trim>
 		WHERE
 		USER_ID = #{userId}
@@ -324,7 +324,7 @@
 				,CORP_ZIP = #{corpZip}
 				,CORP_ADDR1 = #{corpAddr1}
 				,CORP_ADDR2 = #{corpAddr2}
-				,LAST_OPER_DT = SYSDATE()
+				,LAST_OPER_DT = SYSDATE
 			</trim>
 		WHERE
 		USER_ID = #{userId}
@@ -336,7 +336,7 @@
 	</update>
 
 	<update id="updateLastLoginDt">
-		UPDATE TB_CORP_USER SET LAST_LOGIN_DT = SYSDATE()
+		UPDATE TB_CORP_USER SET LAST_LOGIN_DT = SYSDATE
 		WHERE USER_ID = #{userId}
 	</update>
 	

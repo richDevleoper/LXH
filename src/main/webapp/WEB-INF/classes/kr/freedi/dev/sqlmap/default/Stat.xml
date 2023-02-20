@@ -23,7 +23,7 @@
 	
 	<insert id="insert">
 		<selectKey keyProperty="statKey" resultType="int"  order="BEFORE">
-			SELECT IFNULL(MAX(STAT_KEY), 0) + 1 statKey FROM TB_STAT_${year}
+			SELECT NVL(MAX(STAT_KEY), 0) + 1 statKey FROM TB_STAT_${year}
 		</selectKey>
 		INSERT INTO TB_STAT_${year} (
 			STAT_KEY

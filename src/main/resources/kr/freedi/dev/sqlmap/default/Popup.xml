@@ -18,11 +18,11 @@
 					<choose>
 						<when test="searchPbsh == 'Y'.toString()">
 							AND T.ACT_FLG = 'Y'
-							AND ( T.PERIOD_FLG = 'N' OR (T.PERIOD_FLG = 'Y' AND (T.START_DT <![CDATA[<=]]> SYSDATE() AND T.END_DT <![CDATA[>=]]> SYSDATE())) )
+							AND ( T.PERIOD_FLG = 'N' OR (T.PERIOD_FLG = 'Y' AND (T.START_DT <![CDATA[<=]]> SYSDATE AND T.END_DT <![CDATA[>=]]> SYSDATE)) )
 						</when>
 						<when test="searchPbsh == 'N'.toString()">
 							OR T.ACT_FLG = 'N'
-							OR ( T.PERIOD_FLG = 'Y' AND (T.START_DT <![CDATA[>=]]> SYSDATE() OR T.END_DT <![CDATA[<=]]> SYSDATE()))						
+							OR ( T.PERIOD_FLG = 'Y' AND (T.START_DT <![CDATA[>=]]> SYSDATE OR T.END_DT <![CDATA[<=]]> SYSDATE))						
 						</when>
 						<otherwise></otherwise>
 					</choose>
@@ -61,7 +61,7 @@
 					AND T.ACT_FLG = #{actFlg}	
 				</if>
 				AND ( 
-						T.PERIOD_FLG = 'N' OR (T.PERIOD_FLG = 'Y' AND (T.START_DT <![CDATA[<=]]> SYSDATE() AND T.END_DT <![CDATA[>=]]> SYSDATE())) 
+						T.PERIOD_FLG = 'N' OR (T.PERIOD_FLG = 'Y' AND (T.START_DT <![CDATA[<=]]> SYSDATE AND T.END_DT <![CDATA[>=]]> SYSDATE)) 
 					)
 			</trim>
 		</where>
@@ -188,7 +188,7 @@
 			,#{actFlg}
 			,0
 			,#{frstOperId}
-			,SYSDATE()
+			,SYSDATE
 			,NULL
 			,NULL
 		)
@@ -211,7 +211,7 @@
 				,VIEW_ORD = #{viewOrd}
 			</if>
 			,LAST_OPER_ID = #{lastOperId}
-			,LAST_OPER_DT = SYSDATE()
+			,LAST_OPER_DT = SYSDATE
 		WHERE
 		POPUP_KEY = #{popupKey}
 	</update>

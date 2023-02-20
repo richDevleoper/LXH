@@ -75,7 +75,7 @@
 			,#{viewOrd}
 			,#{actFlg}
 			,#{frstOperId}
-			,SYSDATE()
+			,SYSDATE
 			,NULL
 			,NULL
 		)
@@ -91,7 +91,7 @@
 			,VIEW_ORD = #{viewOrd}
 			,ACT_FLG = #{actFlg}
 			,LAST_OPER_ID = #{lastOperId}
-			,LAST_OPER_DT = SYSDATE()
+			,LAST_OPER_DT = SYSDATE
 		WHERE CODE_GRP_ID = #{codeGrpId} 
 		AND CODE_ID = #{codeId}
 	</update>

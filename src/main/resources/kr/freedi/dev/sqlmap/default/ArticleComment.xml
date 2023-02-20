@@ -55,7 +55,7 @@
 		FROM TB_ARTICLE_COMMENT T
 		<include refid="defCond"></include>
 		ORDER BY T.FKEY ASC, T.OKEY ASC
-		LIMIT #{firstRecordIndex}, #{recordCountPerPage}
+		<![CDATA[-- LIMIT #{firstRecordIndex}, #{recordCountPerPage}]]>
 	</select>
 	
 	<select id="selectFullList" resultType="kr.freedi.dev.article.domain.ArticleCommentVO">

@@ -50,7 +50,7 @@
 			,#{contentKey}
 			,#{content}
 			,#{operId}
-			,SYSDATE()
+			,SYSDATE
 		)
 	</insert>
 

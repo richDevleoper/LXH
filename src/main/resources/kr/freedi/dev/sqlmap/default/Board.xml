@@ -224,7 +224,7 @@
 			,#{headHtml}
 			,#{footHtml}
 			,#{frstOperId}
-			,SYSDATE()
+			,SYSDATE
 			,NULL
 			,NULL
 		)
@@ -254,7 +254,7 @@
 			,HEAD_HTML = #{headHtml}
 			,FOOT_HTML = #{footHtml}
 			,LAST_OPER_ID = #{lastOperId}
-			,LAST_OPER_DT = SYSDATE()
+			,LAST_OPER_DT = SYSDATE
 		WHERE
 		BOARD_KEY = #{boardKey}
 	</update>

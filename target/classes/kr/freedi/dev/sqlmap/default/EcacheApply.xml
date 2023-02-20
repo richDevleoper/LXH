@@ -31,7 +31,7 @@
 			,#{bannerFlg}
 			,#{popupFlg}
 			,#{linkFlg}
-			,SYSDATE()
+			,SYSDATE
 		)
 	</insert>
 	
@@ -42,68 +42,68 @@
 			,BANNER_FLG = #{bannerFlg}
 			,POPUP_FLG = #{popupFlg}
 			,LINK_FLG = #{linkFlg}
-			,OPER_DT = SYSDATE()
+			,OPER_DT = SYSDATE
 		WHERE NODE_NM = #{nodeNm} 
 	</update>
 	
 	<update id="updateMenuFlg">
 		UPDATE TB_ECACHE_APPLY SET 
 			MENU_FLG = #{menuFlg}
-			,OPER_DT = SYSDATE()
+			,OPER_DT = SYSDATE
 		WHERE NODE_NM = #{nodeNm} 
 	</update>
 	<update id="updateMenuFlgAll">
 		UPDATE TB_ECACHE_APPLY SET 
 			MENU_FLG = #{menuFlg}
-			,OPER_DT = SYSDATE()
+			,OPER_DT = SYSDATE
 	</update>
 	
 	<update id="updateContentFlg">
 		UPDATE TB_ECACHE_APPLY SET 
 			CONTENT_FLG = #{contentFlg}
-			,OPER_DT = SYSDATE()
+			,OPER_DT = SYSDATE
 		WHERE NODE_NM = #{nodeNm} 
 	</update>
 	<update id="updateContentFlgAll">
 		UPDATE TB_ECACHE_APPLY SET 
 			CONTENT_FLG = #{contentFlg}
-			,OPER_DT = SYSDATE()
+			,OPER_DT = SYSDATE
 	</update>
 	
 	<update id="updateBannerFlg">
 		UPDATE TB_ECACHE_APPLY SET 
 			BANNER_FLG = #{bannerFlg}
-			,OPER_DT = SYSDATE()
+			,OPER_DT = SYSDATE
 		WHERE NODE_NM = #{nodeNm} 
 	</update>
 	<update id="updateBannerFlgAll">
 		UPDATE TB_ECACHE_APPLY SET 
 			BANNER_FLG = #{bannerFlg}
-			,OPER_DT = SYSDATE()
+			,OPER_DT = SYSDATE
 	</update>
 	
 	<update id="updatePopupFlg">
 		UPDATE TB_ECACHE_APPLY SET 
 			POPUP_FLG = #{popupFlg}
-			,OPER_DT = SYSDATE()
+			,OPER_DT = SYSDATE
 		WHERE NODE_NM = #{nodeNm} 
 	</update>
 	<update id="updatePopupFlgAll">
 		UPDATE TB_ECACHE_APPLY SET 
 			POPUP_FLG = #{popupFlg}
-			,OPER_DT = SYSDATE()
+			,OPER_DT = SYSDATE
 	</update>
 	
 	<update id="updateLinkFlg">
 		UPDATE TB_ECACHE_APPLY SET 
 			LINK_FLG = #{linkFlg}
-			,OPER_DT = SYSDATE()
+			,OPER_DT = SYSDATE
 		WHERE NODE_NM = #{nodeNm} 
 	</update>
 	<update id="updateLinkFlgAll">
 		UPDATE TB_ECACHE_APPLY SET 
 			LINK_FLG = #{linkFlg}
-			,OPER_DT = SYSDATE()
+			,OPER_DT = SYSDATE
 	</update>
 	
 

@@ -132,7 +132,7 @@
 			,#{content}
 			,#{actFlg}
 			,#{frstOperId}
-			,SYSDATE()
+			,SYSDATE
 			,NULL
 			,NULL
 		)
@@ -144,7 +144,7 @@
 			,CONTENT = #{content}
 			,ACT_FLG = #{actFlg}
 			,LAST_OPER_ID = #{lastOperId}
-			,LAST_OPER_DT = SYSDATE()
+			,LAST_OPER_DT = SYSDATE
 		WHERE
 		CONTENT_KEY = #{contentKey}
 	</update>
