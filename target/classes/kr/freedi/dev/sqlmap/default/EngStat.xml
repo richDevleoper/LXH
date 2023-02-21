@@ -89,7 +89,7 @@
 			ORDER BY STAT_DATA DESC
 		) T2
 		<if test="searchStatCnt != null and searchStatCnt > 0">
-			LIMIT #{searchStatCnt}
+			where rownum <![CDATA[<=]]> #{searchStatCnt}
 		</if>
 	</select>
 

@@ -152,7 +152,7 @@
 
 	<insert id="insert">
 		<selectKey keyProperty="bannerKey" resultType="int"  order="BEFORE">
-			SELECT IFNULL(MAX(BANNER_KEY), 0) + 1 bannerKey FROM TB_BANNER
+			SELECT NVL(MAX(BANNER_KEY), 0) + 1 bannerKey FROM TB_BANNER
 		</selectKey>
 		INSERT INTO TB_BANNER (
 			BANNER_KEY

@@ -408,7 +408,7 @@
 			WHERE PKEY = #{pkey}
 			ORDER BY OKEY DESC
 		)T
-		LIMIT 1
+		where rownum<![CDATA[<=]]>1
 	</select>
 	
 	<update id="updateOkey">

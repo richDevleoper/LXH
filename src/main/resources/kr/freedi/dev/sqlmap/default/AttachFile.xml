@@ -67,7 +67,7 @@
 
 	<insert id="insert">
 		<selectKey keyProperty="fileSeq" resultType="int"  order="BEFORE">
-			SELECT IFNULL(MAX(FILE_SEQ), 0) + 1 fileSeq FROM TB_ATTACH_FILE WHERE FILE_ID = #{fileId}
+			SELECT NVL(MAX(FILE_SEQ), 0) + 1 fileSeq FROM TB_ATTACH_FILE WHERE FILE_ID = #{fileId}
 		</selectKey>
 		INSERT INTO TB_ATTACH_FILE (
 			FILE_ID

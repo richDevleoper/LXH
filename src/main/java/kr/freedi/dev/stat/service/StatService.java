@@ -139,6 +139,32 @@ public class StatService {
 		
 		StringBuffer sb = new StringBuffer();
 		sb.append("CREATE TABLE TB_STAT_" + nextYear + " (");
+		sb.append("STAT_KEY             NUMBER NOT NULL,");
+		sb.append("YEAR                 NUMBER NOT NULL,");
+		sb.append("MONTH                NUMBER NOT NULL,");
+		sb.append("DAY                  NUMBER NOT NULL,");
+		sb.append("HOUR                 NUMBER NOT NULL,");
+		sb.append("MINUTE               NUMBER NOT NULL,");
+		sb.append("SECOND               NUMBER NOT NULL,");
+		sb.append("STAT_TYP             VARCHAR2(20) NOT NULL,");
+		sb.append("SESSION_ID           VARCHAR2(100) NOT NULL,");
+		sb.append("URL                  VARCHAR2(255) NULL,");
+		sb.append("LOCALE               VARCHAR2(50) NULL,");
+		sb.append("LANG                 VARCHAR2(10) NULL,");
+		sb.append("CNTRY                VARCHAR2(10) NULL,");
+		sb.append("DSPLY_LANG           VARCHAR2(20) NULL,");
+		sb.append("DSPLY_CNTRY          VARCHAR2(20) NULL,");
+		sb.append("IP                   VARCHAR2(20) NULL,");
+		sb.append("REFERER              VARCHAR2(255) NULL,");
+		sb.append("USER_AGENT           VARCHAR2(255) NULL,");
+		sb.append("PRIMARY KEY (STAT_KEY)");
+		sb.append(")");
+		map.put("sql", sb.toString());
+		dao.selectOne("Stat.createNextYearTable", map);
+		
+		
+		/* MSSQL
+		sb.append("CREATE TABLE TB_STAT_" + nextYear + " (");
 		sb.append("`STAT_KEY`             INT(8) NOT NULL COMMENT '접속통계키',");
 		sb.append("`YEAR`                 INT(4) NOT NULL COMMENT '년',");
 		sb.append("`MONTH`                INT(2) NOT NULL COMMENT '월',");
@@ -158,9 +184,8 @@ public class StatService {
 		sb.append("`REFERER`              VARCHAR(255) NULL COMMENT 'REFERER',");
 		sb.append("`USER_AGENT`           VARCHAR(255) NULL COMMENT 'USER_AGENT',");
 		sb.append("PRIMARY KEY (`STAT_KEY`)");
-		sb.append(")CHARSET=utf8 COMMENT='접속통계_" + nextYear + "'");
-		map.put("sql", sb.toString());
-		dao.selectOne("Stat.createNextYearTable", map);
+		sb.append(")CHARSET=utf8 COMMENT='접속통계_" + nextYear + "'"); 
+		*/
 		
 		/*map.put("sql", "ALTER TABLE TB_STAT_" + nextYear + " ADD CONSTRAINT  PK_TB_STAT_" + nextYear + " PRIMARY KEY (STAT_KEY)");
 		dao.selectOne("Stat.createNextYearTable", map);

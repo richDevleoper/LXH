@@ -23,8 +23,13 @@
 	 
 	<bean id="statCreateTableJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
 		<property name="jobDetail" ref="statCreateTableJobDetail" />
-		<property name="cronExpression" value="0 30 14 * 12 ?"/>
+		<property name="cronExpression" value="0 30 14 * 12 ?"/>	
 	</bean>
+	<!--  
+		cronExpression
+		초    분   시   일   월   요일   년도(생략가능)
+		요일은 1-7로 표현하시면 되요.(1:일, 2:월, 3:화, 4:수, 5:목, 6:금, 7:토)
+	-->
 
 	<bean id="statCreateTableJobQuartz" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="jobDetails">

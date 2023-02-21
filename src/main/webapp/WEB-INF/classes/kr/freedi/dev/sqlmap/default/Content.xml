@@ -113,7 +113,7 @@
 	</select>
 	
 	<select id="selectNextKey" resultType="int">
-		SELECT IFNULL(MAX(CONTENT_KEY), 0) + 1 contentKey FROM TB_CONTENT
+		SELECT NVL(MAX(CONTENT_KEY), 0) + 1 contentKey FROM TB_CONTENT
 	</select>
 
 	<insert id="insert">

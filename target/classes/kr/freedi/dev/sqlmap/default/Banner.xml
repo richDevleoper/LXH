@@ -73,8 +73,24 @@
 	</select>
 
 	<select id="selectList" resultType="egovMap">
+	select *
+	  from (
 		SELECT
-			T.BANNER_KEY
+			row_number() over (ORDER BY 
+		<choose>
+			<when test="orderBy != null and orderBy != ''">
+				<choose>
+					<when test="orderBy == 'FRST_OPER_DT'.toString()">FRST_OPER_DT DESC</when>
+					<when test="orderBy == 'TITLE'.toString()">TITLE ASC</when>
+					<otherwise>FRST_OPER_DT DESC</otherwise>
+				</choose>
+			</when>
+			<otherwise>
+				FRST_OPER_DT DESC
+			</otherwise>
+		</choose>
+			) as num
+			,T.BANNER_KEY
 			,T.LOCATE_TYP
 			,T.TITLE
 			,T.URL
@@ -104,7 +120,8 @@
 				FRST_OPER_DT DESC
 			</otherwise>
 		</choose>
-		LIMIT #{firstRecordIndex}, #{recordCountPerPage}
+		)
+		where num between #{firstRecordIndex} and #{recordCountPerPage}
 	</select>
 
 	<select id="selectFullList" resultType="egovMap">
@@ -152,7 +169,7 @@
 
 	<insert id="insert">
 		<selectKey keyProperty="bannerKey" resultType="int"  order="BEFORE">
-			SELECT IFNULL(MAX(BANNER_KEY), 0) + 1 bannerKey FROM TB_BANNER
+			SELECT NVL(MAX(BANNER_KEY), 0) + 1 bannerKey FROM TB_BANNER
 		</selectKey>
 		INSERT INTO TB_BANNER (
 			BANNER_KEY

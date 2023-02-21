@@ -57,8 +57,25 @@
 	</select>
 
 	<select id="selectList" resultType="egovMap">
+	select *
+	  from (
 		SELECT
-			T.CODE_GRP_ID
+			row_number() over (ORDER BY 
+		<choose>
+			<when test="orderBy != null and orderBy != ''">
+				<choose>
+					<when test="orderBy == 'FRST_OPER_DT'.toString()">FRST_OPER_DT DESC</when>
+					<when test="orderBy == 'CODE_GRP_ID'.toString()">CODE_GRP_ID ASC</when>
+					<when test="orderBy == 'CODE_GRP_NM'.toString()">CODE_GRP_NM ASC</when>
+					<otherwise>CODE_GRP_ID ASC</otherwise>
+				</choose>
+			</when>
+			<otherwise>
+				CODE_GRP_ID ASC
+			</otherwise>
+		</choose>
+			) as num
+			,T.CODE_GRP_ID
 			,T.CODE_GRP_NM
 			,T.ATTR
 			,T.ACT_FLG
@@ -82,7 +99,8 @@
 				CODE_GRP_ID ASC
 			</otherwise>
 		</choose>
-		LIMIT #{firstRecordIndex}, #{recordCountPerPage}
+		) 
+		where num between #{firstRecordIndex} and #{recordCountPerPage}
 	</select>
 	
 	<select id="selectFullList" resultType="egovMap">

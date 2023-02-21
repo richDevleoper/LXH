@@ -14,7 +14,7 @@
 	
 	<insert id="insert">
 		<selectKey keyProperty="menuStatKey" resultType="int"  order="BEFORE">
-			SELECT IFNULL(MAX(MENU_STAT_KEY), 0) + 1 menuStatKey FROM TB_MENU_STAT_${ym}
+			SELECT NVL(MAX(MENU_STAT_KEY), 0) + 1 menuStatKey FROM TB_MENU_STAT_${ym}
 		</selectKey>
 		INSERT INTO TB_MENU_STAT_${ym} (
 			MENU_STAT_KEY
@@ -110,7 +110,7 @@
 	</select>
 	
 	<select id="isNextMonthTable" resultType="egovMap">
-		SELECT * from INFORMATION_SCHEMA.COLUMNS IC WHERE IC.TABLE_NAME = #{tableNm}
+		SELECT * FROM TAB WHERE TNAME=#{tableNm}
 	</select>
 </mapper>
 

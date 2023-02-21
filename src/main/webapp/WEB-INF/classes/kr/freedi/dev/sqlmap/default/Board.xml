@@ -134,7 +134,7 @@
 	</select>
 	
 	<select id="selectMaxKey" resultType="int">
-		SELECT IFNULL(MAX(BOARD_KEY), 0) + 1 boardKey FROM TB_BOARD
+		SELECT NVL(MAX(BOARD_KEY), 0) + 1 boardKey FROM TB_BOARD
 	</select>
 		
 	<select id="select" resultType="kr.freedi.dev.board.domain.BoardVO">
@@ -171,7 +171,7 @@
 
 	<insert id="insert">
 		<selectKey keyProperty="boardKey" resultType="int"  order="BEFORE">
-			SELECT IFNULL(MAX(BOARD_KEY), 0) + 1 boardKey FROM TB_BOARD
+			SELECT NVL(MAX(BOARD_KEY), 0) + 1 boardKey FROM TB_BOARD
 		</selectKey>
 		INSERT INTO TB_BOARD (
 			BOARD_KEY

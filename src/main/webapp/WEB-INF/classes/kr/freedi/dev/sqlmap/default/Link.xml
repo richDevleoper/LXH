@@ -149,7 +149,7 @@
 
 	<insert id="insert">
 		<selectKey keyProperty="linkKey" resultType="int" order="BEFORE">
-			SELECT IFNULL(MAX(LINK_KEY), 0) + 1 linkKey FROM TB_LINK 
+			SELECT NVL(MAX(LINK_KEY), 0) + 1 linkKey FROM TB_LINK 
 		</selectKey>
 		INSERT INTO TB_LINK (
 			LINK_KEY

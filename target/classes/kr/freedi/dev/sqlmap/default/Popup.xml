@@ -73,8 +73,24 @@
 	</select>
 
 	<select id="selectList" resultType="egovMap">
+	select *
+	  from (
 		SELECT
-			T.POPUP_KEY
+			row_number() over (ORDER BY 
+		<choose>
+			<when test="orderBy != null and orderBy != ''">
+				<choose>
+					<when test="orderBy == 'FRST_OPER_DT'.toString()">FRST_OPER_DT DESC</when>
+					<when test="orderBy == 'TITLE'.toString()">TITLE ASC</when>
+					<otherwise>FRST_OPER_DT DESC</otherwise>
+				</choose>
+			</when>
+			<otherwise>
+				FRST_OPER_DT DESC
+			</otherwise>
+		</choose>
+			) as num
+			,T.POPUP_KEY
 			,T.LOCATE_TYP
 			,T.TITLE
 			,T.PERIOD_FLG
@@ -105,7 +121,8 @@
 				FRST_OPER_DT DESC
 			</otherwise>
 		</choose>
-		LIMIT #{firstRecordIndex}, #{recordCountPerPage}
+		)
+		where num between #{firstRecordIndex} and #{recordCountPerPage}
 	</select>
 	
 	<select id="selectFullList" resultType="egovMap">
@@ -155,7 +172,7 @@
 
 	<insert id="insert">
 		<selectKey keyProperty="popupKey" resultType="int"  order="BEFORE">
-			SELECT IFNULL(MAX(POPUP_KEY), 0) + 1 popupKey FROM TB_POPUP
+			SELECT NVL(MAX(POPUP_KEY), 0) + 1 popupKey FROM TB_POPUP
 		</selectKey>
 		INSERT INTO TB_POPUP (
 			POPUP_KEY

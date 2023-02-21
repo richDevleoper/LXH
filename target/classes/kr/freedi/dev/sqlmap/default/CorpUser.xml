@@ -52,8 +52,25 @@
 	</select>
 
 	<select id="selectList" resultType="egovMap">
+	select *
+	  from (
 		SELECT
-			T.USER_ID
+			row_number() over (
+			ORDER BY 
+		<choose>
+			<when test="orderBy != null and orderBy != ''">
+				<choose>
+					<when test="orderBy == 'USER_NM'.toString()">USER_NM ASC</when>
+					<when test="orderBy == 'FRST_OPER_DT'.toString()">FRST_OPER_DT DESC</when>
+					<otherwise>USER_NM ASC</otherwise>
+				</choose>
+			</when>
+			<otherwise>
+				USER_NM ASC
+			</otherwise>
+		</choose>			
+			)
+			,T.USER_ID
 			,T.USER_PW
 			,T.USER_NM
 			,T.CHR_TEL
@@ -93,7 +110,8 @@
 				USER_NM ASC
 			</otherwise>
 		</choose>
-		LIMIT #{firstRecordIndex}, #{recordCountPerPage}
+		)
+		where num as between #{firstRecordIndex} and #{recordCountPerPage}
 	</select>
 
 	<select id="select" resultType="kr.freedi.dev.user.domain.CorpUserVO">

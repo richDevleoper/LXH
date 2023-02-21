@@ -73,8 +73,11 @@
 	</select>
 
 	<select id="selectList" resultType="egovMap">
+	select *
+	  from (
 		SELECT
-			T.LINK_KEY
+			row_number() over (order by ) as num
+			,T.LINK_KEY
 			,T.LOCATE_TYP
 			,T.TITLE
 			,T.URL
@@ -103,7 +106,8 @@
 				FRST_OPER_DT DESC
 			</otherwise>
 		</choose>
-		LIMIT #{firstRecordIndex}, #{recordCountPerPage}
+		)
+		where num as between #{firstRecordIndex} and #{recordCountPerPage}
 	</select>
 	
 	<select id="selectFullList" resultType="egovMap">
@@ -149,7 +153,7 @@
 
 	<insert id="insert">
 		<selectKey keyProperty="linkKey" resultType="int" order="BEFORE">
-			SELECT IFNULL(MAX(LINK_KEY), 0) + 1 linkKey FROM TB_LINK 
+			SELECT NVL(MAX(LINK_KEY), 0) + 1 linkKey FROM TB_LINK 
 		</selectKey>
 		INSERT INTO TB_LINK (
 			LINK_KEY

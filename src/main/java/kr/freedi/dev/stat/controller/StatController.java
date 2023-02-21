@@ -250,8 +250,6 @@ public class StatController {
 	String setStat(HttpServletRequest request , @RequestParam Map<String, Object> reqMap)throws Exception {
 
 		statService.createNextYearTable();
-		
 		return null;
 	}
-	
 }

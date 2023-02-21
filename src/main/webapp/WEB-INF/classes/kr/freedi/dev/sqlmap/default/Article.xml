@@ -243,7 +243,7 @@
 	</select>
 	
 	<select id="selectNextFkey" resultType="int">
-		SELECT IFNULL(MAX(FKEY), 0) + 1 fkey FROM TB_ARTICLE
+		SELECT NVL(MAX(FKEY), 0) + 1 fkey FROM TB_ARTICLE
 	</select>
 		
 	<select id="select" resultMap="articleMap">

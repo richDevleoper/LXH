@@ -53,8 +53,25 @@
 	</select>
 
 	<select id="selectList" resultType="egovMap">
+	select *
+	  from (
 		SELECT
-			T.BOARD_KEY
+			row_number() over (
+			ORDER BY 
+		<choose>
+			<when test="orderBy != null and orderBy != ''">
+				<choose>
+					<when test="orderBy == 'FRST_OPER_DT'.toString()">FRST_OPER_DT DESC</when>
+					<when test="orderBy == 'BOARD_NM'.toString()">BOARD_NM ASC</when>
+					<otherwise>BOARD_NM ASC</otherwise>
+				</choose>
+			</when>
+			<otherwise>
+				BOARD_NM ASC
+			</otherwise>
+		</choose>
+			) as num
+			,T.BOARD_KEY
 			,T.BOARD_NM
 			,T.BOARD_TYP
 			,T.ACT_FLG
@@ -97,7 +114,9 @@
 				BOARD_NM ASC
 			</otherwise>
 		</choose>
-		LIMIT #{firstRecordIndex}, #{recordCountPerPage}
+		) 
+		where num between #{firstRecordIndex} and #{recordCountPerPage}
+		
 	</select>
 
 	<select id="selectFullList" resultType="kr.freedi.dev.board.domain.BoardVO">
@@ -134,7 +153,7 @@
 	</select>
 	
 	<select id="selectMaxKey" resultType="int">
-		SELECT IFNULL(MAX(BOARD_KEY), 0) + 1 boardKey FROM TB_BOARD
+		SELECT NVL(MAX(BOARD_KEY), 0) + 1 boardKey FROM TB_BOARD
 	</select>
 		
 	<select id="select" resultType="kr.freedi.dev.board.domain.BoardVO">
@@ -171,7 +190,7 @@
 
 	<insert id="insert">
 		<selectKey keyProperty="boardKey" resultType="int"  order="BEFORE">
-			SELECT IFNULL(MAX(BOARD_KEY), 0) + 1 boardKey FROM TB_BOARD
+			SELECT NVL(MAX(BOARD_KEY), 0) + 1 boardKey FROM TB_BOARD
 		</selectKey>
 		INSERT INTO TB_BOARD (
 			BOARD_KEY

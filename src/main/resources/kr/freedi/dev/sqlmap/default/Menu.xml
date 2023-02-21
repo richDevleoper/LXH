@@ -208,15 +208,15 @@
 	</select>
 	
 	<select id="selectNextMenuKey" resultType="int">
-		SELECT IFNULL(MAX(MENU_KEY),0) + 1 menuKey FROM TB_MENU
+		SELECT NVL(MAX(MENU_KEY),0) + 1 menuKey FROM TB_MENU
 	</select>
 	
 	<select id="selectNextFkey" resultType="int">
-		SELECT IFNULL(MAX(FKEY),0) + 1 menuKey FROM TB_MENU WHERE MENU_TYP = #{menuTyp}
+		SELECT NVL(MAX(FKEY),0) + 1 menuKey FROM TB_MENU WHERE MENU_TYP = #{menuTyp}
 	</select>
 	
 	<select id="selectNextOkey" resultType="int">
-		SELECT IFNULL(MAX(OKEY),0) + 1 FROM TB_MENU WHERE PKEY = #{pkey}
+		SELECT NVL(MAX(OKEY),0) + 1 FROM TB_MENU WHERE PKEY = #{pkey}
 	</select>
 	
 	<!-- deprecated 
@@ -280,7 +280,7 @@
 				AND OKEY <![CDATA[<]]> #{okey}
 				ORDER BY OKEY DESC
 		) B
-		LIMIT 1
+		WHERE ROWNUM<![CDATA[<=]]>1
 	</select>
 	
 	<select id="selectForMoveNext" resultMap="menu">
@@ -291,7 +291,7 @@
 				AND OKEY <![CDATA[>]]> #{okey}
 				ORDER BY OKEY ASC
 		) B
-		LIMIT 1
+		WHERE ROWNUM<![CDATA[<=]]>1
 	</select>
 	
 	<update id="updateOkeyForMove">

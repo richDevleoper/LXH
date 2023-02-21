@@ -155,7 +155,7 @@
 
 	<insert id="insert">
 		<selectKey keyProperty="popupKey" resultType="int"  order="BEFORE">
-			SELECT IFNULL(MAX(POPUP_KEY), 0) + 1 popupKey FROM TB_POPUP
+			SELECT NVL(MAX(POPUP_KEY), 0) + 1 popupKey FROM TB_POPUP
 		</selectKey>
 		INSERT INTO TB_POPUP (
 			POPUP_KEY

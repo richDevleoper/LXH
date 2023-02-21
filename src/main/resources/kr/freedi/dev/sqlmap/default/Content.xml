@@ -54,8 +54,24 @@
 	</select>
 
 	<select id="selectList" resultType="egovMap">
+	select *
+	  from (
 		SELECT
-			T.CONTENT_KEY
+			row_number() over (ORDER BY 
+		<choose>
+			<when test="orderBy != null and orderBy != ''">
+				<choose>
+					<when test="orderBy == 'FRST_OPER_DT'.toString()">FRST_OPER_DT DESC</when>
+					<when test="orderBy == 'TITLE'.toString()">TITLE ASC</when>
+					<otherwise>TITLE ASC</otherwise>
+				</choose>
+			</when>
+			<otherwise>
+				TITLE ASC
+			</otherwise>
+		</choose>
+			) as num
+			,T.CONTENT_KEY
 			,T.TITLE
 			,T.CONTENT
 			,T.ACT_FLG
@@ -80,7 +96,8 @@
 				TITLE ASC
 			</otherwise>
 		</choose>
-		LIMIT #{firstRecordIndex}, #{recordCountPerPage}
+		)
+		where num between #{firstRecordIndex} and #{recordCountPerPage}
 	</select>
 	
 	<select id="selectFullList" resultType="egovMap">
@@ -113,7 +130,7 @@
 	</select>
 	
 	<select id="selectNextKey" resultType="int">
-		SELECT IFNULL(MAX(CONTENT_KEY), 0) + 1 contentKey FROM TB_CONTENT
+		SELECT NVL(MAX(CONTENT_KEY), 0) + 1 contentKey FROM TB_CONTENT
 	</select>
 
 	<insert id="insert">

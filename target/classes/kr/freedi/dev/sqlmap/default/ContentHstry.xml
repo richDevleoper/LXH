@@ -37,7 +37,7 @@
 
 	<insert id="insert">
 		<selectKey keyProperty="contentHstryKey" resultType="int"  order="BEFORE">
-			SELECT IFNULL(MAX(CONTENT_HSTRY_KEY), 0) + 1 contentHstryKey FROM TB_CONTENT_HSTRY
+			SELECT NVL(MAX(CONTENT_HSTRY_KEY), 0) + 1 contentHstryKey FROM TB_CONTENT_HSTRY
 		</selectKey>
 		INSERT INTO TB_CONTENT_HSTRY (
 			CONTENT_HSTRY_KEY

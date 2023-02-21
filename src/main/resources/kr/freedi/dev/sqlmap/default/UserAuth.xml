@@ -36,8 +36,11 @@
 	</select>
 
 	<select id="selectList" resultType="egovMap">
+	select *
+	  from (
 		SELECT
-			T.AUTH_ID
+			row_number() over (order by  T.USER_GRP, T.ORDER_NO ASC) as num
+			,T.AUTH_ID
 			,T.AUTH_NM
 			,T.USER_GRP
 			,T.ORDER_NO
@@ -49,7 +52,8 @@
 		FROM TB_USER_AUTH T
 		<include refid="defCond"></include>
 		ORDER BY T.USER_GRP, T.ORDER_NO ASC
-		LIMIT #{firstRecordIndex}, #{recordCountPerPage}
+		   )
+	  where num between #{firstRecordIndex} and #{recordCountPerPage}
 	</select>
 	
 	<select id="selectFullList" resultType="egovMap">

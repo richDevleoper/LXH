@@ -34,8 +34,11 @@
 	</select>
 
 	<select id="selectList" resultType="kr.freedi.dev.article.domain.ArticleCommentVO">
+	select *
+	  from (
 		SELECT
-			T.ARTICLE_COMMENT_KEY
+			row_number() over (ORDER BY T.FKEY ASC, T.OKEY ASC) as num
+			,T.ARTICLE_COMMENT_KEY
 			,T.ARTICLE_KEY
 			,T.FKEY
 			,T.PKEY
@@ -55,7 +58,8 @@
 		FROM TB_ARTICLE_COMMENT T
 		<include refid="defCond"></include>
 		ORDER BY T.FKEY ASC, T.OKEY ASC
-		<![CDATA[-- LIMIT #{firstRecordIndex}, #{recordCountPerPage}]]>
+		) 
+		where num between #{firstRecordIndex} and  #{recordCountPerPage}
 	</select>
 	
 	<select id="selectFullList" resultType="kr.freedi.dev.article.domain.ArticleCommentVO">
@@ -106,7 +110,7 @@
 	</select>
 
 	<select id="selectNextKey" resultType="int">
-		SELECT IFNULL(MAX(ARTICLE_COMMENT_KEY), 0) + 1 articleCommentKey FROM TB_ARTICLE_COMMENT
+		SELECT NVL(MAX(ARTICLE_COMMENT_KEY), 0) + 1 articleCommentKey FROM TB_ARTICLE_COMMENT
 	</select>
 	
 	<insert id="insert">
@@ -179,7 +183,7 @@
 			WHERE PKEY = #{pkey}
 			ORDER BY OKEY DESC
 		)T
-		LIMIT 1
+		where rownum<![CDATA[<=]]>1
 	</select>
 	
 	<update id="updateOkey">
