@@ -48,7 +48,7 @@ $(function(){
 	</div>
 
 	<script type="text/javascript">
-	<!-- //
+
 	(function($) {
 		$.fn.imgsSrcToggle = function(settings) {
 			var config = {
@@ -133,7 +133,6 @@ $(function(){
 		switchBg();
 	});
 
-	// -->
 	</script>
 	<!-- //visual_wrap -->
 

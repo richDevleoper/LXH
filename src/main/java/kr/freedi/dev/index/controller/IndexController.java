@@ -128,7 +128,53 @@ public class IndexController {
 		return "redirect:" + redirect;
 	}
 	
+	@RequestMapping("/index.do")
+	public String indexHandler(HttpServletRequest request, ModelMap model) throws Exception {
+		return "index/qi/Index";
+	}
 	
+	@RequestMapping("/sub.do")
+	public String subHandler(HttpServletRequest request, @ModelAttribute("searchVO")CommonVO searchVO)throws Exception {
+		String redirect = "/index.do";
+		
+		Integer menuKey = searchVO.getMenuKey();
+		
+		if(menuKey != null && menuKey.intValue() > 0){
+			MenuVO vo = menuService.select(menuKey);
+			if(vo != null){
+				if(!StringUtils.equalsIgnoreCase(vo.getLinkTyp(), "EMPTY")){
+					if(StringUtils.equalsIgnoreCase(vo.getLinkTyp(), "URL")){
+						redirect = this.getEncodUrl(vo.getMenuUrl());
+					}else{
+						redirect = vo.getMenuUrl();
+					}
+				}else{
+					MenuVO paramMenuVO = new MenuVO();
+					paramMenuVO.setMenuKey(menuKey);
+					paramMenuVO.setMenuTyp(MENU_TYP_DEF);
+					
+					MenuVO childVO = menuService.getAvailChildMenu(paramMenuVO);
+					if(childVO != null){ 
+						if(StringUtils.equalsIgnoreCase(childVO.getLinkTyp(), "U")){
+							redirect = this.getEncodUrl(childVO.getMenuUrl());
+						}else{
+							redirect = childVO.getMenuUrl();
+						}
+					}else { 
+						log.debug("childVO=null");
+						throw new NotExistPageException();
+					}
+				}
+			}else{
+				log.debug("vo=null");
+				throw new NotExistPageException();
+			}
+		}
+		
+		return "redirect:" + redirect;
+	}
+	
+	/*
 	@RequestMapping("/index.do")
 	public String indexHandler(HttpServletRequest request, ModelMap model) throws Exception {
 		
@@ -145,10 +191,10 @@ public class IndexController {
 		model.addAttribute("visualBannerList", bannerService.selectFullList(visualBannerVO));
 		
 		//main bottom banner
-		/*BannerVO bottomBannerVO = new BannerVO();
-		bottomBannerVO.setLocateTyp("MAIN_BOTTOM");
-		bottomBannerVO.setActFlg("Y");
-		model.addAttribute("bottomBannerList", bannerService.selectFullList(bottomBannerVO));*/
+		//BannerVO bottomBannerVO = new BannerVO();
+		//bottomBannerVO.setLocateTyp("MAIN_BOTTOM");
+		//bottomBannerVO.setActFlg("Y");
+		//model.addAttribute("bottomBannerList", bannerService.selectFullList(bottomBannerVO));   
 		
 		//link
 		LinkVO linkVO = new LinkVO();
@@ -281,7 +327,7 @@ public class IndexController {
 		}
 		
 		return "redirect:" + redirect;
-	}
+	}*/
 	
 	private String getEncodUrl(String url) throws UnsupportedEncodingException{
 		String result = "";

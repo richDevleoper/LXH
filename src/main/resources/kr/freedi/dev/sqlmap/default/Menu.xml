@@ -37,16 +37,33 @@
 	</resultMap>
 	
 	<select id="selectMenuList" resultMap="menu">
-		SELECT * FROM TB_MENU
-		WHERE MENU_TYP = #{menuTyp}
-		ORDER BY FKEY, OKEY
+		
+        WITH TMP_TABLE AS (
+	        SELECT 0 MENU_KEY, 0 FKEY, -1 PKEY, 0 OKEY, -1 GKEY, 'ROOT' AS MENU_NM FROM DUAL
+	        UNION ALL
+	        SELECT MENU_KEY, FKEY, PKEY, OKEY, GKEY, MENU_NM
+	          FROM TB_MENU
+	        WHERE MENU_TYP = #{menuTyp}
+        ) 
+        , SORT_TABLE AS (
+			        SELECT * 
+			          FROM TMP_TABLE
+			         WHERE MENU_KEY <![CDATA[<>]]>0
+			    START WITH MENU_KEY = 0
+		  CONNECT BY PRIOR  MENU_KEY =PKEY
+		 ORDER SIBLINGS BY OKEY
+        )
+        SELECT M.*
+          FROM SORT_TABLE O
+               , TB_MENU M
+         WHERE M.MENU_KEY(+)=O.MENU_KEY
 	</select>
 	
 	<select id="selectActMenuList" resultMap="menu">
 		SELECT * FROM TB_MENU
 		WHERE MENU_TYP = #{menuTyp}
 		AND ACT_FLG = 'Y'
-		ORDER BY FKEY, OKEY
+		ORDER BY FKEY, GKEY, OKEY
 	</select>
 
 	<select id="selectTopMenuList" resultMap="menu">

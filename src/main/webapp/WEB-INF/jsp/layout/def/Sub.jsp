@@ -58,53 +58,135 @@
 
 	<div id="wrap">
 	<%@ include file="/WEB-INF/jsp/layout/def/Header.jsp" %>
-		<!-- sub_visual_wrap -->
-		<%-- ${subBannerList } --%>
-		<div class="sub_visual_wrap"></div>
-		<!-- //sub_visual_wrap -->
-		
-		<c:if test="${not empty parentMenu }">
-			<!-- location_box -->
-			<div class="location_box">
-				<div class="location">
-					<a class="home" href="/" title="메인으로 이동합니다"><img alt="home" src="/def/img/contents/btn_home.png" /></a>
-					<div class="first">
-						<a href="#none" onclick="hideLocation('#location1');$('#location1').slideToggle()" title="${parentMenu.menuNm }">${parentMenu.menuNm }<img alt="home" src="/def/img/contents/btn_location_arrow.png" /></a>
-						<ul id="location1" style="display:none;">
-							<c:forEach var="topMenu" items="${treeMenuList }">
-								<li><a href="/sub.do?menuKey=${topMenu.menuKey}">${topMenu.menuNm }</a></li>
-							</c:forEach>
-						</ul>
-					</div>
-					<c:if test="${not empty childList}">
-						<span>&gt;</span>
-						<div class="">
-							<a href="#none" onclick="hideLocation('#location2');$('#location2').slideToggle()" title="${currentMenu.menuNm }">${currentMenu.menuNm }<img alt="home" src="/def/img/contents/btn_location_arrow.png" /></a>
-							<ul id="location2" style="display:none;">
-								<c:forEach var="depth1Menu" items="${childList }">
-									<li><a href="/sub.do?menuKey=${depth1Menu.menuKey }">${depth1Menu.menuNm }</a></li>
-								</c:forEach>
+	
+    <div id="wrap">
+        <!-- container -->
+        <div id="container">
+            <div id="page-header">
+                <div class="inner">
+                 <c:if test="${not empty parentMenu }">
+                    <div class="page-category">${parentMenu.menuNm }</div>
+                    <div id="path">
+                   
+                        <a href="">홈</a>
+                        <span class="arr">></span>
+                        <a href="">${parentMenu.menuNm }</a>
+                        <span class="arr">></span>
+                        <a href="javascript:void(0);">${currentMenu.menuNm }</a>
+                    
+                    </div>
+                    <button tpye="button" class="btn-print">
+                        <img src="/assets/images/btn_print.png" alt="">
+                        <span>인쇄</span>
+                    </button>
+                    </c:if>
+                </div>
+            </div>
+            <div id="page-container">
+                <div class="inner">
+                    <nav id="page-left">
+                    
+             
+						<c:forEach var="topMenu" items="${treeMenuList}">
+							<ul class="depth1">
+							<c:if test="${topMenu.naviFlg eq 'Y'}">
+							
+<%-- 								<li><a href="/sub.do?menuKey=${depth1Menu.menuKey }">${depth1Menu.menuNm }</a> --%>
+								<c:choose>
+									<c:when test="${empty topMenu.childList}">
+										
+									</c:when>
+									<c:otherwise>
+										
+										<ul class="depth2">
+											<c:forEach var="depth1Menu" items="${topMenu.childList }">
+												<li><a href="/sub.do?menuKey=${depth1Menu.menuKey}">${depth1Menu.menuNm}</a>
+												<c:choose>
+													<c:when test="${empty depth1Menu.childList}">
+														
+													</c:when>
+													<c:otherwise>
+														
+														<ul>
+															<c:forEach var="depth2Menu" items="${depth1Menu.childList }">
+																<li><a href="/sub.do?menuKey=${depth2Menu.menuKey}">${depth2Menu.menuNm}</a>
+																<c:choose>
+																	<c:when test="${empty depth2Menu.childList}">
+																		
+																	</c:when>
+																	<c:otherwise>
+										
+																		<ul>
+																			<c:forEach var="depth3Menu" items="${depth2Menu.childList }">
+																				<li><a href="/sub.do?menuKey=${depth3Menu.menuKey}">${depth3Menu.menuNm}</a></li>
+																			</c:forEach>
+																		</ul>
+																	</c:otherwise>
+																</c:choose>
+																</li>
+															</c:forEach>
+														</ul>
+													</c:otherwise>
+												</c:choose>
+												</li>
+											</c:forEach>
+										</ul>
+									</c:otherwise>
+								</c:choose>
+								</li>
+							</c:if>
 							</ul>
-						</div>
-					</c:if>
-				</div>
-			</div>
-			<!-- //location_box -->
-		</c:if>
+						</c:forEach>                    
+                    
+                    
+                    
+                        <ul class="depth1">
+                        <c:if test="${not empty childList}">
+                        	<c:forEach var="depth1Menu" items="${childList }">
+								<c:choose>
+								
+									<c:when test="${empty depth1Menu.childList}">
+										<li><a href="/sub.do?menuKey=${depth1Menu.menuKey }"  <c:if test="${depth1Menu.menuKey eq currentMenu.menuKey}"> class="cur" </c:if>>${depth1Menu.menuNm }</a></li>
+									</c:when>
+									<c:otherwise>
+										<li><a href="javascript:void(0)" class="has-depth"  <c:if test="${depth1Menu.menuKey eq currentMenu.menuKey}"> class="cur" </c:if> >${depth1Menu.menuNm}</a>
+										<ul class="depth2">
+											<c:forEach var="depth2Menu" items="${depth1Menu.childList }">
 
-		<!-- container_wrap -->
-		<div id="container_wrap" >
-			<div id="main_container_box">
-				<div id="con_header">
-					<h3>${currentMenu.menuNm}</h3>
-					<p class="text">혁신적인 건설문화를 위한 새로운도전!</p>
-				</div>
-				<div id="con_body">
-					<decorator:body />
-				</div>
-			</div>
-		</div>
-		<!-- //container_wrap -->
+												<c:choose>
+													<c:when test="${empty depth2Menu.childList}">
+														<li><a href="/sub.do?menuKey=${depth2Menu.menuKey}">${depth2Menu.menuNm}</a></li>
+													</c:when>
+													<c:otherwise>
+														<li><a href="javascript:void(0)" >${depth2Menu.menuNm}</a></li>
+														<ul>
+															<c:forEach var="depth3Menu" items="${depth2Menu.childList }">
+																<li><a href="/sub.do?menuKey=${depth3Menu.menuKey}">${depth3Menu.menuNm}</a></li>
+															</c:forEach>
+														</ul>
+													</c:otherwise>
+												</c:choose>
+												</li>
+											</c:forEach>
+										</ul>
+										</li>
+									</c:otherwise>
+								</c:choose>
+							</c:forEach>
+						</c:if>
+                            
+                        </ul>
+                    </nav>
+                    <section id="page-content">
+                    
+                    	<decorator:body />
+
+                    </section>
+                </div>
+            </div>
+        </div>                    
+           <div class="dimmed"></div>
+
 	<%@ include file="/WEB-INF/jsp/layout/def/Footer.jsp" %>
 	</div>
 </body>

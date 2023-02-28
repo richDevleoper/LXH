@@ -43,7 +43,7 @@
 <script type="text/javascript" src="<c:url value='/csl/jquery/jstree-1.0-rc3/jquery.jstree.js'/>"></script>
 
 <script type="text/javaScript" language="javascript">
-<!--
+
 (function($){
 
 	$.makeTree = function(selector, menu, menunListSize, currentIndex) {
@@ -741,7 +741,6 @@ function reloadMenuList(){
 	$.getMenuList();
 }
 
-//-->
 </script>
 </head>
 

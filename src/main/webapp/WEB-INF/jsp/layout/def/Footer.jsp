@@ -4,12 +4,16 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 			
-	<!-- footer_wrap -->
-	<div id="footer_wrap">
-		<div id="footer">
-			<p><img src="/def/img/common/footer_logo.jpg" alt=""/> copyright (c)  HEUNGDEOK Construction. all rights reserved.</p>
-		</div>
-	</div>
-	<!-- //footer_wrap -->
+    <!-- footer -->
+    <footer>
+        <div class="inner">
+            <div class="footer-logo">
+                <img src="/assets/images/footer_logo.png" alt="LX 하우시스">
+                <span>품질혁신지원시스템</span>
+            </div>
+            <p class="copyright">COPYRIGHT © 2021 LX HAUSYS. ALL RIGHTS RESERVED.</p>
+        </div>
+    </footer>
+    <!-- //footer -->
 </div>
 <iframe title="다운로드 프레임" id="downloadFrame" name="downloadFrame" width="0" height="0"></iframe>
