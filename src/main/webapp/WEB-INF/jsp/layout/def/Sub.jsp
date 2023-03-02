@@ -9,11 +9,13 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ko" lang="ko">
 <head>
+
+	<!-- 이부분이 잘못되어 부모  자식관계가  2 DEPT 이상시 오륙가 날수  밖에 없음,   개선 필요 -->
 	<c:set var="parentMenu" value="" />
 	<c:set var="childList" value="" />
 	<c:choose>
 		<c:when test="${currentMenu.gkey eq 0 }">
-			<c:forEach var="topMenu" items="${treeMenuList }">
+			<c:forEach var="topMenu" items="${treeMenuList}">
 				<c:if test="${topMenu.menuKey eq currentMenu.menuKey }">
 					<c:set var="parentMenu" value="${topMenu }" />
 				</c:if>
@@ -21,10 +23,26 @@
 		</c:when>
 		<c:otherwise>
 			<c:forEach var="topMenu" items="${treeMenuList }">
-				<c:if test="${topMenu.menuKey eq currentMenu.pkey }">
-					<c:set var="parentMenu" value="${topMenu }" />
-					<c:set var="childList" value="${topMenu.childList }" />
-				</c:if>
+				<c:choose>
+					<c:when test="${topMenu.menuKey eq currentMenu.pkey}">
+						<%-- <c:out value="<script type='text/javascript'>alert('${topMenu.menuKey}  ${currentMenu.pkey }');</script>" escapeXml="false"/> --%>
+						<c:if test="${topMenu.menuKey eq currentMenu.pkey }">
+							<c:set var="parentMenu" value="${topMenu }" />
+							<c:set var="childList" value="${topMenu.childList }" />
+						</c:if>						
+					</c:when>						
+					<c:otherwise>
+						<c:forEach var="childMenu" items="${topMenu.childList }">
+							<c:if test="${childMenu.childList != null }">
+								<%-- <c:out value="<script type='text/javascript'>alert('${childMenu.menuKey}  ${currentMenu.pkey }');</script>" escapeXml="false"/> --%> 
+								<c:if test="${childMenu.menuKey eq currentMenu.pkey }">
+									<c:set var="parentMenu" value="${topMenu }" />
+									<c:set var="childList" value="${topMenu.childList }" />								
+								</c:if>
+							</c:if>
+						</c:forEach>					
+					</c:otherwise>			
+				</c:choose>
 			</c:forEach>
 		</c:otherwise>
 	</c:choose>
@@ -58,7 +76,9 @@
 
 	<div id="wrap">
 	<%@ include file="/WEB-INF/jsp/layout/def/Header.jsp" %>
-	
+	<script  type="text/javascript">
+		console.log('${parentMenu}');
+	</script>
     <div id="wrap">
         <!-- container -->
         <div id="container">
@@ -87,17 +107,13 @@
                     <nav id="page-left">
                     
              
-						<c:forEach var="topMenu" items="${treeMenuList}">
-							<ul class="depth1">
+             			<ul class="depth1">
+						<c:forEach var="topMenu" items="${treeMenuList}">							
 							<c:if test="${topMenu.naviFlg eq 'Y'}">
-							
 <%-- 								<li><a href="/sub.do?menuKey=${depth1Menu.menuKey }">${depth1Menu.menuNm }</a> --%>
 								<c:choose>
-									<c:when test="${empty topMenu.childList}">
-										
-									</c:when>
+									<c:when test="${empty topMenu.childList}"></c:when>
 									<c:otherwise>
-										
 										<ul class="depth2">
 											<c:forEach var="depth1Menu" items="${topMenu.childList }">
 												<li><a href="/sub.do?menuKey=${depth1Menu.menuKey}">${depth1Menu.menuNm}</a>
@@ -135,27 +151,37 @@
 								</c:choose>
 								</li>
 							</c:if>
-							</ul>
-						</c:forEach>                    
+							
+						</c:forEach>
+						</ul>                    
                     
                     
                     
                         <ul class="depth1">
+
                         <c:if test="${not empty childList}">
                         	<c:forEach var="depth1Menu" items="${childList }">
 								<c:choose>
-								
 									<c:when test="${empty depth1Menu.childList}">
 										<li><a href="/sub.do?menuKey=${depth1Menu.menuKey }"  <c:if test="${depth1Menu.menuKey eq currentMenu.menuKey}"> class="cur" </c:if>>${depth1Menu.menuNm }</a></li>
 									</c:when>
 									<c:otherwise>
-										<li><a href="javascript:void(0)" class="has-depth"  <c:if test="${depth1Menu.menuKey eq currentMenu.menuKey}"> class="cur" </c:if> >${depth1Menu.menuNm}</a>
-										<ul class="depth2">
+										<c:choose>
+											<c:when test="${depth1Menu.menuKey eq currentMenu.menuKey or (currentMenu.gkey eq '2' and depth1Menu.menuKey eq currentMenu.pkey)}">
+												<li><a href="javascript:void(0)" class="has-depth active cur">${depth1Menu.menuNm}</a>
+												<ul class="depth2" style="display: block;">
+											</c:when>
+											<c:otherwise>
+												<li><a href="javascript:void(0)" class="has-depth">${depth1Menu.menuNm}</a>
+												<ul class="depth2">
+											</c:otherwise>
+										</c:choose>	
+										
 											<c:forEach var="depth2Menu" items="${depth1Menu.childList }">
 
 												<c:choose>
 													<c:when test="${empty depth2Menu.childList}">
-														<li><a href="/sub.do?menuKey=${depth2Menu.menuKey}">${depth2Menu.menuNm}</a></li>
+														<li><a href="/sub.do?menuKey=${depth2Menu.menuKey}" <c:if test="${depth2Menu.menuKey eq currentMenu.menuKey}"> class="lx-red" </c:if>>${depth2Menu.menuNm}</a></li>
 													</c:when>
 													<c:otherwise>
 														<li><a href="javascript:void(0)" >${depth2Menu.menuNm}</a></li>
