@@ -69,7 +69,7 @@ public class AppController {
 
 
 	@RequestMapping({"/app/001_01_sigma.do"})
-	public String sixSigmaStatusHandler(HttpServletRequest request, ModelMap model,
+	public String handler001_01(HttpServletRequest request, ModelMap model,
 			@ModelAttribute("articleVO") ArticleVO articleVO,
 			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
 			UserVO userSession)throws Exception {
@@ -90,7 +90,7 @@ public class AppController {
 	}
 	
 	@RequestMapping({"/app/001_01_sigma_sub.do"})
-	public String sixSigmaStatusSubHandler(HttpServletRequest request, ModelMap model,
+	public String handler001_01_sub(HttpServletRequest request, ModelMap model,
 			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
 			UserVO userSession)throws Exception {
 		
@@ -99,7 +99,7 @@ public class AppController {
 	}
 	
 	@RequestMapping({"/app/001_03_t_mbb.do"})
-	public String captainMBBStatusHandler(HttpServletRequest request, ModelMap model,
+	public String handler001_03(HttpServletRequest request, ModelMap model,
 			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
 			UserVO userSession)throws Exception {
 		
@@ -108,7 +108,7 @@ public class AppController {
 	}
 	
 	@RequestMapping({"/app/001_04_mbb_use.do"})
-	public String useRateMBBHandler(HttpServletRequest request, ModelMap model,
+	public String handler001_04(HttpServletRequest request, ModelMap model,
 			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
 			UserVO userSession)throws Exception {
 		
@@ -117,7 +117,7 @@ public class AppController {
 	}
 	
 	@RequestMapping({"/app/001_04_mbb_use_sub.do"})
-	public String useRateMBBSubHandler(HttpServletRequest request, ModelMap model,
+	public String handler001_04_sub(HttpServletRequest request, ModelMap model,
 			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
 			UserVO userSession)throws Exception {
 		
@@ -128,7 +128,7 @@ public class AppController {
 
 	
 	@RequestMapping({"/app/001_05_01_kpi_list.do"})
-	public String kpiMgrListHandler(HttpServletRequest request, ModelMap model,
+	public String handler001_05_01(HttpServletRequest request, ModelMap model,
 			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
 			UserVO userSession)throws Exception {
 		
@@ -137,7 +137,7 @@ public class AppController {
 	}
 	
 	@RequestMapping({"/app/001_05_02_plan.do"})
-	public String kpiPlanBuildHandler(HttpServletRequest request, ModelMap model,
+	public String handler001_05_02(HttpServletRequest request, ModelMap model,
 			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
 			UserVO userSession)throws Exception {
 		
@@ -150,7 +150,7 @@ public class AppController {
 	 #2. 과제/10+ No Policy활동  
 	 */
 	@RequestMapping({"/app/002_01_mission.do"})
-	public String missionListHandler(HttpServletRequest request, ModelMap model,
+	public String handler002_01(HttpServletRequest request, ModelMap model,
 			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
 			UserVO userSession)throws Exception {
 		
@@ -159,7 +159,7 @@ public class AppController {
 	}
 	
 	@RequestMapping({"/app/002_01_sub01.do"})
-	public String missionSub01Handler(HttpServletRequest request, ModelMap model,
+	public String handler002_01_sub(HttpServletRequest request, ModelMap model,
 			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
 			UserVO userSession)throws Exception {
 		
@@ -168,7 +168,7 @@ public class AppController {
 	}
 	
 	@RequestMapping({"/app/002_01_sub02.do"})
-	public String missionSub02Handler(HttpServletRequest request, ModelMap model,
+	public String handler002_01_sub02(HttpServletRequest request, ModelMap model,
 			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
 			UserVO userSession)throws Exception {
 		
@@ -177,7 +177,7 @@ public class AppController {
 	}
 	
 	@RequestMapping({"/app/002_01_sub04.do"})
-	public String missionSub04Handler(HttpServletRequest request, ModelMap model,
+	public String handler002_01_sub04(HttpServletRequest request, ModelMap model,
 			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
 			UserVO userSession)throws Exception {
 		
@@ -186,7 +186,7 @@ public class AppController {
 	}
 	
 	@RequestMapping({"/app/002_01_sub05.do"})
-	public String missionSub05Handler(HttpServletRequest request, ModelMap model,
+	public String handler002_01_sub05(HttpServletRequest request, ModelMap model,
 			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
 			UserVO userSession)throws Exception {
 		
@@ -195,7 +195,7 @@ public class AppController {
 	}
 	
 	@RequestMapping({"/app/002_02_search.do"})
-	public String missionSearchHandler(HttpServletRequest request, ModelMap model,
+	public String handler002_02(HttpServletRequest request, ModelMap model,
 			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
 			UserVO userSession)throws Exception {
 		
@@ -204,7 +204,7 @@ public class AppController {
 	}
 	
 	@RequestMapping({"/app/002_02_sub.do"})
-	public String missionSearchSubHandler(HttpServletRequest request, ModelMap model,
+	public String handler002_02_sub(HttpServletRequest request, ModelMap model,
 			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
 			UserVO userSession)throws Exception {
 		
@@ -213,13 +213,15 @@ public class AppController {
 	}
 	
 	@RequestMapping({"/app/002_03_report.do"})
-	public String missionReportHandler(HttpServletRequest request, ModelMap model,
+	public String handler002_03(HttpServletRequest request, ModelMap model,
 			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
 			UserVO userSession)throws Exception {
 		
 		return "app/qi/002_03_report";
 
 	}
+	
+	
 	
 	
 	
