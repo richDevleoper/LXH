@@ -77,7 +77,7 @@
 	<div id="wrap">
 	<%@ include file="/WEB-INF/jsp/layout/def/Header.jsp" %>
 	<script  type="text/javascript">
-		console.log('${parentMenu}');
+		//console.log('${parentMenu}');
 	</script>
     <div id="wrap">
         <!-- container -->
