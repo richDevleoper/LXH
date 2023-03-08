@@ -34,7 +34,7 @@ hr { display:none; }
                     <div class="header-util">
                         <p>홍길동(품질관리팀) 과제 <a href="" class="lx-red">3</a>건, 결제 <a href="" class="lx-red">1</a>건, 교육 <a href="" class="lx-red">1</a>건</p>
                         <ul>
-                            <li><a href=""><img src="/assets/images/icon_mypage.png" alt=""><span>마이페이지</span></a></li>
+                            <li><a href="/app/008_01_apprvbox.do?menuKey=73"><img src="/assets/images/icon_mypage.png" alt=""><span>마이페이지</span></a></li>
                             <li><a href=""><img src="/assets/images/icon_help.png" alt=""><span>도움말</span></a></li>
                             <li><a href=""><img src="/assets/images/icon_logout.png" alt=""><span>로그아웃</span></a></li>
                             <li><a href=""><img src="/assets/images/icon_admin.png" alt=""></a></li>
