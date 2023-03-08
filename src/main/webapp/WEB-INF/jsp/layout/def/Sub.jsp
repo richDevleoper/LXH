@@ -108,7 +108,7 @@
                     
              
              			<ul class="depth1">
-						<c:forEach var="topMenu" items="${treeMenuList}">							
+						<c:forEach var="topMenu" items="${treeMenuList}">
 							<c:if test="${topMenu.naviFlg eq 'Y'}">
 <%-- 								<li><a href="/sub.do?menuKey=${depth1Menu.menuKey }">${depth1Menu.menuNm }</a> --%>
 								<c:choose>
