@@ -6,6 +6,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
     <!-- CSS -->
+    <link rel="stylesheet" href="../css/jqury-ui.css">
     <link rel="stylesheet" href="../css/reset.css">
     <link rel="stylesheet" href="../css/tree.css">
     <link rel="stylesheet" href="../css/common.css">
@@ -13,7 +14,8 @@
 
     <!-- JS -->
     <script src="../js/jquery-3.3.1.min.js"></script>
-    <script src="../js/jstree.min.js"></script>
+    <script src="../js/jquery-ui.js"></script>
+    <script src="../js/jstree.min.js"></script>    
     <script src="../js/common.js"></script>
 
     <title>품질혁신지원시스템</title>
@@ -178,6 +180,7 @@
             </div>
         </header>
         <div class="dimmed"></div>
+        <input type="checkbox" id="orgSelAll">
         <!-- //header -->
         <!-- container -->
         <div id="container">
@@ -199,6 +202,7 @@
                     </button>
                 </div>
             </div>
+            <input type="checkbox" id="orgSelAll">
             <div id="page-container">
                 <div class="inner">
                     <nav id="page-left">
@@ -221,7 +225,7 @@
                             </li>
                             <li><a href="" class="lx-red">Report관리</a></li>
                         </ul>
-                    </nav>
+                    </nav>                    
                     <section id="page-content">
                         <div class="list-wrap">
                             <div class="list-search">
@@ -292,12 +296,12 @@
                                         </div>
                                         <div class="pd-l10 col s8">
                                             <div class="col s5 input-date">
-                                                <input type="text">
+                                                <input type="text" class="datepicker">
                                                 <i class="ico calendar"></i>
                                             </div>
                                             <span class="col s1 text-bul align-center">~</span>
                                             <div class="col s5 input-date">
-                                                <input type="text">
+                                                <input type="text" class="datepicker">
                                                 <i class="ico calendar"></i>
                                             </div>
                                         </div>
@@ -318,67 +322,12 @@
                                     <option value="100">100개</option>
                                 </select>
                             </div>
-                            <!--                               
-                            -->
-                            <!---->
-
-
-                            <div class="inr">                                
-                                <div class="tree-check">
-                                    <ul>
-                                        <li>
-                                            <div class="list-content">
-                                            <div class="list-wrap">
-                                                <div class="list-table list">
-                                                    <table>
-                                                        <colgroup>
-                                                            <col>
-                                                            <col>
-                                                            <col>
-                                                            <col>
-                                                            <col>
-                                                            <col>
-                                                            <col>
-                                                            <col>
-                                                            <col>
-                                                            <col>
-                                                            <col>
-                                                        </colgroup>
-                                                        <thead>
-                                                            <tr>
-                                                                <th class="bg-gray font-weight-bold"><input type="checkbox"></th>
-                                                                <th><input type="checkbox"></th>
-                                                                <th><span>제안명</span></th>
-                                                                <th><span>제안자</span></th>
-                                                                <th><span>분임조</span></th>
-                                                                <th><span>제안유형</span></th>
-                                                                <th><span>조직명</span></th>
-                                                                <th><span>심사자</span></th>
-                                                                <th><span>등급</span></th>
-                                                                <th><span>제안일</span></th>
-                                                                <th><span>지급금액</span></th>
-                                                                <th><span>지급여부</span></th>
-                                                            </tr>
-                                                        </thead>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                        </li>
-                                    </div>
-                                    </ul>
-                                </div>
-                            </div>
-
-
-
-                            <!---->
-                            <!---->
                             <div class="list-content">
                                 <div class="list-table">
                                     <table class="even">
                                         <thead>
                                             <tr>
-                                                <th><input type="checkbox"></th>
+                                                <th class="bg-gray font-weight-bold"><input type="checkbox" name="" id="forpaid" value=""><label for="forpaid"></label></th>
                                                 <th class="bg-gray font-weight-bold">6σFull Process 여부</th>
                                                 <th class="bg-gray font-weight-bold">과제유형</th>
                                                 <th class="bg-gray font-weight-bold">과제명</th>

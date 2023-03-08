@@ -303,7 +303,7 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <th><label for="text7"><span class="asterisk">*</span>과제지도/사원</label></th>
+                                                <th><label for="text7" class="color primary"><span class="asterisk">*</span>과제지도/사원</label></th>
                                                 <td class="pd3">
                                                     <div class="row">
                                                         <div class="col s12 input-text search">
@@ -323,7 +323,7 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <th><label for="text8" class="color primary"><span class="asterisk">*</span>Process Owner</label></th>
+                                                <th><label for="text8">Process Owner</label></th>
                                                 <td class="pd3">
                                                     <div class="row">
                                                         <div class="col s12 input-text search">

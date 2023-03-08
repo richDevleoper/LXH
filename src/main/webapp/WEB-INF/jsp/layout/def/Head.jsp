@@ -35,6 +35,7 @@ dwr 사용을 지양하기 위해 주석처리함, 필요시 해당 jsp에 추�
 <script type="text/javascript" src="<c:out value='/dwr/util.js' />"></script>
 --%>
 	<script src="/assets/js/jquery-3.3.1.min.js"></script>
+	<script src="/assets/js/jquery-ui.js"></script>
 	<script src="/assets/js/jstree.min.js"></script>
     <script src="/assets/js/tabulator.min.js"></script>
 	<script src="/assets/js/common.js"></script>
@@ -45,7 +46,8 @@ dwr 사용을 지양하기 위해 주석처리함, 필요시 해당 jsp에 추�
 <script type="text/javascript" src="<c:out value='/def/js/site.util.js' />"></script>
 <script type="text/javascript" src="<c:out value='/def/js/site.cmmn.js' />"></script>
  --%>
+    <link rel="stylesheet" href="/assets/css/jqury-ui.css">
     <link rel="stylesheet" href="/assets/css/reset.css">
     <link rel="stylesheet" href="/assets/css/tree.css">
-    <link rel="stylesheet" href="/assets/css/common.css">
+    <link rel="stylesheet" href="/assets/css/common.css?v=230307">
     <link rel="stylesheet" href="/assets/css/style.css">

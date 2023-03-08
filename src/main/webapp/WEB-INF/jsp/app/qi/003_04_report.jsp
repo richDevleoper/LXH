@@ -19,32 +19,32 @@
                         <div class="list-wrap">
                             <div class="list-search">
                                 <div class="search-form row">
-                                    <div class="form-inline form-input col s10">
+                                    <div class="form-inline form-input col s4">
                                         <div class="col s3 align-right">
                                             <label>조회기간</label>
                                         </div>
-                                        <div class="pd-l10 col s7">
+                                        <div class="pd-l10 col s12">
                                             <div class="col s5 input-date">
                                                 <input type="text">
                                                 <i class="ico calendar"></i>
                                             </div>
                                             <span class="col s1 text-bul align-center">~</span>
-                                            <div class="col s5 input-date">
+                                            <div class="col s6 input-date">
                                                 <input type="text">
                                                 <i class="ico calendar"></i>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="form-inline form-input col s4">
-                                        <div class="col s3 align-right">
+                                        <div class="col s6 align-right">
                                             <label>조직</label>
                                         </div>
-                                        <div class="pd-l10 col s12">
+                                        <div class="pd-l10 col s6">
                                             <input type="text" name="">
                                             <button type="button" class="btn-org">검색</button>
                                         </div>
                                     </div>
-                                    <div class="form-inline form-input col s6">
+                                    <div class="form-inline form-input col s4">
                                         <div class="col s7 align-right">
                                             <label>사업장</label>
                                         </div>
@@ -56,7 +56,7 @@
                                     </div>
                                 </div>
                                 <div class="search-form row">
-                                    <div class="form-inline form-input col s8">
+                                    <div class="form-inline form-input col s4">
                                         <div class="col s6 align-right">
                                             <label>6σ Full Process 여부</label>
                                         </div>
@@ -88,7 +88,7 @@
                                     </div>
                                 </div>
                                 <div class="search-form row">
-                                    <div class="form-inline form-input col s8">
+                                    <div class="form-inline form-input col s4">
                                         <div class="col s6 align-right">
                                             <label>활동분야</label>
                                         </div>
@@ -98,7 +98,7 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="form-inline form-input col s8">
+                                    <div class="form-inline form-input col s4">
                                         <div class="col s6 align-right">
                                             <label>진행현황</label>
                                         </div>
@@ -133,8 +133,8 @@
                                             <tr>
                                                 <th class="bg-gray font-weight-bold" rowspan="2" colspan="2">구분</th>
                                                 <th class="bg-gray font-weight-bold" rowspan="2">년내 Total</th>
-                                                <th class="bg-gray font-weight-bold" colspan="5">활동 실적(년내)</th>
-                                                <th class="bg-gray font-weight-bold" colspan="5">활동 실적(년간)</th>                                                
+                                                <th class="font-weight-bold" colspan="5">활동 실적(년내)</th>
+                                                <th class="font-weight-bold" colspan="5">활동 실적(년간)</th>                                                
                                             </tr>      
                                             <tr>
                                                 <th>품질개선</th>

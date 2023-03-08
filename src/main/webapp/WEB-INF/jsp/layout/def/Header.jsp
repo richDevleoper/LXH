@@ -49,7 +49,15 @@ hr { display:none; }
                         <nav>
                             <ul>
                             <c:forEach var="topMenu" items="${treeMenuList }">
-								<li><a href="/sub.do?menuKey=${topMenu.menuKey}">${topMenu.menuNm }</a></li>
+                            <c:choose>
+								<c:when test="${topMenu.menuNm eq '마이페이지'}">
+									
+								</c:when>
+								<c:otherwise>
+									<li><a href="/sub.do?menuKey=${topMenu.menuKey}">${topMenu.menuNm }</a></li>
+								</c:otherwise>
+							</c:choose>
+							
 							</c:forEach>
                             </ul>
                         </nav>
@@ -70,33 +78,40 @@ hr { display:none; }
                         	<button type="button" class="btn-close">닫기</button>
                             <ul>
                             <c:forEach var="topMenu" items="${treeMenuList }">
-								<li><a href="/sub.do?menuKey=${topMenu.menuKey}">${topMenu.menuNm }</a>
-								<c:if test="${not empty topMenu.childList }">
-									<div>
-                                        <ul class="depth1">
-											<c:forEach var="depth1Menu" items="${topMenu.childList }">
-												<li><a href="/sub.do?menuKey=${depth1Menu.menuKey}" class="snb-link" <c:if test="${historyMenuList[1].menuKey eq depth1Menu.menuKey}">style="color:#aa1d1d;"</c:if> >${depth1Menu.menuNm}</a>
-												<c:choose>
-													<c:when test="${empty depth1Menu.childList}">
-														
-													</c:when>
-													<c:otherwise>
-														<ul class="depth2">
-															<c:forEach var="depth2Menu" items="${depth1Menu.childList }">
-																<li><a href="/sub.do?menuKey=${depth2Menu.menuKey}">- ${depth2Menu.menuNm}</a></li>
-															</c:forEach>
-														</ul>
+	                            <c:choose>
+									<c:when test="${topMenu.menuNm eq '마이페이지'}">
+										
+									</c:when>
+									<c:otherwise>
+										<li><a href="/sub.do?menuKey=${topMenu.menuKey}">${topMenu.menuNm }</a>
+										<c:if test="${not empty topMenu.childList }">
+											<div>
+		                                        <ul class="depth1">
+													<c:forEach var="depth1Menu" items="${topMenu.childList }">
+														<li><a href="/sub.do?menuKey=${depth1Menu.menuKey}" class="snb-link" <c:if test="${historyMenuList[1].menuKey eq depth1Menu.menuKey}">style="color:#aa1d1d;"</c:if> >${depth1Menu.menuNm}</a>
+														<c:choose>
+															<c:when test="${empty depth1Menu.childList}">
+																
+															</c:when>
+															<c:otherwise>
+																<ul class="depth2">
+																	<c:forEach var="depth2Menu" items="${depth1Menu.childList }">
+																		<li><a href="/sub.do?menuKey=${depth2Menu.menuKey}">- ${depth2Menu.menuNm}</a></li>
+																	</c:forEach>
+																</ul>
+																</li>
+															</c:otherwise>
+														</c:choose>
 														</li>
-													</c:otherwise>
-												</c:choose>
-												</li>
-											</c:forEach>
-										</ul>
-									</div>
-								</c:if>
-							
-								
-								</li>
+													</c:forEach>
+												</ul>
+											</div>
+										</c:if>
+									
+										
+										</li>
+									</c:otherwise>
+								</c:choose>                            
 							</c:forEach>
                             </ul>
                         </div>

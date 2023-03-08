@@ -171,7 +171,6 @@
                                 </li>
                             </ul>
                         </div>
-        
                         <button type="button" class="btn-close">닫기</button>
                     </div>
                 </div>
@@ -183,13 +182,13 @@
         <div id="container">
             <div id="page-header">
                 <div class="inner">
-                    <div class="page-category">분임조 활동</div>
+                    <div class="page-category">마이페이지</div>
                     <div id="path">
                         <a href="">홈</a>
-                        <span class="arr">></span>
-                        <a href="">분임조 활동</a>
-                        <span class="arr">></span>
-                        <a href="javascript:void(0);">Report관리</a>
+                        <span class="arr">&gt;</span>
+                        <a href="">마이페이지</a>
+                        <span class="arr">&gt;</span>
+                        <a href="javascript:void(0);">교육신청내역</a>
                     </div>
                     <button tpye="button" class="btn-print">
                         <img src="../images/btn_print.png" alt="">
@@ -200,231 +199,142 @@
             <div id="page-container">
                 <div class="inner">
                     <nav id="page-left">
-                        <ul class="depth1">
-                            <li><a href="">나의 분임조과제</a></li>                            
-                            <li><a href="">분임조 과제검색</a></li>
-                            <li><a href="">분임조 편성(관리)</a></li>
-                            <li><a href="" class="cur">Report(관리)</a></li>
+                        <ul class="depth1">                            
+                            <li><a href="">결재함</a></li>
+                            <li><a href="">결재의뢰함</a></li>
+                            <li><a href="" class="cur">교육신청내역</a></li>
                         </ul>
                     </nav>
                     <section id="page-content">
-                        <div class="list-wrap">
-                            <div class="list-search">
-                                <div class="search-form row">
-                                    <div class="form-inline form-input col s4">
-                                        <div class="col s3 align-right">
-                                            <label>조회기간</label>
-                                        </div>
-                                        <div class="pd-l10 col s12">
-                                            <div class="col s5 input-date">
-                                                <input type="text">
-                                                <i class="ico calendar"></i>
-                                            </div>
-                                            <span class="col s1 text-bul align-center">~</span>
-                                            <div class="col s6 input-date">
-                                                <input type="text">
-                                                <i class="ico calendar"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-inline form-input col s4">
-                                        <div class="col s6 align-right">
-                                            <label>조직</label>
-                                        </div>
-                                        <div class="pd-l10 col s6">
-                                            <input type="text" name="">
-                                            <button type="button" class="btn-org">검색</button>
-                                        </div>
-                                    </div>
-                                    <div class="form-inline form-input col s4">
-                                        <div class="col s7 align-right">
-                                            <label>사업장</label>
-                                        </div>
-                                        <div class="pd-l10 col s12">
-                                            <select name="" id="">
-                                                <option value="">전체</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="search-form row">
-                                    <div class="form-inline form-input col s4">
-                                        <div class="col s6 align-right">
-                                            <label>6σ Full Process 여부</label>
-                                        </div>
-                                        <div class="pd-l10 col s8">
-                                            <select name="" id="">
-                                                <option value="">전체</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="form-inline form-input col s4">
-                                        <div class="col s6 align-right">
-                                            <label>과제유형</label>
-                                        </div>
-                                        <div class="pd-l10 col s8">
-                                            <select name="" id="">
-                                                <option value="">전체</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="form-inline form-input col s4">
-                                        <div class="col s5 align-right">
-                                            <label>과제리더밸트</label>
-                                        </div>
-                                        <div class="pd-l10 col s8">
-                                            <select name="" id="">
-                                                <option value="">전체</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="search-form row">
-                                    <div class="form-inline form-input col s4">
-                                        <div class="col s6 align-right">
-                                            <label>활동분야</label>
-                                        </div>
-                                        <div class="pd-l10 col s8">
-                                            <select name="" id="">
-                                                <option value="">전체</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="form-inline form-input col s4">
-                                        <div class="col s6 align-right">
-                                            <label>진행현황</label>
-                                        </div>
-                                        <div class="pd-l10 col s8">
-                                            <select name="" id="">
-                                                <option value="">전체</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="col s8 align-right">
-                                        <button type="button" class="btn-submit">조회</button>
-                                    </div>
-                                </div>
+                        <div class="tab-group">
+                            <div class="tab-btn">
+                                <!-- [D] 현재 활성화된 메뉴에 on클래스 추가해주세요. -->
+                                <button type="button">GB</button>
+                                <button type="button">MGB</button>
+                                <button type="button">BB</button>
+                                <button type="button" class="on">MBB</button>
                             </div>
-
-                            <div class="list-header">
-                                <p class="title">검색결과(Report)</p>                                
-                            </div>
-                            <div class="list-content">
-                                <div class="list-table">
-                                    <table class="centered odd">
-                                        <caption></caption>
+                            <div class="tab-inr">
+                                <!-- [D] 현재 활성화된 내용에 on클래스 추가해주세요. -->
+                                <div class="tab-box"></div>
+                                <div class="tab-box"></div>
+                                <div class="tab-box"></div>
+                                <div class="tab-box on">
+                                    <div class="list-table list mg-t20">
+                                        <table class="centered">
+                                            <caption></caption>
                                             <colgroup>
-                                                <col style="width:30px">
-                                                <col style="width:60px">
                                                 <col>
-                                                <col>
-                                                <col>
+                                                <col style="width:100px">
+                                                <col style="width:250px">
+                                                <col style="width:100px">
+                                                <col style="width:100px">
+                                                <col style="width:100px">
                                             </colgroup>
-                                        <thead>
-                                            <tr>
-                                                <th class="bg-gray font-weight-bold" rowspan="2" colspan="2">구분</th>
-                                                <th class="bg-gray font-weight-bold" rowspan="2">년내 Total</th>
-                                                <th class="font-weight-bold" colspan="5">활동 실적(년내)</th>
-                                                <th class="font-weight-bold" colspan="5">활동 실적(년간)</th>                                                
-                                            </tr>      
-                                            <tr>
-                                                <th>품질개선</th>
-                                                <th>개발</th>
-                                                <th>생산성향상</th>
-                                                <th>원가개선</th>
-                                                <th>기타</th>
-                                                <th>품질개선</th>
-                                                <th>개발</th>
-                                                <th>생산성향상</th>
-                                                <th>원가개선</th>
-                                                <th>기타</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr class="bg-white">
-                                                <th class="bg-gray font-weight-bold" colspan="2">과제수(건)</th>
-                                                <th class="bg-gray font-weight-bold">65</th>
-                                                <td>8</td>
-                                                <td>8</td>
-                                                <td>8</td>
-                                                <td>8</td>
-                                                <td>8</td>
-                                                <td>8</td>
-                                                <td>8</td>
-                                                <td>8</td>
-                                                <td>8</td>
-                                                <td>8</td>                                                
-                                            </tr>
-                                            <tr>
-                                                <th class="bg-gray font-weight-bold" rowspan="3">예상효과</th>
-                                                <th class="bg-gray font-weight-bold" >외부실패</th>
-                                                <td class="bg-gray font-weight-bold">22.2</td>
-                                                <td>7.7</td>
-                                                <td>7.7</td>
-                                                <td>7.7</td>
-                                                <td>7.7</td>
-                                                <td>7.7</td>
-                                                <td>7.7</td>
-                                                <td>7.7</td>
-                                                <td>7.7</td>
-                                                <td>7.7</td>
-                                                <td>7.7</td>
-                                            </tr>
-                                            <tr class="bg-white">
-                                                <th class="bg-gray font-weight-bold">내부실패</th>
-                                                <td class="bg-gray font-weight-bold">-</td>
-                                                <td>5</td>
-                                                <td>5</td>
-                                                <td>5</td>
-                                                <td>5</td>
-                                                <td>5</td>
-                                                <td>5</td>
-                                                <td>5</td>
-                                                <td>5</td>
-                                                <td>5</td>
-                                                <td>5</td>
-                                            </tr>
-                                            <tr>
-                                                <th class="bg-gray font-weight-bold">영업이익</th>
-                                                <td class="bg-gray font-weight-bold">-</td>
-                                                <td>10</td>
-                                                <td>10</td>
-                                                <td>10</td>
-                                                <td>10</td>
-                                                <td>10</td>
-                                                <td>10</td>
-                                                <td>10</td>
-                                                <td>10</td>
-                                                <td>10</td>
-                                                <td>10</td>
-                                            </tr>
-                                            <tr class="bg-white">
-                                                <th class="bg-gray font-weight-bold" colspan="2">매출액</th>
-                                                <th class="bg-gray font-weight-bold">80.4</th>
-                                                <td>37.1</td>
-                                                <td>37.1</td>
-                                                <td>37.1</td>
-                                                <td>37.1</td>
-                                                <td>37.1</td>
-                                                <td>37.1</td>
-                                                <td>37.1</td>
-                                                <td>37.1</td>
-                                                <td>37.1</td>
-                                                <td>37.1</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                            <thead>
+                                                <tr>
+                                                    <th>과정명</th>
+                                                    <th>차수명</th>
+                                                    <th>기간</th>
+                                                    <th>이수여부</th>
+                                                    <th>신청(취소)일</th>
+                                                    <th>내역</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>
+                                                        <div class="link-group center">
+                                                            <ul>
+                                                                <li><a href="#" title="바로가기">MBB 교육과정명(ooooooooooooooooo)</a></li>
+                                                            </ul>
+                                                        </div>
+                                                    </td>
+                                                    <td>22년 1차</td>
+                                                    <td>2023년 1월 20일 ~ 2023년 2월 10일</td>
+                                                    <td>미이수</td>
+                                                    <td>2023.06.30</td>
+                                                    <td>수강신청완료</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <div class="link-group center">
+                                                            <ul>
+                                                                <li><a href="#" title="바로가기">MBB 교육과정명(ooooooooooooooooo)</a></li>
+                                                            </ul>
+                                                        </div>
+                                                    </td>
+                                                    <td>22년 1차</td>
+                                                    <td>2023년 1월 20일 ~ 2023년 2월 10일</td>
+                                                    <td>미이수</td>
+                                                    <td>2023.06.30</td>
+                                                    <td>신청취소</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="list-footer">                               
-                                <div class="list-btns">
-                                    <button type="button" class="btn-excel">
-                                        <img src="../images/icon_excel.png" alt="">
-                                        <span>다운로드</span>
-                                    </button>                                    
+                        </div>
+                        <div class="tab-group">
+                            <div class="tab-btn">
+                                <!-- [D] 현재 활성화된 메뉴에 on클래스 추가해주세요. -->
+                                <button type="button" class="on">1차 교육 (1/20~26)</button>
+                                <span>정원 : <b>40</b>명, 신청 : <b>20</b>명</span>
+                            </div>
+                            <div class="tab-inr">
+                                <!-- [D] 현재 활성화된 내용에 on클래스 추가해주세요. -->
+                                <div class="tab-box on">
+                                    <div class="list-wrap mg-t20">
+                                        <div class="list-content">
+                                            <div class="list-table list">
+                                                <table>
+                                                    <caption></caption>
+                                                    <colgroup>
+                                                        <col style="width:110px">
+                                                        <col>
+                                                    </colgroup>
+                                                    <tbody>
+                                                        <tr>
+                                                            <th>교육과정명</th>
+                                                            <td>
+                                                                <div class="link-group">
+                                                                    <ul>
+                                                                        <li><a href="#" title="바로가기">MBB 교육과정명(ooooooooooooooooo)</a></li>
+                                                                    </ul>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>교육방식</th>
+                                                            <td>M메신저를 활용한 온라인 실시간 교육 자택 또는 회의실에서 접속,'유첨1. Virtual Live 교육 참가 매뉴얼'참조</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>대상자</th>
+                                                            <td>2차 교육희망자 및 1차때 교육이수했으나 통계Test 미합격자가 대상이며, + 5월 BB과제 Test 응시자 포함</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>이수기준</th>
+                                                            <td>출석율 80% 이상  (출석체크는 매일 오전/오후 2회 실시)</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>준비사항</th>
+                                                            <td>MBB교재+BB동영상 교육자료는 T-Cloud에 있습니다('유첨0_Six Sigma 교육 자료 접속 방법' 참조) </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>첨부파일</th>
+                                                            <td>유첨0_Six Sigma 교육 자료 접속 방법' , '유첨1. Virtual Live 교육 참가 매뉴얼' 참조</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-
+                            </div>
+                            <div class="btn-group">
+                                <button type="button" class="btn bg-gray">재신청</button>
+                                <button type="button" class="btn bg-white">취소</button>
                             </div>
                         </div>
                     </section>

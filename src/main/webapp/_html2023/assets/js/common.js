@@ -123,3 +123,26 @@ function org_search(){
     var text = $('#org-form input').val();
     $('#org-tree').jstree(true).search(text);
 }
+
+//modal open
+$(document).on('click', 'modal_trigger', function() {
+    $(".modal_close").trigger("click");
+
+    var name = $(this).attr("data-targer");
+    var modal_name = modal(name);
+    $("body").append(mosdal_name);
+
+    $("#" + name+",.dim").stop().fadeIn('fast').css({"margin-top":"-" + $("#" + name).height()/2 + "px"});
+    $("#" + name).attr("tabindex","0").focus();
+});
+
+//modal close
+$(document).on('click', 'modal_close, .modal.popup > button.close', function() {
+    var popup = $(this).parents('.modal.popup');
+
+    popup.next(".dim").stop().fadeout('fast');
+    popup.stop().fadeOut('fast',function() {
+        popup.next(".dim").remove();
+        popup.remove();
+    });
+});

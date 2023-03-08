@@ -41,7 +41,7 @@
                                             <div class="list-btns center">
                                                 <button type="button" class="btn bg-gray">계획저장</button>
                                                 <button type="button" class="btn-excel">
-                                                    <img src="../images/icon_excel.png" alt="">
+                                                    <img src="/assets/images/icon_excel.png" alt="">
                                                     <span>다운로드</span>
                                                 </button>
                                             </div>
@@ -67,7 +67,7 @@
                                             <div class="list-btns center">
                                                 <button type="button" class="btn bg-gray">계획저장</button>
                                                 <button type="button" class="btn-excel">
-                                                    <img src="../images/icon_excel.png" alt="">
+                                                    <img src="/assets/images/icon_excel.png" alt="">
                                                     <span>다운로드</span>
                                                 </button>
                                             </div>

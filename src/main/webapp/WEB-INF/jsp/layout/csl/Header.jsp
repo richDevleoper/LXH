@@ -18,7 +18,8 @@
 			<!-- <a href="/csl/index.do"><img src="<c:url value='/csl/img/logo.gif' />" alt="logo" /></a> -->
 			<!-- <a href="/csl/index.do"><img src="" alt="logo" /></a> -->
 			<a href="/csl/index.do">
-				<b>${pageContext.request.serverName }</b>
+				<%-- <b>${pageContext.request.serverName }</b> --%>
+				<img src="/assets/images/logo.png" alt="logo" />&nbsp;<span>품질혁신지원시스템</span>
 			</a>
 		</h1>
 		<div id="lnb">

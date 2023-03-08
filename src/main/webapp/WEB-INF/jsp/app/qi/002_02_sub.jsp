@@ -648,7 +648,7 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <th><label for="select6"><span class="asterisk">*</span>키워드</label> <i class="ico tip"><em>tip.</em></i></th>
+                                                <th><label for="select6">키워드</label></th>
                                                 <td colspan="3">
                                                     <div class="row">
                                                         <div class="col s8">키워드1, 키워드2, 키워드3, 키워드4, 키워드5</div>

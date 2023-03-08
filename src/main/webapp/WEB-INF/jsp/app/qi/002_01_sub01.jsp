@@ -15,7 +15,6 @@
 	<meta name="description" content="" />
 </head>
 <body>
-
                         <!-- breadcrumb -->
                         <div class="breadcrumb">
                             <ul>
@@ -158,7 +157,7 @@
                                                                     <td class="pd3">
                                                                         <div class="row">
                                                                             <div class="col s12 input-text input-date">
-                                                                                <input type="text" id="" name="" value="">
+                                                                                <input type="text" id="" name="" value="" class="datepicker">
                                                                                 <i class="ico calendar"></i>
                                                                             </div>
                                                                         </div>
@@ -166,7 +165,7 @@
                                                                     <td class="pd3">
                                                                         <div class="row">
                                                                             <div class="col s12 input-text input-date">
-                                                                                <input type="text" id="" name="" value="">
+                                                                                <input type="text" id="" name="" value="" class="datepicker">
                                                                                 <i class="ico calendar"></i>
                                                                             </div>
                                                                         </div>
@@ -174,7 +173,7 @@
                                                                     <td class="pd3">
                                                                         <div class="row">
                                                                             <div class="col s12 input-text input-date">
-                                                                                <input type="text" id="" name="" value="">
+                                                                                <input type="text" id="" name="" value="" class="datepicker">
                                                                                 <i class="ico calendar"></i>
                                                                             </div>
                                                                         </div>
@@ -182,7 +181,7 @@
                                                                     <td class="pd3">
                                                                         <div class="row">
                                                                             <div class="col s12 input-text input-date">
-                                                                                <input type="text" id="" name="" value="">
+                                                                                <input type="text" id="" name="" value="" class="datepicker">
                                                                                 <i class="ico calendar"></i>
                                                                             </div>
                                                                         </div>
@@ -190,7 +189,7 @@
                                                                     <td class="pd3">
                                                                         <div class="row">
                                                                             <div class="col s12 input-text input-date">
-                                                                                <input type="text" id="" name="" value="">
+                                                                                <input type="text" id="" name="" value="" class="datepicker">
                                                                                 <i class="ico calendar"></i>
                                                                             </div>
                                                                         </div>
@@ -198,7 +197,7 @@
                                                                     <td class="pd3">
                                                                         <div class="row">
                                                                             <div class="col s12 input-text input-date">
-                                                                                <input type="text" id="" name="" value="">
+                                                                                <input type="text" id="" name="" value="" class="datepicker">
                                                                                 <i class="ico calendar"></i>
                                                                             </div>
                                                                         </div>

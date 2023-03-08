@@ -15,13 +15,12 @@
 	<meta name="description" content="" />
 </head>
 <body>
-
                         <div class="list-wrap">
                             <div class="list-search">
                                 <div class="search-form row">
-                                    <div class="form-inline form-input col s8">
+                                    <div class="form-inline form-input col s4">
                                         <div class="col s2 align-right">
-                                            <label>과제명(키워드)</label>
+                                            <label>제안명</label>
                                         </div>
                                         <div class="pd-l10 col s10">
                                             <input type="text" name="">
@@ -29,7 +28,17 @@
                                     </div>
                                     <div class="form-inline form-input col s4">
                                         <div class="col s5 align-right">
-                                            <label>6o Full Process여부</label>
+                                            <label>조직</label>
+                                        </div>
+                                        <div class="pd-l10 col s7">
+                                            <select name="" id="">
+                                                <option value="">전체</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-inline form-input col s4">
+                                        <div class="col s5 align-right">
+                                            <label>사업장</label>
                                         </div>
                                         <div class="pd-l10 col s7">
                                             <select name="" id="">
@@ -41,7 +50,7 @@
                                 <div class="search-form row">
                                     <div class="form-inline form-input col s8">
                                         <div class="col s2 align-right">
-                                            <label>과제참여자</label>
+                                            <label>제안자</label>
                                         </div>
                                         <div class="pd-l10 col s2">
                                             <select name="" id="">
@@ -52,7 +61,7 @@
                                             <input type="text" name="">
                                         </div>
                                         <div class="col s2 align-right">
-                                            <label>부문</label>
+                                            <label>실시/쪽지</label>
                                         </div>
                                         <div class="pd-l10 col s3">
                                             <select name="" id="">
@@ -62,7 +71,7 @@
                                     </div>
                                     <div class="form-inline form-input col s4">
                                         <div class="col s5 align-right">
-                                            <label>과제유형</label>
+                                            <label>등급</label>
                                         </div>
                                         <div class="pd-l10 col s7">
                                             <select name="" id="">
@@ -71,36 +80,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="search-form row">
-                                    <div class="form-inline form-input col s8">
-                                        <div class="col s2 align-right">
-                                            <label>사업장</label>
-                                        </div>
-                                        <div class="pd-l10 col s5">
-                                            <select name="" id="">
-                                                <option value="">전체</option>
-                                            </select>
-                                        </div>
-                                        <div class="col s2 align-right">
-                                            <label>활동분야</label>
-                                        </div>
-                                        <div class="pd-l10 col s3">
-                                            <select name="" id="">
-                                                <option value="">전체</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="form-inline form-input col s4">
-                                        <div class="col s5 align-right">
-                                            <label>과제리더벨트</label>
-                                        </div>
-                                        <div class="pd-l10 col s7">
-                                            <select name="" id="">
-                                                <option value="">전체</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
+                                
                                 <div class="search-form row">
                                     <div class="form-inline form-input col s10">
                                         <div class="col s2 align-right">
@@ -112,7 +92,15 @@
                                             </select>
                                         </div>
                                         <div class="col s2 align-right">
-                                            <label>조회기간</label>
+                                            <label>진행단계</label>
+                                        </div>
+                                        <div class="pd-l10 col s5">
+                                            <select name="" id="">
+                                                <option value="">전체</option>
+                                            </select>
+                                        </div>
+                                        <div class="col s2 align-right">
+                                            <label>제안일</label>
                                         </div>
                                         <div class="pd-l10 col s6">
                                             <div class="col s5 input-date">
@@ -133,7 +121,7 @@
                             </div>
                             <div class="new_group">
                                 <div class="list-header mg-t20">
-                                    <p class="title">6o Full Process 90건, 일반과제 10건</p>
+                                    <p class="title">조회된 제안</p>
                                     <span class="bar"></span>
                                     <p class="total">총 100</p>
                                     <select name="limit" class="limit">
@@ -321,7 +309,7 @@
                                         </div>
                                         <div class="list-btns">
                                             <button type="button" class="btn-excel">
-                                                <img src="../images/icon_excel.png" alt="">
+                                                <img src="/assets/images/icon_excel.png" alt="">
                                                 <span>다운로드</span>
                                             </button>
                                         </div>

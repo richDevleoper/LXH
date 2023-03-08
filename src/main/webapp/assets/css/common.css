@@ -33,11 +33,38 @@ html,body{
     min-width: 1200px;
     width:1200px
 }
-input,
+
+input[type=checkbox] {
+    display:none;
+}
+
+input[type=checkbox] + label {
+    display:inline-block;
+    
+    background-color: #fff;
+    border: 1px solid #c3c3c3;
+    box-sizing: border-box;
+    width: 19px;
+    height: 19px;
+    background-repeat: no-repeat;
+    background-position: center center;
+    cursor: pointer;
+
+}
+
+input[type=checkbox]:checked + label {
+    background:url("../images/icon_check.png") no-repeat;
+    background-color: #fff;
+    display:inline-block;
+    background-position: center center;
+    
+}
 button{
     font-family:  나눔고딕,'NanumGothic',  sans-serif;
     font-weight: 400;
 }
+
+
 select{
     appearance: none;
     -webkit-appearance: none;

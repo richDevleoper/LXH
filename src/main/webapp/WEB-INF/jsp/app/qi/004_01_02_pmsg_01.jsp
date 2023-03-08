@@ -37,32 +37,53 @@
                                         <tbody>
                                             <tr>
                                                 <th><label for="text1"><span class="asterisk">*</span>제안명</label></th>
-                                                <td colspan="3">제안내용</td>
+                                                <td colspan="3">
+                                                    <div class="row">
+                                                        <div class="col s12 input-text">
+                                                            <input type="text" id="text1" name="" value="" title="제안명을 입력해주세요.">
+                                                        </div>
+                                                    </div>
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <th><label for="text2"><span class="asterisk">*</span>제안자</label></th>
-                                                <td>제안자</td>
-                                                <th><label for="text3"><span class="asterisk">*</span>관련 쪽지 제안</label></th>
-                                                <td>관련 쪽지</td>
+                                                <td colspan="3">
+                                                    <div class="row">
+                                                        <div class="col s037 input-text search">
+                                                            <input type="text" id="text2" name="" value="">
+                                                            <button type="button">검색</button>
+                                                        </div>
+                                                    </div>
+                                                </td>                                                
                                             </tr>
                                             <tr>
                                                 <th><span class="asterisk">*</span>조직명</th>
-                                                <td>조직명1</td>
+                                                <td>조직명</td>
                                                 <th><span class="asterisk">*</span>분임조</th>
-                                                <td>분임조명1</td>
+                                                <td>분임조명</td>
                                             </tr>
                                             <tr>
                                                 <th><label for="select1"><span class="asterisk">*</span>제안유형</label></th>
-                                                <td>제안유형1</td>
+                                                <td>
+                                                    <div class="row">
+                                                        <div class="col s12 select-group">
+                                                            <select name="" id="select1" title="제안유형 선택">
+                                                                <option value="">선택</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </td>
                                                 <th><label for="text4"><span class="asterisk">*</span>제안일</label></th>
-                                                <td>2023.06.30</td>
+                                                <td>
+                                                    <div class="row">
+                                                        <div class="col s6 input-text input-date">
+                                                            <input type="text" id="text4" name="" value="">
+                                                            <i class="ico calendar"></i>
+                                                        </div>
+                                                    </div>
+                                                </td>
                                             </tr>
-                                            <tr>
-                                                <th><label for="text5"><span class="asterisk">*</span>실행 완료일</label></th>
-                                                <td>2023.06.30</td>
-                                                <th><label for="select1"><span class="asterisk">*</span>년간 효과금액</label></th>
-                                                <td>년간 20억</td>
-                                            </tr>
+                                            
                                             <tr>
                                                 <th colspan="4" class="align-center"><span class="asterisk">*</span>제안내용</th>
                                             </tr>
@@ -95,69 +116,7 @@
                                                         </div>
                                                     </div>
                                                 </td>
-                                            </tr>
-                                            <tr>
-                                                <th>활동결과</th>
-                                                <td colspan="3" class="pd0">
-                                                    <div class="list-wrap" style="margin:-1px">
-                                                        <div class="list-content">
-                                                            <div class="list-table list">
-                                                                <table class="centered">
-                                                                    <caption></caption>
-                                                                    <colgroup>
-                                                                        <col style="width:50%">
-                                                                        <col>
-                                                                    </colgroup>
-                                                                    <thead>
-                                                                        <tr>
-                                                                            <th>개선 전</th>
-                                                                            <th>개선 후</th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                        <tr>
-                                                                            <td>
-                                                                                <div class="themb-box">
-                                                                                    <figure>
-                                                                                        <img src="../images/@sample.jpg" alt="" class="btn-org">
-                                                                                    </figure>
-                                                                                    <button type="button" class="themb_del"><i class="ico file_del"><em>파일삭제</em></i></button>
-                                                                                </div>
-                                                                            </td>
-                                                                            <td>
-                                                                                <div class="themb-box">
-                                                                                    <figure>
-                                                                                        <img src="../images/@sample.jpg" alt="" class="btn-org">
-                                                                                    </figure>
-                                                                                    <button type="button" class="themb_del"><i class="ico file_del"><em>파일삭제</em></i></button>
-                                                                                </div>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td>
-                                                                                <div class="themb-box">
-                                                                                    <figure>
-                                                                                        <img src="../images/@sample.jpg" alt="" class="btn-org">
-                                                                                    </figure>
-                                                                                    <button type="button" class="themb_del"><i class="ico file_del"><em>파일삭제</em></i></button>
-                                                                                </div>
-                                                                            </td>
-                                                                            <td>
-                                                                                <div class="themb-box">
-                                                                                    <figure>
-                                                                                        <img src="../images/@sample.jpg" alt="" class="btn-org">
-                                                                                    </figure>
-                                                                                    <button type="button" class="themb_del"><i class="ico file_del"><em>파일삭제</em></i></button>
-                                                                                </div>
-                                                                            </td>
-                                                                        </tr>                                                                        
-                                                                    </tbody>
-                                                                </table>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
+                                            </tr>                                            
                                             <tr>
                                                 <th><span class="asterisk">*</span>결재자 지정</th>
                                                 <td colspan="3" class="pd0">
@@ -184,7 +143,14 @@
                                                                     </thead>
                                                                     <tbody>
                                                                         <tr></tr>
-                                                                        <td class="pd3">소속정보1</td>
+                                                                        <td class="pd3">
+                                                                            <div class="row">
+                                                                                <div class="col s12 input-text search">
+                                                                                    <input type="text" id="text3" name="" value="">
+                                                                                    <button type="button">검색</button>
+                                                                                </div>
+                                                                            </div>
+                                                                        </td>
                                                                         <td>홍길동</td>
                                                                         <td>책임</td>
                                                                         <td>팀장</td>
@@ -201,7 +167,7 @@
                                 </div>
                             </div>
                         </div>
-                        <p class="content_title">2. 첨부파일</p>
+                        <p class="content_title">2. 첨부파일 등록</p>
                         <div class="list-wrap">
                             <div class="list-content">
                                 <div class="list-table list">
@@ -211,7 +177,22 @@
                                             <col style="width:180px">
                                             <col>
                                         </colgroup>
-                                        <tbody>                                            
+                                        <tbody>
+                                            <tr>
+                                                <th>첨부파일 (신규/수정)</th>
+                                                <td>
+                                                    <div class="row">
+                                                        <div class="col s12 input-text file">
+                                                            <span class="file-path">
+                                                                <input type="text" id="file5_text" readonly name="" value="">
+                                                                <button type="button"><i class="ico file_del"><em>삭제</em></i></button>
+                                                            </span>
+                                                            <input type="file" id="file5" name="" value="">
+                                                            <label for="file5">파일추가</label>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
                                             <tr>
                                                 <th>첨부파일 (조회)</th>
                                                 <td>
@@ -227,55 +208,10 @@
                                 </div>
                             </div>
                         </div>
-                        <p class="content_title">승인/반려_결재이력</p>
-                        <div class="list-wrap">
-                            <div class="list-content">
-                                <div class="list-table list">
-                                    <table class="centered">
-                                        <caption></caption>
-                                        <colgroup>
-                                            <col style="width:160px">
-                                            <col style="width:80px">
-                                            <col style="width:60px">
-                                            <col style="width:120px">
-                                            <col style="width:130px">
-                                            <col>
-                                        </colgroup>
-                                        <thead>
-                                            <tr>
-                                                <th>결재상태 및 결재일</th>
-                                                <th>결재자</th>
-                                                <th>직책</th>
-                                                <th>결재종류</th>
-                                                <th>평가점수(등급)</th>
-                                                <th>결재의견</th>                                                
-                                            </tr>
-                                        <tbody>
-                                            <tr>
-                                                <td>1차 승인(2023.06.30)</td>
-                                                <td>홍길동</td>
-                                                <td>실장</td>
-                                                <td>제안>실시제안</td>
-                                                <td>70점(C)</td>
-                                                <td>수고하셨습니다. 2차 팀장님 결재 의뢰</td>                                                
-                                            </tr>
-                                            <tr>
-                                                <td>2차 승인(2023.06.30)</td>
-                                                <td>홍길동</td>
-                                                <td>실장</td>
-                                                <td>제안>실시제안</td>
-                                                <td>90점(A)</td>
-                                                <td>심의위원회 제안을 상정하였습니다. 오프라인 제안 심의 후 등급 평가완료 예정</td>
-                                            </tr>
-                                        </tbody>
-                                        </thead>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-
                         <div class="list-footer">
-                            <div class="list-btns">                                
+                            <div class="list-btns">
+                                <button type="button" class="btn light-gray">저장</button>
+                                <button type="button" class="btn bg-gray">결제의뢰</button>                                
                                 <a href="#" class="btn">목록</a>
                             </div>
                         </div>
@@ -293,6 +229,5 @@
                 </figure>
             </div>
         </div>
-    
 </body>
 </html>

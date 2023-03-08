@@ -98,7 +98,7 @@
                                     </div>
                                 </li>
                                 <li>
-                                    <a href="">분임조활동</a>
+                                    <a href="">제안활동</a>
                                     <div>
                                         <ul class="depth1">
                                             <li>
@@ -183,28 +183,37 @@
         <div id="container">
             <div id="page-header">
                 <div class="inner">
-                    <div class="page-category">분임조 활동</div>
-                    <div id="path">
-                        <a href="">홈</a>
-                        <span class="arr">></span>
-                        <a href="">분임조 활동</a>
-                        <span class="arr">></span>
-                        <a href="javascript:void(0);">Report관리</a>
+                    <div class="page-category">품질인재육성</div>
+                        <div id="path">
+                            <a href="">홈</a>
+                            <span class="arr">></span>
+                            <a href="">품질인재육성</a>
+                            <span class="arr">></span>
+                            <a href="">교육/Test인증(관리)</a>
+                            <span class="arr">></span>
+                            <a href="javascript:void(0);">계획수립</a>
+                        </div>
+                        <button tpye="button" class="btn-print">
+                            <img src="../images/btn_print.png" alt="">
+                            <span>인쇄</span>
+                        </button>
                     </div>
-                    <button tpye="button" class="btn-print">
-                        <img src="../images/btn_print.png" alt="">
-                        <span>인쇄</span>
-                    </button>
                 </div>
             </div>
             <div id="page-container">
                 <div class="inner">
                     <nav id="page-left">
                         <ul class="depth1">
-                            <li><a href="">나의 분임조과제</a></li>                            
-                            <li><a href="">분임조 과제검색</a></li>
-                            <li><a href="">분임조 편성(관리)</a></li>
-                            <li><a href="" class="cur">Report(관리)</a></li>
+                            <li><a href="">나의 육성 현황</a></li>
+                            <li><a href="">년간계획(교육,Test)</a></li>
+                            <li>
+                                <a href="javascript:void(0)" class="has-depth cur">교육/Test인증(관리)</a>
+                                <ul class="depth2" style="display:block">
+                                    <li><a href="" class="lx-red">계획수립</a></li>
+                                    <li><a href="">실적입력</a></li>
+                                    <li><a href="">인증관리</a></li>
+                                </ul>
+                            </li>
                         </ul>
                     </nav>
                     <section id="page-content">
@@ -212,217 +221,275 @@
                             <div class="list-search">
                                 <div class="search-form row">
                                     <div class="form-inline form-input col s4">
-                                        <div class="col s3 align-right">
-                                            <label>조회기간</label>
+                                        <div class="col s4 align-right">
+                                            <label>교육과정명</label>
                                         </div>
-                                        <div class="pd-l10 col s12">
+                                        <div class="pd-l10 col s8">
+                                            <input type="text" name="">
+                                        </div>
+                                    </div>
+                                    <div class="form-inline form-input col s4 ">
+                                        <div class="col s4 align-right">
+                                            <label>교육연도</label>
+                                        </div>
+                                        <div class="pd-l10 col s8">
+                                            <select name="" id="">
+                                                <option value="">전체</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-inline form-input col s4">
+                                        <div class="col s4 align-right">
+                                            <label>인증벨트</label>
+                                        </div>
+                                        <div class="pd-l10 col s8">
+                                            <select name="" id="">
+                                                <option value="">전체</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="search-form row">
+                                    <div class="form-inline form-input col s4">
+                                        <div class="col s4 align-right">
+                                            <label>교육유형</label>
+                                        </div>
+                                        <div class="pd-l10 col s8">
+                                            <select name="" id="">
+                                                <option value="">전체</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-inline form-input col s4 ">
+                                        <div class="col s4 align-right">
+                                            <label>상세유형</label>
+                                        </div>
+                                        <div class="pd-l10 col s8">
+                                            <select name="" id="">
+                                                <option value="">전체</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-inline form-input col s4">
+                                        <div class="col s4 align-right">
+                                            <label>교육차수</label>
+                                        </div>
+                                        <div class="pd-l10 col s8">
+                                            <select name="" id="">
+                                                <option value="">전체</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="search-form row">
+                                    <div class="form-inline form-input col s8">
+                                        <div class="col s2 align-right">
+                                            <label>교육기간</label>
+                                        </div>
+                                        <div class="pd-l10 col s8">
                                             <div class="col s5 input-date">
                                                 <input type="text">
                                                 <i class="ico calendar"></i>
                                             </div>
                                             <span class="col s1 text-bul align-center">~</span>
-                                            <div class="col s6 input-date">
+                                            <div class="col s5 input-date">
                                                 <input type="text">
                                                 <i class="ico calendar"></i>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="form-inline form-input col s4">
-                                        <div class="col s6 align-right">
-                                            <label>조직</label>
-                                        </div>
-                                        <div class="pd-l10 col s6">
-                                            <input type="text" name="">
-                                            <button type="button" class="btn-org">검색</button>
-                                        </div>
-                                    </div>
-                                    <div class="form-inline form-input col s4">
-                                        <div class="col s7 align-right">
-                                            <label>사업장</label>
-                                        </div>
-                                        <div class="pd-l10 col s12">
-                                            <select name="" id="">
-                                                <option value="">전체</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="search-form row">
-                                    <div class="form-inline form-input col s4">
-                                        <div class="col s6 align-right">
-                                            <label>6σ Full Process 여부</label>
-                                        </div>
-                                        <div class="pd-l10 col s8">
-                                            <select name="" id="">
-                                                <option value="">전체</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="form-inline form-input col s4">
-                                        <div class="col s6 align-right">
-                                            <label>과제유형</label>
-                                        </div>
-                                        <div class="pd-l10 col s8">
-                                            <select name="" id="">
-                                                <option value="">전체</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="form-inline form-input col s4">
-                                        <div class="col s5 align-right">
-                                            <label>과제리더밸트</label>
-                                        </div>
-                                        <div class="pd-l10 col s8">
-                                            <select name="" id="">
-                                                <option value="">전체</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="search-form row">
-                                    <div class="form-inline form-input col s4">
-                                        <div class="col s6 align-right">
-                                            <label>활동분야</label>
-                                        </div>
-                                        <div class="pd-l10 col s8">
-                                            <select name="" id="">
-                                                <option value="">전체</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="form-inline form-input col s4">
-                                        <div class="col s6 align-right">
-                                            <label>진행현황</label>
-                                        </div>
-                                        <div class="pd-l10 col s8">
-                                            <select name="" id="">
-                                                <option value="">전체</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="col s8 align-right">
+                                    <div class="col s4 align-right">
                                         <button type="button" class="btn-submit">조회</button>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="list-header">
-                                <p class="title">검색결과(Report)</p>                                
+                                <p class="title">교육과정</p>
+                                <span class="bar"></span>
+                                <p class="total">전체 100</p>
+                                <select name="limit" class="limit">
+                                    <option value="10">10개</option>
+                                    <option value="50">50개</option>
+                                    <option value="100">100개</option>
+                                </select>
                             </div>
+                            <!--                               
+                            -->
+                            <!---->
+
+
+
+
+                            <!---->
+                            <!---->
                             <div class="list-content">
                                 <div class="list-table">
-                                    <table class="centered odd">
+                                    <table class="even">
                                         <caption></caption>
                                             <colgroup>
-                                                <col style="width:30px">
                                                 <col style="width:60px">
+                                                <col style="width:80px">
+                                                <col style="width:60px">
+                                                <col style="width:80px">
+                                                <col style="width:120px">
+                                                <col style="width:80px">
                                                 <col>
-                                                <col>
-                                                <col>
+                                                <col style="width:100px">
+                                                <col style="width:60px">
                                             </colgroup>
+
                                         <thead>
                                             <tr>
-                                                <th class="bg-gray font-weight-bold" rowspan="2" colspan="2">구분</th>
-                                                <th class="bg-gray font-weight-bold" rowspan="2">년내 Total</th>
-                                                <th class="font-weight-bold" colspan="5">활동 실적(년내)</th>
-                                                <th class="font-weight-bold" colspan="5">활동 실적(년간)</th>                                                
-                                            </tr>      
-                                            <tr>
-                                                <th>품질개선</th>
-                                                <th>개발</th>
-                                                <th>생산성향상</th>
-                                                <th>원가개선</th>
-                                                <th>기타</th>
-                                                <th>품질개선</th>
-                                                <th>개발</th>
-                                                <th>생산성향상</th>
-                                                <th>원가개선</th>
-                                                <th>기타</th>
-                                            </tr>
+                                                <th class="bg-gray font-weight-bold">No</th>
+                                                <th class="bg-gray font-weight-bold">교육연도</th>
+                                                <th class="bg-gray font-weight-bold">벨트</th>
+                                                <th class="bg-gray font-weight-bold">교육유형</th>
+                                                <th class="bg-gray font-weight-bold">상세유형</th>
+                                                <th class="bg-gray font-weight-bold">교육차수</th>
+                                                <th class="bg-gray font-weight-bold">교육과정명</th>
+                                                <th class="bg-gray font-weight-bold">교육일정</th>
+                                                <th class="bg-gray font-weight-bold">정원</th>
+                                            </tr>                                            
                                         </thead>
                                         <tbody>
-                                            <tr class="bg-white">
-                                                <th class="bg-gray font-weight-bold" colspan="2">과제수(건)</th>
-                                                <th class="bg-gray font-weight-bold">65</th>
-                                                <td>8</td>
-                                                <td>8</td>
-                                                <td>8</td>
-                                                <td>8</td>
-                                                <td>8</td>
-                                                <td>8</td>
-                                                <td>8</td>
-                                                <td>8</td>
-                                                <td>8</td>
-                                                <td>8</td>                                                
+                                            <tr>
+                                                <td>10</td>
+                                                <td>2023</td>
+                                                <td>GB</td>
+                                                <td>교육</td>
+                                                <td>온라인 동영상 교육</td>
+                                                <td>1차</td>
+                                                <td>6σFull Process(5/24~25일,2일),고급통계... </td>
+                                                <td>5/25, 5/26, 5/28</td>
+                                                <td>40</td>
                                             </tr>
                                             <tr>
-                                                <th class="bg-gray font-weight-bold" rowspan="3">예상효과</th>
-                                                <th class="bg-gray font-weight-bold" >외부실패</th>
-                                                <td class="bg-gray font-weight-bold">22.2</td>
-                                                <td>7.7</td>
-                                                <td>7.7</td>
-                                                <td>7.7</td>
-                                                <td>7.7</td>
-                                                <td>7.7</td>
-                                                <td>7.7</td>
-                                                <td>7.7</td>
-                                                <td>7.7</td>
-                                                <td>7.7</td>
-                                                <td>7.7</td>
-                                            </tr>
-                                            <tr class="bg-white">
-                                                <th class="bg-gray font-weight-bold">내부실패</th>
-                                                <td class="bg-gray font-weight-bold">-</td>
-                                                <td>5</td>
-                                                <td>5</td>
-                                                <td>5</td>
-                                                <td>5</td>
-                                                <td>5</td>
-                                                <td>5</td>
-                                                <td>5</td>
-                                                <td>5</td>
-                                                <td>5</td>
-                                                <td>5</td>
+                                                <td>9</td>
+                                                <td>2023</td>
+                                                <td>GB</td>
+                                                <td>Test</td>
+                                                <td>통계Test</td>
+                                                <td>4차</td>
+                                                <td>6σFull Process(5/24~25일,2일),고급통계... </td>
+                                                <td>5/25, 5/26, 5/28</td>
+                                                <td>40</td>
                                             </tr>
                                             <tr>
-                                                <th class="bg-gray font-weight-bold">영업이익</th>
-                                                <td class="bg-gray font-weight-bold">-</td>
-                                                <td>10</td>
-                                                <td>10</td>
-                                                <td>10</td>
-                                                <td>10</td>
-                                                <td>10</td>
-                                                <td>10</td>
-                                                <td>10</td>
-                                                <td>10</td>
-                                                <td>10</td>
-                                                <td>10</td>
+                                                <td>8</td>
+                                                <td>2023</td>
+                                                <td>BB</td>
+                                                <td>교육</td>
+                                                <td>온라인 실시간 교육</td>
+                                                <td>3차</td>
+                                                <td>6σFull Process(5/24~25일,2일),고급통계... </td>
+                                                <td>5/25, 5/26, 5/28</td>
+                                                <td>40</td>
                                             </tr>
-                                            <tr class="bg-white">
-                                                <th class="bg-gray font-weight-bold" colspan="2">매출액</th>
-                                                <th class="bg-gray font-weight-bold">80.4</th>
-                                                <td>37.1</td>
-                                                <td>37.1</td>
-                                                <td>37.1</td>
-                                                <td>37.1</td>
-                                                <td>37.1</td>
-                                                <td>37.1</td>
-                                                <td>37.1</td>
-                                                <td>37.1</td>
-                                                <td>37.1</td>
-                                                <td>37.1</td>
+                                            <tr>
+                                                <td>7</td>
+                                                <td>2023</td>
+                                                <td>BB</td>
+                                                <td>Test</td>
+                                                <td>통계Test</td>
+                                                <td>1차</td>
+                                                <td>6σFull Process(5/24~25일,2일),고급통계... </td>
+                                                <td>5/25, 5/26, 5/28</td>
+                                                <td>40</td>
                                             </tr>
+                                            <tr>
+                                                <td>6</td>
+                                                <td>2023</td>
+                                                <td>BB</td>
+                                                <td>Test</td>
+                                                <td>과제Test</td>
+                                                <td>2차</td>
+                                                <td>6σFull Process(5/24~25일,2일),고급통계... </td>
+                                                <td>5/25, 5/26, 5/28</td>
+                                                <td>40</td>
+                                            </tr>
+                                            <tr>
+                                                <td>5</td>
+                                                <td>2023</td>
+                                                <td>MBB</td>
+                                                <td>교육</td>
+                                                <td>온라인 실시간 교육</td>
+                                                <td>3차</td>
+                                                <td>6σFull Process(5/24~25일,2일),고급통계... </td>
+                                                <td>5/25, 5/26, 5/28</td>
+                                                <td>40</td>
+                                            </tr>
+                                            <tr>
+                                                <td>4</td>
+                                                <td>2023</td>
+                                                <td>MBB</td>
+                                                <td>Test</td>
+                                                <td>과제Test</td>
+                                                <td>4차</td>
+                                                <td>6σFull Process(5/24~25일,2일),고급통계... </td>
+                                                <td>5/25, 5/26, 5/28</td>
+                                                <td>40</td>
+                                            </tr>
+                                            <tr>
+                                                <td>3</td>
+                                                <td>2023</td>
+                                                <td>MBB</td>
+                                                <td>Test</td>
+                                                <td>온라인 동영상 교육</td>
+                                                <td>1차</td>
+                                                <td>6σFull Process(5/24~25일,2일),고급통계... </td>
+                                                <td>5/25, 5/26, 5/28</td>
+                                                <td>40</td>
+                                            </tr>
+                                            <tr>
+                                                <td>2</td>
+                                                <td>2023</td>
+                                                <td>MBB</td>
+                                                <td>Test</td>
+                                                <td>과제Test</td>
+                                                <td>2차</td>
+                                                <td>6σFull Process(5/24~25일,2일),고급통계... </td>
+                                                <td>5/25, 5/26, 5/28</td>
+                                                <td>40</td>
+                                            </tr>
+                                            <tr>
+                                                <td>1</td>
+                                                <td>2023</td>
+                                                <td>MBB</td>
+                                                <td>Test</td>
+                                                <td>온라인 동영상 교육</td>
+                                                <td>1차</td>
+                                                <td>6σFull Process(5/24~25일,2일),고급통계... </td>
+                                                <td>5/25, 5/26, 5/28</td>
+                                                <td>40</td>
+                                            </tr>
+                                                        
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
-                            <div class="list-footer">                               
+                            <div class="list-footer">
+                                <div class="pagination">
+                                    <a href="" class="first">처음</a>
+                                    <a href="" class="prev">이전</a>
+                                    <a href="" class="cur num">1</a>
+                                    <a href="" class="num">2</a>
+                                    <a href="" class="num">3</a>
+                                    <a href="" class="num">4</a>
+                                    <a href="" class="num">5</a>
+                                    <a href="" class="next">다음</a>
+                                    <a href="" class="last">끝</a>
+                                </div>
                                 <div class="list-btns">
+                                    <button type="button" class="btn bg-gray">                                        
+                                        <span>교육등록</span>
+                                    </button>
+                                    
                                     <button type="button" class="btn-excel">
                                         <img src="../images/icon_excel.png" alt="">
                                         <span>다운로드</span>
-                                    </button>                                    
+                                    </button>
+                                    
                                 </div>
 
                             </div>

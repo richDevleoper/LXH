@@ -15,13 +15,14 @@
 	<meta name="description" content="" />
 </head>
 <body>
+
                         <!-- breadcrumb -->
                         <div class="breadcrumb">
                             <ul>
-                                <li>실시 제안정보</li>
+                                <li>쪽지 제안 정보</li>
                             </ul>
                         </div>
-                        <p class="content_title">1. 실시 제안 정보</p>
+                        <p class="content_title">1. 쪽지 제안 정보</p>
                         <div class="list-wrap">
                             <div class="list-content">
                                 <div class="list-table list">
@@ -46,23 +47,14 @@
                                             </tr>
                                             <tr>
                                                 <th><label for="text2"><span class="asterisk">*</span>제안자</label></th>
-                                                <td>
+                                                <td colspan="3">
                                                     <div class="row">
-                                                        <div class="col s12 input-text search">
+                                                        <div class="col s037 input-text search">
                                                             <input type="text" id="text2" name="" value="">
                                                             <button type="button">검색</button>
                                                         </div>
                                                     </div>
-                                                </td>
-                                                <th><label for="text3"><span class="asterisk">*</span>관련 쪽지 제안</label></th>
-                                                <td>
-                                                    <div class="row">
-                                                        <div class="col s12 input-text search">
-                                                            <input type="text" id="text3" name="" value="">
-                                                            <button type="button">검색</button>
-                                                        </div>
-                                                    </div>
-                                                </td>
+                                                </td>                                                
                                             </tr>
                                             <tr>
                                                 <th><span class="asterisk">*</span>조직명</th>
@@ -91,30 +83,7 @@
                                                     </div>
                                                 </td>
                                             </tr>
-                                            <tr>
-                                                <th><label for="text5"><span class="asterisk">*</span>실행 완료일</label></th>
-                                                <td>
-                                                    <div class="row">
-                                                        <div class="col s6 input-text input-date">
-                                                            <input type="text" id="text5" name="" value="">
-                                                            <i class="ico calendar"></i>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <th><label for="select1"><span class="asterisk">*</span>년간 효과금액</label></th>
-                                                <td>
-                                                    <div class="row">
-                                                        <div class="col s6 select-group">
-                                                            <select name="" id="select2" title="년간 효과금액 선택">
-                                                                <option value="">선택</option>
-                                                            </select>
-                                                        </div>
-                                                        <div class="col s6 input-text pd-l10">
-                                                            <input type="text" id="text4" name="" value="">
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
+                                            
                                             <tr>
                                                 <th colspan="4" class="align-center"><span class="asterisk">*</span>제안내용</th>
                                             </tr>
@@ -147,101 +116,7 @@
                                                         </div>
                                                     </div>
                                                 </td>
-                                            </tr>
-                                            <tr>
-                                                <th>활동결과</th>
-                                                <td colspan="3" class="pd0">
-                                                    <div class="list-wrap" style="margin:-1px">
-                                                        <div class="list-content">
-                                                            <div class="list-table list">
-                                                                <table class="centered">
-                                                                    <caption></caption>
-                                                                    <colgroup>
-                                                                        <col style="width:50%">
-                                                                        <col>
-                                                                    </colgroup>
-                                                                    <thead>
-                                                                        <tr>
-                                                                            <th></th>
-                                                                            <th></th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                        <tr>
-                                                                            <td>
-                                                                                <div class="row">
-                                                                                    <div class="col s12 input-text file">
-                                                                                        <span class="file-path">
-                                                                                            <input type="text" id="file5_text" readonly name="" value="개선전이미지.jpg">
-                                                                                            <button type="button"><i class="ico file_del"><em>삭제</em></i></button>
-                                                                                        </span>
-                                                                                        <input type="file" id="file5" name="" value="">
-                                                                                        <label for="file5">파일추가</label>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="row">
-                                                                                    <div class="col s12 input-text file">
-                                                                                        <span class="file-path">
-                                                                                            <input type="text" id="file5_text" readonly name="" value="개선전이미지.jpg">
-                                                                                            <button type="button"><i class="ico file_del"><em>삭제</em></i></button>
-                                                                                        </span>
-                                                                                        <input type="file" id="file5" name="" value="">
-                                                                                        <label for="file5">파일추가</label>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="row">
-                                                                                    <div class="col s12 input-text file">
-                                                                                        <span class="file-path">
-                                                                                            <input type="text" id="file5_text" readonly name="" value="개선전이미지.jpg">
-                                                                                            <button type="button"><i class="ico file_del"><em>삭제</em></i></button>
-                                                                                        </span>
-                                                                                        <input type="file" id="file5" name="" value="">
-                                                                                        <label for="file5">파일추가</label>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </td>
-                                                                            <td>
-                                                                                <div class="row">
-                                                                                    <div class="col s12 input-text file">
-                                                                                        <span class="file-path">
-                                                                                            <input type="text" id="file5_text" readonly name="" value="개선전이미지.jpg">
-                                                                                            <button type="button"><i class="ico file_del"><em>삭제</em></i></button>
-                                                                                        </span>
-                                                                                        <input type="file" id="file5" name="" value="">
-                                                                                        <label for="file5">파일추가</label>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="row">
-                                                                                    <div class="col s12 input-text file">
-                                                                                        <span class="file-path">
-                                                                                            <input type="text" id="file5_text" readonly name="" value="개선전이미지.jpg">
-                                                                                            <button type="button"><i class="ico file_del"><em>삭제</em></i></button>
-                                                                                        </span>
-                                                                                        <input type="file" id="file5" name="" value="">
-                                                                                        <label for="file5">파일추가</label>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="row">
-                                                                                    <div class="col s12 input-text file">
-                                                                                        <span class="file-path">
-                                                                                            <input type="text" id="file5_text" readonly name="" value="개선전이미지.jpg">
-                                                                                            <button type="button"><i class="ico file_del"><em>삭제</em></i></button>
-                                                                                        </span>
-                                                                                        <input type="file" id="file5" name="" value="">
-                                                                                        <label for="file5">파일추가</label>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </td>
-                                                                        </tr>
-                                                                        
-                                                                        <tr>
-                                                                    </tbody>
-                                                                </table>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
+                                            </tr>                                            
                                             <tr>
                                                 <th><span class="asterisk">*</span>결재자 지정</th>
                                                 <td colspan="3" class="pd0">
@@ -336,11 +211,16 @@
                         <div class="list-footer">
                             <div class="list-btns">
                                 <button type="button" class="btn light-gray">저장</button>
-                                <button type="button" class="btn bg-gray">결제의뢰</button>                                
+                                <button type="button" class="btn bg-gray">결제의뢰</button>
+                                <button type="button" class="btn bg-gray">Drop신청</button>
+                                <button type="button" class="btn-excel">
+                                    <img src="/assets/images/icon_excel.png" alt="">
+                                    <span>다운로드</span>
+                                </button>   
                                 <a href="#" class="btn">목록</a>
                             </div>
                         </div>
-                   
+
         <!-- 조직도 -->
         <div class="modal-dimmed"></div>
         <div class="org-modal">
@@ -354,6 +234,5 @@
                 </figure>
             </div>
         </div>
-
 </body>
 </html>

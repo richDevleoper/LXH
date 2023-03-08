@@ -26,6 +26,7 @@ h1 {
 	background: url(<c:out value='/csl/img/common/bg_head.gif' />)
 		no-repeat;
 	text-align: center;
+	padding-top: 10px;
 }
 
 .login_form {
@@ -139,7 +140,7 @@ function checkLoginInfo(){
 
 <h1>
 	<!-- <img src="<c:out value='/csl/img/logo.gif' />" alt="logo" /> -->
-	<img src="" alt="logo" />
+	<img src="/assets/images/logo.png" alt="logo" />&nbsp;<span>품질혁신지원시스템</span>
 </h1>
 <div class="login_form">
 	<h2>

@@ -222,7 +222,7 @@
                             <div class="list-footer mg-t10">
                                 <div class="list-btns">
                                     <button type="button" class="btn-excel">
-                                        <img src="../images/icon_excel.png" alt="">
+                                        <img src="/assets/images/icon_excel.png" alt="">
                                         <span>다운로드</span>
                                     </button>
                                 </div>
@@ -240,7 +240,7 @@
                             </div>
                             <div class="list-content">
                                 <div class="list-table">
-                                    <table class="even">
+                                    <table class="even" id="tb1">
                                         <caption></caption>
                                         <colgroup>
                                             <col style="width:50px">
@@ -395,12 +395,22 @@
                                 </div>
                                 <div class="list-btns">
                                     <button type="button" class="btn-excel">
-                                        <img src="../images/icon_excel.png" alt="">
+                                        <img src="/assets/images/icon_excel.png" alt="">
                                         <span>다운로드</span>
                                     </button>
                                 </div>
                             </div>
                         </div>
+                        
+                        <script type="text/javascript">
+                        	$(document).ready(init);
+                        	
+                        	function init(){
+                        		$("#tb1 tbody tr").on("click", function(){
+                        			location.href="./004_06_report_01.do?menuKey=55";
+                        		}).css("cursor", "pointer");
+                        	}
+                        </script>
                     
 </body>
 </html>

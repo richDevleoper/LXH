@@ -228,7 +228,7 @@
                             <div class="list-footer">                               
                                 <div class="list-btns">
                                     <button type="button" class="btn-excel">
-                                        <img src="../images/icon_excel.png" alt="">
+                                        <img src="/assets/images/icon_excel.png" alt="">
                                         <span>다운로드</span>
                                     </button>                                    
                                 </div>
