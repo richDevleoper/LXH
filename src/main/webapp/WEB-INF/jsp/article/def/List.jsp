@@ -72,18 +72,32 @@ ${articleSearchVO.superHiddenTag}
 <input type="hidden" id="boardKey" name="boardKey" value="${articleSearchVO.boardKey }" />
 <input type="hidden" id="articleKey" name="articleKey" value="" />
 
-<div id="article_header">
-	<!-- 검색영역 -->
-	<fieldset id="article_search">
-	<legend class="hidden">게시글 검색</legend>
-	<div id="article_sel">
-		<label for="event_sdate1" class="hidden">조회기간</label> 
-		<input type="text" id="searchStartFrstOperDt" name="searchStartFrstOperDt" value="${articleSearchVO.searchStartFrstOperDt}" class="datepicker ip_type va_m" size="10"/>
-		<%-- <input type="button" title="날짜선택" class="at_calender va_m" /> --%>
-		~
-		<input type="text" id="searchEndFrstOperDt" name="searchEndFrstOperDt" value="${articleSearchVO.searchEndFrstOperDt}" class="datepicker ip_type va_m" size="10"/>
-		<%-- <input type="button" title="날짜선택" class="at_calender va_m" /> --%>
-		<c:if test="${boardVO.catgrFlg eq 'Y'}">
+<div class="list-wrap">
+
+<div class="list-search">
+                                
+
+                                <div class="search-form row">
+                                
+                                	<div class="form-inline form-input col s5">
+                                    	<div class="col s2 align-right">
+                                            <label>조회기간</label>
+                                        </div>                                        
+                                        <div class="pd-l10 col s10">
+                                            <div class="col s5 input-date">
+                                                <input type="text" class="datepicker" readonly id="searchStartFrstOperDt" name="searchStartFrstOperDt" value="${articleSearchVO.searchStartFrstOperDt}" >
+                                                <i class="ico calendar"></i>
+                                            </div>
+                                            <span class="col s1 text-bul align-center">~</span>
+                                            <div class="col s5 input-date">
+                                                <input type="text" class="datepicker" readonly id="searchEndFrstOperDt" name="searchEndFrstOperDt" value="${articleSearchVO.searchEndFrstOperDt}">
+                                                <i class="ico calendar"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+
+<c:if test="${boardVO.catgrFlg eq 'Y'}">
+<div class="form-inline form-input col s5">
 			<label class="hidden" for="searchCatgr">카테고리</label>
 			<select id="searchCatgr" name="searchCatgr" class="sel_type ml15" style="width:100px;">
 				<option value="" >전체</option>	
@@ -91,18 +105,39 @@ ${articleSearchVO.superHiddenTag}
 					<option value="${item.codeId}">${item.codeNm }</option>
 				</c:forEach>
 			</select>
-		</c:if>
-				
-		<label class="hidden" for="searchClass">검색구분</label>
-		<form:select path="searchClass" cssClass="sel_type ml15" cssStyle="width:80px;">
-			<form:option value="TITLE" label="제목" />
-			<form:option value="CONTENT" label="내용" />
-			<form:option value="WRITER" label="작성자" />
-		</form:select>
-		<form:input path="searchValue" cssClass="ip_type va_m" title="검색어" size="20" />
-		<input type="button" id="search" name="search" value="검색" class="btn_st1 va_m" onclick="searchList();" />
-	</div>
-	</fieldset>
+</div>                                			
+</c:if>
+
+                                    <div class="form-inline form-input col s6">
+                                        <div class="col s2 align-right">
+                                            <label>검색어</label>
+                                        </div>
+                                        <div class="pd-l10 col s3">
+                                        	<form:select path="searchClass" cssClass="sel_type ml15">
+												<form:option value="TITLE" label="제목" />
+												<form:option value="CONTENT" label="내용" />
+												<form:option value="WRITER" label="작성자" />
+											</form:select>
+                                        </div>
+                                        <div class="pd-l10 col s7">
+	                                        
+                                            <form:input path="searchValue" cssClass="ip_type va_m" title="검색어"  />
+                                        </div>
+                                    </div>
+                                  
+                                    
+                                    <div class="col s1 align-right">
+                                        <button type="button" class="btn-submit"  id="search" name="search"  onclick="searchList();">조회</button>
+                                    </div>
+                                </div>
+                                
+                                
+                            </div>
+
+</div>
+
+<div id="article_header">
+
 	<!-- //검색영역 -->
 	<!-- 페이지 정보 -->
 	<div id="page_info">

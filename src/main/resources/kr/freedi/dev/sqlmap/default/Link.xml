@@ -76,7 +76,18 @@
 	select *
 	  from (
 		SELECT
-			row_number() over (order by ) as num
+			row_number() over (order by <choose>
+			<when test="orderBy != null and orderBy != ''">
+				<choose>
+					<when test="orderBy == 'FRST_OPER_DT'.toString()">FRST_OPER_DT DESC</when>
+					<when test="orderBy == 'TITLE'.toString()">TITLE ASC</when>
+					<otherwise>FRST_OPER_DT DESC</otherwise>
+				</choose>
+			</when>
+			<otherwise>
+				FRST_OPER_DT DESC
+			</otherwise>
+		</choose>) as num
 			,T.LINK_KEY
 			,T.LOCATE_TYP
 			,T.TITLE
@@ -107,7 +118,7 @@
 			</otherwise>
 		</choose>
 		)
-		where num as between #{firstRecordIndex} and #{recordCountPerPage}
+		where num between #{firstRecordIndex} and #{recordCountPerPage}
 	</select>
 	
 	<select id="selectFullList" resultType="egovMap">

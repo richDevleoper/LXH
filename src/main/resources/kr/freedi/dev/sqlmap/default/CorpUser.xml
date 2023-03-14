@@ -5,11 +5,15 @@
 	<sql id="defCond">
 		<where>
 			<trim prefixOverrides="AND|OR">
-				<if test="searchStartFrstOperDt != null and searchStartFrstOperDt != ''">
-					AND T.FRST_OPER_DT <![CDATA[>=]]> #{searchStartFrstOperDt}
+				<if
+					test="searchStartFrstOperDt != null and searchStartFrstOperDt != ''">
+					AND T.FRST_OPER_DT <![CDATA[>=]]>
+					#{searchStartFrstOperDt}
 				</if>
-				<if test="searchEndFrstOperDt != null and searchEndFrstOperDt != ''">
-					AND T.FRST_OPER_DT <![CDATA[<=]]> TO_DATE(#{searchEndFrstOperDt}, 'YYYY-MM-DD') + 1
+				<if
+					test="searchEndFrstOperDt != null and searchEndFrstOperDt != ''">
+					AND T.FRST_OPER_DT <![CDATA[<=]]>
+					TO_DATE(#{searchEndFrstOperDt}, 'YYYY-MM-DD') + 1
 				</if>
 				<if test="searchRegSt != null and searchRegSt != ''">
 					AND T.REG_ST = #{searchRegSt}
@@ -19,7 +23,7 @@
 				</if>
 				<if test="searchClass != null and searchClass != ''">
 					<if test="searchValue != null and searchValue != ''">
-						AND 
+						AND
 						<trim prefixOverrides="AND">
 							<choose>
 								<when test="searchClass == 'USER_ID'.toString()">
@@ -40,23 +44,23 @@
 								<otherwise></otherwise>
 							</choose>
 						</trim>
-					</if>			
+					</if>
 				</if>
 			</trim>
 		</where>
 	</sql>
 
 	<select id="selectListCount" resultType="int">
-		SELECT COUNT(*) FROM TB_CORP_USER T 
+		SELECT COUNT(*) FROM TB_CORP_USER T
 		<include refid="defCond"></include>
 	</select>
 
 	<select id="selectList" resultType="egovMap">
-	select *
-	  from (
+		select *
+		from (
 		SELECT
-			row_number() over (
-			ORDER BY 
+		row_number() over (
+		ORDER BY
 		<choose>
 			<when test="orderBy != null and orderBy != ''">
 				<choose>
@@ -68,36 +72,36 @@
 			<otherwise>
 				USER_NM ASC
 			</otherwise>
-		</choose>			
-			)
-			,T.USER_ID
-			,T.USER_PW
-			,T.USER_NM
-			,T.CHR_TEL
-			,T.CHR_MOB
-			,T.CHR_FAX
-			,T.CHR_EMAIL
-			,T.CHR_ZIP
-			,T.CHR_ADDR1
-			,T.CHR_ADDR2
-			,T.CORP_ID
-			,T.CORP_NM
-			,T.CORP_TEL
-			,T.CORP_MOB
-			,T.CORP_FAX
-			,T.CORP_EMAIL
-			,T.CORP_ZIP
-			,T.CORP_ADDR1
-			,T.CORP_ADDR2
-			,T.REG_ST
-			,T.AUTH_ID
-			,(SELECT AUTH_NM FROM TB_USER_AUTH UA WHERE UA.AUTH_ID = T.AUTH_ID) AUTH_NM
-			,T.LAST_LOGIN_DT
-			,T.FRST_OPER_DT
-			,T.LAST_OPER_DT
+		</choose>
+		) as num
+		,T.USER_ID
+		,T.USER_PW
+		,T.USER_NM
+		,T.CHR_TEL
+		,T.CHR_MOB
+		,T.CHR_FAX
+		,T.CHR_EMAIL
+		,T.CHR_ZIP
+		,T.CHR_ADDR1
+		,T.CHR_ADDR2
+		,T.CORP_ID
+		,T.CORP_NM
+		,T.CORP_TEL
+		,T.CORP_MOB
+		,T.CORP_FAX
+		,T.CORP_EMAIL
+		,T.CORP_ZIP
+		,T.CORP_ADDR1
+		,T.CORP_ADDR2
+		,T.REG_ST
+		,T.AUTH_ID
+		,(SELECT AUTH_NM FROM TB_USER_AUTH UA WHERE UA.AUTH_ID = T.AUTH_ID) AUTH_NM
+		,T.LAST_LOGIN_DT
+		,T.FRST_OPER_DT
+		,T.LAST_OPER_DT
 		FROM TB_CORP_USER T
 		<include refid="defCond"></include>
-		ORDER BY 
+		ORDER BY
 		<choose>
 			<when test="orderBy != null and orderBy != ''">
 				<choose>
@@ -111,266 +115,274 @@
 			</otherwise>
 		</choose>
 		)
-		where num as between #{firstRecordIndex} and #{recordCountPerPage}
+		where num between #{firstRecordIndex} and #{recordCountPerPage}
 	</select>
 
-	<select id="select" resultType="kr.freedi.dev.user.domain.CorpUserVO">
-		SELECT 
-			T.USER_ID userId
-			,T.USER_PW userPw
-			,T.USER_NM userNm
-			,T.CHR_TEL chrTel
-			,T.CHR_MOB chrMob
-			,T.CHR_FAX chrFax
-			,T.CHR_EMAIL chrEmail
-			,T.CHR_ZIP chrZip
-			,T.CHR_ADDR1 chrAddr1
-			,T.CHR_ADDR2 chrAddr2
-			,T.CORP_ID corpId
-			,T.CORP_NM corpNm
-			,T.CORP_TEL corpTel
-			,T.CORP_MOB corpMob
-			,T.CORP_FAX corpFax
-			,T.CORP_EMAIL corpEmail
-			,T.CORP_ZIP corpZip
-			,T.CORP_ADDR1 corpAddr1
-			,T.CORP_ADDR2 corpAddr2
-			,T.REG_ST regSt
-			,T.AUTH_ID authId
-			,T.LAST_LOGIN_DT lastLoginDt
-			,T.FRST_OPER_DT frstOperDt
-			,T.LAST_OPER_DT lastOperDt
-		FROM TB_CORP_USER T 
+	<select id="select"
+		resultType="kr.freedi.dev.user.domain.CorpUserVO">
+		SELECT
+		T.USER_ID userId
+		,T.USER_PW userPw
+		,T.USER_NM userNm
+		,T.CHR_TEL chrTel
+		,T.CHR_MOB chrMob
+		,T.CHR_FAX chrFax
+		,T.CHR_EMAIL chrEmail
+		,T.CHR_ZIP chrZip
+		,T.CHR_ADDR1 chrAddr1
+		,T.CHR_ADDR2 chrAddr2
+		,T.CORP_ID corpId
+		,T.CORP_NM corpNm
+		,T.CORP_TEL corpTel
+		,T.CORP_MOB corpMob
+		,T.CORP_FAX corpFax
+		,T.CORP_EMAIL corpEmail
+		,T.CORP_ZIP corpZip
+		,T.CORP_ADDR1 corpAddr1
+		,T.CORP_ADDR2 corpAddr2
+		,T.REG_ST regSt
+		,T.AUTH_ID authId
+		,T.LAST_LOGIN_DT lastLoginDt
+		,T.FRST_OPER_DT frstOperDt
+		,T.LAST_OPER_DT lastOperDt
+		FROM TB_CORP_USER T
 		WHERE T.USER_ID = #{userId}
 	</select>
-	
-	<select id="selectByUserIdAndUserPw" resultType="kr.freedi.dev.user.domain.CorpUserVO">
-		SELECT 
-			T.USER_ID userId
-			,T.USER_PW userPw
-			,T.USER_NM userNm
-			,T.CHR_TEL chrTel
-			,T.CHR_MOB chrMob
-			,T.CHR_FAX chrFax
-			,T.CHR_EMAIL chrEmail
-			,T.CHR_ZIP chrZip
-			,T.CHR_ADDR1 chrAddr1
-			,T.CHR_ADDR2 chrAddr2
-			,T.CORP_ID corpId
-			,T.CORP_NM corpNm
-			,T.CORP_TEL corpTel
-			,T.CORP_MOB corpMob
-			,T.CORP_FAX corpFax
-			,T.CORP_EMAIL corpEmail
-			,T.CORP_ZIP corpZip
-			,T.CORP_ADDR1 corpAddr1
-			,T.CORP_ADDR2 corpAddr2
-			,T.REG_ST regSt
-			,T.AUTH_ID authId
-			,T.LAST_LOGIN_DT lastLoginDt
-			,T.FRST_OPER_DT frstOperDt
-			,T.LAST_OPER_DT lastOperDt
-		FROM TB_CORP_USER T 
+
+	<select id="selectByUserIdAndUserPw"
+		resultType="kr.freedi.dev.user.domain.CorpUserVO">
+		SELECT
+		T.USER_ID userId
+		,T.USER_PW userPw
+		,T.USER_NM userNm
+		,T.CHR_TEL chrTel
+		,T.CHR_MOB chrMob
+		,T.CHR_FAX chrFax
+		,T.CHR_EMAIL chrEmail
+		,T.CHR_ZIP chrZip
+		,T.CHR_ADDR1 chrAddr1
+		,T.CHR_ADDR2 chrAddr2
+		,T.CORP_ID corpId
+		,T.CORP_NM corpNm
+		,T.CORP_TEL corpTel
+		,T.CORP_MOB corpMob
+		,T.CORP_FAX corpFax
+		,T.CORP_EMAIL corpEmail
+		,T.CORP_ZIP corpZip
+		,T.CORP_ADDR1 corpAddr1
+		,T.CORP_ADDR2 corpAddr2
+		,T.REG_ST regSt
+		,T.AUTH_ID authId
+		,T.LAST_LOGIN_DT lastLoginDt
+		,T.FRST_OPER_DT frstOperDt
+		,T.LAST_OPER_DT lastOperDt
+		FROM TB_CORP_USER T
 		WHERE T.USER_ID = #{userId}
 		AND T.USER_PW = #{userPw}
 	</select>
-	
-	<select id="selectByUserNmAndChrMob" resultType="kr.freedi.dev.user.domain.CorpUserVO">
-		SELECT 
-			T.USER_ID userId
-			,T.USER_PW userPw
-			,T.USER_NM userNm
-			,T.CHR_TEL chrTel
-			,T.CHR_MOB chrMob
-			,T.CHR_FAX chrFax
-			,T.CHR_EMAIL chrEmail
-			,T.CHR_ZIP chrZip
-			,T.CHR_ADDR1 chrAddr1
-			,T.CHR_ADDR2 chrAddr2
-			,T.CORP_ID corpId
-			,T.CORP_NM corpNm
-			,T.CORP_TEL corpTel
-			,T.CORP_MOB corpMob
-			,T.CORP_FAX corpFax
-			,T.CORP_EMAIL corpEmail
-			,T.CORP_ZIP corpZip
-			,T.CORP_ADDR1 corpAddr1
-			,T.CORP_ADDR2 corpAddr2
-			,T.REG_ST regSt
-			,T.AUTH_ID authId
-			,T.LAST_LOGIN_DT lastLoginDt
-			,T.FRST_OPER_DT frstOperDt
-			,T.LAST_OPER_DT lastOperDt
-		FROM TB_CORP_USER T 
+
+	<select id="selectByUserNmAndChrMob"
+		resultType="kr.freedi.dev.user.domain.CorpUserVO">
+		SELECT
+		T.USER_ID userId
+		,T.USER_PW userPw
+		,T.USER_NM userNm
+		,T.CHR_TEL chrTel
+		,T.CHR_MOB chrMob
+		,T.CHR_FAX chrFax
+		,T.CHR_EMAIL chrEmail
+		,T.CHR_ZIP chrZip
+		,T.CHR_ADDR1 chrAddr1
+		,T.CHR_ADDR2 chrAddr2
+		,T.CORP_ID corpId
+		,T.CORP_NM corpNm
+		,T.CORP_TEL corpTel
+		,T.CORP_MOB corpMob
+		,T.CORP_FAX corpFax
+		,T.CORP_EMAIL corpEmail
+		,T.CORP_ZIP corpZip
+		,T.CORP_ADDR1 corpAddr1
+		,T.CORP_ADDR2 corpAddr2
+		,T.REG_ST regSt
+		,T.AUTH_ID authId
+		,T.LAST_LOGIN_DT lastLoginDt
+		,T.FRST_OPER_DT frstOperDt
+		,T.LAST_OPER_DT lastOperDt
+		FROM TB_CORP_USER T
 		WHERE T.USER_NM = #{userNm}
 		AND T.CHR_MOB = #{chrMob}
 	</select>
-	
-	<select id="selectByUserIdAndUserNmAndEmail" resultType="kr.freedi.dev.user.domain.CorpUserVO">
-		SELECT 
-			T.USER_ID userId
-			,T.USER_PW userPw
-			,T.USER_NM userNm
-			,T.CHR_TEL chrTel
-			,T.CHR_MOB chrMob
-			,T.CHR_FAX chrFax
-			,T.CHR_EMAIL chrEmail
-			,T.CHR_ZIP chrZip
-			,T.CHR_ADDR1 chrAddr1
-			,T.CHR_ADDR2 chrAddr2
-			,T.CORP_ID corpId
-			,T.CORP_NM corpNm
-			,T.CORP_TEL corpTel
-			,T.CORP_MOB corpMob
-			,T.CORP_FAX corpFax
-			,T.CORP_EMAIL corpEmail
-			,T.CORP_ZIP corpZip
-			,T.CORP_ADDR1 corpAddr1
-			,T.CORP_ADDR2 corpAddr2
-			,T.REG_ST regSt
-			,T.AUTH_ID authId
-			,T.LAST_LOGIN_DT lastLoginDt
-			,T.FRST_OPER_DT frstOperDt
-			,T.LAST_OPER_DT lastOperDt
-		FROM TB_CORP_USER T 
+
+	<select id="selectByUserIdAndUserNmAndEmail"
+		resultType="kr.freedi.dev.user.domain.CorpUserVO">
+		SELECT
+		T.USER_ID userId
+		,T.USER_PW userPw
+		,T.USER_NM userNm
+		,T.CHR_TEL chrTel
+		,T.CHR_MOB chrMob
+		,T.CHR_FAX chrFax
+		,T.CHR_EMAIL chrEmail
+		,T.CHR_ZIP chrZip
+		,T.CHR_ADDR1 chrAddr1
+		,T.CHR_ADDR2 chrAddr2
+		,T.CORP_ID corpId
+		,T.CORP_NM corpNm
+		,T.CORP_TEL corpTel
+		,T.CORP_MOB corpMob
+		,T.CORP_FAX corpFax
+		,T.CORP_EMAIL corpEmail
+		,T.CORP_ZIP corpZip
+		,T.CORP_ADDR1 corpAddr1
+		,T.CORP_ADDR2 corpAddr2
+		,T.REG_ST regSt
+		,T.AUTH_ID authId
+		,T.LAST_LOGIN_DT lastLoginDt
+		,T.FRST_OPER_DT frstOperDt
+		,T.LAST_OPER_DT lastOperDt
+		FROM TB_CORP_USER T
 		WHERE T.USER_ID = #{userId}
 		AND T.USER_NM = #{userNm}
-		AND T.CHR_EMAIL = #{chrEmail}
+		AND T.CHR_EMAIL =
+		#{chrEmail}
 	</select>
 
 	<insert id="insert">
 		INSERT INTO TB_CORP_USER (
-			USER_ID
-			,USER_PW
-			,USER_NM
-			,CHR_TEL
-			,CHR_MOB
-			,CHR_FAX
-			,CHR_EMAIL
-			,CHR_ZIP
-			,CHR_ADDR1
-			,CHR_ADDR2
-			,CORP_ID
-			,CORP_NM
-			,CORP_TEL
-			,CORP_MOB
-			,CORP_FAX
-			,CORP_EMAIL
-			,CORP_ZIP
-			,CORP_ADDR1
-			,CORP_ADDR2
-			,REG_ST
-			,AUTH_ID
-			,LAST_LOGIN_DT
-			,FRST_OPER_DT
-			,LAST_OPER_DT
+		USER_ID
+		,USER_PW
+		,USER_NM
+		,CHR_TEL
+		,CHR_MOB
+		,CHR_FAX
+		,CHR_EMAIL
+		,CHR_ZIP
+		,CHR_ADDR1
+		,CHR_ADDR2
+		,CORP_ID
+		,CORP_NM
+		,CORP_TEL
+		,CORP_MOB
+		,CORP_FAX
+		,CORP_EMAIL
+		,CORP_ZIP
+		,CORP_ADDR1
+		,CORP_ADDR2
+		,REG_ST
+		,AUTH_ID
+		,LAST_LOGIN_DT
+		,FRST_OPER_DT
+		,LAST_OPER_DT
 		) VALUES (
-			#{userId}
-			,#{userPw}
-			,#{userNm}
-			,#{chrTel}
-			,#{chrMob}
-			,#{chrFax}
-			,#{chrEmail}
-			,#{chrZip}
-			,#{chrAddr1}
-			,#{chrAddr2}
-			,#{corpId}
-			,#{corpNm}
-			,#{corpTel}
-			,#{corpMob}
-			,#{corpFax}
-			,#{corpEmail}
-			,#{corpZip}
-			,#{corpAddr1}
-			,#{corpAddr2}
-			,#{regSt}
-			,#{authId}
-			,NULL
-			,SYSDATE
-			,NULL
+		#{userId}
+		,#{userPw}
+		,#{userNm}
+		,#{chrTel}
+		,#{chrMob}
+		,#{chrFax}
+		,#{chrEmail}
+		,#{chrZip}
+		,#{chrAddr1}
+		,#{chrAddr2}
+		,#{corpId}
+		,#{corpNm}
+		,#{corpTel}
+		,#{corpMob}
+		,#{corpFax}
+		,#{corpEmail}
+		,#{corpZip}
+		,#{corpAddr1}
+		,#{corpAddr2}
+		,#{regSt}
+		,#{authId}
+		,NULL
+		,SYSDATE
+		,NULL
 		)
 	</insert>
 
 	<update id="updateByMngr">
-		UPDATE TB_CORP_USER SET 
-			<trim prefixOverrides=",">
-				<if test="userPw != null and userPw != ''">
-					USER_PW = #{userPw}
-				</if>
-				,USER_NM = #{userNm}
-				,CHR_TEL = #{chrTel}
-				,CHR_MOB = #{chrMob}
-				,CHR_FAX = #{chrFax}
-				,CHR_EMAIL = #{chrEmail}
-				,CHR_ZIP = #{chrZip}
-				,CHR_ADDR1 = #{chrAddr1}
-				,CHR_ADDR2 = #{chrAddr2}
-				,CORP_ID = #{corpId}
-				,CORP_NM = #{corpNm}
-				,CORP_TEL = #{corpTel}
-				,CORP_MOB = #{corpMob}
-				,CORP_FAX = #{corpFax}
-				,CORP_EMAIL = #{corpEmail}
-				,CORP_ZIP = #{corpZip}
-				,CORP_ADDR1 = #{corpAddr1}
-				,CORP_ADDR2 = #{corpAddr2}
-				,REG_ST = #{regSt}
-				,AUTH_ID = #{authId}
-				,LAST_OPER_DT = SYSDATE
-			</trim>
+		UPDATE TB_CORP_USER SET
+		<trim prefixOverrides=",">
+			<if test="userPw != null and userPw != ''">
+				USER_PW = #{userPw}
+			</if>
+			,USER_NM = #{userNm}
+			,CHR_TEL = #{chrTel}
+			,CHR_MOB = #{chrMob}
+			,CHR_FAX = #{chrFax}
+			,CHR_EMAIL = #{chrEmail}
+			,CHR_ZIP = #{chrZip}
+			,CHR_ADDR1 = #{chrAddr1}
+			,CHR_ADDR2 = #{chrAddr2}
+			,CORP_ID = #{corpId}
+			,CORP_NM = #{corpNm}
+			,CORP_TEL = #{corpTel}
+			,CORP_MOB = #{corpMob}
+			,CORP_FAX = #{corpFax}
+			,CORP_EMAIL = #{corpEmail}
+			,CORP_ZIP = #{corpZip}
+			,CORP_ADDR1 = #{corpAddr1}
+			,CORP_ADDR2 = #{corpAddr2}
+			,REG_ST = #{regSt}
+			,AUTH_ID = #{authId}
+			,LAST_OPER_DT = SYSDATE
+		</trim>
 		WHERE
 		USER_ID = #{userId}
 	</update>
-	
+
 	<update id="updateByCorp">
-		UPDATE TB_CORP_USER SET 
-			<trim prefixOverrides=",">
-				,CHR_TEL = #{chrTel}
-				,CHR_MOB = #{chrMob}
-				,CHR_FAX = #{chrFax}
-				,CHR_EMAIL = #{chrEmail}
-				,CHR_ZIP = #{chrZip}
-				,CHR_ADDR1 = #{chrAddr1}
-				,CHR_ADDR2 = #{chrAddr2}
-				,CORP_ID = #{corpId}
-				,CORP_NM = #{corpNm}
-				,CORP_TEL = #{corpTel}
-				,CORP_MOB = #{corpMob}
-				,CORP_FAX = #{corpFax}
-				,CORP_EMAIL = #{corpEmail}
-				,CORP_ZIP = #{corpZip}
-				,CORP_ADDR1 = #{corpAddr1}
-				,CORP_ADDR2 = #{corpAddr2}
-				,LAST_OPER_DT = SYSDATE
-			</trim>
+		UPDATE TB_CORP_USER SET
+		<trim prefixOverrides=",">
+			,CHR_TEL = #{chrTel}
+			,CHR_MOB = #{chrMob}
+			,CHR_FAX = #{chrFax}
+			,CHR_EMAIL = #{chrEmail}
+			,CHR_ZIP = #{chrZip}
+			,CHR_ADDR1 = #{chrAddr1}
+			,CHR_ADDR2 = #{chrAddr2}
+			,CORP_ID = #{corpId}
+			,CORP_NM = #{corpNm}
+			,CORP_TEL = #{corpTel}
+			,CORP_MOB = #{corpMob}
+			,CORP_FAX = #{corpFax}
+			,CORP_EMAIL = #{corpEmail}
+			,CORP_ZIP = #{corpZip}
+			,CORP_ADDR1 = #{corpAddr1}
+			,CORP_ADDR2 = #{corpAddr2}
+			,LAST_OPER_DT = SYSDATE
+		</trim>
 		WHERE
 		USER_ID = #{userId}
 	</update>
-	
+
 	<update id="updatePw">
 		UPDATE TB_CORP_USER SET USER_PW = #{userPw}
-		WHERE USER_ID = #{userId}
+		WHERE
+		USER_ID = #{userId}
 	</update>
 
 	<update id="updateLastLoginDt">
 		UPDATE TB_CORP_USER SET LAST_LOGIN_DT = SYSDATE
-		WHERE USER_ID = #{userId}
+		WHERE
+		USER_ID = #{userId}
 	</update>
-	
+
 	<update id="updateRegSt">
 		UPDATE TB_CORP_USER SET REG_ST = #{regSt}
-		WHERE USER_ID = #{userId}
+		WHERE
+		USER_ID = #{userId}
 	</update>
-	
+
 	<update id="updateSetNullAuthId">
-		UPDATE TB_MNGR_USER 
+		UPDATE TB_MNGR_USER
 		SET AUTH_ID = NULL
 		WHERE AUTH_ID = #{authId}
 	</update>
-	
+
 	<delete id="delete">
-		DELETE FROM TB_CORP_USER	WHERE USER_ID = #{userId}
-	</delete>	
+		DELETE FROM TB_CORP_USER WHERE USER_ID = #{userId}
+	</delete>
 </mapper>
 

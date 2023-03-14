@@ -46,9 +46,9 @@
 			,T.ORDER_NO
 			,T.ACT_FLG
 			,T.FRST_OPER_ID
-			,T.FRST_OPER_DT
+			,to_char(T.FRST_OPER_DT, 'yyyyMMdd') as FRST_OPER_DT
 			,T.LAST_OPER_ID
-			,T.LAST_OPER_DT
+			,to_char(T.LAST_OPER_DT, 'yyyyMMdd') as LAST_OPER_DT
 		FROM TB_USER_AUTH T
 		<include refid="defCond"></include>
 		ORDER BY T.USER_GRP, T.ORDER_NO ASC

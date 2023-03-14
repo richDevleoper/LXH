@@ -200,8 +200,8 @@ ${userAuthSearchVO.superHiddenTagWithoutToggle}
 			</td>
 			<td>
 				<!-- fmt:formatDate pattern="yyyy-MM-dd" value="${item.frstOperDt}" /-->
-				<fmt:parseDate value='${item.frstOperDt}' var='frstOperDt' pattern='yyyymmdd'/> <!-- J's 20230202 -->
-				<fmt:formatDate value="${frstOperDt}" pattern="yyyy-mm-dd"/>
+				<fmt:parseDate value='${item.frstOperDt}' var='frstOperDt' pattern='yyyyMMdd'/> <!-- J's 20230202 -->
+				<fmt:formatDate value="${frstOperDt}" pattern="yyyy-MM-dd"/>
 			</td>
 			<td>
 				<button class="jButton" onclick="return menuUse('${item.authId}');" <c:if test="${item.userGrp ne 'MNGR_USER'}">disabled="disabled"</c:if>>메뉴사용설정</button>
