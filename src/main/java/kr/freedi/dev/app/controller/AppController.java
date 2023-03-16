@@ -397,6 +397,14 @@ public class AppController {
 		return "app/qi/004_03_audit_01";
 	}
 	
+	@RequestMapping({"/app/004_04_01_grd_eval.do"})  // 이 주소를 메뉴 URL로 등록하겠습니다.
+	public String handler004_04_01(HttpServletRequest request, ModelMap model,  // 핸들러 메서드의 이름도 고유하게 바꿉니다.
+			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
+			UserVO userSession)throws Exception {
+		
+		return "app/qi/004_04_01_grd_eval"; //JSP 파일의 경로를 넣되 확장자는 넣지 않습니다.
+	}
+	
 	@RequestMapping({"/app/004_06_report.do"})
 	public String handler004_06(HttpServletRequest request, ModelMap model,
 			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
