@@ -51,14 +51,14 @@ public class DefDefaultPaginationRenderer  implements PaginationRenderer {
 		</ul>
         */
 		
-		firstPageLabel = "<ul class=\"paging\">\n";
-		firstPageLabel += "\t<li><a href=\"#\" onclick=\"{0}({1}); return false;\" title=\"처음\">&lt;&lt;</a></li>\n"; 
-        previousPageLabel = "\t<li><a href=\"#\" onclick=\"{0}({1}); return false;\" title=\"이전 " + pageSize + " 페이지\">&lt;</a></li>\n";
-        currentPageLabel = "\t<li><span class=\"current\">{0}</span></li>\n";
-        otherPageLabel = "\t<li><a href=\"#\" onclick=\"{0}({1}); return false;\" title=\"{2} 페이지\">{2}</a></li>\n";
-        nextPageLabel = "\t<li><a href=\"#\" onclick=\"{0}({1}); return false;\" title=\"다음 " + pageSize + " 페이지\">&gt;</a></li>\n";
-        lastPageLabel = "\t<li><a href=\"#\" onclick=\"{0}({1}); return false;\" title=\"마지막\">&gt;&gt;</a></li>\n";
-        lastPageLabel += "</ul>";
+		firstPageLabel = "<div class=\"pagination\">\n";
+		firstPageLabel += "\t<a href=\"#\" onclick=\"{0}({1}); return false;\" title=\"처음\" class=\"first\">&lt;&lt;</a></li>\n"; 
+        previousPageLabel = "\t<a href=\"#\" onclick=\"{0}({1}); return false;\" title=\"이전 " + pageSize + " 페이지\" class=\"prev\">&lt;</a></li>\n";
+        currentPageLabel = "\t<span class=\"cur num\">{0}</span></li>\n";
+        otherPageLabel = "\t<a href=\"#\" onclick=\"{0}({1}); return false;\" title=\"{2} 페이지\" class=\"num\">{2}</a>\n";
+        nextPageLabel = "\t<a href=\"#\" onclick=\"{0}({1}); return false;\" title=\"다음 " + pageSize + " 페이지\" class=\"next\">&gt;</a>\n";
+        lastPageLabel = "\t<a href=\"#\" onclick=\"{0}({1}); return false;\" title=\"마지막\" class=\"last\">&gt;&gt;</a>\n";
+        lastPageLabel += "</div>";
 
         
 		if(firstPageNoOnPageList > pageSize){
