@@ -7,8 +7,20 @@
 <head>
     <script src="./assets/js/chartjs_dist_2.4.1/chart.js"></script>"
 	<script src="./assets/js/handleChart.js"></script>
-   <!--  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script> -->
+   <!--  
+   	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script> 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    -->
+    
+    <script src="./assets/js/chart.js"></script>
+    <script src="./assets/js/chartjs-plugin-datalabels@2.0.0"></script>
+    <script src="./assets/js/apexcharts.js"></script>
+    
+    
+    
 
 </head>
 <body>
@@ -23,7 +35,7 @@
                     <li>
                         <div class="dashboard-item-top flex-col2">
                             <div class="flex-item">
-                                <span>6σ 인재 현황</span>
+                                <span> 인재 현황</span>
                                 <a href=""></a>
                             </div>
                             <span>2023년 기준</span>
@@ -71,8 +83,8 @@
                             <span>2023.06.01 기준</span>
                         </div>
                         <div class="dashboard-item-bottom">
-                            <div class="bar-chart color-or">
-                                <ul class="bar-chart-head">
+                            <div class="bar-chart color-or" id="chart" style="min-height: 365px">
+                                <!-- <ul class="bar-chart-head">
                                     <li>0</li>
                                     <li>50</li>
                                     <li>100</li>
@@ -81,6 +93,7 @@
                                     <li>
                                         <span>창호</span>
                                         <div style="background-color:#c4c4c4">
+                                            <div></div>
                                             <p><span class="color-white">80</span></p>
                                             <span class="color-white">
                                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;20</span>
@@ -157,8 +170,68 @@
                                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;20</span>
                                         </div>
                                     </li>
-                                </ul>
+                                </ul> -->
                             </div>
+                            <script>
+                                var options = {
+                                    series: [{
+                                        data: [44, 55, 55, 55, 55, 55, 55, 55, 55, 55],
+                                    }, {
+                                        data: [53, 32, 33, 52, 13, 53, 32, 33, 52, 13],
+                                    }],
+                                    chart: {
+                                        type: 'bar',
+                                        height: 330,
+                                        stacked: true,
+                                        stackType: '100%',
+                                        toolbar: false,
+                                        fontFamily: '나눔고딕, NanumGothic, sans-serif',
+                                        foreColor: '#AAAAAA',
+                                    },
+                                    plotOptions: {
+                                        bar: {
+                                            horizontal: true,
+                                        },
+                                    },
+                                    dataLabels: {
+                                        style: {
+                                            colors: ['#000', '#FFF'],
+                                        }
+                                    },
+                                    stroke: {
+                                        width: 1,
+                                        colors: ['#fff'],
+                                    },
+                                    title: {
+                                        text: undefined,
+                                    },
+                                    xaxis: {
+                                        categories: ['창호', '바닥재', '단열재', '벽지', '표면소재', '산업용필름', '자동차소재', '인테리어', '연구소', '품질'],
+                                        position: 'top',
+                                        tickAmount: 2,
+                                    },
+                                    tooltip: {
+                                        enabled: false,
+                                    },
+                                    fill: {
+                                        opacity: 1,
+                                    },
+                                    legend: {
+                                        show: false,
+                                    },
+                                    grid: {
+                                        show: false,
+                                    },
+                                    fill: {
+                                        colors: ['#ff9800', '#c4c4c4'],
+                                        opacity: 1,
+                                    },
+                                    
+                                };
+                        
+                                var chart = new ApexCharts(document.querySelector("#chart"), options);
+                                chart.render();
+                            </script>
                         </div>
                     </li>
                     <li>
@@ -170,8 +243,67 @@
                             <span>2023,06.01 기준</span>
                         </div>
                         <div class="dashboard-item-bottom">
-                            <div class="bar-chart color-gr">
-                                <ul class="bar-chart-head">
+                            <div class="bar-chart color-gr" id="chart2">
+                                <script>
+                                    var options = {
+                                        series: [{
+                                            data: [44, 55, 55, 55, 55, 55, 55, 55, 55, 55],
+                                        }, {
+                                            data: [53, 32, 33, 52, 13, 53, 32, 33, 52, 13],
+                                        }],
+                                        chart: {
+                                            type: 'bar',
+                                            height: 330,
+                                            stacked: true,
+                                            stackType: '100%',
+                                            toolbar: false,
+                                            fontFamily: '나눔고딕, NanumGothic, sans-serif',
+                                            foreColor: '#AAAAAA',
+                                        },
+                                        plotOptions: {
+                                            bar: {
+                                                horizontal: true,
+                                            },
+                                        },
+                                        dataLabels: {
+                                            style: {
+                                                colors: ['#000', '#FFF'],
+                                            }
+                                        },
+                                        stroke: {
+                                            width: 1,
+                                            colors: ['#fff'],
+                                        },
+                                        title: {
+                                            text: undefined,
+                                        },
+                                        xaxis: {
+                                            categories: ['창호', '바닥재', '단열재', '벽지', '표면소재', '산업용필름', '자동차소재', '인테리어', '연구소', '품질'],
+                                            position: 'top',
+                                            tickAmount: 2,
+                                        },
+                                        tooltip: {
+                                            enabled: false,
+                                        },
+                                        fill: {
+                                            opacity: 1,
+                                        },
+                                        legend: {
+                                            show: false,
+                                        },
+                                        grid: {
+                                            show: false,
+                                        },
+                                        fill: {
+                                            colors: ['#9ee5a1', '#c4c4c4'],
+                                            opacity: 1,
+                                        }
+                                    };
+                            
+                                    var chart = new ApexCharts(document.querySelector("#chart2"), options);
+                                    chart.render();
+                                </script>
+                                <!-- <ul class="bar-chart-head">
                                     <li>0</li>
                                     <li>50</li>
                                     <li>100</li>
@@ -256,7 +388,7 @@
                                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;20</span>
                                         </div>
                                     </li>
-                                </ul>
+                                </ul> -->
                             </div>
                         </div>
                     </li>
