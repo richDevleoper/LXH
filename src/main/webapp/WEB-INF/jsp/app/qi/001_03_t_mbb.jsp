@@ -325,7 +325,7 @@ function view(key){
 		}
 		
 		function onclickCell(e, cell){
-			location.href="001_01_sigma_sub.do?idx="+cell.getColumn().getDefinition().field+"&seq="+cell.getRow().getData().id+"&menuKey="+qString.menuKey;
+			location.href="001_01_sigma_sub.do?idx="+cell.getColumn().getDefinition().field+"&seq="+cell.getRow().getData().id+"&menuKey=25";
 			alert(cell.getColumn().getDefinition().field +", "+ cell.getRow().getData().id);
 			console.log(cell.getColumn().getDefinition().field, cell.getRow().getData().id);
 		}

@@ -216,8 +216,8 @@
                                 <button type="button" class="btn-excel">
                                     <img src="/assets/images/icon_excel.png" alt="">
                                     <span>다운로드</span>
-                                </button>   
-                                <a href="#" class="btn">목록</a>
+                                </button>
+                                <a href="/app/004_01_02_pmsg.do?menuKey=49" class="btn">목록</a>
                             </div>
                         </div>
 

@@ -226,7 +226,7 @@
                                     <a href="" class="last">끝</a>
                                 </div>
                                 <div class="list-btns">
-                                    <button type="button" class="btn bg-gray">                                        
+                                    <button type="button" class="btn bg-gray" onclick="location.href='/app/004_01_01_suggest_01.do?menuKey=48'">                                        
                                         <span>실시제안등록</span>
                                     </button>                                    
                                 </div>

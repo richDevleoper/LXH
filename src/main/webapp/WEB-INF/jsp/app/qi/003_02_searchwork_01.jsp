@@ -879,7 +879,7 @@
                         </div>
                         <div class="list-footer">
                             <div class="list-btns">                               
-                                <a href="#" class="btn">목록</a>
+                                <a href="/app/003_02_searchwork.do?menuKey=69" class="btn">목록</a>
                             </div>
                         </div>
                         

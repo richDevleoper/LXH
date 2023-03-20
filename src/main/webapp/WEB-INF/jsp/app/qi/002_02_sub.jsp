@@ -899,7 +899,7 @@
                                 <button type="button" class="btn light-gray">저장</button>
                                 <button type="button" class="btn bg-gray">결제의뢰</button>
                                 <button type="button" class="btn bg-gray">Drop신청</button>
-                                <a href="#" class="btn">목록</a>
+                                <a href="/app/002_02_search.do?menuKey=30" class="btn">목록</a>
                             </div>
                         </div>
                     

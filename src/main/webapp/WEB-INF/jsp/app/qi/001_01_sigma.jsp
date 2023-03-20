@@ -223,7 +223,7 @@ function view(key){
 	                        {
 	                            title:"GB",field:"GB1",
 	                            columns:[
-	                                {title:"인원", field:"GB1_1",headerSort:false, width:40, hozAlign: 'right', cssClass:"font-small", hozAlign: 'right', cssClass:"font-small", cellClick:onclickCell },
+	                                {title:"인원", field:"GB1_1",headerSort:false, width:40, hozAlign: 'right', cssClass:"font-small", hozAlign: 'right', cssClass:"font-small", cellClick: onclickCell},
 	                                {title:"율(%)", field:"GB1_2",headerSort:false, width:40},
 	                            ],
 	                        },
@@ -325,8 +325,8 @@ function view(key){
 		}
 		
 		function onclickCell(e, cell){
-			location.href="001_01_sigma_sub.do?idx="+cell.getColumn().getDefinition().field+"&seq="+cell.getRow().getData().id+"&menuKey="+qString.menuKey;
-			alert(cell.getColumn().getDefinition().field +", "+ cell.getRow().getData().id);
+			location.href="001_01_sigma_sub.do?idx="+cell.getColumn().getDefinition().field+"&seq="+cell.getRow().getData().id+"&menuKey=23";
+			//alert(cell.getColumn().getDefinition().field +", "+ cell.getRow().getData().id);
 			console.log(cell.getColumn().getDefinition().field, cell.getRow().getData().id);
 		}
 		

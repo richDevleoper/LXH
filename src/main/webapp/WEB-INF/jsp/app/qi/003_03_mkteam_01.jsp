@@ -152,8 +152,8 @@
                                 </div>
                                 <div class="list-footer">
                                     <div class="list-btns">
-                                        <button type="button" class="btn light-gray">수정</button>                                        
-                                        <a href="#" class="btn">목록</a>
+                                        <button type="button" class="btn light-gray" onclick="location.href='/app/003_03_mkteam_02.do?menuKey=70';">수정</button>                                        
+                                        <a href="/app/003_03_mkteam.do?menuKey=70" class="btn">목록</a>
                                     </div>
                             </div>
                         </div>

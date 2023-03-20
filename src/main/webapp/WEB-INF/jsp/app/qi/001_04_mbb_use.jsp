@@ -124,8 +124,24 @@
     </div>
     <script>
 		var tableDataNested = [
-            {name:"생산/기술/R&D/품질",name2:"47",data3_1:"26",data3_2:"15",data4_1:"11",data4_2:"-",data4_3:"26",data4_4:"-",data4_5:"26",data4_6:"-",data5_1:"26",data5_2:"55",data6_1:"26",data6_2:"+55"},
-			{name:"창호 사업부",name2:"47",data3_1:"26",data3_2:"15",data4_1:"11",data4_2:"-",data4_3:"26",data4_4:"-",data4_5:"26",data4_6:"-",data5_1:"26",data5_2:"55",data6_1:"26",data6_2:"+55",
+            {id: 101, name:"생산/기술/R&D/품질",name2:"47",data3_1:"26",data3_2:"15",data4_1:"11",data4_2:"-",data4_3:"26",data4_4:"-",data4_5:"26",data4_6:"-",data5_1:"26",data5_2:"55",data6_1:"26",data6_2:"+55"},
+			{id: 102, name:"창호 사업부",name2:"47",data3_1:"26",data3_2:"15",data4_1:"11",data4_2:"-",data4_3:"26",data4_4:"-",data4_5:"26",data4_6:"-",data5_1:"26",data5_2:"55",data6_1:"26",data6_2:"+55",
+                _children:[
+                    {id: 103, name:"창호 사업부",name2:"47",data3_1:"26",data3_2:"15",data4_1:"11",data4_2:"-",data4_3:"26",data4_4:"-",data4_5:"26",data4_6:"-",data5_1:"26",data5_2:"55",data6_1:"26",data6_2:"+55",
+                    _children:[
+                        {name:"창호 사업부",name2:"47",data3_1:"26",data3_2:"15",data4_1:"11",data4_2:"-",data4_3:"26",data4_4:"-",data4_5:"26",data4_6:"-",data5_1:"26",data5_2:"55",data6_1:"26",data6_2:"+55"}
+                    ]}
+                ]
+            },
+            {id: 104, name:"창호.생산담당",name2:"47",data3_1:"26",data3_2:"15",data4_1:"11",data4_2:"-",data4_3:"26",data4_4:"-",data4_5:"26",data4_6:"-",data5_1:"26",data5_2:"55",data6_1:"26",data6_2:"+55",
+                _children:[
+                    {id: 105, name:"창호.프로파일생산팀",name2:"47",data3_1:"26",data3_2:"15",data4_1:"11",data4_2:"-",data4_3:"26",data4_4:"-",data4_5:"26",data4_6:"-",data5_1:"26",data5_2:"55",data6_1:"26",data6_2:"+55"},
+                    {id: 106, name:"창호.기술팀",name2:"47",data3_1:"26",data3_2:"15",data4_1:"11",data4_2:"-",data4_3:"26",data4_4:"-",data4_5:"26",data4_6:"-",data5_1:"26",data5_2:"55",data6_1:"26",data6_2:"+55"},
+                    {id: 107, name:"창호.공정혁신팀",name2:"47",data3_1:"26",data3_2:"15",data4_1:"11",data4_2:"-",data4_3:"26",data4_4:"-",data4_5:"26",data4_6:"-",data5_1:"26",data5_2:"55",data6_1:"26",data6_2:"+55"},
+                    {id: 108, name:"창호.완성창공정기술팀",name2:"47",data3_1:"26",data3_2:"15",data4_1:"11",data4_2:"-",data4_3:"26",data4_4:"-",data4_5:"26",data4_6:"-",data5_1:"26",data5_2:"55",data6_1:"26",data6_2:"+55"},
+                ]
+            },
+            {id: 109, name:"창호 사업부",name2:"47",data3_1:"26",data3_2:"15",data4_1:"11",data4_2:"-",data4_3:"26",data4_4:"-",data4_5:"26",data4_6:"-",data5_1:"26",data5_2:"55",data6_1:"26",data6_2:"+55",
                 _children:[
                     {name:"창호 사업부",name2:"47",data3_1:"26",data3_2:"15",data4_1:"11",data4_2:"-",data4_3:"26",data4_4:"-",data4_5:"26",data4_6:"-",data5_1:"26",data5_2:"55",data6_1:"26",data6_2:"+55",
                     _children:[
@@ -133,23 +149,7 @@
                     ]}
                 ]
             },
-            {name:"창호.생산담당",name2:"47",data3_1:"26",data3_2:"15",data4_1:"11",data4_2:"-",data4_3:"26",data4_4:"-",data4_5:"26",data4_6:"-",data5_1:"26",data5_2:"55",data6_1:"26",data6_2:"+55",
-                _children:[
-                    {name:"창호.프로파일생산팀",name2:"47",data3_1:"26",data3_2:"15",data4_1:"11",data4_2:"-",data4_3:"26",data4_4:"-",data4_5:"26",data4_6:"-",data5_1:"26",data5_2:"55",data6_1:"26",data6_2:"+55"},
-                    {name:"창호.기술팀",name2:"47",data3_1:"26",data3_2:"15",data4_1:"11",data4_2:"-",data4_3:"26",data4_4:"-",data4_5:"26",data4_6:"-",data5_1:"26",data5_2:"55",data6_1:"26",data6_2:"+55"},
-                    {name:"창호.공정혁신팀",name2:"47",data3_1:"26",data3_2:"15",data4_1:"11",data4_2:"-",data4_3:"26",data4_4:"-",data4_5:"26",data4_6:"-",data5_1:"26",data5_2:"55",data6_1:"26",data6_2:"+55"},
-                    {name:"창호.완성창공정기술팀",name2:"47",data3_1:"26",data3_2:"15",data4_1:"11",data4_2:"-",data4_3:"26",data4_4:"-",data4_5:"26",data4_6:"-",data5_1:"26",data5_2:"55",data6_1:"26",data6_2:"+55"},
-                ]
-            },
-            {name:"창호 사업부",name2:"47",data3_1:"26",data3_2:"15",data4_1:"11",data4_2:"-",data4_3:"26",data4_4:"-",data4_5:"26",data4_6:"-",data5_1:"26",data5_2:"55",data6_1:"26",data6_2:"+55",
-                _children:[
-                    {name:"창호 사업부",name2:"47",data3_1:"26",data3_2:"15",data4_1:"11",data4_2:"-",data4_3:"26",data4_4:"-",data4_5:"26",data4_6:"-",data5_1:"26",data5_2:"55",data6_1:"26",data6_2:"+55",
-                    _children:[
-                        {name:"창호 사업부",name2:"47",data3_1:"26",data3_2:"15",data4_1:"11",data4_2:"-",data4_3:"26",data4_4:"-",data4_5:"26",data4_6:"-",data5_1:"26",data5_2:"55",data6_1:"26",data6_2:"+55"}
-                    ]}
-                ]
-            },
-            {name:"생산/기술/R&D/품질 外",name2:"47",data3_1:"26",data3_2:"15",data4_1:"11",data4_2:"-",data4_3:"26",data4_4:"-",data4_5:"26",data4_6:"-",data5_1:"26",data5_2:"55",data6_1:"26",data6_2:"+55"},
+            {id: 110, name:"생산/기술/R&D/품질 外",name2:"47",data3_1:"26",data3_2:"15",data4_1:"11",data4_2:"-",data4_3:"26",data4_4:"-",data4_5:"26",data4_6:"-",data5_1:"26",data5_2:"55",data6_1:"26",data6_2:"+55"},
 		];
 
 		var table = new Tabulator("#example-table", {
@@ -158,7 +158,7 @@
 			dataTreeStartExpanded:true,
             columnHeaderVertAlign:"middle", //align header contents to bottom of cell
 			columns:[
-                {title:"대상구분", field:"name",headerSort:false, width:160},
+                {title:"대상구분", field:"name",headerSort:false, width:160, cssClass: "link-cell", cellClick:onclickCell},
                 {title:"‘23MBB 인원", field:"name2",headerSort:false},
                 {//create column group
                     title:"‘23년 육성",field:"name3",
@@ -194,6 +194,15 @@
                 }
             ],
 		});
+		
+		function onclickCell(e, cell){
+			location.href="001_04_mbb_use_sub.do?idx="+cell.getColumn().getDefinition().field+"&seq="+cell.getRow().getData().id+"&menuKey=26";
+			//alert( cell.getRow().getData().id);
+			console.log(cell.getColumn().getDefinition().field, cell.getRow().getData().id);
+		}
 	</script>
+	<style>
+	.link-cell { text-decoration: underline; cursor: pointer; }
+	</style>
 </body>
 </html>

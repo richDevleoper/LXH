@@ -1680,7 +1680,7 @@
                                 <button type="button" class="btn bg-gray">                                        
                                     <span>대상선정</span>
                                 </button>
-                                <a href="" class="btn">목록</a>                               
+                                <a href="/app/003_03_mkteam.do?menuKey=70" class="btn">목록</a>                               
                             </div>
                         </div>
                 

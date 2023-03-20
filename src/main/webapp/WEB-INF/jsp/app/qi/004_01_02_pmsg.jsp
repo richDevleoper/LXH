@@ -95,7 +95,7 @@
                                         <tbody>
                                             <tr>
                                                 <td>10</td>
-                                                <td class="align-left">예시) 23년 신제품 싸움닭 초기 유동관리를...</td>
+                                                <td class="align-left"><a href="/app/004_01_02_pmsg_01.do?menuKey=49">예시) 23년 신제품 싸움닭 초기 유동관리를...</a></td>
                                                 <td>홍길동</td>
                                                 <td>생산성향상</td>
                                                 <td>조직명1</td>
@@ -104,7 +104,7 @@
                                             </tr>
                                             <tr>
                                                 <td>9</td>                                                
-                                                <td class="align-left">예시) 23년 신제품 싸움닭 초기 유동관리를...</td>
+                                                <td class="align-left"><a href="/app/004_01_02_pmsg_01.do?menuKey=49">예시) 23년 신제품 싸움닭 초기 유동관리를...</a></td>
                                                 <td>홍길동</td>
                                                 <td>생산성향상</td>
                                                 <td>조직명1</td>
@@ -202,7 +202,7 @@
                                     <a href="" class="last">끝</a>
                                 </div>
                                 <div class="list-btns">
-                                    <button type="button" class="btn bg-gray">                                        
+                                    <button type="button" class="btn bg-gray" onclick="location.href='/app/004_01_02_pmsg_02.do?menuKey=49'">                                        
                                         <span>쪽지제안등록</span>
                                     </button>                                    
                                 </div>

@@ -281,7 +281,7 @@
                                     <a href="" class="last">끝</a>
                                 </div>
                                 <div class="list-btns">
-                                    <button type="button" class="btn bg-gray">                                        
+                                    <button type="button" class="btn bg-gray" id="btnRegEdu">                                        
                                         <span>교육등록</span>
                                     </button>
                                     
@@ -403,9 +403,9 @@
        	$(document).ready(init);
        	
        	function init(){
-       		$("#tb1 tbody tr").on("click", function(){
+       		$("#btnRegEdu").on("click", function(){
        			location.href="./005_03_01_buildup_01.do?menuKey=67";
-       		}).css("cursor", "pointer");
+       		});
        	}
        </script>        
 </body>

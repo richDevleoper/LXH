@@ -85,7 +85,7 @@
                                                 <td>10</td>
                                                 <td>6σFull Process</td>
                                                 <td>DMAIC</td>
-                                                <td>예시)23년 신제품 싸움닭 초기 유통관리를 통한 품질 안정화...</td>
+                                                <td><a href="/app/003_01_myworks_01.do?menuKey=33" style="text-decoration: underline;">예시)23년 신제품 싸움닭 초기 유통관리를 통한 품질 안정화...</a></td>
                                                 <td>선정중</td>
                                                 <td>2023.01.30</td>
                                                 <td>2023.06.30</td>                                                

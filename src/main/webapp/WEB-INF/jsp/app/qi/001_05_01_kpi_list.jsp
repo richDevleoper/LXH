@@ -355,8 +355,8 @@
                                                 <a href="" class="last">끝</a>
                                             </div>
                                             <div class="list-btns">
-                                                <button type="button" class="btn bg-gray">                                        
-                                                    <span>과제등록</span>
+                                                <button type="button" class="btn bg-gray" onclick="location.href='/app/001_05_01_sub.do?menuKey=46';">                                        
+                                                    <span>대상선정</span>
                                                 </button>     
                                                 <button type="button" class="btn-excel">
                                                     <img src="/assets/images/icon_excel.png" alt="">

@@ -93,7 +93,7 @@
                                                 <td>
                                                     <div class="link-group center">
                                                         <ul>
-                                                            <li><a href="#" title="바로가기" class="btn-org">분임조명</a></li>                                                                
+                                                            <li><a href="/app/003_03_mkteam_01.do?menuKey=70" title="바로가기" >분임조명</a></li>                                                                
                                                         </ul>
                                                     </div>                                                                   
                                                 <td>창호 프로파일생산팀</td>
@@ -108,7 +108,7 @@
                                                 <td>
                                                     <div class="link-group center">
                                                         <ul>
-                                                            <li><a href="#" title="바로가기" class="btn-org">분임조명</a></li>                                                                
+                                                            <li><a href="/app/003_03_mkteam_01.do?menuKey=70" title="바로가기" >분임조명</a></li>
                                                         </ul>
                                                     </div>                                                                   
                                                 <td>창호 프로파일생산팀</td>
@@ -123,7 +123,7 @@
                                                 <td>
                                                     <div class="link-group center">
                                                         <ul>
-                                                            <li><a href="#" title="바로가기" class="btn-org">분임조명</a></li>                                                                
+                                                            <li><a href="/app/003_03_mkteam_01.do?menuKey=70" title="바로가기" >분임조명</a></li>                                                                
                                                         </ul>
                                                     </div>                                                                   
                                                 <td>창호 프로파일생산팀</td>
@@ -138,7 +138,7 @@
                                                 <td>
                                                     <div class="link-group center">
                                                         <ul>
-                                                            <li><a href="#" title="바로가기" class="btn-org">분임조명</a></li>                                                                
+                                                            <li><a href="/app/003_03_mkteam_01.do?menuKey=70" title="바로가기" >분임조명</a></li>                                                                
                                                         </ul>
                                                     </div>                                                                   
                                                 <td>창호 프로파일생산팀</td>
@@ -155,7 +155,7 @@
                                                 <td>
                                                     <div class="link-group center">
                                                         <ul>
-                                                            <li><a href="#" title="바로가기" class="btn-org">분임조명</a></li>                                                                
+                                                            <li><a href="/app/003_03_mkteam_01.do?menuKey=70" title="바로가기" >분임조명</a></li>                                                                
                                                         </ul>
                                                     </div>                                                                   
                                                 <td>창호 프로파일생산팀</td>
@@ -170,7 +170,7 @@
                                                 <td>
                                                     <div class="link-group center">
                                                         <ul>
-                                                            <li><a href="#" title="바로가기" class="btn-org">분임조명</a></li>                                                                
+                                                            <li><a href="/app/003_03_mkteam_01.do?menuKey=70" title="바로가기" >분임조명</a></li>                                                                
                                                         </ul>
                                                     </div>                                                                   
                                                 <td>창호 프로파일생산팀</td>
@@ -185,7 +185,7 @@
                                                 <td>
                                                     <div class="link-group center">
                                                         <ul>
-                                                            <li><a href="#" title="바로가기" class="btn-org">분임조명</a></li>                                                                
+                                                            <li><a href="/app/003_03_mkteam_01.do?menuKey=70" title="바로가기" >분임조명</a></li>                                                                
                                                         </ul>
                                                     </div>                                                                   
                                                 <td>창호 프로파일생산팀</td>
@@ -200,7 +200,7 @@
                                                 <td>
                                                     <div class="link-group center">
                                                         <ul>
-                                                            <li><a href="#" title="바로가기" class="btn-org">분임조명</a></li>                                                                
+                                                            <li><a href="/app/003_03_mkteam_01.do?menuKey=70" title="바로가기" >분임조명</a></li>                                                                
                                                         </ul>
                                                     </div>                                                                   
                                                 <td>창호 프로파일생산팀</td>
@@ -215,7 +215,7 @@
                                                 <td>
                                                     <div class="link-group center">
                                                         <ul>
-                                                            <li><a href="#" title="바로가기" class="btn-org">분임조명</a></li>                                                                
+                                                            <li><a href="/app/003_03_mkteam_01.do?menuKey=70" title="바로가기" >분임조명</a></li>                                                                
                                                         </ul>
                                                     </div>                                                                   
                                                 <td>창호 프로파일생산팀</td>
@@ -230,7 +230,7 @@
                                                 <td>
                                                     <div class="link-group center">
                                                         <ul>
-                                                            <li><a href="#" title="바로가기" class="btn-org">분임조명</a></li>                                                                
+                                                            <li><a href="/app/003_03_mkteam_01.do?menuKey=70" title="바로가기" >분임조명</a></li>
                                                         </ul>
                                                     </div>                                                                   
                                                 <td>창호 프로파일생산팀</td>

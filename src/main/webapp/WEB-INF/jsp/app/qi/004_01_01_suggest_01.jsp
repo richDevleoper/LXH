@@ -337,7 +337,7 @@
                             <div class="list-btns">
                                 <button type="button" class="btn light-gray">저장</button>
                                 <button type="button" class="btn bg-gray">결제의뢰</button>                                
-                                <a href="#" class="btn">목록</a>
+                                <a href="/app/004_01_01_suggest.do?menuKey=48" class="btn">목록</a>
                             </div>
                         </div>
                    
