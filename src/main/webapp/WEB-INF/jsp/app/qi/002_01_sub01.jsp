@@ -45,40 +45,51 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <th><label for="select1"><span class="asterisk">*</span>6σ Full Process여부</label> <i class="ico tip"><em>tip.</em></i></th>
+                                                <th><label for="ddlRepDevisionCode"><span class="asterisk">*</span>6σ Full Process여부</label> <i class="ico tip"><em>tip.</em></i></th>
                                                 <td>
                                                     <div class="row">
                                                         <div class="col s12 select-group">
-                                                            <select name="" id="select1" title="6σ Full Process여부 선택">
-                                                                <option value="">6σ Full Process</option>
+                                                            <select name="REP_DEVISION_CODE" id="ddlRepDevisionCode" title="6σ Full Process여부 선택">
+																<option value="1">6σ Full Process</option>
+																<option value="2">일반과제</option>
+																<option value="3">10+ No Policy</option>
                                                             </select>
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <th><label for="select2"><span class="asterisk">*</span>과제유형</label></th>
+                                                <th><label for="ddlRepTypeCode"><span class="asterisk">*</span>과제유형</label></th>
                                                 <td>
                                                     <div class="row">
                                                         <div class="col s12 select-group">
-                                                            <select name="" id="select2" title="과제유형 선택">
-                                                                <option value="">선택</option>
-                                                                <option value="">Define</option>
-                                                                <option value="">Measure</option>
-                                                                <option value="">Explore</option>
-                                                                <option value="">Develop</option>
-                                                                <option value="">Implement</option>
-                                                                <option value="">Finish</option>
+                                                            <select name="REP_TYPE_CODE" id="ddlRepTypeCode" title="과제유형 선택">
+                                                            	<option value="">선택하세요</option>
+                                                                <option value="1">DMAIC</option>
+                                                                <option value="2">DMEDI</option>
                                                             </select>
                                                         </div>
                                                     </div>
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <th><label for="select3"><span class="asterisk">*</span>부문</label></th>
+                                                <th><label for="ddlRepSectorCode"><span class="asterisk">*</span>부문</label></th>
                                                 <td>
                                                     <div class="row">
                                                         <div class="col s12 select-group">
-                                                            <select name="" id="select3" title="부문 선택">
-                                                                <option value="">선택</option>
+                                                            <select name="REP_SECTOR_CODE" id="ddlRepSectorCode" title="부문 선택">
+                                                            	<option value="">선택하세요</option>
+                                                                <option value="1">창호</option>
+																<option value="2">바닥재</option>
+																<option value="3">단열재</option>
+																<option value="4">벽지</option>
+																<option value="5">표면소재</option>
+																<option value="6">산업용필름</option>
+																<option value="7">자동차소재부품</option>
+																<option value="8">인테리어</option>
+																<option value="9">연구소</option>
+																<option value="10">품질</option>
+																<option value="11">생산기술(제조혁신)</option>
+																<option value="12">환경안전</option>
+																<option value="13">기타</option>
                                                             </select>
                                                         </div>
                                                     </div>
@@ -792,6 +803,15 @@
                 </div>
             </div>
         </div>
-
+<script>
+	$(document).ready(init);
+	function init(){
+		$("#ddlRepDevisionCode").off("change").on("change", onchange_ddlRepDevisionCode); // 6σ Full Process여부 
+	}
+	
+	function onchange_ddlRepDevisionCode(e){
+		console.log(e);
+	}
+</script>
 </body>
 </html>
