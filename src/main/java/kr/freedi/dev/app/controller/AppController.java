@@ -503,11 +503,11 @@ public class AppController {
 		return "app/qi/008_03_apprv_list";
 	}
 	
-	@RequestMapping({"/app/009_01_total_src.do"})
+	@RequestMapping({"/search/009_01_total_src.do"})
 	public String handler009_01(HttpServletRequest request, ModelMap model,
 			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
 			UserVO userSession)throws Exception {
 		
-		return "app/qi/009_01_total_src";
+		return "search/009_01_total_src";
 	}
 }

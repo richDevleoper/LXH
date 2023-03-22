@@ -195,22 +195,7 @@
 
                             </div>
                         </div>
-                    </section>
-                </div>
-            </div>
-        </div>
-        <!-- //container -->
-        <!-- footer -->
-        <footer>
-            <div class="inner">
-                <div class="footer-logo">
-                    <img src="../images/footer_logo.png" alt="LX 하우시스">
-                    <span>품질혁신지원시스템</span>
-                </div>
-                <p class="copyright">COPYRIGHT © 2021 LX HAUSYS. ALL RIGHTS RESERVED.</p>
-            </div>
-        </footer>
-        <!-- //footer -->
+                   
         <!-- 조직도 -->
         <div class="modal-dimmed"></div>
         <div class="org-modal">
@@ -313,6 +298,6 @@
                 </div>
             </div>
         </div>
-    </div>
+
 </body>
 </html>

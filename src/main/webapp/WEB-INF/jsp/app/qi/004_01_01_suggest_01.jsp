@@ -350,7 +350,7 @@
             </div>
             <div class="modal-content">
                 <figure>
-                    <img src="../images/@sample.jpg" width="100%" alt="">
+                    <img src="/assets/images/@sample.jpg" width="100%" alt="">
                 </figure>
             </div>
         </div>

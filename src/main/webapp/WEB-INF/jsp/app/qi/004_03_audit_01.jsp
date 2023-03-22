@@ -119,7 +119,7 @@
                                                                             <td>
                                                                                 <div class="themb-box">
                                                                                     <figure>
-                                                                                        <img src="../images/@sample.jpg" alt="" class="btn-org">
+                                                                                        <img src="/assets/images/@sample.jpg" alt="" class="btn-org">
                                                                                     </figure>
                                                                                     <button type="button" class="themb_del"><i class="ico file_del"><em>파일삭제</em></i></button>
                                                                                 </div>
@@ -127,7 +127,7 @@
                                                                             <td>
                                                                                 <div class="themb-box">
                                                                                     <figure>
-                                                                                        <img src="../images/@sample.jpg" alt="" class="btn-org">
+                                                                                        <img src="/assets/images/@sample.jpg" alt="" class="btn-org">
                                                                                     </figure>
                                                                                     <button type="button" class="themb_del"><i class="ico file_del"><em>파일삭제</em></i></button>
                                                                                 </div>
@@ -137,7 +137,7 @@
                                                                             <td>
                                                                                 <div class="themb-box">
                                                                                     <figure>
-                                                                                        <img src="../images/@sample.jpg" alt="" class="btn-org">
+                                                                                        <img src="/assets/images/@sample.jpg" alt="" class="btn-org">
                                                                                     </figure>
                                                                                     <button type="button" class="themb_del"><i class="ico file_del"><em>파일삭제</em></i></button>
                                                                                 </div>
@@ -145,7 +145,7 @@
                                                                             <td>
                                                                                 <div class="themb-box">
                                                                                     <figure>
-                                                                                        <img src="../images/@sample.jpg" alt="" class="btn-org">
+                                                                                        <img src="/assets/images/@sample.jpg" alt="" class="btn-org">
                                                                                     </figure>
                                                                                     <button type="button" class="themb_del"><i class="ico file_del"><em>파일삭제</em></i></button>
                                                                                 </div>
@@ -289,7 +289,7 @@
             </div>
             <div class="modal-content">
                 <figure>
-                    <img src="../images/@sample.jpg" width="100%" alt="">
+                    <img src="/assets/images/@sample.jpg" width="100%" alt="">
                 </figure>
             </div>
         </div>
