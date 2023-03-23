@@ -135,21 +135,29 @@
                                                                 <col>
                                                             </colgroup>
                                                             <thead>
-                                                                <tr>
-                                                                    <th>Define</th>
-                                                                    <th>Measure</th>
-                                                                    <th>Analyze</th>
-                                                                    <th>Improve</th>
-                                                                    <th>Control</th>
-                                                                    <th>Finish</th>
+                                                                <tr id="trPlanDateLabel">
+                                                                    <th str1="Define" str2="Define">Define</th>
+                                                                    <th str1="Measure" str2="Measure">Measure</th>
+                                                                    <th str1="Analyze" str2="Explore">Analyze</th>
+                                                                    <th str1="Improve" str2="Develop">Improve</th>
+                                                                    <th str1="Control" str2="Implement">Control</th>
+                                                                    <th str1="Finish" str2="Finish">Finish</th>
                                                                 </tr>
+                                                                <%/*
+																	REP_SIX_MEASUER_DATE		2
+																	REP_SIX_EXPLORE_DATE		3
+																	REP_SIX_DEVELOP_DATE		4
+																	REP_SIX_IMPLEMENT_DATE		5
+																	REP_START_DATE    			1
+																	REP_FINISH_DATE				6
+                                                                */%>
                                                             </thead>
                                                             <tbody>
                                                                 <tr>
                                                                     <td class="pd3">
                                                                         <div class="row"><!-- Define -->
                                                                             <div class="col s12 input-text input-date">
-                                                                                <input type="text" id="" name="REP_START_DATE" value="" class="datepicker">
+                                                                                <input type="text" id="dtPlan01" name="REP_START_DATE" value="" class="datepicker">
                                                                                 <i class="ico calendar"></i>
                                                                             </div>
                                                                         </div>
@@ -157,31 +165,31 @@
                                                                     <td class="pd3">
                                                                         <div class="row"><!-- Measure -->
                                                                             <div class="col s12 input-text input-date">
-                                                                                <input type="text" id="" name="REP_SIX_MEASUER_DATE" value="" class="datepicker">
+                                                                                <input type="text" id="dtPlan02" name="REP_SIX_MEASUER_DATE" value="" class="datepicker">
                                                                                 <i class="ico calendar"></i>
                                                                             </div>
                                                                         </div>
                                                                     </td>
                                                                     <td class="pd3">
-                                                                        <div class="row"><!-- Analyze -->
+                                                                        <div class="row"><!-- Analyze / Explore -->
                                                                             <div class="col s12 input-text input-date">
-                                                                                <input type="text" id="" name="" value="" class="datepicker">
+                                                                                <input type="text" id="dtPlan03" name="REP_SIX_EXPLORE_DATE" value="" class="datepicker">
                                                                                 <i class="ico calendar"></i>
                                                                             </div>
                                                                         </div>
                                                                     </td>
                                                                     <td class="pd3">
-                                                                        <div class="row"><!-- Improve -->
+                                                                        <div class="row"><!-- Improve / Develop -->
                                                                             <div class="col s12 input-text input-date">
-                                                                                <input type="text" id="" name="" value="" class="datepicker">
+                                                                                <input type="text" id="dtPlan04" name="REP_SIX_DEVELOP_DATE" value="" class="datepicker">
                                                                                 <i class="ico calendar"></i>
                                                                             </div>
                                                                         </div>
                                                                     </td>
                                                                     <td class="pd3">
-                                                                        <div class="row"><!-- Control -->
+                                                                        <div class="row"><!-- Control / Implement -->
                                                                             <div class="col s12 input-text input-date">
-                                                                                <input type="text" id="" name="" value="" class="datepicker">
+                                                                                <input type="text" id="dtPlan05" name="REP_SIX_IMPLEMENT_DATE" value="" class="datepicker">
                                                                                 <i class="ico calendar"></i>
                                                                             </div>
                                                                         </div>
@@ -189,7 +197,7 @@
                                                                     <td class="pd3">
                                                                         <div class="row"><!-- Finish -->
                                                                             <div class="col s12 input-text input-date">
-                                                                                <input type="text" id="" name="REP_FINISH_DATE" value="" class="datepicker">
+                                                                                <input type="text" id="dtPlan06" name="REP_FINISH_DATE" value="" class="datepicker">
                                                                                 <i class="ico calendar"></i>
                                                                             </div>
                                                                         </div>
@@ -783,6 +791,8 @@
 		$("#ddlRepDevisionCode").off("change").on("change", onchange_ddlRepDevisionCode); // 6σ Full Process여부
 		onchange_ddlRepDevisionCode();	// 초기셋팅을 위한 호출
 		
+		$("#ddlRepTypeCode").off("change").on("change", onchange_ddlRepTypeCode); // 과제유형
+		
 		setDropDown("ddlRepSectorCode", cdListSector, true);//부문코드
 		setDropDown("ddlRepLeaderBeltCd", cdLeaderBelt, true);//리더벨트
 		setDropDown("ddlRepActionTyCd", cdActionType, true);//활동분야
@@ -821,6 +831,23 @@
 			break;
 		}
 		setDropDown(targetObjId, arrRepType, true);
+	}
+	
+	function onchange_ddlRepTypeCode(e){
+		changeTitle(); // 6sigma 일정계획 타이틀 변경( DMAIC ↔ DMEDI )
+	}
+	
+	function changeTitle(){
+		let repDevCd = $("#ddlRepDevisionCode").val(); 	// 6sigma F-P 여부
+		let repTypeCd = $("#ddlRepTypeCode").val();	// 과제유형
+		if(repDevCd==="1"){
+			if(repTypeCd==="2"){
+				//DMEDI str2
+				
+			} else {
+				//DMAIC str1	
+			}
+		}
 	}
 	
 	function validate(){
