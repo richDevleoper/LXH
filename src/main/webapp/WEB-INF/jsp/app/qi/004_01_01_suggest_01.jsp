@@ -50,7 +50,7 @@
                                                     <div class="row">
                                                         <div class="col s12 input-text search">
                                                             <input type="text" id="text2" name="" value="">
-                                                            <button type="button">검색</button>
+                                                            <button type="button" class="btn-member-search-modal">검색</button>                                                            
                                                         </div>
                                                     </div>
                                                 </td>
@@ -59,7 +59,7 @@
                                                     <div class="row">
                                                         <div class="col s12 input-text search">
                                                             <input type="text" id="text3" name="" value="">
-                                                            <button type="button">검색</button>
+                                                            <button type="button" class="btn-psmg-search-modal">검색</button>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -341,19 +341,160 @@
                             </div>
                         </div>
                    
-        <!-- 조직도 -->
         <div class="modal-dimmed"></div>
-        <div class="org-modal">
+        <!-- 사원조회 -->
+        <div class="org-modal member-search-modal">
             <div class="modal-header">
-                <h4>이미지 크게보기</h4>
+                <h4>사원조회</h4>
                 <button type="button" class="btn-close">닫기</button>
             </div>
             <div class="modal-content">
-                <figure>
-                    <img src="/assets/images/@sample.jpg" width="100%" alt="">
-                </figure>
+                <div class="list-wrap">
+                    <div class="list-search">
+                        <form id="org-form" onsubmit="org_search();return false;">
+                            <div class="search-form">
+                                <div class="form-inline form-input">
+                                    <label>이름명</label>
+                                    <input type="text" name="">
+                                </div>
+                                <button type="submit" class="btn-submit">조회</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="list-wrap">
+                    <div class="list-content">
+                        <div class="list-table list">
+                            <table class="centered">
+                                <caption></caption>
+                                <colgroup>
+                                    <col style="width:50px">
+                                    <col style="width:60px">
+                                    <col>
+                                    <col style="width:60px">
+                                    <col style="width:60px">
+                                    <col style="width:70px">
+                                </colgroup>
+                                <thead>
+                                    <tr>
+                                        <th>선택</th>
+                                        <th>이름</th>
+                                        <th>소속</th>
+                                        <th>직위</th>
+                                        <th>직책</th>
+                                        <th>Belt</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><input type="radio" /></td>
+                                        <td>홍길동</td>
+                                        <td>소속소속소속소속소속소속소속</td>
+                                        <td>직위</td>
+                                        <td>직책</td>
+                                        <td>MBB</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="list-footer">
+                        <div class="pagination">
+                            <a href="" class="first">처음</a>
+                            <a href="" class="prev">이전</a>
+                            <a href="" class="cur num">1</a>
+                            <a href="" class="num">2</a>
+                            <a href="" class="num">3</a>
+                            <a href="" class="num">4</a>
+                            <a href="" class="num">5</a>
+                            <a href="" class="next">다음</a>
+                            <a href="" class="last">끝</a>
+                        </div>
+                        <div class="btns">
+                            <button type="button" class="btn-submit">확인</button>
+                            <button type="button" class="btn-cancel">취소</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
+    
+    <!-- 관련쪽지조회 -->
+    <div class="org-modal psmg-search-modal">
+        <div class="modal-header">
+            <h4>사원조회2</h4>
+            <button type="button" class="btn-close">닫기</button>
+        </div>
+        <div class="modal-content">
+            <div class="list-wrap">
+                <div class="list-search">
+                    <form id="org-form" onsubmit="org_search();return false;">
+                        <div class="search-form">
+                            <div class="form-inline form-input">
+                                <label>사원명</label>
+                                <input type="text" name="">
+                            </div>
+                            <button type="submit" class="btn-submit">조회</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="list-wrap">
+                <div class="list-content">
+                    <div class="list-table list">
+                        <table class="centered">
+                            <caption></caption>
+                            <colgroup>
+                                <col style="width:50px">
+                                <col style="width:60px">
+                                <col>
+                                <col style="width:60px">
+                                <col style="width:60px">
+                                <col style="width:70px">
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th>선택</th>
+                                    <th>이름</th>
+                                    <th>소속</th>
+                                    <th>직위</th>
+                                    <th>직책</th>
+                                    <th>Belt</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><input type="radio" /></td>
+                                    <td>홍길동</td>
+                                    <td>소속소속소속소속소속소속소속</td>
+                                    <td>직위</td>
+                                    <td>직책</td>
+                                    <td>MBB</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="list-footer">
+                    <div class="pagination">
+                        <a href="" class="first">처음</a>
+                        <a href="" class="prev">이전</a>
+                        <a href="" class="cur num">1</a>
+                        <a href="" class="num">2</a>
+                        <a href="" class="num">3</a>
+                        <a href="" class="num">4</a>
+                        <a href="" class="num">5</a>
+                        <a href="" class="next">다음</a>
+                        <a href="" class="last">끝</a>
+                    </div>
+                    <div class="btns">
+                        <button type="button" class="btn-submit">확인</button>
+                        <button type="button" class="btn-cancel">취소</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </body>
 </html>

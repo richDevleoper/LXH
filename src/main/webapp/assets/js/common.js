@@ -204,7 +204,13 @@ $(function() {
 
 })
 
-// 사원조회 모달
+// 직책조회 모달
+$(document).on('click', '.btn-member-position-search-modal', function() {
+    console.log('asdfasdf');
+    $('.modal-dimmed, .member-position-search-modal').show();
+})
+
+//사원조회 모달
 $(document).on('click', '.btn-member-search-modal', function() {
     console.log('asdfasdf');
     $('.modal-dimmed, .member-search-modal').show();
