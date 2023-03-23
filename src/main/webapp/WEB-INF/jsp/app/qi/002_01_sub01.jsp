@@ -190,7 +190,7 @@
                                                                         <div class="row">
                                                                             <div class="col s12 input-text input-date">
                                                                                 <input type="text" id="" name="" value="" class="datepicker">
-                                                                                <i class="ico calendar"></i>
+                                                                                <i class="ico calendar"></i> 
                                                                             </div>
                                                                         </div>
                                                                     </td>
