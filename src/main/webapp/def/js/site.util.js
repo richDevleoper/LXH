@@ -79,3 +79,17 @@ function substrInfo(reqValue, maxByteSize) {
     
     return rtnVal;
 }
+
+// dropdownlist<select> 세팅
+// 예) setDropDown("ddlRepTypeCode", [{key:1,value:'DMAIC'},{key:2,value:'DMEDI'}], true/false);
+function setDropDown(objId, cdList, flagFirstEmptyYn){
+	htm = "";
+	if(flagFirstEmptyYn){
+		htm += "<option value=''>선택하세요</option>";
+	}
+	for(i in cdList){
+		let item = cdList[i];
+		htm += "<option value='"+item.key+"'>"+item.value+"</option>";
+	}
+	$("#"+objId).empty().append(htm);
+}

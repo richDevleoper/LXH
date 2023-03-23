@@ -62,9 +62,7 @@
                                                     <div class="row">
                                                         <div class="col s12 select-group">
                                                             <select name="REP_TYPE_CODE" id="ddlRepTypeCode" title="과제유형 선택">
-                                                            	<option value="">선택하세요</option>
-                                                                <option value="1">DMAIC</option>
-                                                                <option value="2">DMEDI</option>
+                                                            	
                                                             </select>
                                                         </div>
                                                     </div>
@@ -76,70 +74,53 @@
                                                     <div class="row">
                                                         <div class="col s12 select-group">
                                                             <select name="REP_SECTOR_CODE" id="ddlRepSectorCode" title="부문 선택">
-                                                            	<option value="">선택하세요</option>
-                                                                <option value="1">창호</option>
-																<option value="2">바닥재</option>
-																<option value="3">단열재</option>
-																<option value="4">벽지</option>
-																<option value="5">표면소재</option>
-																<option value="6">산업용필름</option>
-																<option value="7">자동차소재부품</option>
-																<option value="8">인테리어</option>
-																<option value="9">연구소</option>
-																<option value="10">품질</option>
-																<option value="11">생산기술(제조혁신)</option>
-																<option value="12">환경안전</option>
-																<option value="13">기타</option>
                                                             </select>
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <th><label for="text2"><span class="asterisk">*</span>제품군</label></th>
+                                                <th><label for="txtRepProductClass"><span class="asterisk">*</span>제품군</label></th>
                                                 <td>
                                                     <div class="row">
                                                         <div class="col s12 input-text">
-                                                            <input type="text" id="text2" name="" value="" title="제품군을 입력해주세요.">
+                                                            <input type="text" id="txtRepProductClass" name="REP_PRODUCT_CLASS" value="" title="제품군을 입력해주세요.">
                                                         </div>
                                                     </div>
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <th><label for="select4"><span class="asterisk">*</span>과제리더벨트</label> <i class="ico tip"><em>tip.</em></i></th>
+                                                <th><label for="ddlRepLeaderBeltCd"><span class="asterisk">*</span>과제리더벨트</label> <i class="ico tip"><em>tip.</em></i></th>
                                                 <td>
                                                     <div class="row">
                                                         <div class="col s12 select-group">
-                                                            <select name="" id="select4" title="부문 선택">
-                                                                <option value="">선택</option>
+                                                            <select name="REP_LEADER_BELT_CODE" id="ddlRepLeaderBeltCd" title="부문 선택">
                                                             </select>
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <th><label for="select5"><span class="asterisk">*</span>활동분야</label></th>
+                                                <th><label for="ddlRepActionTyCd"><span class="asterisk">*</span>활동분야</label></th>
                                                 <td>
                                                     <div class="row">
                                                         <div class="col s12 select-group">
-                                                            <select name="" id="select4" title="활동분야 선택">
-                                                                <option value="">선택</option>
+                                                            <select name="REP_ACTION_TYPE_CODE" id="ddlRepActionTyCd" title="활동분야 선택">
                                                             </select>
                                                         </div>
                                                     </div>
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <th><label for="select6"><span class="asterisk">*</span>MBB활용율</label></th>
+                                                <th><label for="ddlRepMbbUseRateCode"><span class="asterisk">*</span>MBB활용율</label></th>
                                                 <td>
                                                     <div class="row">
                                                         <div class="col s12 select-group">
-                                                            <select name="" id="select6" title="MBB활용율 선택">
-                                                                <option value="">선택</option>
+                                                            <select name="REP_MBB_USE_RATE_CODE" id="ddlRepMbbUseRateCode" title="MBB활용율 선택">
                                                             </select>
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <th>활동분야</th>
-                                                <td>2023년</td>
+                                                <th>활용율 반영년도</th>
+                                                <td><span id="lblUseRefDt">-</span>년 <input type="hidden" name="REP_USE_REF_DATE" id="hidUseRefDt" value=""></td>
                                             </tr>
-                                            <tr>
+                                            <tr id="trRepDate1" class="tr-rep-date">
                                                 <th><span class="asterisk">*</span>일정계획<br>(완료예정일)</th>
                                                 <td colspan="3">
                                                     <div class="list-table list">
@@ -166,7 +147,23 @@
                                                             <tbody>
                                                                 <tr>
                                                                     <td class="pd3">
-                                                                        <div class="row">
+                                                                        <div class="row"><!-- Define -->
+                                                                            <div class="col s12 input-text input-date">
+                                                                                <input type="text" id="" name="REP_START_DATE" value="" class="datepicker">
+                                                                                <i class="ico calendar"></i>
+                                                                            </div>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td class="pd3">
+                                                                        <div class="row"><!-- Measure -->
+                                                                            <div class="col s12 input-text input-date">
+                                                                                <input type="text" id="" name="REP_SIX_MEASUER_DATE" value="" class="datepicker">
+                                                                                <i class="ico calendar"></i>
+                                                                            </div>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td class="pd3">
+                                                                        <div class="row"><!-- Analyze -->
                                                                             <div class="col s12 input-text input-date">
                                                                                 <input type="text" id="" name="" value="" class="datepicker">
                                                                                 <i class="ico calendar"></i>
@@ -174,7 +171,7 @@
                                                                         </div>
                                                                     </td>
                                                                     <td class="pd3">
-                                                                        <div class="row">
+                                                                        <div class="row"><!-- Improve -->
                                                                             <div class="col s12 input-text input-date">
                                                                                 <input type="text" id="" name="" value="" class="datepicker">
                                                                                 <i class="ico calendar"></i>
@@ -182,7 +179,7 @@
                                                                         </div>
                                                                     </td>
                                                                     <td class="pd3">
-                                                                        <div class="row">
+                                                                        <div class="row"><!-- Control -->
                                                                             <div class="col s12 input-text input-date">
                                                                                 <input type="text" id="" name="" value="" class="datepicker">
                                                                                 <i class="ico calendar"></i>
@@ -190,25 +187,49 @@
                                                                         </div>
                                                                     </td>
                                                                     <td class="pd3">
-                                                                        <div class="row">
+                                                                        <div class="row"><!-- Finish -->
                                                                             <div class="col s12 input-text input-date">
-                                                                                <input type="text" id="" name="" value="" class="datepicker">
+                                                                                <input type="text" id="" name="REP_FINISH_DATE" value="" class="datepicker">
+                                                                                <i class="ico calendar"></i>
+                                                                            </div>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr id="trRepDate2" class="tr-rep-date">
+                                                <th><span class="asterisk">*</span>일정계획<br>(완료예정일)</th>
+                                                <td colspan="3">
+                                                    <div class="list-table list">
+                                                        <table>
+                                                            <caption></caption>
+                                                            <colgroup>
+                                                                <col>
+                                                                <col>
+                                                            </colgroup>
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>착수(예정)일</th>
+                                                                    <th>완료(예정)일</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td class="pd3">
+                                                                        <div class="row">
+                                                                            <div class="col s12 input-text input-date" style="float:none;width:120px;margin:0 auto !important">
+                                                                                <input type="text" id="" name="REP_START_DATE_2" value="">
                                                                                 <i class="ico calendar"></i>
                                                                             </div>
                                                                         </div>
                                                                     </td>
                                                                     <td class="pd3">
                                                                         <div class="row">
-                                                                            <div class="col s12 input-text input-date">
-                                                                                <input type="text" id="" name="" value="" class="datepicker">
-                                                                                <i class="ico calendar"></i>
-                                                                            </div>
-                                                                        </div>
-                                                                    </td>
-                                                                    <td class="pd3">
-                                                                        <div class="row">
-                                                                            <div class="col s12 input-text input-date">
-                                                                                <input type="text" id="" name="" value="" class="datepicker">
+                                                                            <div class="col s12 input-text input-date" style="float:none;width:120px;margin:0 auto !important">
+                                                                                <input type="text" id="" name="REP_START_DATE_2" value="">
                                                                                 <i class="ico calendar"></i>
                                                                             </div>
                                                                         </div>
@@ -282,7 +303,7 @@
                                                 <th><label for="text3"><span class="asterisk">*</span>과제리더</label></th>
                                                 <td class="pd3">
                                                     <div class="row">
-                                                        <div class="col s12 input-text search">
+                                                        <div class="col s12 input-text search org-search">
                                                             <input type="text" id="text3" name="" value="">
                                                             <button type="button">검색</button>
                                                         </div>
@@ -747,71 +768,88 @@
                             </div>
                         </div>
                     
-        <!-- 조직도 -->
-        <div class="modal-dimmed"></div>
-        <div class="org-modal">
-            <div class="modal-header">
-                <h4>직책조회</h4>
-                <button type="button" class="btn-close">닫기</button>
-            </div>
-            <div class="modal-content">
-                <div class="list-wrap">
-                    <div class="list-search">
-                        <form id="org-form" onsubmit="org_search();return false;">
-                            <div class="search-form">
-                                <div class="form-inline form-input">
-                                    <label>직책명</label>
-                                    <input type="text" name="">
-                                </div>
-                                <button type="submit" class="btn-submit">조회</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-                <div class="tree-header">
-                    <div>
-                        <input type="checkbox" id="orgSelAll">
-                        <label for="orgSelAll"></label>
-                    </div>
-                    <div>
-                        직책선택
-                    </div>
-                </div>
-                <div id="org-tree">
-                    <ul>
-                        <li>사업부장</li>
-                        <li>담당</li>
-                        <li>팀장</li>
-                        <li>책임</li>
-                        <li>선임</li>
-                        <li>사원1</li>
-                        <li>사원2</li>
-                        <li>사원3</li>
-                        <li>사원4</li>
-                        <li>사원5</li>
-                        <li>사원6</li>
-                        <li>사원7</li>
-                        <li>사원8</li>
-                        <li>사원9</li>
-                        <li>사원10</li>
-                        <li>사원11</li>
-                    </ul>
-                </div>
-                <div class="btns">
-                    <button type="button" class="btn-submit">확인</button>
-                    <button type="button" class="btn-cancel">취소</button>
-                </div>
-            </div>
-        </div>
-<script>
+<script type="text/javascript">
 	$(document).ready(init);
+	
+	let cdListSector = [{key:1,value:'창호'},{key:2,value:'바닥재'},{key:3,value:'단열재'},{key:4,value:'벽지'},{key:5,value:'표면소재'},{key:6,value:'산업용필름'},{key:7,value:'자동차소재부품'},{key:8,value:'인테리어'},{key:9,value:'연구소'},{key:10,value:'품질'},{key:11,value:'생산기술(제조혁신)'},{key:12,value:'환경안전'},{key:13,value:'기타'}];
+	
+	let cdLeaderBelt = [{key:1,value:'GB'},{key:2,value:'BB'},{key:3,value:'BB후보'},{key:4,value:'MBB'},{key:5,value:'MBB후보'},{key:6,value:'MGB'},{key:7,value:'No Belt'}];
+	
+	let cdActionType = [{key:1,value:'품질개선'},{key:2,value:'개발'},{key:3,value:'생산성향상'},{key:4,value:'원가개선'},{key:5,value:'기타'}];
+	
+	let cdMbbUseRate = [{key:1,value:'해당없음'},{key:2,value:'직접수행'},{key:3,value:'지원MBB'},{key:4,value:'팀장MBB '}];
+	
 	function init(){
-		$("#ddlRepDevisionCode").off("change").on("change", onchange_ddlRepDevisionCode); // 6σ Full Process여부 
+		$("#ddlRepDevisionCode").off("change").on("change", onchange_ddlRepDevisionCode); // 6σ Full Process여부
+		onchange_ddlRepDevisionCode();	// 초기셋팅을 위한 호출
+		
+		setDropDown("ddlRepSectorCode", cdListSector, true);//부문코드
+		setDropDown("ddlRepLeaderBeltCd", cdLeaderBelt, true);//리더벨트
+		setDropDown("ddlRepActionTyCd", cdActionType, true);//활동분야
+		setDropDown("ddlRepMbbUseRateCode", cdMbbUseRate, true);//MBB활용율
+		$("#lblUseRefDt").text("2023"); $("#hidUseRefDt").val("2023");	//활용율 반영년도
+		
+		$(".org-search").off("click").on("click", onclick_orgSearch)
+	}
+
+	function onclick_orgSearch(e){
+		debugger;
+		let retObj = $(this).find("input")
+		popupGetOrgCd(retObj);
 	}
 	
 	function onchange_ddlRepDevisionCode(e){
-		console.log(e);
+	
+		let repDevCd = $("#ddlRepDevisionCode").val(); //이벤트 트리거 객체의 값
+		let targetObjId = "ddlRepTypeCode";	//바뀔 대상 객체 ID
+		let arrRepType = [];
+		$(".tr-rep-date").hide();
+		switch(repDevCd){
+		case "1": //6sigma
+			arrRepType = [{key:1,value:'DMAIC'},{key:2,value:'DMEDI'}];
+			$("#trRepDate1").show();
+			break;
+		case "2": //일반
+			arrRepType = [{key:1,value:'Quick 6σ'},{key:2,value:'빅데이터'},{key:3,value:'FMEA'},{key:4,value:'CEO/CPO Task'}];
+			$("#trRepDate2").show();
+			break;
+		case "3": // 10+No.
+			arrRepType = [{key:1,value:'No Particle'},{key:2,value:'No Scrap'},{key:3,value:'No Line trouble'},{key:4,value:'No Light'},{key:5,value:'No Model change Loss'},{key:6,value:'No Re-handling'},{key:7,value:'No Forklift'},{key:8,value:'No Overstock'},{key:9,value:'No Mask'},{key:10,value:'No Accident'}];
+			$("#trRepDate2").show();
+			break;
+		default:
+			break;
+		}
+		setDropDown(targetObjId, arrRepType, true);
 	}
+	
+	function validate(){
+		//과제명
+		//*6σ Full Process여부 
+		//과제유형
+		//부문
+		//*제품군
+		//*과제리더벨트 
+		//활동분야
+		//*MBB활용율	
+		//*일정계획
+		//*키워드 
+		
+		//[승인]
+		//*과제리더	
+		//팀멤버 (최소1명)
+		//*과제지도/사원	
+		//*Process Owner	
+		//*챔피언	(챔피언이 들어가야 하는 경우와 아닌 경우 구분하기)
+		
+		//[성과 및 주요지표]
+		//예상성과 아래 열의 갯수만큼 반복하며 체크하기
+		// ㄴ *성과항목
+	
+	}
+	
+	
+	
 </script>
 </body>
 </html>
