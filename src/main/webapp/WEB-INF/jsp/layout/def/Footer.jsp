@@ -17,3 +17,160 @@
     <!-- //footer -->
 </div>
 <iframe title="다운로드 프레임" id="downloadFrame" name="downloadFrame" width="0" height="0"></iframe>
+
+<div class="modal-dimmed"></div>
+<div class="org-modal" id="comPopup_orgSearch">
+    <div class="modal-header">
+        <h4>조직조회</h4>
+        <button type="button" class="btn-close">닫기</button>
+    </div>
+    <div class="modal-content">
+        <div class="list-wrap">
+            <div class="list-search">
+                <form id="org-form" onsubmit="org_search();return false;">
+                    <div class="search-form">
+                        <div class="form-inline form-input">
+                            <label>조직명</label>
+                            <input type="text" name="">
+                        </div>
+                        <button type="submit" class="btn-submit">조회</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="tree-header">
+            <div>
+                <input type="checkbox" id="orgSelAll">
+                <label for="orgSelAll"></label>
+            </div>
+            <div>
+                6σ 인재육성대상 조직명
+            </div>
+        </div>
+        <div id="org-tree">
+            <ul>
+                <li>창호 사업부
+                    <ul>
+                        <li>창호.생산담당
+                            <ul>
+                                <li>· 창호.프로파일생산팀</li>
+                                <li>· 창호.기술팀</li>
+                                <li>· 창호.공정혁신팀</li>
+                                <li>· 창호.완성창공정기술팀</li>
+                            </ul>
+                        </li>
+                        <li>유리</li>
+                        <li>연구소 근무</li>
+                        <li>창호.시스템창사업담당</li>
+                        <li>창호.중문팀</li>
+                        <li>바닥재 사업담당	</li>
+                    </ul>
+                </li>
+                <li>단열재 사업담당
+                    <ul>
+                        <li>창호.프로파일생산팀</li>
+                    </ul>
+                </li>
+                <li>벽지 사업담당	
+                    <ul>
+                        <li>창호.프로파일생산팀</li>
+                    </ul>
+                </li>
+                <li>표면소재 사업담당
+                    <ul>
+                        <li>창호.프로파일생산팀</li>
+                    </ul>
+                </li>
+                <li>산업용필름 사업담당
+                    <ul>
+                        <li>창호.프로파일생산팀</li>
+                    </ul>
+                </li>
+                <li>자동차소재부품 사업부
+                    <ul>
+                        <li>창호.프로파일생산팀</li>
+                    </ul>
+                </li>
+                <li>인테리어 사업부
+                    <ul>
+                        <li>창호.프로파일생산팀</li>
+                    </ul>
+                </li>
+                <li>연구소
+                    <ul>
+                        <li>창호.프로파일생산팀</li>
+                    </ul>
+                </li>
+                <li>품질 담당
+                    <ul>
+                        <li>창호.프로파일생산팀</li>
+                    </ul>
+                </li>
+                <li>생산/기술/R&D/품질 外
+                    <ul>
+                        <li>창호.프로파일생산팀</li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div class="btns">
+            <button type="button" class="btn-submit">확인</button>
+            <button type="button" class="btn-cancel">취소</button>
+        </div>
+    </div>
+</div>
+
+<div class="org-modal"  id="comPopup_posSearch">
+    <div class="modal-header">
+        <h4>직책조회</h4>
+        <button type="button" class="btn-close">닫기</button>
+    </div>
+    <div class="modal-content">
+        <div class="list-wrap">
+            <div class="list-search">
+                <form id="org-form" onsubmit="org_search();return false;">
+                    <div class="search-form">
+                        <div class="form-inline form-input">
+                            <label>직책명</label>
+                            <input type="text" name="">
+                        </div>
+                        <button type="submit" class="btn-submit">조회</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="tree-header">
+            <div>
+                <input type="checkbox" id="orgSelAll">
+                <label for="orgSelAll"></label>
+            </div>
+            <div>
+                직책선택
+            </div>
+        </div>
+        <div id="org-tree">
+            <ul>
+                <li>사업부장</li>
+                <li>담당</li>
+                <li>팀장</li>
+                <li>책임</li>
+                <li>선임</li>
+                <li>사원1</li>
+                <li>사원2</li>
+                <li>사원3</li>
+                <li>사원4</li>
+                <li>사원5</li>
+                <li>사원6</li>
+                <li>사원7</li>
+                <li>사원8</li>
+                <li>사원9</li>
+                <li>사원10</li>
+                <li>사원11</li>
+            </ul>
+        </div>
+        <div class="btns">
+            <button type="button" class="btn-submit">확인</button>
+            <button type="button" class="btn-cancel">취소</button>
+        </div>
+    </div>
+</div>

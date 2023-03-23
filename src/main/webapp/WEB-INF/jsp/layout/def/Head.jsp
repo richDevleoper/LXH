@@ -39,6 +39,7 @@ dwr 사용을 지양하기 위해 주석처리함, 필요시 해당 jsp에 추�
 	<script src="/assets/js/jstree.min.js"></script>
     <script src="/assets/js/tabulator.min.js"></script>
 	<script src="/assets/js/common.js"></script>
+	<script src="/def/js/site.util.js"></script>
 
 <!-- site -->
 <%-- 
