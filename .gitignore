@@ -3,3 +3,6 @@
 src/main/resources/kr/freedi/dev/spring/context-datasource.xml
 target/m2e-wtp/web-resources/META-INF/*
 .externalToolBuilders/
+.classpath
+.project
+.settings/*
