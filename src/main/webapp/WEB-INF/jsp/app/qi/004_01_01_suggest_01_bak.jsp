@@ -1,228 +1,20 @@
-<!DOCTYPE html>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
+<%@ taglib prefix="string" uri="/WEB-INF/tld/string-taglib.tld" %>
+
+<!DOCTYPE html PUBLIC "-/W3C/DTD XHTML 1.0 Transitional/EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-
-    <!-- CSS -->
-    <link rel="stylesheet" href="../css/reset.css">
-    <link rel="stylesheet" href="../css/tree.css">
-    <link rel="stylesheet" href="../css/common.css">
-    <link rel="stylesheet" href="../css/style.css">
-
-    <!-- JS -->
-    <script src="../js/jquery-3.3.1.min.js"></script>
-    <script src="../js/jstree.min.js"></script>
-    <script src="../js/common.js"></script>
-
-    <title>품질혁신지원시스템</title>
+	<title>${fn:split(boardVO.boardNm,'>')[fn:length(fn:split(boardVO.boardNm,'>'))-1]}</title>
+	<meta name="keywords" content="" />
+	<meta name="description" content="" />
 </head>
 <body>
-    <div id="wrap">
-        <!-- header -->
-        <header>
-            <div class="header-top">
-                <div class="inner">
-                    <h1>
-                        <img src="../images/logo.png" alt="">
-                        <span>품질혁신지원시스템</span>
-                    </h1>
-                    <div class="header-util">
-                        <p>홍길동(품질관리팀) 과제 <a href="" class="lx-red">3</a>건, 결제 <a href="" class="lx-red">1</a>건, 교육 <a href="" class="lx-red">1</a>건</p>
-                        <ul>
-                            <li><a href=""><img src="../images/icon_mypage.png" alt=""><span>마이페이지</span></a></li>
-                            <li><a href=""><img src="../images/icon_help.png" alt=""><span>도움말</span></a></li>
-                            <li><a href=""><img src="../images/icon_logout.png" alt=""><span>로그아웃</span></a></li>
-                            <li><a href=""><img src="../images/icon_admin.png" alt=""></a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="header-btm">
-                <div class="inner">
-                    <div class="header-menu">
-                        <button type="button" class="btn-gnb">메뉴</button>
-                        <nav>
-                            <ul>
-                                <li><a href="">품질KPI</a></li>
-                                <li><a href="">과제/10+ No Policy활동</a></li>
-                                <li><a href="">분임조활동</a></li>
-                                <li><a href="">제안활동</a></li>
-                                <li><a href="">품질인재육성</a></li>
-                                <li><a href="">Big Data/커뮤니티</a></li>
-                            </ul>
-                        </nav>
-                    </div>
-                    <div class="search-box">
-                        <div class="search-form">
-                            <form method="GET">
-                                <span>전체</span>
-                                <input type="text" name="" placeholder="검색어를 입력하세요">
-                                <button type="submit" class="btn-search">검색</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-                <div id="total-menu">
-                    <div class="inner">
-                        <div id="gnb">
-                            <ul>
-                                <li>
-                                    <a href="">품질KPI</a>
-                                    <div>
-                                        <ul class="depth1">
-                                            <li><a href="">6σ인재 현황</a></li>
-                                            <li><a href="">팀장MBB율</a></li>
-                                            <li><a href="">MBB활용율</a></li>
-                                            <li>
-                                                <a class="lx-red" href="">KPI관리</a>
-                                                <ul class="depth2">
-                                                    <li><a class="lx-red" href="">- 관리대상</a></li>
-                                                    <li><a class="lx-red" href="">- 계획수립</a></li>
-                                                </ul>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </li>
-                                <li>
-                                    <a href="">과제/10+ No Policy활동</a>
-                                    <div>
-                                        <ul class="depth1">
-                                            <li>
-                                                <a href="">나의 과제</a>                                                
-                                            </li>
-                                            <li><a href="">과제검색</a></li>
-                                            <li><a href="" class="lx-red">Report</a></li>
-                                        </ul>
-                                    </div>
-                                </li>
-                                <li>
-                                    <a href="">분임조활동</a>
-                                    <div>
-                                        <ul class="depth1">
-                                            <li>
-                                                <a href="">나의 분임조과제</a>                                                
-                                            </li>
-                                            <li><a href="">과제검색</a></li>
-                                            <li><a href="" class="lx-red">분임조 편성</a></li>
-                                            <li><a href="" class="lx-red">Report</a></li>
-                                        </ul>
-                                    </div>
-                                </li>
-                                <li>
-                                    <a href="">제안활동y</a>
-                                    <div>
-                                        <ul class="depth1">
-                                            <li>
-                                                <a href="">나의 제안</a>
-                                                <ul class="depth2">
-                                                    <li><a href="">- 실시제안</a></li>
-                                                    <li><a href="">- 쪽지제안</a></li>
-                                                </ul>
-                                            </li>
-                                            <li><a href="">제안검색</a></li>
-                                            <li><a href="" class="lx-red">제안 심사</a></li>
-                                            <li>
-                                                <a href="" class="lx-red">제안 마감</a>
-                                                <ul class="depth2">
-                                                    <li><a href="">- 등급평가</a></li>
-                                                    <li><a href="">- 비용지급</a></li>
-                                                </ul>
-                                            </li>
-                                            <li><a href="">10+ No Policy</a></li>
-                                            <li><a href="" class="lx-red">Report</a></li>
-                                        </ul>
-                                    </div>
-                                </li>
-                                <li>
-                                    <a href="">품질인재육성</a>
-                                    <div>
-                                        <ul class="depth1">
-                                            <li><a href="">나의 육성 현황</a></li>
-                                            <ul class="depth2">
-                                                <li><a href="">- GB</a></li>
-                                                <li><a href="">- MGB</a></li>
-                                                <li><a href="">- BB</a></li>
-                                                <li><a href="">- MBB</a></li>
-                                            </ul>
-                                            <li><a href="">년간계획(교육,Test)</a></li>                                            
-                                            <li>
-                                                <a href="" class="lx-red">교육/Test/인증</a>
-                                                <ul class="depth2">
-                                                    <li><a href="">- 계획수립</a></li>
-                                                    <li><a href="">- 실적입력</a></li>
-                                                </ul>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </li>
-                                <li>
-                                    <a href="">Big Data/커뮤니티</a>
-                                    <div>
-                                        <ul class="depth1">
-                                            <li><a href="">Big DATA</a></li>
-                                            <li><a href="">자료실</a></li>
-                                            <li><a href="">BP사례</a></li>
-                                            <li><a href="">공지사항</a></li>
-                                            <li><a href="">Q&A</a></li>
-                                        </ul>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-        
-                        <button type="button" class="btn-close">닫기</button>
-                    </div>
-                </div>
-            </div>
-        </header>
-        <div class="dimmed"></div>
-        <!-- //header -->
-        <!-- container -->
-        <div id="container">
-            <div id="page-header">
-                <div class="inner">
-                    <div class="page-category">제안활동</div>
-                    <div id="path">
-                        <a href="">홈</a>
-                        <span class="arr">></span>
-                        <a href="">제안활동</a>
-                        <span class="arr">></span>
-                        <a href="">나의 제안</a>
-                        <span class="arr">></span>
-                        <a href="javascript:void(0);">쪽지 제안</a>
-                    </div>
-                    <button tpye="button" class="btn-print">
-                        <img src="../images/btn_print.png" alt="">
-                        <span>인쇄</span>
-                    </button>
-                </div>
-            </div>
-            <div id="page-container">
-                <div class="inner">
-                    <nav id="page-left">
-                        <ul class="depth1">
-                            <li>
-                                <a href="javascript:void(0)" class="has-depth cur active">나의 제안</a>
-                                <ul class="depth2" style="display:block">
-                                    <li><a href="">실시 제안</a></li>
-                                    <li><a href="" class="lx-red">쪽지 제안</a></li>
-                                </ul>
-                            </li>
-                            <li><a href="">제안 검색</a></li>
-                            <li><a href="">제안 심사(관리)</a></li>
-                            <li>
-                                <a href="javascript:void(0)" class="has-depth">제안 마감(관리)</a>
-                                <ul class="depth2">
-                                    <li><a href="">등급평가</a></li>
-                                    <li><a href="">비용지급</a></li>
-                                </ul>
-                            </li>                            
-                            <li><a href="">Report(관리)</a></li>
-                        </ul>
-                    </nav>
-                    <section id="page-content">
                         <!-- breadcrumb -->
                         <div class="breadcrumb">
                             <ul>
@@ -254,14 +46,23 @@
                                             </tr>
                                             <tr>
                                                 <th><label for="text2"><span class="asterisk">*</span>제안자</label></th>
-                                                <td colspan="3">
+                                                <td>
                                                     <div class="row">
-                                                        <div class="col s037 input-text search">
+                                                        <div class="col s12 input-text search">
                                                             <input type="text" id="text2" name="" value="">
                                                             <button type="button">검색</button>
                                                         </div>
                                                     </div>
-                                                </td>                                                
+                                                </td>
+                                                <th><label for="text3"><span class="asterisk">*</span>관련 쪽지 제안</label></th>
+                                                <td>
+                                                    <div class="row">
+                                                        <div class="col s12 input-text search">
+                                                            <input type="text" id="text3" name="" value="">
+                                                            <button type="button">검색</button>
+                                                        </div>
+                                                    </div>
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <th><span class="asterisk">*</span>조직명</th>
@@ -290,7 +91,30 @@
                                                     </div>
                                                 </td>
                                             </tr>
-                                            
+                                            <tr>
+                                                <th><label for="text5"><span class="asterisk">*</span>실행 완료일</label></th>
+                                                <td>
+                                                    <div class="row">
+                                                        <div class="col s6 input-text input-date">
+                                                            <input type="text" id="text5" name="" value="">
+                                                            <i class="ico calendar"></i>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <th><label for="select1"><span class="asterisk">*</span>년간 효과금액</label></th>
+                                                <td>
+                                                    <div class="row">
+                                                        <div class="col s6 select-group">
+                                                            <select name="" id="select2" title="년간 효과금액 선택">
+                                                                <option value="">선택</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col s6 input-text pd-l10">
+                                                            <input type="text" id="text4" name="" value="">
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
                                             <tr>
                                                 <th colspan="4" class="align-center"><span class="asterisk">*</span>제안내용</th>
                                             </tr>
@@ -323,7 +147,101 @@
                                                         </div>
                                                     </div>
                                                 </td>
-                                            </tr>                                            
+                                            </tr>
+                                            <tr>
+                                                <th>활동결과</th>
+                                                <td colspan="3" class="pd0">
+                                                    <div class="list-wrap" style="margin:-1px">
+                                                        <div class="list-content">
+                                                            <div class="list-table list">
+                                                                <table class="centered">
+                                                                    <caption></caption>
+                                                                    <colgroup>
+                                                                        <col style="width:50%">
+                                                                        <col>
+                                                                    </colgroup>
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th></th>
+                                                                            <th></th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <tr>
+                                                                            <td>
+                                                                                <div class="row">
+                                                                                    <div class="col s12 input-text file">
+                                                                                        <span class="file-path">
+                                                                                            <input type="text" id="file5_text" readonly name="" value="개선전이미지.jpg">
+                                                                                            <button type="button"><i class="ico file_del"><em>삭제</em></i></button>
+                                                                                        </span>
+                                                                                        <input type="file" id="file5" name="" value="">
+                                                                                        <label for="file5">파일추가</label>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="row">
+                                                                                    <div class="col s12 input-text file">
+                                                                                        <span class="file-path">
+                                                                                            <input type="text" id="file5_text" readonly name="" value="개선전이미지.jpg">
+                                                                                            <button type="button"><i class="ico file_del"><em>삭제</em></i></button>
+                                                                                        </span>
+                                                                                        <input type="file" id="file5" name="" value="">
+                                                                                        <label for="file5">파일추가</label>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="row">
+                                                                                    <div class="col s12 input-text file">
+                                                                                        <span class="file-path">
+                                                                                            <input type="text" id="file5_text" readonly name="" value="개선전이미지.jpg">
+                                                                                            <button type="button"><i class="ico file_del"><em>삭제</em></i></button>
+                                                                                        </span>
+                                                                                        <input type="file" id="file5" name="" value="">
+                                                                                        <label for="file5">파일추가</label>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </td>
+                                                                            <td>
+                                                                                <div class="row">
+                                                                                    <div class="col s12 input-text file">
+                                                                                        <span class="file-path">
+                                                                                            <input type="text" id="file5_text" readonly name="" value="개선전이미지.jpg">
+                                                                                            <button type="button"><i class="ico file_del"><em>삭제</em></i></button>
+                                                                                        </span>
+                                                                                        <input type="file" id="file5" name="" value="">
+                                                                                        <label for="file5">파일추가</label>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="row">
+                                                                                    <div class="col s12 input-text file">
+                                                                                        <span class="file-path">
+                                                                                            <input type="text" id="file5_text" readonly name="" value="개선전이미지.jpg">
+                                                                                            <button type="button"><i class="ico file_del"><em>삭제</em></i></button>
+                                                                                        </span>
+                                                                                        <input type="file" id="file5" name="" value="">
+                                                                                        <label for="file5">파일추가</label>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="row">
+                                                                                    <div class="col s12 input-text file">
+                                                                                        <span class="file-path">
+                                                                                            <input type="text" id="file5_text" readonly name="" value="개선전이미지.jpg">
+                                                                                            <button type="button"><i class="ico file_del"><em>삭제</em></i></button>
+                                                                                        </span>
+                                                                                        <input type="file" id="file5" name="" value="">
+                                                                                        <label for="file5">파일추가</label>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </td>
+                                                                        </tr>
+                                                                        
+                                                                        <tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
                                             <tr>
                                                 <th><span class="asterisk">*</span>결재자 지정</th>
                                                 <td colspan="3" class="pd0">
@@ -422,22 +340,7 @@
                                 <a href="#" class="btn">목록</a>
                             </div>
                         </div>
-                    </section>
-                </div>
-            </div>
-        </div>
-        <!-- //container -->
-        <!-- footer -->
-        <footer>
-            <div class="inner">
-                <div class="footer-logo">
-                    <img src="../images/footer_logo.png" alt="LX 하우시스">
-                    <span>품질혁신지원시스템</span>
-                </div>
-                <p class="copyright">COPYRIGHT © 2021 LX HAUSYS. ALL RIGHTS RESERVED.</p>
-            </div>
-        </footer>
-        <!-- //footer -->
+                   
         <!-- 조직도 -->
         <div class="modal-dimmed"></div>
         <div class="org-modal">
@@ -451,6 +354,6 @@
                 </figure>
             </div>
         </div>
-    </div>
+
 </body>
 </html>

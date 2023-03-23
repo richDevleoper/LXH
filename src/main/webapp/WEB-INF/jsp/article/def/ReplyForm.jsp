@@ -193,7 +193,7 @@ ${articleSearchVO.hiddenTag }
 
 <!-- 게시판 폼 영역 -->
 <fieldset>
-	<legend class="hidden">게시글 수정</legend>
+	<legend class="hidden">게시글2 수정</legend>
 	<table class="article_form" summary="현재 누르신 글의 제목,작성자,작성일,조회수, 첨부, 내용에 대한 테이블 정보입니다.">
 		<caption><span>글의 제목을 출력해주세요</span></caption>
 		<colgroup>

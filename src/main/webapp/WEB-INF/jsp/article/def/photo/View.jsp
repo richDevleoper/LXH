@@ -84,10 +84,10 @@ ${articleSearchVO.superHiddenTag}
 <input type="hidden" id="boardKey" name="boardKey" value="${articleSearchVO.boardKey }" />
 <input type="hidden" id="articleKey" name="articleKey" value="${articleVO.articleKey }" />
 
-<!-- article_view -->
+<!-- article_view2 -->
 <div id="article_view">
 	<!-- 게시판출력 -->
-	<h4 class="skin2">
+	<h4 class="skin21">
 		${articleVO.title }
 		<c:if test="${articleVO.secretFlg eq 'Y'}">
 			<img src="/def/img/article/icon_secret.gif" alt="비밀글" />

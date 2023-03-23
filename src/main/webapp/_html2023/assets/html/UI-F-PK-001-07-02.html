@@ -13,6 +13,7 @@
 
     <!-- JS -->
     <script src="../js/jquery-3.3.1.min.js"></script>
+    <script src="../js/jquery-ui.js"></script>
     <script src="../js/jstree.min.js"></script>
     <script src="../js/common.js"></script>
 
@@ -72,7 +73,7 @@
                                     <a href="">품질KPI</a>
                                     <div>
                                         <ul class="depth1">
-                                            <li><a href="">6σ인재 현황</a></li>
+                                            <li><a href="">인재 현황</a></li>
                                             <li><a href="">팀장MBB율</a></li>
                                             <li><a href="">MBB활용율</a></li>
                                             <li>
@@ -237,12 +238,12 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <th><label for="select1"><span class="asterisk">*</span>6σ Full Process여부</label> <i class="ico tip"><em>tip.</em></i></th>
+                                                <th><label for="select1"><span class="asterisk">*</span>Full Process여부</label> <i class="ico tip" id="btnAdviceFullProcess"><em>tip.</em></i></th>
                                                 <td>
                                                     <div class="row">
                                                         <div class="col s12 select-group">
-                                                            <select name="" id="select1" title="6σ Full Process여부 선택">
-                                                                <option value="">6σ Full Process</option>
+                                                            <select name="" id="select1" title="Full Process여부 선택">
+                                                                <option value="">Full Process</option>
                                                             </select>
                                                         </div>
                                                     </div>
@@ -279,7 +280,7 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <th><label for="select4"><span class="asterisk">*</span>과제리더벨트</label> <i class="ico tip"><em>tip.</em></i></th>
+                                                <th><label for="select4"><span class="asterisk">*</span>과제리더벨트</label> <i class="ico tip" id="btnAdviceReaderBelt"><em>tip.</em></i></th>
                                                 <td>
                                                     <div class="row">
                                                         <div class="col s12 select-group">
@@ -355,7 +356,7 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <th><label for="select6"><span class="asterisk">*</span>키워드</label> <i class="ico tip"><em>tip.</em></i></th>
+                                                <th><label for="select6"><span class="asterisk">*</span>키워드</label> <i class="ico tip" id="btnAdviceKeyword"><em>tip.</em></i></th>
                                                 <td colspan="3">
                                                     <div class="row">
                                                         <div class="col s8">
@@ -428,9 +429,9 @@
                                                 <td>팀장</td>
                                                 <td>MBB</td>
                                                 <td class="pd3">
-                                                    <div class="btn-group">
+                                                    <!-- <div class="btn-group">
                                                         <button type="button" class="btn light-gray">추가</button>
-                                                    </div>
+                                                    </div> -->
                                                 </td>
                                             </tr>
                                             <tr>
@@ -439,7 +440,7 @@
                                                     <div class="row">
                                                         <div class="col s12 input-text search">
                                                             <input type="text" id="text4" name="" value="">
-                                                            <button type="button">검색</button>
+                                                            <button type="button" class="btn-psmg-search-modal">검색</button>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -449,47 +450,7 @@
                                                 <td>MBB</td>
                                                 <td class="pd3">
                                                     <div class="btn-group">
-                                                        <button type="button" class="btn light-gray">추가</button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th><label for="text5">팀멤버</label></th>
-                                                <td class="pd3">
-                                                    <div class="row">
-                                                        <div class="col s12 input-text search">
-                                                            <input type="text" id="text5" name="" value="">
-                                                            <button type="button">검색</button>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>홍길동</td>
-                                                <td>책임</td>
-                                                <td>팀장</td>
-                                                <td>MBB</td>
-                                                <td class="pd3">
-                                                    <div class="btn-group">
-                                                        <button type="button" class="btn light-gray">삭제</button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th><label for="text6">팀멤버</label></th>
-                                                <td class="pd3">
-                                                    <div class="row">
-                                                        <div class="col s12 input-text search">
-                                                            <input type="text" id="text6" name="" value="">
-                                                            <button type="button">검색</button>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>홍길동</td>
-                                                <td>책임</td>
-                                                <td>팀장</td>
-                                                <td>MBB</td>
-                                                <td class="pd3">
-                                                    <div class="btn-group">
-                                                        <button type="button" class="btn light-gray">추가</button>
+                                                        <button type="button" class="btn light-gray btn-team-member-add">추가</button>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -508,9 +469,9 @@
                                                 <td>팀장</td>
                                                 <td>MBB</td>
                                                 <td class="pd3">
-                                                    <div class="btn-group">
+                                                    <!-- <div class="btn-group">
                                                         <button type="button" class="btn light-gray">추가</button>
-                                                    </div>
+                                                    </div> -->
                                                 </td>
                                             </tr>
                                             <tr>
@@ -528,9 +489,9 @@
                                                 <td>팀장</td>
                                                 <td>MBB</td>
                                                 <td class="pd3">
-                                                    <div class="btn-group">
+                                                    <!-- <div class="btn-group">
                                                         <button type="button" class="btn light-gray">추가</button>
-                                                    </div>
+                                                    </div> -->
                                                 </td>
                                             </tr>
                                             <tr>
@@ -548,9 +509,9 @@
                                                 <td>팀장</td>
                                                 <td>MBB</td>
                                                 <td class="pd3">
-                                                    <div class="btn-group">
+                                                    <!-- <div class="btn-group">
                                                         <button type="button" class="btn light-gray">추가</button>
-                                                    </div>
+                                                    </div> -->
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -608,7 +569,7 @@
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <th class="pd0 pd-r10">산출 Logic <i class="ico tip"><em>tip.</em></i></th>
+                                                <th class="pd0 pd-r10">산출 Logic <i class="ico tip" id="btnAdviceLogic"><em>tip.</em></i></th>
                                                 <td class="pd3">
                                                     <div class="row">
                                                         <div class="col s12 input-text">
@@ -897,11 +858,61 @@
             </div>
         </footer>
         <!-- //footer -->
-        <!-- 조직도 -->
+
         <div class="modal-dimmed"></div>
-        <div class="org-modal">
+        <!-- 도움말 Full Process여부 -->
+        <div class="org-modal advice-modal advice-full-process-modal">
             <div class="modal-header">
-                <h4>직책조회</h4>
+                <h4>도움말</h4>
+                <button type="button" class="btn-close">닫기</button>
+            </div>
+            <div class="modal-content">
+                <div class="advide-content">
+                    Full Process여부 온라인 도움말 영역 (내용 수령 후 확인)
+                </div>
+            </div>
+        </div>
+        <!-- 도움말 과제리더벨트 -->
+        <div class="org-modal advice-modal advice-reader-belt-modal">
+            <div class="modal-header">
+                <h4>도움말</h4>
+                <button type="button" class="btn-close">닫기</button>
+            </div>
+            <div class="modal-content">
+                <div class="advide-content">
+                    과제리더벨트 온라인 도움말 영역 (내용 수령 후 확인)
+                </div>
+            </div>
+        </div>
+        <!-- 도움말 키워드 -->
+        <div class="org-modal advice-modal advice-keyword-modal">
+            <div class="modal-header">
+                <h4>도움말</h4>
+                <button type="button" class="btn-close">닫기</button>
+            </div>
+            <div class="modal-content">
+                <div class="advide-content">
+                    키워드 온라인 도움말 영역 (내용 수령 후 확인)
+                </div>
+            </div>
+        </div>
+        <!-- 도움말 산출 Logic -->
+        <div class="org-modal advice-modal advice-logic-modal">
+            <div class="modal-header">
+                <h4>도움말</h4>
+                <button type="button" class="btn-close">닫기</button>
+            </div>
+            <div class="modal-content">
+                <div class="advide-content">
+                    산출 Logic 온라인 도움말 영역 (내용 수령 후 확인)
+                </div>
+            </div>
+        </div>
+
+        <!-- 사원조회 -->
+        <div class="org-modal member-search-modal">
+            <div class="modal-header">
+                <h4>사원조회</h4>
                 <button type="button" class="btn-close">닫기</button>
             </div>
             <div class="modal-content">
@@ -910,7 +921,7 @@
                         <form id="org-form" onsubmit="org_search();return false;">
                             <div class="search-form">
                                 <div class="form-inline form-input">
-                                    <label>직책명</label>
+                                    <label>사원명</label>
                                     <input type="text" name="">
                                 </div>
                                 <button type="submit" class="btn-submit">조회</button>
@@ -918,38 +929,59 @@
                         </form>
                     </div>
                 </div>
-                <div class="tree-header">
-                    <div>
-                        <input type="checkbox" id="orgSelAll">
-                        <label for="orgSelAll"></label>
+                <div class="list-wrap">
+                    <div class="list-content">
+                        <div class="list-table list">
+                            <table class="centered">
+                                <caption></caption>
+                                <colgroup>
+                                    <col style="width:50px">
+                                    <col style="width:60px">
+                                    <col>
+                                    <col style="width:60px">
+                                    <col style="width:60px">
+                                    <col style="width:70px">
+                                </colgroup>
+                                <thead>
+                                    <tr>
+                                        <th>선택</th>
+                                        <th>이름</th>
+                                        <th>소속</th>
+                                        <th>직위</th>
+                                        <th>직책</th>
+                                        <th>Belt</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><input type="radio" /></td>
+                                        <td>홍길동</td>
+                                        <td>소속소속소속소속소속소속소속</td>
+                                        <td>직위</td>
+                                        <td>직책</td>
+                                        <td>MBB</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                    <div>
-                        직책선택
+                    <div class="list-footer">
+                        <div class="pagination">
+                            <a href="" class="first">처음</a>
+                            <a href="" class="prev">이전</a>
+                            <a href="" class="cur num">1</a>
+                            <a href="" class="num">2</a>
+                            <a href="" class="num">3</a>
+                            <a href="" class="num">4</a>
+                            <a href="" class="num">5</a>
+                            <a href="" class="next">다음</a>
+                            <a href="" class="last">끝</a>
+                        </div>
+                        <div class="btns">
+                            <button type="button" class="btn-submit">확인</button>
+                            <button type="button" class="btn-cancel">취소</button>
+                        </div>
                     </div>
-                </div>
-                <div id="org-tree">
-                    <ul>
-                        <li>사업부장</li>
-                        <li>담당</li>
-                        <li>팀장</li>
-                        <li>책임</li>
-                        <li>선임</li>
-                        <li>사원1</li>
-                        <li>사원2</li>
-                        <li>사원3</li>
-                        <li>사원4</li>
-                        <li>사원5</li>
-                        <li>사원6</li>
-                        <li>사원7</li>
-                        <li>사원8</li>
-                        <li>사원9</li>
-                        <li>사원10</li>
-                        <li>사원11</li>
-                    </ul>
-                </div>
-                <div class="btns">
-                    <button type="button" class="btn-submit">확인</button>
-                    <button type="button" class="btn-cancel">취소</button>
                 </div>
             </div>
         </div>

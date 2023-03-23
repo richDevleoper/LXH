@@ -146,3 +146,92 @@ $(document).on('click', 'modal_close, .modal.popup > button.close', function() {
         popup.remove();
     });
 });
+
+$(function() {
+    // 조직 버튼
+    $('.btn-organization').click(function(){
+        $('.modal-dimmed, .organization-modal').show();
+    })
+
+    // 직잭 버튼
+    $('.btn-position').click(function(){
+        $('.modal-dimmed, .position-modal').show();
+    })
+
+    //직책도
+    $('#positionSelAll').change(function() {          
+        ($('#positionSelAll').is(":checked"))?$("#position-tree").jstree().check_all(true):$("#position-tree").jstree().uncheck_all(true);
+    }); 
+
+    $('#position-tree').jstree({
+        "plugins" : ['checkbox','search'],
+        "search" : {
+            "show_only_matches" : true,
+            "show_only_matches_children" : true,
+        },
+    })
+    .on("check_node.jstree uncheck_node.jstree", function (e, data) {  								
+        if (e.type == "uncheck_node") {
+            $("#positionSelAll").prop( "checked", false );                
+        }
+        else if (e.type == "check_node") {					
+            if ($(this).jstree().get_json('#', {flat:true}).length === $(this).jstree().get_checked(true).length)
+                $("#positionSelAll").prop( "checked", true ); 					
+        }
+    }); 
+
+    // 도움말 Full Process여부
+    $('#btnAdviceFullProcess').click(function() {
+        $('.modal-dimmed, .advice-full-process-modal').show();
+    })
+
+    // 도움말 과제리더벨트
+    $('#btnAdviceReaderBelt').click(function() {
+        $('.modal-dimmed, .advice-reader-belt-modal').show();
+    })
+
+    // 도움말 키워드
+    $('#btnAdviceKeyword').click(function() {
+        $('.modal-dimmed, .advice-keyword-modal').show();
+    })
+
+    // 도움말 산출 Logic
+    $('#btnAdviceLogic').click(function() {
+        $('.modal-dimmed, .advice-logic-modal').show();
+    })
+
+
+
+})
+
+// 사원조회 모달
+$(document).on('click', '.btn-member-search-modal', function() {
+    console.log('asdfasdf');
+    $('.modal-dimmed, .member-search-modal').show();
+})
+
+// 관련쪽지조회 모달
+$(document).on('click', '.btn-psmg-search-modal', function() {
+    console.log('asdfasdf');
+    $('.modal-dimmed, .psmg-search-modal').show();
+})
+
+// 팀멤버 추가
+$(document).on('click', '.btn-team-member-add', function() {
+    let oParent = $(this).closest('tr')
+    let oClone = oParent.clone();
+    oClone.find('input').val('');
+    oClone.find('th > label').text('팀멤버');
+    oClone.find('td:nth-child(3), td:nth-child(4), td:nth-child(5), td:nth-child(6)').text('');
+    oClone.find('.btn-team-member-add').text('삭제');
+    oClone.find('.btn-group button').removeClass('btn-team-member-add').addClass('btn-team-member-remove');
+
+    oParent.after(oClone);
+})
+
+// 팀멤버 삭제
+$(document).on('click', '.btn-team-member-remove', function() {
+    $(this).closest('tr').remove();
+})
+
+

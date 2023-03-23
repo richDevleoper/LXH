@@ -84,7 +84,7 @@ ${articleSearchVO.superHiddenTag}
 <input type="hidden" id="boardKey" name="boardKey" value="${articleSearchVO.boardKey }" />
 <input type="hidden" id="articleKey" name="articleKey" value="${articleVO.articleKey }" />
 
-<!-- article_view -->
+<!-- article_view2 -->
 <div id="article_view">
 	<!-- 게시판출력 -->
 	<h4 class="skin2">

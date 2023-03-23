@@ -225,12 +225,12 @@
                                         <div class="form-inline form-input">
                                             <label>조직</label>
                                             <input type="text" name="">
-                                            <button type="button" class="btn-org">검색</button>
+                                            <button type="button" class="btn-org btn-organization">검색</button>
                                         </div>
                                         <div class="form-inline form-input">
                                             <label>직책</label>
                                             <input type="text" name="">
-                                            <button type="button" class="btn-org">검색</button>
+                                            <button type="button" class="btn-org btn-position">검색</button>
                                         </div>                                        
                                         <button type="button" class="btn-submit">조회</button>
                                     </div>
@@ -455,9 +455,10 @@
             </div>
         </footer>
         <!-- //footer -->
-        <!-- 조직도 -->
+
         <div class="modal-dimmed"></div>
-        <div class="org-modal">
+        <!-- 조직도 -->
+        <div class="org-modal organization-modal">
             <div class="modal-header">
                 <h4>조직조회</h4>
                 <button type="button" class="btn-close">닫기</button>
@@ -482,7 +483,7 @@
                         <label for="orgSelAll"></label>
                     </div>
                     <div>
-                        6σ 인재육성대상 조직명
+                        인재육성대상 조직명
                     </div>
                 </div>
                 <div id="org-tree">
@@ -557,6 +558,57 @@
                 </div>
             </div>
         </div>
+
+        <!-- 직책 -->
+        <div class="org-modal position-modal">
+            <div class="modal-header">
+                <h4>직책조회</h4>
+                <button type="button" class="btn-close">닫기</button>
+            </div>
+            <div class="modal-content">
+                <div class="list-wrap">
+                    <div class="list-search">
+                        <form id="org-form" onsubmit="org_search();return false;">
+                            <div class="search-form">
+                                <div class="form-inline form-input">
+                                    <label>직책명</label>
+                                    <input type="text" name="">
+                                </div>
+                                <button type="submit" class="btn-submit">조회</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="tree-header">
+                    <div>
+                        <input type="checkbox" id="positionSelAll">
+                        <label for="positionSelAll"></label>
+                    </div>
+                    <div>
+                        직책선택
+                    </div>
+                </div>
+                <div id="position-tree">
+                    <ul>
+                        <li>사업부장</li>
+                        <li>담당</li>
+                        <li>팀장</li>
+                        <li>책임</li>
+                        <li>선임</li>
+                        <li>사원1</li>
+                        <li>사원2</li>
+                        <li>사원3</li>
+                        <li>사원4</li>
+                        <li>사원5</li>
+                    </ul>
+                </div>
+                <div class="btns">
+                    <button type="button" class="btn-submit">확인</button>
+                    <button type="button" class="btn-cancel">취소</button>
+                </div>
+            </div>
+        </div>
+
     </div>
 </body>
 </html>

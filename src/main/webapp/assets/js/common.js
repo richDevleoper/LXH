@@ -210,6 +210,12 @@ $(document).on('click', '.btn-member-search-modal', function() {
     $('.modal-dimmed, .member-search-modal').show();
 })
 
+// 관련쪽지조회 모달
+$(document).on('click', '.btn-psmg-search-modal', function() {
+    console.log('asdfasdf');
+    $('.modal-dimmed, .psmg-search-modal').show();
+})
+
 // 팀멤버 추가
 $(document).on('click', '.btn-team-member-add', function() {
     let oParent = $(this).closest('tr')
