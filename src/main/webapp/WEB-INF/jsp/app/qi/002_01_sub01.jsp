@@ -135,21 +135,29 @@
                                                                 <col>
                                                             </colgroup>
                                                             <thead>
-                                                                <tr>
-                                                                    <th>Define</th>
-                                                                    <th>Measure</th>
-                                                                    <th>Analyze</th>
-                                                                    <th>Improve</th>
-                                                                    <th>Control</th>
-                                                                    <th>Finish</th>
+                                                                <tr id="trPlanDateLabel">
+                                                                    <th str1="Define" str2="Define">Define</th>
+                                                                    <th str1="Measure" str2="Measure">Measure</th>
+                                                                    <th str1="Analyze" str2="Explore">Analyze</th>
+                                                                    <th str1="Improve" str2="Develop">Improve</th>
+                                                                    <th str1="Control" str2="Implement">Control</th>
+                                                                    <th str1="Finish" str2="Finish">Finish</th>
                                                                 </tr>
+                                                                <%/*
+																	REP_SIX_MEASUER_DATE		2
+																	REP_SIX_EXPLORE_DATE		3
+																	REP_SIX_DEVELOP_DATE		4
+																	REP_SIX_IMPLEMENT_DATE		5
+																	REP_START_DATE    			1
+																	REP_FINISH_DATE				6
+                                                                */%>
                                                             </thead>
                                                             <tbody>
                                                                 <tr>
                                                                     <td class="pd3">
                                                                         <div class="row"><!-- Define -->
                                                                             <div class="col s12 input-text input-date">
-                                                                                <input type="text" id="" name="REP_START_DATE" value="" class="datepicker">
+                                                                                <input type="text" id="dtPlan01" name="REP_START_DATE" value="" class="datepicker">
                                                                                 <i class="ico calendar"></i>
                                                                             </div>
                                                                         </div>
@@ -157,31 +165,31 @@
                                                                     <td class="pd3">
                                                                         <div class="row"><!-- Measure -->
                                                                             <div class="col s12 input-text input-date">
-                                                                                <input type="text" id="" name="REP_SIX_MEASUER_DATE" value="" class="datepicker">
+                                                                                <input type="text" id="dtPlan02" name="REP_SIX_MEASUER_DATE" value="" class="datepicker">
                                                                                 <i class="ico calendar"></i>
                                                                             </div>
                                                                         </div>
                                                                     </td>
                                                                     <td class="pd3">
-                                                                        <div class="row"><!-- Analyze -->
+                                                                        <div class="row"><!-- Analyze / Explore -->
                                                                             <div class="col s12 input-text input-date">
-                                                                                <input type="text" id="" name="" value="" class="datepicker">
+                                                                                <input type="text" id="dtPlan03" name="REP_SIX_EXPLORE_DATE" value="" class="datepicker">
                                                                                 <i class="ico calendar"></i>
                                                                             </div>
                                                                         </div>
                                                                     </td>
                                                                     <td class="pd3">
-                                                                        <div class="row"><!-- Improve -->
+                                                                        <div class="row"><!-- Improve / Develop -->
                                                                             <div class="col s12 input-text input-date">
-                                                                                <input type="text" id="" name="" value="" class="datepicker">
+                                                                                <input type="text" id="dtPlan04" name="REP_SIX_DEVELOP_DATE" value="" class="datepicker">
                                                                                 <i class="ico calendar"></i>
                                                                             </div>
                                                                         </div>
                                                                     </td>
                                                                     <td class="pd3">
-                                                                        <div class="row"><!-- Control -->
+                                                                        <div class="row"><!-- Control / Implement -->
                                                                             <div class="col s12 input-text input-date">
-                                                                                <input type="text" id="" name="" value="" class="datepicker">
+                                                                                <input type="text" id="dtPlan05" name="REP_SIX_IMPLEMENT_DATE" value="" class="datepicker">
                                                                                 <i class="ico calendar"></i>
                                                                             </div>
                                                                         </div>
@@ -189,7 +197,7 @@
                                                                     <td class="pd3">
                                                                         <div class="row"><!-- Finish -->
                                                                             <div class="col s12 input-text input-date">
-                                                                                <input type="text" id="" name="REP_FINISH_DATE" value="" class="datepicker">
+                                                                                <input type="text" id="dtPlan06" name="REP_FINISH_DATE" value="" class="datepicker">
                                                                                 <i class="ico calendar"></i>
                                                                             </div>
                                                                         </div>
@@ -200,7 +208,7 @@
                                                     </div>
                                                 </td>
                                             </tr>
-                                            <tr id="trRepDate2" class="tr-rep-date">
+                                            <tr id="trRepDate2" class="tr-rep-date" style="display: none;">
                                                 <th><span class="asterisk">*</span>일정계획<br>(완료예정일)</th>
                                                 <td colspan="3">
                                                     <div class="list-table list">
@@ -246,19 +254,19 @@
                                                     <div class="row">
                                                         <div class="col s8">
                                                             <div class="col s2 input-text pd-r10" style="width:20%">
-                                                                <input type="text" id="" name="" value="" title="키워드를 입력해주세요.">
+                                                                <input type="text" id="txtRepKeyword_1" name="REP_KEYWORD" value="" title="키워드를 입력해주세요.">
                                                             </div>
                                                             <div class="col s2 input-text pd-r10" style="width:20%">
-                                                                <input type="text" id="" name="" value="" title="키워드를 입력해주세요.">
+                                                                <input type="text" id="txtRepKeyword_2" name="REP_KEYWORD" value="" title="키워드를 입력해주세요.">
                                                             </div>
                                                             <div class="col s2 input-text pd-r10" style="width:20%">
-                                                                <input type="text" id="" name="" value="" title="키워드를 입력해주세요.">
+                                                                <input type="text" id="txtRepKeyword_3" name="REP_KEYWORD" value="" title="키워드를 입력해주세요.">
                                                             </div>
                                                             <div class="col s2 input-text pd-r10" style="width:20%">
-                                                                <input type="text" id="" name="" value="" title="키워드를 입력해주세요.">
+                                                                <input type="text" id="txtRepKeyword_4" name="REP_KEYWORD" value="" title="키워드를 입력해주세요.">
                                                             </div>
                                                             <div class="col s2 input-text pd-r10" style="width:20%">
-                                                                <input type="text" id="" name="" value="" title="키워드를 입력해주세요.">
+                                                                <input type="text" id="txtRepKeyword_5" name="REP_KEYWORD" value="" title="키워드를 입력해주세요.">
                                                             </div>
                                                         </div>
                                                         <span class="col s4 text-bul" style="letter-spacing:-1px">
@@ -463,42 +471,41 @@
                                         </colgroup>
                                         <thead>
                                             <tr>
-                                                <th colspan="9">예상성과</th>
+                                                <th colspan="9">예상성과</th>	<!-- TB_REPORT_RESULT -->
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <th class="pd0 pd-r23"><label for="select7"><span class="asterisk">*</span>성과항목</label></th>
+                                                <th class="pd0 pd-r23"><label for="ddlRepResultTypeCode1"><span class="asterisk">*</span>성과항목</label></th>
                                                 <td class="pd3">
                                                     <div class="row">
                                                         <div class="col s12 select-group">
-                                                            <select name="" id="select7" title="성과항목 선택">
-                                                                <option value="">선택</option>
+                                                            <select name="REP_RESULT_TYPE_CODE" id="ddlRepResultTypeCode1" title="성과항목 선택">
                                                             </select>
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <th class="pd0 pd-r23"><label for="text10">년내(당해년)</label></th>
+                                                <th class="pd0 pd-r23"><label for="txtRepResultWithinYear">년내(당해년)</label></th>
                                                 <td class="pd3">
                                                     <div class="row">
                                                         <div class="col s12 input-text">
-                                                            <input type="text" id="text10" name="" value="" title="년내 입력">
+                                                            <input type="text" name="REP_RESULT_WITHIN_YEAR" id="txtRepResultWithinYear" value="" title="년내 입력">
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <th class="pd0 pd-r23">년간(12개월)</th>
+                                                <th class="pd0 pd-r23"><label for="txtRepResultYear">년간(12개월)</label></th>
                                                 <td class="pd3">
                                                     <div class="row">
                                                         <div class="col s12 input-text">
-                                                            <input type="text" id="text11" name="" value="" title="년내 입력">
+                                                            <input type="text" id="txtRepResultYear" name="REP_RESULT_YEAR" value="" title="년내 입력">
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <th class="pd0 pd-r10">산출 Logic <i class="ico tip"><em>tip.</em></i></th>
+                                                <th class="pd0 pd-r10"><label for="txtRepResultCalLogic">산출 Logic</label> <i class="ico tip"><em>tip.</em></i></th>
                                                 <td class="pd3">
                                                     <div class="row">
                                                         <div class="col s12 input-text">
-                                                            <input type="text" id="text11" name="" value="" title="년내 입력">
+                                                            <input type="text" id="txtRepResultCalLogic" name="REP_RESULT_CAL_LOGIC" value="" title="년내 입력">
                                                         </div>
                                                     </div>
                                                 </td>
@@ -592,56 +599,56 @@
                                                 <td class="pd3">
                                                     <div class="row">
                                                         <div class="col s12 input-text">
-                                                            <input type="text" id="text15" name="" value="" title="항목 입력">
+                                                            <input type="text" id="txtRepIndiPy_Item" name="REP_INDI_PY_ITEM" value="" title="항목 입력">
                                                         </div>
                                                     </div>
                                                 </td>
                                                 <td class="pd3">
                                                     <div class="row">
                                                         <div class="col s12 input-text">
-                                                            <input type="text" id="text16" name="" value="" title="단위 입력">
+                                                            <input type="text" id="txtRepIndiPy_Unit" name="REP_INDI_PY_UNIT" value="" title="단위 입력">
                                                         </div>
                                                     </div>
                                                 </td>
                                                 <td class="pd3">
                                                     <div class="row">
                                                         <div class="col s12 input-text">
-                                                            <input type="text" id="text17" name="" value="" title="개선전 입력">
+                                                            <input type="text" id="txtRepIndiPy_Before" name="REP_INDI_PY_BEFORE" value="" title="개선전 입력">
                                                         </div>
                                                     </div>
                                                 </td>
                                                 <td class="pd3">
                                                     <div class="row">
                                                         <div class="col s12 input-text">
-                                                            <input type="text" id="text18" name="" value="" title="개선목표 입력">
+                                                            <input type="text" id="txtRepIndiPy_Goal" name="REP_INDI_PY_GOAL" value="" title="개선목표 입력">
                                                         </div>
                                                     </div>
                                                 </td>
                                                 <td class="pd3">
                                                     <div class="row">
                                                         <div class="col s12 input-text">
-                                                            <input type="text" id="text19" name="" value="" title="항목 입력">
+                                                            <input type="text" id="txtRepIndiKPI_Item" name="REP_INDI_KPI_ITEM" value="" title="항목 입력">
                                                         </div>
                                                     </div>
                                                 </td>
                                                 <td class="pd3">
                                                     <div class="row">
                                                         <div class="col s12 input-text">
-                                                            <input type="text" id="text20" name="" value="" title="단위 입력">
+                                                            <input type="text" id="txtRepIndiKPI_Unit" name="REP_INDI_KPI_UNIT" value="" title="단위 입력">
                                                         </div>
                                                     </div>
                                                 </td>
                                                 <td class="pd3">
                                                     <div class="row">
                                                         <div class="col s12 input-text">
-                                                            <input type="text" id="text21" name="" value="" title="개선전 입력">
+                                                            <input type="text" id="txtRepIndiKPI_Before" name="REP_INDI_KPI_BEFORE" value="" title="개선전 입력">
                                                         </div>
                                                     </div>
                                                 </td>
                                                 <td class="pd3">
                                                     <div class="row">
                                                         <div class="col s12 input-text">
-                                                            <input type="text" id="text22" name="" value="" title="개선목표 입력">
+                                                            <input type="text" id="txtRepIndiKPI_Goal" name="REP_INDI_KPI_GOAL" value="" title="개선목표 입력">
                                                         </div>
                                                     </div>
                                                 </td>
@@ -772,16 +779,16 @@
 	$(document).ready(init);
 	
 	let cdListSector = [{key:1,value:'창호'},{key:2,value:'바닥재'},{key:3,value:'단열재'},{key:4,value:'벽지'},{key:5,value:'표면소재'},{key:6,value:'산업용필름'},{key:7,value:'자동차소재부품'},{key:8,value:'인테리어'},{key:9,value:'연구소'},{key:10,value:'품질'},{key:11,value:'생산기술(제조혁신)'},{key:12,value:'환경안전'},{key:13,value:'기타'}];
-	
 	let cdLeaderBelt = [{key:1,value:'GB'},{key:2,value:'BB'},{key:3,value:'BB후보'},{key:4,value:'MBB'},{key:5,value:'MBB후보'},{key:6,value:'MGB'},{key:7,value:'No Belt'}];
-	
 	let cdActionType = [{key:1,value:'품질개선'},{key:2,value:'개발'},{key:3,value:'생산성향상'},{key:4,value:'원가개선'},{key:5,value:'기타'}];
-	
 	let cdMbbUseRate = [{key:1,value:'해당없음'},{key:2,value:'직접수행'},{key:3,value:'지원MBB'},{key:4,value:'팀장MBB '}];
+	let cdRepResultType = [{key:1,value:'외부실패비용'},{key:2,value:'내부실패비용'},{key:3,value:'매출액'},{key:4,value:'제조원가'},{key:5,value:'상품원가'},{key:6,value:'기타 영업이익'},{key:7,value:'해당없음 '}];
 	
 	function init(){
 		$("#ddlRepDevisionCode").off("change").on("change", onchange_ddlRepDevisionCode); // 6σ Full Process여부
 		onchange_ddlRepDevisionCode();	// 초기셋팅을 위한 호출
+		
+		$("#ddlRepTypeCode").off("change").on("change", onchange_ddlRepTypeCode); // 과제유형
 		
 		setDropDown("ddlRepSectorCode", cdListSector, true);//부문코드
 		setDropDown("ddlRepLeaderBeltCd", cdLeaderBelt, true);//리더벨트
@@ -790,6 +797,9 @@
 		$("#lblUseRefDt").text("2023"); $("#hidUseRefDt").val("2023");	//활용율 반영년도
 		
 		$(".org-search").off("click").on("click", onclick_orgSearch)
+		
+		setDropDown("ddlRepResultTypeCode1", cdRepResultType, true);//성과항목
+		
 	}
 
 	function onclick_orgSearch(e){
@@ -808,6 +818,7 @@
 		case "1": //6sigma
 			arrRepType = [{key:1,value:'DMAIC'},{key:2,value:'DMEDI'}];
 			$("#trRepDate1").show();
+			changeTitle();
 			break;
 		case "2": //일반
 			arrRepType = [{key:1,value:'Quick 6σ'},{key:2,value:'빅데이터'},{key:3,value:'FMEA'},{key:4,value:'CEO/CPO Task'}];
@@ -821,6 +832,28 @@
 			break;
 		}
 		setDropDown(targetObjId, arrRepType, true);
+	}
+	
+	function onchange_ddlRepTypeCode(e){
+		changeTitle(); // 6sigma 일정계획 타이틀 변경( DMAIC ↔ DMEDI )
+	}
+	
+	function changeTitle(){
+		let repDevCd = $("#ddlRepDevisionCode").val(); 	// 6sigma F-P 여부
+		let repTypeCd = $("#ddlRepTypeCode").val();	// 과제유형
+		if(repDevCd==="1"){
+			let focusAttr = "";
+			if(repTypeCd==="2"){
+				//DMEDI str2
+				focusAttr = "str2";
+			} else {
+				//DMAIC str1
+				focusAttr = "str1";
+			}
+			$("#trPlanDateLabel th").each(function(i,o){
+			    $(o).text($(o).attr(focusAttr))
+			});
+		}
 	}
 	
 	function validate(){
