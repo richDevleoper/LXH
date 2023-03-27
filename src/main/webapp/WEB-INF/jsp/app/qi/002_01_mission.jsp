@@ -188,7 +188,7 @@
                                     <a href="" class="last">끝</a>
                                 </div>
                                 <div class="list-btns">
-                                    <button type="button" class="btn bg-gray" onclick="location.href='/app/002_01_sub01.do?menuKey=29'">                                        
+                                    <button type="button" class="btn bg-gray" onclick="location.href='/report/002_01_sub01.do?menuKey=29'">                                        
                                         <span>과제등록</span>
                                     </button>                                    
                                 </div>

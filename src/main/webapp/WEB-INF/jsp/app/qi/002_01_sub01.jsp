@@ -15,7 +15,7 @@
 	<meta name="description" content="" />
 </head>
 <body>
-<form name="frm_002_01_01" action="" onsubmit="return false" method="post">
+<form:form commandName="frmReport" id="defaultForm" name="defaultForm"  action="${action}" onsubmit="return false" method="post" modelAttribute="reportVO">
                         <!-- breadcrumb -->
                         <div class="breadcrumb">
                             <ul>
@@ -36,25 +36,29 @@
                                         </colgroup>
                                         <tbody>
                                             <tr>
-                                                <th><label for="text1"><span class="asterisk">*</span>과제명</label></th>
+                                                <th><form:label path="repName"><span class="asterisk">*</span>과제명</form:label></th>
                                                 <td colspan="3">
                                                     <div class="row">
                                                         <div class="col s12 input-text">
-                                                            <input type="text" id="text1" name="" value="" title="과제명을 입력해주세요.">
+                                                            <form:input type="text" id="txtRepName" path="repName" value="" title="과제명을 입력해주세요." />
                                                         </div>
                                                     </div>
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <th><label for="ddlRepDevisionCode"><span class="asterisk">*</span>6σ Full Process여부</label> <i class="ico tip"><em>tip.</em></i></th>
+                                                <th><form:label path="repDivisionCode"><span class="asterisk">*</span>6σ Full Process여부</form:label> <i class="ico tip"><em>tip.</em></i></th>
                                                 <td>
                                                     <div class="row">
                                                         <div class="col s12 select-group">
-                                                            <select name="REP_DEVISION_CODE" id="ddlRepDevisionCode" title="6σ Full Process여부 선택">
-																<option value="1">6σ Full Process</option>
+                                                            <!-- <select name="REP_DEVISION_CODE" id="ddlRepDevisionCode" title="6σ Full Process여부 선택"> -->
+                                                            <form:select path="repDivisionCode">
+																<!-- <option value="1">6σ Full Process</option>
 																<option value="2">일반과제</option>
-																<option value="3">10+ No Policy</option>
-                                                            </select>
+																<option value="3">10+ No Policy</option> -->
+																<c:forEach var="item" items="${divisionCode}">
+																	<option value="${item.codeId}" <c:if test="${item.codeId eq articleVO.catgr }">selected="selected"</c:if>>${item.codeNm}</option>
+																</c:forEach>
+                                                            </form:select>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -62,9 +66,10 @@
                                                 <td>
                                                     <div class="row">
                                                         <div class="col s12 select-group">
-                                                            <select name="REP_TYPE_CODE" id="ddlRepTypeCode" title="과제유형 선택">
+                                                            <!-- <select name="REP_TYPE_CODE" id="ddlRepTypeCode" title="과제유형 선택"> -->
+                                                            <form:select path="repTypeCode">
                                                             	
-                                                            </select>
+                                                            </form:select>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -775,7 +780,9 @@
                                 <a href="/app/002_01_mission.do?menuKey=29" class="btn">목록</a>
                             </div>
                         </div>
-</form>                    
+
+</form:form>                    
+
 <script type="text/javascript">
 	$(document).ready(init);
 	
@@ -784,12 +791,14 @@
 	let cdActionType = [{key:1,value:'품질개선'},{key:2,value:'개발'},{key:3,value:'생산성향상'},{key:4,value:'원가개선'},{key:5,value:'기타'}];
 	let cdMbbUseRate = [{key:1,value:'해당없음'},{key:2,value:'직접수행'},{key:3,value:'지원MBB'},{key:4,value:'팀장MBB '}];
 	let cdRepResultType = [{key:1,value:'외부실패비용'},{key:2,value:'내부실패비용'},{key:3,value:'매출액'},{key:4,value:'제조원가'},{key:5,value:'상품원가'},{key:6,value:'기타 영업이익'},{key:7,value:'해당없음 '}];
-	
+	let cdRepType1 = [<c:forEach var="item" items="${typeCode1}">{key:${item.codeId},value:"${item.codeNm}"},</c:forEach>];
+	let cdRepType2 = [<c:forEach var="item" items="${typeCode2}">{key:${item.codeId},value:"${item.codeNm}"},</c:forEach>];
+	let cdRepType3 = [<c:forEach var="item" items="${typeCode3}">{key:${item.codeId},value:"${item.codeNm}"},</c:forEach>];
 	function init(){
-		$("#ddlRepDevisionCode").off("change").on("change", onchange_ddlRepDevisionCode); // 6σ Full Process여부
+		$("#repDivisionCode").off("change").on("change", onchange_ddlRepDevisionCode); // 6σ Full Process여부
 		onchange_ddlRepDevisionCode();	// 초기셋팅을 위한 호출
 		
-		$("#ddlRepTypeCode").off("change").on("change", onchange_ddlRepTypeCode); // 과제유형
+		$("#repTypeCode").off("change").on("change", onchange_ddlRepTypeCode); // 과제유형
 		
 		setDropDown("ddlRepSectorCode", cdListSector, true);//부문코드
 		setDropDown("ddlRepLeaderBeltCd", cdLeaderBelt, true);//리더벨트
@@ -801,6 +810,7 @@
 		
 		setDropDown("ddlRepResultTypeCode1", cdRepResultType, true);//성과항목
 		
+		
 	}
 
 	function onclick_orgSearch(e){
@@ -811,22 +821,22 @@
 	
 	function onchange_ddlRepDevisionCode(e){
 	
-		let repDevCd = $("#ddlRepDevisionCode").val(); //이벤트 트리거 객체의 값
-		let targetObjId = "ddlRepTypeCode";	//바뀔 대상 객체 ID
+		let repDevCd = $("#repDivisionCode").val(); //이벤트 트리거 객체의 값
+		let targetObjId = "repTypeCode";	//바뀔 대상 객체 ID
 		let arrRepType = [];
 		$(".tr-rep-date").hide();
 		switch(repDevCd){
 		case "1": //6sigma
-			arrRepType = [{key:1,value:'DMAIC'},{key:2,value:'DMEDI'}];
+			arrRepType = cdRepType1;
 			$("#trRepDate1").show();
 			changeTitle();
 			break;
 		case "2": //일반
-			arrRepType = [{key:1,value:'Quick 6σ'},{key:2,value:'빅데이터'},{key:3,value:'FMEA'},{key:4,value:'CEO/CPO Task'}];
+			arrRepType = cdRepType2;
 			$("#trRepDate2").show();
 			break;
 		case "3": // 10+No.
-			arrRepType = [{key:1,value:'No Particle'},{key:2,value:'No Scrap'},{key:3,value:'No Line trouble'},{key:4,value:'No Light'},{key:5,value:'No Model change Loss'},{key:6,value:'No Re-handling'},{key:7,value:'No Forklift'},{key:8,value:'No Overstock'},{key:9,value:'No Mask'},{key:10,value:'No Accident'}];
+			arrRepType = cdRepType3;
 			$("#trRepDate2").show();
 			break;
 		default:
@@ -840,8 +850,8 @@
 	}
 	
 	function changeTitle(){
-		let repDevCd = $("#ddlRepDevisionCode").val(); 	// 6sigma F-P 여부
-		let repTypeCd = $("#ddlRepTypeCode").val();	// 과제유형
+		let repDevCd = $("#repDivisionCode").val(); 	// 6sigma F-P 여부
+		let repTypeCd = $("#repTypeCode").val();	// 과제유형
 		if(repDevCd==="1"){
 			let focusAttr = "";
 			if(repTypeCd==="2"){

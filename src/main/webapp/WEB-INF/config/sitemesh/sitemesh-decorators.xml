@@ -40,7 +40,14 @@
 
 	<!-- def -->
 	<decorator name="def" page="/WEB-INF/jsp/layout/def/Sub.jsp">
-		<pattern>/app/*</pattern> 
+		<pattern>/app/*</pattern>
+		
+		<pattern>/kpi/*</pattern>
+		<pattern>/report/*</pattern>
+		<pattern>/team/*</pattern>
+		<pattern>/suggest/*</pattern>
+		<pattern>/teach/*</pattern>
+		
 		<pattern>/article/*</pattern> 
 		<pattern>/content/view.do</pattern> 
 		<pattern>/user/*</pattern> 
