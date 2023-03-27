@@ -15,6 +15,7 @@
 	<meta name="description" content="" />
 </head>
 <body>
+<form name="frm_002_01_01" action="" onsubmit="return false" method="post">
                         <!-- breadcrumb -->
                         <div class="breadcrumb">
                             <ul>
@@ -237,7 +238,7 @@
                                                                     <td class="pd3">
                                                                         <div class="row">
                                                                             <div class="col s12 input-text input-date" style="float:none;width:120px;margin:0 auto !important">
-                                                                                <input type="text" id="" name="REP_START_DATE_2" value="">
+                                                                                <input type="text" id="" name="REP_FINISH_DATE_2" value="">
                                                                                 <i class="ico calendar"></i>
                                                                             </div>
                                                                         </div>
@@ -774,7 +775,7 @@
                                 <a href="/app/002_01_mission.do?menuKey=29" class="btn">목록</a>
                             </div>
                         </div>
-                    
+</form>                    
 <script type="text/javascript">
 	$(document).ready(init);
 	
