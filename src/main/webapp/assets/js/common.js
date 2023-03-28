@@ -69,8 +69,6 @@ $(function(){
     $(".tabulator-data-tree-control-collapse").parent().css("border-color","#a72b2a");
    
     $('.btn-org').click(function(){
-    	console.log('tabulator-data-tree-control-collapse');
-        $('.modal-dimmed, .org-modal').show();
     })
 
     $('.org-modal .btn-cancel, .org-modal .btn-close, .modal-dimmed').click(function(){
@@ -148,6 +146,9 @@ $(document).on('click', 'modal_close, .modal.popup > button.close', function() {
     });
 });
 
+
+
+
 $(function() {
     // 조직 버튼
     $('.btn-organization').click(function(){
@@ -209,19 +210,19 @@ $(function() {
 
 // 직책조회 모달
 $(document).on('click', '.btn-member-position-search-modal', function() {
-    console.log('asdfasdf');
+    console.log('직책조회');
     $('.modal-dimmed, .member-position-search-modal').show();
 })
 
 //사원조회 모달
 $(document).on('click', '.btn-member-search-modal', function() {
-    console.log('asdfasdf');
+    console.log('사원조회');
     $('.modal-dimmed, .member-search-modal').show();
 })
 
 // 관련쪽지조회 모달
 $(document).on('click', '.btn-psmg-search-modal', function() {
-    console.log('asdfasdf');
+    console.log('관련쪽지조회');
     $('.modal-dimmed, .psmg-search-modal').show();
 })
 

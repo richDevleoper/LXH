@@ -27,12 +27,12 @@
                                         <div class="form-inline form-input">
                                             <label>조직</label>
                                             <input type="text" name="">
-                                            <button type="button" class="btn-org">검색</button>
+                                            <button type="button" class="btn-org comPopup_orgSearch">검색</button>
                                         </div>
                                         <div class="form-inline form-input">
                                             <label>직책</label>
                                             <input type="text" name="">
-                                            <button type="button" class="btn-org">검색</button>
+                                            <button type="button" class="btn-org comPopup_posSearch">검색</button>
                                         </div>
                                         
                                         <button type="button" class="btn-submit">조회</button>
