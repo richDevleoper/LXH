@@ -104,7 +104,7 @@ public class ReportController {
 	public String handler002_01(HttpServletRequest request, ModelMap model,
 			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
 			UserVO userSession)throws Exception {
-		
+		model.addAttribute("menuKey", searchVO.getMenuKey());
 		return "app/qi/002_01_mission";
 	}
 	
@@ -112,6 +112,7 @@ public class ReportController {
 	// 과제 - 뷰페이지
 	@RequestMapping({"/002_01_sub01.do"})
 	public String view(HttpServletRequest req, ModelMap model,
+			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO,
 			@ModelAttribute("reportVO") ReportVO reportVO, 
 			UserVO userSession) throws Exception {
 		
@@ -136,7 +137,8 @@ public class ReportController {
 		
 		model.addAttribute("action", "/report/insert.do");
 		
-		return "app/qi/002_01_sub01"; //getPath(request, "View", boardVO.getBoardTyp());
+		
+		return "app/qi/002_01_sub01";
 	}  
 	
 	@RequestMapping({"/insert.do"})
@@ -167,9 +169,10 @@ public class ReportController {
 //		articleVO.setFrstOperIp(userIp);
 //		
 //		//insert article
-//		articleService.insert(articleVO);
+		reportService.insert(reportVO);
 
-		return "redirect:/report/002_01_mission.do?" + searchVO.getParam();
+		return "redirect:/report/002_01_sub01.do?menuKey=29";
+		//return "redirect:/sub.do?menuKey=29";
 	}
   
 	

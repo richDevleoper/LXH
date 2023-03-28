@@ -653,7 +653,7 @@
 </div>
 
 <!-- 도움말 과제리더벨트 -->
-<div class="org-modal" id="advice-modal advice-reader-belt-modal">
+<div class="org-modal" id="advice-reader-belt-modal">
 <div class="modal-header">
                 <h4>도움말</h4>
                 <button type="button" class="btn-close">닫기</button>

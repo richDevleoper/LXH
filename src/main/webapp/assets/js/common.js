@@ -226,22 +226,22 @@ $(document).on('click', '.btn-psmg-search-modal', function() {
     $('.modal-dimmed, .psmg-search-modal').show();
 })
 
-// 팀멤버 추가
-$(document).on('click', '.btn-team-member-add', function() {
-    let oParent = $(this).closest('tr')
-    let oClone = oParent.clone();
-    oClone.find('input').val('');
-    oClone.find('th > label').text('팀멤버');
-    oClone.find('td:nth-child(3), td:nth-child(4), td:nth-child(5), td:nth-child(6)').text('');
-    oClone.find('.btn-team-member-add').text('삭제');
-    oClone.find('.btn-group button').removeClass('btn-team-member-add').addClass('btn-team-member-remove');
-
-    oParent.after(oClone);
-})
-
-// 팀멤버 삭제
-$(document).on('click', '.btn-team-member-remove', function() {
-    $(this).closest('tr').remove();
-})
+//// 팀멤버 추가
+//$(document).on('click', '.btn-team-member-add', function() {
+//    let oParent = $(this).closest('tr')
+//    let oClone = oParent.clone();
+//    oClone.find('input').val('');
+//    oClone.find('th > label').text('팀멤버');
+//    oClone.find('td:nth-child(3), td:nth-child(4), td:nth-child(5), td:nth-child(6)').text('');
+//    oClone.find('.btn-team-member-add').text('삭제');
+//    oClone.find('.btn-group button').removeClass('btn-team-member-add').addClass('btn-team-member-remove');
+//
+//    oParent.after(oClone);
+//})
+//
+//// 팀멤버 삭제
+//$(document).on('click', '.btn-team-member-remove', function() {
+//    $(this).closest('tr').remove();
+//})
 
 
