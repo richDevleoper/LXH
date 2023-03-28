@@ -150,13 +150,13 @@ $(document).on('click', 'modal_close, .modal.popup > button.close', function() {
 
 $(function() {
     // 조직 버튼
-    $('$btn-organization').click(function(){
+    $('.btn-organization').click(function(){
     	console.log('btn-organization');
         $('.modal-dimmed, .organization-modal').show();
     })
 
     // 직잭 버튼
-    $('$btn-position').click(function(){
+    $('.btn-position').click(function(){
     	console.log('btn-position');
         $('.modal-dimmed, .position-modal').show();
     })
