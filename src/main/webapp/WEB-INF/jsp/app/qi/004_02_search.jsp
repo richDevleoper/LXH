@@ -19,28 +19,28 @@
                             <div class="list-search">
                                 <div class="search-form row">
                                     <div class="form-inline form-input col s4">
-                                        <div class="col s2 align-right">
+                                        <div class="col s3 align-right">
                                             <label>제안명</label>
                                         </div>
-                                        <div class="pd-l10 col s10">
+                                        <div class="pd-l10 col s9">
                                             <input type="text" name="">
                                         </div>
                                     </div>
                                     <div class="form-inline form-input col s4">
-                                        <div class="col s5 align-right">
+                                        <div class="col s3 align-right">
                                             <label>조직</label>
                                         </div>
-                                        <div class="pd-l10 col s7">
+                                        <div class="pd-l10 col s9">
                                             <select name="" id="">
                                                 <option value="">전체</option>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="form-inline form-input col s4">
-                                        <div class="col s5 align-right">
+                                        <div class="col s3 align-right">
                                             <label>사업장</label>
                                         </div>
-                                        <div class="pd-l10 col s7">
+                                        <div class="pd-l10 col s9">
                                             <select name="" id="">
                                                 <option value="">전체</option>
                                             </select>
@@ -48,61 +48,66 @@
                                     </div>
                                 </div>
                                 <div class="search-form row">
-                                    <div class="form-inline form-input col s8">
-                                        <div class="col s2 align-right">
+                                    <div class="form-inline form-input col s4">
+                                        <div class="col s3 align-right">
                                             <label>제안자</label>
                                         </div>
-                                        <div class="pd-l10 col s2">
+                                        <div class="pd-l10 col s4">
                                             <select name="" id="">
                                                 <option value="">전체</option>
                                             </select>
                                         </div>
-                                        <div class="pd-l10 col s3">
+                                        <div class="pd-l10 col s5">
                                             <input type="text" name="">
                                         </div>
-                                        <div class="col s2 align-right">
+                                    </div>
+                                    <div class="form-inline form-input col s4">
+                                        <div class="col s3 align-right">
                                             <label>실시/쪽지</label>
                                         </div>
-                                        <div class="pd-l10 col s3">
+                                        <div class="pd-l10 col s9">
                                             <select name="" id="">
                                                 <option value="">전체</option>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="form-inline form-input col s4">
-                                        <div class="col s5 align-right">
+                                        <div class="col s3 align-right">
                                             <label>등급</label>
                                         </div>
-                                        <div class="pd-l10 col s7">
+                                        <div class="pd-l10 col s9">
                                             <select name="" id="">
                                                 <option value="">전체</option>
                                             </select>
                                         </div>
                                     </div>
                                 </div>
-                                
                                 <div class="search-form row">
-                                    <div class="form-inline form-input col s10">
-                                        <div class="col s2 align-right">
+                                    <div class="form-inline form-input col s4">
+                                        <div class="col s3 align-right">
                                             <label>진행구분</label>
                                         </div>
-                                        <div class="pd-l10 col s5">
+                                        <div class="pd-l10 col s9">
                                             <select name="" id="">
                                                 <option value="">전체</option>
                                             </select>
                                         </div>
-                                        <div class="col s2 align-right">
+                                    </div>
+                                    <div class="form-inline form-input col s4">
+                                        <div class="col s3 align-right">
                                             <label>진행단계</label>
                                         </div>
-                                        <div class="pd-l10 col s5">
+                                        <div class="pd-l10 col s9">
                                             <select name="" id="">
                                                 <option value="">전체</option>
                                             </select>
                                         </div>
-                                        <div class="col s2 align-right">
+                                    </div>
+                                    <div class="form-inline form-input col s4">
+                                        <div class="col s3 align-right">
                                             <label>제안일</label>
                                         </div>
-                                        <div class="pd-l10 col s6">
+                                        <div class="pd-l10 col s9">
                                             <div class="col s5 input-date">
                                                 <input type="text">
                                                 <i class="ico calendar"></i>
@@ -114,7 +119,9 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col s2 align-right">
+                                </div>
+                                <div class="search-form row">
+                                    <div class="col s12 align-right">
                                         <button type="button" class="btn-submit">조회</button>
                                     </div>
                                 </div>

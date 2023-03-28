@@ -1504,3 +1504,10 @@ body.tabulator-print-fullscreen-hide > *:not(.tabulator-print-fullscreen) {
     font-family: 나눔고딕,'NanumGothic', sans-serif !important;
 }
 
+.list-search .search-form .inline-calendar input {
+    width: 80px;
+    border-right: 0;
+}
+.list-search .search-form .inline-calendar .text-bul {
+    margin: 0 2px;
+}

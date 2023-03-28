@@ -42,17 +42,13 @@
                                             </select>
                                         </div>
                                         
-                                        <div class="form-inline form-select">
+                                        <div class="form-inline form-select inline-calendar">
                                             <label></label>                                            
-                                                    <input type="text" style="width: 80px;">
-                                                    <i class="ico calendar"></i>
-                                            
-                                                <span class="col s1 text-bul align-center">~</span>
-                                            
-                                                    <input type="text" style="width: 80px;">
-                                                    <i class="ico calendar"></i>
-                                            
-                                            
+                                            <input type="text"/>
+                                            <i class="ico calendar"></i>
+                                            <span class="text-bul align-center">~</span>
+                                            <input type="text"/>
+                                            <i class="ico calendar"></i>
                                         </div>
                                         <button type="button" class="btn-submit">조회</button>
                                     </div>

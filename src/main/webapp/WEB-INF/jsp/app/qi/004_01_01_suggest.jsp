@@ -27,43 +27,28 @@
                                             </select>                                            
                                         </div>
                                         <div class="form-inline form-select">
-                                            <input type="text" name="" style="width: 120px;">
+                                            <input type="text" name="" style="width: 130px;">
                                         </div>
                                         <div class="form-inline form-select">
                                             <label>제안유형</label>                                            
                                             <select name="">
                                                 <option value="">전체</option>
-                                                <option value="">품질</option>
-                                                <option value="">생산성향상</option> 
-                                                <option value="">에너지</option> 
-                                                <option value="">환경안전</option>
-                                                <option value="">설비개선</option> 
-                                                <option value="">낭비제거</option> 
-                                                <option value="">비용절감</option> 
-                                                <option value="">기타</option>
                                             </select>
                                         </div>
                                         <div class="form-inline form-select">
                                             <label>등급</label>
                                             <select name="">
                                                 <option value="">전체</option>
-                                                <option value="">S등급</option>
-                                                <option value="">A급</option>
-                                                <option value="">B급</option>
-                                                <option value="">C급</option>
                                             </select>
-                                        </div>                                        
-                                        <div class="form-inline form-input input-date">
+                                        </div>
+                                        
+                                        <div class="form-inline form-select inline-calendar">
                                             <label></label>                                            
-                                                    <input type="text" style="width: 60px;" class="datepicker">
-                                                    <i class="ico calendar"></i>
-                                        </div>    
-                                                <span class="col s1 text-bul align-center">~</span>
-                                        <div class="form-inline form-input input-date">    
-                                                    <input type="text" style="width: 60px;" class="datepicker">
-                                                    <i class="ico calendar"></i>
-                                            
-                                            
+                                            <input type="text"/>
+                                            <i class="ico calendar"></i>
+                                            <span class="text-bul align-center">~</span>
+                                            <input type="text"/>
+                                            <i class="ico calendar"></i>
                                         </div>
                                         <button type="button" class="btn-submit">조회</button>
                                     </div>

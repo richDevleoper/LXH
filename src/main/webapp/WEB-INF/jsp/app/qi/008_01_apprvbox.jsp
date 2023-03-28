@@ -21,55 +21,48 @@
                             <div class="list-search">
                                 <div class="search-form row">
                                     <div class="form-inline form-input col s4">
-                                        <div class="col s5 align-right">
+                                        <div class="col s3 align-right">
                                             <label>결재종류</label>
                                         </div>
-                                        <div class="pd-l10 col s10">
+                                        <div class="pd-l10 col s9">
                                         <select name="" id="">
                                             <option value="">전체</option>
                                         </select>
                                         </div>
                                     </div>
-                                    <div class="form-inline form-input col s7">
-                                        <div class="col s2 align-right">
+                                    <div class="form-inline form-input col s8">
+                                        <div class="col s2 align-right" style="min-width: 77.17px; width: 77.17px;">
                                             <label>제목</label>
                                         </div>
-                                        <div class="pd-l10 col s11">
+                                        <div class="pd-l10 col s12">
                                             <input type="text" name="">
                                         </div>
                                     </div>
-                                    <div class="form-inline form-input col s1">
-                                        
-                                    </div>
-                                    <div class="col s4 align-right"></div>
                                 </div>
-
                                 <div class="search-form row">
                                     <div class="form-inline form-input col s4">
-                                        <div class="col s5 align-right">
+                                        <div class="col s3 align-right">
                                             <label>결재의뢰자</label>
                                         </div>
-                                        <div class="pd-l10 col s10">
+                                        <div class="pd-l10 col s9">
                                             <input type="text" name="">
                                         </div>
                                     </div>
                                     <div class="form-inline form-input col s4">
-                                        
-                                            <div class="col s4 align-right">
-                                                    <label>결재상태</label>
-                                                </div>
-                                                <div class="pd-l10 col s10">
-                                                    <select name="" id="">
-                                                        <option value="">전체</option>
-                                                    </select>                                        
-                                                </div>
-                                        
+                                        <div class="col s3 align-right">
+                                            <label>결재상태</label>
+                                        </div>
+                                        <div class="pd-l10 col s9">
+                                            <select name="" id="">
+                                                <option value="">전체</option>
+                                            </select>                                        
+                                        </div>
                                     </div>
-                                    <div class="form-inline form-input col s6">
+                                    <div class="form-inline form-input col s4">
                                         <div class="col s3 align-right">
                                             <label>조회기간</label>
                                         </div>
-                                        <div class="pd-l10 col s12">
+                                        <div class="pd-l10 col s9">
                                             <div class="col s5 input-date">
                                                 <input type="text">
                                                 <i class="ico calendar"></i>
@@ -81,12 +74,12 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col s2 align-right">
+                                </div>
+                                <div class="search-form row">
+                                    <div class="col s12 align-right">
                                         <button type="button" class="btn-submit">조회</button>
                                     </div>
                                 </div>
-                                
-                                
                             </div>
                             <div class="list-header">
                                 <p class="title">나의 결재의뢰함</p>
