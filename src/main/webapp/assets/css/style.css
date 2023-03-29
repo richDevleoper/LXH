@@ -1483,7 +1483,7 @@ body.tabulator-print-fullscreen-hide > *:not(.tabulator-print-fullscreen) {
 
 
 
-/* 23.03.16 추가 */
+/* 조창우 추가 */
 .advide-content {
   border: 1px solid #c8c8c8;
   height: 500px;
@@ -1510,4 +1510,30 @@ body.tabulator-print-fullscreen-hide > *:not(.tabulator-print-fullscreen) {
 }
 .list-search .search-form .inline-calendar .text-bul {
     margin: 0 2px;
+}
+
+
+/**
+ * FilePond Custom Styles
+ */
+ .filepond--drop-label {
+	color: #4c4e53;
+}
+
+.filepond--label-action {
+	text-decoration-color: #babdc0;
+}
+
+.filepond--panel-root {
+	border-radius: 2em;
+	background-color: #edf0f4;
+	height: 1em;
+}
+
+.filepond--item-panel {
+	background-color: #595e68;
+}
+
+.filepond--drip-blob {
+	background-color: #7f8a9a;
 }

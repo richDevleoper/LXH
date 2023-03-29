@@ -6,6 +6,9 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
     <!-- CSS -->
+
+    <link href="https://unpkg.com/filepond@^4/dist/filepond.css" rel="stylesheet" />
+
     <link rel="stylesheet" href="../css/reset.css">
     <link rel="stylesheet" href="../css/tree.css">
     <link rel="stylesheet" href="../css/common.css">
@@ -13,8 +16,13 @@
 
     <!-- JS -->
     <script src="../js/jquery-3.3.1.min.js"></script>
+    <script src="../js/jquery-ui.js"></script>
     <script src="../js/jstree.min.js"></script>
     <script src="../js/common.js"></script>
+
+    <script src="https://unpkg.com/filepond/dist/filepond.min.js"></script>
+
+    <script src="https://unpkg.com/jquery-filepond/filepond.jquery.js"></script>
 
     <title>품질혁신지원시스템</title>
 </head>
@@ -425,64 +433,8 @@
                                                                                                             </th>
                                                                                                             <td colspan="5">
                                                                                                                 <div class="file-drop-box">
-                                                                                                                    <!-- [D] -->
-                                                                                                                </div>
-                                                                                                            </td>
-                                                                                                        </tr>
-                                                                                                        <tr>
-                                                                                                            <th colspan="2" class="pd-r10 align-right">
-                                                                                                                첨부파일<br>
-                                                                                                                (Up to 10)
-                                                                                                            </th>
-                                                                                                            <td colspan="5">
-                                                                                                                <div class="file-list">
-                                                                                                                    <div class="btn-group">
-                                                                                                                        <span>(Total 2 / 5.3MB)</span>
-                                                                                                                        <button type="button" class="btn light-gray">Add</button>
-                                                                                                                        <button type="button" class="btn light-gray">Delete All</button>
-                                                                                                                    </div>
-                                                                                                                    <ul>
-                                                                                                                        <li>
-                                                                                                                            <div class="row">
-                                                                                                                                <div class="col s12 input-text file">
-                                                                                                                                    <span class="file-path">
-                                                                                                                                        <input type="text" id="" readonly name="" value="LG_Hausys_UI_Design_Guide.pptx [1.27MB]">
-                                                                                                                                        <button type="button"><i class="ico file_del"><em>삭제</em></i></button>
-                                                                                                                                    </span>
-                                                                                                                                </div>
-                                                                                                                            </div>
-                                                                                                                        </li>
-                                                                                                                        <li>
-                                                                                                                            <div class="row">
-                                                                                                                                <div class="col s12 input-text file">
-                                                                                                                                    <span class="file-path">
-                                                                                                                                        <input type="text" id="" readonly name="" value="LG_Hausys_UI_Design_Guide.pptx [1.27MB]">
-                                                                                                                                        <button type="button"><i class="ico file_del"><em>삭제</em></i></button>
-                                                                                                                                    </span>
-                                                                                                                                </div>
-                                                                                                                            </div>
-                                                                                                                        </li>
-                                                                                                                        <li>
-                                                                                                                            <div class="row">
-                                                                                                                                <div class="col s12 input-text file">
-                                                                                                                                    <span class="file-path">
-                                                                                                                                        <input type="text" id="" readonly name="" value="LG_Hausys_UI_Design_Guide.pptx [1.27MB]">
-                                                                                                                                        <button type="button"><i class="ico file_del"><em>삭제</em></i></button>
-                                                                                                                                    </span>
-                                                                                                                                </div>
-                                                                                                                            </div>
-                                                                                                                        </li>
-                                                                                                                        <li>
-                                                                                                                            <div class="row">
-                                                                                                                                <div class="col s12 input-text file">
-                                                                                                                                    <span class="file-path">
-                                                                                                                                        <input type="text" id="" readonly name="" value="LG_Hausys_UI_Design_Guide.pptx [1.27MB]">
-                                                                                                                                        <button type="button"><i class="ico file_del"><em>삭제</em></i></button>
-                                                                                                                                    </span>
-                                                                                                                                </div>
-                                                                                                                            </div>
-                                                                                                                        </li>
-                                                                                                                    </ul>
+                                                                                                                    
+                                                                                                                    <input type="file" class="my-pond" name="filepond"/>
                                                                                                                 </div>
                                                                                                             </td>
                                                                                                         </tr>
@@ -1535,4 +1487,30 @@
         </div>
     </div>
 </body>
+
+<script>
+// Turn input element into a pond
+$('.my-pond').filepond();
+
+// Turn input element into a pond with configuration options
+$('.my-pond').filepond({
+    allowMultiple: true,
+});
+
+// Set allowMultiple property to true
+$('.my-pond').filepond('allowMultiple', true);
+
+// Listen for addfile event
+$('.my-pond').on('FilePond:addfile', function (e) {
+    console.log('file added event', e);
+});
+
+// Manually add a file using the addfile method
+$('.my-pond')
+    .filepond('addFile', 'index.html')
+    .then(function (file) {
+        console.log('file added', file);
+    });
+</script>
+
 </html>

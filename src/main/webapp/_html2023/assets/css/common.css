@@ -1090,7 +1090,7 @@ p.content_title + .list-wrap{margin-top:9px}
 .file-list ul li{float:left;width:48%;margin:1% 0 0 2%}
 .file-list ul li .input-text input[type=text]{display:block;width:100%}
 .file-list ul li .input-text.file .file-path{width:100% !important}
-.file-drop-box{height:110px;border:1px solid #c3c3c3;background:url(../images/bg_dropfile.png) no-repeat center;box-sizing:border-box}
+/* .file-drop-box{height:110px;border:1px solid #c3c3c3;background:url(../images/bg_dropfile.png) no-repeat center;box-sizing:border-box} */
 .file-link > ul > li{text-align:left;list-style:none}
 .file-link > ul > li a{font-size:12px;color:#3166a2;text-decoration:underline}
 .link-group li{text-align:left}

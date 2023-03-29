@@ -1504,3 +1504,36 @@ body.tabulator-print-fullscreen-hide > *:not(.tabulator-print-fullscreen) {
     font-family: 나눔고딕,'NanumGothic', sans-serif !important;
 }
 
+.list-search .search-form .inline-calendar input {
+    width: 80px;
+    border-right: 0;
+}
+.list-search .search-form .inline-calendar .text-bul {
+    margin: 0 2px;
+}
+
+
+/**
+ * FilePond Custom Styles
+ */
+ .filepond--drop-label {
+	color: #4c4e53;
+}
+
+.filepond--label-action {
+	text-decoration-color: #babdc0;
+}
+
+.filepond--panel-root {
+	border-radius: 2em;
+	background-color: #edf0f4;
+	height: 1em;
+}
+
+.filepond--item-panel {
+	background-color: #595e68;
+}
+
+.filepond--drip-blob {
+	background-color: #7f8a9a;
+}
