@@ -82,14 +82,29 @@ function substrInfo(reqValue, maxByteSize) {
 
 // dropdownlist<select> 세팅
 // 예) setDropDown("ddlRepTypeCode", [{key:1,value:'DMAIC'},{key:2,value:'DMEDI'}], true/false);
-function setDropDown(objId, cdList, flagFirstEmptyYn){
+function setDropDown(objId, cdList, flagFirstEmptyYn, emptyTitle){
 	htm = "";
+	
+	if(!emptyTitle){
+		emptyTitle = "선택하세요";
+	}
+	
 	if(flagFirstEmptyYn){
-		htm += "<option value=''>선택하세요</option>";
+		htm += "<option value=''>"+ emptyTitle +"</option>";
 	}
 	for(i in cdList){
 		let item = cdList[i];
 		htm += "<option value='"+item.key+"'>"+item.value+"</option>";
 	}
 	$("#"+objId).empty().append(htm);
+}
+
+
+
+//paging
+function cfnPageLink(page) {
+	var frm = $("#currentPageNo").parent("form");
+	//$("#currentPageNo").parent("form").validationEngine('detach');
+	$("#currentPageNo").val(page);
+	frm.submit();
 }

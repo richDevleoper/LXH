@@ -16,6 +16,7 @@
 </head>
 <body>
 <form:form commandName="frmReport" id="defaultForm" name="defaultForm"  action="${action}" onsubmit="return false" method="post" modelAttribute="reportVO">
+<form:hidden path="repStatusCode" />
                         <!-- breadcrumb -->
                         <div class="breadcrumb">
                             <ul>
@@ -50,11 +51,7 @@
                                                 <td>
                                                     <div class="row">
                                                         <div class="col s12 select-group">
-                                                            <!-- <select name="REP_DEVISION_CODE" id="ddlRepDevisionCode" title="6σ Full Process여부 선택"> -->
-                                                            <form:select path="repDivisionCode">
-																<!-- <option value="1">6σ Full Process</option>
-																<option value="2">일반과제</option>
-																<option value="3">10+ No Policy</option> -->
+                                                            <form:select path="repDivisionCode" title="6σ Full Process여부 선택">
 																<c:forEach var="item" items="${divisionCode}">
 																	<option value="${item.codeId}" <c:if test="${item.codeId eq articleVO.catgr }">selected="selected"</c:if>>${item.codeNm}</option>
 																</c:forEach>
@@ -62,64 +59,62 @@
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <th><label for="ddlRepTypeCode"><span class="asterisk">*</span>과제유형</label></th>
+                                                <th><form:label path="repTypeCode"><span class="asterisk">*</span>과제유형</form:label></th>
                                                 <td>
                                                     <div class="row">
                                                         <div class="col s12 select-group">
-                                                            <!-- <select name="REP_TYPE_CODE" id="ddlRepTypeCode" title="과제유형 선택"> -->
-                                                            <form:select path="repTypeCode">
-                                                            	
+                                                            <form:select path="repTypeCode" title="과제유형 선택">
                                                             </form:select>
                                                         </div>
                                                     </div>
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <th><label for="ddlRepSectorCode"><span class="asterisk">*</span>부문</label></th>
+                                                <th><form:label path="repSectorCode"><span class="asterisk">*</span>부문</form:label></th>
                                                 <td>
                                                     <div class="row">
                                                         <div class="col s12 select-group">
-                                                            <select name="REP_SECTOR_CODE" id="ddlRepSectorCode" title="부문 선택">
-                                                            </select>
+                                                            <form:select path="repSectorCode" title="부문 선택">
+                                                            </form:select>
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <th><label for="txtRepProductClass"><span class="asterisk">*</span>제품군</label></th>
+                                                <th><form:label path="repProductClass"><span class="asterisk">*</span>제품군</form:label></th>
                                                 <td>
                                                     <div class="row">
                                                         <div class="col s12 input-text">
-                                                            <input type="text" id="txtRepProductClass" name="REP_PRODUCT_CLASS" value="" title="제품군을 입력해주세요.">
+                                                            <form:input type="text" path="repProductClass" name="REP_PRODUCT_CLASS" value="" title="제품군을 입력해주세요." />
                                                         </div>
                                                     </div>
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <th><label for="ddlRepLeaderBeltCd"><span class="asterisk">*</span>과제리더벨트</label> <i class="ico tip"><em>tip.</em></i></th>
+                                                <th><form:label path="repLeaderBeltCode"><span class="asterisk">*</span>과제리더벨트</form:label> <i class="ico tip"><em>tip.</em></i></th>
                                                 <td>
                                                     <div class="row">
                                                         <div class="col s12 select-group">
-                                                            <select name="REP_LEADER_BELT_CODE" id="ddlRepLeaderBeltCd" title="부문 선택">
-                                                            </select>
+                                                            <form:select path="repLeaderBeltCode" title="부문 선택">
+                                                            </form:select>
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <th><label for="ddlRepActionTyCd"><span class="asterisk">*</span>활동분야</label></th>
+                                                <th><form:label path="repActionTypeCode"><span class="asterisk">*</span>활동분야</form:label></th>
                                                 <td>
                                                     <div class="row">
                                                         <div class="col s12 select-group">
-                                                            <select name="REP_ACTION_TYPE_CODE" id="ddlRepActionTyCd" title="활동분야 선택">
-                                                            </select>
+                                                            <form:select path="repActionTypeCode" title="활동분야 선택">
+                                                            </form:select>
                                                         </div>
                                                     </div>
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <th><label for="ddlRepMbbUseRateCode"><span class="asterisk">*</span>MBB활용율</label></th>
+                                                <th><form:label path="repMbbUseRateCode"><span class="asterisk">*</span>MBB활용율</form:label></th>
                                                 <td>
                                                     <div class="row">
                                                         <div class="col s12 select-group">
-                                                            <select name="REP_MBB_USE_RATE_CODE" id="ddlRepMbbUseRateCode" title="MBB활용율 선택">
-                                                            </select>
+                                                            <form:select path="repMbbUseRateCode" title="MBB활용율 선택">
+                                                            </form:select>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -255,7 +250,7 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <th><label for="select6"><span class="asterisk">*</span>키워드</label> <i class="ico tip"><em>tip.</em></i></th>
+                                                <th><label path="select6"><span class="asterisk">*</span>키워드</label> <i class="ico tip"><em>tip.</em></i></th>
                                                 <td colspan="3">
                                                     <div class="row">
                                                         <div class="col s8">
@@ -314,10 +309,10 @@
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <th><label for="text3"><span class="asterisk">*</span>과제리더</label></th>
+                                                <th><label path="text3"><span class="asterisk">*</span>과제리더</form></th>
                                                 <td class="pd3">
                                                     <div class="row">
-                                                        <div class="col s12 input-text search org-search">
+                                                        <div class="col s12 input-text search">
                                                             <input type="text" id="text3" name="" value="">
                                                             <button type="button">검색</button>
                                                         </div>
@@ -328,18 +323,18 @@
                                                 <td>팀장</td>
                                                 <td>MBB</td>
                                                 <td class="pd3">
-                                                    <div class="btn-group">
+                                                    <!-- <div class="btn-group">
                                                         <button type="button" class="btn light-gray">추가</button>
-                                                    </div>
+                                                    </div> -->
                                                 </td>
                                             </tr>
-                                            <tr>
-                                                <th><label for="text4"><span class="asterisk">*</span>팀멤버</label></th>
+                                            <tr class="tr-team-member">
+                                                <th><label path="text4"><span class="asterisk">*</span>팀멤버</label></th>
                                                 <td class="pd3">
                                                     <div class="row">
                                                         <div class="col s12 input-text search">
                                                             <input type="text" id="text4" name="" value="">
-                                                            <button type="button">검색</button>
+                                                            <button type="button" class="btn-org btn-psmg-search-modal">검색</button>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -349,58 +344,18 @@
                                                 <td>MBB</td>
                                                 <td class="pd3">
                                                     <div class="btn-group">
-                                                        <button type="button" class="btn light-gray">추가</button>
+                                                        <button type="button" class="btn light-gray btn-team-member-add">추가</button>
                                                     </div>
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <th><label for="text5">팀멤버</label></th>
-                                                <td class="pd3">
-                                                    <div class="row">
-                                                        <div class="col s12 input-text search">
-                                                            <input type="text" id="text5" name="" value="">
-                                                            <button type="button">검색</button>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>홍길동</td>
-                                                <td>책임</td>
-                                                <td>팀장</td>
-                                                <td>MBB</td>
-                                                <td class="pd3">
-                                                    <div class="btn-group">
-                                                        <button type="button" class="btn light-gray">삭제</button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th><label for="text6">팀멤버</label></th>
-                                                <td class="pd3">
-                                                    <div class="row">
-                                                        <div class="col s12 input-text search">
-                                                            <input type="text" id="text6" name="" value="">
-                                                            <button type="button">검색</button>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>홍길동</td>
-                                                <td>책임</td>
-                                                <td>팀장</td>
-                                                <td>MBB</td>
-                                                <td class="pd3">
-                                                    <div class="btn-group">
-                                                        <button type="button" class="btn light-gray">추가</button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th><label for="text7"><span class="asterisk">*</span>과제지도/사원</label></th>
+                                                <th><label path="text7" class="color primary"><span class="asterisk">*</span>과제지도/사원</label></th>
                                                 <td class="pd3">
                                                     <div class="row">
                                                         <div class="col s12 input-text search">
                                                             <input type="text" id="text7" name="" value="">
                                                             <button type="button">검색</button>
-                                                        </div>
+                                                        </div> 
                                                     </div>
                                                 </td>
                                                 <td>홍길동</td>
@@ -408,13 +363,13 @@
                                                 <td>팀장</td>
                                                 <td>MBB</td>
                                                 <td class="pd3">
-                                                    <div class="btn-group">
+                                                    <!-- <div class="btn-group">
                                                         <button type="button" class="btn light-gray">추가</button>
-                                                    </div>
+                                                    </div> -->
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <th><label for="text8" class="color primary"><span class="asterisk">*</span>Process Owner</label></th>
+                                                <th><label path="text8">Process Owner</label></th>
                                                 <td class="pd3">
                                                     <div class="row">
                                                         <div class="col s12 input-text search">
@@ -428,13 +383,13 @@
                                                 <td>팀장</td>
                                                 <td>MBB</td>
                                                 <td class="pd3">
-                                                    <div class="btn-group">
+                                                    <!-- <div class="btn-group">
                                                         <button type="button" class="btn light-gray">추가</button>
-                                                    </div>
+                                                    </div> -->
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <th><label for="text9" class="color primary"><span class="asterisk">*</span>챔피언</label></th>
+                                                <th><label path="text9" class="color primary"><span class="asterisk">*</span>챔피언</label></th>
                                                 <td class="pd3">
                                                     <div class="row">
                                                         <div class="col s12 input-text search">
@@ -448,9 +403,9 @@
                                                 <td>팀장</td>
                                                 <td>MBB</td>
                                                 <td class="pd3">
-                                                    <div class="btn-group">
+                                                    <!-- <div class="btn-group">
                                                         <button type="button" class="btn light-gray">추가</button>
-                                                    </div>
+                                                    </div> -->
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -482,16 +437,16 @@
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <th class="pd0 pd-r23"><label for="ddlRepResultTypeCode1"><span class="asterisk">*</span>성과항목</label></th>
+                                                <th class="pd0 pd-r23"><label path="ddlRepResultTypeCode1"><span class="asterisk">*</span>성과항목</label></th>
                                                 <td class="pd3">
                                                     <div class="row">
                                                         <div class="col s12 select-group">
-                                                            <select name="REP_RESULT_TYPE_CODE" id="ddlRepResultTypeCode1" title="성과항목 선택">
+                                                            <select path="REP_RESULT_TYPE_CODE" id="ddlRepResultTypeCode1" title="성과항목 선택">
                                                             </select>
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <th class="pd0 pd-r23"><label for="txtRepResultWithinYear">년내(당해년)</label></th>
+                                                <th class="pd0 pd-r23"><label path="txtRepResultWithinYear">년내(당해년)</label></th>
                                                 <td class="pd3">
                                                     <div class="row">
                                                         <div class="col s12 input-text">
@@ -499,7 +454,7 @@
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <th class="pd0 pd-r23"><label for="txtRepResultYear">년간(12개월)</label></th>
+                                                <th class="pd0 pd-r23"><label path="txtRepResultYear">년간(12개월)</label></th>
                                                 <td class="pd3">
                                                     <div class="row">
                                                         <div class="col s12 input-text">
@@ -507,7 +462,7 @@
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <th class="pd0 pd-r10"><label for="txtRepResultCalLogic">산출 Logic</label> <i class="ico tip"><em>tip.</em></i></th>
+                                                <th class="pd0 pd-r10"><label path="txtRepResultCalLogic">산출 Logic</label> <i class="ico tip"><em>tip.</em></i></th>
                                                 <td class="pd3">
                                                     <div class="row">
                                                         <div class="col s12 input-text">
@@ -522,17 +477,17 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <th class="pd0 pd-r23"><label for="select8">성과항목</label></th>
+                                                <th class="pd0 pd-r23"><label path="select8">성과항목</label></th>
                                                 <td class="pd3">
                                                     <div class="row">
                                                         <div class="col s12 select-group">
-                                                            <select name="" id="select8" title="성과항목 선택">
+                                                            <form:select path="" id="select8" title="성과항목 선택">
                                                                 <option value="">선택</option>
-                                                            </select>
+                                                            </form:select>
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <th class="pd0 pd-r23"><label for="text12">년내(당해년)</label></th>
+                                                <th class="pd0 pd-r23"><label path="text12">년내(당해년)</label></th>
                                                 <td class="pd3">
                                                     <div class="row">
                                                         <div class="col s12 input-text">
@@ -753,12 +708,12 @@
                                                                 <button type="button"><i class="ico file_del"><em>삭제</em></i></button>
                                                             </span>
                                                             <input type="file" id="file1" name="" value="">
-                                                            <label for="file1">파일추가</label>
+                                                            <label path="file1">파일추가</label>
                                                         </div>
                                                     </div>
                                                 </td>
                                             </tr>
-                                            <tr>
+                                            <tr style="display:none;">
                                                 <th>첨부파일 (조회)</th>
                                                 <td>
                                                     <div class="file-link">
@@ -775,16 +730,16 @@
                         </div>
                         <div class="list-footer">
                             <div class="list-btns">
-                                <button type="button" class="btn light-gray">저장</button>
-                                <button type="button" class="btn bg-gray">결제완료</button>
-                                <a href="/app/002_01_mission.do?menuKey=29" class="btn">목록</a>
+                                <button type="button" class="btn light-gray" id="btnSave">저장</button>
+                                <button type="button" class="btn bg-gray" id="btnReqApproval">결재완료</button>
+                                <a href="./list.do?menuKey=${menuKey}" class="btn">목록</a>
                             </div>
                         </div>
 
 </form:form>                    
 
 <script type="text/javascript">
-	$(document).ready(init);
+	
 	
 	let cdListSector = [{key:1,value:'창호'},{key:2,value:'바닥재'},{key:3,value:'단열재'},{key:4,value:'벽지'},{key:5,value:'표면소재'},{key:6,value:'산업용필름'},{key:7,value:'자동차소재부품'},{key:8,value:'인테리어'},{key:9,value:'연구소'},{key:10,value:'품질'},{key:11,value:'생산기술(제조혁신)'},{key:12,value:'환경안전'},{key:13,value:'기타'}];
 	let cdLeaderBelt = [{key:1,value:'GB'},{key:2,value:'BB'},{key:3,value:'BB후보'},{key:4,value:'MBB'},{key:5,value:'MBB후보'},{key:6,value:'MGB'},{key:7,value:'No Belt'}];
@@ -794,22 +749,75 @@
 	let cdRepType1 = [<c:forEach var="item" items="${typeCode1}">{key:${item.codeId},value:"${item.codeNm}"},</c:forEach>];
 	let cdRepType2 = [<c:forEach var="item" items="${typeCode2}">{key:${item.codeId},value:"${item.codeNm}"},</c:forEach>];
 	let cdRepType3 = [<c:forEach var="item" items="${typeCode3}">{key:${item.codeId},value:"${item.codeNm}"},</c:forEach>];
+	
+</script>
+<script type="text/javascript">
+	$(document).ready(init);
+	
 	function init(){
-		$("#repDivisionCode").off("change").on("change", onchange_ddlRepDevisionCode); // 6σ Full Process여부
+		
+		
 		onchange_ddlRepDevisionCode();	// 초기셋팅을 위한 호출
 		
-		$("#repTypeCode").off("change").on("change", onchange_ddlRepTypeCode); // 과제유형
+		setDropDown("repSectorCode", cdListSector, true);//부문코드
+		setDropDown("repLeaderBeltCode", cdLeaderBelt, true);//리더벨트
+		setDropDown("repActionTypeCode", cdActionType, true);//활동분야
+		setDropDown("repMbbUseRateCode", cdMbbUseRate, true);//MBB활용율
 		
-		setDropDown("ddlRepSectorCode", cdListSector, true);//부문코드
-		setDropDown("ddlRepLeaderBeltCd", cdLeaderBelt, true);//리더벨트
-		setDropDown("ddlRepActionTyCd", cdActionType, true);//활동분야
-		setDropDown("ddlRepMbbUseRateCode", cdMbbUseRate, true);//MBB활용율
 		$("#lblUseRefDt").text("2023"); $("#hidUseRefDt").val("2023");	//활용율 반영년도
-		
-		$(".org-search").off("click").on("click", onclick_orgSearch)
 		
 		setDropDown("ddlRepResultTypeCode1", cdRepResultType, true);//성과항목
 		
+		
+		setEvent();
+		
+	}
+	
+	function setEvent(){
+		
+		$(".org-search").off("click").on("click", onclick_orgSearch); // 조직 검색
+		
+		$("#repDivisionCode").off("change").on("change", onchange_ddlRepDevisionCode); // 6σ Full Process여부
+		$("#repTypeCode").off("change").on("change", onchange_ddlRepTypeCode); // 과제유형
+		// onchange_ddlRepDevisionCode : 과제유형, 일정계획 입력창 변경
+		
+		//팀멤버 추가
+		$('.btn-team-member-add').on('click', function() {
+			
+			if($(".tr-team-member").length>4){
+				return false;
+			}
+			
+		    let oParent = $(this).closest('tr')
+		    let oClone = oParent.clone();
+		    oClone.find('input').val('');
+		    oClone.find('th > label').text('팀멤버');
+		    oClone.find('td:nth-child(3), td:nth-child(4), td:nth-child(5), td:nth-child(6)').text('');
+		    oClone.find('.btn-team-member-add').text('삭제');
+		    oClone.find('.btn-group button').removeClass('btn-team-member-add').addClass('btn-team-member-remove');
+		    oParent.after(oClone);
+		});
+		
+		// 팀멤버 삭제
+		$('.btn-team-member-remove').on('click', function() {
+		    $(this).closest('tr').remove();
+		});
+		
+		//저장버튼
+		$("#btnSave").on("click", function(){
+			if(validate()){
+				$("#repStatusCode").val("1"); // 상태 임시저장 으로 저장
+				$("#defaultForm")[0].submit();	
+			};
+		});
+		
+		//결재버튼
+		$("#btnReqApproval").on("click", function(){
+			if(validate()){
+				$("#repStatusCode").val("2"); // 상태 임시저장 으로 저장
+				$("#defaultForm")[0].submit();	
+			};
+		});
 		
 	}
 
@@ -887,12 +895,12 @@
 		//*챔피언	(챔피언이 들어가야 하는 경우와 아닌 경우 구분하기)
 		
 		//[성과 및 주요지표]
-		//예상성과 아래 열의 갯수만큼 반복하며 체크하기
+		// 예상성과 아래 열의 갯수만큼 반복하며 체크하기
 		// ㄴ *성과항목
-	
+		return true;
 	}
 	
-	
+
 	
 </script>
 </body>

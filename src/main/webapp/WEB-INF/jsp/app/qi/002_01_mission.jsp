@@ -13,44 +13,54 @@
 	<title>${fn:split(boardVO.boardNm,'>')[fn:length(fn:split(boardVO.boardNm,'>'))-1]}</title>
 	<meta name="keywords" content="" />
 	<meta name="description" content="" />
+	<style>
+		.w-90p { width: 90px !important;}
+	</style>
 </head>
 <body>
 
                         <div class="list-wrap">
                             <div class="list-search">
-                                <form>
+                                <form:form commandName="reportSearchVO" id="defaultForm" method="get" action="list.do" >
+                                ${reportSearchVO.superHiddenTag}
                                     <div class="search-form">
                                         <div class="form-inline form-input">
-                                            <label>과제명</label>
-                                            <input type="text" name="">
+                                            <label>과제명 </label>
+                                            <form:input path="searchRepName" title="검색어"  />
                                         </div>
                                         <div class="form-inline form-select">
                                             <label>6σFull Process 여부</label>                                            
-                                            <select name="">
+                                            <form:select path="searchDivision" cssClass="w-90p">
                                                 <option value="">전체</option>
-                                            </select>
+                                                <c:forEach var="item" items="${searchRepName}">
+													<option value="${item.codeId}" <c:if test="${item.codeId eq reportSearchVO.searchDivision }">selected="selected"</c:if>>${item.codeNm}</option>
+												</c:forEach>
+                                            </form:select>
                                         </div>
                                         <div class="form-inline form-select">
                                             <label>과제유형</label>
-                                            <select name="">
+                                            <form:select path="searchType" cssClass="w-90p">
                                                 <option value="">전체</option>
-                                            </select>
+                                            </form:select>
                                         </div>
                                         <div class="form-inline form-select">
-                                            <label>진행사항</label>
-                                            <select name="">
+                                            <label>진행현황</label>
+                                            <form:select path="searchStatus">
                                                 <option value="">전체</option>
-                                            </select>
+                                                <c:forEach var="item" items="${searchStatus}">
+													<option value="${item.codeId}" <c:if test="${item.codeId eq reportSearchVO.searchStatus }">selected="selected"</c:if>>${item.codeNm}</option>
+												</c:forEach>
+                                            </form:select>
                                         </div>
-                                        <button type="button" class="btn-submit">조회</button>
+                                        <button type="button" class="btn-submit" onclick="onclick_search()">조회</button>
                                     </div>
-                                </form>
+                               </form:form>
                             </div>
 
                             <div class="list-header">
                                 <p class="title">나의 과제</p>
                                 <span class="bar"></span>
-                                <p class="total">총 10(완료 2, 진행중 4, 선정중 2, Drop 2)</p>
+                                <p class="total">총 ${totalCount}건(완료${count_1}, 진행중${count_3+count_4}, 선정중 ${count_2}, Drop ${count_5})</p>
                                 <select name="limit" class="limit">
                                     <option value="10">10개</option>
                                     <option value="50">50개</option>
@@ -58,7 +68,7 @@
                                 </select>
                             </div>
                             <div class="list-content">
-                                <div class="list-table">
+                                <div class="list-table" style="min-height: 235px;">
                                     <table class="centered even">
                                         <colgroup>
                                             <col style="width:50px">
@@ -81,102 +91,24 @@
                                             </tr>                                            
                                         </thead>
                                         <tbody>
+                                        <c:forEach items="${reportList}" var="item" varStatus="i">
                                             <tr>
-                                                <td>10</td>
-                                                <td>6σFull Process</td>
-                                                <td>DMAIC</td>
-                                                <td>예시)23년 신제품 싸움닭 초기 유통관리를 통한 품질 안정화...</td>
-                                                <td>선정중</td>
-                                                <td>2023.01.30</td>
-                                                <td>2023.06.30</td>                                                
+                                                <td>${item.idx}</td>
+                                                <td>${item.repDivision}</td>
+                                                <td>${item.repType}</td>
+                                                <td>${item.repName}</td>
+                                                <td>${item.repStatus}</td>
+                                                <td><fmt:formatDate pattern="yyyy.MM.dd" value="${item.repStartDate}" /></td>
+                                                <td><fmt:formatDate pattern="yyyy.MM.dd" value="${item.repFinishDate}" /></td>
                                             </tr>
-                                            <tr>
-                                                <td>9</td>
-                                                <td>6σFull Process</td>
-                                                <td>DMEDI</td>
-                                                <td>예시)23년 신제품 싸움닭 초기 유통관리를 통한 품질 안정화...</td>
-                                                <td>진행중(On)</td>
-                                                <td>2023.01.30</td>
-                                                <td>2023.06.30</td>                                                
-                                            </tr>     
-                                            <tr>
-                                                <td>8</td>
-                                                <td>일반과제</td>
-                                                <td>Quick 6σ</td>
-                                                <td>예시)23년 신제품 싸움닭 초기 유통관리를 통한 품질 안정화...</td>
-                                                <td>진행중(Off)</td>
-                                                <td>2023.01.30</td>
-                                                <td>2023.06.30</td>                                                
-                                            </tr>
-                                            <tr>
-                                                <td>7</td>
-                                                <td>일반과제</td>
-                                                <td>빅데이터</td>
-                                                <td>예시)23년 신제품 싸움닭 초기 유통관리를 통한 품질 안정화...</td>
-                                                <td>Drop</td>
-                                                <td>2023.01.30</td>
-                                                <td>2023.06.30</td>                                                
-                                            </tr>   
-                                            <tr>
-                                                <td>6</td>
-                                                <td>일반과제</td>
-                                                <td>FMEA</td>
-                                                <td>예시)23년 신제품 싸움닭 초기 유통관리를 통한 품질 안정화...</td>
-                                                <td>선정중</td>
-                                                <td>2023.01.30</td>
-                                                <td>2023.06.30</td>                                                
-                                            </tr>
-                                            <tr>
-                                                <td>5</td>
-                                                <td>일반과제</td>
-                                                <td>CEO/CPO Task</td>
-                                                <td>예시)23년 신제품 싸움닭 초기 유통관리를 통한 품질 안정화...</td>
-                                                <td>진행중(On)</td>
-                                                <td>2023.01.30</td>
-                                                <td>2023.06.30</td>                                                
-                                            </tr>     
-                                            <tr>
-                                                <td>4</td>
-                                                <td>일반과제</td>
-                                                <td>MGB(현장개선)</td>
-                                                <td>예시)23년 신제품 싸움닭 초기 유통관리를 통한 품질 안정화...</td>
-                                                <td>진행중(Off)</td>
-                                                <td>2023.01.30</td>
-                                                <td>2023.06.30</td>                                                
-                                            </tr>
-                                            <tr>
-                                                <td>3</td>
-                                                <td>일반과제</td>
-                                                <td>Quick Win(현장개선)</td>
-                                                <td>예시)23년 신제품 싸움닭 초기 유통관리를 통한 품질 안정화...</td>
-                                                <td>Drop</td>
-                                                <td>2023.01.30</td>
-                                                <td>2023.06.30</td>                                                
-                                            </tr>    
-                                            <tr>
-                                                <td>2</td>
-                                                <td>일반과제</td>
-                                                <td>DMAIC</td>
-                                                <td>예시)23년 신제품 싸움닭 초기 유통관리를 통한 품질 안정화...</td>
-                                                <td>선정중</td>
-                                                <td>2023.01.30</td>
-                                                <td>2023.06.30</td>                                                
-                                            </tr>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>일반과제</td>
-                                                <td>MGB(현장개선)</td>
-                                                <td>예시)23년 신제품 싸움닭 초기 유통관리를 통한 품질 안정화...</td>
-                                                <td>완료(2023.06.30)</td>
-                                                <td>2023.01.30</td>
-                                                <td>2023.06.30</td>                                                
-                                            </tr>                                   
+                                        </c:forEach>
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
                             <div class="list-footer">
-                                <div class="pagination">
+                            	<ui:pagination paginationInfo="${reportSearchVO}" type="defDefault" jsFunction="cfnPageLink" />
+                                <!-- <div class="pagination">
                                     <a href="" class="first">처음</a>
                                     <a href="" class="prev">이전</a>
                                     <a href="" class="cur num">1</a>
@@ -186,118 +118,64 @@
                                     <a href="" class="num">5</a>
                                     <a href="" class="next">다음</a>
                                     <a href="" class="last">끝</a>
-                                </div>
+                                </div> -->
                                 <div class="list-btns">
-                                    <button type="button" class="btn bg-gray" onclick="location.href='/report/002_01_sub01.do?menuKey=29'">                                        
+                                    <button type="button" class="btn bg-gray" onclick="location.href='/report/002_01_sub01.do?menuKey=${menuKey}'">                                        
                                         <span>과제등록</span>
                                     </button>                                    
                                 </div>
 
                             </div>
                         </div>
-                   
-        <!-- 조직도 -->
-        <div class="modal-dimmed"></div>
-        <div class="org-modal">
-            <div class="modal-header">
-                <h4>조직조회</h4>
-                <button type="button" class="btn-close">닫기</button>
-            </div>
-            <div class="modal-content">
-                <div class="list-wrap">
-                    <div class="list-search">
-                        <form id="org-form" onsubmit="org_search();return false;">
-                            <div class="search-form">
-                                <div class="form-inline form-input">
-                                    <label>조직명</label>
-                                    <input type="text" name="">
-                                </div>
-                                <button type="submit" class="btn-submit">조회</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-                <div class="tree-header">
-                    <div>
-                        <input type="checkbox" id="orgSelAll">
-                        <label for="orgSelAll"></label>
-                    </div>
-                    <div>
-                        6σ 인재육성대상 조직명
-                    </div>
-                </div>
-                <div id="org-tree">
-                    <ul>
-                        <li>창호 사업부
-                            <ul>
-                                <li>창호.생산담당
-                                    <ul>
-                                        <li>· 창호.프로파일생산팀</li>
-                                        <li>· 창호.기술팀</li>
-                                        <li>· 창호.공정혁신팀</li>
-                                        <li>· 창호.완성창공정기술팀</li>
-                                    </ul>
-                                </li>
-                                <li>유리</li>
-                                <li>연구소 근무</li>
-                                <li>창호.시스템창사업담당</li>
-                                <li>창호.중문팀</li>
-                                <li>바닥재 사업담당	</li>
-                            </ul>
-                        </li>
-                        <li>단열재 사업담당
-                            <ul>
-                                <li>창호.프로파일생산팀</li>
-                            </ul>
-                        </li>
-                        <li>벽지 사업담당	
-                            <ul>
-                                <li>창호.프로파일생산팀</li>
-                            </ul>
-                        </li>
-                        <li>표면소재 사업담당
-                            <ul>
-                                <li>창호.프로파일생산팀</li>
-                            </ul>
-                        </li>
-                        <li>산업용필름 사업담당
-                            <ul>
-                                <li>창호.프로파일생산팀</li>
-                            </ul>
-                        </li>
-                        <li>자동차소재부품 사업부
-                            <ul>
-                                <li>창호.프로파일생산팀</li>
-                            </ul>
-                        </li>
-                        <li>인테리어 사업부
-                            <ul>
-                                <li>창호.프로파일생산팀</li>
-                            </ul>
-                        </li>
-                        <li>연구소
-                            <ul>
-                                <li>창호.프로파일생산팀</li>
-                            </ul>
-                        </li>
-                        <li>품질 담당
-                            <ul>
-                                <li>창호.프로파일생산팀</li>
-                            </ul>
-                        </li>
-                        <li>생산/기술/R&D/품질 外
-                            <ul>
-                                <li>창호.프로파일생산팀</li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
-                <div class="btns">
-                    <button type="button" class="btn-submit">확인</button>
-                    <button type="button" class="btn-cancel">취소</button>
-                </div>
-            </div>
-        </div>
+<script type="text/javascript">
+	
+	let cdRepType1 = [<c:forEach var="item" items="${typeCode1}">{key:${item.codeId},value:"${item.codeNm}"},</c:forEach>];
+	let cdRepType2 = [<c:forEach var="item" items="${typeCode2}">{key:${item.codeId},value:"${item.codeNm}"},</c:forEach>];
+	let cdRepType3 = [<c:forEach var="item" items="${typeCode3}">{key:${item.codeId},value:"${item.codeNm}"},</c:forEach>];
+	
+</script>
+<script type="text/javascript">
+	$(document).ready(init);
+	let paramSearchType = '${reportSearchVO.searchType}';
+	
+	function init(){
+		$("#searchDivision").off("change").on("change", onchange_ddlRepDevisionCode); // 6σ Full Process여부
+		onchange_ddlRepDevisionCode();
+		
+		$("#searchType").val(paramSearchType);	
+	}
+	
+	// onchange_ddlRepDevisionCode : 과제유형, 일정계획 입력창 변경
+	function onchange_ddlRepDevisionCode(e){
+	
+		let repDevCd = $("#searchDivision").val(); //이벤트 트리거 객체의 값
+		let targetObjId = "searchType";	//바뀔 대상 객체 ID
+		let arrRepType = [];
+		$(".tr-rep-date").hide();
+		switch(repDevCd){
+		case "1": //6sigma
+			arrRepType = cdRepType1;
+			break;
+		case "2": //일반
+			arrRepType = cdRepType2;
+			break;
+		case "3": // 10+No.
+			arrRepType = cdRepType3;
+			break;
+		default:
+			arrRepType = [];
+			break;
+		}
+		setDropDown(targetObjId, arrRepType, true, '전체');
+	}
+	
+	function onclick_search(){
+		$("#defaultForm")[0].submit();
+	}
+	
+
+</script>
+
 
 </body>
 </html>
