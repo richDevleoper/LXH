@@ -1,6 +1,7 @@
 package kr.freedi.dev.qreport.controller;
 
 import java.io.File;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import egovframework.rte.fdl.idgnr.EgovIdGnrService;
+import egovframework.rte.psl.dataaccess.util.EgovMap;
 import kr.freedi.dev.article.domain.ArticleSearchVO;
 import kr.freedi.dev.article.domain.ArticleVO;
 import kr.freedi.dev.article.service.ArticleService;
@@ -35,6 +37,7 @@ import kr.freedi.dev.code.domain.CodeVO;
 import kr.freedi.dev.code.service.CodeService;
 import kr.freedi.dev.common.util.EncriptUtil;
 import kr.freedi.dev.common.util.MapUtil;
+import kr.freedi.dev.qreport.domain.ReportSearchVO;
 import kr.freedi.dev.qreport.domain.ReportVO;
 import kr.freedi.dev.qreport.service.ReportService;
 import kr.freedi.dev.user.domain.UserVO;
@@ -100,11 +103,72 @@ public class ReportController {
 	
 	
 //	// 과제 - 리스트
-	@RequestMapping({"/002_01_mission.do"})
+	@RequestMapping({"/list.do", "/002_01_mission.do"})
 	public String handler002_01(HttpServletRequest request, ModelMap model,
-			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
+			@ModelAttribute("reportVO") ReportVO reportVO,
+			@ModelAttribute("reportSearchVO") ReportSearchVO searchVO,
 			UserVO userSession)throws Exception {
+		
 		model.addAttribute("menuKey", searchVO.getMenuKey());
+		
+		List<EgovMap> countList = reportService.selectListCount2(searchVO);
+		
+		
+		int totalCount = 0;
+		for (EgovMap egovMap : countList) {
+			BigDecimal currVal = (BigDecimal)egovMap.get("cnt");
+			totalCount = totalCount + currVal.intValue();
+			String codeNm = (String)egovMap.get("repstatuscode");
+			if(codeNm!=null) {
+				model.addAttribute("count_"+codeNm, currVal.intValue());
+			}
+		}
+		
+		//페이징 기본설정
+		searchVO.setRecordCountPerPage(10);
+		searchVO.setPageSize(10);
+		searchVO.setTotalRecordCount(totalCount);
+		
+		List<ReportVO> reportList = reportService.selectList(searchVO);
+		model.addAttribute("reportList", reportList);
+		model.addAttribute("totalCount", totalCount);
+	
+		
+		CodeVO codeVO = new CodeVO(); 
+		codeVO.setCodeGrpId("6SIG_YN");
+		codeVO.setActFlg("Y"); 
+		model.addAttribute("searchRepName", codeService.selectFullList(codeVO));
+		
+		codeVO.setCodeGrpId("RP_TY1");
+		codeVO.setActFlg("Y"); 
+		model.addAttribute("typeCode1", codeService.selectFullList(codeVO));
+		
+		codeVO.setCodeGrpId("RP_TY2");
+		codeVO.setActFlg("Y"); 
+		model.addAttribute("typeCode2", codeService.selectFullList(codeVO));
+		
+		codeVO.setCodeGrpId("RP_TY3");
+		codeVO.setActFlg("Y"); 
+		model.addAttribute("typeCode3", codeService.selectFullList(codeVO));
+		
+		codeVO.setCodeGrpId("REP_STAT");
+		codeVO.setActFlg("Y"); 
+		model.addAttribute("searchStatus", codeService.selectFullList(codeVO));
+		
+		
+//		HashMap<String, Integer> count = new HashMap<>();
+//		
+//		for (ReportVO item : reportList) {
+//			String key = item.getRepStatus();
+//			Integer val = count.get(key);
+//			if(val==null){
+//				val = 0;
+//			}
+//			if(key!=null) {
+//				count.put(key, val+1);	
+//			}
+//		}
+//		System.out.println(count.toString());
 		return "app/qi/002_01_mission";
 	}
 	
@@ -116,7 +180,7 @@ public class ReportController {
 			@ModelAttribute("reportVO") ReportVO reportVO, 
 			UserVO userSession) throws Exception {
 		
-		
+		model.addAttribute("menuKey", searchVO.getMenuKey());
 		
 		CodeVO codeVO = new CodeVO(); 
 		codeVO.setCodeGrpId("6SIG_YN");
@@ -143,8 +207,8 @@ public class ReportController {
 	
 	@RequestMapping({"/insert.do"})
 	public String insert(HttpServletRequest req, ModelMap model,
-			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO,
 			@ModelAttribute("reportVO") ReportVO reportVO,
+			@ModelAttribute("reportSearchVO") ReportSearchVO searchVO,
 			UserVO userSession, 
 			String userIp) throws Exception {
 
@@ -168,6 +232,8 @@ public class ReportController {
 //		articleVO.setFrstOperId(userSession.getUserId());
 //		articleVO.setFrstOperIp(userIp);
 //		
+		//reportVO.setRepStatusCode("1");
+	
 //		//insert article
 		reportService.insert(reportVO);
 

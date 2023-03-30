@@ -40,24 +40,79 @@
 		<result property="repStatus" column="REP_STATUS" /> 
 	</resultMap>
 	
+	<sql id="defCond">
+		
+			<if test="searchRepName != null and searchRepName != ''">
+				AND T.REP_NAME like '%' || #{searchRepName} || '%'
+			</if>
+			<if test="searchDivision != null and searchDivision != ''">
+				AND T.REP_DEVISION_CODE = #{searchDivision}
+			</if>
+			<if test="searchType != null and searchType != ''">
+				AND T.REP_TYPE_CODE = #{searchType}
+			</if>
+			<if test="searchStatus != null and searchStatus != ''">
+				AND T.REP_STATUS_CODE = #{searchStatus}
+			</if>
+		
+	</sql> 
 	
+	<sql id="selectListBasic">
+	    WITH report_mst AS (
+            SELECT ROW_NUMBER() OVER( ORDER BY TO_NUMBER(rep_code) ASC ) idx,
+                ROW_NUMBER() OVER( ORDER BY TO_NUMBER(rep_code) DESC ) rowidx,
+                m.*
+            FROM   tb_report_mst m
+        )
+        SELECT
+            idx,
+            rep_code,
+            rep_name,
+            c_div.code_nm AS rep_division,
+            c_ty.code_nm  AS rep_type,
+            rep_status_code,
+            c_st.code_nm  AS rep_status,
+            rep_start_date,
+            rep_finish_date
+        FROM
+            report_mst T,
+            tb_code    c_div,
+            tb_code    c_ty,
+            tb_code    c_st
+        WHERE   
+                T.rep_devision_code = c_div.code_id(+) 	AND c_div.code_grp_id(+) = '6SIG_YN' 
+            AND T.rep_type_code = c_ty.code_id(+) 		AND c_ty.code_grp_id(+) IN ('RP_TY1', 'RP_TY2', 'RP_TY3')
+            AND T.rep_status_code = c_st.code_id(+) 	AND c_st.code_grp_id(+) = 'REP_STAT'
+            <include refid="defCond"></include>
+	</sql>
 	
 	<select id="selectList" resultMap="reportMap">
-		with report_mst as (  
-		  select row_number() over (order by to_number(rep_code) asc) idx
-		         , m.*
-		    from tb_report_mst m
-		    -- 작성자 WHERE rep_reg_user='10118122'
-		)
-		select idx, rep_code, rep_name, c_div.code_nm as rep_division, c_ty.code_nm as rep_type
-		       , c_st.code_nm as rep_status
-		       , to_char(rep_start_date, 'YYYY.MM.DD') rep_start_date, to_char(rep_finish_date, 'YYYY.MM.DD') rep_finish_date
-		  from report_mst m
-		       , tb_code c_div, tb_code c_ty, tb_code c_st
-		where m.rep_devision_code = c_div.code_id(+) and c_div.code_grp_id(+)='6SIG_YN'
-		  and m.rep_type_code = c_ty.code_id(+) and c_ty.code_grp_id(+) in ('RP_TY1', 'RP_TY2', 'RP_TY3') -- '3개 타입은 겹치지 않도록 설정함'
-		  and m.rep_status_code = c_st.code_id(+) and c_st.code_grp_id(+)='REP_STAT'
-		  and idx between (1*10+1-10) and (1*10)  -- page 1, 단위 10
+		<include refid="selectListBasic"></include>
+		  and rowidx between (#{currentPageNo}*#{recordCountPerPage}+1-#{recordCountPerPage}) and (#{currentPageNo}*#{recordCountPerPage})
+		  order by idx desc
+	</select>
+	
+	<select id="selectListCount2" resultType="egovMap">
+		SELECT
+		    c.code_id repStatusCode, c.code_nm repStatus, nvl(m.cnt, 0) AS cnt
+		FROM tb_code c,
+		     (
+		        SELECT
+		            rep_status_code, rep_status, COUNT(1) cnt
+		        FROM (
+					<include refid="selectListBasic"></include>
+					 ) a
+		        GROUP BY rep_status_code, rep_status
+		    ) m
+		WHERE c.code_id = m.rep_status_code (+)
+		  AND c.code_grp_id = 'REP_STAT'
+		  AND c.act_flg = 'Y'
+      ORDER BY c.code_id		 
+	 </select>
+	
+	<select id="selectListCount" resultType="int">
+		SELECT COUNT(*) FROM tb_report_mst T 
+		<include refid="defCond"></include>
 	</select>
 	
 	<select id="selectNextFkey" resultType="int">
@@ -114,7 +169,7 @@
 			,#{repStartDate} 
 			,#{repFinishDate} 
 			,#{repKeyword} 
-			,#{repRegUser} 
+			, sysdate
 			,#{repRegDate} 
 			,#{repApprovalCode} 
 			,#{repUseYn} 

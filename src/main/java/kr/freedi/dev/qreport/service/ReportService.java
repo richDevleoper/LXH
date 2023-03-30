@@ -16,6 +16,7 @@ import kr.freedi.dev.board.domain.BoardUseVO;
 import kr.freedi.dev.board.domain.BoardVO;
 import kr.freedi.dev.board.service.BoardService;
 import kr.freedi.dev.board.service.BoardUseService;
+import kr.freedi.dev.code.domain.CodeVO;
 import kr.freedi.dev.common.dao.DefaultDAO;
 import kr.freedi.dev.common.util.EncriptUtil;
 import kr.freedi.dev.menu.service.IMenuService;
@@ -29,6 +30,8 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Service;
 
 import egovframework.rte.psl.dataaccess.util.EgovMap;
+
+
 
 
 /**
@@ -81,9 +84,16 @@ public class ReportService {
 
 	public List<ReportVO> selectList(ReportSearchVO searchVO) {
 		
-		return dao.selectList("Article.selectList", searchVO);
+		return dao.selectList("Report.selectList", searchVO);
 	}
 	
+	public int selectListCount(ReportSearchVO searchVO) {
+		return (Integer) dao.selectOne("Report.selectListCount", searchVO);
+	}
+	
+	public List<EgovMap> selectListCount2(ReportSearchVO searchVO) {
+		return dao.selectList("Report.selectListCount2", searchVO);
+	}
 	
 	//@Autowired
 	//private JFileService service;
@@ -104,9 +114,7 @@ public class ReportService {
 //		return dao.selectList("Article.selectRecentList", searchVO);
 //	}
 //
-//	public int selectArticleListCount(ArticleSearchVO searchVO) {
-//		return (Integer) dao.selectOne("Article.selectListCount", searchVO);
-//	}
+
 //
 //	public List<ArticleVO> selectFullList(ArticleVO articleVO) {
 //		List<ArticleVO> resultList =  dao.selectList("Article.selectFullList", articleVO);

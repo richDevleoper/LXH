@@ -221,6 +221,30 @@ public class ReportVO {
 	public void setRepFileYn(String repFileYn) {
 		this.repFileYn = repFileYn;
 	}
+	public Integer getIdx() {
+		return idx;
+	}
+//	public void setIdx(Integer idx) {
+//		this.idx = idx;
+//	}
+	public String getRepDivision() {
+		return repDivision;
+	}
+//	public void setRepDivision(String repDivision) {
+//		this.repDivision = repDivision;
+//	}
+	public String getRepType() {
+		return repType;
+	}
+//	public void setRepType(String repType) {
+//		this.repType = repType;
+//	}
+	public String getRepStatus() {
+		return repStatus;
+	}
+//	public void setRepStatus(String repStatus) {
+//		this.repStatus = repStatus;
+//	}
 	@Override
 	public String toString() {
 		return "ReportVO [repCode=" + repCode + ", repName=" + repName + ", repMenuCode=" + repMenuCode
@@ -234,6 +258,8 @@ public class ReportVO {
 				+ ", repRegDate=" + repRegDate + ", repUpdateUser=" + repUpdateUser + ", repUpdateDate=" + repUpdateDate
 				+ ", repApprovalCode=" + repApprovalCode + ", repUseYn=" + repUseYn + ", repMailSendYn=" + repMailSendYn
 				+ ", repMailSendDate=" + repMailSendDate + ", repPlaceCode=" + repPlaceCode + ", repLeaderCode="
-				+ repLeaderCode + ", repFileYn=" + repFileYn + "]";
+				+ repLeaderCode + ", repFileYn=" + repFileYn + ", idx=" + idx + ", repDivision=" + repDivision
+				+ ", repType=" + repType + ", repStatus=" + repStatus + "]";
 	}
+	
 }

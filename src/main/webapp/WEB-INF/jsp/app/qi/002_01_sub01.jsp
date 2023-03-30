@@ -16,6 +16,7 @@
 </head>
 <body>
 <form:form commandName="frmReport" id="defaultForm" name="defaultForm"  action="${action}" onsubmit="return false" method="post" modelAttribute="reportVO">
+<form:hidden path="repStatusCode" />
                         <!-- breadcrumb -->
                         <div class="breadcrumb">
                             <ul>
@@ -712,7 +713,7 @@
                                                     </div>
                                                 </td>
                                             </tr>
-                                            <tr>
+                                            <tr style="display:none;">
                                                 <th>첨부파일 (조회)</th>
                                                 <td>
                                                     <div class="file-link">
@@ -730,15 +731,15 @@
                         <div class="list-footer">
                             <div class="list-btns">
                                 <button type="button" class="btn light-gray" id="btnSave">저장</button>
-                                <button type="button" class="btn bg-gray">결재완료</button>
-                                <a href="/app/002_01_mission.do?menuKey=29" class="btn">목록</a>
+                                <button type="button" class="btn bg-gray" id="btnReqApproval">결재완료</button>
+                                <a href="./list.do?menuKey=${menuKey}" class="btn">목록</a>
                             </div>
                         </div>
 
 </form:form>                    
 
 <script type="text/javascript">
-	$(document).ready(init);
+	
 	
 	let cdListSector = [{key:1,value:'창호'},{key:2,value:'바닥재'},{key:3,value:'단열재'},{key:4,value:'벽지'},{key:5,value:'표면소재'},{key:6,value:'산업용필름'},{key:7,value:'자동차소재부품'},{key:8,value:'인테리어'},{key:9,value:'연구소'},{key:10,value:'품질'},{key:11,value:'생산기술(제조혁신)'},{key:12,value:'환경안전'},{key:13,value:'기타'}];
 	let cdLeaderBelt = [{key:1,value:'GB'},{key:2,value:'BB'},{key:3,value:'BB후보'},{key:4,value:'MBB'},{key:5,value:'MBB후보'},{key:6,value:'MGB'},{key:7,value:'No Belt'}];
@@ -749,6 +750,9 @@
 	let cdRepType2 = [<c:forEach var="item" items="${typeCode2}">{key:${item.codeId},value:"${item.codeNm}"},</c:forEach>];
 	let cdRepType3 = [<c:forEach var="item" items="${typeCode3}">{key:${item.codeId},value:"${item.codeNm}"},</c:forEach>];
 	
+</script>
+<script type="text/javascript">
+	$(document).ready(init);
 	
 	function init(){
 		
@@ -802,10 +806,18 @@
 		//저장버튼
 		$("#btnSave").on("click", function(){
 			if(validate()){
+				$("#repStatusCode").val("1"); // 상태 임시저장 으로 저장
 				$("#defaultForm")[0].submit();	
 			};
 		});
 		
+		//결재버튼
+		$("#btnReqApproval").on("click", function(){
+			if(validate()){
+				$("#repStatusCode").val("2"); // 상태 임시저장 으로 저장
+				$("#defaultForm")[0].submit();	
+			};
+		});
 		
 	}
 
@@ -883,7 +895,7 @@
 		//*챔피언	(챔피언이 들어가야 하는 경우와 아닌 경우 구분하기)
 		
 		//[성과 및 주요지표]
-		//예상성과 아래 열의 갯수만큼 반복하며 체크하기
+		// 예상성과 아래 열의 갯수만큼 반복하며 체크하기
 		// ㄴ *성과항목
 		return true;
 	}
