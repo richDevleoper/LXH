@@ -1,6 +1,9 @@
 package kr.freedi.dev.qreport.domain;
 
 import java.util.Date;
+import java.util.List;
+
+import kr.freedi.dev.attachfile.domain.AttachFileVO;
 
 public class ReportVO {
 
@@ -40,6 +43,8 @@ public class ReportVO {
 	private String repDivision;
 	private String repType;
 	private String repStatus;
+	
+	private List<AttachFileVO> fileList;
 	
 	public Integer getRepCode() {
 		return repCode;
@@ -242,7 +247,13 @@ public class ReportVO {
 	public String getRepStatus() {
 		return repStatus;
 	}
-//	public void setRepStatus(String repStatus) {
+public List<AttachFileVO> getFileList() {
+		return fileList;
+	}
+	public void setFileList(List<AttachFileVO> fileList) {
+		this.fileList = fileList;
+	}
+	//	public void setRepStatus(String repStatus) {
 //		this.repStatus = repStatus;
 //	}
 	@Override

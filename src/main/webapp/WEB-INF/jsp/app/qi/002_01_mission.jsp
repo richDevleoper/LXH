@@ -15,6 +15,7 @@
 	<meta name="description" content="" />
 	<style>
 		.w-90p { width: 90px !important;}
+		table.centered tbody tr td a {text-decoration: underline;}
 	</style>
 </head>
 <body>
@@ -23,6 +24,7 @@
                             <div class="list-search">
                                 <form:form commandName="reportSearchVO" id="defaultForm" method="get" action="list.do" >
                                 ${reportSearchVO.superHiddenTag}
+                                	<%-- <form:hidden path="recordCountPerPage"/> --%>
                                     <div class="search-form">
                                         <div class="form-inline form-input">
                                             <label>과제명 </label>
@@ -61,10 +63,10 @@
                                 <p class="title">나의 과제</p>
                                 <span class="bar"></span>
                                 <p class="total">총 ${totalCount}건(완료${count_1}, 진행중${count_3+count_4}, 선정중 ${count_2}, Drop ${count_5})</p>
-                                <select name="limit" class="limit">
-                                    <option value="10">10개</option>
-                                    <option value="50">50개</option>
-                                    <option value="100">100개</option>
+                                <select name="limit" class="limit" onchange="onchange_recordCountPerPage(this.value)">
+                                    <option value="10" <c:if test="${reportSearchVO.recordCountPerPage eq '10' }">selected="selected"</c:if>>10개</option>
+                                    <option value="50" <c:if test="${reportSearchVO.recordCountPerPage eq '50' }">selected="selected"</c:if>>50개</option>
+                                    <option value="100" <c:if test="${reportSearchVO.recordCountPerPage eq '100' }">selected="selected"</c:if>>100개</option>
                                 </select>
                             </div>
                             <div class="list-content">
@@ -96,7 +98,7 @@
                                                 <td>${item.idx}</td>
                                                 <td>${item.repDivision}</td>
                                                 <td>${item.repType}</td>
-                                                <td>${item.repName}</td>
+                                                <td><a href="javascript: onclick_reportName('${item.repCode}')">${item.repName}</a></td>
                                                 <td>${item.repStatus}</td>
                                                 <td><fmt:formatDate pattern="yyyy.MM.dd" value="${item.repStartDate}" /></td>
                                                 <td><fmt:formatDate pattern="yyyy.MM.dd" value="${item.repFinishDate}" /></td>
@@ -120,7 +122,7 @@
                                     <a href="" class="last">끝</a>
                                 </div> -->
                                 <div class="list-btns">
-                                    <button type="button" class="btn bg-gray" onclick="location.href='/report/002_01_sub01.do?menuKey=${menuKey}'">                                        
+                                    <button type="button" class="btn bg-gray" onclick="location.href='/report/insertForm.do?menuKey=${menuKey}'">                                        
                                         <span>과제등록</span>
                                     </button>                                    
                                 </div>
@@ -173,7 +175,15 @@
 		$("#defaultForm")[0].submit();
 	}
 	
-
+	function onchange_recordCountPerPage(vCount){
+		debugger;
+		$("#recordCountPerPage").val(vCount);
+		onclick_search();// 검색 '조회'버튼 클릭
+	}
+	
+	function onclick_reportName(repCode){
+		location.href="/report/updateForm.do?menuKey=${menuKey}&repCode="+repCode;
+	}
 </script>
 
 

@@ -92,7 +92,19 @@ public class ReportService {
 	}
 	
 	public List<EgovMap> selectListCount2(ReportSearchVO searchVO) {
-		return dao.selectList("Report.selectListCount2", searchVO);
+		return dao.selectList("Report.selectListCount2", searchVO); // 상태 종류별 카운트 
+	}
+	
+	public ReportVO select(ReportVO reportVO) {
+		ReportVO resultVO = (ReportVO)dao.selectOne("Report.select", reportVO);
+		//첨부파일
+//		if(resultVO != null){
+//			AttachFileVO attachFileVO = new AttachFileVO();
+//			attachFileVO.setFileId(ATTACH_PREFIX + "_" + + resultVO.getArticleKey());
+//			attachFileVO.setDeleteFlg("N");
+//			resultVO.setFileList(attachFileService.selectFullList(attachFileVO));
+//		}
+		return resultVO;
 	}
 	
 	//@Autowired

@@ -124,9 +124,7 @@ public class ReportController {
 			}
 		}
 		
-		//페이징 기본설정
-		searchVO.setRecordCountPerPage(10);
-		searchVO.setPageSize(10);
+		//페이징 기본설정8
 		searchVO.setTotalRecordCount(totalCount);
 		
 		List<ReportVO> reportList = reportService.selectList(searchVO);
@@ -174,7 +172,7 @@ public class ReportController {
 	
 	
 	// 과제 - 뷰페이지
-	@RequestMapping({"/002_01_sub01.do"})
+	@RequestMapping({"/insertForm.do"})
 	public String view(HttpServletRequest req, ModelMap model,
 			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO,
 			@ModelAttribute("reportVO") ReportVO reportVO, 
@@ -239,6 +237,86 @@ public class ReportController {
 
 		return "redirect:/report/002_01_sub01.do?menuKey=29";
 		//return "redirect:/sub.do?menuKey=29";
+	}
+	
+	@RequestMapping({"/updateForm.do"})
+	public String updateForm(HttpServletRequest request, ModelMap model,
+			@ModelAttribute("reportVO") ReportVO reportVO,
+			@ModelAttribute("reportSearchVO") ReportSearchVO searchVO, 
+			UserVO userSession)throws Exception {
+
+		
+		//Integer paramRepCode = reportVO.getRepCode();
+		ReportVO tReportVO = new ReportVO();
+		tReportVO = reportService.select(reportVO);
+		
+		if(tReportVO.getRepStatusCode().equals("1")) {
+			return "redirect:./insertForm.do?menuKey="+searchVO.getMenuKey()+"&repCode="+reportVO.getRepCode();
+		} else {
+			model.addAttribute("reportVO", tReportVO);
+			//권한체크
+//			boolean isMngr = reportService.isMngr(userSession, articleVO);
+//			boolean isUseGrpForWrite = reportService.isUseGrp(userSession, articleVO, BOARD_USE_TYP_WRITE);
+//			if(!isMngr && !isUseGrpForWrite){
+//				//throw new ArticlePermissionDeniedException();
+//				return getPath(request, "ExcpPermissionDenied", "exception");
+//			}
+
+			
+			/*
+			//게시물
+			ArticleVO tReportVO = new ArticleVO();
+			tReportVO = reportService.select(reportVO);
+			model.addAttribute("reportVO", tReportVO);
+			
+			if(!isMngr){
+				//로그인없이 쓴 글
+				if(StringUtils.isEmpty(tArticleVO.getFrstOperId())){
+					if(StringUtils.isEmpty(searchVO.getSearchWriterPwd())){
+						model.addAttribute("cmd", "update");
+						model.addAttribute("cause", "empty");
+						model.addAttribute("action", "updateForm.do");
+						return getPath(request, "PwdCheckForm", boardVO.getBoardTyp());
+						
+					}else{
+						if(!StringUtils.equals(EncriptUtil.encript(searchVO.getSearchWriterPwd()), tArticleVO.getWriterPwd())){
+							model.addAttribute("cmd", "update");
+							model.addAttribute("cause", "wrong");
+							model.addAttribute("action", "updateForm.do");
+							return getPath(request, "PwdCheckForm", boardVO.getBoardTyp());
+						}
+					}
+					
+				//로그인해서 쓴글
+				}else{
+					if(userSession.isLoginUser()){
+						if(!StringUtils.equals(userSession.getUserId(), tArticleVO.getFrstOperId())){
+							return getPath(request, "ExcpIncorrectUser", "exception");
+						}
+					}else{
+						request.getSession().setAttribute("destinationAfterLogin", request.getHeader("referer"));
+						return getPath(request, "ExcpNotLoginUser", "exception");
+					}
+				}
+			}
+			
+			//수정권한 획득 
+			userSession.setCurrentArticleVO(tArticleVO);
+
+			//카테고리정보
+			if(StringUtils.equals(boardVO.getCatgrFlg(), "Y")){
+				CodeVO codeVO = new CodeVO();
+				codeVO.setCodeGrpId(boardVO.getCatgrId());
+				codeVO.setActFlg("Y");
+				model.addAttribute("catgrList", codeService.selectFullList(codeVO));
+			}
+			
+			//set submit action
+			model.addAttribute("action", "update.do");
+			 */
+			//return getPath(request, "Form", boardVO.getBoardTyp());
+			return "redirect:./updateForm.do?menuKey="+searchVO.getMenuKey()+"&repCode="+reportVO.getRepCode();
+		}
 	}
   
 	
