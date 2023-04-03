@@ -244,4 +244,27 @@ $(document).on('click', '.btn-psmg-search-modal', function() {
 //    $(this).closest('tr').remove();
 //})
 
+// 체크박스 (전체선택)
+$(document).ready(function () {
+    $("#ch_all").on("click", function () {
+        if ($("input:checkbox[id='ch_all']").prop("checked")) {
+            $("input[type=checkbox]").prop("checked", true);
+        } else {
+            $("input[type=checkbox]").prop("checked", false);
+        }
+    });
+});
+
+
+$('.ch_all').on('click', function () {
+	var get_id = $(this).attr('id');
+	if($("input:checkbox[id='"+get_id+"']").prop("checked")){
+		$(this).parentsUntil('.list-table').find("input[type=checkbox]").prop("checked", true);
+	} else {
+		$(this).parentsUntil('.list-table').find("input[type=checkbox]").prop("checked", false);
+	}
+});
+
+
+
 

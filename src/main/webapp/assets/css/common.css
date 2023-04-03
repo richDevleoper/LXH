@@ -430,6 +430,26 @@ footer .footer-logo img{
     color:#333;
     margin-left: 5px;
 }
+#container .header-btns {
+	display: flex;
+    align-items: center;
+}
+#container .header-btns>*{
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #c8c8c8;
+    background-color: transparent;
+    height: 27px;
+    font-size: 12px;
+    letter-spacing: -0.025em;
+    color: #333;
+    padding:0 21px;
+}
+#container .header-btns>*+*{
+    margin-left: 5px;
+}
 #page-container>.inner{
     display: flex;
     align-items: stretch;

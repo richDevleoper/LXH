@@ -79,7 +79,7 @@ ${articleSearchVO.superHiddenTag}
 		<div class="search-form row">
 			<div class="form-inline form-input col s5">
 	        	<div class="col s2 align-right">
-	                <label>조회기간</label>
+	                <label>조회기간112</label>
 	            </div>                                        
             <div class="pd-l10 col s10">
                 <div class="col s5 input-date">

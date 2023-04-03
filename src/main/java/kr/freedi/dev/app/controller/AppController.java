@@ -462,12 +462,45 @@ public class AppController {
 		return "app/qi/005_03_02_pfmsubmit";
 	}
 	
+	@RequestMapping({"/app/005_03_02_pfmsubmit_02.do"})
+	public String handler005_03_02_01(HttpServletRequest request, ModelMap model,
+			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
+			UserVO userSession)throws Exception {
+		
+		return "app/qi/005_03_02_pfmsubmit_02";
+	}
+	
+	@RequestMapping({"/app/005_04_01_certmag_01.do"})
+	public String handler005_04_01(HttpServletRequest request, ModelMap model,
+			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
+			UserVO userSession)throws Exception {
+		
+		return "app/qi/005_04_01_certmag_01";
+	}	
+	
+	
 	@RequestMapping({"/app/008_01_apprvbox.do"})
 	public String handler008_01(HttpServletRequest request, ModelMap model,
 			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
 			UserVO userSession)throws Exception {
 		
 		return "app/qi/008_01_apprvbox";
+	}
+	
+	@RequestMapping({"/app/008_01_01_apprvcate.do"})
+	public String handler008_01_01(HttpServletRequest request, ModelMap model,
+			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
+			UserVO userSession)throws Exception {
+		
+		return "app/qi/008_01_01_apprvcate";
+	}
+	
+	@RequestMapping({"/app/008_01_02_apprvsugg.do"})
+	public String handler008_01_02(HttpServletRequest request, ModelMap model,
+			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
+			UserVO userSession)throws Exception {
+		
+		return "app/qi/008_01_02_apprvsugg";
 	}
 	
 	@RequestMapping({"/app/008_02_apprv_req.do"})
@@ -478,6 +511,22 @@ public class AppController {
 		return "app/qi/008_02_apprv_req";
 	}
 	
+	@RequestMapping({"/app/008_02_01_apprvcate_req.do"})
+	public String handler008_02_01(HttpServletRequest request, ModelMap model,
+			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
+			UserVO userSession)throws Exception {
+		
+		return "app/qi/008_02_01_apprvcate_req";
+	}
+	
+	@RequestMapping({"/app/008_02_02_apprvsugg_req.do"})
+	public String handler008_02_02(HttpServletRequest request, ModelMap model,
+			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
+			UserVO userSession)throws Exception {
+		
+		return "app/qi/008_02_02_apprvsugg_req";
+	}
+	
 	@RequestMapping({"/app/008_03_apprv_list.do"})
 	public String handler008_03(HttpServletRequest request, ModelMap model,
 			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
@@ -485,7 +534,7 @@ public class AppController {
 		
 		return "app/qi/008_03_apprv_list";
 	}
-	
+		
 	@RequestMapping({"/search/009_01_total_src.do"})
 	public String handler009_01(HttpServletRequest request, ModelMap model,
 			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
@@ -493,4 +542,5 @@ public class AppController {
 		
 		return "search/009_01_total_src";
 	}
+
 }
