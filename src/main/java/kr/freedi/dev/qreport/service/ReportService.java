@@ -81,6 +81,11 @@ public class ReportService {
 		
 		dao.insert("Report.insert", reportVO);
 	}
+	
+	public void update(ReportVO reportVO) throws Exception {
+
+		dao.update("Report.update", reportVO);
+	}
 
 	public List<ReportVO> selectList(ReportSearchVO searchVO) {
 		

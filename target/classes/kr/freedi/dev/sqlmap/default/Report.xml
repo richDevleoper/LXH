@@ -181,6 +181,39 @@
 		)
 	</insert>
 	
+	<update id="update">
+	
+		UPDATE TB_REPORT_MST SET 
+			REP_NAME = #{repName} 
+			, REP_DEVISION_CODE = #{repDivisionCode} 
+			, REP_TYPE_CODE = #{repTypeCode} 
+			, REP_SECTOR_CODE = #{repSectorCode} 
+			, REP_PRODUCT_CLASS = #{repProductClass} 
+			, REP_LEADER_BELT_CODE = #{repLeaderBeltCode} 
+			, REP_ACTION_TYPE_CODE = #{repActionTypeCode} 
+			, REP_MBB_USE_RATE_CODE = #{repMbbUseRateCode}
+			, REP_USE_REF_DATE = #{repUseRefDate} 
+			, REP_STATUS_CODE = #{repStatusCode} 
+			, REP_SIX_MEASUER_DATE = #{repSixMeasureDate} 
+			, REP_SIX_EXPLORE_DATE = #{repSixExploreDate} 
+			, REP_SIX_DEVELOP_DATE = #{repSixDevelopDate} 
+			, REP_SIX_IMPLEMENT_DATE = #{repSixImplementDate} 
+			, REP_START_DATE = #{repStartDate} 
+			, REP_FINISH_DATE = #{repFinishDate} 
+			, REP_KEYWORD = #{repKeyword} 
+			, REP_UPDATE_USER = #{repRegUser} 
+			, REP_UPDATE_DATE = sysdate
+			, REP_APPROVAL_CODE = #{repApprovalCode} 
+			, REP_USE_YN = #{repUseYn} 
+			, REP_MAIL_SEND_YN = #{repMailSendYn} 
+			, REP_MAIL_SEND_DATE = #{repMailSendDate} 
+			, REP_PLACE_CODE = #{repPlaceCode} 
+			, REP_LEADER_CODE = #{repLeaderCode} 
+			, REP_FILE_YN = #{repFileYn} 
+		WHERE
+		REP_CODE = #{repCode}
+	</update>
+	
 	<select id="select" resultMap="reportMap">
 		SELECT 
 			REP_CODE

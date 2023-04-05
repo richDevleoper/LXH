@@ -94,7 +94,11 @@ function setDropDown(objId, cdList, flagFirstEmptyYn, emptyTitle){
 	}
 	for(i in cdList){
 		let item = cdList[i];
-		htm += "<option value='"+item.key+"'>"+item.value+"</option>";
+		let strSelected = "";
+		if(item.selected){
+			strSelected = " selected='selected'"
+		}
+		htm += "<option value='"+item.key+"' "+ strSelected +">"+item.value+"</option>";
 	}
 	$("#"+objId).empty().append(htm);
 }

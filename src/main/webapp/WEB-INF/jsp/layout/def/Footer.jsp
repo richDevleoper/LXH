@@ -174,7 +174,7 @@
 	                        <label>이 름</label>
 	                        <input type="text" name="">
 	                    </div>
-	                    <button type="submit" class="btn-submit">조회</button>
+	                    <button type="submit" class="btn-submit" onclick="onclick_searchMember()">조회</button>
 	                </div>
 	            </form>
 	        </div>
@@ -202,21 +202,76 @@
 	                                <th>Belt</th>
 	                            </tr>
 	                        </thead>
-	                        <tbody>
-	                            <tr>
+	                        <tbody id="tbodyMemberSearch" class="tbody-search-result">
+	                            <!-- <tr>
 	                                <td><input type="radio" /></td>
 	                                <td>홍길동</td>
 	                                <td>소속소속소속소속소속소속소속</td>
 	                                <td>직위</td>
 	                                <td>직책</td>
 	                                <td>MBB</td>
+	                            </tr> -->
+	                            <tr class="tr-empty">
+	                            	<td colspan="6">검색어를 입력하세요.</td>
 	                            </tr>
 	                        </tbody>
 	                    </table>
 	                </div>
 	            </div>
+	            <script>
+	            	
+	            
+	            
+		            let vMemberSearchReturnId; // 팝업 종료시 리턴할 대상 객체명
+		            let vMemberSEarchReturnFunc; // 팝업 종료시 리턴실행할 함수
+		            
+	            	function addTr(obj){
+	            		
+	            		let paramObj = {comNo:"00091754",userName:"박수민"
+	            				,comJobX:"주임",comPosition:"생산파트장"
+	            				,deptCode:"50006135"
+	            				,deptName:"바닥재 사업담당 > 바닥재.울산생산팀 > 바닥재.울산생산팀(발포기P) > 바닥재.울산생산팀(발포2실)"
+	            				,comCertBelt:"BB"};
+	            		let htm = "<tr class='tr-data' onclick='onclick_memberTr(this)' data='"+JSON.stringify(paramObj)+"' > \n"+
+                            "<td><input type='radio' name='member_search_selected' class='radio-selected-smember'/></td> \n"+
+                            "<td>"+paramObj.userName+"</td> \n"+
+                            "<td>"+paramObj.deptName+"</td> \n"+
+                            "<td>"+paramObj.comJobX+"</td> \n"+
+                            "<td>"+paramObj.comPosition+"</td> \n"+
+                            "<td>"+paramObj.comCertBelt+"</td> \n"+ 
+                        "</tr>";
+	            		
+	            		$("#tbodyMemberSearch").append(htm);
+	            		$("#tbodyMemberSearch").append(htm);
+	            		$("#tbodyMemberSearch").append(htm);
+	            		$("#tbodyMemberSearch").append(htm);
+	            		$("#tbodyMemberSearch").append(htm);
+	            		
+	            		$("input[name=member_search_selected]:eq(0)").prop("checked", true);
+	            	}
+	            	
+	            	// 검색버튼
+	            	function onclick_searchMember(){
+	            		$(".tr-empty").hide();
+	            		addTr({});
+	            	}
+	            	
+	            	function onclick_memberTr(obj){
+	            		$(obj).find(".radio-selected-smember").prop("checked", true);
+	            		
+	            	}
+	            	
+	            	function submit_memberSearch(){
+	            		
+	            		let dt = $("input[name=member_search_selected]:checked").closest("tr").attr("data");
+	            		
+	            		
+	            		
+	            	}
+	            </script>
+	            
 	            <div class="list-footer">
-	                <div class="pagination">
+	                <div class="pagination" style="display: none;">
 	                    <a href="" class="first">처음</a>
 	                    <a href="" class="prev">이전</a>
 	                    <a href="" class="cur num">1</a>
@@ -228,8 +283,8 @@
 	                    <a href="" class="last">끝</a>
 	                </div>
 	                <div class="btns">
-	                    <button type="button" class="btn-submit">확인</button>
-	                    <button type="button" class="btn-cancel">취소</button>
+	                    <button class="btn-submit" onclick="submit_memberSearch()">확인</button>
+	                    <button class="btn-cancel">취소</button>
 	                </div>
 	            </div>
 	        </div>

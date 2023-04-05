@@ -159,32 +159,32 @@ public class AppController {
 //		return "app/qi/002_01_sub01";
 //	}
 //	
-	@RequestMapping({"/app/002_01_sub02.do"})
-	public String handler002_01_sub02(HttpServletRequest request, ModelMap model,
-			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
-			UserVO userSession)throws Exception {
-		
-		return "app/qi/002_01_sub02";
-
-	}
-	
-	@RequestMapping({"/app/002_01_sub04.do"})
-	public String handler002_01_sub04(HttpServletRequest request, ModelMap model,
-			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
-			UserVO userSession)throws Exception {
-		
-		return "app/qi/002_01_sub04";
-
-	}
-	
-	@RequestMapping({"/app/002_01_sub05.do"})
-	public String handler002_01_sub05(HttpServletRequest request, ModelMap model,
-			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
-			UserVO userSession)throws Exception {
-		
-		return "app/qi/002_01_sub05";
-
-	}
+//	@RequestMapping({"/app/002_01_sub02.do"})
+//	public String handler002_01_sub02(HttpServletRequest request, ModelMap model,
+//			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
+//			UserVO userSession)throws Exception {
+//		
+//		return "app/qi/002_01_sub02";
+//
+//	}
+//	
+//	@RequestMapping({"/app/002_01_sub04.do"})
+//	public String handler002_01_sub04(HttpServletRequest request, ModelMap model,
+//			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
+//			UserVO userSession)throws Exception {
+//		
+//		return "app/qi/002_01_sub04";
+//
+//	}
+//	
+//	@RequestMapping({"/app/002_01_sub05.do"})
+//	public String handler002_01_sub05(HttpServletRequest request, ModelMap model,
+//			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
+//			UserVO userSession)throws Exception {
+//		
+//		return "app/qi/002_01_sub05";
+//
+//	}
 	
 	@RequestMapping({"/app/002_02_search.do"})
 	public String handler002_02(HttpServletRequest request, ModelMap model,
@@ -478,7 +478,6 @@ public class AppController {
 		return "app/qi/005_04_01_certmag_01";
 	}	
 	
-	
 	@RequestMapping({"/app/008_01_apprvbox.do"})
 	public String handler008_01(HttpServletRequest request, ModelMap model,
 			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
@@ -534,7 +533,7 @@ public class AppController {
 		
 		return "app/qi/008_03_apprv_list";
 	}
-		
+	
 	@RequestMapping({"/search/009_01_total_src.do"})
 	public String handler009_01(HttpServletRequest request, ModelMap model,
 			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
@@ -542,5 +541,4 @@ public class AppController {
 		
 		return "search/009_01_total_src";
 	}
-
 }

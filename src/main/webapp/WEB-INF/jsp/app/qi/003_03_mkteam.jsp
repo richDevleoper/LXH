@@ -257,7 +257,7 @@
                                     <a href="" class="last">끝</a>
                                 </div>
                                 <div class="list-btns">
-                                    <button type="button" class="btn bg-gray">                                        
+                                    <button type="button" class="btn bg-gray" onclick="location.href='./003_03_mkteam_02.do?menuKey=70';">                                        
                                         <span>분임조등록</span>
                                     </button>                                    
                                 </div>

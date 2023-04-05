@@ -1,6 +1,8 @@
 package kr.freedi.dev.code.domain;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
@@ -27,6 +29,8 @@ public class CodeVO {
 	private Date frstOperDt;
 	private String lastOperId;
 	private Date lastOperDt;
+	
+	private String[] codeGrpIdList;
 
 	public CodeVO(){
 	}
@@ -116,6 +120,19 @@ public class CodeVO {
 	public void setViewOrd(Integer viewOrd) {
 		this.viewOrd = viewOrd;
 	}
+
+
+
+
+	public String[] getCodeGrpIdList() {
+		return codeGrpIdList;
+	}
+
+
+	public void setCodeGrpIdList(String[] codeGrpIdList) {
+		this.codeGrpIdList = codeGrpIdList;
+	}
+
 
 	public String toString(){
 		return ToStringBuilder.reflectionToString(this);

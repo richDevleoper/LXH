@@ -5,9 +5,18 @@
 	<sql id="fullCond">
 		<where>
 			<trim prefixOverrides="AND|OR">
-				AND T.CODE_GRP_ID = #{codeGrpId}	
+				<if test="codeGrpId != null and codeGrpId != ''">
+					AND T.CODE_GRP_ID = #{codeGrpId}
+				</if>	
 				<if test="actFlg != null and actFlg != ''">
 					AND T.ACT_FLG = #{actFlg}	
+				</if>
+				<if test="codeGrpIdList != null and codeGrpIdList.length>0">
+					AND T.CODE_GRP_ID in (
+			        <foreach collection="codeGrpIdList" item="item" index="index" separator=",">
+			            '${item}'
+			        </foreach>
+		        	) 
 				</if>
 			</trim>
 		</where>
@@ -29,7 +38,7 @@
 			,T.LAST_OPER_DT
 		FROM TB_CODE T
 		<include refid="fullCond"></include>
-		ORDER BY T.VIEW_ORD ASC, T.CODE_ID ASC, T.CODE_NM ASC
+		ORDER BY T.CODE_GRP_ID, T.VIEW_ORD ASC, T.CODE_ID ASC, T.CODE_NM ASC
 	</select>
 	
 	<select id="select" resultType="kr.freedi.dev.code.domain.CodeVO">

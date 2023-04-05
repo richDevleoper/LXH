@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+
 import egovframework.rte.fdl.idgnr.EgovIdGnrService;
 import egovframework.rte.psl.dataaccess.util.EgovMap;
 import kr.freedi.dev.article.domain.ArticleSearchVO;
@@ -41,6 +42,9 @@ import kr.freedi.dev.qreport.domain.ReportSearchVO;
 import kr.freedi.dev.qreport.domain.ReportVO;
 import kr.freedi.dev.qreport.service.ReportService;
 import kr.freedi.dev.user.domain.UserVO;
+
+
+
 
 /**
  * @project : dev_default
@@ -67,7 +71,7 @@ public class ReportController {
 	
 	@InitBinder
 	public void customizeBinding(WebDataBinder binder) {
-		SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
 		dateFormatter.setLenient(false);
 		binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormatter, true));
 	}
@@ -100,9 +104,8 @@ public class ReportController {
 		}
 
 	}
-	
-	
-//	// 과제 - 리스트
+
+	// 과제 - 리스트
 	@RequestMapping({"/list.do", "/002_01_mission.do"})
 	public String handler002_01(HttpServletRequest request, ModelMap model,
 			@ModelAttribute("reportVO") ReportVO reportVO,
@@ -131,7 +134,6 @@ public class ReportController {
 		model.addAttribute("reportList", reportList);
 		model.addAttribute("totalCount", totalCount);
 	
-		
 		CodeVO codeVO = new CodeVO(); 
 		codeVO.setCodeGrpId("6SIG_YN");
 		codeVO.setActFlg("Y"); 
@@ -153,7 +155,6 @@ public class ReportController {
 		codeVO.setActFlg("Y"); 
 		model.addAttribute("searchStatus", codeService.selectFullList(codeVO));
 		
-		
 //		HashMap<String, Integer> count = new HashMap<>();
 //		
 //		for (ReportVO item : reportList) {
@@ -167,7 +168,7 @@ public class ReportController {
 //			}
 //		}
 //		System.out.println(count.toString());
-		return "app/qi/002_01_mission";
+		return "app/report/List";
 	}
 	
 	
@@ -180,27 +181,35 @@ public class ReportController {
 		
 		model.addAttribute("menuKey", searchVO.getMenuKey());
 		
+		if(reportVO.getRepCode() != null) {
+				
+			ReportVO dbReportVO = new ReportVO();
+			dbReportVO = reportService.select(reportVO);
+			// 키 코드가 파라메터로 들어오면 임시저장건 수정모드로 진행
+			if(dbReportVO.getRepStatusCode().equals("1")) {
+				dbReportVO.setMode("UPDATE");
+				model.addAttribute("reportVO", dbReportVO);		
+			} else {
+				return "redirect:list.do";
+			}
+		} 
+		
 		CodeVO codeVO = new CodeVO(); 
+		
+		// 그 외 코드 바인딩, 개별 코드별로 부르는 것이 오래 걸려 한번에 불러오도록 커스터마이징(23/4/3) 
+		String[] arrCodeGrpIds = {"6SIG_YN", "RP_TY1", "RP_TY2", "RP_TY3", "SECTOR", "ACTTYPE", "LDRBELT", "MBBUSERT", "RESULTTY"};
+		codeVO.setCodeGrpIdList(arrCodeGrpIds);
+		codeVO.setActFlg("Y"); 
+		model.addAttribute("allCodes", codeService.selectFullList(codeVO));
+
+		// 6sigma Full Process 여부, 최초 바인딩이 필요해 별도로 조회
 		codeVO.setCodeGrpId("6SIG_YN");
 		codeVO.setActFlg("Y"); 
 		model.addAttribute("divisionCode", codeService.selectFullList(codeVO));
 		
-		codeVO.setCodeGrpId("RP_TY1");
-		codeVO.setActFlg("Y"); 
-		model.addAttribute("typeCode1", codeService.selectFullList(codeVO));
-		
-		codeVO.setCodeGrpId("RP_TY2");
-		codeVO.setActFlg("Y"); 
-		model.addAttribute("typeCode2", codeService.selectFullList(codeVO));
-		
-		codeVO.setCodeGrpId("RP_TY3");
-		codeVO.setActFlg("Y"); 
-		model.addAttribute("typeCode3", codeService.selectFullList(codeVO));
-		
 		model.addAttribute("action", "/report/insert.do");
 		
-		
-		return "app/qi/002_01_sub01";
+		return "app/report/InsertForm";
 	}  
 	
 	@RequestMapping({"/insert.do"})
@@ -233,10 +242,15 @@ public class ReportController {
 		//reportVO.setRepStatusCode("1");
 	
 //		//insert article
-		reportService.insert(reportVO);
+		if(reportVO.getMode().equals("UPDATE")) {
+			reportService.update(reportVO);	
+		} else {
+			reportService.insert(reportVO);	
+		}
+		
 
-		return "redirect:/report/002_01_sub01.do?menuKey=29";
-		//return "redirect:/sub.do?menuKey=29";
+		//return "redirect:/report/002_01_sub01.do?menuKey=29";
+		return "redirect:/sub.do?menuKey=29";
 	}
 	
 	@RequestMapping({"/updateForm.do"})

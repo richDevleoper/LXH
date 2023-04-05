@@ -17,6 +17,8 @@
 <body>
 <form:form commandName="frmReport" id="defaultForm" name="defaultForm"  action="${action}" onsubmit="return false" method="post" modelAttribute="reportVO">
 <form:hidden path="repStatusCode" />
+<form:hidden path="repCode" />
+<form:hidden path="mode" />
                         <!-- breadcrumb -->
                         <div class="breadcrumb">
                             <ul>
@@ -53,7 +55,7 @@
                                                         <div class="col s12 select-group">
                                                             <form:select path="repDivisionCode" title="6σ Full Process여부 선택">
 																<c:forEach var="item" items="${divisionCode}">
-																	<option value="${item.codeId}" <c:if test="${item.codeId eq articleVO.catgr }">selected="selected"</c:if>>${item.codeNm}</option>
+																	<option value="${item.codeId}" <c:if test="${item.codeId eq reportVO.repDivisionCode }">selected="selected"</c:if>>${item.codeNm}</option>
 																</c:forEach>
                                                             </form:select>
                                                         </div>
@@ -144,21 +146,13 @@
                                                                     <th str1="Control" str2="Implement">Control</th>
                                                                     <th str1="Finish" str2="Finish">Finish</th>
                                                                 </tr>
-                                                                <%/*
-																	REP_SIX_MEASUER_DATE		2
-																	REP_SIX_EXPLORE_DATE		3
-																	REP_SIX_DEVELOP_DATE		4
-																	REP_SIX_IMPLEMENT_DATE		5
-																	REP_START_DATE    			1
-																	REP_FINISH_DATE				6
-                                                                */%>
                                                             </thead>
                                                             <tbody>
                                                                 <tr>
                                                                     <td class="pd3">
                                                                         <div class="row"><!-- Define -->
                                                                             <div class="col s12 input-text input-date">
-                                                                                <input type="text" id="dtPlan01" name="REP_START_DATE" value="" class="datepicker">
+                                                                                <form:input type="text" path="repStartDate" class="datepicker" />
                                                                                 <i class="ico calendar"></i>
                                                                             </div>
                                                                         </div>
@@ -166,7 +160,7 @@
                                                                     <td class="pd3">
                                                                         <div class="row"><!-- Measure -->
                                                                             <div class="col s12 input-text input-date">
-                                                                                <input type="text" id="dtPlan02" name="REP_SIX_MEASUER_DATE" value="" class="datepicker">
+                                                                                <form:input type="text" path="repSixMeasureDate" class="datepicker 6sigma-date"/>
                                                                                 <i class="ico calendar"></i>
                                                                             </div>
                                                                         </div>
@@ -174,7 +168,7 @@
                                                                     <td class="pd3">
                                                                         <div class="row"><!-- Analyze / Explore -->
                                                                             <div class="col s12 input-text input-date">
-                                                                                <input type="text" id="dtPlan03" name="REP_SIX_EXPLORE_DATE" value="" class="datepicker">
+                                                                                <form:input type="text" path="repSixExploreDate" class="datepicker 6sigma-date"/>
                                                                                 <i class="ico calendar"></i>
                                                                             </div>
                                                                         </div>
@@ -182,7 +176,7 @@
                                                                     <td class="pd3">
                                                                         <div class="row"><!-- Improve / Develop -->
                                                                             <div class="col s12 input-text input-date">
-                                                                                <input type="text" id="dtPlan04" name="REP_SIX_DEVELOP_DATE" value="" class="datepicker">
+                                                                                <form:input type="text" path="repSixDevelopDate" class="datepicker 6sigma-date"/>
                                                                                 <i class="ico calendar"></i>
                                                                             </div>
                                                                         </div>
@@ -190,7 +184,7 @@
                                                                     <td class="pd3">
                                                                         <div class="row"><!-- Control / Implement -->
                                                                             <div class="col s12 input-text input-date">
-                                                                                <input type="text" id="dtPlan05" name="REP_SIX_IMPLEMENT_DATE" value="" class="datepicker">
+                                                                                <form:input type="text" path="repSixImplementDate"  class="datepicker 6sigma-date"/>
                                                                                 <i class="ico calendar"></i>
                                                                             </div>
                                                                         </div>
@@ -198,7 +192,7 @@
                                                                     <td class="pd3">
                                                                         <div class="row"><!-- Finish -->
                                                                             <div class="col s12 input-text input-date">
-                                                                                <input type="text" id="dtPlan06" name="REP_FINISH_DATE" value="" class="datepicker">
+                                                                                <form:input type="text" path="repFinishDate" class="datepicker"/>
                                                                                 <i class="ico calendar"></i>
                                                                             </div>
                                                                         </div>
@@ -230,7 +224,7 @@
                                                                     <td class="pd3">
                                                                         <div class="row">
                                                                             <div class="col s12 input-text input-date" style="float:none;width:120px;margin:0 auto !important">
-                                                                                <input type="text" id="" name="REP_START_DATE_2" value="">
+                                                                                <input type="text" id="repStartDate2" name="REP_START_DATE_2" value="" class="datepicker" onchange="onchange_repStartDate(this)">
                                                                                 <i class="ico calendar"></i>
                                                                             </div>
                                                                         </div>
@@ -238,7 +232,7 @@
                                                                     <td class="pd3">
                                                                         <div class="row">
                                                                             <div class="col s12 input-text input-date" style="float:none;width:120px;margin:0 auto !important">
-                                                                                <input type="text" id="" name="REP_FINISH_DATE_2" value="">
+                                                                                <input type="text" id="repFinishDate2" name="REP_FINISH_DATE_2" value="" class="datepicker" onchange="onchange_repFinishDate(this)">
                                                                                 <i class="ico calendar"></i>
                                                                             </div>
                                                                         </div>
@@ -255,19 +249,20 @@
                                                     <div class="row">
                                                         <div class="col s8">
                                                             <div class="col s2 input-text pd-r10" style="width:20%">
-                                                                <input type="text" id="txtRepKeyword_1" name="REP_KEYWORD" value="" title="키워드를 입력해주세요.">
+                                                            	<form:input type="hidden" path="repKeyword" />
+                                                                <input type="text" id="txtRepKeyword_1" name="REP_KEYWORD" class="obj-rep-keyword" value="" title="키워드를 입력해주세요." onkeyup="onkeypress_repKeyword(this)">
                                                             </div>
                                                             <div class="col s2 input-text pd-r10" style="width:20%">
-                                                                <input type="text" id="txtRepKeyword_2" name="REP_KEYWORD" value="" title="키워드를 입력해주세요.">
+                                                                <input type="text" id="txtRepKeyword_2" name="REP_KEYWORD" class="obj-rep-keyword" value="" title="키워드를 입력해주세요." onkeyup="onkeypress_repKeyword(this)">
                                                             </div>
                                                             <div class="col s2 input-text pd-r10" style="width:20%">
-                                                                <input type="text" id="txtRepKeyword_3" name="REP_KEYWORD" value="" title="키워드를 입력해주세요.">
+                                                                <input type="text" id="txtRepKeyword_3" name="REP_KEYWORD" class="obj-rep-keyword" value="" title="키워드를 입력해주세요." onkeyup="onkeypress_repKeyword(this)">
                                                             </div>
                                                             <div class="col s2 input-text pd-r10" style="width:20%">
-                                                                <input type="text" id="txtRepKeyword_4" name="REP_KEYWORD" value="" title="키워드를 입력해주세요.">
+                                                                <input type="text" id="txtRepKeyword_4" name="REP_KEYWORD" class="obj-rep-keyword" value="" title="키워드를 입력해주세요." onkeyup="onkeypress_repKeyword(this)">
                                                             </div>
                                                             <div class="col s2 input-text pd-r10" style="width:20%">
-                                                                <input type="text" id="txtRepKeyword_5" name="REP_KEYWORD" value="" title="키워드를 입력해주세요.">
+                                                                <input type="text" id="txtRepKeyword_5" name="REP_KEYWORD" class="obj-rep-keyword" value="" title="키워드를 입력해주세요." onkeyup="onkeypress_repKeyword(this)">
                                                             </div>
                                                         </div>
                                                         <span class="col s4 text-bul" style="letter-spacing:-1px">
@@ -282,9 +277,20 @@
                             </div>
                         </div>
                         <p class="content_title">2. 팀구성 및 승인자</p>
+                        <c:out value="${reportVO.repTemMemberList}" />
                         <div class="list-wrap">
                             <div class="list-content">
                                 <div class="list-table list">
+                                <!-- 
+									REP_ROLE	1	과제리더
+									REP_ROLE	2	팀멤버
+									REP_ROLE	3	과제지도/사원
+									REP_ROLE	4	PROCESS OWNER
+									REP_ROLE	5	챔피언
+									REP_ROLE	6	분임조장
+									REP_ROLE	7	분임조사무국
+									REP_ROLE	8	분임조팀장                                
+                                 -->
                                     <table class="centered">
                                         <caption></caption>
                                         <colgroup>
@@ -307,53 +313,57 @@
                                                 <th>추가/삭제</th>
                                             </tr>
                                         </thead>
+                                       <!-- # To-Do -->
                                         <tbody>
-                                            <tr>
-                                                <th><label path="text3"><span class="asterisk">*</span>과제리더</form></th>
+                                            <tr class="tr-team-role-1">
+                                                <th><label><span class="asterisk">*</span>과제리더</label></th>
                                                 <td class="pd3">
                                                     <div class="row">
+                                                    	
+                                                    <!-- <input type="hidden" name="repTemMemberList[0].repTeamCode" value="1"/> -->
+                                                    <input type="hidden" name="repTeamMemRole" value="1"/> <!-- 1 과제리더 -->
+                                                    <input type="hidden" name="">
                                                         <div class="col s12 input-text search">
-                                                            <input type="text" id="text3" name="" value="">
-                                                            <button type="button">검색</button>
+                                                            <input type="text" class='dept-full-name' readonly>
+                                                            <button type="button" class="btn-search-emp">검색</button>
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <td>홍길동</td>
-                                                <td>책임</td>
-                                                <td>팀장</td>
-                                                <td>MBB</td>
-                                                <td class="pd3">
-                                                    <!-- <div class="btn-group">
-                                                        <button type="button" class="btn light-gray">추가</button>
-                                                    </div> -->
-                                                </td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td class="pd3"></td>
                                             </tr>
-                                            <tr class="tr-team-member">
-                                                <th><label path="text4"><span class="asterisk">*</span>팀멤버</label></th>
+                                            <tr class="tr-team-role-2">
+                                                <th><label><span class="asterisk">*</span>팀멤버</label></th>
                                                 <td class="pd3">
                                                     <div class="row">
+                                                    
+                                                    <input type="hidden" name="repTeamMemRole" value="2"/> <!-- 2 팀멤버 -->
                                                         <div class="col s12 input-text search">
-                                                            <input type="text" id="text4" name="" value="">
+                                                            <input type="text" class='dept-full-name' readonly>
                                                             <button type="button" class="btn-org btn-psmg-search-modal">검색</button>
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <td>홍길동</td>
-                                                <td>책임</td>
-                                                <td>팀장</td>
-                                                <td>MBB</td>
+                                                <td class="com-name"></td>
+                                                <td class="jobx"></td>
+                                                <td class="position"></td>
+                                                <td class="belt">MBB</td>
                                                 <td class="pd3">
                                                     <div class="btn-group">
                                                         <button type="button" class="btn light-gray btn-team-member-add">추가</button>
                                                     </div>
                                                 </td>
                                             </tr>
-                                            <tr>
-                                                <th><label path="text7" class="color primary"><span class="asterisk">*</span>과제지도/사원</label></th>
+                                            <tr class="tr-team-guide">
+                                                <th><label for="text7" class="color primary"><span class="asterisk">*</span>과제지도/사원</label></th>
                                                 <td class="pd3">
                                                     <div class="row">
+                                                    	<input type="hidden" name="repTeamMemRole" value="3"/> <!-- 3 과제지도/사원 -->
                                                         <div class="col s12 input-text search">
-                                                            <input type="text" id="text7" name="" value="">
+                                                            <input type="text" class='dept-full-name' readonly>
                                                             <button type="button">검색</button>
                                                         </div> 
                                                     </div>
@@ -362,18 +372,15 @@
                                                 <td>책임</td>
                                                 <td>팀장</td>
                                                 <td>MBB</td>
-                                                <td class="pd3">
-                                                    <!-- <div class="btn-group">
-                                                        <button type="button" class="btn light-gray">추가</button>
-                                                    </div> -->
-                                                </td>
+                                                <td class="pd3"></td>
                                             </tr>
-                                            <tr>
-                                                <th><label path="text8">Process Owner</label></th>
+                                            <tr class="tr-team-proc-owner">
+                                                <th><label for="text8">Process Owner</label></th>
                                                 <td class="pd3">
                                                     <div class="row">
+                                                    <input type="hidden" name="repTeamMemRole" value="4"/> <!-- 4	PROCESS OWNER -->
                                                         <div class="col s12 input-text search">
-                                                            <input type="text" id="text8" name="" value="">
+                                                            <input type="text" class='dept-full-name' readonly>
                                                             <button type="button">검색</button>
                                                         </div>
                                                     </div>
@@ -382,18 +389,15 @@
                                                 <td>책임</td>
                                                 <td>팀장</td>
                                                 <td>MBB</td>
-                                                <td class="pd3">
-                                                    <!-- <div class="btn-group">
-                                                        <button type="button" class="btn light-gray">추가</button>
-                                                    </div> -->
-                                                </td>
+                                                <td class="pd3"></td>
                                             </tr>
-                                            <tr>
-                                                <th><label path="text9" class="color primary"><span class="asterisk">*</span>챔피언</label></th>
+                                            <tr class="tr-team-champion">
+                                                <th><label for="text9" class="color primary"><span class="asterisk">*</span>챔피언</label></th>
                                                 <td class="pd3">
                                                     <div class="row">
+                                                    <input type="hidden" name="repTeamMemRole" value="5"/> <!-- 5	챔피언 -->
                                                         <div class="col s12 input-text search">
-                                                            <input type="text" id="text9" name="" value="">
+                                                            <input type="text" class='dept-full-name' readonly>
                                                             <button type="button">검색</button>
                                                         </div>
                                                     </div>
@@ -402,11 +406,7 @@
                                                 <td>책임</td>
                                                 <td>팀장</td>
                                                 <td>MBB</td>
-                                                <td class="pd3">
-                                                    <!-- <div class="btn-group">
-                                                        <button type="button" class="btn light-gray">추가</button>
-                                                    </div> -->
-                                                </td>
+                                                <td class="pd3"></td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -730,8 +730,8 @@
                         </div>
                         <div class="list-footer">
                             <div class="list-btns">
-                                <button type="button" class="btn light-gray" id="btnSave">저장</button>
-                                <button type="button" class="btn bg-gray" id="btnReqApproval">결재완료</button>
+                                <button type="button" class="btn light-gray" id="btnSave">임시저장</button>
+                                <button type="button" class="btn bg-gray" id="btnReqApproval">결재의뢰</button>
                                 <a href="./list.do?menuKey=${menuKey}" class="btn">목록</a>
                             </div>
                         </div>
@@ -741,14 +741,18 @@
 <script type="text/javascript">
 	
 	
-	let cdListSector = [{key:1,value:'창호'},{key:2,value:'바닥재'},{key:3,value:'단열재'},{key:4,value:'벽지'},{key:5,value:'표면소재'},{key:6,value:'산업용필름'},{key:7,value:'자동차소재부품'},{key:8,value:'인테리어'},{key:9,value:'연구소'},{key:10,value:'품질'},{key:11,value:'생산기술(제조혁신)'},{key:12,value:'환경안전'},{key:13,value:'기타'}];
-	let cdLeaderBelt = [{key:1,value:'GB'},{key:2,value:'BB'},{key:3,value:'BB후보'},{key:4,value:'MBB'},{key:5,value:'MBB후보'},{key:6,value:'MGB'},{key:7,value:'No Belt'}];
-	let cdActionType = [{key:1,value:'품질개선'},{key:2,value:'개발'},{key:3,value:'생산성향상'},{key:4,value:'원가개선'},{key:5,value:'기타'}];
-	let cdMbbUseRate = [{key:1,value:'해당없음'},{key:2,value:'직접수행'},{key:3,value:'지원MBB'},{key:4,value:'팀장MBB '}];
-	let cdRepResultType = [{key:1,value:'외부실패비용'},{key:2,value:'내부실패비용'},{key:3,value:'매출액'},{key:4,value:'제조원가'},{key:5,value:'상품원가'},{key:6,value:'기타 영업이익'},{key:7,value:'해당없음 '}];
-	let cdRepType1 = [<c:forEach var="item" items="${typeCode1}">{key:${item.codeId},value:"${item.codeNm}"},</c:forEach>];
-	let cdRepType2 = [<c:forEach var="item" items="${typeCode2}">{key:${item.codeId},value:"${item.codeNm}"},</c:forEach>];
-	let cdRepType3 = [<c:forEach var="item" items="${typeCode3}">{key:${item.codeId},value:"${item.codeNm}"},</c:forEach>];
+	let cdListSector = []; //[{key:1,value:'창호'},{key:2,value:'바닥재'},{key:3,value:'단열재'},{key:4,value:'벽지'},{key:5,value:'표면소재'},{key:6,value:'산업용필름'},{key:7,value:'자동차소재부품'},{key:8,value:'인테리어'},{key:9,value:'연구소'},{key:10,value:'품질'},{key:11,value:'생산기술(제조혁신)'},{key:12,value:'환경안전'},{key:13,value:'기타'}];
+	let cdLeaderBelt = []; // = [{key:1,value:'GB'},{key:2,value:'BB'},{key:3,value:'BB후보'},{key:4,value:'MBB'},{key:5,value:'MBB후보'},{key:6,value:'MGB'},{key:7,value:'No Belt'}];
+	let cdActionType = []; // = [{key:1,value:'품질개선'},{key:2,value:'개발'},{key:3,value:'생산성향상'},{key:4,value:'원가개선'},{key:5,value:'기타'}];
+	let cdMbbUseRate = []; // = [{key:1,value:'해당없음'},{key:2,value:'직접수행'},{key:3,value:'지원MBB'},{key:4,value:'팀장MBB '}];
+	let cdRepResultType = []; // = [{key:1,value:'외부실패비용'},{key:2,value:'내부실패비용'},{key:3,value:'매출액'},{key:4,value:'제조원가'},{key:5,value:'상품원가'},{key:6,value:'기타 영업이익'},{key:7,value:'해당없음 '}];
+	let cdRepType1 = [];
+	let cdRepType2 = [];
+	let cdRepType3 = [];
+	
+	let codes = [<c:forEach var="item" items="${allCodes}">
+		{index:"${item.codeGrpId}",key:${item.codeId},value:"${item.codeNm}"},</c:forEach>
+	];
 	
 </script>
 <script type="text/javascript">
@@ -756,21 +760,56 @@
 	
 	function init(){
 		
+		initCode();
 		
-		onchange_ddlRepDevisionCode();	// 초기셋팅을 위한 호출
-		
-		setDropDown("repSectorCode", cdListSector, true);//부문코드
-		setDropDown("repLeaderBeltCode", cdLeaderBelt, true);//리더벨트
-		setDropDown("repActionTypeCode", cdActionType, true);//활동분야
-		setDropDown("repMbbUseRateCode", cdMbbUseRate, true);//MBB활용율
-		
-		$("#lblUseRefDt").text("2023"); $("#hidUseRefDt").val("2023");	//활용율 반영년도
-		
-		setDropDown("ddlRepResultTypeCode1", cdRepResultType, true);//성과항목
-		
+		setControl()
 		
 		setEvent();
 		
+	}
+	
+	function initCode(){
+		cdListSector = codes.filter(function(code){ return code.index==="SECTOR"; });
+		cdLeaderBelt = codes.filter(function(code){ return code.index==="LDRBELT"; });
+		cdActionType = codes.filter(function(code){ return code.index==="ACTTYPE"; });
+		cdMbbUseRate = codes.filter(function(code){ return code.index==="MBBUSERT"; });
+		cdRepResultType = codes.filter(function(code){ return code.index==="RESULTTY";});
+		cdRepType1 = codes.filter(function(code){ return code.index==="RP_TY1";});
+		cdRepType2 = codes.filter(function(code){ return code.index==="RP_TY2";});
+		cdRepType3 = codes.filter(function(code){ return code.index==="RP_TY3";});
+	}
+	
+	function setControl(){
+		
+		setDropDown("repSectorCode", cdListSector, true);//부문코드
+		$("#repSectorCode").val("${reportVO.repSectorCode}")
+		
+		setDropDown("repLeaderBeltCode", cdLeaderBelt, true);//리더벨트
+		$("#repLeaderBeltCode").val("${reportVO.repLeaderBeltCode}")
+		
+		setDropDown("repActionTypeCode", cdActionType, true);//활동분야
+		$("#repActionTypeCode").val("${reportVO.repActionTypeCode}")
+		
+		setDropDown("repMbbUseRateCode", cdMbbUseRate, true);//MBB활용율
+		$("#repMbbUseRateCode").val("${reportVO.repMbbUseRateCode}")
+		
+		setDropDown("ddlRepResultTypeCode1", cdRepResultType, true);//성과항목
+		$("#lblUseRefDt").text("2023"); $("#hidUseRefDt").val("2023");	//활용율 반영년도
+		
+		onchange_ddlRepDevisionCode();	// 과제유형
+		$("#repTypeCode").val("${reportVO.repTypeCode}");
+		
+		if($("#mode").val()==="UPDATE"){
+			$("#repStartDate2").val($("#repStartDate").val());
+			$("#repFinishDate2").val($("#repFinishDate").val());
+		}
+		
+		if($("#repKeyword").val()){
+			let arrKeyword = $("#repKeyword").val().split(",");
+			$(arrKeyword).each(function(i,o){
+				$(".obj-rep-keyword:eq("+i+")").val(o);
+			});
+		}
 	}
 	
 	function setEvent(){
@@ -784,24 +823,29 @@
 		//팀멤버 추가
 		$('.btn-team-member-add').on('click', function() {
 			
+			/* 
+			추가 인원수 제한
 			if($(".tr-team-member").length>4){
 				return false;
 			}
+			*/
 			
 		    let oParent = $(this).closest('tr')
 		    let oClone = oParent.clone();
 		    oClone.find('input').val('');
 		    oClone.find('th > label').text('팀멤버');
 		    oClone.find('td:nth-child(3), td:nth-child(4), td:nth-child(5), td:nth-child(6)').text('');
-		    oClone.find('.btn-team-member-add').text('삭제');
+ 		    oClone.find('.btn-team-member-add').text('삭제');
 		    oClone.find('.btn-group button').removeClass('btn-team-member-add').addClass('btn-team-member-remove');
 		    oParent.after(oClone);
+		    
+		 	// 팀멤버 삭제
+			$('.btn-team-member-remove').off("click").on('click', function() {
+				$(this).closest('tr').remove();
+			});
 		});
 		
-		// 팀멤버 삭제
-		$('.btn-team-member-remove').on('click', function() {
-		    $(this).closest('tr').remove();
-		});
+		
 		
 		//저장버튼
 		$("#btnSave").on("click", function(){
@@ -817,6 +861,10 @@
 				$("#repStatusCode").val("2"); // 상태 임시저장 으로 저장
 				$("#defaultForm")[0].submit();	
 			};
+		});
+		
+		$(".btn-search-emp").on("click", function(){
+			callPopup_searchEmployee(this);
 		});
 		
 	}
@@ -837,7 +885,6 @@
 		case "1": //6sigma
 			arrRepType = cdRepType1;
 			$("#trRepDate1").show();
-			changeTitle();
 			break;
 		case "2": //일반
 			arrRepType = cdRepType2;
@@ -850,21 +897,25 @@
 		default:
 			break;
 		}
+		changeTitle();
 		setDropDown(targetObjId, arrRepType, true);
 	}
 	
 	function onchange_ddlRepTypeCode(e){
+		
 		changeTitle(); // 6sigma 일정계획 타이틀 변경( DMAIC ↔ DMEDI )
 	}
 	
 	function changeTitle(){
 		let repDevCd = $("#repDivisionCode").val(); 	// 6sigma F-P 여부
 		let repTypeCd = $("#repTypeCode").val();	// 과제유형
+		
 		if(repDevCd==="1"){
 			let focusAttr = "";
 			if(repTypeCd==="2"){
 				//DMEDI str2
 				focusAttr = "str2";
+				
 			} else {
 				//DMAIC str1
 				focusAttr = "str1";
@@ -872,7 +923,52 @@
 			$("#trPlanDateLabel th").each(function(i,o){
 			    $(o).text($(o).attr(focusAttr))
 			});
+		} else {
+			// 일반과제, 10+과제
+			$(".6sigma-date").each(function(i, o){
+				$(o).val("");
+			});
 		}
+	}
+	
+	function onkeypress_repKeyword(obj){
+		
+		filterString(obj);
+		
+		let sumStr = "";
+		
+		$(".obj-rep-keyword").each(function(i,o){
+			if(!$(o).val()){
+				console.log("없음!")
+			} else {
+				if(i>0)
+			    	sumStr += ",";
+			    sumStr += $(o).val();	
+			}
+		});
+		
+		$("#repKeyword").val(sumStr);
+		console.log($("#repKeyword").val())
+	}
+	
+	function filterString(obj){
+
+		const reg = /[\{\}\ \[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi;
+		
+		// 허용할 특수문자는 여기서 삭제하면 됨
+		// 지금은 띄어쓰기도 특수문자 처리됨 참고하셈
+		if( reg.test(obj.value) ){
+			console.log("특수문자는 입력하실수 없습니다.");
+			obj.value = obj.value.replace(reg,'');
+		}	
+	}
+	
+	function onchange_repStartDate(obj){
+		$("#repStartDate").val(obj.value);
+	}
+	
+	function onchange_repFinishDate(obj){
+		$("#repFinishDate").val(obj.value);
 	}
 	
 	function validate(){
@@ -898,6 +994,40 @@
 		// 예상성과 아래 열의 갯수만큼 반복하며 체크하기
 		// ㄴ *성과항목
 		return true;
+	}
+	
+	// 팝업 호출 함수
+	function callPopup_searchEmployee(obj){
+		
+		// footer.jsp 내 영역 호출
+		vMemberSearchReturnId = $(obj).closest("td").find("input").attr("id");
+		vMemberSearchReturnFunc = returnPopup_searchEmployee;
+		$(".modal-dimmed").show();
+		$("#comPopup_memberSearch").show();
+	}
+	
+	// 팝업에서 돌아올 때 함수
+	function returnPopup_searchEmployee(data){
+		console.log(data);
+		debugger;
+		console.log($("#"+vMemberSearchReturnId));
+		vMemberSearchReturnFunc();
+		closePopup();
+	}
+	
+	function initPopup(){
+		
+		$(".tr-data").remove();
+		$(".tr-empty").show();
+		// text-box 비우기
+		
+	}
+	
+	function closePopup(){
+		$(".modal-dimmed").hide();
+ 		$("#comPopup_memberSearch").hide();
+ 		
+ 		initPopup();
 	}
 	
 
