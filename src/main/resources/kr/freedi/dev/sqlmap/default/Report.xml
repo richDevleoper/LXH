@@ -15,10 +15,10 @@
 		<result property="repMbbUseRateCode" column="REP_MBB_USE_RATE_CODE" />
 		<result property="repUseRefDate" column="REP_USE_REF_DATE" />
 		<result property="repStatusCode" column="REP_STATUS_CODE" />
-		<result property="repSixMeasureDate" column="REP_SIX_MEASUER_DATE" />
+		<!-- <result property="repSixMeasureDate" column="REP_SIX_MEASUER_DATE" />
 		<result property="repSixExploreDate" column="REP_SIX_EXPLORE_DATE" />
 		<result property="repSixDevelopDate" column="REP_SIX_DEVELOP_DATE" />
-		<result property="repSixImplementDate" column="REP_SIX_IMPLEMENT_DATE" />
+		<result property="repSixImplementDate" column="REP_SIX_IMPLEMENT_DATE" /> -->
 		<result property="repStartDate" column="REP_START_DATE" />
 		<result property="repFinishDate" column="REP_FINISH_DATE" />
 		<result property="repKeyword" column="REP_KEYWORD" />
@@ -72,8 +72,8 @@
             c_ty.code_nm  AS rep_type,
             rep_status_code,
             c_st.code_nm  AS rep_status,
-            rep_start_date,
-            rep_finish_date
+            (select min(REP_PLAN_START_DATE) from tb_report_detail m where m.rep_code=t.rep_code) rep_start_date,
+            (select case when m.rep_devision_code='1' then max(REP_PLAN_START_DATE) else max(REP_PLAN_END_DATE) end as rep_finish_date from tb_report_detail m where m.rep_code=T.rep_code group by rep_code, m.rep_devision_code) rep_finish_date
         FROM
             report_mst T,
             tb_code    c_div,
@@ -133,12 +133,7 @@
 			, REP_MBB_USE_RATE_CODE
 			, REP_USE_REF_DATE
 			, REP_STATUS_CODE
-			, REP_SIX_MEASUER_DATE
-			, REP_SIX_EXPLORE_DATE
-			, REP_SIX_DEVELOP_DATE
-			, REP_SIX_IMPLEMENT_DATE
-			, REP_START_DATE
-			, REP_FINISH_DATE
+			
 			, REP_KEYWORD
 			, REP_REG_USER
 			, REP_REG_DATE
@@ -162,12 +157,7 @@
 			,#{repMbbUseRateCode} 
 			,#{repUseRefDate} 
 			,#{repStatusCode} 
-			,#{repSixMeasureDate} 
-			,#{repSixExploreDate} 
-			,#{repSixDevelopDate} 
-			,#{repSixImplementDate} 
-			,#{repStartDate} 
-			,#{repFinishDate} 
+			 
 			,#{repKeyword} 
 			, sysdate
 			,#{repRegDate} 
@@ -194,12 +184,7 @@
 			, REP_MBB_USE_RATE_CODE = #{repMbbUseRateCode}
 			, REP_USE_REF_DATE = #{repUseRefDate} 
 			, REP_STATUS_CODE = #{repStatusCode} 
-			, REP_SIX_MEASUER_DATE = #{repSixMeasureDate} 
-			, REP_SIX_EXPLORE_DATE = #{repSixExploreDate} 
-			, REP_SIX_DEVELOP_DATE = #{repSixDevelopDate} 
-			, REP_SIX_IMPLEMENT_DATE = #{repSixImplementDate} 
-			, REP_START_DATE = #{repStartDate} 
-			, REP_FINISH_DATE = #{repFinishDate} 
+ 
 			, REP_KEYWORD = #{repKeyword} 
 			, REP_UPDATE_USER = #{repRegUser} 
 			, REP_UPDATE_DATE = sysdate
@@ -228,12 +213,6 @@
 			, REP_MBB_USE_RATE_CODE
 			, REP_USE_REF_DATE
 			, REP_STATUS_CODE
-			, REP_SIX_MEASUER_DATE
-			, REP_SIX_EXPLORE_DATE
-			, REP_SIX_DEVELOP_DATE
-			, REP_SIX_IMPLEMENT_DATE
-			, REP_START_DATE
-			, REP_FINISH_DATE
 			, REP_KEYWORD
 			, REP_REG_USER
 			, REP_REG_DATE

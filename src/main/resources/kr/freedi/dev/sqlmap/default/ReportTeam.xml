@@ -1,122 +1,98 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="Report">
+<mapper namespace="ReportTeam">
 
-	<resultMap id="reportMap" type="kr.freedi.dev.qreport.domain.ReportVO">		
+	<resultMap id="reportTeamMap" type="kr.freedi.dev.qreport.domain.ReportTeamVO">		
+		<result property="repTeamCode" column="REP_TEAM_CODE" />
 		<result property="repCode" column="REP_CODE" />
-		<result property="repName" column="REP_NAME" />
-		<result property="repMenuCode" column="REP_MENU_CODE" />
-		<result property="repDivisionCode" column="REP_DEVISION_CODE" />
-		<result property="repTypeCode" column="REP_TYPE_CODE" />
-		<result property="repSectorCode" column="REP_SECTOR_CODE" />
-		<result property="repProductClass" column="REP_PRODUCT_CLASS" />
-		<result property="repLeaderBeltCode" column="REP_LEADER_BELT_CODE" />
-		<result property="repActionTypeCode" column="REP_ACTION_TYPE_CODE" />
-		<result property="repMbbUseRateCode" column="REP_MBB_USE_RATE_CODE" />
-		<result property="repUseRefDate" column="REP_USE_REF_DATE" />
-		<result property="repStatusCode" column="REP_STATUS_CODE" />
-		<!-- <result property="repSixMeasureDate" column="REP_SIX_MEASUER_DATE" />
-		<result property="repSixExploreDate" column="REP_SIX_EXPLORE_DATE" />
-		<result property="repSixDevelopDate" column="REP_SIX_DEVELOP_DATE" />
-		<result property="repSixImplementDate" column="REP_SIX_IMPLEMENT_DATE" /> -->
-		<result property="repStartDate" column="REP_START_DATE" />
-		<result property="repFinishDate" column="REP_FINISH_DATE" />
-		<result property="repKeyword" column="REP_KEYWORD" />
-		<result property="repRegUser" column="REP_REG_USER" />
-		<result property="repRegDate" column="REP_REG_DATE" />
-		<result property="repUpdateUser" column="REP_UPDATE_USER" />
-		<result property="repUpdateDate" column="REP_UPDATE_DATE" />
-		<result property="repApprovalCode" column="REP_APPROVAL_CODE" />
-		<result property="repUseYn" column="REP_USE_YN" />
-		<result property="repMailSendYn" column="REP_MAIL_SEND_YN" />
-		<result property="repMailSendDate" column="REP_MAIL_SEND_DATE" />
-		<result property="repPlaceCode" column="REP_PLACE_CODE" />
-		<result property="repLeaderCode" column="REP_LEADER_CODE" />
-		<result property="repFileYn" column="REP_FILE_YN" />
-
-		<result property="idx" column="IDX" />
-		<result property="repDivision" column="REP_DEVISION" />
-		<result property="repType" column="REP_TYPE" />
-		<result property="repStatus" column="REP_STATUS" /> 
+		<result property="comNo" column="COM_NO" />
+		<result property="deptCode" column="DEPT_CODE" />
+		<result property="cirCode" column="CIR_CODE" /> 
+		<result property="deptName" column="DEPT_NAME" />		
+		<result property="comJobxCode" column="COM_JOBX_CODE" />		
+		<result property="comPositionCode" column="COM_POSITION_CODE" />	
+		<result property="beltCode" column="BELT_CODE" /> 		
+		<result property="repTeamMemName" column="REP_TEAM_MEM_NAME" />
+		<result property="repTeamMemEduCode" column="REP_TEAM_MEM_EDU_CODE" />	
+		<result property="repTeamMemRole" column="REP_TEAM_MEM_ROLE" />		
+		<result property="repTeamRegUser" column="REP_TEAM_REG_USER" />
+		<result property="repTeamRegDate" column="REP_TEAM_REG_DATE" />
+		<result property="repTeamUpdateUser" column="REP_TEAM_UPDATE_USER" />
+		<result property="repTeamUpdateDate" column="REP_TEAM_UPDATE_DATE" />
+		<result property="repTeamMemStatus" column="REP_TEAM_MEM_STATUS" />
+		
+		<result property="repTeamMemRoleNm" column="REP_TEAM_MEM_ROLE_NM" />
+		<result property="comJobxNm" 		column="COM_JOBX_NM" />
+		<result property="comPositionNm" 	column="COM_POSITION_NM" />
+		<result property="repTeamMemEduNm" 	column="REP_TEAM_MEM_EDU_NM" />
+		<result property="beltNm" 			column="BELT_NM" />
+		
 	</resultMap>
 	
 	<sql id="defCond">
 		
-			<if test="searchRepName != null and searchRepName != ''">
-				AND T.REP_NAME like '%' || #{searchRepName} || '%'
-			</if>
-			<if test="searchDivision != null and searchDivision != ''">
-				AND T.REP_DEVISION_CODE = #{searchDivision}
-			</if>
-			<if test="searchType != null and searchType != ''">
-				AND T.REP_TYPE_CODE = #{searchType}
-			</if>
-			<if test="searchStatus != null and searchStatus != ''">
-				AND T.REP_STATUS_CODE = #{searchStatus}
-			</if>
+		<where>
+			<trim prefixOverrides="AND|OR">
+				<if test="repTeamCode != null and repTeamCode != ''">
+					AND REP_TEAM_CODE = #{repCode}
+			  	</if>
+			  	<if test="repCode != null and repCode != ''">
+					AND REP_CODE = #{repCode}
+			  	</if>
+			</trim>
+		</where>
 		
 	</sql> 
 	
-	<sql id="selectListBasic">
-	    WITH report_mst AS (
-            SELECT ROW_NUMBER() OVER( ORDER BY TO_NUMBER(rep_code) ASC ) idx,
-                ROW_NUMBER() OVER( ORDER BY TO_NUMBER(rep_code) DESC ) rowidx,
-                m.*
-            FROM   tb_report_mst m
-        )
-        SELECT
-            idx,
-            rep_code,
-            rep_name,
-            c_div.code_nm AS rep_division,
-            c_ty.code_nm  AS rep_type,
-            rep_status_code,
-            c_st.code_nm  AS rep_status,
-            (select min(REP_PLAN_START_DATE) from tb_report_detail m where m.rep_code=t.rep_code) rep_start_date,
-            (select case when m.rep_devision_code='1' then max(REP_PLAN_START_DATE) else max(REP_PLAN_END_DATE) end as rep_finish_date from tb_report_detail m where m.rep_code=T.rep_code group by rep_code, m.rep_devision_code) rep_finish_date
-        FROM
-            report_mst T,
-            tb_code    c_div,
-            tb_code    c_ty,
-            tb_code    c_st
-        WHERE   
-                T.rep_devision_code = c_div.code_id(+) 	AND c_div.code_grp_id(+) = '6SIG_YN' 
-            AND T.rep_type_code = c_ty.code_id(+) 		AND c_ty.code_grp_id(+) IN ('RP_TY1', 'RP_TY2', 'RP_TY3')
-            AND T.rep_status_code = c_st.code_id(+) 	AND c_st.code_grp_id(+) = 'REP_STAT'
-            <include refid="defCond"></include>
-	</sql>
+
 	
-	<select id="selectList" resultMap="reportMap">
-		<include refid="selectListBasic"></include>
-		  and rowidx between (#{currentPageNo}*#{recordCountPerPage}+1-#{recordCountPerPage}) and (#{currentPageNo}*#{recordCountPerPage})
-		  order by idx desc
+	<select id="selectFullList" resultMap="reportTeamMap">
+		SELECT
+			M.REP_TEAM_CODE
+			, M.REP_CODE
+			, M.COM_NO
+			, M.DEPT_CODE
+			, M.CIR_CODE
+			, M.DEPT_NAME
+			, M.COM_JOBX_CODE
+			, M.COM_POSITION_CODE
+			, M.BELT_CODE
+			, REP_TEAM_MEM_NAME
+			, REP_TEAM_MEM_EDU_CODE
+			, REP_TEAM_MEM_ROLE
+			, REP_TEAM_REG_USER
+			, REP_TEAM_REG_DATE
+			, REP_TEAM_UPDATE_USER
+			, REP_TEAM_UPDATE_DATE
+			, REP_TEAM_MEM_STATUS
+			
+			, CD_ROLE.CODE_NM AS REP_TEAM_MEM_ROLE_NM
+            , CD_JOB.CODE_NM AS COM_JOBX_NM
+            , CD_POS.CODE_NM AS COM_POSITION_NM
+            , '' as REP_TEAM_MEM_EDU_NM
+            , CD_BT.CODE_NM as BELT_NM
+		FROM TB_REPORT_TEAM M
+			 LEFT OUTER JOIN  TB_USER_MST U ON U.COM_NO=M.COM_NO
+		     LEFT OUTER JOIN  TB_CODE CD_ROLE ON CD_ROLE.CODE_ID=M.REP_TEAM_MEM_ROLE AND CD_ROLE.CODE_GRP_ID='REP_ROLE'
+             LEFT OUTER JOIN  TB_CODE CD_JOB ON CD_JOB.CODE_ID=M.COM_JOBX_CODE AND CD_JOB.CODE_GRP_ID='JOBX'
+		     LEFT OUTER JOIN  TB_CODE CD_POS ON CD_POS.CODE_ID=M.COM_POSITION_CODE AND CD_POS.CODE_GRP_ID='POSITION'
+		     LEFT OUTER JOIN  TB_CODE CD_BT ON CD_BT.CODE_ID=M.BELT_CODE AND CD_BT.CODE_GRP_ID='LDRBELT'
+		     
+		<include refid="defCond"></include>
+		
+		ORDER BY REP_TEAM_MEM_ROLE ASC, REP_TEAM_REG_DATE ASC
+		
 	</select>
 	
-	<select id="selectListCount2" resultType="egovMap">
-		SELECT
-		    c.code_id repStatusCode, c.code_nm repStatus, nvl(m.cnt, 0) AS cnt
-		FROM tb_code c,
-		     (
-		        SELECT
-		            rep_status_code, rep_status, COUNT(1) cnt
-		        FROM (
-					<include refid="selectListBasic"></include>
-					 ) a
-		        GROUP BY rep_status_code, rep_status
-		    ) m
-		WHERE c.code_id = m.rep_status_code (+)
-		  AND c.code_grp_id = 'REP_STAT'
-		  AND c.act_flg = 'Y'
-      ORDER BY c.code_id		 
-	 </select>
+
 	
 	<select id="selectListCount" resultType="int">
-		SELECT COUNT(*) FROM tb_report_mst T 
+		SELECT COUNT(*) FROM TB_REPORT_TEAM T 
 		<include refid="defCond"></include>
 	</select>
 	
 	<select id="selectNextFkey" resultType="int">
-		SELECT MAX(TO_NUMBER(NVL(REP_CODE, 0))) + 1 REP_CODE FROM TB_REPORT_MST
+		SELECT MAX(TO_NUMBER(NVL(REP_CODE, 0))) + 1 REP_TEAM_CODE FROM TB_REPORT_TEAM
 	</select>
 	
 	<insert id="insert">
@@ -133,7 +109,12 @@
 			, REP_MBB_USE_RATE_CODE
 			, REP_USE_REF_DATE
 			, REP_STATUS_CODE
-			
+			, REP_SIX_MEASUER_DATE
+			, REP_SIX_EXPLORE_DATE
+			, REP_SIX_DEVELOP_DATE
+			, REP_SIX_IMPLEMENT_DATE
+			, REP_START_DATE
+			, REP_FINISH_DATE
 			, REP_KEYWORD
 			, REP_REG_USER
 			, REP_REG_DATE
@@ -157,7 +138,12 @@
 			,#{repMbbUseRateCode} 
 			,#{repUseRefDate} 
 			,#{repStatusCode} 
-			 
+			,#{repSixMeasureDate} 
+			,#{repSixExploreDate} 
+			,#{repSixDevelopDate} 
+			,#{repSixImplementDate} 
+			,#{repStartDate} 
+			,#{repFinishDate} 
 			,#{repKeyword} 
 			, sysdate
 			,#{repRegDate} 
@@ -184,7 +170,12 @@
 			, REP_MBB_USE_RATE_CODE = #{repMbbUseRateCode}
 			, REP_USE_REF_DATE = #{repUseRefDate} 
 			, REP_STATUS_CODE = #{repStatusCode} 
- 
+			, REP_SIX_MEASUER_DATE = #{repSixMeasureDate} 
+			, REP_SIX_EXPLORE_DATE = #{repSixExploreDate} 
+			, REP_SIX_DEVELOP_DATE = #{repSixDevelopDate} 
+			, REP_SIX_IMPLEMENT_DATE = #{repSixImplementDate} 
+			, REP_START_DATE = #{repStartDate} 
+			, REP_FINISH_DATE = #{repFinishDate} 
 			, REP_KEYWORD = #{repKeyword} 
 			, REP_UPDATE_USER = #{repRegUser} 
 			, REP_UPDATE_DATE = sysdate
@@ -199,7 +190,7 @@
 		REP_CODE = #{repCode}
 	</update>
 	
-	<select id="select" resultMap="reportMap">
+	<select id="select" resultMap="reportTeamMap">
 		SELECT 
 			REP_CODE
 			, REP_NAME
@@ -213,6 +204,12 @@
 			, REP_MBB_USE_RATE_CODE
 			, REP_USE_REF_DATE
 			, REP_STATUS_CODE
+			, REP_SIX_MEASUER_DATE
+			, REP_SIX_EXPLORE_DATE
+			, REP_SIX_DEVELOP_DATE
+			, REP_SIX_IMPLEMENT_DATE
+			, REP_START_DATE
+			, REP_FINISH_DATE
 			, REP_KEYWORD
 			, REP_REG_USER
 			, REP_REG_DATE

@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ReportIndicator">
+
+	<resultMap id="reportIndicatorMap" type="kr.freedi.dev.qreport.domain.ReportIndicatorVO">		
+		
+		<result property="repIndiCode" column="REP_INDI_CODE" />
+		<result property="repCode" column="REP_CODE" />
+		<result property="repIndiPyItem" column="REP_INDI_PY_ITEM" />
+		<result property="repIndiPyUnit" column="REP_INDI_PY_UNIT" />
+		<result property="repIndiPyBefore" column="REP_INDI_PY_BEFORE" />
+		<result property="repIndiPyGoal" column="REP_INDI_PY_GOAL" />
+		<result property="repIndiKpiItem" column="REP_INDI_KPI_ITEM" />
+		<result property="repIndiKpiUnit" column="REP_INDI_KPI_UNIT" />
+		<result property="repIndiKpiBefore" column="REP_INDI_KPI_BEFORE" />
+		<result property="repIndiKpiGoal" column="REP_INDI_KPI_GOAL" />
+		<result property="repIndiRegUser" column="REP_INDI_REG_USER" />
+		<result property="repIndiRegDate" column="REP_INDI_REG_DATE" />
+		<result property="repIndiUpdateUser" column="REP_INDI_UPDATE_USER" />
+		<result property="repIndiUpdateDate" column="REP_INDI_UPDATE_DATE" />
+		
+	</resultMap>
+	
+	<sql id="defCond">
+		
+		<where>
+			<trim prefixOverrides="AND|OR">
+				<if test="repIndiCode != null and repIndiCode != ''">
+					AND REP_INDI_CODE = #{repIndiCode}
+			  	</if>
+			  	<if test="repCode != null and repCode != ''">
+					AND REP_CODE = #{repCode}
+			  	</if>
+			</trim>
+		</where>
+		
+	</sql> 
+	
+
+	
+	<select id="selectFullList" resultMap="reportIndicatorMap">
+		SELECT
+		        rep_indi_code,
+		        rep_code,
+		        rep_indi_py_item,
+		        rep_indi_py_unit,
+		        rep_indi_py_before,
+		        rep_indi_py_goal,
+		        rep_indi_kpi_item,
+		        rep_indi_kpi_unit,
+		        rep_indi_kpi_before,
+		        rep_indi_kpi_goal,
+		        rep_indi_reg_user,
+		        rep_indi_reg_date,
+		        rep_indi_update_user,
+		        rep_indi_update_date
+		    FROM tb_report_indicators
+		
+		<include refid="defCond"></include>
+		
+		ORDER BY rep_indi_reg_date ASC
+		
+	</select>
+	
+
+	
+	<select id="selectListCount" resultType="int">
+		SELECT COUNT(*) FROM TB_REPORT_TEAM T 
+		<include refid="defCond"></include>
+	</select>
+	
+	<select id="selectNextFkey" resultType="int">
+		SELECT MAX(TO_NUMBER(NVL(REP_CODE, 0))) + 1 REP_TEAM_CODE FROM TB_REPORT_TEAM
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO TB_REPORT_MST (
+			REP_CODE
+			, REP_NAME
+			, REP_MENU_CODE
+			, REP_DEVISION_CODE
+			, REP_TYPE_CODE
+			, REP_SECTOR_CODE
+			, REP_PRODUCT_CLASS
+			, REP_LEADER_BELT_CODE
+			, REP_ACTION_TYPE_CODE
+			, REP_MBB_USE_RATE_CODE
+			, REP_USE_REF_DATE
+			, REP_STATUS_CODE
+			, REP_SIX_MEASUER_DATE
+			, REP_SIX_EXPLORE_DATE
+			, REP_SIX_DEVELOP_DATE
+			, REP_SIX_IMPLEMENT_DATE
+			, REP_START_DATE
+			, REP_FINISH_DATE
+			, REP_KEYWORD
+			, REP_REG_USER
+			, REP_REG_DATE
+			, REP_APPROVAL_CODE
+			, REP_USE_YN
+			, REP_MAIL_SEND_YN
+			, REP_MAIL_SEND_DATE
+			, REP_PLACE_CODE
+			, REP_LEADER_CODE
+			, REP_FILE_YN
+		) VALUES (
+			#{repCode} 
+			,#{repName} 
+			,#{repMenuCode} 
+			,#{repDivisionCode} 
+			,#{repTypeCode} 
+			,#{repSectorCode} 
+			,#{repProductClass} 
+			,#{repLeaderBeltCode} 
+			,#{repActionTypeCode} 
+			,#{repMbbUseRateCode} 
+			,#{repUseRefDate} 
+			,#{repStatusCode} 
+			,#{repSixMeasureDate} 
+			,#{repSixExploreDate} 
+			,#{repSixDevelopDate} 
+			,#{repSixImplementDate} 
+			,#{repStartDate} 
+			,#{repFinishDate} 
+			,#{repKeyword} 
+			, sysdate
+			,#{repRegDate} 
+			,#{repApprovalCode} 
+			,#{repUseYn} 
+			,#{repMailSendYn} 
+			,#{repMailSendDate} 
+			,#{repPlaceCode} 
+			,#{repLeaderCode} 
+			,#{repFileYn} 
+		)
+	</insert>
+	
+	<update id="update">
+	
+		UPDATE TB_REPORT_MST SET 
+			REP_NAME = #{repName} 
+			, REP_DEVISION_CODE = #{repDivisionCode} 
+			, REP_TYPE_CODE = #{repTypeCode} 
+			, REP_SECTOR_CODE = #{repSectorCode} 
+			, REP_PRODUCT_CLASS = #{repProductClass} 
+			, REP_LEADER_BELT_CODE = #{repLeaderBeltCode} 
+			, REP_ACTION_TYPE_CODE = #{repActionTypeCode} 
+			, REP_MBB_USE_RATE_CODE = #{repMbbUseRateCode}
+			, REP_USE_REF_DATE = #{repUseRefDate} 
+			, REP_STATUS_CODE = #{repStatusCode} 
+			, REP_SIX_MEASUER_DATE = #{repSixMeasureDate} 
+			, REP_SIX_EXPLORE_DATE = #{repSixExploreDate} 
+			, REP_SIX_DEVELOP_DATE = #{repSixDevelopDate} 
+			, REP_SIX_IMPLEMENT_DATE = #{repSixImplementDate} 
+			, REP_START_DATE = #{repStartDate} 
+			, REP_FINISH_DATE = #{repFinishDate} 
+			, REP_KEYWORD = #{repKeyword} 
+			, REP_UPDATE_USER = #{repRegUser} 
+			, REP_UPDATE_DATE = sysdate
+			, REP_APPROVAL_CODE = #{repApprovalCode} 
+			, REP_USE_YN = #{repUseYn} 
+			, REP_MAIL_SEND_YN = #{repMailSendYn} 
+			, REP_MAIL_SEND_DATE = #{repMailSendDate} 
+			, REP_PLACE_CODE = #{repPlaceCode} 
+			, REP_LEADER_CODE = #{repLeaderCode} 
+			, REP_FILE_YN = #{repFileYn} 
+		WHERE
+		REP_CODE = #{repCode}
+	</update>
+	
+	<select id="select" resultMap="reportIndicatorMap">
+		SELECT 
+			REP_CODE
+			, REP_NAME
+			, REP_MENU_CODE
+			, REP_DEVISION_CODE
+			, REP_TYPE_CODE
+			, REP_SECTOR_CODE
+			, REP_PRODUCT_CLASS
+			, REP_LEADER_BELT_CODE
+			, REP_ACTION_TYPE_CODE
+			, REP_MBB_USE_RATE_CODE
+			, REP_USE_REF_DATE
+			, REP_STATUS_CODE
+			, REP_SIX_MEASUER_DATE
+			, REP_SIX_EXPLORE_DATE
+			, REP_SIX_DEVELOP_DATE
+			, REP_SIX_IMPLEMENT_DATE
+			, REP_START_DATE
+			, REP_FINISH_DATE
+			, REP_KEYWORD
+			, REP_REG_USER
+			, REP_REG_DATE
+			, REP_UPDATE_USER
+			, REP_UPDATE_DATE
+			, REP_APPROVAL_CODE
+			, REP_USE_YN
+			, REP_MAIL_SEND_YN
+			, REP_MAIL_SEND_DATE
+			, REP_PLACE_CODE
+			, REP_LEADER_CODE
+			, REP_FILE_YN
+		FROM TB_REPORT_MST T  
+		WHERE T.REP_CODE = #{repCode}
+	</select>
+	
+</mapper>
+

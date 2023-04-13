@@ -13,18 +13,27 @@ public class ReportTeamVO {
 	private Integer repCode;
 	private String comNo;
 	private String deptCode;
-	private String cirCode; //서클코드
+	private String cirCode; 		// 분임조코드
+	private String deptName;		
 	private String comJobxCode;		// 직위코드
 	private String comPositionCode;	// 직책코드
-	private String beltCode; // Belt 코드
+	private String beltCode; 		
 	private String repTeamMemName;
-	private String repTeamMemEduCode;
-	private String repTeamMemRole;
+	private String repTeamMemEduCode;	// 학력코드
+	private String repTeamMemRole;		// 과제 역할
 	private String repTeamRegUser;
 	private Date repTeamRegDate;
 	private String repTeamUpdateUser;
 	private Date repTeamUpdateDate;
 	private String repTeamMemStatus;
+	
+	private String repTeamMemRoleNm;		// 역할(명)
+	private String comJobxNm;		// 직위(명)
+	private String comPositionNm;		// 직책(명)
+	private String repTeamMemEduNm; // 학력(명)
+	private String beltNm; //벨트(명)
+	
+	
 	public Integer getRepTeamCode() {
 		return repTeamCode;
 	}
@@ -54,6 +63,12 @@ public class ReportTeamVO {
 	}
 	public void setCirCode(String cirCode) {
 		this.cirCode = cirCode;
+	}
+	public String getDeptName() {
+		return deptName;
+	}
+	public void setDeptName(String deptName) {
+		this.deptName = deptName;
 	}
 	public String getComJobxCode() {
 		return comJobxCode;
@@ -121,14 +136,50 @@ public class ReportTeamVO {
 	public void setRepTeamMemStatus(String repTeamMemStatus) {
 		this.repTeamMemStatus = repTeamMemStatus;
 	}
+	public String getRepTeamMemRoleNm() {
+		return repTeamMemRoleNm;
+	}
+	public void setRepTeamMemRoleNm(String repTeamMemRoleNm) {
+		this.repTeamMemRoleNm = repTeamMemRoleNm;
+	}
+	public String getComJobxNm() {
+		return comJobxNm;
+	}
+	public void setComJobxNm(String comJobxNm) {
+		this.comJobxNm = comJobxNm;
+	}
+	public String getComPositionNm() {
+		return comPositionNm;
+	}
+	public void setComPositionNm(String comPositionNm) {
+		this.comPositionNm = comPositionNm;
+	}
+	
+	public String getRepTeamMemEduNm() {
+		return repTeamMemEduNm;
+	}
+	public void setRepTeamMemEduNm(String repTeamMemEduNm) {
+		this.repTeamMemEduNm = repTeamMemEduNm;
+	}
+	public String getBeltNm() {
+		return beltNm;
+	}
+	public void setBeltNm(String beltNm) {
+		this.beltNm = beltNm;
+	}
 	@Override
 	public String toString() {
 		return "ReportTeamVO [repTeamCode=" + repTeamCode + ", repCode=" + repCode + ", comNo=" + comNo + ", deptCode="
-				+ deptCode + ", cirCode=" + cirCode + ", comJobxCode=" + comJobxCode + ", comPositionCode="
-				+ comPositionCode + ", beltCode=" + beltCode + ", repTeamMemName=" + repTeamMemName
-				+ ", repTeamMemEduCode=" + repTeamMemEduCode + ", repTeamMemRole=" + repTeamMemRole
+				+ deptCode + ", cirCode=" + cirCode + ", deptName=" + deptName + ", comJobxCode=" + comJobxCode
+				+ ", comPositionCode=" + comPositionCode + ", beltCode=" + beltCode + ", repTeamMemName="
+				+ repTeamMemName + ", repTeamMemEduCode=" + repTeamMemEduCode + ", repTeamMemRole=" + repTeamMemRole
 				+ ", repTeamRegUser=" + repTeamRegUser + ", repTeamRegDate=" + repTeamRegDate + ", repTeamUpdateUser="
 				+ repTeamUpdateUser + ", repTeamUpdateDate=" + repTeamUpdateDate + ", repTeamMemStatus="
-				+ repTeamMemStatus + "]";
+				+ repTeamMemStatus + ", repTeamMemRoleNm=" + repTeamMemRoleNm + ", comJobxNm=" + comJobxNm
+				+ ", comPositionNm=" + comPositionNm + ", repTeamMemEduNm=" + repTeamMemEduNm + ", beltNm=" + beltNm
+				+ "]";
 	}
+	
+
+	
 }

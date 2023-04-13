@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ReportDetail">
+
+	<resultMap id="reportDetailMap" type="kr.freedi.dev.qreport.domain.ReportDetailVO">		
+		
+		<result property="repSeq" column="REP_SEQ" />
+		<result property="repTeamCode" column="REP_TEAM_CODE" />
+		<result property="repCode" column="REP_CODE" />
+		<result property="repMenuCode" column="REP_MENU_CODE" />
+		<result property="repDivisionCode" column="REP_DEVISION_CODE" />
+		<result property="repStepCode" column="REP_STEP_CODE" />
+		<result property="repPlanStartDate" column="REP_PLAN_START_DATE" />
+		<result property="repPlanEendDate" column="REP_PLAN_END_DATE" />
+		<result property="repActStartDate" column="REP_ACT_START_DATE" />
+		<result property="repActEndDate" column="REP_ACT_END_DATE" />
+		<result property="repPropelBg" column="REP_PROPEL_BG" />
+		<result property="repActivity" column="REP_ACTIVITY" />
+		<result property="repFinishSummary" column="REP_FINISH_SUMMARY" />
+		<result property="repCtqCtp" column="REP_CTQ_CTP" />
+		<result property="repKpi" column="REP_KPI" />
+		<result property="repExpectationResult" column="REP_EXPECTATION_RESULT" />
+		<result property="repApprovalMemCode" column="REP_APPROVAL_MEM_CODE" />
+		<result property="repApprovalMemRole" column="REP_APPROVAL_MEM_ROLE" />
+		<result property="repStatus" column="REP_STATUS" />
+		<result property="repRegUser" column="REP_REG_USER" />
+		<result property="repRegDate" column="REP_REG_DATE" />
+		<result property="repUpdateUser" column="REP_UPDATE_USER" />
+		<result property="repUpdateDate" column="REP_UPDATE_DATE" />
+		
+	</resultMap>
+	
+	<sql id="defCond">
+		<where>
+			<trim prefixOverrides="AND|OR">
+				<if test="repSeq != null and repSeq != ''">
+					AND REP_SEQ = #{repSeq}
+			  	</if>
+			  	<if test="repCode != null and repCode != ''">
+					AND REP_CODE = #{repCode}
+			  	</if>
+			</trim>
+		</where>
+	</sql> 
+
+	<select id="selectFullList" resultMap="reportDetailMap">
+		SELECT
+		    t.rep_seq,
+		    t.rep_team_code,
+		    t.rep_code,
+		    t.rep_menu_code,
+		    t.rep_devision_code,
+		    t.rep_step_code,
+		    t.rep_plan_start_date,
+		    t.rep_plan_end_date,
+		    t.rep_act_start_date,
+		    t.rep_act_end_date,
+		    t.rep_propel_bg,
+		    t.rep_activity,
+		    t.rep_finish_summary,
+		    t.rep_ctq_ctp,
+		    t.rep_kpi,
+		    t.rep_expectation_result,
+		    t.rep_approval_mem_code,
+		    t.rep_approval_mem_role,
+		    t.rep_status,
+		    t.rep_reg_user,
+		    t.rep_reg_date,
+		    t.rep_update_user,
+		    t.rep_update_date
+		FROM
+		    tb_report_detail t
+		
+		<include refid="defCond"></include>
+		
+		ORDER BY t.rep_step_code 
+		
+	</select>
+	
+
+	
+	<select id="selectListCount" resultType="int">
+		SELECT COUNT(*) FROM tb_report_detail  T 
+		<include refid="defCond"></include>
+	</select>
+	
+	<select id="selectNextFkey" resultType="int">
+		SELECT MAX(TO_NUMBER(NVL(REP_SEQ, 0))) + 1 tb_report_detail FROM tb_report_detail
+	</select>
+	
+	<insert id="insert">
+		
+	</insert>
+	
+	<update id="update">
+	
+		
+	</update>
+	
+	<select id="select" resultMap="reportDetailMap">
+		
+	</select>
+	
+</mapper>
+

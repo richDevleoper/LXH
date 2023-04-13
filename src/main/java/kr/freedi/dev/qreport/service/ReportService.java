@@ -1,30 +1,23 @@
 package kr.freedi.dev.qreport.service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.Resource;
 
-import kr.freedi.dev.article.domain.ArticleCommentVO;
-import kr.freedi.dev.article.domain.ArticleSearchVO;
 import kr.freedi.dev.article.domain.ArticleVO;
 import kr.freedi.dev.attachfile.domain.AttachFileVO;
 import kr.freedi.dev.attachfile.service.AttachFileService;
-import kr.freedi.dev.board.domain.BoardUseVO;
-import kr.freedi.dev.board.domain.BoardVO;
 import kr.freedi.dev.board.service.BoardService;
 import kr.freedi.dev.board.service.BoardUseService;
-import kr.freedi.dev.code.domain.CodeVO;
 import kr.freedi.dev.common.dao.DefaultDAO;
-import kr.freedi.dev.common.util.EncriptUtil;
-import kr.freedi.dev.menu.service.IMenuService;
+import kr.freedi.dev.qreport.domain.ReportDetailVO;
+import kr.freedi.dev.qreport.domain.ReportIndicatorVO;
+import kr.freedi.dev.qreport.domain.ReportResultVO;
 import kr.freedi.dev.qreport.domain.ReportSearchVO;
+import kr.freedi.dev.qreport.domain.ReportTeamVO;
 import kr.freedi.dev.qreport.domain.ReportVO;
-import kr.freedi.dev.user.domain.UserVO;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Service;
@@ -51,25 +44,24 @@ public class ReportService {
 	
 	final String USER_TYP_MNGR = "MNGR_USER";
 	
-//	final String BOARD_USE_TYP_MANAGE = "MANAGE";
-//	final String BOARD_USE_TYP_VIEW = "VIEW";
-//	final String BOARD_USE_TYP_WRITE = "WRITE";
-//	final String BOARD_USE_TYP_REPLY = "REPLY";
-//	final String BOARD_USE_TYP_COMMENT = "COMMENT";
-//	
-//	final String WRITE_SUB_TYP_WRITE = "WRITE";
-//	final String WRITE_SUB_TYP_MODIFY = "MODIFY";
-//	final String WRITE_SUB_TYP_DELETE = "DELETE";
-	
+
 	@Resource(name = "defaultDAO")
 	private DefaultDAO dao;
+
+	@Resource(name = "reportDetailService")
+	private ReportDetailService reportDetailService;
 	
-	@Resource(name = "boardService")
-	private BoardService boardService;
+	@Resource(name = "reportTeamService")
+	private ReportTeamService reportTeamService;
 	
-	@Resource(name = "boardUseService")
-	private BoardUseService boardUseService;
+	@Resource(name = "reportResultService")
+	private ReportResultService reportResultService;
 	
+	@Resource(name = "reportIndicatorService")
+	private ReportIndicatorService reportIndicatorService;
+	
+	@Resource
+	private AttachFileService attachFileService;
 	
 	
 	
@@ -102,13 +94,32 @@ public class ReportService {
 	
 	public ReportVO select(ReportVO reportVO) {
 		ReportVO resultVO = (ReportVO)dao.selectOne("Report.select", reportVO);
-		//첨부파일
-//		if(resultVO != null){
-//			AttachFileVO attachFileVO = new AttachFileVO();
-//			attachFileVO.setFileId(ATTACH_PREFIX + "_" + + resultVO.getArticleKey());
-//			attachFileVO.setDeleteFlg("N");
-//			resultVO.setFileList(attachFileService.selectFullList(attachFileVO));
-//		}
+		// 과제 팀원
+		if(resultVO != null){
+			
+			ReportDetailVO reportDetailVO = new ReportDetailVO();
+			reportDetailVO.setRepCode(reportVO.getRepCode());
+			resultVO.setRepDetailList(reportDetailService.selectFullList(reportDetailVO));
+			
+			
+			ReportTeamVO reportTeamVO = new ReportTeamVO();
+			reportTeamVO.setRepCode(reportVO.getRepCode());
+			resultVO.setRepTeamMemberList(reportTeamService.selectFullList(reportTeamVO));
+			
+			ReportResultVO reportResultVO = new ReportResultVO();
+			reportResultVO.setRepCode(reportVO.getRepCode());
+			resultVO.setRepResultList(reportResultService.selectFullList(reportResultVO));
+			
+			ReportIndicatorVO reportIndicatorVO = new ReportIndicatorVO();
+			reportIndicatorVO.setRepCode(reportVO.getRepCode());
+			resultVO.setRepIndicatorList(reportIndicatorService.selectFullList(reportIndicatorVO));
+			
+			AttachFileVO attachFileVO = null;
+			attachFileVO = new AttachFileVO();
+			attachFileVO.setFileId(ATTACH_PREFIX + "_" + reportVO.getRepCode());
+			attachFileVO.setDeleteFlg("N");
+			resultVO.setFileList(attachFileService.selectFullList(attachFileVO));
+		}
 		return resultVO;
 	}
 	

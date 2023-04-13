@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -38,13 +39,12 @@ import kr.freedi.dev.code.domain.CodeVO;
 import kr.freedi.dev.code.service.CodeService;
 import kr.freedi.dev.common.util.EncriptUtil;
 import kr.freedi.dev.common.util.MapUtil;
+import kr.freedi.dev.qreport.domain.ReportIndicatorVO;
+import kr.freedi.dev.qreport.domain.ReportResultVO;
 import kr.freedi.dev.qreport.domain.ReportSearchVO;
 import kr.freedi.dev.qreport.domain.ReportVO;
 import kr.freedi.dev.qreport.service.ReportService;
 import kr.freedi.dev.user.domain.UserVO;
-
-
-
 
 /**
  * @project : dev_default
@@ -187,12 +187,29 @@ public class ReportController {
 			dbReportVO = reportService.select(reportVO);
 			// 키 코드가 파라메터로 들어오면 임시저장건 수정모드로 진행
 			if(dbReportVO.getRepStatusCode().equals("1")) {
+				// 임시저장 건 수정모드.
 				dbReportVO.setMode("UPDATE");
 				model.addAttribute("reportVO", dbReportVO);		
 			} else {
+				// rep_status_code 가 1(임시저장)이 아닌 경우 리스트로 보내기. (잘못 진입한 것임)
 				return "redirect:list.do";
 			}
-		} 
+		} else {
+			// 신규작성건으로 기본 Form 구성을 위한 메모리 할당
+			ReportVO emptyReportVO = new ReportVO();
+			
+			// 성과 - 빈 칸 작성
+			List<ReportResultVO> repResultList = new ArrayList<>();
+			repResultList.add(new ReportResultVO());
+			emptyReportVO.setRepResultList(repResultList);
+			
+			// 주요지표 - 빈 칸 작성
+			List<ReportIndicatorVO> repIndicatorList = new ArrayList<>();
+			repIndicatorList.add(new ReportIndicatorVO());
+			emptyReportVO.setRepIndicatorList(repIndicatorList);
+			
+			model.addAttribute("reportVO", emptyReportVO);
+		}
 		
 		CodeVO codeVO = new CodeVO(); 
 		
@@ -200,13 +217,30 @@ public class ReportController {
 		String[] arrCodeGrpIds = {"6SIG_YN", "RP_TY1", "RP_TY2", "RP_TY3", "SECTOR", "ACTTYPE", "LDRBELT", "MBBUSERT", "RESULTTY"};
 		codeVO.setCodeGrpIdList(arrCodeGrpIds);
 		codeVO.setActFlg("Y"); 
-		model.addAttribute("allCodes", codeService.selectFullList(codeVO));
+		List<EgovMap> allCodes = codeService.selectFullList(codeVO);		//item.codeGrpId, codeId, codeNm
+
+		model.addAttribute("allCodes", allCodes);
+		model.addAttribute("code", allCodes);
+		List<Map> codeResultTy = new ArrayList<>();
+		Map mapItem = new HashMap<String, String>();
+		mapItem.put("codeId", "");
+		mapItem.put("codeNm", "선택하세요");
+		codeResultTy.add(mapItem);
+		
+		for (EgovMap item : allCodes) {
+			if(item.get("codeGrpId").equals("RESULTTY")) {
+				mapItem = new HashMap<String, String>();
+				mapItem.put("codeId", item.get("codeId"));
+				mapItem.put("codeNm", item.get("codeNm"));
+				codeResultTy.add(mapItem);
+			}
+		}
+		model.addAttribute("codeResultTy", codeResultTy);
 
 		// 6sigma Full Process 여부, 최초 바인딩이 필요해 별도로 조회
 		codeVO.setCodeGrpId("6SIG_YN");
 		codeVO.setActFlg("Y"); 
 		model.addAttribute("divisionCode", codeService.selectFullList(codeVO));
-		
 		model.addAttribute("action", "/report/insert.do");
 		
 		return "app/report/InsertForm";
@@ -226,20 +260,20 @@ public class ReportController {
 //			//throw new ArticlePermissionDeniedException();
 //			return getPath(request, "ExcpPermissionDenied", "exception");
 //		}
-//		
+		
 //		//기본값 체크
 //		if(StringUtils.isEmpty(articleVO.getNoticeFlg())){
 //			articleVO.setNoticeFlg("N");
 //		}
+		
 //		if(StringUtils.isEmpty(articleVO.getSecretFlg())){
 //			articleVO.setSecretFlg("N");
 //		}
-//		
+
 //		//사용자정보 세팅
 //		articleVO.setFrstOperId(userSession.getUserId());
 //		articleVO.setFrstOperIp(userIp);
-//		
-		//reportVO.setRepStatusCode("1");
+//		reportVO.setRepStatusCode("1");
 	
 //		//insert article
 		if(reportVO.getMode().equals("UPDATE")) {
@@ -248,7 +282,6 @@ public class ReportController {
 			reportService.insert(reportVO);	
 		}
 		
-
 		//return "redirect:/report/002_01_sub01.do?menuKey=29";
 		return "redirect:/sub.do?menuKey=29";
 	}

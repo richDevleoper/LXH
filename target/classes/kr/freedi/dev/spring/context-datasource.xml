@@ -56,14 +56,22 @@
         <property name="url" value="jdbc:mysql://127.0.0.1:3306/lxh2023"/>
         <property name="username" value="LXH_CMS"/>
         <property name="password" value="LXH_CMS"/>
-    </bean> -->
+    </bean> 
     
     <bean id="defaultDataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="net.sf.log4jdbc.DriverSpy"/>
-		<property name="url" value="jdbc:log4jdbc:oracle:thin:@127.0.0.1:1521:XE" />
-		<property name="username" value="system"/>
-		<property name="password" value="manager"/>
+		<property name="url" value="jdbc:log4jdbc:oracle:thin:@165.244.142.27:1526:PSAA01" />
+		<property name="username" value="sixsigma"/>
+		<property name="password" value="lghausys123!"/>
 	</bean>
+    -->
+    
+    <bean id="defaultDataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="net.sf.log4jdbc.DriverSpy"/>
+		<property name="url" value="jdbc:log4jdbc:oracle:thin:@10.38.54.32:1521:TEST01" />
+		<property name="username" value="sixsigma"/>
+		<property name="password" value="lghausys123!"/>
+	</bean>    
     
     <!-- bean id="defaultDataSource" class="net.sf.log4jdbc.Log4jdbcProxyDataSource">
         <constructor-arg ref="dataSourceSpied" />

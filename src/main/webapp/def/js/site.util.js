@@ -100,7 +100,15 @@ function setDropDown(objId, cdList, flagFirstEmptyYn, emptyTitle){
 		}
 		htm += "<option value='"+item.key+"' "+ strSelected +">"+item.value+"</option>";
 	}
-	$("#"+objId).empty().append(htm);
+	if(objId.indexOf(".")===0){
+		// Class Name
+		$(objId).each(function(i,o){
+			$(o).empty().append(htm);
+		})
+	} else {
+		$("#"+objId).empty().append(htm);	
+	}
+	
 }
 
 

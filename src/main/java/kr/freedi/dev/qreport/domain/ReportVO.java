@@ -21,10 +21,10 @@ public class ReportVO {
 	private String repMbbUseRateCode;
 	private String repUseRefDate;
 	private String repStatusCode;
-	private Date repSixMeasureDate;
-	private Date repSixExploreDate;
-	private Date repSixDevelopDate;
-	private Date repSixImplementDate;
+//	private Date repSixMeasureDate;
+//	private Date repSixExploreDate;
+//	private Date repSixDevelopDate;
+//	private Date repSixImplementDate;
 	private Date repStartDate;
 	private Date repFinishDate;
 	private String repKeyword;
@@ -46,9 +46,11 @@ public class ReportVO {
 	private String repType;
 	private String repStatus;
 	
-	private List<ReportTeamVO> repTemMemberList;
-	
-	
+	private List<ReportDetailVO> repDetailList; 	// 단계별 계획 일정
+	private List<ReportTeamVO> repTeamMemberList; 	// 멤버 리스트
+	private List<ReportResultVO> repResultList;	// 과제 성과
+	private List<ReportIndicatorVO> repIndicatorList; // 과제지표
+	private List<AttachFileVO> repFileList;
 	
 
 	private List<AttachFileVO> fileList;
@@ -149,38 +151,38 @@ public class ReportVO {
 		this.repStatusCode = repStatusCode;
 	}
 
-	public Date getRepSixMeasureDate() {
-		return repSixMeasureDate;
-	}
-
-	public void setRepSixMeasureDate(Date repSixMeasureDate) {
-		this.repSixMeasureDate = repSixMeasureDate;
-	}
-
-	public Date getRepSixExploreDate() {
-		return repSixExploreDate;
-	}
-
-	public void setRepSixExploreDate(Date repSixExploreDate) {
-		this.repSixExploreDate = repSixExploreDate;
-	}
-
-	public Date getRepSixDevelopDate() {
-		return repSixDevelopDate;
-	}
-
-	public void setRepSixDevelopDate(Date repSixDevelopDate) {
-		this.repSixDevelopDate = repSixDevelopDate;
-	}
-
-	public Date getRepSixImplementDate() {
-		return repSixImplementDate;
-	}
-
-	public void setRepSixImplementDate(Date repSixImplementDate) {
-		this.repSixImplementDate = repSixImplementDate;
-	}
-
+//	public Date getRepSixMeasureDate() {
+//		return repSixMeasureDate;
+//	}
+//
+//	public void setRepSixMeasureDate(Date repSixMeasureDate) {
+//		this.repSixMeasureDate = repSixMeasureDate;
+//	}
+//
+//	public Date getRepSixExploreDate() {
+//		return repSixExploreDate;
+//	}
+//
+//	public void setRepSixExploreDate(Date repSixExploreDate) {
+//		this.repSixExploreDate = repSixExploreDate;
+//	}
+//
+//	public Date getRepSixDevelopDate() {
+//		return repSixDevelopDate;
+//	}
+//
+//	public void setRepSixDevelopDate(Date repSixDevelopDate) {
+//		this.repSixDevelopDate = repSixDevelopDate;
+//	}
+//
+//	public Date getRepSixImplementDate() {
+//		return repSixImplementDate;
+//	}
+//
+//	public void setRepSixImplementDate(Date repSixImplementDate) {
+//		this.repSixImplementDate = repSixImplementDate;
+//	}
+//
 	public Date getRepStartDate() {
 		return repStartDate;
 	}
@@ -335,31 +337,60 @@ public class ReportVO {
 	}
 
 	public List<ReportTeamVO> getRepTemMemberList() {
-		return repTemMemberList;
+		return repTeamMemberList;
 	}
 
-	public void setRepTemMemberList(List<ReportTeamVO> repTemMemberList) {
-		this.repTemMemberList = repTemMemberList;
+	public void setRepTeamMemberList(List<ReportTeamVO> repTeamMemberList) {
+		this.repTeamMemberList = repTeamMemberList;
 	}
 
-	// public void setRepStatus(String repStatus) {
-//		this.repStatus = repStatus;
-//	}
+	public List<ReportResultVO> getRepResultList() {
+		return repResultList;
+	}
+
+	public void setRepResultList(List<ReportResultVO> repResultList) {
+		this.repResultList = repResultList;
+	}
+	public List<ReportIndicatorVO> getRepIndicatorList() {
+		return repIndicatorList;
+	}
+
+	public void setRepIndicatorList(List<ReportIndicatorVO> repIndicatorList) {
+		this.repIndicatorList = repIndicatorList;
+	}
+
+	public List<AttachFileVO> getRepFileList() {
+		return repFileList;
+	}
+
+	public void setRepFileList(List<AttachFileVO> repFileList) {
+		this.repFileList = repFileList;
+	}
+
+	public List<ReportDetailVO> getRepDetailList() {
+		return repDetailList;
+	}
+
+	public void setRepDetailList(List<ReportDetailVO> repDetailList) {
+		this.repDetailList = repDetailList;
+	}
+
 	@Override
 	public String toString() {
 		return "ReportVO [repCode=" + repCode + ", repName=" + repName + ", repMenuCode=" + repMenuCode
 				+ ", repDivisionCode=" + repDivisionCode + ", repTypeCode=" + repTypeCode + ", repSectorCode="
 				+ repSectorCode + ", repProductClass=" + repProductClass + ", repLeaderBeltCode=" + repLeaderBeltCode
 				+ ", repActionTypeCode=" + repActionTypeCode + ", repMbbUseRateCode=" + repMbbUseRateCode
-				+ ", repUseRefDate=" + repUseRefDate + ", repStatusCode=" + repStatusCode + ", repSixMeasureDate="
-				+ repSixMeasureDate + ", repSixExploreDate=" + repSixExploreDate + ", repSixDevelopDate="
-				+ repSixDevelopDate + ", repSixImplementDate=" + repSixImplementDate + ", repStartDate=" + repStartDate
-				+ ", repFinishDate=" + repFinishDate + ", repKeyword=" + repKeyword + ", repRegUser=" + repRegUser
-				+ ", repRegDate=" + repRegDate + ", repUpdateUser=" + repUpdateUser + ", repUpdateDate=" + repUpdateDate
-				+ ", repApprovalCode=" + repApprovalCode + ", repUseYn=" + repUseYn + ", repMailSendYn=" + repMailSendYn
-				+ ", repMailSendDate=" + repMailSendDate + ", repPlaceCode=" + repPlaceCode + ", repLeaderCode="
-				+ repLeaderCode + ", repFileYn=" + repFileYn + ", idx=" + idx + ", repDivision=" + repDivision
-				+ ", repType=" + repType + ", repStatus=" + repStatus + "]";
+				+ ", repUseRefDate=" + repUseRefDate + ", repStatusCode=" + repStatusCode + ", repKeyword=" + repKeyword
+				+ ", repRegUser=" + repRegUser + ", repRegDate=" + repRegDate + ", repUpdateUser=" + repUpdateUser
+				+ ", repUpdateDate=" + repUpdateDate + ", repApprovalCode=" + repApprovalCode + ", repUseYn=" + repUseYn
+				+ ", repMailSendYn=" + repMailSendYn + ", repMailSendDate=" + repMailSendDate + ", repPlaceCode="
+				+ repPlaceCode + ", repLeaderCode=" + repLeaderCode + ", repFileYn=" + repFileYn + ", mode=" + mode
+				+ ", idx=" + idx + ", repDivision=" + repDivision + ", repType=" + repType + ", repStatus=" + repStatus
+				+ ", repDetailList=" + repDetailList + ", repTeamMemberList=" + repTeamMemberList + ", repResultList="
+				+ repResultList + ", repIndicatorList=" + repIndicatorList + ", repFileList=" + repFileList
+				+ ", fileList=" + fileList + "]";
 	}
 
+	
 }
