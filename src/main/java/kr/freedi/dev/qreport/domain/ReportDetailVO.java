@@ -12,7 +12,7 @@ public class ReportDetailVO {
 	private String repDivisionCode;
 	private String repStepCode;
 	private Date repPlanStartDate;
-	private Date repPlanEendDate;
+	private Date repPlanEndDate;
 	private Date repActStartDate;
 	private Date repActEndDate;
 	private String repPropelBg;
@@ -71,11 +71,11 @@ public class ReportDetailVO {
 	public void setRepPlanStartDate(Date repPlanStartDate) {
 		this.repPlanStartDate = repPlanStartDate;
 	}
-	public Date getRepPlanEendDate() {
-		return repPlanEendDate;
+	public Date getRepPlanEndDate() {
+		return repPlanEndDate;
 	}
-	public void setRepPlanEendDate(Date repPlanEendDate) {
-		this.repPlanEendDate = repPlanEendDate;
+	public void setRepPlanEndDate(Date repPlanEndDate) {
+		this.repPlanEndDate = repPlanEndDate;
 	}
 	public Date getRepActStartDate() {
 		return repActStartDate;
@@ -171,7 +171,7 @@ public class ReportDetailVO {
 	public String toString() {
 		return "ReportDetailVO [repSeq=" + repSeq + ", repTeamCode=" + repTeamCode + ", repCode=" + repCode
 				+ ", repMenuCode=" + repMenuCode + ", repDivisionCode=" + repDivisionCode + ", repStepCode="
-				+ repStepCode + ", repPlanStartDate=" + repPlanStartDate + ", repPlanEendDate=" + repPlanEendDate
+				+ repStepCode + ", repPlanStartDate=" + repPlanStartDate + ", repPlanEndDate=" + repPlanEndDate
 				+ ", repActStartDate=" + repActStartDate + ", repActEndDate=" + repActEndDate + ", repPropelBg="
 				+ repPropelBg + ", repActivity=" + repActivity + ", repFinishSummary=" + repFinishSummary
 				+ ", repCtqCtp=" + repCtqCtp + ", repKpi=" + repKpi + ", repExpectationResult=" + repExpectationResult
@@ -179,5 +179,6 @@ public class ReportDetailVO {
 				+ ", repStatus=" + repStatus + ", repRegUser=" + repRegUser + ", repRegDate=" + repRegDate
 				+ ", repUpdateUser=" + repUpdateUser + ", repUpdateDate=" + repUpdateDate + "]";
 	}
+	
 	
 }

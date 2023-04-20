@@ -26,11 +26,9 @@
 		<result property="comPositionNm" 	column="COM_POSITION_NM" />
 		<result property="repTeamMemEduNm" 	column="REP_TEAM_MEM_EDU_NM" />
 		<result property="beltNm" 			column="BELT_NM" />
-		
 	</resultMap>
 	
 	<sql id="defCond">
-		
 		<where>
 			<trim prefixOverrides="AND|OR">
 				<if test="repTeamCode != null and repTeamCode != ''">
@@ -40,12 +38,9 @@
 					AND REP_CODE = #{repCode}
 			  	</if>
 			</trim>
-		</where>
-		
+		</where>	
 	</sql> 
-	
-
-	
+		
 	<select id="selectFullList" resultMap="reportTeamMap">
 		SELECT
 			M.REP_TEAM_CODE
@@ -84,7 +79,60 @@
 		
 	</select>
 	
-
+	<insert id="insert">
+		INSERT INTO tb_report_team 
+			(REP_TEAM_CODE
+			, REP_CODE
+			, COM_NO
+			, DEPT_CODE
+			, CIR_CODE
+			, DEPT_NAME
+			, COM_JOBX_CODE
+			, COM_POSITION_CODE
+			, BELT_CODE
+			, REP_TEAM_MEM_NAME
+			, REP_TEAM_MEM_EDU_CODE
+			, REP_TEAM_MEM_ROLE
+			, REP_TEAM_REG_USER
+			, REP_TEAM_REG_DATE
+			, REP_TEAM_MEM_STATUS) 
+		values 
+			(
+			#{repTeamCode}
+			,#{repCode}
+			,#{comNo}
+			,#{deptCode}
+			,#{cirCode}
+			,#{deptName}
+			,#{comJobxCode}
+			,#{comPositionCode}
+			,#{beltCode}
+			,#{repTeamMemName}
+			,#{repTeamMemEduCode}
+			,#{repTeamMemRole}
+			,#{repTeamRegUser}
+			,sysdate
+			,#{repTeamMemStatus}
+			)
+	</insert>
+	
+	<update id="update">
+		UPDATE TB_REPORT_TEAM 
+		   SET  REP_CODE = #{repCode}
+			    , COM_NO = #{comNo}
+			    , DEPT_CODE = #{deptCode}
+			    , CIR_CODE = #{cirCode}
+			    , DEPT_NAME = #{deptName}
+			    , COM_JOBX_CODE = #{comJobxCode}
+			    , COM_POSITION_CODE = #{comPositionCode}
+			    , BELT_CODE = #{beltCode}
+			    , REP_TEAM_MEM_NAME = #{repTeamMemName}
+			    , REP_TEAM_MEM_EDU_CODE = #{repTeamMemEduCode}
+			    , REP_TEAM_MEM_ROLE = #{repTeamMemRole}
+			    , REP_TEAM_UPDATE_USER = #{repTeamRegUser}
+			    , REP_TEAM_UPDATE_DATE = sysdate
+		  WHERE REP_TEAM_CODE = #{repTeamCode}
+	</update>
 	
 	<select id="selectListCount" resultType="int">
 		SELECT COUNT(*) FROM TB_REPORT_TEAM T 
@@ -92,491 +140,11 @@
 	</select>
 	
 	<select id="selectNextFkey" resultType="int">
-		SELECT MAX(TO_NUMBER(NVL(REP_CODE, 0))) + 1 REP_TEAM_CODE FROM TB_REPORT_TEAM
+		SELECT MAX(TO_NUMBER(NVL(REP_TEAM_CODE, 0))) + 1 REP_TEAM_CODE FROM TB_REPORT_TEAM
 	</select>
 	
-	<insert id="insert">
-		INSERT INTO TB_REPORT_MST (
-			REP_CODE
-			, REP_NAME
-			, REP_MENU_CODE
-			, REP_DEVISION_CODE
-			, REP_TYPE_CODE
-			, REP_SECTOR_CODE
-			, REP_PRODUCT_CLASS
-			, REP_LEADER_BELT_CODE
-			, REP_ACTION_TYPE_CODE
-			, REP_MBB_USE_RATE_CODE
-			, REP_USE_REF_DATE
-			, REP_STATUS_CODE
-			, REP_SIX_MEASUER_DATE
-			, REP_SIX_EXPLORE_DATE
-			, REP_SIX_DEVELOP_DATE
-			, REP_SIX_IMPLEMENT_DATE
-			, REP_START_DATE
-			, REP_FINISH_DATE
-			, REP_KEYWORD
-			, REP_REG_USER
-			, REP_REG_DATE
-			, REP_APPROVAL_CODE
-			, REP_USE_YN
-			, REP_MAIL_SEND_YN
-			, REP_MAIL_SEND_DATE
-			, REP_PLACE_CODE
-			, REP_LEADER_CODE
-			, REP_FILE_YN
-		) VALUES (
-			#{repCode} 
-			,#{repName} 
-			,#{repMenuCode} 
-			,#{repDivisionCode} 
-			,#{repTypeCode} 
-			,#{repSectorCode} 
-			,#{repProductClass} 
-			,#{repLeaderBeltCode} 
-			,#{repActionTypeCode} 
-			,#{repMbbUseRateCode} 
-			,#{repUseRefDate} 
-			,#{repStatusCode} 
-			,#{repSixMeasureDate} 
-			,#{repSixExploreDate} 
-			,#{repSixDevelopDate} 
-			,#{repSixImplementDate} 
-			,#{repStartDate} 
-			,#{repFinishDate} 
-			,#{repKeyword} 
-			, sysdate
-			,#{repRegDate} 
-			,#{repApprovalCode} 
-			,#{repUseYn} 
-			,#{repMailSendYn} 
-			,#{repMailSendDate} 
-			,#{repPlaceCode} 
-			,#{repLeaderCode} 
-			,#{repFileYn} 
-		)
-	</insert>
-	
-	<update id="update">
-	
-		UPDATE TB_REPORT_MST SET 
-			REP_NAME = #{repName} 
-			, REP_DEVISION_CODE = #{repDivisionCode} 
-			, REP_TYPE_CODE = #{repTypeCode} 
-			, REP_SECTOR_CODE = #{repSectorCode} 
-			, REP_PRODUCT_CLASS = #{repProductClass} 
-			, REP_LEADER_BELT_CODE = #{repLeaderBeltCode} 
-			, REP_ACTION_TYPE_CODE = #{repActionTypeCode} 
-			, REP_MBB_USE_RATE_CODE = #{repMbbUseRateCode}
-			, REP_USE_REF_DATE = #{repUseRefDate} 
-			, REP_STATUS_CODE = #{repStatusCode} 
-			, REP_SIX_MEASUER_DATE = #{repSixMeasureDate} 
-			, REP_SIX_EXPLORE_DATE = #{repSixExploreDate} 
-			, REP_SIX_DEVELOP_DATE = #{repSixDevelopDate} 
-			, REP_SIX_IMPLEMENT_DATE = #{repSixImplementDate} 
-			, REP_START_DATE = #{repStartDate} 
-			, REP_FINISH_DATE = #{repFinishDate} 
-			, REP_KEYWORD = #{repKeyword} 
-			, REP_UPDATE_USER = #{repRegUser} 
-			, REP_UPDATE_DATE = sysdate
-			, REP_APPROVAL_CODE = #{repApprovalCode} 
-			, REP_USE_YN = #{repUseYn} 
-			, REP_MAIL_SEND_YN = #{repMailSendYn} 
-			, REP_MAIL_SEND_DATE = #{repMailSendDate} 
-			, REP_PLACE_CODE = #{repPlaceCode} 
-			, REP_LEADER_CODE = #{repLeaderCode} 
-			, REP_FILE_YN = #{repFileYn} 
-		WHERE
-		REP_CODE = #{repCode}
-	</update>
-	
-	<select id="select" resultMap="reportTeamMap">
-		SELECT 
-			REP_CODE
-			, REP_NAME
-			, REP_MENU_CODE
-			, REP_DEVISION_CODE
-			, REP_TYPE_CODE
-			, REP_SECTOR_CODE
-			, REP_PRODUCT_CLASS
-			, REP_LEADER_BELT_CODE
-			, REP_ACTION_TYPE_CODE
-			, REP_MBB_USE_RATE_CODE
-			, REP_USE_REF_DATE
-			, REP_STATUS_CODE
-			, REP_SIX_MEASUER_DATE
-			, REP_SIX_EXPLORE_DATE
-			, REP_SIX_DEVELOP_DATE
-			, REP_SIX_IMPLEMENT_DATE
-			, REP_START_DATE
-			, REP_FINISH_DATE
-			, REP_KEYWORD
-			, REP_REG_USER
-			, REP_REG_DATE
-			, REP_UPDATE_USER
-			, REP_UPDATE_DATE
-			, REP_APPROVAL_CODE
-			, REP_USE_YN
-			, REP_MAIL_SEND_YN
-			, REP_MAIL_SEND_DATE
-			, REP_PLACE_CODE
-			, REP_LEADER_CODE
-			, REP_FILE_YN
-		FROM TB_REPORT_MST T  
-		WHERE T.REP_CODE = #{repCode}
-	</select>
-	
-	<!-- <sql id="defCond">
-		<where>
-			<trim prefixOverrides="AND|OR">
-				T.NOTICE_FLG = 'N'
-				<if test="boardKey != null and boardKey != ''">
-					AND T.BOARD_KEY = #{boardKey}
-				</if>
-				<if test="searchViewPrdFlg != null and searchViewPrdFlg != ''">
-					AND (VIEW_START_DT IS NULL OR VIEW_START_DT <![CDATA[<]]> SYSDATE)
-					AND (VIEW_END_DT IS NULL OR VIEW_END_DT <![CDATA[>]]> SYSDATE)
-				</if>
-				<if test="searchStartFrstOperDt != null and searchStartFrstOperDt != ''">
-					AND T.FRST_OPER_DT <![CDATA[>=]]> #{searchStartFrstOperDt}
-				</if>
-				<if test="searchEndFrstOperDt != null and searchEndFrstOperDt != ''">
-					AND T.FRST_OPER_DT <![CDATA[<=]]> TO_DATE(#{searchEndFrstOperDt}, 'YYYY-MM-DD') + 1
-				</if>
-				<if test="searchCatgr != null and searchCatgr != ''">
-					AND T.CATGR = #{searchCatgr}
-				</if>
-				<if test="searchDeleteFlg != null and searchDeleteFlg != ''">
-					AND T.DELETE_FLG = #{searchDeleteFlg}
-				</if>
-				<if test="searchClass != null and searchClass != ''">
-					<if test="searchValue != null and searchValue != ''">
-						AND 
-						<trim prefixOverrides="AND">
-							<choose>
-								<when test="searchClass == 'TITLE'.toString()">
-									<foreach collection="searchItrValue" index="i" item="item" open="(" close=")" separator=" ">
-										<if test="i != 0">AND </if> T.TITLE LIKE '%' || #{item} || '%'
-									</foreach>
-								</when>
-								<when test="searchClass == 'CONTENT'.toString()">
-									<foreach collection="searchItrValue" index="i" item="item" open="(" close=")" separator=" ">
-										<if test="i != 0">AND </if> T.CONTENT LIKE '%' || #{item} || '%'
-									</foreach>
-								</when>
-								<when test="searchClass == 'WRITER'.toString()">
-									T.WRITER LIKE '%' || #{searchValue} || '%'
-								</when>
-								<otherwise></otherwise>
-							</choose>
-						</trim>
-					</if>			
-				</if>
-			</trim>
-		</where>
-	</sql> 
 
-    <sql id="fullCond">
-		<where>
-			<trim prefixOverrides="AND|OR">
-				<if test="boardKey != null and boardKey != ''">
-					AND T.BOARD_KEY = #{boardKey}
-				</if>
-				<if test="noticeFlg != null and noticeFlg != ''">
-					AND T.NOTICE_FLG = #{noticeFlg}
-				</if>
-				<if test="deleteFlg != null and deleteFlg != ''">
-					AND T.DELETE_FLG = #{deleteFlg}
-				</if>
-				<if test="viewStartDt != null and viewStartDt != ''">
-					AND (VIEW_START_DT IS NULL OR VIEW_START_DT <![CDATA[<]]> SYSDATE)
-				</if>
-				<if test="viewEndDt != null and viewEndDt != ''">
-					AND (VIEW_END_DT IS NULL OR VIEW_END_DT <![CDATA[>]]> SYSDATE)
-				</if>
-			</trim>
-		</where>
-	</sql>
-
-	<select id="selectListCount" resultType="int">
-		SELECT COUNT(*) FROM TB_ARTICLE T 
-		<include refid="defCond"></include>
-	</select>
-
-	<select id="selectList" resultMap="articleMap">
-	select *
-	  from (
-		SELECT
-			row_number() over ( 
-			<choose>
-				<when test="orderByTyp != null and orderByTyp != ''">
-					<choose>
-						<when test="orderByTyp == 'RECENTLY'.toString()">
-							ORDER BY FRST_OPER_DT DESC
-						</when>
-						<when test="orderByTyp == 'HIERARCHY'.toString()">
-							ORDER BY FKEY DESC, OKEY ASC
-						</when>
-						<otherwise>
-							ORDER BY FRST_OPER_DT DESC
-						</otherwise>
-					</choose>
-				</when>
-				<otherwise>
-					ORDER BY FRST_OPER_DT DESC
-				</otherwise>
-			</choose>
-			) num 
-			,T.ARTICLE_KEY
-			,T.BOARD_KEY
-			,T.FKEY
-			,T.PKEY
-			,T.OKEY
-			,T.GKEY
-			,T.CATGR
-			,T.TITLE
-			,T.CONTENT
-			,T.WRITER
-			,T.WRITER_PWD
-			,T.NOTICE_FLG
-			,T.SECRET_FLG
-			,T.VIEW_START_DT
-			,T.VIEW_END_DT
-			,T.DELETE_TYP
-			,T.DELETE_FLG
-			,T.VIEW_CNT
-			,T.MOVE_FLG
-			,T.MOVE_DT
-			,T.ORGNL_BOARD_KEY
-			,T.FRST_OPER_ID
-			,T.FRST_OPER_DT
-			,T.FRST_OPER_IP
-			,T.LAST_OPER_ID
-			,T.LAST_OPER_DT
-			,T.LAST_OPER_IP
-			,ROUND(SYSDATE - T.FRST_OPER_DT, 0) OPER_PRD
-		FROM TB_ARTICLE T
-		<include refid="defCond"></include>
-		<choose>
-			<when test="orderByTyp != null and orderByTyp != ''">
-				<choose>
-					<when test="orderByTyp == 'RECENTLY'.toString()">
-						ORDER BY FRST_OPER_DT DESC
-					</when>
-					<when test="orderByTyp == 'HIERARCHY'.toString()">
-						ORDER BY FKEY DESC, OKEY ASC
-					</when>
-					<otherwise>
-						ORDER BY FRST_OPER_DT DESC
-					</otherwise>
-				</choose>
-			</when>
-			<otherwise>
-				ORDER BY FRST_OPER_DT DESC
-			</otherwise>
-		</choose>
-			) where num between #{firstRecordIndex} and  #{recordCountPerPage}
-	</select>
-
-	<select id="selectFullList" resultMap="articleMap">
-		SELECT
-			T.ARTICLE_KEY
-			,T.BOARD_KEY
-			,T.FKEY
-			,T.PKEY
-			,T.OKEY
-			,T.GKEY
-			,T.CATGR
-			,T.TITLE
-			,T.CONTENT
-			,T.WRITER
-			,T.WRITER_PWD
-			,T.NOTICE_FLG
-			,T.SECRET_FLG
-			,T.VIEW_START_DT
-			,T.VIEW_END_DT
-			,T.DELETE_TYP
-			,T.DELETE_FLG
-			,T.VIEW_CNT
-			,T.MOVE_FLG
-			,T.MOVE_DT
-			,T.ORGNL_BOARD_KEY
-			,T.FRST_OPER_ID
-			,T.FRST_OPER_DT
-			,T.FRST_OPER_IP
-			,T.LAST_OPER_ID
-			,T.LAST_OPER_DT
-			,T.LAST_OPER_IP
-			,ROUND(SYSDATE - T.FRST_OPER_DT, 0) OPER_PRD
-		FROM TB_ARTICLE T
-		<include refid="fullCond"></include>
-		ORDER BY T.FRST_OPER_DT DESC
-	</select>
-
-	<select id="selectRecentList" resultMap="articleMap">
-	
-	select *
-	  from (
-		SELECT
-			row_number() over (ORDER BY FKEY DESC, OKEY ASC) as num
-			,T.ARTICLE_KEY
-			,T.BOARD_KEY
-			,T.FKEY
-			,T.PKEY
-			,T.OKEY
-			,T.GKEY
-			,T.CATGR
-			,T.TITLE
-			,T.CONTENT
-			,T.WRITER
-			,T.WRITER_PWD
-			,T.NOTICE_FLG
-			,T.SECRET_FLG
-			,T.VIEW_START_DT
-			,T.VIEW_END_DT
-			,T.DELETE_TYP
-			,T.DELETE_FLG
-			,T.VIEW_CNT
-			,T.MOVE_FLG
-			,T.MOVE_DT
-			,T.ORGNL_BOARD_KEY
-			,T.FRST_OPER_ID
-			,T.FRST_OPER_DT
-			,T.FRST_OPER_IP
-			,T.LAST_OPER_ID
-			,T.LAST_OPER_DT
-			,T.LAST_OPER_IP
-			,ROUND(SYSDATE - T.FRST_OPER_DT, 0) OPER_PRD
-		FROM TB_ARTICLE T
-		WHERE T.BOARD_KEY = #{boardKey}
-		AND T.NOTICE_FLG = 'N'
-		AND T.DELETE_FLG = 'N'
-		AND T.SECRET_FLG = 'N'
-		AND (VIEW_START_DT IS NULL OR VIEW_START_DT <![CDATA[<]]> SYSDATE)
-		AND (VIEW_END_DT IS NULL OR VIEW_END_DT <![CDATA[>]]> SYSDATE)
-		AND PKEY = 0
-		ORDER BY FKEY DESC, OKEY ASC
-	) where num between #{firstRecordIndex} and #{recordCountPerPage} 
-	
-	</select>
-	
-	<select id="selectNextFkey" resultType="int">
-		SELECT NVL(MAX(FKEY), 0) + 1 fkey FROM TB_ARTICLE
-	</select>
-		
-	<select id="select" resultMap="articleMap">
-		SELECT 
-			T.ARTICLE_KEY articleKey
-			,T.BOARD_KEY
-			,T.FKEY
-			,T.PKEY
-			,T.OKEY
-			,T.GKEY
-			,T.CATGR
-			,T.TITLE
-			,T.CONTENT
-			,T.WRITER
-			,T.WRITER_PWD
-			,T.NOTICE_FLG
-			,T.SECRET_FLG
-			,T.VIEW_START_DT
-			,T.VIEW_END_DT
-			,T.DELETE_TYP
-			,T.DELETE_FLG
-			,T.VIEW_CNT
-			,T.MOVE_FLG
-			,T.MOVE_DT
-			,T.ORGNL_BOARD_KEY
-			,T.FRST_OPER_ID
-			,T.FRST_OPER_DT
-			,T.FRST_OPER_IP
-			,T.LAST_OPER_ID
-			,T.LAST_OPER_DT
-			,T.LAST_OPER_IP
-			,ROUND(SYSDATE - T.FRST_OPER_DT, 0) OPER_PRD
-		FROM TB_ARTICLE T 
-		WHERE T.ARTICLE_KEY = #{articleKey}
-	</select>
-
-	<
-
-	<update id="update">
-		UPDATE TB_ARTICLE SET 
-			CATGR = #{catgr}
-			,TITLE = #{title}
-			,CONTENT = #{content}
-			,WRITER = #{writer}
-			,WRITER_PWD = #{writerPwd}
-			,NOTICE_FLG = #{noticeFlg}
-			
-			,SECRET_FLG = #{secretFlg}
-			,VIEW_START_DT = #{viewStartDt}
-			,VIEW_END_DT = #{viewEndDt}
-			
-			,LAST_OPER_ID = #{lastOperId}
-			,LAST_OPER_DT = SYSDATE
-			,LAST_OPER_IP = #{lastOperIp}
-		WHERE
-		ARTICLE_KEY = #{articleKey}
-	</update>
-
-	<delete id="delete">
-		DELETE FROM TB_ARTICLE WHERE ARTICLE_KEY = #{articleKey}
-	</delete>
 	
 	
-	<update id="updateViewCnt">
-		UPDATE TB_ARTICLE 
-		SET VIEW_CNT = VIEW_CNT + 1 
-		WHERE ARTICLE_KEY = #{articleKey}
-	</update>
-
-	<select id="selectChildList" resultMap="articleMap">
-		 SELECT * FROM TB_ARTICLE WHERE PKEY = #{articleKey} ORDER BY OKEY
-	</select>
-	
-	<select id="selectByMaxOkey" resultMap="articleMap">
-		SELECT * FROM (
-			SELECT * FROM TB_ARTICLE
-			WHERE PKEY = #{pkey}
-			ORDER BY OKEY DESC
-		)T
-		where rownum<![CDATA[<=]]>1
-	</select>
-	
-	<update id="updateOkey">
-		UPDATE TB_ARTICLE 
-		SET OKEY = OKEY + 1
-		WHERE FKEY = #{fkey} AND OKEY <![CDATA[>=]]> #{okey}
-	</update>
-	
-	<update id="disable">
-		UPDATE TB_ARTICLE SET 
-			DELETE_FLG = 'Y'
-			,DELETE_TYP = #{deleteTyp}
-			,LAST_OPER_ID = #{lastOperId}
-			,LAST_OPER_DT = SYSDATE
-			,LAST_OPER_IP = #{lastOperIp}
-		WHERE ARTICLE_KEY = #{articleKey}
-	</update>
-
-	<update id="recovery">
-		UPDATE TB_ARTICLE SET 
-			DELETE_FLG = 'N' 
-			,DELETE_TYP = #{deleteTyp}
-			,LAST_OPER_ID = #{lastOperId}
-			,LAST_OPER_DT = SYSDATE
-			,LAST_OPER_IP = #{lastOperIp}
-		WHERE ARTICLE_KEY = #{articleKey}
-	</update>
-	
-	<update id="move">
-		UPDATE TB_ARTICLE SET
-			BOARD_KEY = #{newBoardKey},
-			MOVE_FLG = 'Y',
-			ORGNL_BOARD_KEY = #{oldBoardKey},
-			LAST_OPER_DT = SYSDATE
-		WHERE FKEY = #{fkey}
-	</update> -->
 </mapper>
 

@@ -180,25 +180,25 @@ $(function() {
         }
     }); 
 
-    // 도움말 Full Process여부
-    $('#btnAdviceFullProcess').click(function() {
-        $('.modal-dimmed, .advice-full-process-modal').show();
-    })
-
-    // 도움말 과제리더벨트
-    $('#btnAdviceReaderBelt').click(function() {
-        $('.modal-dimmed, .advice-reader-belt-modal').show();
-    })
-
-    // 도움말 키워드
-    $('#btnAdviceKeyword').click(function() {
-        $('.modal-dimmed, .advice-keyword-modal').show();
-    })
-
-    // 도움말 산출 Logic
-    $('#btnAdviceLogic').click(function() {
-        $('.modal-dimmed, .advice-logic-modal').show();
-    })
+//    // 도움말 Full Process여부
+//    $('#btnAdviceFullProcess').click(function() {
+//        $('.modal-dimmed, .advice-full-process-modal').show();
+//    })
+//
+//    // 도움말 과제리더벨트
+//    $('#btnAdviceReaderBelt').click(function() {
+//        $('.modal-dimmed, .advice-reader-belt-modal').show();
+//    })
+//
+//    // 도움말 키워드
+//    $('#btnAdviceKeyword').click(function() {
+//        $('.modal-dimmed, .advice-keyword-modal').show();
+//    })
+//
+//    // 도움말 산출 Logic
+//    $('#btnAdviceLogic').click(function() {
+//        $('.modal-dimmed, .advice-logic-modal').show();
+//    })
 
 
 

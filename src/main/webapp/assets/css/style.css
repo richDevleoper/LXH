@@ -219,7 +219,7 @@
 .list-table .input-text input[type=text],
 .list-table .input-text input[type=password]{border-radius:2px}
 .list-table .input-text textarea{display:block;width:100%;box-sizing:border-box;resize:none}
-.list-table > table.centered tbody tr td{text-align:center}
+/*.list-table > table.centered tbody tr td{text-align:center}*/
 .list-table .btn-group button.light-gray{width:100%;min-height:27px;padding-top:2px}
 /* //2023.02.15 추가분 */
 

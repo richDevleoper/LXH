@@ -159,6 +159,10 @@
         </div>
 </div>
 
+
+<style>
+.tb-popup-table td { text-align: center !important; }
+</style>
 <!-- 29 사원조회 -->
 <div class="org-modal" id="comPopup_memberSearch">
 	<div class="modal-header">
@@ -172,24 +176,24 @@
 	                <div class="search-form">
 	                    <div class="form-inline form-input">
 	                        <label>이 름</label>
-	                        <input type="text" name="">
+	                        <input type="text" name="search_name" id="txtSearchName">
 	                    </div>
-	                    <button type="submit" class="btn-submit" onclick="onclick_searchMember()">조회</button>
+	                    <button type="submit" class="btn-submit" onclick="popEmp.callData()">조회</button>
 	                </div>
 	            </form>
 	        </div>
 	    </div>
 	    <div class="list-wrap">
-	        <div class="list-content">
+	        <div class="list-content" style="max-height: 300px; overflow: auto;">
 	            <div class="list-table list">
-	                <table class="centered">
+	                <table class="centered tb-popup-table">
 	                    <caption></caption>
 	                    <colgroup>
 	                        <col style="width:50px">
 	                        <col style="width:60px">
 	                        <col>
 	                        <col style="width:60px">
-	                        <col style="width:60px">
+	                        <col style="width:80px">
 	                        <col style="width:70px">
 	                    </colgroup>
 	                        <thead>
@@ -202,72 +206,107 @@
 	                                <th>Belt</th>
 	                            </tr>
 	                        </thead>
-	                        <tbody id="tbodyMemberSearch" class="tbody-search-result">
-	                            <!-- <tr>
-	                                <td><input type="radio" /></td>
-	                                <td>홍길동</td>
-	                                <td>소속소속소속소속소속소속소속</td>
-	                                <td>직위</td>
-	                                <td>직책</td>
-	                                <td>MBB</td>
-	                            </tr> -->
+	                        
+ 	                        <tbody id="tbodyMemberSearch" class="tbody-search-result">
 	                            <tr class="tr-empty">
-	                            	<td colspan="6">검색어를 입력하세요.</td>
+	                            	<td colspan="6" style="text-align: center; height:30px;">검색어를 입력하세요.</td>
 	                            </tr>
 	                        </tbody>
+	                        
 	                    </table>
 	                </div>
 	            </div>
 	            <script>
 	            	
-	            
-	            
-		            let vMemberSearchReturnId; // 팝업 종료시 리턴할 대상 객체명
-		            let vMemberSEarchReturnFunc; // 팝업 종료시 리턴실행할 함수
-		            
-	            	function addTr(obj){
-	            		
-	            		let paramObj = {comNo:"00091754",userName:"박수민"
-	            				,comJobX:"주임",comPosition:"생산파트장"
-	            				,deptCode:"50006135"
-	            				,deptName:"바닥재 사업담당 > 바닥재.울산생산팀 > 바닥재.울산생산팀(발포기P) > 바닥재.울산생산팀(발포2실)"
-	            				,comCertBelt:"BB"};
-	            		let htm = "<tr class='tr-data' onclick='onclick_memberTr(this)' data='"+JSON.stringify(paramObj)+"' > \n"+
-                            "<td><input type='radio' name='member_search_selected' class='radio-selected-smember'/></td> \n"+
-                            "<td>"+paramObj.userName+"</td> \n"+
-                            "<td>"+paramObj.deptName+"</td> \n"+
-                            "<td>"+paramObj.comJobX+"</td> \n"+
-                            "<td>"+paramObj.comPosition+"</td> \n"+
-                            "<td>"+paramObj.comCertBelt+"</td> \n"+ 
-                        "</tr>";
-	            		
-	            		$("#tbodyMemberSearch").append(htm);
-	            		$("#tbodyMemberSearch").append(htm);
-	            		$("#tbodyMemberSearch").append(htm);
-	            		$("#tbodyMemberSearch").append(htm);
-	            		$("#tbodyMemberSearch").append(htm);
-	            		
-	            		$("input[name=member_search_selected]:eq(0)").prop("checked", true);
-	            	}
-	            	
-	            	// 검색버튼
-	            	function onclick_searchMember(){
-	            		$(".tr-empty").hide();
-	            		addTr({});
-	            	}
-	            	
-	            	function onclick_memberTr(obj){
-	            		$(obj).find(".radio-selected-smember").prop("checked", true);
-	            		
-	            	}
-	            	
-	            	function submit_memberSearch(){
-	            		
-	            		let dt = $("input[name=member_search_selected]:checked").closest("tr").attr("data");
-	            		
-	            		
-	            		
-	            	}
+	            	let popEmp = {
+	            			returnObjId : null,  //팝업에서 선택한 사람을 리턴할 객체
+	            			returnFunc : null,
+	            			open : function(){
+	            				
+	            				$(".modal-dimmed").show();
+	            				$("#comPopup_memberSearch").show();
+	            			},
+	            			close: function(){
+	            				$(".modal-dimmed").hide();
+	            		 		$("#comPopup_memberSearch").hide();
+	            		 		
+	            		 		this.init();
+	            			},
+	            			init : function(){
+	            				$(".tr-empty").show();
+	            				$(".tr-data").remove();
+	            				$("#txtSearchName").val("");
+	            				
+	            				this.returnObjId = null;
+	            				this.returnFunc = null;
+	            			},
+	            			callData : function(){
+	            				
+	            				if($("#txtSearchName").val().trim().length<2){
+	            					return false;
+	            				}
+	            				
+	            				var searchText = $("#txtSearchName").val();
+	            				var posting = $.post( "/qpopup/getEmpSearch.ajax", { userName: searchText }, this.setData, "json" );
+	            				
+	            			},
+	            			setData : function(data){
+	            				
+	            				//{"userId":"parksoomin","userName":"박수민"
+	            				//,"deptFullName":"울산설비팀(전기PM／변전실)"
+	            				//,"comJobx":"FE0","comPosition":"생산파트장","comCertBelt":null}
+	            				$(".tr-empty").hide();
+	            				$(".tr-data").remove();
+	            				if(data.length===0){
+	            					// 데이터가 없습니다. 
+	            					
+	            					let htm = "<tr class='tr-data'> \n"+
+		                                "<td colspan='6' style='text-align: center; height: 30px;'>조회된 사원이 없습니다.</td> \n"+ 
+		                            "</tr>";
+
+		    	            		$("#tbodyMemberSearch").append(htm);
+	            				}
+	            				for ( var i in data) {
+	            					let item = data[i];
+	            					let htm = "<tr class='tr-data' onclick='popEmp.onclickTr(this)' data='"+JSON.stringify(item)+"' > \n"+
+		                                "<td><input type='radio' name='member_search_selected' class='radio-selected-smember' value='"+item.com_no+"'/></td> \n"+
+		                                "<td>"+strChk(item.userName)+"</td> \n"+
+		                                "<td style='text-align: left !important;'>"+strChk(item.deptFullName)+"</td> \n"+
+		                                "<td>"+strChk(item.comJobxNm)+"</td> \n"+
+		                                "<td>"+strChk(item.comPositionNm)+"</td> \n"+
+		                                "<td>"+strChk(item.comCertBeltNm)+"</td> \n"+ 
+		                            "</tr>";
+		    	            		$("#tbodyMemberSearch").append(htm);
+								}
+	            				
+	    	            		$("input[name=member_search_selected]:eq(0)").prop("checked", true);
+	    	            	}, 
+	    	            	searchMember : function(){
+	    	            		// 검색버튼
+	    	            		$(".tr-empty").hide();
+	    	            		popEmp.setData({});
+	    	            	},
+	    	            	onclickTr : function(obj){
+	    	            		$(obj).find(".radio-selected-smember").prop("checked", true);
+	    	            	},
+	    	            	onSubmit: function(){
+	    	            		let checkedItem = $(".radio-selected-smember:checked").closest("tr");
+	    	            		let retData = checkedItem.attr("data");
+	    	            		retData = JSON.parse(retData);
+	    	            		
+	    	            		if(this.returnFunc){
+	    	            			this.returnFunc(this.returnObjId, retData); //리턴함수 호출, 초기화 전 객체명 넘기기
+	    	            			this.close();	// 팝업 Close, 각 파라메터 초기화
+	    	            		} else {
+	    	            			alert("반환 함수가 정의되지 않았습니다.");
+	    	            		}
+	    	            		
+	    	            		
+	    	            		
+	    	            		
+	    	            	}
+	            	};
+
 	            </script>
 	            
 	            <div class="list-footer">
@@ -283,7 +322,7 @@
 	                    <a href="" class="last">끝</a>
 	                </div>
 	                <div class="btns">
-	                    <button class="btn-submit" onclick="submit_memberSearch()">확인</button>
+	                    <button class="btn-submit" onclick="popEmp.onSubmit()">확인</button>
 	                    <button class="btn-cancel">취소</button>
 	                </div>
 	            </div>
@@ -695,7 +734,7 @@
 
 
 <!-- 도움말 Full Process여부 -->
-<div class="org-modal" id="advice-full-process-modal">
+<div class="org-modal" id="adviceModal">
             <div class="modal-header">
                 <h4>도움말</h4>
                 <button type="button" class="btn-close">닫기</button>
@@ -706,45 +745,27 @@
                 </div>
             </div>
 </div>
-
-<!-- 도움말 과제리더벨트 -->
-<div class="org-modal" id="advice-reader-belt-modal">
-<div class="modal-header">
-                <h4>도움말</h4>
-                <button type="button" class="btn-close">닫기</button>
-            </div>
-            <div class="modal-content">
-                <div class="advide-content">
-                    과제리더벨트 온라인 도움말 영역 (내용 수령 후 확인)
-                </div>
-            </div>
-</div>
-
-<!-- 도움말 키워드 -->
-<div class="org-modal" id="advice-keyword-modal">
-<div class="modal-header">
-                <h4>도움말</h4>
-                <button type="button" class="btn-close">닫기</button>
-            </div>
-            <div class="modal-content">
-                <div class="advide-content">
-                    키워드 온라인 도움말 영역 (내용 수령 후 확인)
-                </div>
-            </div>
-</div>
-
-<!-- 도움말 산출 Logic -->
-<div class="org-modal" id="advice-logic-modal">
-<div class="modal-header">
-                <h4>도움말</h4>
-                <button type="button" class="btn-close">닫기</button>
-            </div>
-            <div class="modal-content">
-                <div class="advide-content">
-                    산출 Logic 온라인 도움말 영역 (내용 수령 후 확인)
-                </div>
-            </div>
-</div>
+<script>
+	let popAdvice = {
+		message : {
+			"6sigma-yn":"  ㄱ. 6σ Full Process : 6σ Process인 DMAIC 또는 DMEDI에 맞춰 과제를 진행하는 경우 선택 <br> \r\n"+
+				"  ㄱ. 일반과제 : 6σ Process 단계별 진행이 아닌 일부 통계Tool만 사용시(예로, 공정능력분석/관리도 등) 선택.  <br> \r\n"+
+				"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Quick 6σ / Big Data / FMEA / Task / Quick Win 과제를 등록시 선택 <br>\r\n"+
+				"  ㄱ. 10+ No Policy : 10+ No Policy 에 해당하는 과제 등록시 선택  <br>\r\n",
+			"rep-reader":"등록하려는 과제가 벨트 인증용(과제Test)으로 사용되는 경우는 BB후보 또는 MBB후보를 선택",
+			"keyword":"과제 내용에 부합하는 키워드를 등록하면, 과제 검색에 큰 도움이 됨",
+			"cal-logic":"산출 Logic 온라인 도움말 영역 (내용 수령 후 확인)"
+		},
+		open : function(msgId){
+			$(".advide-content").html(this.message[msgId]);
+			$(".modal-dimmed, #adviceModal").show();
+		},
+		close: function(){
+			$(".modal-dimmed, #adviceModal").hide();
+	 		
+		},
+	}
+</script>
 
 
 

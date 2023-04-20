@@ -120,3 +120,12 @@ function cfnPageLink(page) {
 	$("#currentPageNo").val(page);
 	frm.submit();
 }
+
+function strChk(str){
+	if(!str){
+		return "";
+	} else {
+		return str;
+	}
+	
+}

@@ -6,6 +6,7 @@ import javax.annotation.Resource;
 
 import kr.freedi.dev.common.dao.DefaultDAO;
 import kr.freedi.dev.qreport.domain.ReportIndicatorVO;
+import kr.freedi.dev.qreport.domain.ReportResultVO;
 import kr.freedi.dev.qreport.domain.ReportVO;
 
 import org.apache.commons.logging.Log;
@@ -31,13 +32,24 @@ public class ReportIndicatorService {
 	private DefaultDAO dao;
 	
 	
-	public void insert(ReportVO reportVO) throws Exception {
-
-//		Integer repCode = (Integer)dao.selectOne("Report.selectNextFkey");
-//		reportVO.setRepCode(repCode);
-//		reportVO.setRepMenuCode("REPORT"); //REPORT-과제, TEAM-분임조
-//		
-//		dao.insert("Report.insert", reportVO);
+	public void insert(ReportIndicatorVO vo) throws Exception {
+		
+		Integer newKey = (Integer)dao.selectOne("ReportIndicator.selectNextFkey");
+		vo.setRepIndiCode(newKey);
+		dao.insert("ReportIndicator.insert", vo);
+	}
+	
+	public void update(ReportIndicatorVO vo) throws Exception {
+		
+		dao.update("ReportIndicator.update", vo);
+	}
+	
+	public void save(ReportIndicatorVO vo) throws Exception {
+		if(vo.getRepIndiCode()==null) {
+			this.insert(vo);
+		} else {
+			this.update(vo);
+		}
 	}
 	
 	public List<ReportIndicatorVO> selectFullList(ReportIndicatorVO reportIndicatorVO) {

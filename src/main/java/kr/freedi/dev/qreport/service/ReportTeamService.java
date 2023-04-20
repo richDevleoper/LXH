@@ -1,11 +1,13 @@
 package kr.freedi.dev.qreport.service;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
 import kr.freedi.dev.article.service.ArticleCommentService;
 import kr.freedi.dev.common.dao.DefaultDAO;
+import kr.freedi.dev.qpopup.domain.UserVO;
 import kr.freedi.dev.qreport.domain.ReportTeamVO;
 import kr.freedi.dev.qreport.domain.ReportVO;
 
@@ -31,16 +33,27 @@ public class ReportTeamService {
 	@Resource(name = "defaultDAO")
 	private DefaultDAO dao;
 	
-	@Resource(name = "articleCommentService")
-	private ArticleCommentService articleCommentService;
 	
-	public void insert(ReportVO reportVO) throws Exception {
-
-//		Integer repCode = (Integer)dao.selectOne("Report.selectNextFkey");
-//		reportVO.setRepCode(repCode);
-//		reportVO.setRepMenuCode("REPORT"); //REPORT-과제, TEAM-분임조
-//		
-//		dao.insert("Report.insert", reportVO);
+	public void save(ReportTeamVO teamVO) throws Exception {
+		if(teamVO.getRepTeamCode()==null) {
+			this.insert(teamVO);
+		} else {
+			this.update(teamVO);
+		}
+	}
+	
+	public void insert(ReportTeamVO teamVO) throws Exception {
+		
+		if(teamVO.getComNo()!=null && !teamVO.getComNo().isEmpty()) {
+			Integer teamCode = (Integer)dao.selectOne("ReportTeam.selectNextFkey");
+			teamVO.setRepTeamCode(teamCode);
+			dao.insert("ReportTeam.insert", teamVO);
+		}
+	}
+	
+	public void update(ReportTeamVO teamVO) throws Exception {
+		
+		dao.update("ReportTeam.update", teamVO);
 	}
 	
 	public List<ReportTeamVO> selectFullList(ReportTeamVO reportTeamVO) {

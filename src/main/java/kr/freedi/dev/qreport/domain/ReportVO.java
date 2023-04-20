@@ -336,7 +336,7 @@ public class ReportVO {
 		this.mode = mode;
 	}
 
-	public List<ReportTeamVO> getRepTemMemberList() {
+	public List<ReportTeamVO> getRepTeamMemberList() {
 		return repTeamMemberList;
 	}
 

@@ -11,15 +11,17 @@ public class ReportResultVO {
 
 	private Integer repResultCode;
 	private Integer repCode;
-	private String repResultTypeCode;
+	private String repResultTypeCode;		// 타입코드
 	private String repResultType;	        // 타입명
 	private String repResultWithinYear;
 	private String repResultYear;
-	private String repResultCalLogic; 		// 분임조코드
+	private String repResultCalLogic; 		// 
+	
 	private String repResultRegUser;
 	private Date repResultRegDate;
 	private String repResultUpdateUser;
 	private Date repResultUpdateDate;
+	
 	public Integer getRepResultCode() {
 		return repResultCode;
 	}

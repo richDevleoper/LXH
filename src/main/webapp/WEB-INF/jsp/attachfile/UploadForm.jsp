@@ -10,13 +10,13 @@
 		-->
 	    <div class="fileupload-buttonbar">
 	        <div class="fileupload-buttons">
-	            <span class="fileinput-button">
+	            <span class="fileinput-button" style="float: left !important;">
 	                <span>파일선택</span>
 	                <input type="file" name="files[]" multiple>
 	            </span>
-	            <button id="startAll" type="submit" class="start">전체첨부</button>
+	            <button id="startAll" type="submit" class="start" style="float: left !important;">전체첨부</button>
 	            <!--  <button type="reset" class="cancel">취소</button> -->
-	            <button type="button" class="delete">전체삭제</button>
+	            <button type="button" class="delete" style="float: left !important;">전체삭제</button>
 	            <!-- <input type="checkbox" class="toggle"> -->
 	            <!-- The global file processing state -->
 	            <span class="fileupload-process"></span>

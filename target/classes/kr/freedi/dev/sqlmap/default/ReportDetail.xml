@@ -11,7 +11,7 @@
 		<result property="repDivisionCode" column="REP_DEVISION_CODE" />
 		<result property="repStepCode" column="REP_STEP_CODE" />
 		<result property="repPlanStartDate" column="REP_PLAN_START_DATE" />
-		<result property="repPlanEendDate" column="REP_PLAN_END_DATE" />
+		<result property="repPlanEndDate" column="REP_PLAN_END_DATE" />
 		<result property="repActStartDate" column="REP_ACT_START_DATE" />
 		<result property="repActEndDate" column="REP_ACT_END_DATE" />
 		<result property="repPropelBg" column="REP_PROPEL_BG" />
@@ -89,12 +89,79 @@
 	</select>
 	
 	<insert id="insert">
-		
+		INSERT INTO tb_report_detail 
+		 (
+			REP_SEQ
+			, REP_TEAM_CODE
+			, REP_CODE
+			, REP_MENU_CODE
+			, REP_DEVISION_CODE
+			, REP_STEP_CODE
+			, REP_PLAN_START_DATE
+			, REP_PLAN_END_DATE
+			, REP_ACT_START_DATE
+			, REP_ACT_END_DATE
+			, REP_PROPEL_BG
+			, REP_ACTIVITY
+			, REP_FINISH_SUMMARY
+			, REP_CTQ_CTP
+			, REP_KPI
+			, REP_EXPECTATION_RESULT
+			, REP_APPROVAL_MEM_CODE
+			, REP_APPROVAL_MEM_ROLE
+			, REP_STATUS
+			, REP_REG_USER
+			, REP_REG_DATE
+		) VALUES (
+			#{repSeq}
+			, #{repTeamCode}
+			, #{repCode}
+			, #{repMenuCode}
+			, #{repDivisionCode}
+			, #{repStepCode}
+			, #{repPlanStartDate}
+			, #{repPlanEndDate}
+			, #{repActStartDate}
+			, #{repActEndDate}
+			, #{repPropelBg}
+			, #{repActivity}
+			, #{repFinishSummary}
+			, #{repCtqCtp}
+			, #{repKpi}
+			, #{repExpectationResult}
+			, #{repApprovalMemCode}
+			, #{repApprovalMemRole}
+			, #{repStatus}
+			, #{repRegUser}
+			, SYSDATE
+			
+		)
 	</insert>
 	
 	<update id="update">
 	
-		
+		UPDATE TB_REPORT_DETAIL 
+		   SET REP_TEAM_CODE = #{repTeamCode}
+				, REP_CODE = #{repCode}
+				, REP_MENU_CODE = #{repMenuCode}
+				, REP_DEVISION_CODE = #{repDivisionCode}
+				, REP_STEP_CODE = #{repStepCode}
+				, REP_PLAN_START_DATE = #{repPlanStartDate}
+				, REP_PLAN_END_DATE = #{repPlanEndDate}
+				, REP_ACT_START_DATE = #{repActStartDate}
+				, REP_ACT_END_DATE = #{repActEndDate}
+				, REP_PROPEL_BG = #{repPropelBg}
+				, REP_ACTIVITY = #{repActivity}
+				, REP_FINISH_SUMMARY = #{repFinishSummary}
+				, REP_CTQ_CTP = #{repCtqCtp}
+				, REP_KPI = #{repKpi}
+				, REP_EXPECTATION_RESULT = #{repExpectationResult}
+				, REP_APPROVAL_MEM_CODE = #{repApprovalMemCode}
+				, REP_APPROVAL_MEM_ROLE = #{repApprovalMemRole}
+				, REP_STATUS = #{repStatus}
+				, REP_UPDATE_USER = SYSDATS
+				, REP_UPDATE_DATE = #{repUpdateDate}
+		WHERE REP_SEQ = #{repSeq}
 	</update>
 	
 	<select id="select" resultMap="reportDetailMap">

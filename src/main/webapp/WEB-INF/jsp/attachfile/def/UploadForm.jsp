@@ -12,7 +12,7 @@
 	        <div class="fileupload-buttons">
 	            <span class="fileinput-button">
 	                <span>파일선택</span>
-	                <input type="file" name="files[]" multiple>
+	                <input type="file" name="files[]" multiple style="min-height: 30px;">
 	            </span>
 	            <button id="startAll" type="submit" class="start">전체첨부</button>
 	            <!--  <button type="reset" class="cancel">취소</button> -->

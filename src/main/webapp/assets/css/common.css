@@ -1167,8 +1167,9 @@ p.content_title + .list-wrap{margin-top:9px}
     cursor:pointer;
 }
 
+/*
 .input-text.file button{
-    position:absolute;
+    position:static;
     top:1px;
     right:1px;
     height:25px;
@@ -1176,6 +1177,7 @@ p.content_title + .list-wrap{margin-top:9px}
     padding:7px 6px 5px;
     box-sizing:border-box;
 }
+*/
 
 /* select */
 .select-group select{

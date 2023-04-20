@@ -67,16 +67,66 @@ public class ReportService {
 	
 	public void insert(ReportVO reportVO) throws Exception {
 
-		Integer repCode = (Integer)dao.selectOne("Report.selectNextFkey");
-		reportVO.setRepCode(repCode);
-		reportVO.setRepMenuCode("REPORT"); //REPORT-과제, TEAM-분임조
+
+		//reportVO.setRepMenuCode("REPORT"); //REPORT-과제, TEAM-분임조
 		
+		
+		// report_detail
+		// report_team
+		// report_result
+		// report_indicators
 		dao.insert("Report.insert", reportVO);
+		
+		for (ReportDetailVO vo : reportVO.getRepDetailList()) {
+			vo.setRepCode(reportVO.getRepCode());
+			vo.setRepDivisionCode(reportVO.getRepDivisionCode());
+			reportDetailService.insert(vo);
+		}
+		
+		for (ReportTeamVO vo : reportVO.getRepTeamMemberList()) {
+			vo.setRepCode(reportVO.getRepCode());
+			reportTeamService.insert(vo);	
+		}
+		
+		for (ReportResultVO vo : reportVO.getRepResultList()) {
+			vo.setRepCode(reportVO.getRepCode());
+			reportResultService.insert(vo);	
+		}
+		
+		for (ReportIndicatorVO vo : reportVO.getRepIndicatorList()) {
+			vo.setRepCode(reportVO.getRepCode());
+			reportIndicatorService.insert(vo);	
+		}
 	}
 	
 	public void update(ReportVO reportVO) throws Exception {
 
+		// report_detail 저장
+		// report_team 저장
+		// report_result 저장
+		// report_indicator 저장
+		
+		// 각 항목 키가 있으면 저장, 없으면 update
+		// 서비스에 해당 기능 만들어서 vo 던지기.
+		
+		
 		dao.update("Report.update", reportVO);
+		
+		for (ReportDetailVO vo : reportVO.getRepDetailList()) {
+			reportDetailService.save(vo);
+		}
+		
+		for (ReportTeamVO vo : reportVO.getRepTeamMemberList()) {
+			reportTeamService.save(vo);	
+		}
+		
+		for (ReportResultVO vo : reportVO.getRepResultList()) {
+			reportResultService.save(vo);	
+		}
+		
+		for (ReportIndicatorVO vo : reportVO.getRepIndicatorList()) {
+			reportIndicatorService.save(vo);	
+		}
 	}
 
 	public List<ReportVO> selectList(ReportSearchVO searchVO) {
@@ -100,7 +150,6 @@ public class ReportService {
 			ReportDetailVO reportDetailVO = new ReportDetailVO();
 			reportDetailVO.setRepCode(reportVO.getRepCode());
 			resultVO.setRepDetailList(reportDetailService.selectFullList(reportDetailVO));
-			
 			
 			ReportTeamVO reportTeamVO = new ReportTeamVO();
 			reportTeamVO.setRepCode(reportVO.getRepCode());

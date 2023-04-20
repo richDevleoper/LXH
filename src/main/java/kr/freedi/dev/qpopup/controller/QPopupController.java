@@ -1,4 +1,4 @@
-package kr.freedi.dev.qreport.controller;
+package kr.freedi.dev.qpopup.controller;
 
 import java.io.File;
 import java.math.BigDecimal;
@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
+import org.springframework.web.context.request.WebRequest;
 
 import egovframework.rte.fdl.idgnr.EgovIdGnrService;
 import egovframework.rte.psl.dataaccess.util.EgovMap;
@@ -39,14 +39,14 @@ import kr.freedi.dev.code.domain.CodeVO;
 import kr.freedi.dev.code.service.CodeService;
 import kr.freedi.dev.common.util.EncriptUtil;
 import kr.freedi.dev.common.util.MapUtil;
-import kr.freedi.dev.qreport.domain.ReportDetailVO;
+import kr.freedi.dev.qpopup.domain.UserVO;
+import kr.freedi.dev.qpopup.service.QPopupService;
 import kr.freedi.dev.qreport.domain.ReportIndicatorVO;
 import kr.freedi.dev.qreport.domain.ReportResultVO;
 import kr.freedi.dev.qreport.domain.ReportSearchVO;
-import kr.freedi.dev.qreport.domain.ReportTeamVO;
 import kr.freedi.dev.qreport.domain.ReportVO;
 import kr.freedi.dev.qreport.service.ReportService;
-import kr.freedi.dev.user.domain.UserVO;
+
 
 /**
  * @project : dev_default
@@ -57,21 +57,21 @@ import kr.freedi.dev.user.domain.UserVO;
  * @history	: 
  */
 @Controller
-@RequestMapping({"/report"})
-public class ReportController {
+@RequestMapping({"/qpopup"})
+public class QPopupController {
 
 	protected Log log = LogFactory.getLog(this.getClass());
 	
 	final String ATTACH_TABLE_PREFIX = "TB";
 	
-	@Resource(name = "reportService")
-	private ReportService reportService;
+	@Resource(name = "reportIdGnrService")
+	private EgovIdGnrService idGnrService;
+	
+	@Resource(name = "qPopupService")
+	private QPopupService qPopupService;
 	
 	@Resource(name = "codeService")
 	private CodeService codeService;
-	
-	@Resource(name = "reportIdGnrService")
-	private EgovIdGnrService idGnrService;
 	
 	
 	@InitBinder
@@ -81,250 +81,6 @@ public class ReportController {
 		binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormatter, true));
 	}
 	
-	private String getPath(HttpServletRequest request, String fileName, String boardTyp) {
-
-		File jspFile = null;
-		if(StringUtils.startsWith(request.getRequestURI(), "/csl")){
-			jspFile = new File(request.getServletContext().getRealPath("/") + "/WEB-INF/jsp/article/csl/" + boardTyp + "/" + fileName + ".jsp");
-			if(jspFile.isFile()){
-				return "article/csl/" + boardTyp + "/" + fileName;
-			}else{
-				return "article/csl/" + fileName;
-			}
-		
-		}else if(StringUtils.startsWith(request.getRequestURI(), "/eng")){
-			jspFile = new File(request.getServletContext().getRealPath("/") + "/WEB-INF/jsp/article/eng/" + boardTyp + "/" + fileName + ".jsp");
-			if(jspFile.isFile()){
-				return "article/eng/" + boardTyp + "/" + fileName;
-			}else{
-				return "article/eng/" + fileName;
-			}
-		}else{
-			jspFile = new File(request.getServletContext().getRealPath("/") + "/WEB-INF/jsp/article/def/" + boardTyp + "/" + fileName + ".jsp");
-			if(jspFile.isFile()){
-				return "article/def/" + boardTyp + "/" + fileName;
-			}else{
-				return "article/def/" + fileName;
-			}
-		}
-
-	}
-
-	// 과제 - 리스트
-	@RequestMapping({"/list.do", "/002_01_mission.do"})
-	public String handler002_01(HttpServletRequest request, ModelMap model,
-			@ModelAttribute("reportVO") ReportVO reportVO,
-			@ModelAttribute("reportSearchVO") ReportSearchVO searchVO,
-			UserVO userSession)throws Exception {
-		
-		model.addAttribute("menuKey", searchVO.getMenuKey());
-		
-		List<EgovMap> countList = reportService.selectListCount2(searchVO);
-		
-		
-		int totalCount = 0;
-		for (EgovMap egovMap : countList) {
-			BigDecimal currVal = (BigDecimal)egovMap.get("cnt");
-			totalCount = totalCount + currVal.intValue();
-			String codeNm = (String)egovMap.get("repstatuscode");
-			if(codeNm!=null) {
-				model.addAttribute("count_"+codeNm, currVal.intValue());
-			}
-		}
-		
-		//페이징 기본설정8
-		searchVO.setTotalRecordCount(totalCount);
-		
-		List<ReportVO> reportList = reportService.selectList(searchVO);
-		model.addAttribute("reportList", reportList);
-		model.addAttribute("totalCount", totalCount);
-	
-		CodeVO codeVO = new CodeVO(); 
-		codeVO.setCodeGrpId("6SIG_YN");
-		codeVO.setActFlg("Y"); 
-		model.addAttribute("searchRepName", codeService.selectFullList(codeVO));
-		
-		codeVO.setCodeGrpId("RP_TY1");
-		codeVO.setActFlg("Y"); 
-		model.addAttribute("typeCode1", codeService.selectFullList(codeVO));
-		
-		codeVO.setCodeGrpId("RP_TY2");
-		codeVO.setActFlg("Y"); 
-		model.addAttribute("typeCode2", codeService.selectFullList(codeVO));
-		
-		codeVO.setCodeGrpId("RP_TY3");
-		codeVO.setActFlg("Y"); 
-		model.addAttribute("typeCode3", codeService.selectFullList(codeVO));
-		
-		codeVO.setCodeGrpId("REP_STAT");
-		codeVO.setActFlg("Y"); 
-		model.addAttribute("searchStatus", codeService.selectFullList(codeVO));
-		
-//		HashMap<String, Integer> count = new HashMap<>();
-//		
-//		for (ReportVO item : reportList) {
-//			String key = item.getRepStatus();
-//			Integer val = count.get(key);
-//			if(val==null){
-//				val = 0;
-//			}
-//			if(key!=null) {
-//				count.put(key, val+1);	
-//			}
-//		}
-//		System.out.println(count.toString());
-		return "app/report/List";
-	}
-	
-	
-	// 과제 - 뷰페이지
-	@RequestMapping({"/insertForm.do"})
-	public String view(HttpServletRequest req, ModelMap model,
-			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO,
-			@ModelAttribute("reportVO") ReportVO reportVO, 
-			UserVO userSession) throws Exception {
-		
-		model.addAttribute("menuKey", searchVO.getMenuKey());
-		
-		/*********
-		 * 1. 기초코드 바인딩
-		 * *******/
-		CodeVO codeVO = new CodeVO(); 
-		
-		// 그 외 코드 바인딩, 개별 코드별로 부르는 것이 오래 걸려 한번에 불러오도록 커스터마이징(23/4/3) 
-		String[] arrCodeGrpIds = {"6SIG_YN", "RP_TY1", "RP_TY2", "RP_TY3", "SECTOR", "ACTTYPE", "LDRBELT", "MBBUSERT", "RESULTTY", "REP_ROLE"};
-		codeVO.setCodeGrpIdList(arrCodeGrpIds);
-		codeVO.setActFlg("Y"); 
-		List<EgovMap> allCodes = codeService.selectFullList(codeVO);		//item.codeGrpId, codeId, codeNm
-
-		model.addAttribute("allCodes", allCodes);
-		
-		List<Map> codeResultTy = new ArrayList<>();
-		Map mapItem = new HashMap<String, String>();
-		mapItem.put("codeId", "");
-		mapItem.put("codeNm", "선택하세요");
-		codeResultTy.add(mapItem);
-		
-		HashMap<String, String> repRoleCodes  = new HashMap<>();
-		
-		for (EgovMap item : allCodes) {
-			if(item.get("codeGrpId").equals("RESULTTY")) {
-				mapItem = new HashMap<String, String>();
-				mapItem.put("codeId", item.get("codeId"));
-				mapItem.put("codeNm", item.get("codeNm"));
-				codeResultTy.add(mapItem);
-			} else if(item.get("codeGrpId").equals("REP_ROLE")) {
-				
-				repRoleCodes.put(item.get("codeId").toString(), item.get("codeNm").toString());
-			}
-		}
-		model.addAttribute("codeResultTy", codeResultTy);
-
-		// 6sigma Full Process 여부, 최초 바인딩이 필요해 별도로 조회
-		codeVO.setCodeGrpId("6SIG_YN");
-		codeVO.setActFlg("Y"); 
-		model.addAttribute("divisionCode", codeService.selectFullList(codeVO));
-		model.addAttribute("action", "/report/insert.do");
-		
-		/*********
-		 * 2. ReportVO 데이터 가져오기
-		 * *******/
-		if(reportVO.getRepCode() != null) {
-			// 수정모드	
-			ReportVO dbReportVO = new ReportVO();
-			dbReportVO = reportService.select(reportVO);
-			// 키 코드가 파라메터로 들어오면 임시저장건 수정모드로 진행
-			if(dbReportVO.getRepStatusCode().equals("1")) {
-				// 임시저장 건 수정모드.
-				dbReportVO.setMode("UPDATE");
-				model.addAttribute("reportVO", dbReportVO);		
-			} else {
-				// rep_status_code 가 1(임시저장)이 아닌 경우 리스트로 보내기. (잘못 진입한 것임)
-				return "redirect:list.do";
-			}
-		} else {
-			// 신규작성 - 기본 Form 구성을 위한 메모리 할당
-			ReportVO emptyReportVO = new ReportVO();
-			emptyReportVO.setRepCode(idGnrService.getNextIntegerId());
-			emptyReportVO.setRepMenuCode("REPORT"); // REPORT >> 과제 
-			
-			// 일정 구성 - 빈 칸 작성
-			List<ReportDetailVO> reportDetailList = new ArrayList<>();
-			for (int i=1; i<=6; i++) { // 6시그마 기준
-				ReportDetailVO emptyDetailVO = new ReportDetailVO();
-				emptyDetailVO.setRepStepCode(Integer.toString(i));
-				reportDetailList.add(emptyDetailVO);
-			}
-			emptyReportVO.setRepDetailList(reportDetailList);
-			
-			// 팀 구성 - 빈 칸 작성
-			List<ReportTeamVO> reportTeamList = new ArrayList<>();
-			for (int i = 1; i <= 5; i++) {
-				ReportTeamVO emptyRepTeamVO = new ReportTeamVO();
-				emptyRepTeamVO.setRepTeamMemRole(Integer.toString(i));			// 각 행별 역할부여(과제리더, 팀멤버, ~~)
-				emptyRepTeamVO.setRepTeamMemRoleNm(repRoleCodes.get(Integer.toString(i)));  // 역할명칭 코드값 가져오기
-				reportTeamList.add(emptyRepTeamVO);
-			}
-			emptyReportVO.setRepTeamMemberList(reportTeamList);
-			
-			// 성과 - 빈 칸 작성
-			List<ReportResultVO> repResultList = new ArrayList<>();
-			repResultList.add(new ReportResultVO());
-			emptyReportVO.setRepResultList(repResultList);
-			
-			// 주요지표 - 빈 칸 작성
-			List<ReportIndicatorVO> repIndicatorList = new ArrayList<>();
-			repIndicatorList.add(new ReportIndicatorVO());
-			emptyReportVO.setRepIndicatorList(repIndicatorList);
-			
-			model.addAttribute("reportVO", emptyReportVO);
-		}
-		
-
-		
-		return "app/report/InsertForm";
-	}  
-	
-	@RequestMapping({"/insert.do"})
-	public String insert(HttpServletRequest req, ModelMap model,
-			@ModelAttribute("reportVO") ReportVO reportVO,
-			@ModelAttribute("reportSearchVO") ReportSearchVO searchVO,
-			UserVO userSession, 
-			String userIp) throws Exception {
-
-//		//권한체크
-//		boolean isMngr = articleService.isMngr(userSession, articleVO);
-//		boolean isUseGrpForWrite = articleService.isUseGrp(userSession, articleVO, BOARD_USE_TYP_WRITE);
-//		if(!isMngr && !isUseGrpForWrite){
-//			//throw new ArticlePermissionDeniedException();
-//			return getPath(request, "ExcpPermissionDenied", "exception");
-//		}
-		
-//		//기본값 체크
-//		if(StringUtils.isEmpty(articleVO.getNoticeFlg())){
-//			articleVO.setNoticeFlg("N");
-//		}
-		
-//		if(StringUtils.isEmpty(articleVO.getSecretFlg())){
-//			articleVO.setSecretFlg("N");
-//		}
-
-//		//사용자정보 세팅
-//		articleVO.setFrstOperId(userSession.getUserId());
-//		articleVO.setFrstOperIp(userIp);
-//		reportVO.setRepStatusCode("1");
-	
-//		//insert article
-		if(reportVO.getMode().equals("UPDATE")) {
-			reportService.update(reportVO);	
-		} else {
-			reportService.insert(reportVO);	
-		}
-		
-		//return "redirect:/report/002_01_sub01.do?menuKey=29";
-		return "redirect:/sub.do?menuKey=29";
-	}
-	
 	@RequestMapping({"/updateForm.do"})
 	public String updateForm(HttpServletRequest request, ModelMap model,
 			@ModelAttribute("reportVO") ReportVO reportVO,
@@ -332,80 +88,17 @@ public class ReportController {
 			UserVO userSession)throws Exception {
 
 		
-		//Integer paramRepCode = reportVO.getRepCode();
-		ReportVO tReportVO = new ReportVO();
-		tReportVO = reportService.select(reportVO);
+		return "";
+	}
+	
+	// 과제 - 리스트
+	@RequestMapping({"/getEmpSearch.ajax"})
+	public @ResponseBody List<EgovMap> handler002_01(HttpServletRequest request
+			, @ModelAttribute("userVO") UserVO userVo)throws Exception {
 		
-		if(tReportVO.getRepStatusCode().equals("1")) {
-			return "redirect:./insertForm.do?menuKey="+searchVO.getMenuKey()+"&repCode="+reportVO.getRepCode();
-		} else {
-			model.addAttribute("reportVO", tReportVO);
-			//권한체크
-//			boolean isMngr = reportService.isMngr(userSession, articleVO);
-//			boolean isUseGrpForWrite = reportService.isUseGrp(userSession, articleVO, BOARD_USE_TYP_WRITE);
-//			if(!isMngr && !isUseGrpForWrite){
-//				//throw new ArticlePermissionDeniedException();
-//				return getPath(request, "ExcpPermissionDenied", "exception");
-//			}
-
-			
-			/*
-			//게시물
-			ArticleVO tReportVO = new ArticleVO();
-			tReportVO = reportService.select(reportVO);
-			model.addAttribute("reportVO", tReportVO);
-			
-			if(!isMngr){
-				//로그인없이 쓴 글
-				if(StringUtils.isEmpty(tArticleVO.getFrstOperId())){
-					if(StringUtils.isEmpty(searchVO.getSearchWriterPwd())){
-						model.addAttribute("cmd", "update");
-						model.addAttribute("cause", "empty");
-						model.addAttribute("action", "updateForm.do");
-						return getPath(request, "PwdCheckForm", boardVO.getBoardTyp());
-						
-					}else{
-						if(!StringUtils.equals(EncriptUtil.encript(searchVO.getSearchWriterPwd()), tArticleVO.getWriterPwd())){
-							model.addAttribute("cmd", "update");
-							model.addAttribute("cause", "wrong");
-							model.addAttribute("action", "updateForm.do");
-							return getPath(request, "PwdCheckForm", boardVO.getBoardTyp());
-						}
-					}
-					
-				//로그인해서 쓴글
-				}else{
-					if(userSession.isLoginUser()){
-						if(!StringUtils.equals(userSession.getUserId(), tArticleVO.getFrstOperId())){
-							return getPath(request, "ExcpIncorrectUser", "exception");
-						}
-					}else{
-						request.getSession().setAttribute("destinationAfterLogin", request.getHeader("referer"));
-						return getPath(request, "ExcpNotLoginUser", "exception");
-					}
-				}
-			}
-			
-			//수정권한 획득 
-			userSession.setCurrentArticleVO(tArticleVO);
-
-			//카테고리정보
-			if(StringUtils.equals(boardVO.getCatgrFlg(), "Y")){
-				CodeVO codeVO = new CodeVO();
-				codeVO.setCodeGrpId(boardVO.getCatgrId());
-				codeVO.setActFlg("Y");
-				model.addAttribute("catgrList", codeService.selectFullList(codeVO));
-			}
-			
-			//set submit action
-			model.addAttribute("action", "update.do");
-			 */
-			//return getPath(request, "Form", boardVO.getBoardTyp());
-			return "redirect:./updateForm.do?menuKey="+searchVO.getMenuKey()+"&repCode="+reportVO.getRepCode();
-		}
+		return qPopupService.select(userVo); 
 	}
   
-	
 /*
 	//@RequestMapping({"/csl/article/list.do", "/article/list.do", "/eng/article/list.do"})
 	public String list(HttpServletRequest request, ModelMap model,
