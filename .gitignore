@@ -1,9 +1,8 @@
 *.class
 *.properties
-src/main/resources/kr/freedi/dev/spring/context-datasource.xml
-target/*
 .externalToolBuilders/
 .classpath
 .project
 .settings/*
-docs/~$*
+target/*
+.idea/*
