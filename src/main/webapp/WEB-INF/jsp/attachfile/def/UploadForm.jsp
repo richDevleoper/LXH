@@ -9,7 +9,7 @@
 		<input type="hidden" id="fileGrp" name="fileGrp" value="article" />
 		-->
 	    <div class="fileupload-buttonbar">
-<!-- 	        <div class="fileupload-buttons"> -->
+ 	        <div class="fileupload-buttons">
 	            <span class="fileinput-button">
 	                <span>파일선택</span>
 	                <input type="file" name="files[]" multiple style="min-height: 30px;">
@@ -32,7 +32,6 @@
 	    <!-- The table listing the files available for upload/download -->
 	    <div>
 		    <table role="presentation" style="width:100%;">
-		    	<!-- <colgroup><col style="width:59%;" /><col style="width:11%;" /><col style="width:10%;" /><col style="width:20%;" /></colgroup> -->
 		    	<colgroup><col style="" /><col style="width:90px;" /><col style="width:90px;" /><col style="width:180px;" /></colgroup>
 		    	<tbody class="files"></tbody>
 		    </table>
@@ -61,7 +60,7 @@
 					{% if (!i && !o.options.autoUpload) { %}
 						<button class="start" disabled>첨부</button>
 					{% }else { %}
-						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<button class="start" style="visibility: hidden;">첨부</button>&nbsp;
 					{% } %}
 					{% if (!i) { %}
 						<button class="cancel">삭제</button>
@@ -104,7 +103,7 @@
 					<span class="size">{%=o.formatFileSize(file.fileSiz)%}</span>
 				</td>
 				<td style="text-align:center;">
-					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					<button class="start" style="visibility: hidden;">첨부</button>&nbsp;
 					<button class="delete" data-type="DELETE" data-url="#ctx#/attachfile/delete.do?fileId={%= file.fileId %}&fileSeq={%=file.fileSeq%}"{% if (file.deleteWithCredentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>삭제</button>
 					<!-- <input type="checkbox" name="delete" value="1" class="toggle"> -->
 				</td>
