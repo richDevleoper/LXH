@@ -76,12 +76,12 @@ jAttachFile.fileUploader.prototype.touch = function() {
 	
 		,_listUrl = this.listUrl
 		,_fileId = this.fileId;
-	
-    $('#fileupload').fileupload({
+
+	$("#"+ this.wrapperId + ' #fileupload').fileupload({
         url: _uploadUrl
     });
     
-    $('#fileupload').fileupload('option', {
+	$("#"+ this.wrapperId + ' #fileupload').fileupload('option', {
         dataType: 'json',
         autoUpload: _autoUpload,
         maxFileSize:_maxFileSize,
@@ -90,19 +90,19 @@ jAttachFile.fileUploader.prototype.touch = function() {
         formData:_formData
     });
     
-    if($('#fileupload').fileupload('option').autoUpload){
-    	$('#startAll').hide();
+    if($("#"+ this.wrapperId + ' #fileupload').fileupload('option').autoUpload){
+    	$("#"+ this.wrapperId + ' #startAll').hide();
     }
     
     // Load existing files:
-    $('#fileupload').addClass('fileupload-processing');
+    $("#"+ this.wrapperId + ' #fileupload').addClass('fileupload-processing');
     $.ajax({
         // Uncomment the following to send cross-domain cookies:
         //xhrFields: {withCredentials: true},
         //url: _listUrl + '?fileId=' + _fileId,
         url:_listUrl + '?fileId=' + _fileId,
         dataType: 'json',
-        context: $('#fileupload')[0]
+        context: $("#"+ this.wrapperId + ' #fileupload')[0]
     }).always(function () {
         $(this).removeClass('fileupload-processing');
     }).done(function (result) {

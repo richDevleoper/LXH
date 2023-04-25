@@ -9,7 +9,7 @@
 		<input type="hidden" id="fileGrp" name="fileGrp" value="article" />
 		-->
 	    <div class="fileupload-buttonbar">
-	        <div class="fileupload-buttons">
+<!-- 	        <div class="fileupload-buttons"> -->
 	            <span class="fileinput-button">
 	                <span>파일선택</span>
 	                <input type="file" name="files[]" multiple style="min-height: 30px;">
@@ -32,7 +32,8 @@
 	    <!-- The table listing the files available for upload/download -->
 	    <div>
 		    <table role="presentation" style="width:100%;">
-		    	<colgroup><col style="width:59%;" /><col style="width:11%;" /><col style="width:10%;" /><col style="width:20%;" /></colgroup>
+		    	<!-- <colgroup><col style="width:59%;" /><col style="width:11%;" /><col style="width:10%;" /><col style="width:20%;" /></colgroup> -->
+		    	<colgroup><col style="" /><col style="width:90px;" /><col style="width:90px;" /><col style="width:180px;" /></colgroup>
 		    	<tbody class="files"></tbody>
 		    </table>
     	</div>
