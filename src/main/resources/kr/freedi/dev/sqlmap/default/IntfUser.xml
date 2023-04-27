@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="IntfUser">
+
+	<select id="selectByComNo"
+		resultType="kr.freedi.dev.user.domain.IntfUserVO">
+		select USER_ID as userId
+	       , USER_PW as userPw
+	       , USER_SCHOOL as userSchool
+	       , USER_MAJOR as userMajor
+	       , USER_NAME as userName
+	       , USER_STATE as userState
+	       , USER_SECURITY_LV as userSecurityLv
+	       , USER_PHONE_NO as userPhoneNo
+	       , USER_EMAIL as userEmail
+	       , USER_TYPE as userType
+	       , USER_COM_STATE as userComState
+	       , USER_LEVEL_FLAG as userLevelFlag
+	       , COM_CODE as comCode
+	       , COM_NO as comNo
+	       , COM_LEADER_NO as comLeaderNo
+	       , COM_JOBX as comJobx
+	       , COM_POSITION as comPosition
+	       , COM_GROUP_JOBX as comGroupJobx
+	       , COM_DEPART_CODE as comDepartCode
+	       , COM_WORK_PLACE as comWorkPlace
+	       , COM_SIX_SIGMA_CODE as comSixSigmaCode
+	       , COM_POST_BELT as comPostBelt
+	       , COM_POST_TYPE as comPostType
+	       , COM_POST_RANGE as comPostRange
+	       , COM_CERT_BELT as comCertBelt
+	       , COM_CERT_BLET_2 as comCertBlet2
+	       , COM_CHARGE_WORK as comChargeWork
+	       , COM_JOIN_DATE as comJoinDate
+	       , COST_CENTER as costCenter
+	       , LAST_CHANGE_PW_DATE as lastChangePwDate
+	       , LAST_LOGIN_DATE as lastLoginDate
+	       , APPOINTMENT_DATE as appointmentDate
+	       , UPDATE_DATE as updateDate
+	       , REG_DATE  as regDate
+		from TB_USER_MST T
+		WHERE T.COM_NO = #{comNo}
+	</select>
+
+
+	<update id="updateLastLoginDt">
+		UPDATE TB_USER_MST SET LAST_LOGIN_DATE = SYSDATE
+		WHERE
+		COM_NO = #{comNo}
+	</update>
+
+</mapper>
+

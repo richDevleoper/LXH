@@ -486,13 +486,13 @@ public class AppController {
 		return "app/qi/008_01_apprvbox";
 	}
 	
-	@RequestMapping({"/app/008_01_01_apprvcate.do"})
-	public String handler008_01_01(HttpServletRequest request, ModelMap model,
-			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
-			UserVO userSession)throws Exception {
-		
-		return "app/qi/008_01_01_apprvcate";
-	}
+//	@RequestMapping({"/app/008_01_01_apprvcate.do"})
+//	public String handler008_01_01(HttpServletRequest request, ModelMap model,
+//			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
+//			UserVO userSession)throws Exception {
+//		
+//		return "app/qi/008_01_01_apprvcate";
+//	}
 	
 	@RequestMapping({"/app/008_01_02_apprvsugg.do"})
 	public String handler008_01_02(HttpServletRequest request, ModelMap model,
