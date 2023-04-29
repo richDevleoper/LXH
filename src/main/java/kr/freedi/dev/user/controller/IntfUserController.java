@@ -75,9 +75,7 @@ public class IntfUserController extends UserController {
 			return "forward:loginForm.do";
 		}else{
 			UserVO userVO = new UserVO();
-			
 			userVO.setIntfUserVO(loginVO);
-			
 			userVO.setUserTyp(this.USER_GRP);
 			userVO.setLocale(super.getLocale());
 			userVO.setIpAddr(super.getIpAddr());

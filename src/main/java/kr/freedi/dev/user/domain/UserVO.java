@@ -30,6 +30,7 @@ public class UserVO implements Serializable {
 	private MngrUserVO mngrUserVO;
 	private GenrUserVO genrUserVO;
 	private CorpUserVO corpUserVO;
+	private IntfUserVO intfUserVO;
 	
 	private String loginYmdt;
 	private String locale;
@@ -202,6 +203,16 @@ public class UserVO implements Serializable {
 	
 	public String toString(){
 		return ToStringBuilder.reflectionToString(this);
+	}
+
+
+	public IntfUserVO getIntfUserVO() {
+		return intfUserVO;
+	}
+
+
+	public void setIntfUserVO(IntfUserVO intfUserVO) {
+		this.intfUserVO = intfUserVO;
 	}
 }
 

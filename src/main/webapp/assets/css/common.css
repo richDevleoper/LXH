@@ -1167,9 +1167,18 @@ p.content_title + .list-wrap{margin-top:9px}
     cursor:pointer;
 }
 
-/*
-.input-text.file button{
-    position:static;
+
+/* .input-text.file button{
+    position:absolute;
+    top:1px;
+    right:1px;
+    height:25px;
+    border:1px;
+    padding:7px 6px 5px;
+    box-sizing:border-box;
+} */
+button.remove-file-box {
+    position:absolute;
     top:1px;
     right:1px;
     height:25px;
@@ -1177,7 +1186,8 @@ p.content_title + .list-wrap{margin-top:9px}
     padding:7px 6px 5px;
     box-sizing:border-box;
 }
-*/
+
+
 
 /* select */
 .select-group select{
@@ -1778,4 +1788,5 @@ border-right:0
     right: -1px;
     top: -1px;
 }
+    
     

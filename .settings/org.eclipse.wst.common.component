@@ -6,6 +6,8 @@
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/extra/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/profiles/local"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/target/generated-sources/annotations"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/target/generated-test-sources/test-annotations"/>
         <property name="java-output-path" value="/dev_default/target/classes"/>
         <property name="component.exclusion.patterns" value="upload/**/*"/>
         <property name="context-root" value="/"/>

@@ -98,7 +98,7 @@
                                                 <td>${item.idx}</td>
                                                 <td>${item.repDivision}</td>
                                                 <td>${item.repType}</td>
-                                                <td><a href="javascript: onclick_reportName('${item.repCode}')">${item.repName}</a></td>
+                                                <td><a href="javascript: onclick_reportName('${item.repStatusCode}', '${item.repCode}')">${item.repName}</a></td>
                                                 <td>${item.repStatus}</td>
                                                 <td><fmt:formatDate pattern="yyyy.MM.dd" value="${item.repStartDate}" /></td>
                                                 <td><fmt:formatDate pattern="yyyy.MM.dd" value="${item.repFinishDate}" /></td>
@@ -181,8 +181,13 @@
 		onclick_search();// 검색 '조회'버튼 클릭
 	}
 	
-	function onclick_reportName(repCode){
-		location.href="/report/updateForm.do?menuKey=${menuKey}&repCode="+repCode;
+	function onclick_reportName(statusCode, repCode){
+		if(statusCode==="1"){ // 임시저장
+			location.href="/report/updateForm.do?menuKey=${menuKey}&repCode="+repCode;	
+		} else if(statusCode==="2"){ // 선정중
+			location.href="/report/updateForm.do?menuKey=${menuKey}&repCode="+repCode;
+		}
+		
 	}
 </script>
 

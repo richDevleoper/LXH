@@ -61,7 +61,7 @@
                                                 <td colspan="3">
                                                     <div class="row">
                                                         <div class="col s12 input-text">
-                                                            <form:input type="text" id="txtRepName" path="repName" value="" title="과제명을 입력해주세요." />
+                                                            <form:input type="text" id="txtRepName" path="repName" value="" title="과제명을 입력해주세요." cssClass="validate[required]"/>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -70,8 +70,8 @@
                                                 <th><form:label path="repDivisionCode"><span class="asterisk">*</span>6σ Full Process여부</form:label> <i class="ico tip" onclick="popAdvice.open('6sigma-yn')"><em>tip.</em></i></th>
                                                 <td>
                                                     <div class="row">
-                                                        <div class="col s12 select-group">
-                                                            <form:select path="repDivisionCode" title="6σ Full Process여부 선택">
+                                                        <div class="col s12 select-group" <c:if test="${reportVO.mode eq 'UPDATE' }">style="pointer-events: none;"</c:if> >
+                                                            <form:select path="repDivisionCode" title="6σ Full Process여부 선택" cssClass="validate[required]">
 																<c:forEach var="item" items="${divisionCode}">
 																	<option value="${item.codeId}" <c:if test="${item.codeId eq reportVO.repDivisionCode }">selected="selected"</c:if>>${item.codeNm}</option>
 																</c:forEach>
@@ -82,9 +82,8 @@
                                                 <th><form:label path="repTypeCode"><span class="asterisk">*</span>과제유형</form:label></th>
                                                 <td>
                                                     <div class="row">
-                                                        <div class="col s12 select-group">
-                                                            <form:select path="repTypeCode" title="과제유형 선택">
-                                                            </form:select>
+                                                        <div class="col s12 select-group" <c:if test="${reportVO.mode eq 'UPDATE' }">style="pointer-events: none;"</c:if>>
+                                                            <form:select path="repTypeCode" title="과제유형을 선택하세요." cssClass="validate[required]"></form:select>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -94,7 +93,7 @@
                                                 <td>
                                                     <div class="row">
                                                         <div class="col s12 select-group">
-                                                            <form:select path="repSectorCode" title="부문 선택">
+                                                            <form:select path="repSectorCode" title="부문을 선택하세요." cssClass="validate[required]">
                                                             </form:select>
                                                         </div>
                                                     </div>
@@ -103,17 +102,19 @@
                                                 <td>
                                                     <div class="row">
                                                         <div class="col s12 input-text">
-                                                            <form:input type="text" path="repProductClass" name="REP_PRODUCT_CLASS" value="" title="제품군을 입력해주세요." />
+                                                            <form:input type="text" path="repProductClass" title="제품군을 입력해주세요." cssClass="validate[required]" />
                                                         </div>
                                                     </div>
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <th><form:label path="repLeaderBeltCode"><span class="asterisk">*</span>과제리더벨트</form:label> <i class="ico tip" onclick="popAdvice.open('rep-reader')"></i></th>
+                                                <th><form:label path="repLeaderBeltCode"><span class="asterisk">*</span>과제리더벨트</form:label> <i class="ico tip" onclick="popAdvice.open('rep-reader')"></i>
+                                                <%-- <c:out value="${reportVO.repDivisionCode}"/> --%>
+                                                </th>
                                                 <td>
                                                     <div class="row">
                                                         <div class="col s12 select-group">
-                                                            <form:select path="repLeaderBeltCode" title="부문 선택">
+                                                            <form:select path="repLeaderBeltCode" title="과제리더벨트를 선택하세요." cssClass="validate[required]">
                                                             </form:select>
                                                         </div>
                                                     </div>
@@ -122,7 +123,7 @@
                                                 <td>
                                                     <div class="row">
                                                         <div class="col s12 select-group">
-                                                            <form:select path="repActionTypeCode" title="활동분야 선택">
+                                                            <form:select path="repActionTypeCode" title="활동분야를 선택하세요." cssClass="validate[required]">
                                                             </form:select>
                                                         </div>
                                                     </div>
@@ -133,7 +134,7 @@
                                                 <td>
                                                     <div class="row">
                                                         <div class="col s12 select-group">
-                                                            <form:select path="repMbbUseRateCode" title="MBB활용율 선택">
+                                                            <form:select path="repMbbUseRateCode" title="MBB활용율을 선택하세요." cssClass="validate[required]">
                                                             </form:select>
                                                         </div>
                                                     </div>
@@ -153,9 +154,353 @@
                                                         <!-- [D] 상태에따라 열기/닫기 텍스트 구분해주세요. -->
                                                         <span class="blind">열기/닫기</span>
                                                         <ul>
-                                                            <!-- [D] 열린상태일 경우 active 클래스를 추가해주세요. -->
-                                                            <!--<li class="active">-->
-                                                                <li>
+                                                            <li><!-- [D] 열린상태일 경우 active 클래스를 추가해주세요. -->
+                                                                <div class="list-content">
+                                                                    <div class="list-table list">
+                                                                        <table>
+                                                                            <caption>일정계획 및 수행 테이블</caption>
+                                                                            <colgroup>
+                                                                                <col style="width:60px">
+                                                                                <col style="width:80px">
+                                                                                <col>
+                                                                                <col style="width:80px">
+                                                                                <col style="width:60px">
+                                                                            </colgroup>
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <th>구분</th>
+                                                                                    <th colspan="2">착수(예정)일</th>
+                                                                                    <th colspan="3">완료(예정)일</th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <td>계획</td>
+                                                                                    
+                                                                                    <td class="pd3" colspan="2">
+                                                                                        <div class="row">
+                                                                                            <div class="col s12 input-text input-date" style="float:none;width:120px;margin:0 auto !important">
+	<form:input type="text" path="repDetailList[0].repPlanStartDate" cssClass="datepicker validate[required]" />
+                                                                                                <i class="ico calendar"></i>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </td>
+                                                                                    <td class="pd3" colspan="3">
+                                                                                        <div class="row">
+                                                                                            <div class="col s12 input-text input-date" style="float:none;width:120px;margin:0 auto !important">
+	<form:input type="text" path="repDetailList[0].repPlanEndDate" cssClass="datepicker validate[required]"/>
+                                                                                                <i class="ico calendar"></i>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </td>
+   
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>실시</td>
+                                                                                    <td class="pd3" colspan="2">
+                                                                                        <div class="row">
+                                                                                            <div class="col s12 input-text input-date" style="float:none;width:120px;margin:0 auto !important">
+	<form:input type="text" path="repDetailList[0].repActStartDate" cssClass="datepicker validate[required]"/>
+                                                                                                <i class="ico calendar"></i>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </td>
+                                                                                    <td class="pd3" colspan="3">
+                                                                                        <div class="row">
+                                                                                            <div class="col s12 input-text input-date" style="float:none;width:120px;margin:0 auto !important">
+	<form:input type="text" path="repDetailList[0].repActEndDate"  cssClass="datepicker validate[required]"/>
+                                                                                                <i class="ico calendar"></i>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <th rowspan="2">활동계획</th>
+                                                                                    <th>추진배경</th>                                                                                    
+                                                                                    <td td colspan="4">
+                                                                                    <div class="input-text">
+	<form:textarea path="repDetailList[0].repPropelBg"></form:textarea>
+                                                                                    </div>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>                                                                                    
+                                                                                    <th>주요활동</th>                                                                                    
+                                                                                    <td colspan="4"><div class="input-text">
+	<form:textarea path="repDetailList[0].repActivity"></form:textarea>
+                                                                                    </div>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                 
+                                                                        </table>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+
+                                                            <li>
+                                                                <div class="list-content">
+                                                                    <div class="list-table list">
+                                                                        <table>
+                                                                            <caption>일정계획 및 수행 테이블</caption>
+                                                                            <colgroup>
+                                                                                <col style="width:60px">
+                                                                                <col style="width:80px">
+                                                                                <col>                                                                                
+                                                                                <col style="width:70px">
+                                                                                <col style="width:70px">
+                                                                                <col style="width:70px">
+                                                                                <col style="width:70px">
+                                                                            </colgroup>
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <th colspan="4">Finish 요약</th>                                                                                    
+                                                                                    <th colspan="3">활동결과(실적)</th>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td rowspan="2" colspan="4">
+                                                                                        <div class="input-text">
+	<form:textarea path="repDetailList[0].repFinishSummary"></form:textarea>
+                                                                                        </div>
+                                                                                    </td>                                                                                    
+                                                                                    <td>CTQ/CTP</td>
+                                                                                    <td>KPI</td>
+                                                                                    <td>예상성과</td>                                                                                        
+                                                                                </tr>
+                                                                                <tr>              
+                                                                                    <td><div class="col s2 input-text pd3">
+	<form:input type="text" path="repDetailList[0].repCtqCtp"/>
+                                                                                    </div></td>
+                                                                                    <td><div class="col s2 input-text pd3" style="width:100%">
+	<form:input type="text" path="repDetailList[0].repKpi"/>
+                                                                                    </div></td>
+                                                                                    <td><div class="col s2 input-text pd-r10" style="width:100%">
+	<form:input type="text" path="repDetailList[0].repExpectationResult"/>
+																					</div></td>                                 
+                                                                                </tr>
+                                                                                <!-- <tr>
+                                                                                    <th rowspan="2">승인자</th>
+                                                                                    <th>참여형태</th>
+                                                                                    <th>소속</th>
+                                                                                    <th>이름</th>
+                                                                                    <th>직위</th>
+                                                                                    <th>직책</th>
+                                                                                    <th>Belt</th>
+                                                                                </tr>
+                                                                                <tr>                                                                                    
+                                                                                    <td>챔피온</td>
+                                                                                    <td>소속</td>
+                                                                                    <td>이름</td>
+                                                                                    <td>직위</td>
+                                                                                    <td>직책</td>
+                                                                                    <td>Belt</td>
+                                                                                </tr> 화면설계내용 없애기로 협의 4/26 -->
+                                                                                <tr>
+                                                                                    <th colspan="2" class="pd-r10 align-right"> 첨부파일<br> (Up to 10) </th>
+                                                                                    <td colspan="5"><div class="file-drop-box">
+                                                                                    <style>
+                                                                                    .fileupload-buttonbar {text-align: left;}
+                                                                                    </style>
+                                                       <attachfile:fileuploader
+															objectId="fileUploadObj_02"
+															ctx=""
+															wrapperId="fileUploadWrap2"
+															fileId="reportDetail_${reportVO.repDetailList[0].repStepCode}"
+															fileGrp="reportDetail"
+															autoUpload="false"
+															maxFileSize="${15*1000000}"
+															maxNumberOfFiles="10"/>                                                                                    
+                                                                                    </div></td>
+                                                                                </tr>
+                                                                                                                                                            
+                                                                                <tr>
+                                                                                    <td colspan="6" class="pd0 border0">
+                                                                                        <div class="toggle-box">
+                                                                                            <div class="list-table list">
+                                                                                                <table>
+                                                                                                    <caption>일정계획 및 수행 테이블</caption>
+                                                                                                    <colgroup>
+                                                                                                        <col style="width:60px">
+                                                                                                        <col style="width:145px">
+                                                                                                        <col>
+                                                                                                        <col style="width:80px">
+                                                                                                        <col style="width:80px">
+                                                                                                        <col style="width:80px">
+                                                                                                    </colgroup>
+                                                                                                    <tbody>
+                                                                                                        <tr>
+                                                                                                            <td>계획</td>
+                                                                                                            <td>2023.01.01</td>
+                                                                                                            <td rowspan="2" colspan="4">
+                                                                                                                <div class="input-text">
+                                                                                                                    <textarea name="" id="">활동요약 내용(실시결과 내용)</textarea>
+                                                                                                                </div>
+                                                                                                            </td>
+                                                                                                        </tr>
+                                                                                                        <tr>
+                                                                                                            <td>실시</td>
+                                                                                                            <td>2023.01.01</td>
+                                                                                                        </tr>
+                                                                                                        <tr>
+                                                                                                            <td>계획</td>
+                                                                                                            <td>2023.01.01</td>
+                                                                                                            <td rowspan="2">
+                                                                                                                <div class="input-text">
+                                                                                                                    <textarea name="" id="">활동요약 내용(실시결과 내용)</textarea>
+                                                                                                                </div>
+                                                                                                            </td>
+                                                                                                            <td>CTQ/CTP</td>
+                                                                                                            <td>KPI</td>
+                                                                                                            <td>예상성과</td>
+                                                                                                        </tr>
+                                                                                                        <tr>
+                                                                                                            <td>실시</td>
+                                                                                                            <td>2023.01.01</td>
+                                                                                                            <td>&nbsp;</td>
+                                                                                                            <td>&nbsp;</td>
+                                                                                                            <td>&nbsp;</td>
+                                                                                                        </tr>
+                                                                                                    </tbody>
+                                                                                                </table>
+                                                                                            </div>
+                                                                                            <div class="list-table list">
+                                                                                                <table>
+                                                                                                    <caption>일정계획 및 수행 테이블</caption>
+                                                                                                    <colgroup>
+                                                                                                        <col style="width:60px">
+                                                                                                        <col style="width:80px">
+                                                                                                        <col>
+                                                                                                        <col style="width:60px">
+                                                                                                        <col style="width:60px">
+                                                                                                        <col style="width:60px">
+                                                                                                        <col style="width:60px">
+                                                                                                    </colgroup>
+                                                                                                    <tbody>
+                                                                                                        <!-- <tr>
+                                                                                                            <th rowspan="2">승인자</th>
+                                                                                                            <th>참여형태</th>
+                                                                                                            <th>소속</th>
+                                                                                                            <th>이름</th>
+                                                                                                            <th>직위</th>
+                                                                                                            <th>직책</th>
+                                                                                                            <th>Belt</th>
+                                                                                                        </tr>
+                                                                                                        <tr>
+                                                                                                            <td>지도사원</td>
+                                                                                                            <td>자동차소재부품 사업부 &gt; 경량화사업담당 &gt; 자동차소재부품.투명과학플라스틱연구PJT</td>
+                                                                                                            <td>홍길동</td>
+                                                                                                            <td>책임</td>
+                                                                                                            <td>팀장</td>
+                                                                                                            <td>BB</td>
+                                                                                                        </tr> -->
+                                                                                                        <tr>
+                                                                                                            <th colspan="2" class="pd-r10 align-right">
+                                                                                                                첨부파일<br>
+                                                                                                                (Up to 10)
+                                                                                                            </th>
+                                                                                                            <td colspan="5">
+                                                                                                                <div class="file-list">
+                                                                                                                    <ul>
+                                                                                                                        <li>
+                                                                                                                            <div class="input-text">
+                                                                                                                                <input type="text" id="" name="" value="LG_Hausys_UI_Design_Guide.pptx [1.27MB]" readonly>
+                                                                                                                            </div>
+                                                                                                                        </li>
+                                                                                                                        <li>
+                                                                                                                            <div class="input-text">
+                                                                                                                                <input type="text" id="" name="" value="LG_Hausys_UI_Design_Guide.pptx [1.27MB]" readonly>
+                                                                                                                            </div>
+                                                                                                                        </li>
+                                                                                                                        <li>
+                                                                                                                            <div class="input-text">
+                                                                                                                                <input type="text" id="" name="" value="LG_Hausys_UI_Design_Guide.pptx [1.27MB]" readonly>
+                                                                                                                            </div>
+                                                                                                                        </li>
+                                                                                                                        <li>
+                                                                                                                            <div class="input-text">
+                                                                                                                                <input type="text" id="" name="" value="LG_Hausys_UI_Design_Guide.pptx [1.27MB]" readonly>
+                                                                                                                            </div>
+                                                                                                                        </li>
+                                                                                                                    </ul>
+                                                                                                                </div>
+                                                                                                            </td>
+                                                                                                        </tr>
+                                                                                                    </tbody>
+                                                                                                </table>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                            <!---->
+                                                            <!---->
+                                                        </ul>
+                                                    </div>
+			</c:when>
+			<c:otherwise> <!-- 6시그마 -->
+			 
+													<div class="list-table list">
+                                                        <table>
+                                                            <caption></caption>
+                                                            <colgroup>
+                                                                <col>
+                                                                <col class="dt-6sig">
+                                                                <col class="dt-6sig">
+                                                                <col class="dt-6sig">
+                                                                <col class="dt-6sig">
+                                                                <col>
+                                                            </colgroup>
+                                                            <thead>
+                                                                <tr id="trPlanDateLabel">
+                                                                    <th str1="Define" str2="Define">Define</th>
+                                                                    <th str1="Measure" str2="Measure" class="dt-6sig">Measure</th>
+                                                                    <th str1="Analyze" str2="Explore" class="dt-6sig">Analyze</th>
+                                                                    <th str1="Improve" str2="Develop" class="dt-6sig">Improve</th>
+                                                                    <th str1="Control" str2="Implement" class="dt-6sig">Control</th>
+                                                                    <th str1="Finish" str2="Finish">Finish</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                <c:forEach var="item" items="${reportVO.repDetailList}" varStatus="status">
+                                                                
+                                                                    <td class="pd3">
+                                                                        <div class="row"><!-- Define -->
+                                                                       		<form:input type="hidden" path="repDetailList[${status.index}].repSeq"/>
+                                                                           	<form:input type="hidden" path="repDetailList[${status.index}].repCode"/>
+                                                                        <c:if test="${reportVO.mode eq 'UPDATE' }">
+                                                                           	<form:input type="hidden" path="repDetailList[${status.index}].repStepCode" value="${status.count}"/>
+                                                                        </c:if>
+                                                                            <div class="col s12 input-text input-date">
+	                                                                            <form:input type="text" path="repDetailList[${status.index}].repPlanStartDate" title="일정계획을 입력하세요." cssClass="datepicker validate[required]"/>
+                                                                                <i class="ico calendar"></i>
+                                                                            </div>
+                                                                        </div>
+                                                                    </td>
+                                                                </c:forEach>                                                                    
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>       
+
+			</c:otherwise>
+		</c:choose>			
+
+
+                                                </td>
+                                            </tr>
+                                            <tr id="trRepDate2" class="tr-rep-date" style="display: none;">
+                                                <th><span class="asterisk">*</span>일정계획<br>(완료예정일)</th>
+                                                <td colspan="3">
+                                                    <div class="list-wrap toggle">
+                                                        <!-- [D] 상태에따라 열기/닫기 텍스트 구분해주세요. -->
+                                                        <span class="blind">열기/닫기</span>
+                                                        <ul>
+                                                            <li><!-- [D] 열린상태일 경우 active 클래스를 추가해주세요. -->
                                                                 <div class="list-content">
                                                                     <div class="list-table list">
                                                                         <table>
@@ -305,48 +650,6 @@
                                                                                                 <button type="button" class="btn light-gray">Add</button>
                                                                                                 <button type="button" class="btn light-gray">Delete All</button>
                                                                                             </div>
-                                                                                            <!-- <ul>
-                                                                                                <li>
-                                                                                                    <div class="row">
-                                                                                                        <div class="col s12 input-text file">
-                                                                                                            <span class="file-path">
-                                                                                                                <input type="text" id="" readonly name="" value="LG_Hausys_UI_Design_Guide.pptx [1.27MB]">
-                                                                                                                <button type="button"><i class="ico file_del"><em>삭제</em></i></button>
-                                                                                                            </span>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                </li>
-                                                                                                <li>
-                                                                                                    <div class="row">
-                                                                                                        <div class="col s12 input-text file">
-                                                                                                            <span class="file-path">
-                                                                                                                <input type="text" id="" readonly name="" value="LG_Hausys_UI_Design_Guide.pptx [1.27MB]">
-                                                                                                                <button type="button"><i class="ico file_del"><em>삭제</em></i></button>
-                                                                                                            </span>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                </li>
-                                                                                                <li>
-                                                                                                    <div class="row">
-                                                                                                        <div class="col s12 input-text file">
-                                                                                                            <span class="file-path">
-                                                                                                                <input type="text" id="" readonly name="" value="LG_Hausys_UI_Design_Guide.pptx [1.27MB]">
-                                                                                                                <button type="button"><i class="ico file_del"><em>삭제</em></i></button>
-                                                                                                            </span>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                </li>
-                                                                                                <li>
-                                                                                                    <div class="row">
-                                                                                                        <div class="col s12 input-text file">
-                                                                                                            <span class="file-path">
-                                                                                                                <input type="text" id="" readonly name="" value="LG_Hausys_UI_Design_Guide.pptx [1.27MB]">
-                                                                                                                <button type="button"><i class="ico file_del"><em>삭제</em></i></button>
-                                                                                                            </span>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                </li>
-                                                                                            </ul> -->
                                                                                         </div>
                                                                                     </td>
                                                                                 </tr>
@@ -480,93 +783,6 @@
                                                             <!---->
                                                         </ul>
                                                     </div>
-			</c:when>
-			<c:otherwise> <!-- 6시그마 -->
-													<div class="list-table list">
-                                                        <table>
-                                                            <caption></caption>
-                                                            <colgroup>
-                                                                <col>
-                                                                <col class="dt-6sig">
-                                                                <col class="dt-6sig">
-                                                                <col class="dt-6sig">
-                                                                <col class="dt-6sig">
-                                                                <col>
-                                                            </colgroup>
-                                                            <thead>
-                                                                <tr id="trPlanDateLabel">
-                                                                    <th str1="Define" str2="Define">Define</th>
-                                                                    <th str1="Measure" str2="Measure" class="dt-6sig">Measure</th>
-                                                                    <th str1="Analyze" str2="Explore" class="dt-6sig">Analyze</th>
-                                                                    <th str1="Improve" str2="Develop" class="dt-6sig">Improve</th>
-                                                                    <th str1="Control" str2="Implement" class="dt-6sig">Control</th>
-                                                                    <th str1="Finish" str2="Finish">Finish</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                <tr>
-                                                                <c:forEach var="item" items="${reportVO.repDetailList}" varStatus="status">
-                                                                
-                                                                    <td class="pd3">
-                                                                        <div class="row"><!-- Define -->
-                                                                            <div class="col s12 input-text input-date">
-	                                                                            <form:input type="hidden" path="repDetailList[${status.index}].repStepCode" value="${status.count}"/>
-	                                                                            <form:input type="text" path="repDetailList[${status.index}].repPlanStartDate"  cssClass="datepicker"/>
-                                                                                <%-- <form:input type="text" path="repStartDate" class="datepicker" /> --%>
-                                                                                <i class="ico calendar"></i>
-                                                                            </div>
-                                                                        </div>
-                                                                    </td>
-                                                                </c:forEach>                                                                    
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>       
-
-			</c:otherwise>
-		</c:choose>			
-
-
-                                                </td>
-                                            </tr>
-                                            <tr id="trRepDate2" class="tr-rep-date" style="display: none;">
-                                                <th><span class="asterisk">*</span>일정계획<br>(완료예정일)</th>
-                                                <td colspan="3">
-                                                    <div class="list-table list">
-                                                        <table>
-                                                            <caption></caption>
-                                                            <colgroup>
-                                                                <col>
-                                                                <col>
-                                                            </colgroup>
-                                                            <thead>
-                                                                <tr>
-                                                                    <th>착수(예정)일</th>
-                                                                    <th>완료(예정)일</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td class="pd3">
-                                                                        <div class="row">
-                                                                            <div class="col s12 input-text input-date" style="float:none;width:120px;margin:0 auto !important">
-                                                                                <input type="text" id="repStartDate2" name="REP_START_DATE_2" value="" class="datepicker" onchange="onchange_repStartDate(this)">
-                                                                                <i class="ico calendar"></i>
-                                                                            </div>
-                                                                        </div>
-                                                                    </td>
-                                                                    <td class="pd3">
-                                                                        <div class="row">
-                                                                            <div class="col s12 input-text input-date" style="float:none;width:120px;margin:0 auto !important">
-                                                                                <input type="text" id="repFinishDate2" name="REP_FINISH_DATE_2" value="" class="datepicker" onchange="onchange_repFinishDate(this)">
-                                                                                <i class="ico calendar"></i>
-                                                                            </div>
-                                                                        </div>
-                                                                    </td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -575,20 +791,20 @@
                                                     <div class="row">
                                                         <div class="col s8">
                                                             <div class="col s2 input-text pd-r10" style="width:20%">
-                                                            	<form:input type="hidden" path="repKeyword" />
-                                                                <input type="text" id="txtRepKeyword_1" name="REP_KEYWORD" class="obj-rep-keyword" value="" title="키워드를 입력해주세요." onkeyup="onkeypress_repKeyword(this)">
+                                                            	<form:input type="hidden" path="repKeyword"/>
+                                                                <input type="text" id="txtRepKeyword_1" name="REP_KEYWORD" class="obj-rep-keyword validate[required]" value="" title="키워드를 입력하세요." onkeyup="onkeypress_repKeyword(this)" cssClass="">
                                                             </div>
                                                             <div class="col s2 input-text pd-r10" style="width:20%">
-                                                                <input type="text" id="txtRepKeyword_2" name="REP_KEYWORD" class="obj-rep-keyword" value="" title="키워드를 입력해주세요." onkeyup="onkeypress_repKeyword(this)">
+                                                                <input type="text" id="txtRepKeyword_2" name="REP_KEYWORD" class="obj-rep-keyword" value="" title="키워드를 입력하세요." onkeyup="onkeypress_repKeyword(this)">
                                                             </div>
                                                             <div class="col s2 input-text pd-r10" style="width:20%">
-                                                                <input type="text" id="txtRepKeyword_3" name="REP_KEYWORD" class="obj-rep-keyword" value="" title="키워드를 입력해주세요." onkeyup="onkeypress_repKeyword(this)">
+                                                                <input type="text" id="txtRepKeyword_3" name="REP_KEYWORD" class="obj-rep-keyword" value="" title="키워드를 입력하세요." onkeyup="onkeypress_repKeyword(this)">
                                                             </div>
                                                             <div class="col s2 input-text pd-r10" style="width:20%">
-                                                                <input type="text" id="txtRepKeyword_4" name="REP_KEYWORD" class="obj-rep-keyword" value="" title="키워드를 입력해주세요." onkeyup="onkeypress_repKeyword(this)">
+                                                                <input type="text" id="txtRepKeyword_4" name="REP_KEYWORD" class="obj-rep-keyword" value="" title="키워드를 입력하세요." onkeyup="onkeypress_repKeyword(this)">
                                                             </div>
                                                             <div class="col s2 input-text pd-r10" style="width:20%">
-                                                                <input type="text" id="txtRepKeyword_5" name="REP_KEYWORD" class="obj-rep-keyword" value="" title="키워드를 입력해주세요." onkeyup="onkeypress_repKeyword(this)">
+                                                                <input type="text" id="txtRepKeyword_5" name="REP_KEYWORD" class="obj-rep-keyword" value="" title="키워드를 입력하세요." onkeyup="onkeypress_repKeyword(this)">
                                                             </div>
                                                         </div>
                                                         <span class="col s4 text-bul" style="letter-spacing:-1px">
@@ -641,118 +857,20 @@
                                         </thead>
                                        <!-- # To-Do -->
                                         <tbody>
-                               
-		<%-- <c:choose>  
-			<c:when test="${reportVO.mode eq 'UPDATE'}"> 
-				
-			</c:when> 
-			<c:otherwise> 
-                                            <tr class="tr-team-role-1">
-                                                <th><label><span class="asterisk">*</span>과제리더</label></th>
-                                                <td class="pd3">
-                                                    <div class="row">
-                                                    	
-                                                    <!-- <input type="hidden" name="repTemMemberList[0].repTeamCode" value="1"/> -->
-                                                    <input type="hidden" name="repTeamMemRole" value="1"/> <!-- 1 과제리더 -->
-                                                    <input type="hidden" name="">
-                                                        <div class="col s12 input-text search">
-                                                            <input type="text" class='dept-full-name' readonly>
-                                                            <button type="button" class="btn-search-emp">검색</button>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td class="pd3"></td>
-                                            </tr>
-                                            <tr class="tr-team-role-2">
-                                                <th><label><span class="asterisk">*</span>팀멤버</label></th>
-                                                <td class="pd3">
-                                                    <div class="row">
-                                                    
-                                                    <input type="hidden" name="repTeamMemRole" value="2"/> <!-- 2 팀멤버 -->
-                                                        <div class="col s12 input-text search">
-                                                            <input type="text" class='dept-full-name' readonly>
-                                                            <button type="button" class="btn-org btn-psmg-search-modal">검색</button>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td class="com-name"></td>
-                                                <td class="jobx"></td>
-                                                <td class="position"></td>
-                                                <td class="belt"></td>
-                                                <td class="pd3">
-                                                    <div class="btn-group">
-                                                        <button type="button" class="btn light-gray btn-team-member-add">추가</button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr class="tr-team-guide">
-                                                <th><label class="color primary"><span class="asterisk">*</span>과제지도/사원</label></th>
-                                                <td class="pd3">
-                                                    <div class="row">
-                                                    	<input type="hidden" name="repTeamMemRole" value="3"/> <!-- 3 과제지도/사원 -->
-                                                        <div class="col s12 input-text search">
-                                                            <input type="text" class='dept-full-name' readonly>
-                                                            <button type="button">검색</button>
-                                                        </div> 
-                                                    </div>
-                                                </td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td class="pd3"></td>
-                                            </tr>
-                                            <tr class="tr-team-proc-owner">
-                                                <th><label for="text8">Process Owner</label></th>
-                                                <td class="pd3">
-                                                    <div class="row">
-                                                    <input type="hidden" name="repTeamMemRole" value="4"/> <!-- 4	PROCESS OWNER -->
-                                                        <div class="col s12 input-text search">
-                                                            <input type="text" class='dept-full-name' readonly>
-                                                            <button type="button">검색</button>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td class="pd3"></td>
-                                            </tr>
-                                            <tr class="tr-team-champion">
-                                                <th><label for="text9" class="color primary"><span class="asterisk">*</span>챔피언</label></th>
-                                                <td class="pd3">
-                                                    <div class="row">
-                                                    <input type="hidden" name="repTeamMemRole" value="5"/> <!-- 5	챔피언 -->
-                                                        <div class="col s12 input-text search">
-                                                            <input type="text" class='dept-full-name' readonly>
-                                                            <button type="button">검색</button>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td class="pd3"></td>
-                                            </tr>				
-			</c:otherwise> 
-		</c:choose>  --%>
-				<script>
-					let memMaxSeq = -1;
-					let resMaxSeq = -1;
-					let indMaxSeq = -1;
-				</script>
+        
+<script>
+	let memMaxSeq = -1;
+	let resMaxSeq = -1;
+	let indMaxSeq = -1;
+</script>
 <c:forEach var="item" items="${reportVO.repTeamMemberList}" varStatus="status">
 		
 											<tr class="tr-team-role-${item.repTeamMemRole}" idSeq="repTeamMemberList${status.index}" nameSeq="repTeamMemberList[${status.index}]">
 											
 											
-                                                <th><label <c:if test="${item.repTeamMemRole eq '3' || item.repTeamMemRole eq '5'}">class="color primary"</c:if>><span class="asterisk">*</span>${item.repTeamMemRoleNm}</label>
+                                                <th><label <c:if test="${item.repTeamMemRole eq '3' || item.repTeamMemRole eq '5'}">class="color primary"</c:if>>
+                                                <c:if test="${item.repTeamMemRole ne '4'}"><span class="asterisk">*</span></c:if>
+                                                ${item.repTeamMemRoleNm}</label>
                                                 	<script>
                                                 	memMaxSeq = Math.max(memMaxSeq, "${status.index}");
                                                 	</script>
@@ -770,7 +888,17 @@
                                                 <td class="pd3">
                                                     <div class="row">
                                                         <div class="col s12 input-text search">
-                                                            <form:input type="text" path='repTeamMemberList[${status.index}].deptName' readonly="true" />
+                                                        
+                                                    <c:choose>  
+														<c:when test="${item.repTeamMemRole ne '4'}">
+															<form:input type="text" path='repTeamMemberList[${status.index}].deptName' readonly="true" title="(팀구성)필수인원을 지정해하세요." cssClass="validate[required]" />
+														</c:when>
+														<c:otherwise>
+															<form:input type="text" path='repTeamMemberList[${status.index}].deptName' readonly="true" />
+														</c:otherwise>
+													</c:choose>
+													
+                                                            
                                                             <button type="button" class="btn-search-emp">검색</button>
                                                         </div>
                                                     </div>
@@ -788,30 +916,30 @@
                                                 </td>
                                             </tr>                                            
 </c:forEach>
-				<script>
+<script type="text/javascript">
 
-				$(".btn-team-member-add").each(function(i, o){ 
-				    if(i>0){
-				        $(o).text('삭제');
-						$(o).removeClass('btn-team-member-add').addClass('btn-team-member-remove');
-				    }
-				});
+	$(".btn-team-member-add").each(function(i, o){ 
+	    if(i>0){
+	        $(o).text('삭제');
+			$(o).removeClass('btn-team-member-add').addClass('btn-team-member-remove');
+	    }
+	});
 
-				$(".tr-team-role-2 th label .asterisk").each(function(i,o){
-				    if(i>0){
-				        $(o).hide();
-				    }
-				});
-				
-				function setRepTeamEvent(){
+	$(".tr-team-role-2 th label .asterisk").each(function(i,o){
+	    if(i>0){
+	        $(o).hide();
+	    }
+	});
+	
+	function setRepTeamEvent(){
+		
+		$('.btn-team-member-remove').off("click").on('click', function(){
+			$(this).closest('tr').remove();
+		});
+	}
+	setRepTeamEvent()
 					
-					$('.btn-team-member-remove').off("click").on('click', function(){
-						$(this).closest('tr').remove();
-					});
-				}
-				setRepTeamEvent()
-					
-				</script>
+</script>
 		
 
                                         </tbody>
@@ -844,7 +972,7 @@
                                         <tbody>
 <c:forEach var="item" items="${reportVO.repResultList}" varStatus="status">
                                             <tr idSeq="repResultList${status.index}" nameSeq="repResultList[${status.index}]">
-                                                <th class="pd0 pd-r23"><form:label path="repResultList[${status.index}].repResultTypeCode"><span class="asterisk">*</span>성과항목</form:label></th>
+                                                <th class="pd0 pd-r23"><form:label path="repResultList[${status.index}].repResultTypeCode"><span class="asterisk only-first">*</span>성과항목</form:label></th>
                                                 <td class="pd3">
                                                     <div class="row">
                                                         <div class="col s12 select-group">
@@ -854,11 +982,23 @@
                                                         	<form:input type="hidden" cssClass="result-code" path="repResultList[${status.index}].repResultCode"/>
                                                         	<form:input type="hidden" cssClass="result-report-code" path="repResultList[${status.index}].repCode"/>
                                                         
-                                                            <form:select path="repResultList[${status.index}].repResultTypeCode" title="성과항목 선택" >
-                                                            <c:forEach var="option" items="${codeResultTy}" >
-	                                                            <form:option value="${option.codeId}" label="${option.codeNm}" />
-	                                                        </c:forEach>    
-                                                            </form:select>
+                                                        <c:choose>  
+															<c:when test="${status.first}">
+																<form:select path="repResultList[${status.index}].repResultTypeCode" title="성과항목을 선택하세요" cssClass="only-first validate[required]">
+	                                                            <c:forEach var="option" items="${codeResultTy}" >
+		                                                            <form:option value="${option.codeId}" label="${option.codeNm}" />
+		                                                        </c:forEach>    
+	                                                            </form:select>
+															</c:when>
+															<c:otherwise>
+																<form:select path="repResultList[${status.index}].repResultTypeCode" title="성과항목을 선택하세요">
+	                                                            <c:forEach var="option" items="${codeResultTy}" >
+		                                                            <form:option value="${option.codeId}" label="${option.codeNm}" />
+		                                                        </c:forEach>    
+	                                                            </form:select>
+															</c:otherwise>
+														</c:choose>
+                                                            
                                                         </div>
                                                     </div>
                                                 </td>
@@ -1219,6 +1359,10 @@
 			}) */
 			$("#repStartDate2").val($("#repStartDate").val());
 			$("#repFinishDate2").val($("#repFinishDate").val());
+			
+			// 일정계획 부분 신규입력시 사용할 영역을 수정시 사용하지 않도록.
+			$("#trRepDate1").removeClass("tr-rep-date").show().attr("id","");
+			$("#trRepDate2").remove();
 		}
 		
 		//키워드 세팅
@@ -1270,7 +1414,7 @@
 		
 		//저장버튼
 		$("#btnSave").off("click").on("click", function(){
-			if(validate()){
+			if($("#defaultForm").validationEngine('validate')){
 				$("#repStatusCode").val("1"); // 상태 임시저장 으로 저장
 				$("#defaultForm")[0].submit();	
 			};
@@ -1292,7 +1436,7 @@
 		});
 	 	
 		
-		/* $("#defaultForm").validationEngine('attach', {
+		$("#defaultForm").validationEngine('attach', {
 			unbindEngine:false,
 			validationEventTrigger: "submit",
 			promptPosition : "topLeft",
@@ -1304,18 +1448,18 @@
 				if(status == true) {
 					if(confirm("저장하시겠습니까?")) {
 						//contentsEditors.getById["content"].exec("UPDATE_CONTENTS_FIELD", []);
+						//$("#defaultForm").submit();
 						return true;
 					} 
 					return false;
 				}
 			}
-		}); */
+		});
 		
 	}
 	
 	function addRow(mode, obj){
 
-		debugger;
 		let oParent = $(obj).closest('tr')
 	    let oClone = oParent.clone();
 		let befId = oClone.attr("idSeq");
@@ -1341,12 +1485,17 @@
 	    });
 	    oClone.find(".ico.tip").remove();
 	    oClone.find('.btn-team-'+ mode +'-add').text('삭제');
-	    oClone.find('.btn-group button').removeClass('btn-team-'+ mode +'-add').addClass('btn-team-'+ mode +'-remove');
 	    
 	    if(mode==="member"){
 	    	oClone.find('th > label').text('팀멤버');
+	    	oClone.find('.team-role-cd').val("2");
+	    	
 	    	oClone.find('td:nth-child(3), td:nth-child(4), td:nth-child(5), td:nth-child(6)').text('');
+	    	$(oClone).children().eq(1).children().children().children().removeClass("validate[required]"); //벨리데이션 생략
 	    	oParent.after(oClone);
+	    } else if(mode==="result"){
+	    	oClone.find('span.only-first').remove();
+		    oClone.find('select.only-first').removeClass('validate[required]');	    	
 	    } else {
 	    	oParent.parent().find("tr:last").after(oClone);	
 	    }
@@ -1368,19 +1517,19 @@
 		let repDevCd = $("#repDivisionCode").val(); //이벤트 트리거 객체의 값
 		let targetObjId = "repTypeCode";	//바뀔 대상 객체 ID
 		let arrRepType = [];
-		//$(".tr-rep-date").hide();
+		$(".tr-rep-date").hide();
 		switch(repDevCd){
 		case "1": //6sigma
 			arrRepType = cdRepType1;
-			//$("#trRepDate1").show();
+			$("#trRepDate1").show();
 			break;
 		case "2": //일반
 			arrRepType = cdRepType2;
-			//$("#trRepDate2").show();
+			$("#trRepDate2").show();
 			break;
 		case "3": // 10+No.
 			arrRepType = cdRepType3;
-			//$("#trRepDate2").show();
+			$("#trRepDate2").show();
 			break;
 		default:
 			break;
@@ -1513,7 +1662,7 @@
 		$(objTr).find(".td-com-pos").text(data.comPositionNm);
 		$(objTr).find(".td-belt-nm").text(data.comCertBeltNm);
 		
-		$(objTr).find(".team-role-cd").val(data.repTeamMemRole);
+		//$(objTr).find(".team-role-cd").val(data.repTeamMemRole);
 		$(objTr).find(".team-belt-cd").val(data.comCertBelt);
 		$(objTr).find(".team-dept-cd").val(data.comDepartCode);
 		$(objTr).find(".team-com-no").val(data.comNo);
