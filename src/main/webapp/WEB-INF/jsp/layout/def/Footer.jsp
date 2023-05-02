@@ -247,7 +247,7 @@
 	            				}
 	            				
 	            				var searchText = $("#txtSearchName").val();
-	            				var posting = $.post( "/qpopup/getEmpSearch.ajax", { userName: searchText }, this.setData, "json" );
+	            				var posting = $.post( "/qpopup/getEmpSearch.do", { userName: searchText }, this.setData, "json" );
 	            				
 	            			},
 	            			setData : function(data){

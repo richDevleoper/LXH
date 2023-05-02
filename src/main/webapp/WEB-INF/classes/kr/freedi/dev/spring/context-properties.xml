@@ -32,6 +32,7 @@
 	        	
 	        	<!-- if not empty (file.root.absolute.path) {root = [file.root.absolute.path]} -->
 	        	<!-- if empty (file.root.absolute.path) {root = servletContext.realPath + / + [file.root.relative.path]} -->
+	        	<!-- <entry key="file.root.absolute.path" value="D:\DATA\"/> -->
 	        	<entry key="file.root.absolute.path" value=""/>
 	        	<entry key="file.root.relative.path" value="upload"/>
 	        	

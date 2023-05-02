@@ -48,9 +48,15 @@ dwr 사용을 지양하기 위해 주석처리함, 필요시 해당 jsp에 추�
     <link rel="stylesheet" href="/assets/css/common.css?v=230307">
     <link rel="stylesheet" href="/assets/css/style.css">
     
+    <link type="text/css" rel="stylesheet" media="screen" href="<c:out value='/def/jquery/validation-engine-2.6.2/css/validationEngine.jquery.css' />" />
+    
 	<script src="/assets/js/jquery-3.3.1.min.js"></script>
 	<script src="/assets/js/jquery-ui.js"></script>
 	<script src="/assets/js/jstree.min.js"></script>
     <script src="/assets/js/tabulator.min.js"></script>
 	<script src="/assets/js/common.js"></script>
 	<script src="/def/js/site.util.js"></script>    
+	
+	<script type="text/javascript" src="<c:out value='/def/jquery/validation-engine-2.6.2/js/languages/jquery.validationEngine-ko.js'/>"></script>
+	<script type="text/javascript" src="<c:out value='/def/jquery/validation-engine-2.6.2/js/jquery.validationEngine-custom.js'/>"></script>
+	

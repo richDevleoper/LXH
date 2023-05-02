@@ -113,6 +113,10 @@ $(function(){
 
     // datapicker
     $(".datepicker").datepicker();
+    if($(".datepicker1").length>0){
+    	$(".datepicker1").datepicker(); // 한 페이지 내 같은 아이디의 객체가 있을 경우 각각 나눠서 이벤트 생성
+    }
+    
     $(document).on('click','.input-date i',function() {
         $(this).parent().find("input").datepicker("show");
     });

@@ -22,6 +22,7 @@ public class UserVO implements Serializable {
 	private final String USER_TYP_MNGR = "MNGR_USER"; //관리자
 	private final String USER_TYP_GENR = "GENR_USER"; //개인회원
 	private final String USER_TYP_CORP = "CORP_USER"; //기업회원
+	private final String USER_TYP_INTF = "INTF_USER"; //인터페이스 회원
 	private final String USER_TYP_GUEST = "GUEST_USER"; //비로그인
 	
 	private String userTyp;
@@ -54,6 +55,8 @@ public class UserVO implements Serializable {
 			return genrUserVO.getUserId();
 		}else if(StringUtils.equals(userTyp, USER_TYP_CORP)){
 			return corpUserVO.getUserId();
+		}else if(StringUtils.equals(userTyp, USER_TYP_INTF)){
+			return intfUserVO.getComNo();
 		}
 		return null;
 	}
@@ -65,6 +68,8 @@ public class UserVO implements Serializable {
 			return genrUserVO.getUserNm();
 		}else if(StringUtils.equals(userTyp, USER_TYP_CORP)){
 			return corpUserVO.getUserNm();
+		}else if(StringUtils.equals(userTyp, USER_TYP_INTF)){
+			return intfUserVO.getUserName();
 		}
 		return null;
 	}
@@ -76,6 +81,8 @@ public class UserVO implements Serializable {
 			return genrUserVO.getEmail();
 		}else if(StringUtils.equals(userTyp, USER_TYP_CORP)){
 			return corpUserVO.getChrEmail();
+		}else if(StringUtils.equals(userTyp, USER_TYP_INTF)){
+			return intfUserVO.getUserEmail();
 		}
 		return null;
 	}
@@ -87,6 +94,8 @@ public class UserVO implements Serializable {
 			return genrUserVO.getAuthId();
 		}else if(StringUtils.equals(userTyp, USER_TYP_CORP)){
 			return corpUserVO.getAuthId();
+		}else if(StringUtils.equals(userTyp, USER_TYP_INTF)){
+			return intfUserVO.getAuthId();
 		}
 		return null;
 	}
@@ -107,6 +116,13 @@ public class UserVO implements Serializable {
 	
 	public boolean isCorpUser(){
 		if(StringUtils.equals(userTyp, USER_TYP_CORP)){
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean isIntfUser(){
+		if(StringUtils.equals(userTyp, USER_TYP_INTF)){
 			return true;
 		}
 		return false;
