@@ -1,45 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="Report">
+<mapper namespace="Approval">
 
-	<resultMap id="reportMap" type="kr.freedi.dev.qreport.domain.ReportVO">		
-		<result property="repCode" column="REP_CODE" />
-		<result property="repName" column="REP_NAME" />
-		<result property="repMenuCode" column="REP_MENU_CODE" />
-		<result property="repDivisionCode" column="REP_DEVISION_CODE" />
-		<result property="repTypeCode" column="REP_TYPE_CODE" />
-		<result property="repSectorCode" column="REP_SECTOR_CODE" />
-		<result property="repProductClass" column="REP_PRODUCT_CLASS" />
-		<result property="repLeaderBeltCode" column="REP_LEADER_BELT_CODE" />
-		<result property="repActionTypeCode" column="REP_ACTION_TYPE_CODE" />
-		<result property="repMbbUseRateCode" column="REP_MBB_USE_RATE_CODE" />
-		<result property="repUseRefDate" column="REP_USE_REF_DATE" />
-		<result property="repStatusCode" column="REP_STATUS_CODE" />
-		<!-- <result property="repSixMeasureDate" column="REP_SIX_MEASUER_DATE" />
-		<result property="repSixExploreDate" column="REP_SIX_EXPLORE_DATE" />
-		<result property="repSixDevelopDate" column="REP_SIX_DEVELOP_DATE" />
-		<result property="repSixImplementDate" column="REP_SIX_IMPLEMENT_DATE" /> -->
-		<result property="repStartDate" column="REP_START_DATE" />
-		<result property="repFinishDate" column="REP_FINISH_DATE" />
-		<result property="repKeyword" column="REP_KEYWORD" />
-		<result property="repRegUser" column="REP_REG_USER" />
-		<result property="repRegDate" column="REP_REG_DATE" />
-		<result property="repUpdateUser" column="REP_UPDATE_USER" />
-		<result property="repUpdateDate" column="REP_UPDATE_DATE" />
-		<result property="repApprovalCode" column="REP_APPROVAL_CODE" />
-		<result property="repUseYn" column="REP_USE_YN" />
-		<result property="repMailSendYn" column="REP_MAIL_SEND_YN" />
-		<result property="repMailSendDate" column="REP_MAIL_SEND_DATE" />
-		<result property="repPlaceCode" column="REP_PLACE_CODE" />
-		<result property="repLeaderCode" column="REP_LEADER_CODE" />
-		<result property="repFileYn" column="REP_FILE_YN" />
-
+	<resultMap id="approveMap" type="kr.freedi.dev.qapprove.domain.ApproveVO">		
+		<result property="aprovalCode" column="APROVAL_CODE" />
+		<result property="actRegNo" column="ACT_REG_NO" />
+		<result property="actAprovalNo" column="ACT_APROVAL_NO" />
+		<result property="aprovalType" column="APROVAL_TYPE" />
+		<result property="aprovalState" column="APROVAL_STATE" />
+		<result property="aprovalSubject" column="APROVAL_SUBJECT" />
+		<result property="userId" column="USER_ID" />
+		<result property="draftingDate" column="DRAFTING_DATE" />
+		<result property="draftingComment" column="DRAFTING_COMMENT" />
 		<result property="idx" column="IDX" />
-		<result property="repDivision" column="REP_DEVISION" />
-		<result property="repType" column="REP_TYPE" />
-		<result property="repStatus" column="REP_STATUS" /> 
+		<result property="aprovalTypeNm" column="APROVAL_TYPE_NM" />
+		<result property="aprovalDate" column="APROVAL_DATE" />
+		<result property="aprovalStateNm" column="APROVAL_STATE_NM" /> 
 	</resultMap>
-	
+
+
 	<sql id="defCond">
 		
 			<if test="searchRepName != null and searchRepName != ''">
@@ -58,22 +37,21 @@
 	</sql> 
 	
 	<sql id="selectListBasic">
-	    WITH report_mst AS (
+	   WITH report_mst AS (
             SELECT ROW_NUMBER() OVER( ORDER BY TO_NUMBER(rep_code) ASC ) idx,
                 ROW_NUMBER() OVER( ORDER BY TO_NUMBER(rep_code) DESC ) rowidx,
                 m.*
-            FROM   tb_report_mst m
+            FROM  tb_report_mst m
         )
         SELECT
             idx,
-            rep_code,
-            rep_name,
-            c_div.code_nm AS rep_division,
-            c_ty.code_nm  AS rep_type,
-            rep_status_code,
-            c_st.code_nm  AS rep_status,
-            (select min(REP_PLAN_START_DATE) from tb_report_detail m where m.rep_code=t.rep_code) rep_start_date,
-            (select case when m.rep_devision_code='1' then max(REP_PLAN_START_DATE) else max(REP_PLAN_END_DATE) end as rep_finish_date from tb_report_detail m where m.rep_code=T.rep_code group by rep_code, m.rep_devision_code) rep_finish_date
+            rep_code 		as APROVAL_CODE,
+            '과제 > 과제선정'  	as APROVAL_TYPE_NM,
+            rep_name 		as APROVAL_SUBJECT,
+            '홍길동'  			as USER_ID,
+            (select min(REP_PLAN_START_DATE) from tb_report_detail m where m.rep_code=t.rep_code) DRAFTING_DATE,
+            null APROVAL_DATE,
+            '미결' APROVAL_STATE_NM
         FROM
             report_mst T,
             tb_code    c_div,
@@ -86,7 +64,7 @@
             <include refid="defCond"></include>
 	</sql>
 	
-	<select id="selectList" resultMap="reportMap">
+	<select id="selectList" resultMap="approveMap">
 		<include refid="selectListBasic"></include>
 		  and rowidx between (#{currentPageNo}*#{recordCountPerPage}+1-#{recordCountPerPage}) and (#{currentPageNo}*#{recordCountPerPage})
 		  order by idx desc
@@ -199,7 +177,7 @@
 		REP_CODE = #{repCode}
 	</update>
 	
-	<select id="select" resultMap="reportMap">
+	<select id="select" resultMap="approveMap">
 		SELECT 
 			REP_CODE
 			, REP_NAME

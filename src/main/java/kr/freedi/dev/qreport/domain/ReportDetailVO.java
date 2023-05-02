@@ -1,6 +1,9 @@
 package kr.freedi.dev.qreport.domain;
 
 import java.util.Date;
+import java.util.List;
+
+import kr.freedi.dev.attachfile.domain.AttachFileVO;
 
 
 public class ReportDetailVO {
@@ -23,11 +26,18 @@ public class ReportDetailVO {
 	private String repExpectationResult;
 	private String repApprovalMemCode;
 	private String repApprovalMemRole;
+	private String repApprovalMemRoleName;
+	private String repApprovalMemName;
+	private String repApprovalMemDeptName;
+	private String repApprovalMemComJobx;
+	private String repApprovalMemComPosition;
+	private String repApprovalMemComCertBelt;
 	private String repStatus;
 	private String repRegUser;
 	private Date repRegDate;
 	private String repUpdateUser;
 	private Date repUpdateDate;
+	private List<AttachFileVO> repDetailFileList;
 
 	public Integer getRepSeq() {
 		return repSeq;
@@ -137,6 +147,42 @@ public class ReportDetailVO {
 	public void setRepApprovalMemRole(String repApprovalMemRole) {
 		this.repApprovalMemRole = repApprovalMemRole;
 	}
+	public String getRepApprovalMemRoleName() {
+		return repApprovalMemRoleName;
+	}
+	public void setRepApprovalMemRoleName(String repApprovalMemRoleName) {
+		this.repApprovalMemRoleName = repApprovalMemRoleName;
+	}
+	public String getRepApprovalMemName() {
+		return repApprovalMemName;
+	}
+	public void setRepApprovalMemName(String repApprovalMemName) {
+		this.repApprovalMemName = repApprovalMemName;
+	}
+	public String getRepApprovalMemDeptName() {
+		return repApprovalMemDeptName;
+	}
+	public void setRepApprovalMemDeptName(String repApprovalMemDeptName) {
+		this.repApprovalMemDeptName = repApprovalMemDeptName;
+	}
+	public String getRepApprovalMemComJobx() {
+		return repApprovalMemComJobx;
+	}
+	public void setRepApprovalMemComJobx(String repApprovalMemComJobx) {
+		this.repApprovalMemComJobx = repApprovalMemComJobx;
+	}
+	public String getRepApprovalMemComPosition() {
+		return repApprovalMemComPosition;
+	}
+	public void setRepApprovalMemComPosition(String repApprovalMemComPosition) {
+		this.repApprovalMemComPosition = repApprovalMemComPosition;
+	}
+	public String getRepApprovalMemComCertBelt() {
+		return repApprovalMemComCertBelt;
+	}
+	public void setRepApprovalMemComCertBelt(String repApprovalMemComCertBelt) {
+		this.repApprovalMemComCertBelt = repApprovalMemComCertBelt;
+	}
 	public String getRepStatus() {
 		return repStatus;
 	}
@@ -166,6 +212,12 @@ public class ReportDetailVO {
 	}
 	public void setRepUpdateDate(Date repUpdateDate) {
 		this.repUpdateDate = repUpdateDate;
+	}
+	public List<AttachFileVO> getRepDetailFileList() {
+		return repDetailFileList;
+	}
+	public void setRepDetailFileList(List<AttachFileVO> repDetailFileList) {
+		this.repDetailFileList = repDetailFileList;
 	}
 	@Override
 	public String toString() {

@@ -21,7 +21,15 @@
 		<result property="repKpi" column="REP_KPI" />
 		<result property="repExpectationResult" column="REP_EXPECTATION_RESULT" />
 		<result property="repApprovalMemCode" column="REP_APPROVAL_MEM_CODE" />
+		<result property="repApprovalMemName" column="REP_APPROVAL_MEM_NAME" />
+		<result property="repApprovalMemDeptName" column="REP_APPROVAL_MEM_DEPT_NAME" />
+		<result property="repApprovalMemComJobx" column="REP_APPROVAL_MEM_COM_JOBX" />
+		<result property="repApprovalMemComPosition" column="REP_APPROVAL_MEM_COM_POSITION" />
+		<result property="repApprovalMemComCertBelt" column="REP_APPROVAL_MEM_COM_CERT_BELT" />
+		
 		<result property="repApprovalMemRole" column="REP_APPROVAL_MEM_ROLE" />
+		<result property="repApprovalMemRoleName" column="REP_APPROVAL_MEM_ROLE_NAME" />
+		
 		<result property="repStatus" column="REP_STATUS" />
 		<result property="repRegUser" column="REP_REG_USER" />
 		<result property="repRegDate" column="REP_REG_DATE" />
@@ -31,46 +39,57 @@
 	</resultMap>
 	
 	<sql id="defCond">
-		<where>
-			<trim prefixOverrides="AND|OR">
+		
+			
 				<if test="repSeq != null and repSeq != ''">
 					AND REP_SEQ = #{repSeq}
 			  	</if>
 			  	<if test="repCode != null and repCode != ''">
 					AND REP_CODE = #{repCode}
 			  	</if>
-			</trim>
-		</where>
+			
+		
 	</sql> 
 
 	<select id="selectFullList" resultMap="reportDetailMap">
 		SELECT
-		    t.rep_seq,
-		    t.rep_team_code,
-		    t.rep_code,
-		    t.rep_menu_code,
-		    t.rep_devision_code,
-		    t.rep_step_code,
-		    t.rep_plan_start_date,
-		    t.rep_plan_end_date,
-		    t.rep_act_start_date,
-		    t.rep_act_end_date,
-		    t.rep_propel_bg,
-		    t.rep_activity,
-		    t.rep_finish_summary,
-		    t.rep_ctq_ctp,
-		    t.rep_kpi,
-		    t.rep_expectation_result,
-		    t.rep_approval_mem_code,
-		    t.rep_approval_mem_role,
-		    t.rep_status,
-		    t.rep_reg_user,
-		    t.rep_reg_date,
-		    t.rep_update_user,
-		    t.rep_update_date
+		        t.rep_seq,
+			    t.rep_team_code,
+			    t.rep_code,
+			    t.rep_menu_code,
+			    t.rep_devision_code,
+			    t.rep_step_code,
+			    t.rep_plan_start_date,
+			    t.rep_plan_end_date,
+			    t.rep_act_start_date,
+			    t.rep_act_end_date,
+			    t.rep_propel_bg,
+			    t.rep_activity,
+			    t.rep_finish_summary,
+			    t.rep_ctq_ctp,
+			    t.rep_kpi,
+			    t.rep_expectation_result,
+			    t.rep_approval_mem_code,
+			    u.user_name     AS REP_APPROVAL_MEM_NAME,
+			    t.rep_approval_mem_role,
+			    cd_role.code_nm AS REP_APPROVAL_MEM_ROLE_NAME,
+			    u.dept_name REP_APPROVAL_MEM_NAME,
+			    u.com_jobx_nm as REP_APPROVAL_MEM_COM_JOBX,
+			    u.com_position_nm as REP_APPROVAL_MEM_COM_POSITION,
+			    u.com_cert_belt_nm as REP_APPROVAL_MEM_COM_CERT_BELT,
+			    u.dept_name as REP_APPROVAL_MEM_DEPT_NAME,
+			    t.rep_status,
+			    t.rep_reg_user,
+			    t.rep_reg_date,
+			    t.rep_update_user,
+			    t.rep_update_date
 		FROM
-		    tb_report_detail t
-		
+		    tb_report_detail t,
+		    v_user_mst       u,
+		    tb_code          cd_role
+		WHERE t.rep_approval_mem_code = u.com_no (+)
+		  AND t.rep_approval_mem_role = cd_role.code_id (+)
+		  AND cd_role.code_grp_id = 'REP_ROLE'
 		<include refid="defCond"></include>
 		
 		ORDER BY t.rep_step_code 
@@ -80,7 +99,7 @@
 
 	
 	<select id="selectListCount" resultType="int">
-		SELECT COUNT(*) FROM tb_report_detail  T 
+		SELECT COUNT(*) FROM tb_report_detail  T where 1=1 
 		<include refid="defCond"></include>
 	</select>
 	

@@ -19,6 +19,8 @@
 
                         <div class="list-wrap">
                             <div class="list-search">
+							<form:form commandName="reportSearchVO" id="defaultForm" method="get" action="list.do" >
+                                ${reportSearchVO.superHiddenTag}                            
                                 <div class="search-form row">
                                     <div class="form-inline form-input col s4">
                                         <div class="col s3 align-right">
@@ -80,6 +82,7 @@
                                         <button type="button" class="btn-submit">조회</button>
                                     </div>
                                 </div>
+								</form:form>
                             </div>
                             <div class="list-header">
                                 <p class="title">나의 결재의뢰함</p>
@@ -113,219 +116,32 @@
                                             </tr>
                                         </thead>
                                         <tbody>
+                                        <c:forEach items="${approveList}" var="item" varStatus="i">
                                             <tr>
-                                                <td>10</td>
-                                                <td class="align-left">과제 > 6σ Full Process > DMEDI > Define</td>
-                                                <td class="align-left">과제제목 또는 분임조과제, 제안제목 내용이 많음 자르기 ...</td>
-                                                <td>홍길동</td>
-                                                <td>2023.06.30</td>
-                                                <td>2023.06.30</td>
-                                                <td>승인</td>                                                
+                                                <td>${item.idx}</td>
+                                                <td class="align-left" style="padding-left: 10px;">${item.aprovalTypeNm}</td>
+                                                <td class="align-left" style="padding-left: 10px;"><a href="javascript: onclick_reportName('${item.aprovalCode}')">${item.aprovalSubject}</a></td>
+                                                <td>${item.userId}</td>
+                                                <td><fmt:formatDate pattern="yyyy.MM.dd" value="${item.draftingDate}" /></td>
+                                                <td><fmt:formatDate pattern="yyyy.MM.dd" value="${item.aprovalDate}" /></td>
+                                                <td>${item.aprovalStateNm}</td>                                                
                                             </tr>
-                                            <tr>
-                                                <td>9</td>
-                                                <td class="align-left">분임조과제 > 6σ Full Process > DMEDI > Define</td>
-                                                <td class="align-left">과제제목 또는 분임조과제, 제안제목 내용이 많음 ...</td>
-                                                <td>홍길동</td>
-                                                <td>2023.06.30</td>
-                                                <td>2023.06.30</td>
-                                                <td>반려</td>                                                
-                                            </tr>
-                                            <tr>
-                                                <td>8</td>
-                                                <td class="align-left">과제 > 일반과제</td>
-                                                <td class="align-left">과제제목 또는 분임조과제, 제안제목 내용이 많음 자르기 ...</td>
-                                                <td>홍길동</td>
-                                                <td>2023.06.30</td>
-                                                <td>2023.06.30</td>
-                                                <td>승인</td>                                                
-                                            </tr>
-                                            <tr>
-                                                <td>7</td>
-                                                <td class="align-left">과제 > 10+ No Policy</td>
-                                                <td class="align-left">과제제목 또는 분임조과제, 제안제목 내용이 많음 ...</td>
-                                                <td>홍길동</td>
-                                                <td>2023.06.30</td>
-                                                <td>2023.06.30</td>
-                                                <td>반려</td>                                                
-                                            </tr>
-
-                                            <tr>
-                                                <td>6</td>
-                                                <td class="align-left">과제 > 6σ Full Process > DMEDI > Define</td>
-                                                <td class="align-left">과제제목 또는 분임조과제, 제안제목 내용이 많음 자르기 ...</td>
-                                                <td>홍길동</td>
-                                                <td>2023.06.30</td>
-                                                <td>2023.06.30</td>
-                                                <td>승인</td>                                                
-                                            </tr>
-                                            <tr>
-                                                <td>5</td>
-                                                <td class="align-left">실시제안</td>
-                                                <td class="align-left">과제제목 또는 분임조과제, 제안제목 내용이 많음 ...</td>
-                                                <td>홍길동</td>
-                                                <td>2023.06.30</td>
-                                                <td>2023.06.30</td>
-                                                <td>반려</td>                                                
-                                            </tr>
-                                            <tr>
-                                                <td>4</td>
-                                                <td class="align-left">쪽지제안</td>
-                                                <td class="align-left">과제제목 또는 분임조과제, 제안제목 내용이 많음 자르기 ...</td>
-                                                <td>홍길동</td>
-                                                <td>2023.06.30</td>
-                                                <td>2023.06.30</td>
-                                                <td>승인</td>                                                
-                                            </tr>
-                                            <tr>
-                                                <td>3</td>
-                                                <td class="align-left">과제 > 과제선정</td>
-                                                <td class="align-left">과제제목 또는 분임조과제, 제안제목 내용이 많음 ...</td>
-                                                <td>홍길동</td>
-                                                <td>2023.06.30</td>
-                                                <td>2023.06.30</td>
-                                                <td>승인</td>                                                
-                                            </tr>
-                                            <tr>
-                                                <td>2</td>
-                                                <td class="align-left">과제 > Drop신청</td>
-                                                <td class="align-left">과제제목 또는 분임조과제, 제안제목 내용이 많음 자르기 ...</td>
-                                                <td>홍길동</td>
-                                                <td>-</td>
-                                                <td>-</td>
-                                                <td>미결</td>                                                
-                                            </tr>
-                                            <tr>
-                                                <td>1</td>
-                                                <td class="align-left">분임조과제 > 6σ Full Process > DMAIC > 담계명</td>
-                                                <td class="align-left">과제제목 또는 분임조과제, 제안제목 내용이 많음 ...</td>
-                                                <td>홍길동</td>
-                                                <td>2023.06.30</td>
-                                                <td>2023.06.30</td>
-                                                <td>승인</td>                                                
-                                            </tr>
+                                        </c:forEach>
+                                          
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
                             <div class="list-footer">
-                                <div class="pagination">
-                                    <a href="" class="first">처음</a>
-                                    <a href="" class="prev">이전</a>
-                                    <a href="" class="cur num">1</a>
-                                    <a href="" class="num">2</a>
-                                    <a href="" class="num">3</a>
-                                    <a href="" class="num">4</a>
-                                    <a href="" class="num">5</a>
-                                    <a href="" class="next">다음</a>
-                                    <a href="" class="last">끝</a>
-                                </div>
-                                
+                                <ui:pagination paginationInfo="${approveSearchVO}" type="defDefault" jsFunction="cfnPageLink" />
                             </div>
                         </div>
 
-        <!-- 조직도 -->
-        <div class="modal-dimmed"></div>
-        <div class="org-modal">
-            <div class="modal-header">
-                <h4>조직조회</h4>
-                <button type="button" class="btn-close">닫기</button>
-            </div>
-            <div class="modal-content">
-                <div class="list-wrap">
-                    <div class="list-search">
-                        <form id="org-form" onsubmit="org_search();return false;">
-                            <div class="search-form">
-                                <div class="form-inline form-input">
-                                    <label>조직명</label>
-                                    <input type="text" name="">
-                                </div>
-                                <button type="submit" class="btn-submit">조회</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-                <div class="tree-header">
-                    <div>
-                        <input type="checkbox" id="orgSelAll">
-                        <label for="orgSelAll"></label>
-                    </div>
-                    <div>
-                        6σ 인재육성대상 조직명
-                    </div>
-                </div>
-                <div id="org-tree">
-                    <ul>
-                        <li>창호 사업부
-                            <ul>
-                                <li>창호.생산담당
-                                    <ul>
-                                        <li>· 창호.프로파일생산팀</li>
-                                        <li>· 창호.기술팀</li>
-                                        <li>· 창호.공정혁신팀</li>
-                                        <li>· 창호.완성창공정기술팀</li>
-                                    </ul>
-                                </li>
-                                <li>유리</li>
-                                <li>연구소 근무</li>
-                                <li>창호.시스템창사업담당</li>
-                                <li>창호.중문팀</li>
-                                <li>바닥재 사업담당	</li>
-                            </ul>
-                        </li>
-                        <li>단열재 사업담당
-                            <ul>
-                                <li>창호.프로파일생산팀</li>
-                            </ul>
-                        </li>
-                        <li>벽지 사업담당	
-                            <ul>
-                                <li>창호.프로파일생산팀</li>
-                            </ul>
-                        </li>
-                        <li>표면소재 사업담당
-                            <ul>
-                                <li>창호.프로파일생산팀</li>
-                            </ul>
-                        </li>
-                        <li>산업용필름 사업담당
-                            <ul>
-                                <li>창호.프로파일생산팀</li>
-                            </ul>
-                        </li>
-                        <li>자동차소재부품 사업부
-                            <ul>
-                                <li>창호.프로파일생산팀</li>
-                            </ul>
-                        </li>
-                        <li>인테리어 사업부
-                            <ul>
-                                <li>창호.프로파일생산팀</li>
-                            </ul>
-                        </li>
-                        <li>연구소
-                            <ul>
-                                <li>창호.프로파일생산팀</li>
-                            </ul>
-                        </li>
-                        <li>품질 담당
-                            <ul>
-                                <li>창호.프로파일생산팀</li>
-                            </ul>
-                        </li>
-                        <li>생산/기술/R&D/품질 外
-                            <ul>
-                                <li>창호.프로파일생산팀</li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
-                <div class="btns">
-                    <button type="button" class="btn-submit">확인</button>
-                    <button type="button" class="btn-cancel">취소</button>
-                </div>
-            </div>
-        </div>
-    
+      
+    <script type="text/javascript">
+    function onclick_reportName(aprovalCode){
+    	location.href="/apprv/apprForm.do?menuKey=${menuKey}&aprovalCode="+aprovalCode;
+	}
+    </script>
 </body>
 </html>

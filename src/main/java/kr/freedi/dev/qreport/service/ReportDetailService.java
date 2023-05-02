@@ -4,6 +4,9 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import kr.freedi.dev.article.domain.ArticleVO;
+import kr.freedi.dev.attachfile.domain.AttachFileVO;
+import kr.freedi.dev.attachfile.service.AttachFileService;
 import kr.freedi.dev.common.dao.DefaultDAO;
 import kr.freedi.dev.qreport.domain.ReportDetailVO;
 
@@ -24,8 +27,13 @@ public class ReportDetailService {
 
 	protected Log log = LogFactory.getLog(this.getClass());
 	
+	final String ATTACH_PREFIX = "reportDetail";
+	
 	@Resource(name = "defaultDAO")
 	private DefaultDAO dao;
+	
+	@Resource
+	private AttachFileService attachFileService;
 	
 	public void insert(ReportDetailVO vo) throws Exception {
 		
@@ -49,7 +57,18 @@ public class ReportDetailService {
 	
 	public List<ReportDetailVO> selectFullList(ReportDetailVO reportDetailVO) {
 		
-		return dao.selectList("ReportDetail.selectFullList", reportDetailVO);
+		List<ReportDetailVO> returnVO = dao.selectList("ReportDetail.selectFullList", reportDetailVO);
+		
+		//repDetailFileList
+		AttachFileVO attachFileVO = null;
+		for (ReportDetailVO vo : returnVO) {
+			attachFileVO = new AttachFileVO();
+			attachFileVO.setFileId(ATTACH_PREFIX + "_" + vo.getRepStepCode() + "_" + vo.getRepCode());	//reportDetail_7_137
+			attachFileVO.setDeleteFlg("N");
+			List<AttachFileVO> fileList = attachFileService.selectFullList(attachFileVO);
+			vo.setRepDetailFileList(fileList);
+		}
+		return returnVO;
 	}
 	
 }

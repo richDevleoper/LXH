@@ -46,6 +46,11 @@ public class ReportVO {
 	private String repType;
 	private String repStatus;
 	
+	private String repSector;
+	private String repLeaderBelt;
+	private String repMbbUseRate;
+	private String repActionType;
+	
 	private List<ReportDetailVO> repDetailList; 	// 단계별 계획 일정
 	private List<ReportTeamVO> repTeamMemberList; 	// 멤버 리스트
 	private List<ReportResultVO> repResultList;	// 과제 성과
@@ -375,21 +380,71 @@ public class ReportVO {
 		this.repDetailList = repDetailList;
 	}
 
+	public String getRepSector() {
+		return repSector;
+	}
+
+	public void setRepSector(String repSector) {
+		this.repSector = repSector;
+	}
+
+	public String getRepLeaderBelt() {
+		return repLeaderBelt;
+	}
+
+	public void setRepLeaderBelt(String repLeaderBelt) {
+		this.repLeaderBelt = repLeaderBelt;
+	}
+
+	public String getRepMbbUseRate() {
+		return repMbbUseRate;
+	}
+
+	public void setRepMbbUseRate(String repMbbUseRate) {
+		this.repMbbUseRate = repMbbUseRate;
+	}
+
+	public String getRepActionType() {
+		return repActionType;
+	}
+
+	public void setRepActionType(String repActionType) {
+		this.repActionType = repActionType;
+	}
+
+	public void setIdx(Integer idx) {
+		this.idx = idx;
+	}
+
+	public void setRepDivision(String repDivision) {
+		this.repDivision = repDivision;
+	}
+
+	public void setRepType(String repType) {
+		this.repType = repType;
+	}
+
+	public void setRepStatus(String repStatus) {
+		this.repStatus = repStatus;
+	}
+
 	@Override
 	public String toString() {
 		return "ReportVO [repCode=" + repCode + ", repName=" + repName + ", repMenuCode=" + repMenuCode
 				+ ", repDivisionCode=" + repDivisionCode + ", repTypeCode=" + repTypeCode + ", repSectorCode="
 				+ repSectorCode + ", repProductClass=" + repProductClass + ", repLeaderBeltCode=" + repLeaderBeltCode
 				+ ", repActionTypeCode=" + repActionTypeCode + ", repMbbUseRateCode=" + repMbbUseRateCode
-				+ ", repUseRefDate=" + repUseRefDate + ", repStatusCode=" + repStatusCode + ", repKeyword=" + repKeyword
-				+ ", repRegUser=" + repRegUser + ", repRegDate=" + repRegDate + ", repUpdateUser=" + repUpdateUser
-				+ ", repUpdateDate=" + repUpdateDate + ", repApprovalCode=" + repApprovalCode + ", repUseYn=" + repUseYn
-				+ ", repMailSendYn=" + repMailSendYn + ", repMailSendDate=" + repMailSendDate + ", repPlaceCode="
-				+ repPlaceCode + ", repLeaderCode=" + repLeaderCode + ", repFileYn=" + repFileYn + ", mode=" + mode
-				+ ", idx=" + idx + ", repDivision=" + repDivision + ", repType=" + repType + ", repStatus=" + repStatus
-				+ ", repDetailList=" + repDetailList + ", repTeamMemberList=" + repTeamMemberList + ", repResultList="
-				+ repResultList + ", repIndicatorList=" + repIndicatorList + ", repFileList=" + repFileList
-				+ ", fileList=" + fileList + "]";
+				+ ", repUseRefDate=" + repUseRefDate + ", repStatusCode=" + repStatusCode + ", repStartDate="
+				+ repStartDate + ", repFinishDate=" + repFinishDate + ", repKeyword=" + repKeyword + ", repRegUser="
+				+ repRegUser + ", repRegDate=" + repRegDate + ", repUpdateUser=" + repUpdateUser + ", repUpdateDate="
+				+ repUpdateDate + ", repApprovalCode=" + repApprovalCode + ", repUseYn=" + repUseYn + ", repMailSendYn="
+				+ repMailSendYn + ", repMailSendDate=" + repMailSendDate + ", repPlaceCode=" + repPlaceCode
+				+ ", repLeaderCode=" + repLeaderCode + ", repFileYn=" + repFileYn + ", mode=" + mode + ", idx=" + idx
+				+ ", repDivision=" + repDivision + ", repType=" + repType + ", repStatus=" + repStatus + ", repSector="
+				+ repSector + ", repLeaderBelt=" + repLeaderBelt + ", repMbbUseRate=" + repMbbUseRate
+				+ ", repActionType=" + repActionType + ", repDetailList=" + repDetailList + ", repTeamMemberList="
+				+ repTeamMemberList + ", repResultList=" + repResultList + ", repIndicatorList=" + repIndicatorList
+				+ ", repFileList=" + repFileList + ", fileList=" + fileList + "]";
 	}
 
 	
