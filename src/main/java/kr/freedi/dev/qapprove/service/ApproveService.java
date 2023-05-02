@@ -11,6 +11,8 @@ import kr.freedi.dev.attachfile.service.AttachFileService;
 import kr.freedi.dev.board.service.BoardService;
 import kr.freedi.dev.board.service.BoardUseService;
 import kr.freedi.dev.common.dao.DefaultDAO;
+import kr.freedi.dev.qapprove.domain.ApproveSearchVO;
+import kr.freedi.dev.qapprove.domain.ApproveVO;
 import kr.freedi.dev.qreport.domain.ReportDetailVO;
 import kr.freedi.dev.qreport.domain.ReportIndicatorVO;
 import kr.freedi.dev.qreport.domain.ReportResultVO;
@@ -68,9 +70,9 @@ public class ApproveService {
 		
 	}
 
-	public List<ReportVO> selectList(ReportSearchVO searchVO) {
+	public List<ApproveVO> selectList(ApproveSearchVO searchVO) {
 		
-		return dao.selectList("Report.selectList", searchVO);
+		return dao.selectList("Approval.selectList", searchVO);
 	}
 	
 	public int selectListCount(ReportSearchVO searchVO) {
