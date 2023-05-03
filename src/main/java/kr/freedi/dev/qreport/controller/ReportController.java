@@ -141,6 +141,8 @@ public class ReportController {
 			UserVO userSession) throws Exception {
 		
 		reportService.proc_reportFormHandler(req, model, searchVO, reportVO, userSession);
+		model.addAttribute("action", "/report/updateStep.do");
+		
 				
 		return "app/report/InsertFormStat3";
 	}  
@@ -154,6 +156,7 @@ public class ReportController {
 			UserVO userSession) throws Exception {
 		
 		ReportVO retVO = reportService.proc_reportFormHandler(req, model, searchVO, reportVO, userSession);
+		model.addAttribute("action", "/report/insert.do");
 				
 		if(retVO.getRepCode() != null 
 				&& retVO.getRepDivisionCode() !=null 
@@ -185,6 +188,49 @@ public class ReportController {
 			reportVO.setRepRegUser(userId);
 			reportService.insert(reportVO);	
 		}
+		
+		//return "redirect:/report/002_01_sub01.do?menuKey=29";
+		return "redirect:/sub.do?menuKey=29";
+	}
+	
+	@RequestMapping({"/updateStep.do"})
+	public String update_step(HttpServletRequest req, ModelMap model,
+			@ModelAttribute("reportVO") ReportVO reportVO,
+			@ModelAttribute("reportSearchVO") ReportSearchVO searchVO,
+			UserVO userSession, 
+			String userIp) throws Exception {
+
+		String userId = userSession.getUserId();
+		String currStep = req.getParameter("detail_curr_step");
+		
+		// 수정할 대상 가져오기 
+		// reportVO.getRepDetailList().get(Integer.parseInt(currStep)-1);
+		
+		//1. 그냥 저장
+		if(reportVO.getRepDivisionCode().equals("1")) {
+			// 6시그마 저장
+			reportService.updateStep6Sigma(reportVO, currStep);
+		} else {
+			// 일반/10+ 저장
+			reportService.updateStepGeneral(reportVO);
+		}
+		
+		//2. 결재올리기
+
+		// 3. 기존 데이터 대비 과제 마스터가 바뀐 내용이 있다면 메일 보내기 
+		
+		// 결재 처리부
+		// ㄴ결재 처리하면서  해당 repStepCode는 '2'로 처리하고 그다음 step을 '1'로 처리
+		// ㄴ Drop은 결재 완료시 mst, detail을 
+		
+/*//		//insert article
+		if(reportVO.getMode().equals("UPDATE")) {
+			reportVO.setRepUpdateUser(userId);
+			reportService.update(reportVO);	
+		} else {
+			reportVO.setRepRegUser(userId);
+			reportService.insert(reportVO);	
+		}*/
 		
 		//return "redirect:/report/002_01_sub01.do?menuKey=29";
 		return "redirect:/sub.do?menuKey=29";

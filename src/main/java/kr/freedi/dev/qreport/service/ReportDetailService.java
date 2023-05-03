@@ -47,6 +47,21 @@ public class ReportDetailService {
 		dao.update("ReportDetail.update", vo);
 	}
 	
+	public void updateStep(ReportDetailVO vo) throws Exception {
+		
+		dao.update("ReportDetail.updateStep", vo);
+	}
+	
+	public void updateStepNext(ReportDetailVO vo) throws Exception {
+		
+		// TODO  이 쿼리는 결재가 승인될 때 실행된다. 
+		dao.update("ReportDetail.updateStepNext", vo);
+	}
+	
+	
+	
+	
+	
 	public void save(ReportDetailVO vo) throws Exception {
 		if(vo.getRepSeq()==null) {
 			this.insert(vo);

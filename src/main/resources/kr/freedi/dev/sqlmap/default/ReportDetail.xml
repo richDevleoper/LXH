@@ -73,7 +73,7 @@
 			    u.user_name     AS REP_APPROVAL_MEM_NAME,
 			    t.rep_approval_mem_role,
 			    cd_role.code_nm AS REP_APPROVAL_MEM_ROLE_NAME,
-			    u.dept_name REP_APPROVAL_MEM_NAME,
+			    u.dept_name REP_APPROVAL_MEM_DEPT_NAME,
 			    u.com_jobx_nm as REP_APPROVAL_MEM_COM_JOBX,
 			    u.com_position_nm as REP_APPROVAL_MEM_COM_POSITION,
 			    u.com_cert_belt_nm as REP_APPROVAL_MEM_COM_CERT_BELT,
@@ -178,9 +178,36 @@
 				, REP_APPROVAL_MEM_CODE = #{repApprovalMemCode}
 				, REP_APPROVAL_MEM_ROLE = #{repApprovalMemRole}
 				, REP_STATUS = #{repStatus}
-				, REP_UPDATE_USER = SYSDATS
+				, REP_UPDATE_USER = SYSDATE
 				, REP_UPDATE_DATE = #{repUpdateDate}
 		WHERE REP_SEQ = #{repSeq}
+	</update>
+	
+	<update id="updateStep">
+	UPDATE TB_REPORT_DETAIL 
+		   SET  REP_PLAN_START_DATE = #{repPlanStartDate}
+				, REP_PLAN_END_DATE = #{repPlanEndDate}
+				, REP_ACT_START_DATE = #{repActStartDate}
+				, REP_ACT_END_DATE = #{repActEndDate}
+				, REP_PROPEL_BG = #{repPropelBg}
+				, REP_ACTIVITY = #{repActivity}
+				, REP_FINISH_SUMMARY = #{repFinishSummary}
+				, REP_CTQ_CTP = #{repCtqCtp}
+				, REP_KPI = #{repKpi}
+				, REP_EXPECTATION_RESULT = #{repExpectationResult}
+				, REP_STATUS = #{repStatus}
+				, REP_UPDATE_USER = #{repUpdateUser}
+				, REP_UPDATE_DATE = SYSDATE
+		WHERE REP_SEQ = #{repSeq}
+	</update>
+	
+	<update id="updateStepNext">
+	UPDATE TB_REPORT_DETAIL 
+		   SET REP_STATUS = (REP_STATUS+1)
+				, REP_UPDATE_USER = #{repUpdateUser}
+				, REP_UPDATE_DATE = SYSDATE
+		WHERE REP_CODE = #{repCode} 
+		  and REP_STEP_CODE between #{repStepCode} and (#{repStepCode}+1)
 	</update>
 	
 	<select id="select" resultMap="reportDetailMap">

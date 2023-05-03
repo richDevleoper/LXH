@@ -93,6 +93,7 @@ public class ReportService {
 		ReportTeamVO teamMember5 = new ReportTeamVO(); // 챔피언
 		for (ReportTeamVO vo : reportVO.getRepTeamMemberList()) {
 			vo.setRepCode(reportVO.getRepCode());
+			vo.setRepTeamRegUser(reportVO.getRepRegUser());
 			reportTeamService.insert(vo);	
 			
 			if(vo.getRepTeamMemRole().equals("3"))
@@ -105,28 +106,40 @@ public class ReportService {
 		for (ReportDetailVO vo : reportVO.getRepDetailList()) {
 			vo.setRepCode(reportVO.getRepCode());
 			vo.setRepDivisionCode(reportVO.getRepDivisionCode());
+			vo.setRepRegUser(reportVO.getRepRegUser());
 			
-			if(reportVO.getRepDivisionCode().equals("2")) {
-				vo.setRepStepCode("7");
+			if(vo.getRepStepCode().equals("1,7")) { // 입력화면에서 6시그마 여부에 따라 입력화면이 달라지기때문에 값이 두개가 공존함. 이에 가공 필요.
+				if(reportVO.getRepDivisionCode().equals("1"))
+					vo.setRepStepCode("1"); //6시그마면 첫번째 필드 
+				else 
+					vo.setRepStepCode("7"); // 일반/10+면 유일한 필드
 			}
 		
-			
+			String apprMemCode = "";
+			String apprMemRoleCode = "";
 			switch (vo.getRepStepCode()) {
-
 			case "1": // 6시그마 첫 step
 			case "7": // 일반과제
 				vo.setRepStatus("1");
-			case "6": // 6시그마 마지막 step				
-				vo.setRepApprovalMemCode(teamMember3.getComNo());
-				vo.setRepApprovalMemRole(teamMember3.getRepTeamMemRole());
-				// 챔피언
+				apprMemCode = teamMember5.getComNo(); 
+				apprMemRoleCode = teamMember5.getRepTeamMemRole();
+				break;
+			case "6": // 6시그마 마지막 step
+				// 챔피언 지정
+				vo.setRepStatus("0");
+				apprMemCode = teamMember5.getComNo(); 
+				apprMemRoleCode = teamMember5.getRepTeamMemRole();
 				break;
 			default:
 				// 2,3,4,5 : 지도사원
-				vo.setRepApprovalMemCode(teamMember5.getComNo());
-				vo.setRepApprovalMemRole(teamMember5.getRepTeamMemRole());
+				vo.setRepStatus("0");
+				apprMemCode = teamMember3.getComNo(); 
+				apprMemRoleCode = teamMember3.getRepTeamMemRole();
 				break;
 			}
+			vo.setRepApprovalMemCode(apprMemCode);
+			vo.setRepApprovalMemRole(apprMemRoleCode);
+			
 			if(vo.getRepPlanStartDate()!=null)
 				reportDetailService.insert(vo);
 		}
@@ -134,12 +147,14 @@ public class ReportService {
 		// 3. 성과 tb_report_result 저장
 		for (ReportResultVO vo : reportVO.getRepResultList()) {
 			vo.setRepCode(reportVO.getRepCode());
+			vo.setRepResultRegUser(reportVO.getRepRegUser());
 			reportResultService.insert(vo);	
 		}
 		
 		// 4. 주요지표 tb_report_indicator 저장
 		for (ReportIndicatorVO vo : reportVO.getRepIndicatorList()) {
 			vo.setRepCode(reportVO.getRepCode());
+			vo.setRepIndiRegUser(reportVO.getRepRegUser());
 			reportIndicatorService.insert(vo);	
 		}
 	}
@@ -173,6 +188,28 @@ public class ReportService {
 			reportIndicatorService.save(vo);	
 		}
 	}
+	
+	public void updateStep6Sigma(ReportVO reportVO, String step) throws Exception {
+		// report_detail 의 특정 
+		
+	
+		
+		ReportDetailVO vo = reportVO.getRepDetailList().get(Integer.parseInt(step)-1);
+		vo.setRepCode(reportVO.getRepCode());
+		reportDetailService.updateStep(vo);
+		
+		// 임시 : 결재완료시 다음 단계로 진행
+		reportDetailService.updateStepNext(vo);
+		
+	}
+	
+	public void updateStepGeneral(ReportVO reportVO) throws Exception {
+		// report_detail 의 특정 
+	}
+	
+	
+	
+	
 
 	public List<ReportVO> selectList(ReportSearchVO searchVO) {
 		
@@ -267,7 +304,7 @@ public class ReportService {
 		codeVO.setCodeGrpId("6SIG_YN");
 		codeVO.setActFlg("Y"); 
 		model.addAttribute("divisionCode", codeService.selectFullList(codeVO));
-		model.addAttribute("action", "/report/insert.do");
+		
 		
 		/*********
 		 * 2. ReportVO 데이터 가져오기

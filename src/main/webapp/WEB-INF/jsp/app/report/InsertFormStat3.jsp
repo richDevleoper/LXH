@@ -165,6 +165,7 @@
                                             <tr id="trRepDate1" class="tr-rep-date">
                                                 <th><span class="asterisk">*</span>일정계획<br>(완료예정일)</th>
                                                 <td colspan="3">
+                                                <input type="hidden" id="hidCurrStep" name="detail_curr_step" value="">
 
 <c:choose>  
 	<c:when test="${reportVO.repDivisionCode eq '1'}">
@@ -176,8 +177,6 @@
                                                         	
 		<c:forEach var="item" items="${reportVO.repDetailList}" varStatus="status">
 
-
-                                                            <!-- [D] 열린상태일 경우 active 클래스를 추가해주세요. -->
                                                             <li> <!-- class="active" -->
                                                                 <div class="list-content">
                                                                     <div class="list-table list">
@@ -194,14 +193,44 @@
                                                                             <thead>
                                                                                 <tr>
                                                                                     <th>구분</th>
-                                                                                    <th>Define</th>
+                                                                                    <th><span id="lbl6sigmaStepNm_${status.count}"></span></th>
                                                                                     <th colspan="4">활동요약</th>
                                                                                 </tr>
                                                                             </thead>
                                                                             <tbody>
                                                                                 <tr>
                                                                                     <td colspan="6" class="pd0 border0">
-                                                                                        <div class="toggle-box" <c:if test="${item.repStatus eq '1'}">style="display: block;"</c:if>>
+                                                                                        <div class="toggle-box" id="toggleBox_${status.count}">
+                                                                                        <c:choose> 
+                                                                                        	<c:when test="${item.repStatus eq '0'}">
+                                                                                        	<script> 
+                                                                                        	// 아직 진행되지 않은 step의 토글 방지
+	                                                                                        $(document).ready(function(){
+                                                                                        		let objNm = "#toggleBox_${status.count}";
+                                                                                            	$(objNm).find("input, textarea").prop("disabled", true); // 완료된 항목 disable 시키기
+                                                                                            	//$("#fileUploadWrap_${status.count}").remove()
+                                                                                        	});
+	                                                                                        </script>
+                                                                                        	</c:when>
+                                                                                        	<c:when test="${item.repStatus eq '1'}">
+                                                                                        	<script> 
+                                                                                        	// 아직 진행되지 않은 step의 토글 방지
+	                                                                                        $("#toggleBox_${status.count}").show(); 
+                                                                                        	$("#hidCurrStep").val("${item.repStepCode}");
+	                                                                                        </script>
+                                                                                        	</c:when>
+                                                                                        	<c:when test="${item.repStatus eq '2'}">
+                                                                                        	<script> 
+                                                                                        	$(document).ready(function(){
+                                                                                        		let objNm = "#toggleBox_${status.count}";
+                                                                                            	$(objNm).find("input, textarea").prop("disabled", true); // 완료된 항목 disable 시키기
+                                                                                            	//$("#fileUploadWrap_${status.count} .fileupload-buttons").remove()
+                                                                                        	});
+	                                                                                        </script>
+                                                                                        	</c:when>
+                                                                                        </c:choose>
+                                                                                        	
+                                                                                        
                                                                                             <div class="list-table list">
                                                                                                 <table>
                                                                                                     <caption>일정계획 및 수행 테이블</caption>
@@ -219,6 +248,7 @@
                                                                                                             <td class="pd3">
                                                                                                                 <div class="row">
                                                                                                                     <div class="col s12 input-text input-date">
+	<form:input type="hidden" path="repDetailList[${status.index}].repSeq"/>
 	<form:input type="hidden" path="repDetailList[${status.index}].repStepCode"/>
 	<form:input type="hidden" path="repDetailList[${status.index}].repStatus"/>                                                                                                                    
 	<form:input type="text" path="repDetailList[${status.index}].repPlanStartDate" cssClass="datepicker validate[required]" />
@@ -269,21 +299,30 @@
                                                                                                             <th>Belt</th>
                                                                                                         </tr>
                                                                                                         <tr>
-                                                                                                            <td>챔피언</td>
-                                                                                                            <td class="align-left">자동차소재부품 사업부 &gt; 경량화사업담당 &gt; 자동차소재부품.투명과학플라스틱연구PJT</td>
-                                                                                                            <td>홍길동</td>
-                                                                                                            <td>책임</td>
-                                                                                                            <td>팀장</td>
-                                                                                                            <td>BB</td>
+                                                                                                           <td>${item.repApprovalMemRoleName}</td>
+                                                                                                            <td class="align-left">${item.repApprovalMemDeptName}</td>
+                                                                                                            <td>${item.repApprovalMemName}</td>
+                                                                                                            <td>${item.repApprovalMemComJobx}</td>
+                                                                                                            <td>${item.repApprovalMemComPosition}</td>
+                                                                                                            <td>${item.repApprovalMemComCertBelt}</td>
                                                                                                         </tr>
                                                                                                         <tr>
                                                                                                             <th colspan="2" class="pd-r10 align-right">
-                                                                                                                첨부파일<br>
-                                                                                                                (Up to 10)
+                                                                                                            	첨부파일<br>(Up to 10)
                                                                                                             </th>
                                                                                                             <td colspan="5">
                                                                                                                 <div class="file-drop-box">
-                                                                                                                    <!-- [D] -->
+                                                                                                                   <div class="col s12 input-text file">
+															                                                            <attachfile:fileuploader
+																														objectId="fileUpload_report_sub_${status.count}"
+																														ctx=""
+																														wrapperId="fileUploadWrap_${status.count}"
+																														fileId="reportDetail_${status.count}_${reportVO.repCode}"
+																														fileGrp="reportDetail"
+																														autoUpload="false"
+																														maxFileSize="${15*1000000}"
+																														maxNumberOfFiles="10"/>
+															                                                        </div>
                                                                                                                 </div>
                                                                                                             </td>
                                                                                                         </tr>
@@ -842,69 +881,7 @@
                                                 </td>
                                             </tr>
 </c:forEach>                                            
-                                            <!-- <tr>
-                                                <td class="pd3">
-                                                    <div class="row">
-                                                        <div class="col s12 input-text">
-                                                            <input type="text" id="text23" name="" value="" title="항목 입력">
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td class="pd3">
-                                                    <div class="row">
-                                                        <div class="col s12 input-text">
-                                                            <input type="text" id="text24" name="" value="" title="단위 입력">
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td class="pd3">
-                                                    <div class="row">
-                                                        <div class="col s12 input-text">
-                                                            <input type="text" id="text25" name="" value="" title="개선전 입력">
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td class="pd3">
-                                                    <div class="row">
-                                                        <div class="col s12 input-text">
-                                                            <input type="text" id="text26" name="" value="" title="개선목표 입력">
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td class="pd3">
-                                                    <div class="row">
-                                                        <div class="col s12 input-text">
-                                                            <input type="text" id="text27" name="" value="" title="항목 입력">
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td class="pd3">
-                                                    <div class="row">
-                                                        <div class="col s12 input-text">
-                                                            <input type="text" id="text28" name="" value="" title="단위 입력">
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td class="pd3">
-                                                    <div class="row">
-                                                        <div class="col s12 input-text">
-                                                            <input type="text" id="text29" name="" value="" title="개선전 입력">
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td class="pd3">
-                                                    <div class="row">
-                                                        <div class="col s12 input-text">
-                                                            <input type="text" id="text30" name="" value="" title="개선목표 입력">
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td class="pd3">
-                                                    <div class="btn-group">
-                                                        <button type="button" class="btn light-gray">삭제</button>
-                                                    </div>
-                                                </td>
-                                            </tr> -->
+                                            
                                         </tbody>
                                     </table>
                                 </div>
@@ -926,12 +903,6 @@
                                                 <td>
                                                     <div class="row">
                                                         <div class="col s12 input-text file">
-                                                            <!-- <span class="file-path">
-                                                                <input type="text" id="file1_text" readonly name="" value="">
-                                                                <button type="button"><i class="ico file_del"><em>삭제</em></i></button>
-                                                            </span>
-                                                            <input type="file" id="file1" name="" value="">
-                                                            <label path="file1">파일추가</label> -->
                                                             <attachfile:fileuploader
 															objectId="fileUploadObj_01"
 															ctx=""
@@ -962,8 +933,9 @@
                         </div>
                         <div class="list-footer">
                             <div class="list-btns">
-                                <button type="button" class="btn light-gray" id="btnSave">임시저장</button>
+                                <button type="button" class="btn light-gray" id="btnSave">저장</button>
                                 <button type="button" class="btn bg-gray" id="btnReqApproval">결재의뢰</button>
+                                <button type="button" class="btn bg-gray" id="btnReqDrop">Drop신청</button>
                                 <a href="./list.do?menuKey=${menuKey}" class="btn">목록</a>
                             </div>
                         </div>
@@ -998,8 +970,8 @@
 		setControl()
 		
 		setEvent();
-		
 	}
+		
 	
 	function initCode(){
 		cdListSector = codes.filter(function(code){ return code.index==="SECTOR"; });
@@ -1010,6 +982,21 @@
 		cdRepType1 = codes.filter(function(code){ return code.index==="RP_TY1";});
 		cdRepType2 = codes.filter(function(code){ return code.index==="RP_TY2";});
 		cdRepType3 = codes.filter(function(code){ return code.index==="RP_TY3";});
+		
+		let arrTypeCodeNm;
+		if($("#repDivisionCode").val()==="1"){
+			if($("#repTypeCode").val()==="11"){
+				// DMAIC : Define, Measure, Analyze, Improve, Control, Finish
+				arrTypeCodeNm = ["Define", "Measure", "Analyze", "Improve", "Control", "Finish"];
+			} else {
+				// DMEDI : Define, Measure, Explore, Develop, Implement, Finish
+				arrTypeCodeNm = ["Define", "Measure", "Explore", "Develop", "Implement", "Finish"];
+			}
+			for ( var i in arrTypeCodeNm) {
+				$("#lbl6sigmaStepNm_"+(Number(i)+1)).text(arrTypeCodeNm[i]);
+			}
+		}
+				
 	}
 	
 	function setControl(){
@@ -1095,7 +1082,7 @@
 		//저장버튼
 		$("#btnSave").off("click").on("click", function(){
 			if($("#defaultForm").validationEngine('validate')){
-				$("#repStatusCode").val("1"); // 상태 임시저장 으로 저장
+				//$("#repStatusCode").val("1"); // 상태 임시저장 으로 저장
 				$("#defaultForm")[0].submit();	
 			};
 		});
@@ -1103,7 +1090,7 @@
 		//결재버튼
 		$("#btnReqApproval").off("click").on("click", function(){
 			if(validate()){
-				$("#repStatusCode").val("2"); // 상태 임시저장 으로 저장
+				//$("#repStatusCode").val("2"); // 상태 임시저장 으로 저장
 				$("#defaultForm")[0].submit();	
 			};
 		});
@@ -1367,29 +1354,6 @@
 		$(objTr).find(".report-code").val('${reportVO.repCode}');
 	}
 	
-</script>
-
-	<script type="text/javascript">
-//var contentsEditors = [];
-//$(function() {
-
-	
-//});
-
-/*
- //저장
-function insert(){
-	$("#defaultForm").submit();
-	return false;
-}
-//목록
-function list(){
-	$("#defaultForm").validationEngine('detach');
-	$("#defaultForm input[type='text']").attr('disabled', true);
-	$("#defaultForm").attr('method', 'post');
-	$("#defaultForm").attr('action', 'list.do');
-	$("#defaultForm").submit();
-}*/
 </script>
 </body>
 </html>

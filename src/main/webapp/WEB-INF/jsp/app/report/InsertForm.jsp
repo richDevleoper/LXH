@@ -140,7 +140,7 @@
                                                     </div>
                                                 </td>
                                                 <th>활용율 반영년도</th>
-                                                <td><span id="lblUseRefDt">-</span>년 <input type="hidden" name="REP_USE_REF_DATE" id="hidUseRefDt" value=""></td>
+                                                <td><span id="lblUseRefDt">-</span>년 <form:input type="hidden" path="repUseRefDate" /></td>
                                             </tr>
                                             <tr id="trRepDate1" class="tr-rep-date">
                                                 <th><span class="asterisk">*</span>일정계획<br>(완료예정일)</th>
@@ -1052,10 +1052,15 @@
 		$("#repActionTypeCode").val("${reportVO.repActionTypeCode}")
 		
 		setDropDown("repMbbUseRateCode", cdMbbUseRate, false);//MBB활용율
-		$("#repMbbUseRateCode").val("${reportVO.repMbbUseRateCode}")
+		const vRepMbbUseRate = "${reportVO.repMbbUseRateCode}";
+		if(vRepMbbUseRate){
+			$("#repMbbUseRateCode").val()	
+		}
 		
 		//setDropDown(".ddl-rep-result-type", cdRepResultType, true);//성과항목
-		$("#lblUseRefDt").text("2023"); $("#hidUseRefDt").val("2023");	//활용율 반영년도
+		const currYear = new Date().getFullYear();
+		$("#lblUseRefDt").text(currYear); $("#repUseRefDate").val(currYear);	//활용율 반영년도
+		
 		
 		onchange_ddlRepDevisionCode();	// 과제유형
 		$("#repTypeCode").val("${reportVO.repTypeCode}");
@@ -1130,8 +1135,8 @@
 		
 		//결재버튼
 		$("#btnReqApproval").off("click").on("click", function(){
-			if(validate()){
-				$("#repStatusCode").val("2"); // 상태 임시저장 으로 저장
+			if($("#defaultForm").validationEngine('validate')){
+				$("#repStatusCode").val("2"); // 상태 '선정중'으로 변경
 				$("#defaultForm")[0].submit();	
 			};
 		});
