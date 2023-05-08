@@ -186,24 +186,24 @@ public class AppController {
 //
 //	}
 	
-	@RequestMapping({"/app/002_02_search.do"})
-	public String handler002_02(HttpServletRequest request, ModelMap model,
-			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
-			UserVO userSession)throws Exception {
-		
-		return "app/qi/002_02_search";
+//	@RequestMapping({"/app/002_02_search.do"})
+//	public String handler002_02(HttpServletRequest request, ModelMap model,
+//			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
+//			UserVO userSession)throws Exception {
+//		
+//		return "app/qi/002_02_search";
+//
+//	}
+//	
+//	@RequestMapping({"/app/002_02_sub.do"})
+//	public String handler002_02_sub(HttpServletRequest request, ModelMap model,
+//			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
+//			UserVO userSession)throws Exception {
+//		
+//		return "app/qi/002_02_sub";
+//
+//	}
 
-	}
-	
-	@RequestMapping({"/app/002_02_sub.do"})
-	public String handler002_02_sub(HttpServletRequest request, ModelMap model,
-			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
-			UserVO userSession)throws Exception {
-		
-		return "app/qi/002_02_sub";
-
-	}
-	
 	@RequestMapping({"/app/002_03_report.do"})
 	public String handler002_03(HttpServletRequest request, ModelMap model,
 			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 

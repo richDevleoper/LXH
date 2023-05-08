@@ -1,9 +1,5 @@
 *.class
 *.properties
-.externalToolBuilders/
-.classpath
-.project
-.settings/*
 target/*
-.idea/*
 docs/~$*.*x
+.*/*

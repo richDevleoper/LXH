@@ -176,7 +176,6 @@
 	}
 	
 	function onchange_recordCountPerPage(vCount){
-		debugger;
 		$("#recordCountPerPage").val(vCount);
 		onclick_search();// 검색 '조회'버튼 클릭
 	}

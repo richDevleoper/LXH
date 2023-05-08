@@ -216,12 +216,21 @@ public class ReportService {
 		return dao.selectList("Report.selectList", searchVO);
 	}
 	
+	public List<ReportVO> selectFullList(ReportSearchVO searchVO) {
+		
+		return dao.selectList("Report.selectFullList", searchVO);
+	}
+	
 	public int selectListCount(ReportSearchVO searchVO) {
 		return (Integer) dao.selectOne("Report.selectListCount", searchVO);
 	}
 	
 	public List<EgovMap> selectListCount2(ReportSearchVO searchVO) {
 		return dao.selectList("Report.selectListCount2", searchVO); // 상태 종류별 카운트 
+	}
+	
+	public List<EgovMap> selectFullListCount(ReportSearchVO searchVO) {
+		return dao.selectList("Report.selectFullListCount", searchVO); // 상태 종류별 카운트 
 	}
 	
 	public ReportVO select(ReportVO reportVO) {

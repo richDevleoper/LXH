@@ -56,9 +56,15 @@ public class ReportVO {
 	private List<ReportResultVO> repResultList;	// 과제 성과
 	private List<ReportIndicatorVO> repIndicatorList; // 과제지표
 	private List<AttachFileVO> repFileList;
-	
 
 	private List<AttachFileVO> fileList;
+	
+	
+	private String repTeamLeaderName;
+	private String repTeamMemberName;
+	private String repTeamProcessOwnerName;
+	private String repTeamChapionName;
+
 
 	public Integer getRepCode() {
 		return repCode;
@@ -428,6 +434,38 @@ public class ReportVO {
 		this.repStatus = repStatus;
 	}
 
+	public String getRepTeamLeaderName() {
+		return repTeamLeaderName;
+	}
+
+	public void setRepTeamLeaderName(String repTeamLeaderName) {
+		this.repTeamLeaderName = repTeamLeaderName;
+	}
+
+	public String getRepTeamMemberName() {
+		return repTeamMemberName;
+	}
+
+	public void setRepTeamMemberName(String repTeamMemberName) {
+		this.repTeamMemberName = repTeamMemberName;
+	}
+
+	public String getRepTeamProcessOwnerName() {
+		return repTeamProcessOwnerName;
+	}
+
+	public void setRepTeamProcessOwnerName(String repTeamProcessOwnerName) {
+		this.repTeamProcessOwnerName = repTeamProcessOwnerName;
+	}
+	
+	public String getRepTeamChapionName() {
+		return repTeamChapionName;
+	}
+
+	public void setRepTeamChapionName(String repTeamChapionName) {
+		this.repTeamChapionName = repTeamChapionName;
+	}
+
 	@Override
 	public String toString() {
 		return "ReportVO [repCode=" + repCode + ", repName=" + repName + ", repMenuCode=" + repMenuCode
@@ -444,7 +482,9 @@ public class ReportVO {
 				+ repSector + ", repLeaderBelt=" + repLeaderBelt + ", repMbbUseRate=" + repMbbUseRate
 				+ ", repActionType=" + repActionType + ", repDetailList=" + repDetailList + ", repTeamMemberList="
 				+ repTeamMemberList + ", repResultList=" + repResultList + ", repIndicatorList=" + repIndicatorList
-				+ ", repFileList=" + repFileList + ", fileList=" + fileList + "]";
+				+ ", repFileList=" + repFileList + ", fileList=" + fileList + ", repTeamLeaderName=" + repTeamLeaderName
+				+ ", repTeamMemberName=" + repTeamMemberName + ", repTeamProcessOwnerName=" + repTeamProcessOwnerName
+				+ ", repTeamChapionName=" + repTeamChapionName + "]";
 	}
 
 	

@@ -38,11 +38,16 @@
 		<result property="repDivision" column="REP_DEVISION" />
 		<result property="repType" column="REP_TYPE" />
 		<result property="repStatus" column="REP_STATUS" />
-		<result property="repSector" column="REP_SECTOR" /> 
+		<result property="repSector" column="REP_SECTOR" />
+		
+		<result property="repTeamLeaderName" column="REP_TEAM_LEADER_NAME" />
+		<result property="repTeamMemberName" column="REP_TEAM_MEMBER_NAME" />
+		<result property="repTeamProcessOwnerName" column="REP_TEAM_PROCESS_OWNER_NAME" />
+		<result property="repTeamChapionName" column="REP_TEAM_CHAMPION_NAME" />
+		
 	</resultMap>
 	
 	<sql id="defCond">
-		
 			<if test="searchRepName != null and searchRepName != ''">
 				AND T.REP_NAME like '%' || #{searchRepName} || '%'
 			</if>
@@ -55,26 +60,66 @@
 			<if test="searchStatus != null and searchStatus != ''">
 				AND T.REP_STATUS_CODE = #{searchStatus}
 			</if>
-		
+			<if test="menuCode != null and menuCode != ''">
+				AND T.REP_MENU_CODE = #{menuCode}
+			</if>
+			<if test="searchUserid != null and searchUserid != ''">
+				AND T.REP_REG_USER = #{searchUserid}
+			</if>
+			
+			
+			<if test="searchSectorCode != null and searchSectorCode != ''">
+				AND T.REP_SECTOR_CODE = #{searchSectorCode}
+			</if>
+			<if test="searchPlaceCode != null and searchPlaceCode != ''">
+				AND T.REP_PLACE_CODE = #{searchPlaceCode}
+			</if>
+			<if test="searchUserid != null and searchUserid != ''">
+				AND T.REP_REG_USER = #{searchUserid}
+			</if>
+			<if test="searchActionTypeCode != null and searchActionTypeCode != ''">
+				AND T.REP_ACTION_TYPE_CODE = #{searchActionTypeCode}
+			</if>
+			<if test="searchLeaderBeltCode != null and searchLeaderBeltCode != ''">
+				AND T.REP_LEADER_BELT_CODE = #{searchLeaderBeltCode}
+			</if>
+			
+			<if test="searchFromDt != null and searchFromDt != ''">
+				AND d.start_date(+) > to_date(#{searchFromDt}, 'YYYY-MM-DD')
+			</if>
+			
+			<if test="searchToDt != null and searchToDt != ''">
+				AND D.end_date = to_date(#{searchToDt}, 'YYYY-MM-DD')
+			</if>
+			
 	</sql> 
 	
 	<sql id="selectListBasic">
 	    WITH report_mst AS (
-            SELECT ROW_NUMBER() OVER( ORDER BY TO_NUMBER(rep_code) ASC ) idx,
-                ROW_NUMBER() OVER( ORDER BY TO_NUMBER(rep_code) DESC ) rowidx,
-                m.*
-            FROM   tb_report_mst m
+            SELECT ROW_NUMBER() OVER( ORDER BY TO_NUMBER(T.rep_code) ASC ) idx,
+                ROW_NUMBER() OVER( ORDER BY TO_NUMBER(T.rep_code) DESC ) rowidx,
+                T.*
+            FROM   tb_report_mst T
+                   , (select rep_code, min(rep_plan_start_date) start_date
+                             , (case when rep_devision_code='1' then max(REP_PLAN_START_DATE) else max(REP_PLAN_END_DATE) end) as end_date
+                        from tb_report_detail 
+                       group by rep_code, rep_devision_code) d
+            WHERE t.rep_code=d.rep_code(+)
+            <include refid="defCond"></include>
         )
         SELECT
             idx,
-            rep_code,
-            rep_name,
+            t.rep_code,
+            t.rep_name,
+            t.rep_devision_code,
             c_div.code_nm AS rep_division,
+            t.rep_type_code,
             c_ty.code_nm  AS rep_type,
-            rep_status_code,
+            t.rep_status_code,
             c_st.code_nm  AS rep_status,
             (select min(REP_PLAN_START_DATE) from tb_report_detail m where m.rep_code=t.rep_code) rep_start_date,
-            (select case when m.rep_devision_code='1' then max(REP_PLAN_START_DATE) else max(REP_PLAN_END_DATE) end as rep_finish_date from tb_report_detail m where m.rep_code=T.rep_code group by rep_code, m.rep_devision_code) rep_finish_date
+            (select case when rep_devision_code='1' then max(REP_PLAN_START_DATE) else max(REP_PLAN_END_DATE) end as rep_finish_date from tb_report_detail m where m.rep_code=T.rep_code group by rep_code, m.rep_devision_code) rep_finish_date
+            
         FROM
             report_mst T,
             tb_code    c_div,
@@ -84,7 +129,7 @@
                 T.rep_devision_code = c_div.code_id(+) 	AND c_div.code_grp_id(+) = '6SIG_YN' 
             AND T.rep_type_code = c_ty.code_id(+) 		AND c_ty.code_grp_id(+) IN ('RP_TY1', 'RP_TY2', 'RP_TY3')
             AND T.rep_status_code = c_st.code_id(+) 	AND c_st.code_grp_id(+) = 'REP_STAT'
-            <include refid="defCond"></include>
+            
 	</sql>
 	
 	<select id="selectList" resultMap="reportMap">
@@ -92,6 +137,72 @@
 		  and rowidx between (#{currentPageNo}*#{recordCountPerPage}+1-#{recordCountPerPage}) and (#{currentPageNo}*#{recordCountPerPage})
 		  order by idx desc
 	</select>
+	
+	
+	<sql id="selectFullListBasic">
+		WITH report_mst AS (
+            SELECT ROW_NUMBER() OVER( ORDER BY TO_NUMBER(T.rep_code) ASC ) idx,
+                ROW_NUMBER() OVER( ORDER BY TO_NUMBER(T.rep_code) DESC ) rowidx,
+                T.*
+            FROM   tb_report_mst T
+                   , (select rep_code, min(rep_plan_start_date) start_date
+                             , (case when rep_devision_code='1' then max(REP_PLAN_START_DATE) else max(REP_PLAN_END_DATE) end) as end_date
+                        from tb_report_detail 
+                       group by rep_code, rep_devision_code) d
+            WHERE t.rep_code=d.rep_code(+)
+            <include refid="defCond"></include>
+        )
+        SELECT
+            idx
+            ,t.rep_code
+            ,t.rep_name
+            ,t.rep_devision_code
+            ,c_div.code_nm AS rep_division
+            ,t.rep_type_code
+            ,c_ty.code_nm  AS rep_type
+            ,t.rep_status_code
+            ,c_st.code_nm  AS rep_status
+            ,(select min(REP_PLAN_START_DATE) from tb_report_detail m where m.rep_code=t.rep_code) rep_start_date
+            ,(select case when rep_devision_code='1' then max(REP_PLAN_START_DATE) else max(REP_PLAN_END_DATE) end as rep_finish_date from tb_report_detail m where m.rep_code=T.rep_code group by rep_code, m.rep_devision_code) rep_finish_date
+            ,(select code_nm from tb_code where code_grp_id='ACTTYPE' and code_id=t.REP_ACTION_TYPE_CODE) as REP_ACTION_TYPE
+            ,(select code_nm from tb_code where code_grp_id='MBBUSERT' and code_id=t.REP_MBB_USE_RATE_CODE) as REP_MBB_USE_RATE
+            ,(select code_nm from tb_code where code_grp_id='SECTOR' and code_id=t.REP_SECTOR_CODE) as REP_SECTOR
+            ,(select rep_team_mem_name from tb_report_team where rep_code=t.REP_CODE and rep_team_mem_role='1') REP_TEAM_LEADER_NAME
+            ,(select LISTAGG(cast(rep_team_mem_name as varchar(100)), ',') WITHIN GROUP(ORDER BY REP_TEAM_CODE) from tb_report_team where rep_code=t.REP_CODE and rep_team_mem_role='2') as REP_TEAM_MEMBER_NAME
+            ,(select rep_team_mem_name from tb_report_team where rep_code=t.REP_CODE and rep_team_mem_role='4') REP_TEAM_PROCESS_OWNER_NAME
+            ,(select rep_team_mem_name from tb_report_team where rep_code=t.REP_CODE and rep_team_mem_role='5') REP_TEAM_CHAMPION_NAME
+            
+        FROM
+            report_mst T,
+            tb_code    c_div,
+            tb_code    c_ty,
+            tb_code    c_st
+        WHERE   
+                T.rep_devision_code = c_div.code_id(+) 	AND c_div.code_grp_id(+) = '6SIG_YN' 
+            AND T.rep_type_code = c_ty.code_id(+) 		AND c_ty.code_grp_id(+) IN ('RP_TY1', 'RP_TY2', 'RP_TY3')
+            AND T.rep_status_code = c_st.code_id(+) 	AND c_st.code_grp_id(+) = 'REP_STAT'
+           
+	</sql>
+		    
+	<select id="selectFullList" resultMap="reportMap">
+		<include refid="selectFullListBasic"></include>
+			and rowidx between (#{currentPageNo}*#{recordCountPerPage}+1-#{recordCountPerPage}) and (#{currentPageNo}*#{recordCountPerPage})
+		    order by idx desc
+	</select>
+	
+	<select id="selectFullListCount" resultType="egovMap">
+		
+		SELECT c.code_id rep_devision_code, c.code_nm rep_division, COUNT(a.rep_code) cnt
+          FROM tb_code c,
+		      (
+		<include refid="selectFullListBasic"></include>
+		       ) a
+		 WHERE c.code_id=a.rep_devision_code(+)
+		   AND c.code_grp_id='6SIG_YN'
+	  GROUP BY code_id, code_nm
+	  ORDER BY rep_devision_code
+				 
+	 </select>
 	
 	<select id="selectListCount2" resultType="egovMap">
 		SELECT
@@ -103,7 +214,7 @@
 		        FROM (
 					<include refid="selectListBasic"></include>
 					 ) a
-		        GROUP BY rep_status_code, rep_status
+		        GROUP BY a.rep_status_code, a.rep_status
 		    ) m
 		WHERE c.code_id = m.rep_status_code (+)
 		  AND c.code_grp_id = 'REP_STAT'

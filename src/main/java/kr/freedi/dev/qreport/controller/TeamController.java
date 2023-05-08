@@ -37,14 +37,14 @@ import kr.freedi.dev.user.domain.UserVO;
  * @history	: 
  */
 @Controller
-@RequestMapping({"/report"})
-public class ReportController {
+@RequestMapping({"/team"})
+public class TeamController {
 
 	protected Log log = LogFactory.getLog(this.getClass());
 	
 	//final String ATTACH_TABLE_PREFIX = "TB";
 	
-	final String REP_MENU_CODE = "REPORT";  // REPORT or TEAM
+	final String REP_MENU_CODE = "TEAM";  // REPORT(과제) or TEAM(분임조과제)
 	
 	@Resource(name = "reportService")
 	private ReportService reportService;
@@ -63,7 +63,7 @@ public class ReportController {
 	}
 	
 	// 과제 - 리스트
-	@RequestMapping({"/list.do", "/002_01_mission.do"})
+	@RequestMapping({"/list.do"})
 	public String handler_list(HttpServletRequest request, ModelMap model,
 			@ModelAttribute("reportVO") ReportVO reportVO,
 			@ModelAttribute("reportSearchVO") ReportSearchVO searchVO,
@@ -118,7 +118,6 @@ public class ReportController {
 		return "app/report/List";
 	}
 	
-	// 리스트에서 클릭시 (상황별 수정페이지로 이동)
 	@RequestMapping({"/updateForm.do"})
 	public String updateForm(HttpServletRequest request, ModelMap model,
 			@ModelAttribute("reportVO") ReportVO reportVO,
@@ -136,11 +135,9 @@ public class ReportController {
 		} else {	
 			// 그 외(선정중~)
 			return "redirect:./insertFormStat3.do?menuKey="+searchVO.getMenuKey()+"&repCode="+reportVO.getRepCode();
-			
 		}
 	}
-	
-	// 과제(등록화면) - 상태 '선정중' 이상
+	// 나의 과제 > 상태 '선정중' 이상
 	@RequestMapping({"/insertFormStat3.do"})
 	public String handler_insertFormStat3(HttpServletRequest req, ModelMap model,
 			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO,
@@ -155,7 +152,7 @@ public class ReportController {
 	}  
 	
 	
-	// 과제(등록화면) - 상태 '임시저장'
+	// 나의 과제> 과제작성 (임시저장 포함)
 	@RequestMapping({"/insertForm.do"})
 	public String handler_insertForm(HttpServletRequest req, ModelMap model,
 			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO,
@@ -177,7 +174,7 @@ public class ReportController {
 	}  
 	
 	
-	// 과제 등록(Submit)
+	
 	@RequestMapping({"/insert.do"})
 	public String insert(HttpServletRequest req, ModelMap model,
 			@ModelAttribute("reportVO") ReportVO reportVO,
@@ -200,7 +197,6 @@ public class ReportController {
 		return "redirect:/sub.do?menuKey=29";
 	}
 	
-	// 과제 단계별 승인시 승인처리(6시그마/일반과제 분리처리)
 	@RequestMapping({"/updateStep.do"})
 	public String update_step(HttpServletRequest req, ModelMap model,
 			@ModelAttribute("reportVO") ReportVO reportVO,
@@ -244,70 +240,7 @@ public class ReportController {
 		return "redirect:/sub.do?menuKey=29";
 	}
 	
-	// 과제검색
-	@RequestMapping({"/Search.do"})
-	public String handler_search(HttpServletRequest request, ModelMap model,
-			@ModelAttribute("reportVO") ReportVO reportVO,
-			@ModelAttribute("reportSearchVO") ReportSearchVO searchVO, 
-			UserVO userSession)throws Exception {
 
-		model.addAttribute("menuKey", searchVO.getMenuKey());
-		model.addAttribute("repMenuCode", REP_MENU_CODE);
-		
-		searchVO.setMenuCode(REP_MENU_CODE);  // 과제 or 분임조과제 구분
-		
-		// 페이지 초기값 세팅을 위한 코드값 바인딩
-		CodeVO codeVO = new CodeVO(); 
-		codeVO.setCodeGrpId("6SIG_YN");
-		codeVO.setActFlg("Y"); 
-		model.addAttribute("searchRepName", codeService.selectFullList(codeVO));
-
-		codeVO = new CodeVO(); 
-		String[] arrCodeGrpIds = {"6SIG_YN", "RP_TY1", "RP_TY2", "RP_TY3", "SECTOR", "ACTTYPE", "LDRBELT", "MBBUSERT", "RESULTTY", "REP_ROLE", "WPLACE", "REP_STAT"};
-		codeVO.setCodeGrpIdList(arrCodeGrpIds);
-		codeVO.setActFlg("Y"); 
-		List<EgovMap> allCodes = codeService.selectFullList(codeVO);		//item.codeGrpId, codeId, codeNm
-
-		model.addAttribute("allCodes", allCodes);
-			
-		searchVO.setSearchUserid(userSession.getUserId());
-		List<EgovMap> countList = reportService.selectFullListCount(searchVO);
-		
-		
-		int totalCount = 0;
-		for (EgovMap egovMap : countList) {
-			
-			String codeNm = (String)egovMap.get("repDivisionCode");
-			BigDecimal currVal = (BigDecimal)egovMap.get("cnt");
-			totalCount = totalCount + currVal.intValue();
-		}
-		model.addAttribute("countList", countList);
-		
-		//페이징 기본설정8
-		searchVO.setTotalRecordCount(totalCount);
-		
-		List<ReportVO> reportList = reportService.selectFullList(searchVO);
-		model.addAttribute("reportList", reportList);
-		model.addAttribute("totalCount", totalCount);
-		
-		return "app/report/Search";
-	}
-	
-	// 과제검색_상세보기
-	@RequestMapping({"/SearchView.do"})
-	public String handler_searchView(HttpServletRequest request, ModelMap model,
-			@ModelAttribute("reportVO") ReportVO reportVO,
-			@ModelAttribute("reportSearchVO") ReportSearchVO searchVO, 
-			UserVO userSession)throws Exception {
-		
-		model.addAttribute("menuKey", searchVO.getMenuKey());
-
-		searchVO.setMenuCode(REP_MENU_CODE);
-		
-
-		
-		return "app/report/SearchView";
-	}
   
 }
 
