@@ -53,7 +53,9 @@
 		<pattern>/content/view.do</pattern> 
 		<pattern>/user/*</pattern> 
 		<pattern>/menu/siteMap.do</pattern> 
-		<pattern>/script/*</pattern> 
+		<pattern>/script/*</pattern>
+		
+		<pattern>/proposal/*</pattern> 
 	</decorator>
 	<decorator name="defIndex" page="/WEB-INF/jsp/layout/def/Index.jsp">
 		<pattern>/index.do</pattern>
