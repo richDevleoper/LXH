@@ -45,6 +45,7 @@ public class ReportVO {
 	private String repDivision;
 	private String repType;
 	private String repStatus;
+	private String repPlace;
 	
 	private String repSector;
 	private String repLeaderBelt;
@@ -464,6 +465,14 @@ public class ReportVO {
 
 	public void setRepTeamChapionName(String repTeamChapionName) {
 		this.repTeamChapionName = repTeamChapionName;
+	}
+
+	public String getRepPlace() {
+		return repPlace;
+	}
+
+	public void setRepPlace(String repPlace) {
+		this.repPlace = repPlace;
 	}
 
 	@Override

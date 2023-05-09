@@ -39,6 +39,7 @@
 		<result property="repType" column="REP_TYPE" />
 		<result property="repStatus" column="REP_STATUS" />
 		<result property="repSector" column="REP_SECTOR" />
+		<result property="repPlace" column="REP_PLACE" />
 		
 		<result property="repTeamLeaderName" column="REP_TEAM_LEADER_NAME" />
 		<result property="repTeamMemberName" column="REP_TEAM_MEMBER_NAME" />
@@ -67,7 +68,22 @@
 				AND T.REP_REG_USER = #{searchUserid}
 			</if>
 			
-			
+			<if test="searchTeamMemberName != null and searchTeamMemberName != ''">
+				AND EXISTS (SELECT 1 
+				              FROM TB_REPORT_TEAM 
+				             WHERE REP_CODE=T.REP_CODE
+				             <choose>
+								<when test="searchTeamMemberType != null and searchTeamMemberType != ''">
+									AND REP_TEAM_MEM_ROLE IN ( #{searchTeamMemberType} )
+								</when>
+								<otherwise>
+								    AND REP_TEAM_MEM_ROLE IN (1,2,3,4,5)
+								</otherwise>
+							</choose> 
+							    
+							   AND REP_TEAM_MEM_NAME LIKE '%'|| #{searchTeamMemberName} ||'%'
+						    )
+			</if>
 			<if test="searchSectorCode != null and searchSectorCode != ''">
 				AND T.REP_SECTOR_CODE = #{searchSectorCode}
 			</if>
@@ -83,15 +99,12 @@
 			<if test="searchLeaderBeltCode != null and searchLeaderBeltCode != ''">
 				AND T.REP_LEADER_BELT_CODE = #{searchLeaderBeltCode}
 			</if>
-			
 			<if test="searchFromDt != null and searchFromDt != ''">
 				AND d.start_date(+) > to_date(#{searchFromDt}, 'YYYY-MM-DD')
 			</if>
-			
 			<if test="searchToDt != null and searchToDt != ''">
 				AND D.end_date = to_date(#{searchToDt}, 'YYYY-MM-DD')
 			</if>
-			
 	</sql> 
 	
 	<sql id="selectListBasic">
@@ -162,11 +175,13 @@
             ,c_ty.code_nm  AS rep_type
             ,t.rep_status_code
             ,c_st.code_nm  AS rep_status
+            
             ,(select min(REP_PLAN_START_DATE) from tb_report_detail m where m.rep_code=t.rep_code) rep_start_date
             ,(select case when rep_devision_code='1' then max(REP_PLAN_START_DATE) else max(REP_PLAN_END_DATE) end as rep_finish_date from tb_report_detail m where m.rep_code=T.rep_code group by rep_code, m.rep_devision_code) rep_finish_date
             ,(select code_nm from tb_code where code_grp_id='ACTTYPE' and code_id=t.REP_ACTION_TYPE_CODE) as REP_ACTION_TYPE
             ,(select code_nm from tb_code where code_grp_id='MBBUSERT' and code_id=t.REP_MBB_USE_RATE_CODE) as REP_MBB_USE_RATE
             ,(select code_nm from tb_code where code_grp_id='SECTOR' and code_id=t.REP_SECTOR_CODE) as REP_SECTOR
+            ,(select code_nm from tb_code where code_grp_id='WPLACE' and code_id=t.REP_PLACE_CODE) as REP_PLACE
             ,(select rep_team_mem_name from tb_report_team where rep_code=t.REP_CODE and rep_team_mem_role='1') REP_TEAM_LEADER_NAME
             ,(select LISTAGG(cast(rep_team_mem_name as varchar(100)), ',') WITHIN GROUP(ORDER BY REP_TEAM_CODE) from tb_report_team where rep_code=t.REP_CODE and rep_team_mem_role='2') as REP_TEAM_MEMBER_NAME
             ,(select rep_team_mem_name from tb_report_team where rep_code=t.REP_CODE and rep_team_mem_role='4') REP_TEAM_PROCESS_OWNER_NAME

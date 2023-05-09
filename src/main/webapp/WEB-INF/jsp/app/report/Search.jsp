@@ -26,7 +26,7 @@
                                             <label>과제명(키워드)</label>
                                         </div>
                                         <div class="pd-l10 col s10">
-                                            <form:input type="text" path="searchRepName"/>
+                                            <form:input type="text" path="searchRepName" />
                                         </div>
                                     </div>
                                     <div class="form-inline form-input col s4">
@@ -167,18 +167,17 @@ ${item.repDivision} ${item.cnt}건
                                                     </ul>
                                                 </div>
                                                 <p class="list">
-                                                    <a href="/report/SearchView.do?menuKey=${menuKey}" title="바로가기">과제명 : ${item.repName}</a>
+                                                    <a href="./SearchView.do?menuKey=${menuKey}&repCode=${item.repCode}" title="${item.repName}">과제명 : ${item.repName}</a>
                                                     <span>활동Process(소) : ${item.repType}
                                                     , 활동분야 : ${item.repActionType}
                                                     , MBB활용율 : ${item.repMbbUseRate}
                                                     , 부문 : ${item.repSector}
-                                                    , 사업장 : 청주공장
+                                                    , 사업장 : ${item.repPlace}
                                                     , 과제리더 : ${item.repTeamLeaderName}
                                                     , 팀원 : ${item.repTeamMemberName}
 <c:if test="${item.repTeamProcessOwnerName eq ''}">                                       
                                                     , Process Owner : ${item.repTeamProcessOwnerName}
-</c:if>                                                    
-                                                    
+</c:if>                                             
                                                     , 챔피언 : ${item.repTeamChapionName}
                                                     , 착수(예정)일 : <fmt:formatDate pattern="yyyy.MM.dd" value="${item.repStartDate}" />
                                                     , 완료(예정)일 : <fmt:formatDate pattern="yyyy.MM.dd" value="${item.repFinishDate}" />
@@ -383,6 +382,13 @@ ${item.repDivision} ${item.cnt}건
 		
 		setControl();
 		
+		$("#defaultForm input").off("keyup").on("keyup", function(e){
+			
+		    if(e.keyCode===13 && this.value.trim().length>0){
+		    	onclick_search();
+		    }
+		});
+		
 		$("#searchDivision").off("change").on("change", onchange_ddlRepDevisionCode); // 6σ Full Process여부
 	}
 	
@@ -426,6 +432,8 @@ ${item.repDivision} ${item.cnt}건
 	
 	function setControl(){
 		
+		
+		
 		setDropDown("searchSectorCode", cdListSector, true, "전체");//부문코드
 		$("#searchSectorCode").val("${reportSearchVO.searchSectorCode}");
 		
@@ -447,7 +455,7 @@ ${item.repDivision} ${item.cnt}건
 		
 		
 		onchange_ddlRepDevisionCode();	// 과제유형
-		//$("#repTypeCode").val("${reportVO.repTypeCode}");
+		$("#searchType").val("${reportSearchVO.searchType}");
 		
 		
 	}

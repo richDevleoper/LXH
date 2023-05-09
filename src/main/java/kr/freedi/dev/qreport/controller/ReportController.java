@@ -22,6 +22,7 @@ import egovframework.rte.psl.dataaccess.util.EgovMap;
 import kr.freedi.dev.article.domain.ArticleSearchVO;
 import kr.freedi.dev.code.domain.CodeVO;
 import kr.freedi.dev.code.service.CodeService;
+import kr.freedi.dev.qapprove.domain.ApproveVO;
 import kr.freedi.dev.qreport.domain.ReportSearchVO;
 
 import kr.freedi.dev.qreport.domain.ReportVO;
@@ -162,6 +163,9 @@ public class ReportController {
 			@ModelAttribute("reportVO") ReportVO reportVO, 
 			UserVO userSession) throws Exception {
 		
+		model.addAttribute("repMenuCode", REP_MENU_CODE);
+		reportVO.setRepMenuCode(REP_MENU_CODE); //화면 바인딩을 위해 세팅하여 서비스에 전달
+		
 		ReportVO retVO = reportService.proc_reportFormHandler(req, model, searchVO, reportVO, userSession);
 		model.addAttribute("action", "/report/insert.do");
 				
@@ -295,19 +299,29 @@ public class ReportController {
 	
 	// 과제검색_상세보기
 	@RequestMapping({"/SearchView.do"})
-	public String handler_searchView(HttpServletRequest request, ModelMap model,
+	public String handler_searchView(HttpServletRequest req, ModelMap model,
 			@ModelAttribute("reportVO") ReportVO reportVO,
 			@ModelAttribute("reportSearchVO") ReportSearchVO searchVO, 
 			UserVO userSession)throws Exception {
 		
 		model.addAttribute("menuKey", searchVO.getMenuKey());
+		model.addAttribute("repMenuCode", REP_MENU_CODE); // 과제 or 분임조과제. 결재문서는 이 코드 안들어감.
 
-		searchVO.setMenuCode(REP_MENU_CODE);
+		searchVO.setMenuCode(REP_MENU_CODE);  // 검색조건 설정
 		
+		// TODO 결재건 종류에 따른 서브페이지 로딩하기.(조건문 분기하기)
+		
+		// TODO 과제 정보 가져오기
+		ReportVO dbReportVO = reportService.proc_reportFormHandler(req, model, searchVO, reportVO, userSession);
+		model.addAttribute("reportVO", dbReportVO);
+		
+		// TODO 분임조 정보 가져오기
 
 		
-		return "app/report/SearchView";
+		return "app/approve/ApprForm"; // 과제 페이지
 	}
+	
+
   
 }
 

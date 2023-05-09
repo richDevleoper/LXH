@@ -144,9 +144,11 @@ public class TeamController {
 			@ModelAttribute("reportVO") ReportVO reportVO, 
 			UserVO userSession) throws Exception {
 		
+		
+		
 		reportService.proc_reportFormHandler(req, model, searchVO, reportVO, userSession);
 		model.addAttribute("action", "/report/updateStep.do");
-		
+		model.addAttribute("repMenuCode", REP_MENU_CODE);
 				
 		return "app/report/InsertFormStat3";
 	}  
@@ -159,8 +161,15 @@ public class TeamController {
 			@ModelAttribute("reportVO") ReportVO reportVO, 
 			UserVO userSession) throws Exception {
 		
+		model.addAttribute("repMenuCode", REP_MENU_CODE);
+		reportVO.setRepMenuCode(REP_MENU_CODE); //화면 바인딩을 위해 세팅하여 서비스에 전달
+		
 		ReportVO retVO = reportService.proc_reportFormHandler(req, model, searchVO, reportVO, userSession);
 		model.addAttribute("action", "/report/insert.do");
+		
+		// 분임조 과제 작성 -> 작성 화면 진입시 분임조 정보 가져오기
+		
+		
 				
 		if(retVO.getRepCode() != null 
 				&& retVO.getRepDivisionCode() !=null 
@@ -239,6 +248,79 @@ public class TeamController {
 		//return "redirect:/report/002_01_sub01.do?menuKey=29";
 		return "redirect:/sub.do?menuKey=29";
 	}
+	
+	@RequestMapping({"/Search.do"})
+	public String handler_search(HttpServletRequest request, ModelMap model,
+			@ModelAttribute("reportVO") ReportVO reportVO,
+			@ModelAttribute("reportSearchVO") ReportSearchVO searchVO, 
+			UserVO userSession)throws Exception {
+
+		model.addAttribute("menuKey", searchVO.getMenuKey());
+		model.addAttribute("repMenuCode", REP_MENU_CODE);
+		
+		searchVO.setMenuCode(REP_MENU_CODE);  // 과제 or 분임조과제 구분
+		
+		// 페이지 초기값 세팅을 위한 코드값 바인딩
+		CodeVO codeVO = new CodeVO(); 
+		codeVO.setCodeGrpId("6SIG_YN");
+		codeVO.setActFlg("Y"); 
+		model.addAttribute("searchRepName", codeService.selectFullList(codeVO));
+
+		codeVO = new CodeVO(); 
+		String[] arrCodeGrpIds = {"6SIG_YN", "RP_TY1", "RP_TY2", "RP_TY3", "SECTOR", "ACTTYPE", "LDRBELT", "MBBUSERT", "RESULTTY", "REP_ROLE", "WPLACE", "REP_STAT"};
+		codeVO.setCodeGrpIdList(arrCodeGrpIds);
+		codeVO.setActFlg("Y"); 
+		List<EgovMap> allCodes = codeService.selectFullList(codeVO);		//item.codeGrpId, codeId, codeNm
+
+		model.addAttribute("allCodes", allCodes);
+			
+		searchVO.setSearchUserid(userSession.getUserId());
+		List<EgovMap> countList = reportService.selectFullListCount(searchVO);
+		
+		
+		int totalCount = 0;
+		for (EgovMap egovMap : countList) {
+			
+			String codeNm = (String)egovMap.get("repDivisionCode");
+			BigDecimal currVal = (BigDecimal)egovMap.get("cnt");
+			totalCount = totalCount + currVal.intValue();
+		}
+		model.addAttribute("countList", countList);
+		
+		//페이징 기본설정8
+		searchVO.setTotalRecordCount(totalCount);
+		
+		List<ReportVO> reportList = reportService.selectFullList(searchVO);
+		model.addAttribute("reportList", reportList);
+		model.addAttribute("totalCount", totalCount);
+		
+		return "app/report/Search";
+	}
+	
+	// 과제검색_상세보기
+	@RequestMapping({"/SearchView.do"})
+	public String handler_searchView(HttpServletRequest req, ModelMap model,
+			@ModelAttribute("reportVO") ReportVO reportVO,
+			@ModelAttribute("reportSearchVO") ReportSearchVO searchVO, 
+			UserVO userSession)throws Exception {
+		
+		model.addAttribute("menuKey", searchVO.getMenuKey());
+		model.addAttribute("repMenuCode", REP_MENU_CODE); // 과제 or 분임조과제. 결재문서는 이 코드 안들어감.
+
+		searchVO.setMenuCode(REP_MENU_CODE);  
+		
+		// TODO 결재건 종류에 따른 서브페이지 로딩하기.(조건문 분기하기)
+		
+		// TODO 과제 정보 가져오기
+		ReportVO dbReportVO = reportService.proc_reportFormHandler(req, model, searchVO, reportVO, userSession);
+		model.addAttribute("reportVO", dbReportVO);
+		
+		// TODO 분임조 정보 가져오기
+
+		
+		return "app/approve/ApprForm"; // 과제 페이지
+	}
+	
 	
 
   

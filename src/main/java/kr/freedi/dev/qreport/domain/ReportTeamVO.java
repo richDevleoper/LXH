@@ -14,7 +14,7 @@ public class ReportTeamVO {
 	private String comNo;
 	private String deptCode;
 	private String cirCode; 		// 분임조코드
-	private String deptName;		
+	private String deptName;		// 
 	private String comJobxCode;		// 직위코드
 	private String comPositionCode;	// 직책코드
 	private String beltCode; 		
@@ -32,6 +32,8 @@ public class ReportTeamVO {
 	private String comPositionNm;		// 직책(명)
 	private String repTeamMemEduNm; // 학력(명)
 	private String beltNm; //벨트(명)
+	
+	private String cirName; 		// 분임조명
 	
 	
 	public Integer getRepTeamCode() {
@@ -166,6 +168,12 @@ public class ReportTeamVO {
 	}
 	public void setBeltNm(String beltNm) {
 		this.beltNm = beltNm;
+	}
+	public String getCirName() {
+		return cirName;
+	}
+	public void setCirName(String cirName) {
+		this.cirName = cirName;
 	}
 	@Override
 	public String toString() {

@@ -7,7 +7,11 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib prefix="string" uri="/WEB-INF/tld/string-taglib.tld"%>
-
+<%--
+	1. 마이페이지 > 내 결재함 > 상세보기
+	2. 과제/10+ > 과제검색 > 상세보기
+	3. 분임조활동 > 과제검색 > 상세보기 
+--%>
 <!DOCTYPE html PUBLIC "-/W3C/DTD XHTML 1.0 Transitional/EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html lang="ko">
 <head>
@@ -17,11 +21,12 @@
 </head>
 <body>
 
-                        <div id="page-container">
+             <div id="page-container">
                 <div class="inner">
                     
                     <section id="page-content">
                         <!-- breadcrumb -->
+<c:if test="${ empty repMenuCode }"><%-- 해당 값은 "과제/분임조과제" 에서만 나옴. --%>
                         <div class="breadcrumb">
                             <ul>
                                 <li>결제종류 : 과제 > 과제선정	<!-- 과제 > 6σ Full Process > DMAIC > Define --></li>
@@ -32,6 +37,7 @@
                                 <a href="/apprv/list.do?menuKey=${menuKey}" class="btn">목록</a>
 							</div>
                         </div>
+</c:if>
                         <p class="content_title">1. 과제정보/수행</p>
                         <div class="list-wrap">
                             <div class="list-content">
@@ -221,14 +227,13 @@
 	</c:when>
 	<c:otherwise>
 	<!-- 일반 / 10+ -->
-
-                                                    <div class="list-wrap toggle">
+		<c:forEach var="item" items="${reportVO.repDetailList}" varStatus="status">
+			<%-- <c:out value="${item}"/> --%>
+<div class="list-wrap toggle">
                                                         <!-- [D] 상태에따라 열기/닫기 텍스트 구분해주세요. -->
                                                         <span class="blind">열기/닫기</span>
                                                         <ul>
-                                                            <!-- [D] 열린상태일 경우 active 클래스를 추가해주세요. -->
-                                                            <!--<li class="active">-->
-                                                                <li>
+                                                            <li><!-- [D] 열린상태일 경우 active 클래스를 추가해주세요. -->
                                                                 <div class="list-content">
                                                                     <div class="list-table list">
                                                                         <table>
@@ -236,101 +241,130 @@
                                                                             <colgroup>
                                                                                 <col style="width:60px">
                                                                                 <col style="width:80px">
-																				<col style="width:80px">
                                                                                 <col>
-                                                                                <col style="width:70px">
-                                                                                <col style="width:70px">
-																				<col style="width:70px">
-                                                                                <col style="width:70px">
+                                                                                <col style="width:80px">
+                                                                                <col style="width:60px">
                                                                             </colgroup>
                                                                             <thead>
                                                                                 <tr>
                                                                                     <th>구분</th>
                                                                                     <th colspan="2">착수(예정)일</th>
-                                                                                    <th colspan="5">완료(예정)일</th>
+                                                                                    <th colspan="3">완료(예정)일</th>
                                                                                 </tr>
                                                                             </thead>
+                                                                            
                                                                             <tbody>
                                                                                 <tr>
                                                                                     <td>계획</td>
-                                                                                    <td colspan="2">2023.01.01</td>
-                                                                                    <td colspan="5" rowspan="2">
-                                                                                        <div class="input-text">
-																							<textarea name="" id=""></textarea>
-																						</div>
+                                                                                    
+                                                                                    <td class="pd3" colspan="2">
+                                                                                        <div class="row">
+                                                                                            <div class="col s12 input-text input-date" style="float:none;width:120px;margin:0 auto !important">
+																								<fmt:formatDate pattern="yyyy.MM.dd" value="${item.repPlanStartDate}" />                                                                                                
+                                                                                            </div>
+                                                                                        </div>
                                                                                     </td>
+                                                                                    <td class="pd3" colspan="3">
+                                                                                        <div class="row">
+                                                                                            <div class="col s12 input-text input-date" style="float:none;width:120px;margin:0 auto !important">
+                                                                                                <fmt:formatDate pattern="yyyy.MM.dd" value="${item.repPlanEndDate}" />
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </td>
+   
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td>실시</td>
-                                                                                    <td colspan="2">2023.01.01</td>
-                                                                                </tr>
-																				<tr>
-                                                                                    <th rowspan="2">승인자</th>
-                                                                                    <th>참여형태</th>
-																					<th colspan="2">소속</th>
-																					<th>이름</th>
-																					<th>직위</th>
-																					<th>직책</th>
-																					<th>Belt</th>
+                                                                                    <td class="pd3" colspan="2">
+                                                                                        <div class="row">
+                                                                                            <div class="col s12 input-text input-date" style="float:none;width:120px;margin:0 auto !important">
+                                                                                                <fmt:formatDate pattern="yyyy.MM.dd" value="${item.repActStartDate}" />
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </td>
+                                                                                    <td class="pd3" colspan="3">
+                                                                                        <div class="row">
+                                                                                            <div class="col s12 input-text input-date" style="float:none;width:120px;margin:0 auto !important">
+                                                                                                <fmt:formatDate pattern="yyyy.MM.dd" value="${item.repActEndDate}" />
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </td>
                                                                                 </tr>
                                                                                 <tr>
-																					<td>지도사원</td>
-																					<td colspan="2" class="align-left">자동차소재부품 사업부 > 경량화사업담당 > 자동차소재부품 투명과학플라스틱연구 PJT</td>
-																					<td>홍길동</td>
-																					<td>책임</td>
-																					<td>팀장</td>
-																					<td>BB</td>
-																				</tr>
-																				<tr>
-                                                                                    <th colspan="2" class="pd-r10 align-right">
-                                                                                        첨부파일<br>
-                                                                                        (Up to 10)
-                                                                                    </th>
-                                                                                    <td colspan="6">
-                                                                                        <div class="file-list">
-                                                                                            <ul>
-                                                                                                <li>
-                                                                                                    <div class="row">
-                                                                                                        <div class="col s12 input-text file">
-                                                                                                            <span class="file-path">
-                                                                                                                <input type="text" id="" readonly="" name="" value="LG_Hausys_UI_Design_Guide.pptx [1.27MB]">
-                                                                                                                <button type="button" class="remove-file-box"><i class="ico file_del"><em>삭제</em></i></button>
-                                                                                                            </span>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                </li>
-                                                                                                <li>
-                                                                                                    <div class="row">
-                                                                                                        <div class="col s12 input-text file">
-                                                                                                            <span class="file-path">
-                                                                                                                <input type="text" id="" readonly="" name="" value="LG_Hausys_UI_Design_Guide.pptx [1.27MB]">
-                                                                                                                <button type="button" class="remove-file-box"><i class="ico file_del"><em>삭제</em></i></button>
-                                                                                                            </span>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                </li>
-                                                                                                <li>
-                                                                                                    <div class="row">
-                                                                                                        <div class="col s12 input-text file">
-                                                                                                            <span class="file-path">
-                                                                                                                <input type="text" id="" readonly="" name="" value="LG_Hausys_UI_Design_Guide.pptx [1.27MB]">
-                                                                                                                <button type="button" class="remove-file-box"><i class="ico file_del"><em>삭제</em></i></button>
-                                                                                                            </span>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                </li>
-                                                                                                <li>
-                                                                                                    <div class="row">
-                                                                                                        <div class="col s12 input-text file">
-                                                                                                            <span class="file-path">
-                                                                                                                <input type="text" id="" readonly="" name="" value="LG_Hausys_UI_Design_Guide.pptx [1.27MB]">
-                                                                                                                <button type="button" class="remove-file-box"><i class="ico file_del"><em>삭제</em></i></button>
-                                                                                                            </span>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                </li>
-                                                                                            </ul>
+                                                                                    <th rowspan="2">활동계획</th>
+                                                                                    <th>추진배경</th>                                                                                    
+                                                                                    <td td colspan="4">
+                                                                                    <div class="input-text align-left">
+                                                                                        ${item.repPropelBg}
+                                                                                    </div>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>                                                                                    
+                                                                                    <th>주요활동</th>                                                                                    
+                                                                                    <td colspan="4"><div class="input-text align-left">
+                                                                                        ${item.repActivity}
+                                                                                    </div>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                 
+                                                                        </table>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+
+                                                            <li>
+                                                                <div class="list-content">
+                                                                    <div class="list-table list">
+                                                                        <table>
+                                                                            <caption>일정계획 및 수행 테이블</caption>
+                                                                            <colgroup>
+                                                                                <col style="width:60px">
+                                                                                <col style="width:80px">
+                                                                                <col>                                                                                
+                                                                                <col style="width:70px">
+                                                                                <col style="width:70px">
+                                                                                <col style="width:70px">
+                                                                                <col style="width:70px">
+                                                                            </colgroup>
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <th colspan="4">Finish 요약</th>                                                                                    
+                                                                                    <th colspan="3">활동결과(실적)</th>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td rowspan="2" colspan="4">
+                                                                                        <div class="input-text align-left">
+                                                                                            ${item.repFinishSummary}
                                                                                         </div>
+                                                                                    </td>                                                                                    
+                                                                                    <td>CTQ/CTP</td>
+                                                                                    <td>KPI</td>
+                                                                                    <td>예상성과</td>                                                                                        
+                                                                                </tr>
+                                                                                <tr>              
+                                                                                    <td><div class="col s2 input-text pd3">${item.repCtqCtp}</div></td>
+                                                                                    <td><div class="col s2 input-text pd3" style="width:100%">${item.repKpi}</div></td>
+                                                                                    <td><div class="col s2 input-text pd-r10" style="width:100%">${item.repExpectationResult}</div></td>                                 
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <th colspan="2" class="pd-r10 align-right"> 첨부파일 </th>
+                                                                                    <td colspan="5" style="text-align: left;">
+                                                                                    	<div class="col s12 input-text file">
+	                                                                                    	
+								                                                            <!-- [kr.freedi.dev.attachfile.domain.AttachFileVO@790a7e68[fileId=reportDetail_7_167,fileSeq=1,fileGrp=reportDetail
+								                                                            ,fileNm=test - 복사본 (1) (1).txt,fileSiz=4,fileMsk=20230503034019bdcytcymqyurby,dwnldCnt=0,deleteFlg=N
+								                                                            ,operDt=Wed May 03 03:40:20 KST 2023,filePath=,isImage=false]]
+								                                                             -->
+								                                                            
+								                                                        </div>  
+								                                                        <div class="file-link">								                                                        
+                                                                                            <ul>
+	                                                                                            <c:forEach var="itemFile" items="${item.repDetailFileList}" varStatus="statusSub">
+		                                                                                    		<li><a href="/attachfile/downloadFile.do?fileId=${itemFile.fileId}&fileSeq=${itemFile.fileSeq}" title="다운받기">${itemFile.fileNm}</a><a href="/attachfile/downloadFile.do?fileId=${itemFile.fileId}&fileSeq=${itemFile.fileSeq}" title="다운받기" class="btn color gray mg-l15">다운받기</a></li>
+		                                                                                    	</c:forEach>
+                                                                                            </ul>
+                                                                                        </div>                                                                                  
                                                                                     </td>
                                                                                 </tr>
                                                                             </tbody>
@@ -338,10 +372,11 @@
                                                                     </div>
                                                                 </div>
                                                             </li>
-
+                                                            <!---->
+                                                            <!---->
                                                         </ul>
-                                                    </div>
-	
+                                                    </div>	
+		</c:forEach>	
 	<!-- End of 일반 / 10+ -->	
 	</c:otherwise>
 </c:choose>		
@@ -351,7 +386,24 @@
 											</tr>
 											<tr>
 												<th>키워드</th>
-												<td colspan="3">${reportVO.repKeyword}</td>
+												<td colspan="3">
+													<script type="text/javascript">
+														$(document).ready(init);
+														function init(){
+															const vKeyWord = "${reportVO.repKeyword}";
+															let arr = vKeyWord.split(",");
+															let keyCont = "";
+															for(let i=0; i<arr.length; i++){
+																if(i>0){
+																	keyCont += " ";
+																}
+																keyCont += '#'+arr[i];
+															}
+															$("#divKeyword").html(keyCont);
+														}
+													</script>
+													<div id="divKeyword"></div>
+												</td>
 											</tr>
                                         </tbody>
                                     </table>
@@ -516,6 +568,7 @@
 								</div>
 							</div>
 						</div>
+<c:if test="${ empty repMenuCode }"><%-- 해당 값은 "과제/분임조과제" 에서만 나옴. --%>						
                         <div class="list-footer">
                             <div class="list-btns">
 								<button type="button" class="btn bg-gray" onclick="alert('준비중입니다.');">승인</button>
@@ -574,6 +627,7 @@
 								</div>
 							</div>
 						</div>
+</c:if>						
                     </section>
                 </div>
             </div>

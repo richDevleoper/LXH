@@ -107,6 +107,8 @@
                                                     </div>
                                                 </td>
                                             </tr>
+<c:choose>  
+	<c:when test="${repMenuCode eq 'REPORT'}">
                                             <tr>
                                                 <th><form:label path="repLeaderBeltCode"><span class="asterisk">*</span>과제리더벨트</form:label> <i class="ico tip" onclick="popAdvice.open('rep-reader')"></i>
                                                 <%-- <c:out value="${reportVO.repDivisionCode}"/> --%>
@@ -141,7 +143,36 @@
                                                 </td>
                                                 <th>활용율 반영년도</th>
                                                 <td><span id="lblUseRefDt">-</span>년 <form:input type="hidden" path="repUseRefDate" /></td>
+                                            </tr>		
+	</c:when>
+	<c:otherwise>
+                                            <tr>
+                                                <th><form:label path="repLeaderBeltCode"><span class="asterisk">*</span>Leader</form:label>
+                                                </th>
+                                                <td colspan="3">
+                                                    <div class="row">
+                                                        <div class="col s4 input-text search">
+                                                            <%-- <form:input type="text" path='repTeamMemberList[${status.index}].deptName' readonly="true" /> --%>
+                                                            <input type="text">
+                                                            <button type="button" class="btn-search-emp">검색</button>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                
                                             </tr>
+                                            <tr>
+                                                <th style="height: 20px;">분임조</th>
+                                                <td>
+                                                   111111111111
+                                                </td>
+                                                <th>분임조장</th>
+                                                <td>
+                                                2222222222222
+                                                </td>
+                                            </tr>		
+	</c:otherwise>
+</c:choose>                                            
+
                                             <tr id="trRepDate1" class="tr-rep-date">
                                                 <th><span class="asterisk">*</span>일정계획<br>(완료예정일)</th>
                                                 <td colspan="3">

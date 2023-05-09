@@ -263,6 +263,19 @@ public class ReportService {
 		return resultVO;
 	}
 	
+	
+	
+	// converting
+	public ReportVO proc_reportFormHandler(HttpServletRequest req, ModelMap model,
+			@ModelAttribute("reportSearchVO") ReportSearchVO searchVO,
+			@ModelAttribute("reportVO") ReportVO reportVO, 
+			UserVO userSession) throws Exception {
+		
+		ArticleSearchVO aSearchVO = new ArticleSearchVO();
+		aSearchVO.setMenuKey(searchVO.getMenuKey());
+		return this.proc_reportFormHandler(req, model, aSearchVO, reportVO, userSession);
+	}
+	
 	public ReportVO proc_reportFormHandler(HttpServletRequest req, ModelMap model,
 			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO,
 			@ModelAttribute("reportVO") ReportVO reportVO, 
@@ -328,8 +341,18 @@ public class ReportService {
 		} else {
 			// 신규작성 - 기본 Form 구성을 위한 메모리 할당
 			//ReportVO emptyReportVO = new ReportVO();
+			retVO.setRepMenuCode(reportVO.getRepMenuCode());
 			retVO.setRepCode(idGnrService.getNextIntegerId());
 			retVO.setRepMenuCode("REPORT"); // REPORT >> 과제 
+			
+			// 분임조 정보 가져오기
+			if(reportVO.getRepMenuCode().equals("TEAM")) {
+				//분임조 DB조회하고
+				// 분임조 코드, 분임조명, , 분임조장명 가져오기
+				String userId = userSession.getUserId();
+				
+			}
+			
 			
 			// 일정 구성 - 빈 칸 작성
 			List<ReportDetailVO> reportDetailList = new ArrayList<>();

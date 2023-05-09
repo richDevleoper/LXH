@@ -122,7 +122,7 @@
                                     <a href="" class="last">끝</a>
                                 </div> -->
                                 <div class="list-btns">
-                                    <button type="button" class="btn bg-gray" onclick="location.href='/report/insertForm.do?menuKey=${menuKey}'">                                        
+                                    <button type="button" class="btn bg-gray" onclick="location.href='./insertForm.do?menuKey=${menuKey}'">                                        
                                         <span>과제등록</span>
                                     </button>                                    
                                 </div>
@@ -181,12 +181,7 @@
 	}
 	
 	function onclick_reportName(statusCode, repCode){
-		if(statusCode==="1"){ // 임시저장
-			location.href="/report/updateForm.do?menuKey=${menuKey}&repCode="+repCode;	
-		} else if(statusCode==="2"){ // 선정중
-			location.href="/report/updateForm.do?menuKey=${menuKey}&repCode="+repCode;
-		}
-		
+		location.href="/report/updateForm.do?menuKey=${menuKey}&repCode="+repCode;
 	}
 </script>
 
