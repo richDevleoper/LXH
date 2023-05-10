@@ -90,9 +90,6 @@
 			<if test="searchPlaceCode != null and searchPlaceCode != ''">
 				AND T.REP_PLACE_CODE = #{searchPlaceCode}
 			</if>
-			<if test="searchUserid != null and searchUserid != ''">
-				AND T.REP_REG_USER = #{searchUserid}
-			</if>
 			<if test="searchActionTypeCode != null and searchActionTypeCode != ''">
 				AND T.REP_ACTION_TYPE_CODE = #{searchActionTypeCode}
 			</if>
@@ -309,7 +306,7 @@
 			, REP_LEADER_BELT_CODE = #{repLeaderBeltCode} 
 			, REP_ACTION_TYPE_CODE = #{repActionTypeCode} 
 			, REP_MBB_USE_RATE_CODE = #{repMbbUseRateCode}
-			, REP_USE_REF_DATE = #{repUseRefDate} 
+			, REP_USE_REF_DATE = to_date(#{repUseRefDate}, 'YYYY') 
 			, REP_STATUS_CODE = #{repStatusCode} 
  
 			, REP_KEYWORD = #{repKeyword} 
@@ -344,7 +341,7 @@
             , c_act.code_nm REP_ACTION_TYPE
 			, T.REP_MBB_USE_RATE_CODE
             , c_mbbr.code_nm REP_MBB_USE_RATE
-			, T.REP_USE_REF_DATE
+			, to_char(T.REP_USE_REF_DATE, 'YYYY') REP_USE_REF_DATE
 			, T.REP_STATUS_CODE
 			, T.REP_KEYWORD
 			, T.REP_REG_USER

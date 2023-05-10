@@ -89,7 +89,7 @@
 		    tb_code          cd_role
 		WHERE t.rep_approval_mem_code = u.com_no (+)
 		  AND t.rep_approval_mem_role = cd_role.code_id (+)
-		  AND cd_role.code_grp_id = 'REP_ROLE'
+		  AND cd_role.code_grp_id(+) = 'REP_ROLE'
 		<include refid="defCond"></include>
 		
 		ORDER BY t.rep_step_code 
