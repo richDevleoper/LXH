@@ -32,7 +32,7 @@ public class ProposalController {
 	
 	final String ATTACH_TABLE_PREFIX = "TB";
 	
-	@Resource(name = "reportService")
+	@Resource(name = "proposalService")
 	private ProposalService proposalService;
 	
 	@Resource(name = "codeService")
