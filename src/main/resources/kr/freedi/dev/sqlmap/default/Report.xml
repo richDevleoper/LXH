@@ -45,6 +45,7 @@
 		<result property="repTeamMemberName" column="REP_TEAM_MEMBER_NAME" />
 		<result property="repTeamProcessOwnerName" column="REP_TEAM_PROCESS_OWNER_NAME" />
 		<result property="repTeamChapionName" column="REP_TEAM_CHAMPION_NAME" />
+		<result property="repLeaderName" column="REP_LEADER_NAME" />
 		
 	</resultMap>
 	
@@ -354,7 +355,9 @@
 			, T.REP_MAIL_SEND_DATE
 			, T.REP_PLACE_CODE
 			, T.REP_LEADER_CODE
+			, (select username from tb_user_mst where com_no=T.REP_LEADER_CODE) REP_LEADER_CODE
 			, T.REP_FILE_YN
+			
 		FROM TB_REPORT_MST T,
             tb_code    c_div,
             tb_code    c_ty,

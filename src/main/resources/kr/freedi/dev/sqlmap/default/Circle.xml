@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Circle">
+
+	<resultMap id="circleMap" type="kr.freedi.dev.qcircle.domain.CircleVO">		
+		<result property="cirCode" column="CIR_CODE" />
+		<result property="cirRegNum" column="CIR_REG_NUM" />
+		<result property="deptCode" column="DEPT_CODE" />
+		<result property="deptName" column="DEPT_NAME" />
+		<result property="cirTchComNo" column="CIR_TCH_COM_NO" />
+		<result property="cirWorkMemNo" column="CIR_WORK_MEM_NO" />
+		<result property="cirTeamLeaderNo" column="CIR_TEAM_LEADER_NO" />
+		<result property="cirRecordCont" column="CIR_RECORD_CONT" />
+		<result property="cirMemCnt" column="CIR_MEM_CNT" />
+		<result property="cirRegUser" column="CIR_REG_USER" />
+		<result property="cirRegDate" column="CIR_REG_DATE" />
+		<result property="cirUpdateUser" column="CIR_UPDATE_USER" />
+		<result property="cirUpdateDate" column="CIR_UPDATE_DATE" />
+		<result property="cirMemStatus" column="CIR_MEM_STATUS" />
+		
+		<result property="cirTchName" column="CIR_TCH_NAME" />
+		<result property="cirWorkName" column="CIR_WORK_NAME" />
+		<result property="cirLeaderName" column="CIR_LEADER_NAME" />
+	</resultMap>
+	
+	<sql id="defCond">
+			<if test="searchRepName != null and searchRepName != ''">
+				AND T.REP_NAME like '%' || #{searchRepName} || '%'
+			</if>
+			<if test="searchDivision != null and searchDivision != ''">
+				AND T.REP_DEVISION_CODE = #{searchDivision}
+			</if>
+			
+	</sql> 
+	
+	<sql id="selectListBasic">
+	    
+            
+	</sql>
+	
+	<select id="selectList" resultMap="circleMap">
+		<include refid="selectListBasic"></include>
+		  and rowidx between (#{currentPageNo}*#{recordCountPerPage}+1-#{recordCountPerPage}) and (#{currentPageNo}*#{recordCountPerPage})
+		  order by idx desc
+	</select>
+	
+	<select id="select" resultMap="circleMap">
+		SELECT 
+			T.CIR_CODE
+			, T.CIR_REG_NUM
+			, T.DEPT_CODE
+			, T.DEPT_NAME
+			, T.CIR_TCH_COM_NO
+			, T.CIR_WORK_MEM_NO
+			, T.CIR_TEAM_LEADER_NO
+			, T.CIR_RECORD_CONT
+			, T.CIR_MEM_CNT
+			, T.CIR_REG_USER
+			, T.CIR_REG_DATE
+			, T.CIR_UPDATE_USER
+			, T.CIR_UPDATE_DATE
+			, T.CIR_MEM_STATUS
+            
+            , (select user_name from tb_user_mst where com_no=T.CIR_TCH_COM_NO) as CIR_TCH_NAME
+			, (select user_name from tb_user_mst where com_no=T.CIR_WORK_MEM_NO) as CIR_WORK_NAME
+			, (select user_name from tb_user_mst where com_no=T.CIR_TEAM_LEADER_NO) as CIR_LEADER_NAME
+		FROM TB_CIRCLE_MST T 
+		WHERE T.CIR_CODE = #{cirCode}
+	</select>
+	
+	
+	<select id="findCircleInfo" resultMap="circleMap">
+		SELECT
+		    m.cir_code
+		    , m.dept_code
+		    , m.dept_name
+		    , m.CIR_TCH_COM_NO
+		    , (select user_name from tb_user_mst where com_no=m.CIR_TCH_COM_NO) as CIR_TCH_NAME
+		    , m.CIR_WORK_MEM_NO
+		    , (select user_name from tb_user_mst where com_no=m.CIR_WORK_MEM_NO) as CIR_WORK_NAME
+		    , m.CIR_TEAM_LEADER_NO    
+			, (select user_name from tb_user_mst where com_no=m.CIR_TEAM_LEADER_NO) as CIR_LEADER_NAME
+		FROM
+		    tb_report_team t
+		    , tb_circle_mst m
+		WHERE
+		    t.cir_code=m.cir_code
+		    AND t.com_no = #{comNo}
+	</select>
+	
+	
+	
+	
+	
+</mapper>
+

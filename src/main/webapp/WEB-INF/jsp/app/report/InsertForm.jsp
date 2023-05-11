@@ -152,9 +152,10 @@
                                                 <td colspan="3">
                                                     <div class="row">
                                                         <div class="col s4 input-text search">
-                                                            <%-- <form:input type="text" path='repTeamMemberList[${status.index}].deptName' readonly="true" /> --%>
-                                                            <input type="text">
-                                                            <button type="button" class="btn-search-emp">검색</button>
+                                                            
+                                                            <form:input type="hidden" path="repLeaderCode"/>
+                                                            <form:input type="text" path="repLeaderName" />
+                                                            <button type="button" class="btn-search-leader">검색</button>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -163,11 +164,12 @@
                                             <tr>
                                                 <th style="height: 20px;">분임조</th>
                                                 <td>
-                                                   111111111111
+                                                   	${circleVO.deptName}
+                                                   	<input type="hidden" name="repCirCode">
                                                 </td>
                                                 <th>분임조장</th>
                                                 <td>
-                                                2222222222222
+                                                 	${circleVO.cirLeaderName}
                                                 </td>
                                             </tr>		
 	</c:otherwise>
@@ -1179,7 +1181,10 @@
 			callPopup_searchEmployee(this);
 		});
 	 	
-		
+		$(".btn-search-leader").off("click").on("click", function(){
+			callPopup_searchLeader(this);
+		});
+
 		$("#defaultForm").validationEngine('attach', {
 			unbindEngine:false,
 			validationEventTrigger: "submit",
@@ -1385,7 +1390,7 @@
 		return true;
 	}
 	
-	// 팝업 호출 함수
+	// 팝업 호출 함수(팀원 검색)
 	function callPopup_searchEmployee(obj){
 
 		popEmp.init();
@@ -1393,6 +1398,18 @@
 		// footer.jsp 내 영역 호출
 		popEmp.returnObjId = $(obj).closest("td").find("input").attr("id");
 		popEmp.returnFunc = callback_popEmp;
+		
+		popEmp.open();
+	}
+	
+	// 팝업 호출 함
+	function callPopup_searchLeader(obj){
+
+		popEmp.init();
+		
+		// footer.jsp 내 영역 호출
+		popEmp.returnObjId = $(obj).closest("td").find("input").attr("id");
+		popEmp.returnFunc = callback_popLeader;
 		
 		popEmp.open();
 	}
@@ -1407,7 +1424,6 @@
 		$(obj).val(data.deptFullName);
 		$(objIdComNo).val(data.comNo);
 		
-
 		$(objTr).find(".td-user-nm").text(data.userName);
 		$(objTr).find(".td-com-jobx").text(data.comJobxNm);
 		$(objTr).find(".td-com-pos").text(data.comPositionNm);
@@ -1423,29 +1439,18 @@
 		$(objTr).find(".report-code").val('${reportVO.repCode}');
 	}
 	
-</script>
-
-	<script type="text/javascript">
-//var contentsEditors = [];
-//$(function() {
-
+	// 팝업에서 돌아올 때 함수
+	function callback_popLeader(objId, data){
+		
+		//data = {"comNo":"00208995","userId":"parksoomin","userName":"박수민","deptFullName":"울산설비팀(전기PM／변전실)","comJobx":"사원","comPosition":"생산파트장","comCertBelt":null}
+		let obj = document.getElementById(objId);
+		let objTr = $(obj).closest("tr");
+		
+		$(obj).val(data.comNo);
+		$(objTr).find("#repLeaderName").val(data.userName);
+	}
 	
-//});
-
-/*
- //저장
-function insert(){
-	$("#defaultForm").submit();
-	return false;
-}
-//목록
-function list(){
-	$("#defaultForm").validationEngine('detach');
-	$("#defaultForm input[type='text']").attr('disabled', true);
-	$("#defaultForm").attr('method', 'post');
-	$("#defaultForm").attr('action', 'list.do');
-	$("#defaultForm").submit();
-}*/
 </script>
+
 </body>
 </html>

@@ -22,8 +22,10 @@ import egovframework.rte.psl.dataaccess.util.EgovMap;
 import kr.freedi.dev.article.domain.ArticleSearchVO;
 import kr.freedi.dev.code.domain.CodeVO;
 import kr.freedi.dev.code.service.CodeService;
+import kr.freedi.dev.qcircle.domain.CircleVO;
+import kr.freedi.dev.qcircle.service.CircleService;
 import kr.freedi.dev.qreport.domain.ReportSearchVO;
-
+import kr.freedi.dev.qreport.domain.ReportTeamVO;
 import kr.freedi.dev.qreport.domain.ReportVO;
 import kr.freedi.dev.qreport.service.ReportService;
 import kr.freedi.dev.user.domain.UserVO;
@@ -52,6 +54,8 @@ public class TeamController {
 	@Resource(name = "codeService")
 	private CodeService codeService;
 	
+	@Resource(name = "circleService")
+	private CircleService circleService;
 
 	
 	
@@ -167,10 +171,15 @@ public class TeamController {
 		ReportVO retVO = reportService.proc_reportFormHandler(req, model, searchVO, reportVO, userSession);
 		model.addAttribute("action", "/report/insert.do");
 		
-		// 분임조 과제 작성 -> 작성 화면 진입시 분임조 정보 가져오기
+		// (시작) 분임조 과제 작성 -> 작성 화면 진입시 분임조 정보 가져오기
+		String userId = userSession.getUserId();
+		ReportTeamVO memberVO = new ReportTeamVO();
+		memberVO.setComNo(userId);
 		
-		
-				
+		CircleVO circleVO = circleService.findCircleInfo(memberVO);
+		model.addAttribute("circleVO", circleVO);
+		// (끝) 분임조 과제 작성 -> 작성 화면 진입시 분임조 정보 가져오기
+
 		if(retVO.getRepCode() != null 
 				&& retVO.getRepDivisionCode() !=null 
 				&& !retVO.getRepDivisionCode().equals("1")) {  

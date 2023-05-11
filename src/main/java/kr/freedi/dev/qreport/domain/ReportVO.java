@@ -65,6 +65,7 @@ public class ReportVO {
 	private String repTeamMemberName;
 	private String repTeamProcessOwnerName;
 	private String repTeamChapionName;
+	private String repLeaderName;
 
 
 	public Integer getRepCode() {
@@ -473,6 +474,14 @@ public class ReportVO {
 
 	public void setRepPlace(String repPlace) {
 		this.repPlace = repPlace;
+	}
+
+	public String getRepLeaderName() {
+		return repLeaderName;
+	}
+
+	public void setRepLeaderName(String repLeaderName) {
+		this.repLeaderName = repLeaderName;
 	}
 
 	@Override
