@@ -32,7 +32,7 @@ hr { display:none; }
                         <span>품질혁신지원시스템</span>
                     </h1>
                     <div class="header-util">
-                        <p>홍길동(품질관리팀) 과제 <a href="/intf/login.do?com_no=00206083" class="lx-red">3</a>건, 결제 <a href="" class="lx-red">1</a>건, 교육 <a href="" class="lx-red">1</a>건</p>
+                        <p>홍길동(품질관리팀) 과제 <a href="/intf/login.do?com_no=00206083" class="lx-red">3</a>건, 결재 <a href="" class="lx-red">1</a>건, 교육 <a href="" class="lx-red">1</a>건</p>
                         <ul>
                             <li><a href="/sub.do?menuKey=73"><img src="/assets/images/icon_mypage.png" alt=""><span>마이페이지</span></a></li>
                             <li><a href=""><img src="/assets/images/icon_help.png" alt=""><span>도움말</span></a></li>
@@ -52,6 +52,9 @@ hr { display:none; }
                             <c:choose>
 								<c:when test="${topMenu.menuNm eq '마이페이지'}">
 									
+								</c:when>
+								<c:when test="${topMenu.menuKey eq '45'}">
+									<li><a href="/sub.do?menuKey=${topMenu.menuKey}" target="_blank">${topMenu.menuNm }</a></li>
 								</c:when>
 								<c:otherwise>
 									<li><a href="/sub.do?menuKey=${topMenu.menuKey}">${topMenu.menuNm }</a></li>
@@ -84,12 +87,27 @@ hr { display:none; }
 										
 									</c:when>
 									<c:otherwise>
-										<li><a href="/sub.do?menuKey=${topMenu.menuKey}">${topMenu.menuNm }</a>
+										 <c:choose>
+											<c:when test="${topMenu.menuKey eq '45'}">
+												<li><a href="/sub.do?menuKey=${topMenu.menuKey}" target="_blank">${topMenu.menuNm }</a> <!-- Big Data -->
+											</c:when>
+											<c:otherwise>
+												<li><a href="/sub.do?menuKey=${topMenu.menuKey}">${topMenu.menuNm }</a>
+											</c:otherwise>
+										</c:choose>
+										
 										<c:if test="${not empty topMenu.childList }">
 											<div>
 		                                        <ul class="depth1">
 													<c:forEach var="depth1Menu" items="${topMenu.childList }">
-														<li><a href="/sub.do?menuKey=${depth1Menu.menuKey}" class="snb-link" <c:if test="${historyMenuList[1].menuKey eq depth1Menu.menuKey}">style="color:#aa1d1d;"</c:if> >${depth1Menu.menuNm}</a>
+														<c:choose>
+															<c:when test="${depth1Menu.menuKey eq '56'}">	<!-- Big Data -->
+																<li><a href="/sub.do?menuKey=${depth1Menu.menuKey}" target="_blank">${depth1Menu.menuNm }</a></li>
+															</c:when>
+															<c:otherwise>
+																<li><a href="/sub.do?menuKey=${depth1Menu.menuKey}" class="snb-link" <c:if test="${historyMenuList[1].menuKey eq depth1Menu.menuKey}">style="color:#aa1d1d;"</c:if> >${depth1Menu.menuNm}</a>
+															</c:otherwise>
+														</c:choose>
 														<c:choose>
 															<c:when test="${empty depth1Menu.childList}">
 																

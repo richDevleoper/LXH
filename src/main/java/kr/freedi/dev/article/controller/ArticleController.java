@@ -822,4 +822,10 @@ public class ArticleController {
 
 		return "redirect:list.do?" + searchVO.getParam();
 	}
+	
+	@RequestMapping({ "/article/bigdata.do"})
+	public String handler_Bigdata(HttpServletRequest request, ModelMap model) throws Exception {
+
+		return "/app/community/redBigdata";
+	}	
 }
