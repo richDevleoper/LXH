@@ -215,6 +215,7 @@
 .list-table.list > table > thead > tr > th{padding:9px 0;text-align:center}
 .list-table.list > table > tbody > tr > td{padding:11px;color:#4d4c4c;text-align:left;line-height:1em}
 .list-table .input-text input[type=text],
+.list-table .input-text input[type=number],
 .list-table .input-text textarea{padding:5px 10px 6px!important;border:1px solid #c8c8c8;box-sizing:border-box}
 .list-table .input-text input[type=text],
 .list-table .input-text input[type=password]{border-radius:2px}
