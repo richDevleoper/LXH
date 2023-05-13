@@ -323,9 +323,13 @@ public class ReportService {
 		model.addAttribute("codeResultTy", codeResultTy);
 
 		// 6sigma Full Process 여부, 최초 바인딩이 필요해 별도로 조회
+		// 분임조는 10+ 없애기
 		codeVO.setCodeGrpId("6SIG_YN");
 		codeVO.setActFlg("Y"); 
-		model.addAttribute("divisionCode", codeService.selectFullList(codeVO));
+		List<EgovMap> code6SigYn = codeService.selectFullList(codeVO);
+		if(code6SigYn.size()==3 && code6SigYn.get(2).get("codeNm").toString().startsWith("10+"))
+			code6SigYn.remove(2); // 10+ Poli
+		model.addAttribute("divisionCode", code6SigYn);
 		
 		
 		/*********
@@ -343,7 +347,7 @@ public class ReportService {
 			//ReportVO emptyReportVO = new ReportVO();
 			retVO.setRepMenuCode(reportVO.getRepMenuCode());
 			retVO.setRepCode(idGnrService.getNextIntegerId());
-			retVO.setRepMenuCode("REPORT"); // REPORT >> 과제 
+			retVO.setRepMenuCode(reportVO.getRepMenuCode()); // REPORT >> 과제 
 			
 			// 분임조 정보 가져오기
 			if(reportVO.getRepMenuCode().equals("TEAM")) {

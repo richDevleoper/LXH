@@ -64,13 +64,14 @@ public class ReportController {
 	}
 	
 	// 과제 - 리스트
-	@RequestMapping({"/list.do", "/002_01_mission.do"})
+	@RequestMapping({"/list.do"})
 	public String handler_list(HttpServletRequest request, ModelMap model,
 			@ModelAttribute("reportVO") ReportVO reportVO,
 			@ModelAttribute("reportSearchVO") ReportSearchVO searchVO,
 			UserVO userSession)throws Exception {
 		
 		model.addAttribute("menuKey", searchVO.getMenuKey());
+		model.addAttribute("repMenuCode", REP_MENU_CODE);
 		
 		searchVO.setMenuCode(REP_MENU_CODE);
 		searchVO.setSearchUserid(userSession.getUserId());
@@ -131,13 +132,12 @@ public class ReportController {
 		ReportVO tReportVO = new ReportVO();
 		tReportVO = reportService.select(reportVO);
 		
-		if(tReportVO.getRepStatusCode().equals("1")) { 
-			// 임시저장일 경우
+		if(("1|2").indexOf(tReportVO.getRepStatusCode())>-1) {
+			// 임시저장, 선정중일 경우
 			return "redirect:./insertForm.do?menuKey="+searchVO.getMenuKey()+"&repCode="+reportVO.getRepCode();
 		} else {	
-			// 그 외(선정중~)
+			// 그 외(승인 이후)
 			return "redirect:./insertFormStat3.do?menuKey="+searchVO.getMenuKey()+"&repCode="+reportVO.getRepCode();
-			
 		}
 	}
 	
@@ -150,7 +150,7 @@ public class ReportController {
 		
 		reportService.proc_reportFormHandler(req, model, searchVO, reportVO, userSession);
 		model.addAttribute("action", "/report/updateStep.do");
-		
+		model.addAttribute("repMenuCode", REP_MENU_CODE);
 				
 		return "app/report/InsertFormStat3";
 	}  
@@ -166,6 +166,7 @@ public class ReportController {
 		model.addAttribute("repMenuCode", REP_MENU_CODE);
 		reportVO.setRepMenuCode(REP_MENU_CODE); //화면 바인딩을 위해 세팅하여 서비스에 전달
 		
+		// 페이지 바인딩
 		ReportVO retVO = reportService.proc_reportFormHandler(req, model, searchVO, reportVO, userSession);
 		model.addAttribute("action", "/report/insert.do");
 				
@@ -177,7 +178,6 @@ public class ReportController {
 		} else {
 			return "app/report/InsertForm";
 		}
-		
 	}  
 	
 	

@@ -139,6 +139,7 @@
 <script type="text/javascript">
 	$(document).ready(init);
 	let paramSearchType = '${reportSearchVO.searchType}';
+	let repMenuCode = '${repMenuCode}';
 	
 	function init(){
 		$("#searchDivision").off("change").on("change", onchange_ddlRepDevisionCode); // 6σ Full Process여부
@@ -181,7 +182,7 @@
 	}
 	
 	function onclick_reportName(statusCode, repCode){
-		location.href="/report/updateForm.do?menuKey=${menuKey}&repCode="+repCode;
+		location.href="/"+ repMenuCode.toLowerCase() +"/updateForm.do?menuKey=${menuKey}&repCode="+repCode;
 	}
 </script>
 

@@ -40,7 +40,7 @@
                         <!-- breadcrumb -->
                         <div class="breadcrumb">
                             <ul>
-                                <li>과제등록</li>
+                                <li>과제등록 | <span style="color: #9a3530b3;">일반과제<c:if test="${reportVO.repMenuCode}"> 및 10+No Policy 활동과제</c:if>는 활동결과까지 함께 등록합니다.</span></li>
                             </ul>
                         </div>
                         <p class="content_title">1. 과제정보</p>
@@ -127,6 +127,8 @@
                                                     </div>
                                                 </td>
                                             </tr>
+<c:choose>  
+	<c:when test="${repMenuCode eq 'REPORT'}">
                                             <tr>
                                                 <th><form:label path="repLeaderBeltCode"><span class="asterisk">*</span>과제리더벨트</form:label> <i class="ico tip" onclick="popAdvice.open('rep-reader')"></i>
                                                 <%-- <c:out value="${reportVO.repDivisionCode}"/> --%>
@@ -160,8 +162,38 @@
                                                     </div>
                                                 </td>
                                                 <th>활용율 반영년도</th>
-                                                <td><span id="lblUseRefDt">-</span>년 <input type="hidden" name="REP_USE_REF_DATE" id="hidUseRefDt" value=""></td>
+                                                <td><span id="lblUseRefDt">-</span>년 <form:input type="hidden" path="repUseRefDate" /></td>
                                             </tr>
+	</c:when>
+	<c:otherwise>
+                                            <tr>
+                                                <th><form:label path="repLeaderBeltCode"><span class="asterisk">* </span>Leader</form:label>
+                                                </th>
+                                                <td colspan="3">
+                                                    <div class="row">
+                                                        <div class="col s4 input-text search">
+                                                            <form:input type="hidden" path="repLeaderCode"/>
+                                                            <form:input type="text" path="repLeaderName" readonly="true"/>
+                                                            <button type="button" class="btn-search-leader">검색</button>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                
+                                            </tr>
+                                            <tr>
+                                                <th style="height: 20px;">분임조</th>
+                                                <td>
+                                                   	${circleVO.deptName}
+                                                   	<input type="hidden" name="repCirCode">
+                                                </td>
+                                                <th>분임조장</th>
+                                                <td>
+                                                 	${circleVO.cirLeaderName}
+                                                </td>
+                                            </tr>		
+	</c:otherwise>
+</c:choose>
+
                                             <tr id="trRepDate1" class="tr-rep-date">
                                                 <th><span class="asterisk">*</span>일정계획<br>(완료예정일)</th>
                                                 <td colspan="3">
@@ -392,7 +424,6 @@
                                                                     </div>
                                                                 </div>
                                                             </li>
-
                                                             <li>
                                                                 <div class="list-content">
                                                                     <div class="list-table list">
@@ -445,7 +476,7 @@
 																							fileGrp="reportDetail"
 																							autoUpload="false"
 																							maxFileSize="${15*1000000}"
-																							maxNumberOfFiles="5"/>
+																							maxNumberOfFiles="10"/>
 								                                                        </div>                                                                                    
                                                                                     </td>
                                                                                 </tr>
@@ -646,7 +677,7 @@
                                         </colgroup>
                                         <thead>
                                             <tr>
-                                                <th colspan="9">예상성과</th>	<!-- TB_REPORT_RESULT -->
+                                                <th colspan="9">예상성과(억원)</th>	<!-- TB_REPORT_RESULT -->
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -686,8 +717,7 @@
                                                 <td class="pd3">
                                                     <div class="row">
                                                         <div class="col s12 input-text">
-                                                            <%-- <input type="text" name="REP_RESULT_WITHIN_YEAR" id="txtRepResultWithinYear" class="" value="${item.repResultWithinYear}" title="년내 입력"> --%>
-                                                            <form:input type="text" path="repResultList[${status.index}].repResultWithinYear" title="년내 입력" />
+                                                            <form:input type="number" path="repResultList[${status.index}].repResultWithinYear" title="년내 입력" />
                                                         </div>
                                                     </div>
                                                 </td>
@@ -695,7 +725,7 @@
                                                 <td class="pd3">
                                                     <div class="row">
                                                         <div class="col s12 input-text">
-                                                            <form:input type="text" path="repResultList[${status.index}].repResultYear" title="년간 입력" />
+                                                            <form:input type="number" path="repResultList[${status.index}].repResultYear" title="년간 입력" />
                                                         </div>
                                                     </div>
                                                 </td>
@@ -842,69 +872,6 @@
                                                 </td>
                                             </tr>
 </c:forEach>                                            
-                                            <!-- <tr>
-                                                <td class="pd3">
-                                                    <div class="row">
-                                                        <div class="col s12 input-text">
-                                                            <input type="text" id="text23" name="" value="" title="항목 입력">
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td class="pd3">
-                                                    <div class="row">
-                                                        <div class="col s12 input-text">
-                                                            <input type="text" id="text24" name="" value="" title="단위 입력">
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td class="pd3">
-                                                    <div class="row">
-                                                        <div class="col s12 input-text">
-                                                            <input type="text" id="text25" name="" value="" title="개선전 입력">
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td class="pd3">
-                                                    <div class="row">
-                                                        <div class="col s12 input-text">
-                                                            <input type="text" id="text26" name="" value="" title="개선목표 입력">
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td class="pd3">
-                                                    <div class="row">
-                                                        <div class="col s12 input-text">
-                                                            <input type="text" id="text27" name="" value="" title="항목 입력">
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td class="pd3">
-                                                    <div class="row">
-                                                        <div class="col s12 input-text">
-                                                            <input type="text" id="text28" name="" value="" title="단위 입력">
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td class="pd3">
-                                                    <div class="row">
-                                                        <div class="col s12 input-text">
-                                                            <input type="text" id="text29" name="" value="" title="개선전 입력">
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td class="pd3">
-                                                    <div class="row">
-                                                        <div class="col s12 input-text">
-                                                            <input type="text" id="text30" name="" value="" title="개선목표 입력">
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td class="pd3">
-                                                    <div class="btn-group">
-                                                        <button type="button" class="btn light-gray">삭제</button>
-                                                    </div>
-                                                </td>
-                                            </tr> -->
                                         </tbody>
                                     </table>
                                 </div>
@@ -926,12 +893,6 @@
                                                 <td>
                                                     <div class="row">
                                                         <div class="col s12 input-text file">
-                                                            <!-- <span class="file-path">
-                                                                <input type="text" id="file1_text" readonly name="" value="">
-                                                                <button type="button"><i class="ico file_del"><em>삭제</em></i></button>
-                                                            </span>
-                                                            <input type="file" id="file1" name="" value="">
-                                                            <label path="file1">파일추가</label> -->
                                                             <attachfile:fileuploader
 															objectId="fileUploadObj_01"
 															ctx=""
@@ -940,7 +901,7 @@
 															fileGrp="report"
 															autoUpload="false"
 															maxFileSize="${15*1000000}"
-															maxNumberOfFiles="5"/>
+															maxNumberOfFiles="10"/>
                                                         </div>
                                                     </div>
                                                 </td>
