@@ -81,7 +81,7 @@
                                                     <div class="row">
                                                         <div class="col s12 input-text search">
                                                         	<form:input type="hidden" id="input-proposal-memo-hidden" name="input-proposal-memo-hidden" value="" path="propRelMemoCode"/>
-                                                            <input type="text" id="input-proposal-memo" name="input-proposal-memo" value="" readonly="readonly" style="background-color: #FFF;"/>
+                                                            <input type="text" id="input-proposal-memo" name="input-proposal-memo" value="${PROP_INFO.propRelMemoCodeName }" readonly="readonly" style="background-color: #FFF;"/>
                                                             <button type="button" class="btn-psmg-search-modal">검색</button>
                                                         </div>
                                                     </div>

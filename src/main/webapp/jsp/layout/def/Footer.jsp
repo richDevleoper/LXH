@@ -3,6 +3,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 			
     <!-- footer -->
     <footer>
@@ -351,9 +352,9 @@
 	                         </select>                                            
 	                     </div>
 	                      <div class="form-inline form-select">
-	                         <input type="text" name="input-memo-proposal-name" id="input-proposal-name">
+	                         <input type="text" name="input-memo-proposal-name" id="input-memo-proposal-name">
 	                     </div>                                     
-	                     <button type="button" class="btn-submit">조회</button>
+	                     <button type="button" class="btn-submit" onclick="popRelMemo.callData()">조회</button>
 	                 </div>
 	             </form>
 	        </div>
@@ -377,8 +378,8 @@
 	                                <th>제안자</th>	                                
 	                            </tr>
 	                        </thead>
-	                        <tbody>
-	                            <tr>
+	                        <tbody id="tbodyProposalSearch" class="tbody-search-result">
+<!-- 	                            <tr>
 	                                <td><input type="radio" /></td>	                                
 	                                <td>젠체 쪽지 제안(신청, 심사완료 등 전체)명</td>
 	                                <td>생산향상</td>
@@ -389,30 +390,23 @@
 	                                <td>젠체 쪽지 제안(신청, 심사완료 등 전체)명</td>
 	                                <td>생산향상</td>
 	                                <td>홍길동</td>	                                
+	                            </tr> -->
+	                            <tr class="tr-empty">
+	                            	<td colspan="4" style="text-align: center; height: 30px;">쪽지제안을 검색해 주세요.</td>
 	                            </tr>
 	                        </tbody>
 	                    </table>
 	                </div>
 	            </div>
 	            <div class="list-footer">
-<!-- 	                <div class="pagination">
-	                    <a href="" class="first">처음</a>
-	                    <a href="" class="prev">이전</a>
-	                    <a href="" class="cur num">1</a>
-	                    <a href="" class="num">2</a>
-	                    <a href="" class="num">3</a>
-	                    <a href="" class="num">4</a>
-	                    <a href="" class="num">5</a>
-	                    <a href="" class="next">다음</a>
-	                    <a href="" class="last">끝</a>
-	                </div> -->
+	                <ui:pagination paginationInfo="${proposalSearchVO}" type="defDefault" jsFunction="cfnPageLink" />
 	                <div class="btns">
-	                    <button type="button" class="btn-submit">확인</button>
+	                    <button type="button" class="btn-submit" onclick="popRelMemo.onSubmit()">확인</button>
 	                    <button type="button" class="btn-cancel">취소</button>
 	                </div>
 	            </div>
 	            <script type="text/javascript">
-	            	let popRelMemo = {
+	            	var popRelMemo = {
 	            		returnObjId: null,
 	            		returnFunc: null,
 	            		open: function(){
@@ -445,6 +439,44 @@
             				
             				this.returnObjId = null;
             				this.returnFunc = null;	            			
+	            		},
+	            		callData: function(){
+	            			$.post('/proposal/memoProposalSearch.do', { propCategoryCode: $('#select-proposal-category-code').val(), propName: $('#input-memo-proposal-name').val() }, this.setData, 'json');
+	            		},
+	            		setData: function(data){
+	            			if(data.length == 0){
+	            				var html = '<td colspan="4" style="text-align: center; height: 30px;">조회된 쪽지제안이 없습니다.</td>';
+	            				$('#tbodyProposalSearch').html(html);
+	            			}else{
+	            				var html = '';
+	            				for(var index = 0; index < data.length; index++){
+	            					var item = data[index];
+	                            	html += '<tr class="tr-data" onclick="popRelMemo.onClickTr(this)" data="'+ encodeURIComponent(JSON.stringify(item)) +'">';
+	                            	html += '<td><input type="radio" name="proposal_search_selected" class="radio-selected-proposal" value="' + item.propSeq + '"/></td>';
+	                            	html += '<td>' + item.propName + '</td>';
+	                            	html += '<td>' + item.propCategoryCodeName + '</td>';
+	                            	html += '<td>' + item.propUserName + '</td>';
+	                            	html += '</tr>';	                            	
+	            				}
+	            				
+	            				$('#tbodyProposalSearch').html(html);
+	            				$("input[name=proposal_search_selected]:eq(0)").prop("checked", true);
+	            			}
+	            		},
+	            		onClickTr: function(obj){
+	            			$(obj).find('.radio-selected-proposal').prop('checked', true);
+	            		},
+	            		onSubmit: function(){
+	            			var tr = $('.radio-selected-proposal:checked').closest('tr');
+	            			var data = tr.attr('data');
+	            			data = JSON.parse(decodeURIComponent(data));
+	            			
+    	            		if(this.returnFunc){
+    	            			this.returnFunc(this.returnObjId, data); //리턴함수 호출, 초기화 전 객체명 넘기기
+    	            			this.close();	// 팝업 Close, 각 파라메터 초기화
+    	            		} else {
+    	            			alert("반환 함수가 정의되지 않았습니다.");
+    	            		}
 	            		}
 	            	}
 	            </script>

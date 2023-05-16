@@ -50,4 +50,8 @@ public class ProposalService {
 	public int updateProposalInfo(ProposalVO proposalVO) {
 		return dao.update("Proposal.updateProposalInfo", proposalVO);
 	}
+	
+	public List<ProposalVO> selectProposalMasterInfoWithOutPaging(ProposalSearchVO searchVO) {
+		return dao.selectList("Proposal.selectProposalMasterInfoWithOutPaging", searchVO);
+	}
 }

@@ -365,10 +365,14 @@ public class ProposalController {
 		ProposalSearchVO searchVO = new ProposalSearchVO();
 		searchVO.setSearchPropCategoryCode(String.valueOf(reqMap.get("propCategoryCode")));
 		searchVO.setSearchPropName(String.valueOf(reqMap.get("propName")));
+		searchVO.setCurrentPageNo(Integer.valueOf(String.valueOf(reqMap.get("currentPageNo"))));
 		searchVO.setSearchPropTypeCode("PP_TY_2");
 		List<ProposalVO> resultItems = proposalService.selectProposalMasterInfo(searchVO);
+		EgovMap resultItem = proposalService.selectListCount(searchVO);
+		
+		resultItem.put("list", resultItems);
 		ObjectMapper mapper = new ObjectMapper();
-		String json = mapper.writeValueAsString(resultItems);
+		String json = mapper.writeValueAsString(resultItem);
 		return json;
 	}
 }

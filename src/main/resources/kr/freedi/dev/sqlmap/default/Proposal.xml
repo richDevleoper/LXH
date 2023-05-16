@@ -13,6 +13,7 @@
 		<result column="PROP_YEAR_EFFECT_CODE" 		property="propYearEffectCode"/>
 		<result column="PROP_REL_MEMO_YN" 			property="propRelMemoYn"/>
 		<result column="PROP_REL_MEMO_CODE" 		property="propRelMemoCode"/>
+		<result column="PROP_REL_MEMO_CODE_NM"		property="propRelMemoCodeName"/>
 		<result column="PROP_GROUP_NAME" 			property="propGroupName"/>
 		<result column="PROP_BELT_CODE" 			property="propBeltCode"/>
 		<result column="PROP_BIZ_PLACE_CODE" 		property="propBizPlaceCode"/>
@@ -46,7 +47,8 @@
 				SELECT PROP_SEQ, PROP_NAME, PROP_CATEGORY_CODE, GET_CODE_NM('PP_CT', PROP_CATEGORY_CODE) AS PROP_CATEGORY_CODE_NM, 
 					   PROP_TYPE_CODE, GET_CODE_NM('PP_TY', PROP_TYPE_CODE) AS PROP_TYPE_CODE_NM, PROP_PROBLEM, PROP_IMPROVEMENT_CONT,
 					   PROP_BENEFIT, PROP_YEAR_EFFECT, PROP_YEAR_EFFECT_CODE, GET_CODE_NM('RESULTTY', PROP_YEAR_EFFECT_CODE) AS PROP_YEAR_ERRECT_CODE_NM,
-					   PROP_REL_MEMO_YN, PROP_REL_MEMO_CODE, PROP_GROUP_NAME, PROP_BELT_CODE, PROP_BIZ_PLACE_CODE, PROP_CIRCLE_CODE,
+					   PROP_REL_MEMO_YN, PROP_REL_MEMO_CODE, GET_PROP_NM(TO_NUMBER(PROP_REL_MEMO_CODE)) AS PROP_REL_MEMO_CODE_NM, 
+					   PROP_GROUP_NAME, PROP_BELT_CODE, PROP_BIZ_PLACE_CODE, PROP_CIRCLE_CODE,
 					   PROP_APPROVER_CODE, PROP_PROP_STAT_CODE, GET_CODE_NM('PP_CL', PROP_PROP_STAT_CODE) AS PROP_PROP_STAT_CODE_NM,
 					   PROP_EVAL_SCORE, PROP_EFFECT_SCORE, PROP_SUBSIDY, PROP_PAYMENT_YN, PROP_PAYMENT_DATE, 
 				       TO_CHAR(PROP_DATE, 'YYYY-MM-DD') AS PROP_DATE, 
@@ -90,9 +92,12 @@
 	<select id="selectProposalMasterInfo" resultMap="proposalInfoResultMap">
 		<include refid="selectProposalMasterInfoWithPaging"></include>
 	</select>
+	<select id="selectListCount" resultType="egovMap">
+		SELECT COUNT(*) AS COUNT FROM (<include refid="selectProposalInfo"></include>)
+	</select>
 	<select id="selectProposalMasterInfoCount" resultType="egovMap">
 		SELECT COUNT(PROP_PROP_STAT_CODE) TOTAL, PROP_PROP_STAT_CODE
-		FROM(<include refid="selectProposalMasterInfoWithPaging"></include>)
+		FROM(<include refid="selectProposalInfo"></include>)
 		GROUP BY PROP_PROP_STAT_CODE
 	</select>
 	
@@ -191,4 +196,9 @@
 			PROP_UPDATE_USER 		= #{propRegUser, jdbcType=VARCHAR}
 		WHERE PROP_SEQ 				= #{propSeq}
 	</update>
+	
+	<select id="selectProposalMasterInfoWithOutPaging" resultMap="proposalInfoResultMap">
+		<include refid="selectProposalInfo"></include>
+		ORDER BY T.IDX DESC
+	</select>
 </mapper>
