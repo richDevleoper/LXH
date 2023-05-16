@@ -17,12 +17,12 @@
 <body>
 
                         <div class="list-wrap">
-                            <div class="list-search" style="padding-left: 15px; padding-right: 15px;">
-                                <form:form commandName="proposalSearchVO" id="defaultForm" method="get" action="list.do" >
+                            <div class="list-search">
+                                <form:form commandName="proposalSearchVO" id="defaultForm" method="get" action="memolist.do" >
                                 	${proposalSearchVO.superHiddenTag}
                                     <div class="search-form">
-                                        <div class="form-inline form-select">
-                                            <label style="margin-right: 5px; letter-spacing: -0.085rem;">구분</label>
+<%--                                         <div class="form-inline form-input">
+                                            <label style="margin-right: 5px;">구분</label>
                                             <form:select name="select-type-code" id="select-type-code" path="searchPropTypeCode">
                                                 <option value="">전체</option>
                                                 <c:forEach var="item" items="${PP_TY_LIST }">
@@ -36,12 +36,15 @@
                                                 	</c:choose>
                                                 </c:forEach>
                                             </form:select>                                            
+                                        </div> --%>
+                                        <div class="form-inline form-input">
+	                                        <label style="margin-right: 5px;">제안명</label>
+	                                        <div class="form-inline form-select" style="">
+	                                            <form:input type="text" name="input-proposal-name" id="input-proposal-name" style="width: 130px;" path="searchPropName" value="${PROP_NAME }"/>
+	                                        </div>
                                         </div>
-                                        <div class="form-inline form-input" style="margin-left: 5px;">
-                                            <form:input type="text" name="input-proposal-name" id="input-proposal-name" style="width: 130px;" path="searchPropName" value="${PROP_NAME }"/>
-                                        </div>
-                                        <div class="form-inline form-select" style="margin-left: 6px;">
-                                            <label style="margin-right: 5px; letter-spacing: -0.085rem;">제안유형</label>                                            
+                                        <div class="form-inline form-select">
+                                            <label style="margin-right: 5px;">제안유형</label>                                            
                                             <form:select name="select-category-code" id="select-category-code" path="searchPropCategoryCode">
                                                 <option value="">전체</option>
                                                 <c:forEach var="item" items="${PP_CT_LIST }">
@@ -56,8 +59,8 @@
                                                 </c:forEach>
                                             </form:select>
                                         </div>
-                                        <div class="form-inline form-select" style="margin-left: 6px;">
-                                            <label style="margin-right: 5px; letter-spacing: -0.085rem;">등급</label>
+                                        <div class="form-inline form-select">
+                                            <label style="margin-right: 5px;">등급</label>
                                             <form:select name="select-class-code" id="select-class-code" path="searchPropClassCode">
                                                 <option value="">전체</option>
                                                 <c:forEach var="item" items="${PP_CL_LIST }">
@@ -73,7 +76,7 @@
                                             </form:select>
                                         </div>
                                         
-                                        <div class="form-inline form-input inline-calendar">
+                                        <div class="form-inline form-select inline-calendar">
                                         	<div class="s6 input-text input-date form-inline" style="cursor: pointer;">
 	                                            <form:input type="text" id="input-from-date" name="input-from-date" class="datepicker" readonly="readonly" style="background-color: #FFF; cursor: inherit; width: 100px;" value="${PROP_FROM_DATE }" path="searchPropFromDate"/>
 	                                            <i class="ico calendar"></i>                                        	
@@ -90,9 +93,9 @@
                             </div>
 
                             <div class="list-header">
-                                <p class="title">나의 실시제안</p>
+                                <p class="title">나의 쪽지제안</p>
                                 <span class="bar"></span>
-                                <p class="total" id="total-summary">총 ${COUNT_TOTAL }(S급 : ${COUNT_S }건, A급 : ${COUNT_A }건, B급 : ${COUNT_B }건, C급 : ${COUNT_C }건, D급 : ${COUNT_D }건, 불체택 : ${COUNT_NA }건, 등급평가중 : ${COUNT_EV }건, 입력중 : ${COUNT_IP }건)</p>
+                                <p class="total">총  ${COUNT_TOTAL }</p>
                                 <select name="limit" class="limit" onchange="onchange_recordCountPerPage(this.value)">
                                     <option value="10" <c:if test="${proposalSearchVO.recordCountPerPage eq '10' }">selected="selected"</c:if>>10개</option>
                                     <option value="50" <c:if test="${proposalSearchVO.recordCountPerPage eq '50' }">selected="selected"</c:if>>50개</option>
@@ -109,9 +112,7 @@
                                             <col style="width:80px">
                                             <col style="width:170px">
                                             <col style="width:100px">
-                                            <col style="width:80px">
-                                            <col style="width:80px">
-                                            <col style="width:100px">
+                                            <col style="width:130px">
                                         </colgroup>
                                         <thead>
                                             <tr>
@@ -120,34 +121,22 @@
                                                 <th class="bg-gray">제안자</th>
                                                 <th class="bg-gray">제안유형</th>
                                                 <th class="bg-gray">조직명</th>
-                                                <th class="bg-gray">등급/진행사항</th>
-                                                <th class="bg-gray">제안일</th>
-                                                <th class="bg-gray">실시완료일</th>
-                                                <th class="bg-gray">년간효과(금액)</th>
+                                                <th class="bg-gray">분임조</th>
+                                                <th class="bg-gray">제안일</th>                                                
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <c:forEach items="${PROP_LIST }" var="item">
-                                            	<tr>
-                                            		<td>${item.idx }</td>
-                                            		<td class="align-left"><a href="javascript: onclick_poposalInfo('${item.propSeq}', '${item.propTypeCode }');">${item.propName }</a></td>
-                                            		<td>${item.propUserName }</td>
-                                            		<td>${item.propCategoryCodeName }</td>
-                                            		<td>${item.propGroupName }</td>
-                                            		<td>${item.propPropStatCodeName }</td>
-                                            		<td>${item.propDate }</td>
-                                            		<td>${item.propPracticeCompDate }</td>
-                                            		<c:choose>
-                                            			<c:when test="${item.propYearEffect != null }">
-                                            				<fmt:formatNumber var="propYearEffect" value="${item.propYearEffect}" type="currency" currencySymbol="₩"/>
-                                            				<td>${item.propYearEffectCodeName} <br> ( ${propYearEffect } )</td>
-                                            			</c:when>
-                                            			<c:otherwise>
-                                            				<td>${item.propYearEffectCodeName }</td>
-                                            			</c:otherwise>
-                                            		</c:choose>                                            		
-                                            	</tr>
-                                            </c:forEach>
+                                        	<c:forEach items="${PROP_LIST }" var="item">
+	                                            <tr>
+	                                                <td>${item.idx }</td>
+	                                                <td class="align-left"><a href="javascript: onclick_poposalInfo('${item.propSeq}');">${item.propName }</a></td>
+	                                                <td>${item.propUserName }</td>
+	                                                <td>${item.propCategoryCodeName }</td>
+	                                                <td>${item.propGroupName }</td>
+	                                                <td>${item.propCircleCode }</td>                                                
+	                                                <td>${item.propDate }</td>                                                
+	                                            </tr>                                        	
+                                        	</c:forEach>
                                         </tbody>
                                     </table>
                                 </div>
@@ -155,10 +144,11 @@
                             <div class="list-footer">
                             	<ui:pagination paginationInfo="${proposalSearchVO}" type="defDefault" jsFunction="cfnPageLink" />
                                 <div class="list-btns">
-                                    <button type="button" class="btn bg-gray" onclick="location.href='/proposal/detail.do?menuKey=48'">                                        
-                                        <span>실시제안등록</span>
+                                    <button type="button" class="btn bg-gray" onclick="location.href='/proposal/memodetail.do?menuKey=49'">                                        
+                                        <span>쪽지제안등록</span>
                                     </button>                                    
                                 </div>
+
                             </div>
                         </div>
 <script type="text/javascript">
@@ -177,12 +167,8 @@
 		onclick_search();// 검색 '조회'버튼 클릭
 	}
 	
-	function onclick_poposalInfo(propSeq, propTypeCode){
-		if(propTypeCode == 'PP_TY_1'){
-			location.href="/proposal/detail.do?menuKey=48&propSeq="+propSeq;
-		}else{
-			location.href="/proposal/memodetail.do?menuKey=49&propSeq="+propSeq;
-		}		
+	function onclick_poposalInfo(propSeq){
+		location.href="/proposal/memodetail.do?menuKey=49&propSeq="+propSeq;
 	}
 </script>
 </body>

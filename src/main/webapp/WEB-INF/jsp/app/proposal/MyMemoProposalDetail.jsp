@@ -36,10 +36,10 @@
                         <!-- breadcrumb -->
                         <div class="breadcrumb">
                             <ul>
-                                <li>실시 제안정보</li>
+                                <li>쪽지 제안정보</li>
                             </ul>
                         </div>
-                        <p class="content_title">1. 실시 제안 정보</p>
+                        <p class="content_title">1. 쪽지 제안 정보</p>
                         <div class="list-wrap">
                             <div class="list-content">
                                 <div class="list-table list">
@@ -64,9 +64,9 @@
                                             </tr>
                                             <tr>
                                                 <th><label for="input-proposal"><span class="asterisk">*</span>제안자</label></th>
-                                                <td>
+                                                <td colspan="3">
                                                     <div class="row">
-                                                        <div class="col s12 input-text search">
+                                                        <div class="col s037 input-text search">
                                                         	<form:input type="hidden" id="input-proposal-hidden" name="input-proposal-hidden" value="" path="propRegUser"/>
                                                         	<form:input type="hidden" id="input-proposal-user" name="input-proposal-user" value="" path="propUser"/>
                                                         	<form:input type="hidden" id="input-proposal-belt-hidden" name="input-proposal-belt-hidden" value="" path="propBeltCode"/>
@@ -75,20 +75,10 @@
                                                             <button type="button" class="btn-proposal-member-search-modal">검색</button>
                                                         </div>
                                                     </div>
-                                                </td>
-                                                <th><label for="input-proposal-memo"><span class="asterisk">*</span>관련 쪽지 제안</label></th>
-                                                <td>
-                                                    <div class="row">
-                                                        <div class="col s12 input-text search">
-                                                        	<form:input type="hidden" id="input-proposal-memo-hidden" name="input-proposal-memo-hidden" value="" path="propRelMemoCode"/>
-                                                            <input type="text" id="input-proposal-memo" name="input-proposal-memo" value="" readonly="readonly" style="background-color: #FFF;"/>
-                                                            <button type="button" class="btn-psmg-search-modal">검색</button>
-                                                        </div>
-                                                    </div>
-                                                </td>
+                                                </td>                                               
                                             </tr>
                                             <tr>
-                                                <th><span class="asterisk">*</span>조직명</th>
+                                                <th><label for="input-proposal-memo"><span class="asterisk">*</span>관련 쪽지 제안</label></th>
                                                 <td id="text-proposal-group">${PROP_INFO.propGroupName }</td>
                                                 <form:input type="hidden" id="input-proposal-group" name="input-proposal-group" value="" path="propGroupName"/>
                                                 <th><span class="asterisk">*</span>분임조</th>
@@ -126,40 +116,7 @@
                                                     </div>
                                                 </td>
                                             </tr>
-                                            <tr>
-                                                <th><label for="input-complete-date"><span class="asterisk">*</span>실행 완료일</label></th>
-                                                <td>
-                                                    <div class="row">
-                                                        <div class="col input-text input-date" style="padding-right: 0px;">
-                                                            <form:input type="text" id="input-complete-date" name="input-complete-date" value="" class="datepicker" path="propPracticeCompDate"/>
-                                                            <i class="ico calendar" style="background-size: 28px 29px; background-position: center; width: 28px; height: 29px;"></i>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <th><label for="select-yeareffect-code"><span class="asterisk">*</span>년간 효과금액</label></th>
-                                                <td>
-                                                    <div class="row">
-                                                        <div class="col s6 select-group">
-                                                            <form:select name="" id="select-yeareffect-code" title="년간 효과금액 선택" path="propYearEffectCode">
-                                                                <option value="">선택</option>
-                                                                <c:forEach var="item" items="${PP_YE_LIST }">
-                                                                	<c:choose>
-                                                                		<c:when test="${item.codeId eq PROP_INFO.propYearEffectCode }">
-                                                                			<option value="${item.codeId }" selected="selected">${item.codeNm }</option>
-                                                                		</c:when>
-                                                                		<c:otherwise>
-                                                                			<option value="${item.codeId }">${item.codeNm }</option>
-                                                                		</c:otherwise>
-                                                                	</c:choose>
-                                                                </c:forEach>
-                                                            </form:select>
-                                                        </div>
-                                                        <div class="col s6 input-text pd-l10">
-                                                            <form:input type="text" id="input-yeareffect-remark" name="input-yeareffect-remark" value="" path="propYearEffect"/>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
+                                            
                                             <tr>
                                                 <th colspan="4" class="align-center"><span class="asterisk">*</span>제안내용</th>
                                             </tr>
@@ -192,79 +149,7 @@
                                                         </div>
                                                     </div>
                                                 </td>
-                                            </tr>
-                                            <tr>
-                                                <th>활동결과</th>
-                                                <td colspan="3" class="pd0">
-                                                    <div class="list-wrap" style="margin:-1px">
-                                                        <div class="list-content">
-                                                            <div class="list-table list">
-                                                                <table class="centered">
-                                                                    <caption></caption>
-                                                                    <colgroup>
-                                                                        <col style="width:50%">
-                                                                        <col>
-                                                                    </colgroup>
-                                                                    <thead>
-                                                                        <tr>
-                                                                            <th>개선 전</th>
-                                                                            <th>개선 후</th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                        <tr>
-                                                                            <td>
-                                                                            <!-- 개선전 -->
-							                                                    <div class="row">
-							                                                        <div class="col s12 input-text file">
-							                                                            <!-- <span class="file-path">
-							                                                                <input type="text" id="file1_text" readonly name="" value="">
-							                                                                <button type="button"><i class="ico file_del"><em>삭제</em></i></button>
-							                                                            </span>
-							                                                            <input type="file" id="file1" name="" value="">
-							                                                            <label path="file1">파일추가</label> -->
-							                                                            <attachfile:fileuploader
-																							objectId="beforeImageUpload"
-																							ctx=""
-																							wrapperId="beforeFileUploadWrap"
-																							fileId="proposal_before_${PROP_INFO.propSeq }"
-																							fileGrp="proposal"
-																							autoUpload="false"
-																							maxFileSize="${15*1000000}"
-																							maxNumberOfFiles="3"/>
-							                                                        </div>
-							                                                    </div>                                                                            
-                                                                            </td>
-                                                                            <td>
-                                                                            <!-- 개선후 -->
-							                                                    <div class="row">
-							                                                        <div class="col s12 input-text file">
-							                                                            <!-- <span class="file-path">
-							                                                                <input type="text" id="file1_text" readonly name="" value="">
-							                                                                <button type="button"><i class="ico file_del"><em>삭제</em></i></button>
-							                                                            </span>
-							                                                            <input type="file" id="file1" name="" value="">
-							                                                            <label path="file1">파일추가</label> -->
-							                                                            <attachfile:fileuploader
-																							objectId="afterImageUpload"
-																							ctx=""
-																							wrapperId="afterFileUploadWrap"
-																							fileId="proposal_after_${PROP_INFO.propSeq }"
-																							fileGrp="proposal"
-																							autoUpload="false"
-																							maxFileSize="${15*1000000}"
-																							maxNumberOfFiles="3"/>
-							                                                        </div>
-							                                                    </div>                                                                            
-                                                                            </td>
-                                                                        </tr>
-                                                                    </tbody>
-                                                                </table>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
+                                            </tr>                                            
                                             <tr>
                                                 <th><span class="asterisk">*</span>결재자 지정</th>
                                                 <td colspan="3" class="pd0">
@@ -337,7 +222,7 @@
 																objectId="attachFileUpload"
 																ctx=""
 																wrapperId="attachFileUploadWrap"
-																fileId="proposal_attach_${PROP_INFO.propSeq }"
+																fileId="proposal_memo_attach_${PROP_INFO.propSeq }"
 																fileGrp="proposal"
 																autoUpload="false"
 																maxFileSize="${15*1000000}"
@@ -365,7 +250,7 @@
                             <div class="list-btns">
                                 <button type="button" class="btn light-gray" id="btn-temp-save">저장</button>
                                 <button type="button" class="btn bg-gray" id="btn-req-approval">결제의뢰</button>                                
-                                <a href="/proposal/list.do?menuKey=48" class="btn">목록</a>
+                                <a href="/proposal/memolist.do?menuKey=49" class="btn">목록</a>
                             </div>
                         </div>
 </form:form> 
@@ -419,17 +304,11 @@
 	}
 	
 	function setProposalInfoTempSave(){
-		if(checkValidationInfo()){			
-			if($('#input-proposal-memo-hidden').val() == '' && $('#input-proposal-memo').val() == ''){
-				$('#propRelMemoYn').val('N');
-			}else{
-				$('#propRelMemoYn').val('Y');
-				$('#propRelMemoCode').val($('#input-proposal-memo-hidden').val());
-			}
-			$('#propTypeCode').val('PP_TY_1'); // 구분코드
+		if(checkValidationInfo()){
+			$('#propTypeCode').val('PP_TY_2'); // 구분코드
 			if($('#propPropStatCode').val() == '' && $('#crud').val() == 'I'){
 				$('#propPropStatCode').val('IP'); // 제안상태코드
-			}			
+			}
 			
 			if(confirm('저장하시겠습니까?')){
 				$('#defaultForm')[0].submit();
@@ -462,26 +341,6 @@
 		if($('#input-proposal-date').val().trim() == ''){
 			alert('제안일을 선택해 주세요.'); $('#input-proposal-date').focus();
 			return false;
-		}
-		
-		if($('#input-complete-date').val().trim() == ''){
-			alert('실행 완료일을 선택해 주세요.'); $('#input-complete-date').focus();
-			return false;
-		}
-		
-		if($('#select-yeareffect-code').val() == ''){
-			alert('년간 효과금액을 선택해 주세요.'); $('#select-yeareffect-code').focus();
-			return false;
-		}
-		
-		if($('#select-yeareffect-code').val() != 'PP_YE_7' && $('#input-yeareffect-remark').val().trim() == ''){
-			alert('년간 효과금액을 입력해 주세요.'); $('#input-yeareffect-remark').focus();
-			return false;
-		}
-		
-		if($('#input-yeareffect-remark').val().trim() != '' && /[0-9]/g.test($('#input-yeareffect-remark').val().trim()) == false){
-			alert('년간 효과금액 숫자만 입력해 주세요.'); $('#input-yeareffect-remark').focus();
-			return false;			
 		}
 		
 		if($('#textarea-proposal-problem').val().trim() == ''){
