@@ -67,7 +67,7 @@
                                                 <td colspan="3">
                                                     <div class="row">
                                                         <div class="col s037 input-text search">
-                                                        	<form:input type="hidden" id="input-proposal-hidden" name="input-proposal-hidden" value="" path="propRegUser"/>
+                                                        	<%-- <form:input type="hidden" id="input-proposal-hidden" name="input-proposal-hidden" value="" path="propRegUser"/> --%>
                                                         	<form:input type="hidden" id="input-proposal-user" name="input-proposal-user" value="" path="propUser"/>
                                                         	<form:input type="hidden" id="input-proposal-belt-hidden" name="input-proposal-belt-hidden" value="" path="propBeltCode"/>
                                                         	<form:input type="hidden" id="input-proposal-bizplace-hidden" name="input-proposal-bizplacecode-hidden" value="" path="propBizPlaceCode"/>
@@ -109,8 +109,8 @@
                                                 <th><label for="input-proposal-date"><span class="asterisk">*</span>제안일</label></th>
                                                 <td>
                                                     <div class="row">
-                                                        <div class="col input-text input-date" style="padding-right: 0px;">
-                                                            <form:input type="text" id="input-proposal-date" name="input-proposal-date" value="" class="datepicker" path="propDate"/>
+                                                        <div class="col input-text input-date" style="padding-right: 0px; cursor: pointer;">
+                                                            <form:input type="text" id="input-proposal-date" name="input-proposal-date" value="" class="datepicker" path="propDate" style="background-color: #FFF; cursor: inherit;" readonly="readonly"/>
                                                             <i class="ico calendar" style="background-size: 28px 29px; background-position: center; width: 28px; height: 29px;"></i>
                                                         </div>
                                                     </div>
@@ -290,7 +290,7 @@
 	
 	function setProposalMemberInfo(el, d){
 		$('#input-proposal').val(d.userName);
-		$('#input-proposal-hidden').val(d.userId);
+		/* $('#input-proposal-hidden').val(d.userId); */
 		$('#input-proposal-user').val(d.userId);
 		$('#text-proposal-group').html(d.deptFullName);
 		//$('#input-proposal-group').val(d.comDepartCode);

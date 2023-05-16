@@ -20,6 +20,8 @@ public class ProposalSearchVO extends CommonVO{
 	@ParamField
 	private int searchPropSeq;
 	
+	
+	
 	public String getSearchPropCategoryCode() {
 		return searchPropCategoryCode;
 	}

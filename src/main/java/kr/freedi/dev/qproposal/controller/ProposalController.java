@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -18,6 +19,11 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import egovframework.rte.fdl.idgnr.EgovIdGnrService;
 import egovframework.rte.psl.dataaccess.util.EgovMap;
@@ -144,7 +150,7 @@ public class ProposalController {
 		CodeVO codeVO = new CodeVO();
 		codeVO.setCodeGrpId("PP_CT"); // 제안유형코드 조쇠
 		List<EgovMap> categoryList = codeService.selectFullList(codeVO);
-		codeVO.setCodeGrpId("PP_YE"); // 제안연간효과코드 조쇠
+		codeVO.setCodeGrpId("RESULTTY"); // 제안연간효과코드 조쇠
 		List<EgovMap> yearEffectList = codeService.selectFullList(codeVO);
 		
 		model.addAttribute("PP_CT_LIST", categoryList);		
@@ -189,6 +195,7 @@ public class ProposalController {
 			@ModelAttribute("proposalSearchVO") ProposalSearchVO searchVO,
 			UserVO userSession) throws Exception{
 		
+		proposalVO.setPropRegUser(userSession.getUserId());
 		int result = proposalService.insertProposalInfo(proposalVO);
 		if(result > 0) {
 			if(proposalVO.getPropTypeCode().equals("PP_TY_1")) {
@@ -207,6 +214,7 @@ public class ProposalController {
 			@ModelAttribute("proposalSearchVO") ProposalSearchVO searchVO,
 			UserVO userSession) throws Exception{
 		
+		proposalVO.setPropRegUser(userSession.getUserId());
 		int result = proposalService.updateProposalInfo(proposalVO);
 		if(result > 0) {
 			if(proposalVO.getPropTypeCode().equals("PP_TY_1")) {
@@ -298,7 +306,7 @@ public class ProposalController {
 		CodeVO codeVO = new CodeVO();
 		codeVO.setCodeGrpId("PP_CT"); // 제안유형코드 조쇠
 		List<EgovMap> categoryList = codeService.selectFullList(codeVO);
-		codeVO.setCodeGrpId("PP_YE"); // 제안연간효과코드 조쇠
+		codeVO.setCodeGrpId("RESULTTY"); // 제안연간효과코드 조쇠
 		List<EgovMap> yearEffectList = codeService.selectFullList(codeVO);
 		
 		model.addAttribute("PP_CT_LIST", categoryList);		
@@ -322,5 +330,45 @@ public class ProposalController {
 		
 		model.addAttribute("PROP_INFO", resultItem);
 		return "/app/proposal/MyMemoProposalDetail";
+	}
+	
+	@RequestMapping("/search.do")
+	public String searchView(HttpServletRequest request, ModelMap model,
+			@ModelAttribute("proposalVo") ProposalVO proposalVO, 
+			@ModelAttribute("proposalSearchVO") ProposalSearchVO searchVO,
+			UserVO userSession) throws Exception{
+		model.addAttribute("menuKey", searchVO.getMenuKey());
+		CodeVO codeVO = new CodeVO();
+		codeVO.setCodeGrpId("PP_TY"); // 제안구분코드 조회
+		List<EgovMap> typeList = codeService.selectFullList(codeVO);
+		codeVO.setCodeGrpId("PP_CT"); // 제안유형코드 조쇠
+		List<EgovMap> categoryList = codeService.selectFullList(codeVO);
+		codeVO.setCodeGrpId("RESULTTY"); // 제안연간효과코드 조쇠
+		List<EgovMap> yearEffectList = codeService.selectFullList(codeVO);
+		codeVO.setCodeGrpId("PP_CL"); // 제안등급코드 조회
+		List<EgovMap> classList = codeService.selectFullList(codeVO);
+		codeVO.setCodeGrpId("WPLACE"); // 제안연간효과코드 조쇠
+		List<EgovMap> bizPlaceList = codeService.selectFullList(codeVO);
+		
+		model.addAttribute("PP_TY_LIST", typeList);
+		model.addAttribute("PP_CT_LIST", categoryList);		
+		model.addAttribute("PP_CL_LIST", classList);
+		model.addAttribute("PP_YE_LIST", yearEffectList);	
+		model.addAttribute("BIZ_PLACE_LIST", bizPlaceList);
+		return "app/proposal/SearchProposalList";
+	}
+	
+	@RequestMapping(value = "/memoProposalSearch.do", method = RequestMethod.POST)
+	public @ResponseBody String memoProposalSearch(HttpServletRequest request,
+			@RequestParam Map<String, Object> reqMap) throws Exception{
+		//나의 제안 조회
+		ProposalSearchVO searchVO = new ProposalSearchVO();
+		searchVO.setSearchPropCategoryCode(String.valueOf(reqMap.get("propCategoryCode")));
+		searchVO.setSearchPropName(String.valueOf(reqMap.get("propName")));
+		searchVO.setSearchPropTypeCode("PP_TY_2");
+		List<ProposalVO> resultItems = proposalService.selectProposalMasterInfo(searchVO);
+		ObjectMapper mapper = new ObjectMapper();
+		String json = mapper.writeValueAsString(resultItems);
+		return json;
 	}
 }

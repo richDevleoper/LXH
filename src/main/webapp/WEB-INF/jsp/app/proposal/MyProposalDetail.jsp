@@ -67,7 +67,7 @@
                                                 <td>
                                                     <div class="row">
                                                         <div class="col s12 input-text search">
-                                                        	<form:input type="hidden" id="input-proposal-hidden" name="input-proposal-hidden" value="" path="propRegUser"/>
+                                                        	<%-- <form:input type="hidden" id="input-proposal-hidden" name="input-proposal-hidden" value="" path="propRegUser"/> --%>
                                                         	<form:input type="hidden" id="input-proposal-user" name="input-proposal-user" value="" path="propUser"/>
                                                         	<form:input type="hidden" id="input-proposal-belt-hidden" name="input-proposal-belt-hidden" value="" path="propBeltCode"/>
                                                         	<form:input type="hidden" id="input-proposal-bizplace-hidden" name="input-proposal-bizplacecode-hidden" value="" path="propBizPlaceCode"/>
@@ -119,8 +119,8 @@
                                                 <th><label for="input-proposal-date"><span class="asterisk">*</span>제안일</label></th>
                                                 <td>
                                                     <div class="row">
-                                                        <div class="col input-text input-date" style="padding-right: 0px;">
-                                                            <form:input type="text" id="input-proposal-date" name="input-proposal-date" value="" class="datepicker" path="propDate"/>
+                                                        <div class="col input-text input-date" style="padding-right: 0px; cursor: pointer;">
+                                                            <form:input type="text" id="input-proposal-date" name="input-proposal-date" value="" class="datepicker" path="propDate" style="background-color: #FFF; cursor: inherit;" readonly="readonly"/>
                                                             <i class="ico calendar" style="background-size: 28px 29px; background-position: center; width: 28px; height: 29px;"></i>
                                                         </div>
                                                     </div>
@@ -130,8 +130,8 @@
                                                 <th><label for="input-complete-date"><span class="asterisk">*</span>실행 완료일</label></th>
                                                 <td>
                                                     <div class="row">
-                                                        <div class="col input-text input-date" style="padding-right: 0px;">
-                                                            <form:input type="text" id="input-complete-date" name="input-complete-date" value="" class="datepicker" path="propPracticeCompDate"/>
+                                                        <div class="col input-text input-date" style="padding-right: 0px; cursor: pointer;">
+                                                            <form:input type="text" id="input-complete-date" name="input-complete-date" value="" class="datepicker" path="propPracticeCompDate" style="background-color: #FFF; cursor: inherit;" readonly="readonly"/>
                                                             <i class="ico calendar" style="background-size: 28px 29px; background-position: center; width: 28px; height: 29px;"></i>
                                                         </div>
                                                     </div>
@@ -382,11 +382,21 @@
 			popEmp.open();
 		});
 		
+		//쪽지제안 조회
+		$('.btn-psmg-search-modal').off('click').on('click', function(){
+			popRelMemo.init();
+			
+			popRelMemo.returnObjId = $('#input-approval');
+			popRelMemo.returnFunc = setRelMemoProposal;
+			
+			popRelMemo.open();
+		});
+		
 		//결재자 조회
 		$('.btn-approval-member-search-modal').off('click').on('click', function(){
 			popEmp.init();
 			
-			popEmp.returnObjId = $('#input-approval');
+			popEmp.returnObjId = $('#input-proposal-memo');
 			popEmp.returnFunc = setApprovalMemberInfo;
 			
 			popEmp.open();			
@@ -405,13 +415,19 @@
 	
 	function setProposalMemberInfo(el, d){
 		$('#input-proposal').val(d.userName);
-		$('#input-proposal-hidden').val(d.userId);
+		/* $('#input-proposal-hidden').val(d.userId); */
 		$('#input-proposal-user').val(d.userId);
 		$('#text-proposal-group').html(d.deptFullName);
 		//$('#input-proposal-group').val(d.comDepartCode);
 		$('#input-proposal-group').val(d.deptFullName);
 		$('#input-proposal-belt-hidden').val(d.comCertBelt);
 		$('#input-proposal-bizplace-hidden').val(d.comNo);
+	}
+	
+	function setRelMemoProposal(el, d){
+		debugger;
+		$('#input-proposal-memo').val(d.propName);
+		$('#input-proposal-memo-hidden').val(d.propSeq);
 	}
 	
 	function setApprovalMemberInfo(el, d){
@@ -474,7 +490,7 @@
 			return false;
 		}
 		
-		if($('#select-yeareffect-code').val() != 'PP_YE_7' && $('#input-yeareffect-remark').val().trim() == ''){
+		if($('#select-yeareffect-code').val() != '7' && $('#input-yeareffect-remark').val().trim() == ''){
 			alert('년간 효과금액을 입력해 주세요.'); $('#input-yeareffect-remark').focus();
 			return false;
 		}

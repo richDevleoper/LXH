@@ -33,8 +33,6 @@ public class ProposalVO {
 	private String propUser;
 	private String propRegDate;
 	private String propRegUser;
-	private String propUpdateDate;
-	private String propUpdateUser;
 	
 	private String propCategoryCodeName;
 	private String propTypeCodeName;
@@ -262,22 +260,6 @@ public class ProposalVO {
 
 	public void setPropRegUser(String propRegUser) {
 		this.propRegUser = propRegUser;
-	}
-
-	public String getPropUpdateDate() {
-		return propUpdateDate;
-	}
-
-	public void setPropUpdateDate(String propUpdateDate) {
-		this.propUpdateDate = propUpdateDate;
-	}
-
-	public String getPropUpdateUser() {
-		return propUpdateUser;
-	}
-
-	public void setPropUpdateUser(String propUpdateUser) {
-		this.propUpdateUser = propUpdateUser;
 	}
 
 	public String getPropCategoryCodeName() {

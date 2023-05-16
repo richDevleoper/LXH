@@ -341,27 +341,17 @@
 	        <div class="list-search">
 	             <form>
 	                 <div class="search-form">
-	                     <div class="form-inline form-select">
+<!-- 	                     <div class="form-inline form-select">
 	                         <label>구분</label>
-	                         <select name="">
-	                             <option value="">전체</option>
-	                             <option value="">사번</option>
-	                             <option value="">이름</option>
-	                             <option value="">부문</option>
-	                             <option value="">소속명</option>
-	                             <option value="">팀명</option>
-	                             <option value="">직무명</option>
-	                         </select>                                                    
-	                     </div>
-	                    
+	                         <select name="select-proposal-type-code" id="select-proposal-type-code"></select>                                                    
+	                     </div> -->	                    
 	                     <div class="form-inline form-select">
 	                         <label>제안유형</label>                                            
-	                         <select name="">
-	                             <option value="">전체</option>
+	                         <select name="select-proposal-category-code" id="select-proposal-category-code">
 	                         </select>                                            
 	                     </div>
 	                      <div class="form-inline form-select">
-	                         <input type="text" name="">
+	                         <input type="text" name="input-memo-proposal-name" id="input-proposal-name">
 	                     </div>                                     
 	                     <button type="button" class="btn-submit">조회</button>
 	                 </div>
@@ -405,7 +395,7 @@
 	                </div>
 	            </div>
 	            <div class="list-footer">
-	                <div class="pagination">
+<!-- 	                <div class="pagination">
 	                    <a href="" class="first">처음</a>
 	                    <a href="" class="prev">이전</a>
 	                    <a href="" class="cur num">1</a>
@@ -415,12 +405,49 @@
 	                    <a href="" class="num">5</a>
 	                    <a href="" class="next">다음</a>
 	                    <a href="" class="last">끝</a>
-	                </div>
+	                </div> -->
 	                <div class="btns">
 	                    <button type="button" class="btn-submit">확인</button>
 	                    <button type="button" class="btn-cancel">취소</button>
 	                </div>
 	            </div>
+	            <script type="text/javascript">
+	            	let popRelMemo = {
+	            		returnObjId: null,
+	            		returnFunc: null,
+	            		open: function(){
+	            			/*$.post( "/csl/code/selectFullListByCodeGrpId.do", { codeGrpId: 'PP_TY' }, function(response){
+	            				console.log(response);
+	            			}, "json" );*/
+	            			$.post( "/csl/code/selectFullListByCodeGrpId.do", { codeGrpId: 'PP_CT' }, function(data){
+	            				if(data != null && data.codeCnt > 0){
+	            					var options = '<option value="">전체</option>';
+	            					for(var index = 0; index < data.codeCnt; index++){
+	            						var codeItem = data.codeList[index];
+	            						options += '<option value="' + codeItem.codeId + '">' + codeItem.codeNm + '</option>';
+	            					}
+	            					$('#select-proposal-category-code').html(options);
+	            				}
+	            			}, "json" );
+	            			$('.modal-dimmed').show();
+	            			$('#comPopup_pmsgSearch').show();
+	            		},
+	            		close: function(){
+	            			$('.modal-dimmed').hide();
+	            			$('#comPopup_pmsgSearch').hide();
+	            			
+	            			this.init();
+	            		},
+	            		init: function(){
+            				$(".tr-empty").show();
+            				$(".tr-data").remove();
+            				$("#txtSearchName").val("");
+            				
+            				this.returnObjId = null;
+            				this.returnFunc = null;	            			
+	            		}
+	            	}
+	            </script>
 	        </div>
 	    </div>
 </div>

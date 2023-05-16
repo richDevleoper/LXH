@@ -1,0 +1,233 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
+<%@ taglib prefix="string" uri="/WEB-INF/tld/string-taglib.tld" %>
+
+<!DOCTYPE html PUBLIC "-/W3C/DTD XHTML 1.0 Transitional/EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="ko">
+<head>
+	<title>${fn:split(boardVO.boardNm,'>')[fn:length(fn:split(boardVO.boardNm,'>'))-1]}</title>
+	<meta name="keywords" content="" />
+	<meta name="description" content="" />
+</head>
+<body>
+                        <div class="list-wrap">
+                            <div class="list-search">
+                            	<form:form commandName="proposalSearchVO" id="defaultForm" method="get" action="list.do" >
+                            	${proposalSearchVO.superHiddenTag}
+	                                <div class="search-form row">
+	                                    <div class="form-inline form-input col s4">
+	                                        <div class="col s3 align-right">
+	                                            <label>제안명</label>
+	                                        </div>
+	                                        <div class="pd-l10 col s9">
+	                                            <form:input type="text" name="input-proposal-name" id="input-proposal-name" path="searchPropName"/>
+	                                        </div>
+	                                    </div>
+	                                    <div class="form-inline form-input col s4">
+	                                        <div class="col s3 align-right">
+	                                            <label>조직</label>
+	                                        </div>
+                                      		<div class="pd-l10 col s9 input-text search">
+                                      			<input type="text" id="input-proposal-group" name="input-proposal-group" readonly="readonly" style="background-color: #FFF;"/>
+                                      			<button type="button" class="btn-proposal-group-search-modal">검색</button>                               		
+                                      		</div>
+	                                    </div>
+	                                    <div class="form-inline form-input col s4">
+	                                        <div class="col s3 align-right">
+	                                            <label>사업장</label>
+	                                        </div>
+	                                        <div class="pd-l10 col s9">
+	                                            <form:select name="" id="" path="">
+                                                    <option value="">선택</option>
+                                                    <c:forEach var="item" items="${BIZ_PLACE_LIST }">
+                                                    	<option value="${item.codeId }">${item.codeNm }</option>
+                                                    </c:forEach>
+	                                            </form:select>
+	                                        </div>
+	                                    </div>
+	                                </div>
+	                                <div class="search-form row">
+	                                    <div class="form-inline form-input col s4">
+	                                        <div class="col s3 align-right">
+	                                            <label>제안자</label>
+	                                        </div>
+                                      		<div class="pd-l10 col s9 input-text search">
+                                      			<input type="text" id="input-proposal-member" name="input-proposal-member" readonly="readonly" style="background-color: #FFF;"/>
+                                      			<button type="button" class="btn-proposal-member-search-modal">검색</button>                               		
+                                      		</div>
+	                                    </div>
+	                                    <div class="form-inline form-input col s4">
+	                                        <div class="col s3 align-right">
+	                                            <label>실시/쪽지</label>
+	                                        </div>
+	                                        <div class="pd-l10 col s9">
+	                                            <form:select name="" id="" path="">
+	                                                <option value="">전체</option>
+                                                    <c:forEach var="item" items="${PP_TY_LIST }">
+                                                    	<option value="${item.codeId }">${item.codeNm }</option>
+                                                    </c:forEach>	                                                
+	                                            </form:select>
+	                                        </div>
+	                                    </div>
+	                                    <div class="form-inline form-input col s4">
+	                                        <div class="col s3 align-right">
+	                                            <label>등급</label>
+	                                        </div>
+	                                        <div class="pd-l10 col s9">
+	                                            <form:select name="" id="" path="">
+	                                                <option value="">전체</option>
+	                                                <c:forEach var="item" items="${PP_CL_LIST }">
+	                                                	<c:if test="${item.attr1 eq 'CLASS' }">
+	                                                		<option value="${item.codeId }">${item.codeNm }</option>
+	                                                	</c:if>                                                    	
+                                                    </c:forEach>
+	                                            </form:select>
+	                                        </div>
+	                                    </div>
+	                                </div>
+	                                <div class="search-form row">
+	                                    <div class="form-inline form-input col s4">
+	                                        <div class="col s3 align-right">
+	                                            <label>제안유형</label>
+	                                        </div>
+	                                        <div class="pd-l10 col s9">
+	                                            <form:select name="" id="" path="">
+	                                                <option value="">전체</option>
+	                                                <c:forEach var="item" items="${PP_CT_LIST }">
+                                                    	<option value="${item.codeId }">${item.codeNm }</option>
+                                                    </c:forEach>	                                                
+	                                            </form:select>
+	                                        </div>
+	                                    </div>
+	                                    <div class="form-inline form-input col s4">
+	                                        <div class="col s3 align-right">
+	                                            <label>진행단계</label>
+	                                        </div>
+	                                        <div class="pd-l10 col s9">
+	                                            <form:select name="" id="" path="">
+	                                                <option value="">전체</option>
+	                                                <c:forEach var="item" items="${PP_CL_LIST }">
+	                                                	<c:if test="${item.attr1 eq 'PROC' }">
+	                                                		<option value="${item.codeId }">${item.codeNm }</option>
+	                                                	</c:if>                                                    	
+                                                    </c:forEach>	                                                
+	                                            </form:select>
+	                                        </div>
+	                                    </div>
+	                                    <div class="form-inline form-input col s4">
+	                                        <div class="col s3 align-right">
+	                                            <label>제안일</label>
+	                                        </div>
+	                                        <div class="pd-l10 col s9">
+	                                        	<div class="col s5 input-date input-date" style="padding-right: 0px; cursor: pointer; width: calc(50% - 10px);">
+		                                            <form:input type="text" id="input-from-date" name="input-from-date" class="datepicker" readonly="readonly" style="background-color: #FFF; cursor: inherit; width: 100px;" value="${PROP_FROM_DATE }" path="searchPropFromDate"/>
+		                                            <i class="ico calendar"></i>                                        	
+	                                        	</div>                                 
+	                                            <span class="col s1 text-bul align-center">~</span>
+	                                            <div class="col s5 input-date input-date" style="padding-right: 0px; cursor: pointer; width: calc(50% - 10px);">
+		                                            <form:input type="text" id="input-to-date" name="input-to-date" class="datepicker" readonly="readonly" style="background-color: #FFF; cursor: inherit; width: 100px;" value="${PROP_TO_DATE }" path="searchPropToDate"/>
+		                                            <i class="ico calendar"></i>
+	                                            </div>
+	                                        </div>
+	                                    </div>
+	                                </div>
+	                                <div class="search-form row">
+	                                    <div class="col s12 align-right">
+	                                        <button type="button" class="btn-submit" id="button-search">조회</button>
+	                                    </div>
+	                                </div>
+                                </form:form>
+                            </div>
+                            <div class="new_group">
+                                <div class="list-header mg-t20">
+                                    <p class="title">조회된 제안</p>
+                                    <span class="bar"></span>
+                                    <p class="total">총 100</p>
+	                                <select name="limit" class="limit" onchange="onchange_recordCountPerPage(this.value)">
+	                                    <option value="10" <c:if test="${proposalSearchVO.recordCountPerPage eq '10' }">selected="selected"</c:if>>10개</option>
+	                                    <option value="50" <c:if test="${proposalSearchVO.recordCountPerPage eq '50' }">selected="selected"</c:if>>50개</option>
+	                                    <option value="100" <c:if test="${proposalSearchVO.recordCountPerPage eq '100' }">selected="selected"</c:if>>100개</option>
+	                                </select>
+                                </div>
+                                <div class="new_list">
+                                    <div class="inr">
+                                        <ul>
+                                            <li class="border">
+                                                <div>
+                                                    <ul>
+                                                        <li class="title">
+                                                            <span>진행중(On-track)</span>
+                                                        </li>
+                                                        <li>
+                                                            <span>6σ Full Process</span>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <p class="list">
+                                                    <a href="/app/004_02_search_01.do?menuKey=36" title="바로가기">과제명 : 예시) 23년 신제품 싸움닭 초기 유동관리를 통한 품질 안정화 과제</a>
+                                                    <span>활동Process(소) : DMAIC, 활동분야 : 품질개선, 활동유형 : MBB, 부문 : 창호, 사업장 : 청주공장, 과제리더 : 홍길동, 팀원 : 홍길동, 이길동, Process Owner : 홍길동, 챔피언 : 홍길동, 착수(예정)일 : 2023.01.01, 완료(예정)일 : 2023.06.30</span>
+                                                </p>
+                                            </li>
+                                            <li class="border">
+                                                <div>
+                                                    <ul>
+                                                        <li class="title gray">
+                                                            <span>Drop</span>
+                                                        </li>
+                                                        <li>
+                                                            <span>6σ Full Process</span>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <p class="list">
+                                                    <a href="" title="바로가기">과제명 : 예시) 23년 신제품 싸움닭 초기 유동관리를 통한 품질 안정화 과제</a>
+                                                    <span>활동Process(소) : DMAIC, 활동분야 : 품질개선, 활동유형 : MBB, 부문 : 창호, 사업장 : 청주공장, 과제리더 : 홍길동, 팀원 : 홍길동, 이길동, Process Owner : 홍길동, 챔피언 : 홍길동, 착수(예정)일 : 2023.01.01, 완료(예정)일 : 2023.06.30</span>
+                                                </p>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="list-footer">
+                                        <div class="pagination">
+                                            <a href="" class="first">처음</a>
+                                            <a href="" class="prev">이전</a>
+                                            <a href="" class="cur num">1</a>
+                                            <a href="" class="num">2</a>
+                                            <a href="" class="num">3</a>
+                                            <a href="" class="num">4</a>
+                                            <a href="" class="num">5</a>
+                                            <a href="" class="next">다음</a>
+                                            <a href="" class="last">끝</a>
+                                        </div>
+                                        <div class="list-btns">
+                                            <button type="button" class="btn-excel">
+                                                <img src="/assets/images/icon_excel.png" alt="">
+                                                <span>다운로드</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('#button-search').off('click').on('click', function(){
+			onclick_search();
+		});
+	});
+	
+	function onclick_search(){
+		$("#defaultForm")[0].submit();				
+	}
+	
+	function onchange_recordCountPerPage(vCount){
+		$("#recordCountPerPage").val(vCount);
+		onclick_search();// 검색 '조회'버튼 클릭
+	}
+</script>
+</body>
+</html>

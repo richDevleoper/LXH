@@ -29,8 +29,6 @@
 		<result column="PROP_USER" 					property="propUser"/>
 		<result column="PROP_REG_DATE" 				property="propRegDate"/>
 		<result column="PROP_REG_USER" 				property="propRegUser"/>
-		<result column="PROP_UPDATE_DATE" 			property="propUpdateDate"/>
-		<result column="PROP_UPDATE_USER" 			property="propUpdateUser"/>
 		
 		<result column="PROP_CATEGORY_CODE_NM" 		property="propCategoryCodeName"/>
 		<result column="PROP_TYPE_CODE_NM" 			property="propTypeCodeName"/>
@@ -47,7 +45,7 @@
             FROM(
 				SELECT PROP_SEQ, PROP_NAME, PROP_CATEGORY_CODE, GET_CODE_NM('PP_CT', PROP_CATEGORY_CODE) AS PROP_CATEGORY_CODE_NM, 
 					   PROP_TYPE_CODE, GET_CODE_NM('PP_TY', PROP_TYPE_CODE) AS PROP_TYPE_CODE_NM, PROP_PROBLEM, PROP_IMPROVEMENT_CONT,
-					   PROP_BENEFIT, PROP_YEAR_EFFECT, PROP_YEAR_EFFECT_CODE, GET_CODE_NM('PP_YE', PROP_YEAR_EFFECT_CODE) AS PROP_YEAR_ERRECT_CODE_NM,
+					   PROP_BENEFIT, PROP_YEAR_EFFECT, PROP_YEAR_EFFECT_CODE, GET_CODE_NM('RESULTTY', PROP_YEAR_EFFECT_CODE) AS PROP_YEAR_ERRECT_CODE_NM,
 					   PROP_REL_MEMO_YN, PROP_REL_MEMO_CODE, PROP_GROUP_NAME, PROP_BELT_CODE, PROP_BIZ_PLACE_CODE, PROP_CIRCLE_CODE,
 					   PROP_APPROVER_CODE, PROP_PROP_STAT_CODE, GET_CODE_NM('PP_CL', PROP_PROP_STAT_CODE) AS PROP_PROP_STAT_CODE_NM,
 					   PROP_EVAL_SCORE, PROP_EFFECT_SCORE, PROP_SUBSIDY, PROP_PAYMENT_YN, PROP_PAYMENT_DATE, 
@@ -55,13 +53,15 @@
 				       TO_CHAR(PROP_PRACTICE_COMP_DATE, 'YYYY-MM-DD') AS PROP_PRACTICE_COMP_DATE,
 				       PROP_USER, GET_USER_NM(PROP_USER) AS PROP_USER_NM
 				FROM TB_PROPOSAL_DETAIL	 
-				WHERE 
+				<where>
 					<choose>
 						<when test="searchPropSeq != null and searchPropSeq > 0">
 							PROP_SEQ = #{searchPropSeq}
 						</when>
 						<otherwise>
-							PROP_DATE BETWEEN TO_DATE(#{searchPropFromDate}, 'YYYY-MM-DD') AND TO_DATE(#{searchPropToDate}, 'YYYY-MM-DD')
+							<if test="searchPropFromDate != null and searchPropFromDate neq ''.toString() and searchPropToDate != null and searchPropToDate neq ''.toString()">
+								AND PROP_DATE BETWEEN TO_DATE(#{searchPropFromDate}, 'YYYY-MM-DD') AND TO_DATE(#{searchPropToDate}, 'YYYY-MM-DD')
+							</if>							
 							<if test="searchPropCategoryCode != null and searchPropCategoryCode neq ''.toString()">
 								AND PROP_CATEGORY_CODE = #{searchPropCategoryCode}
 							</if>
@@ -73,9 +73,10 @@
 							</if>
 							<if test="searchPropClassCode != null and searchPropClassCode neq ''.toString()">
 								AND PROP_PROP_STAT_CODE = #{searchPropClassCode}
-							</if>			
+							</if>
 						</otherwise>
 					</choose>
+				</where>
             ) T
 		)
 		SELECT T.*
@@ -138,7 +139,7 @@
 			#{propBenefit, 						jdbcType=VARCHAR},
 			#{propYearEffect, 					jdbcType=VARCHAR},
 			#{propYearEffectCode, 				jdbcType=VARCHAR},
-			#{propRelMemoYn, 					jdbcType=VARCHAR},
+			NVL(#{propRelMemoYn, 				jdbcType=VARCHAR}, 'N'),
 			#{propRelMemoCode, 					jdbcType=VARCHAR},
 			#{propGroupName, 					jdbcType=VARCHAR},
 			#{propBeltCode, 					jdbcType=VARCHAR},
