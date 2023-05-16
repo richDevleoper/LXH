@@ -18,66 +18,85 @@
 
                         <div class="list-wrap">
                             <div class="list-search">
-                                <form>
+                                <form:form commandName="proposalSearchVO" id="defaultForm" method="get" action="list.do" >
+                                	${proposalSearchVO.superHiddenTag}
                                     <div class="search-form">
                                         <div class="form-inline form-input">
                                             <label style="margin-right: 5px;">구분</label>
-                                            <select name="">
+                                            <form:select name="select-type-code" id="select-type-code" path="searchPropTypeCode">
                                                 <option value="">전체</option>
-                                                <option value="">실시</option>
-                                                <option value="">쪽지</option>
-                                            </select>                                            
+                                                <c:forEach var="item" items="${PP_TY_LIST }">
+                                                	<c:choose>
+                                                		<c:when test="${item.codeId eq PROP_TYPE_CODE}">
+                                                			<option value="${item.codeId }" selected="selected">${item.codeNm }</option>
+                                                		</c:when>
+                                                		<c:otherwise>
+                                                			<option value="${item.codeId }">${item.codeNm }</option>
+                                                		</c:otherwise>
+                                                	</c:choose>
+                                                </c:forEach>
+                                            </form:select>                                            
                                         </div>
                                         <div class="form-inline form-select" style="margin-left: 5px;">
-                                            <input type="text" name="" style="width: 130px;">
+                                            <form:input type="text" name="input-proposal-name" id="input-proposal-name" style="width: 130px;" path="searchPropName" value="${PROP_NAME }"/>
                                         </div>
                                         <div class="form-inline form-select">
                                             <label style="margin-right: 5px;">제안유형</label>                                            
-                                            <select name="">
+                                            <form:select name="select-category-code" id="select-category-code" path="searchPropCategoryCode">
                                                 <option value="">전체</option>
-                                                <option value="">품질</option>
-                                                <option value="">생산성향상</option>
-                                                <option value="">에너지</option>
-                                                <option value="">환경안전</option>
-                                                <option value="">설비개선</option>
-                                                <option value="">낭비제거</option>
-                                                <option value="">비용절감</option>
-                                                <option value="">기타</option>
-                                            </select>
+                                                <c:forEach var="item" items="${PP_CT_LIST }">
+                                                	<c:choose>
+                                                		<c:when test="${item.codeId eq PROP_CATEGORY_CODE}">
+                                                			<option value="${item.codeId }" selected="selected">${item.codeNm }</option>
+                                                		</c:when>
+                                                		<c:otherwise>
+                                                			<option value="${item.codeId }">${item.codeNm }</option>
+                                                		</c:otherwise>
+                                                	</c:choose>
+                                                </c:forEach>
+                                            </form:select>
                                         </div>
                                         <div class="form-inline form-select">
                                             <label style="margin-right: 5px;">등급</label>
-                                            <select name="">
+                                            <form:select name="select-class-code" id="select-class-code" path="searchPropClassCode">
                                                 <option value="">전체</option>
-                                                <option value="">S</option>
-                                                <option value="">A</option>
-                                                <option value="">B</option>
-                                                <option value="">C</option>
-                                                <option value="">D</option>
-                                            </select>
+                                                <c:forEach var="item" items="${PP_CL_LIST }">
+                                                	<c:choose>
+                                                		<c:when test="${item.codeId eq PROP_CLASS_CODE}">
+                                                			<option value="${item.codeId }" selected="selected">${item.codeNm }</option>
+                                                		</c:when>
+                                                		<c:otherwise>
+                                                			<option value="${item.codeId }">${item.codeNm }</option>
+                                                		</c:otherwise>
+                                                	</c:choose>
+                                                </c:forEach>
+                                            </form:select>
                                         </div>
                                         
                                         <div class="form-inline form-select inline-calendar">
-                                            <label></label>                                            
-                                            <input type="text"/>
-                                            <i class="ico calendar"></i>
+                                        	<div class="s6 input-text input-date form-inline" style="cursor: pointer;">
+	                                            <form:input type="text" id="input-from-date" name="input-from-date" class="datepicker" readonly="readonly" style="background-color: #FFF; cursor: inherit;" value="${PROP_FROM_DATE }" path="searchPropFromDate"/>
+	                                            <i class="ico calendar"></i>                                        	
+                                        	</div>                                 
                                             <span class="text-bul align-center">~</span>
-                                            <input type="text"/>
-                                            <i class="ico calendar"></i>
+                                            <div class="s6 input-text input-date form-inline" style="cursor: pointer;">
+	                                            <form:input type="text" id="input-to-date" name="input-to-date" class="datepicker" readonly="readonly" style="background-color: #FFF; cursor: inherit;" value="${PROP_TO_DATE }" path="searchPropToDate"/>
+	                                            <i class="ico calendar"></i>
+                                            </div>
                                         </div>
-                                        <button type="button" class="btn-submit">조회</button>
+                                        <button type="button" class="btn-submit" id="button-search">조회</button>
                                     </div>
-                                </form>
+                                </form:form>
                             </div>
 
                             <div class="list-header">
                                 <p class="title">나의 실시제안</p>
                                 <span class="bar"></span>
-                                <p class="total">총 10(S급 : 1건, A급 : 3건, B급 : 1건, C급 : 1건, D급 : 1건, 불체택 : 1건, 등급평가중 : 1건, 입력중 : 1건))</p>
-                                <select name="limit" class="limit">
-                                    <option value="10">10개</option>
-                                    <option value="50">50개</option>
-                                    <option value="100">100개</option>
+                                <p class="total" id="total-summary">총 ${COUNT_TOTAL }(S급 : ${COUNT_S }건, A급 : ${COUNT_A }건, B급 : ${COUNT_B }건, C급 : ${COUNT_C }건, D급 : ${COUNT_D }건, 불체택 : ${COUNT_NA }건, 등급평가중 : ${COUNT_EV }건, 입력중 : ${COUNT_IP }건)</p>
+                                <select name="limit" class="limit" onchange="onchange_recordCountPerPage(this.value)">
+                                    <option value="10" <c:if test="${proposalSearchVO.recordCountPerPage eq '10' }">selected="selected"</c:if>>10개</option>
+                                    <option value="50" <c:if test="${proposalSearchVO.recordCountPerPage eq '50' }">selected="selected"</c:if>>50개</option>
+                                    <option value="100" <c:if test="${proposalSearchVO.recordCountPerPage eq '100' }">selected="selected"</c:if>>100개</option>
                                 </select>
                             </div>
                             <div class="list-content">
@@ -87,8 +106,8 @@
                                             <col style="width:50px">
                                             <col>
                                             <col style="width:60px">
-                                            <col style="width:100px">
-                                            <col style="width:60px">
+                                            <col style="width:80px">
+                                            <col style="width:170px">
                                             <col style="width:100px">
                                             <col style="width:80px">
                                             <col style="width:80px">
@@ -108,245 +127,51 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>10</td>
-                                                <td class="align-left">예시) 23년 신제품 싸움닭 초기 유동관리를...</td>
-                                                <td>홍길동</td>
-                                                <td>생산성향상</td>
-                                                <td>조직명1</td>
-                                                <td>입력중</td>
-                                                <td>2023.01.30</td>
-                                                <td>2023.06.30</td>
-                                                <td>외부실패비용(10억)</td>
-                                            </tr>
-                                            <tr>
-                                                <td>9</td>
-                                                <td class="align-left">예시) 23년 신제품 싸움닭 초기 유동관리를...</td>
-                                                <td>홍길동</td>
-                                                <td>원가개선</td>
-                                                <td>조직명1</td>
-                                                <td>등급평가중</td>
-                                                <td>2023.01.30</td>
-                                                <td>2023.06.30</td>
-                                                <td>내부실패비용(10억)</td>
-                                            </tr>
-                                            <tr>
-                                                <td>8</td>
-                                                <td class="align-left">예시) 23년 신제품 싸움닭 초기 유동관리를...</td>
-                                                <td>홍길동</td>
-                                                <td>에너지</td>
-                                                <td>조직명1</td>
-                                                <td>불체택</td>
-                                                <td>2023.01.30</td>
-                                                <td>2023.06.30</td>
-                                                <td>매출액(10억)</td>
-                                            </tr>
-                                            <tr>
-                                                <td>7</td>
-                                                <td class="align-left">예시) 23년 신제품 싸움닭 초기 유동관리를...</td>
-                                                <td>홍길동</td>
-                                                <td>생산성향상</td>
-                                                <td>조직명1</td>
-                                                <td>S급</td>
-                                                <td>2023.01.30</td>
-                                                <td>2023.06.30</td>
-                                                <td>제조원가(10억)</td>
-                                            </tr>
-                                            <tr>
-                                                <td>6</td>
-                                                <td class="align-left">예시) 23년 신제품 싸움닭 초기 유동관리를...</td>
-                                                <td>홍길동</td>
-                                                <td>생산성향상</td>
-                                                <td>조직명1</td>
-                                                <td>A급</td>
-                                                <td>2023.01.30</td>
-                                                <td>2023.06.30</td>
-                                                <td>제조원가(10억)</td>
-                                            </tr>
-                                            <tr>
-                                                <td>5</td>
-                                                <td class="align-left">예시) 23년 신제품 싸움닭 초기 유동관리를...</td>
-                                                <td>홍길동</td>
-                                                <td>생산성향상</td>
-                                                <td>조직명1</td>
-                                                <td>C급</td>
-                                                <td>2023.01.30</td>
-                                                <td>2023.06.30</td>
-                                                <td>상품원가(10억)</td>
-                                            </tr>
-                                            <tr>
-                                                <td>4</td>
-                                                <td class="align-left">예시) 23년 신제품 싸움닭 초기 유동관리를...</td>
-                                                <td>홍길동</td>
-                                                <td>생산성향상</td>
-                                                <td>조직명1</td>
-                                                <td>A급</td>
-                                                <td>2023.01.30</td>
-                                                <td>2023.06.30</td>
-                                                <td>기타(10억)</td>
-                                            </tr>
-                                            <tr>
-                                                <td>3</td>
-                                                <td class="align-left">예시) 23년 신제품 싸움닭 초기 유동관리를...</td>
-                                                <td>홍길동</td>
-                                                <td>생산성향상</td>
-                                                <td>조직명1</td>
-                                                <td>B급</td>
-                                                <td>2023.01.30</td>
-                                                <td>2023.06.30</td>
-                                                <td>영업이익(10억)</td>
-                                            </tr>
-                                            <tr>
-                                                <td>2</td>
-                                                <td class="align-left">예시) 23년 신제품 싸움닭 초기 유동관리를...</td>
-                                                <td>홍길동</td>
-                                                <td>생산성향상</td>
-                                                <td>조직명1</td>
-                                                <td>D급</td>
-                                                <td>2023.01.30</td>
-                                                <td>2023.06.30</td>
-                                                <td>해당없음(10억)</td>
-                                            </tr>
-                                            <tr>
-                                                <td>1</td>
-                                                <td class="align-left">예시) 23년 신제품 싸움닭 초기 유동관리를...</td>
-                                                <td>홍길동</td>
-                                                <td>생산성향상</td>
-                                                <td>조직명1</td>
-                                                <td>A급</td>
-                                                <td>2023.01.30</td>
-                                                <td>2023.06.30</td>
-                                                <td>해당없음(10억)</td>
-                                            </tr>
-
-                                            
+                                            <c:forEach items="${PROP_LIST }" var="item">
+                                            	<tr>
+                                            		<td>${item.idx }</td>
+                                            		<td class="align-left"><a href="javascript: onclick_poposalInfo('${item.propSeq}');">${item.propName }</a></td>
+                                            		<td>${item.propUserName }</td>
+                                            		<td>${item.propCategoryCodeName }</td>
+                                            		<td>${item.propGroupName }</td>
+                                            		<td>${item.propPropStatCodeName }</td>
+                                            		<td>${item.propDate }</td>
+                                            		<td>${item.propPracticeCompDate }</td>
+                                            		<td>${item.propYearEffectCodeName }</td>
+                                            	</tr>
+                                            </c:forEach>
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
                             <div class="list-footer">
-                                <div class="pagination">
-                                    <a href="" class="first">처음</a>
-                                    <a href="" class="prev">이전</a>
-                                    <a href="" class="cur num">1</a>
-                                    <a href="" class="num">2</a>
-                                    <a href="" class="num">3</a>
-                                    <a href="" class="num">4</a>
-                                    <a href="" class="num">5</a>
-                                    <a href="" class="next">다음</a>
-                                    <a href="" class="last">끝</a>
-                                </div>
+                            	<ui:pagination paginationInfo="${proposalSearchVO}" type="defDefault" jsFunction="cfnPageLink" />
                                 <div class="list-btns">
-                                    <button type="button" class="btn bg-gray" onclick="location.href='/app/004_01_01_suggest_01.do?menuKey=48'">                                        
+                                    <button type="button" class="btn bg-gray" onclick="location.href='/proposal/detail.do?menuKey=48'">                                        
                                         <span>실시제안등록</span>
                                     </button>                                    
                                 </div>
-
                             </div>
                         </div>
-                  
-        <!-- 조직도 -->
-        <div class="modal-dimmed"></div>
-        <div class="org-modal">
-            <div class="modal-header">
-                <h4>조직조회</h4>
-                <button type="button" class="btn-close">닫기</button>
-            </div>
-            <div class="modal-content">
-                <div class="list-wrap">
-                    <div class="list-search">
-                        <form id="org-form" onsubmit="org_search();return false;">
-                            <div class="search-form">
-                                <div class="form-inline form-input">
-                                    <label>조직명</label>
-                                    <input type="text" name="">
-                                </div>
-                                <button type="submit" class="btn-submit">조회</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-                <div class="tree-header">
-                    <div>
-                        <input type="checkbox" id="orgSelAll">
-                        <label for="orgSelAll"></label>
-                    </div>
-                    <div>
-                        6σ 인재육성대상 조직명
-                    </div>
-                </div>
-                <div id="org-tree">
-                    <ul>
-                        <li>창호 사업부
-                            <ul>
-                                <li>창호.생산담당
-                                    <ul>
-                                        <li>· 창호.프로파일생산팀</li>
-                                        <li>· 창호.기술팀</li>
-                                        <li>· 창호.공정혁신팀</li>
-                                        <li>· 창호.완성창공정기술팀</li>
-                                    </ul>
-                                </li>
-                                <li>유리</li>
-                                <li>연구소 근무</li>
-                                <li>창호.시스템창사업담당</li>
-                                <li>창호.중문팀</li>
-                                <li>바닥재 사업담당	</li>
-                            </ul>
-                        </li>
-                        <li>단열재 사업담당
-                            <ul>
-                                <li>창호.프로파일생산팀</li>
-                            </ul>
-                        </li>
-                        <li>벽지 사업담당	
-                            <ul>
-                                <li>창호.프로파일생산팀</li>
-                            </ul>
-                        </li>
-                        <li>표면소재 사업담당
-                            <ul>
-                                <li>창호.프로파일생산팀</li>
-                            </ul>
-                        </li>
-                        <li>산업용필름 사업담당
-                            <ul>
-                                <li>창호.프로파일생산팀</li>
-                            </ul>
-                        </li>
-                        <li>자동차소재부품 사업부
-                            <ul>
-                                <li>창호.프로파일생산팀</li>
-                            </ul>
-                        </li>
-                        <li>인테리어 사업부
-                            <ul>
-                                <li>창호.프로파일생산팀</li>
-                            </ul>
-                        </li>
-                        <li>연구소
-                            <ul>
-                                <li>창호.프로파일생산팀</li>
-                            </ul>
-                        </li>
-                        <li>품질 담당
-                            <ul>
-                                <li>창호.프로파일생산팀</li>
-                            </ul>
-                        </li>
-                        <li>생산/기술/R&D/품질 外
-                            <ul>
-                                <li>창호.프로파일생산팀</li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
-                <div class="btns">
-                    <button type="button" class="btn-submit">확인</button>
-                    <button type="button" class="btn-cancel">취소</button>
-                </div>
-            </div>
-        </div>
-
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('#button-search').off('click').on('click', function(){
+			onclick_search();
+		});
+	});
+	
+	function onclick_search(){
+		$("#defaultForm")[0].submit();				
+	}
+	
+	function onchange_recordCountPerPage(vCount){
+		$("#recordCountPerPage").val(vCount);
+		onclick_search();// 검색 '조회'버튼 클릭
+	}
+	
+	function onclick_poposalInfo(propSeq){
+		location.href="/proposal/detail.do?menuKey=48&propSeq="+propSeq;
+	}
+</script>
 </body>
 </html>

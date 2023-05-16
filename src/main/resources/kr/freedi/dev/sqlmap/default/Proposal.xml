@@ -1,8 +1,193 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="Proposal">
-	<select id="selectListCount" resultType="egovMap">
-		SELECT '1' AS COUNT
-		FROM DUAL
+	<resultMap type="kr.freedi.dev.qproposal.domain.ProposalVO" id="proposalInfoResultMap">
+		<result column="PROP_SEQ" 					property="propSeq"/>
+		<result column="PROP_NAME" 					property="propName"/>
+		<result column="PROP_CATEGORY_CODE" 		property="propCategoryCode"/>
+		<result column="PROP_TYPE_CODE" 			property="propTypeCode"/>
+		<result column="PROP_PROBLEM" 				property="propProblem"/>
+		<result column="PROP_IMPROVEMENT_CONT" 		property="propImprovementCont"/>
+		<result column="PROP_BENEFIT" 				property="propBenefit"/>
+		<result column="PROP_YEAR_EFFECT" 			property="propYearEffect"/>
+		<result column="PROP_YEAR_EFFECT_CODE" 		property="propYearEffectCode"/>
+		<result column="PROP_REL_MEMO_YN" 			property="propRelMemoYn"/>
+		<result column="PROP_REL_MEMO_CODE" 		property="propRelMemoCode"/>
+		<result column="PROP_GROUP_NAME" 			property="propGroupName"/>
+		<result column="PROP_BELT_CODE" 			property="propBeltCode"/>
+		<result column="PROP_BIZ_PLACE_CODE" 		property="propBizPlaceCode"/>
+		<result column="PROP_CIRCLE_CODE" 			property="propCircleCode"/>
+		<result column="PROP_APPROVER_CODE" 		property="propApproverCode"/>
+		<result column="PROP_PROP_STAT_CODE" 		property="propPropStatCode"/>
+		<result column="PROP_EVAL_SCORE" 			property="propEvalScore"/>
+		<result column="PROP_EFFECT_SCORE" 			property="propEffectScore"/>
+		<result column="PROP_SUBSIDY" 				property="propSubsidy"/>
+		<result column="PROP_PAYMENT_YN" 			property="propPaymentYn"/>
+		<result column="PROP_PAYMENT_DATE" 			property="propPaymentDate"/>
+		<result column="PROP_DATE" 					property="propDate"/>
+		<result column="PROP_PRACTICE_COMP_DATE" 	property="propPracticeCompDate"/>
+		<result column="PROP_USER" 					property="propUser"/>
+		<result column="PROP_REG_DATE" 				property="propRegDate"/>
+		<result column="PROP_REG_USER" 				property="propRegUser"/>
+		<result column="PROP_UPDATE_DATE" 			property="propUpdateDate"/>
+		<result column="PROP_UPDATE_USER" 			property="propUpdateUser"/>
+		
+		<result column="PROP_CATEGORY_CODE_NM" 		property="propCategoryCodeName"/>
+		<result column="PROP_TYPE_CODE_NM" 			property="propTypeCodeName"/>
+		<result column="PROP_YEAR_ERRECT_CODE_NM" 	property="propYearEffectCodeName"/>
+		<result column="PROP_PROP_STAT_CODE_NM" 	property="propPropStatCodeName"/>
+		<result column="PROP_USER_NM" 				property="propUserName"/>
+		
+		<result column="IDX"						property="idx"/>
+	</resultMap>
+	
+	<sql id="selectProposalInfo">
+		WITH PROPOSAL_MASTER AS (
+            SELECT ROW_NUMBER() OVER( ORDER BY TO_NUMBER(T.PROP_SEQ) ASC ) IDX, ROW_NUMBER() OVER( ORDER BY TO_NUMBER(T.PROP_SEQ) DESC ) ROWIDX, T.*
+            FROM(
+				SELECT PROP_SEQ, PROP_NAME, PROP_CATEGORY_CODE, GET_CODE_NM('PP_CT', PROP_CATEGORY_CODE) AS PROP_CATEGORY_CODE_NM, 
+					   PROP_TYPE_CODE, GET_CODE_NM('PP_TY', PROP_TYPE_CODE) AS PROP_TYPE_CODE_NM, PROP_PROBLEM, PROP_IMPROVEMENT_CONT,
+					   PROP_BENEFIT, PROP_YEAR_EFFECT, PROP_YEAR_EFFECT_CODE, GET_CODE_NM('PP_YE', PROP_YEAR_EFFECT_CODE) AS PROP_YEAR_ERRECT_CODE_NM,
+					   PROP_REL_MEMO_YN, PROP_REL_MEMO_CODE, PROP_GROUP_NAME, PROP_BELT_CODE, PROP_BIZ_PLACE_CODE, PROP_CIRCLE_CODE,
+					   PROP_APPROVER_CODE, PROP_PROP_STAT_CODE, GET_CODE_NM('PP_CL', PROP_PROP_STAT_CODE) AS PROP_PROP_STAT_CODE_NM,
+					   PROP_EVAL_SCORE, PROP_EFFECT_SCORE, PROP_SUBSIDY, PROP_PAYMENT_YN, PROP_PAYMENT_DATE, 
+				       TO_CHAR(PROP_DATE, 'YYYY-MM-DD') AS PROP_DATE, 
+				       TO_CHAR(PROP_PRACTICE_COMP_DATE, 'YYYY-MM-DD') AS PROP_PRACTICE_COMP_DATE,
+				       PROP_USER, GET_USER_NM(PROP_USER) AS PROP_USER_NM
+				FROM TB_PROPOSAL_DETAIL	 
+				WHERE 
+					<choose>
+						<when test="searchPropSeq != null and searchPropSeq > 0">
+							PROP_SEQ = #{searchPropSeq}
+						</when>
+						<otherwise>
+							PROP_DATE BETWEEN TO_DATE(#{searchPropFromDate}, 'YYYY-MM-DD') AND TO_DATE(#{searchPropToDate}, 'YYYY-MM-DD')
+							<if test="searchPropCategoryCode != null and searchPropCategoryCode neq ''.toString()">
+								AND PROP_CATEGORY_CODE = #{searchPropCategoryCode}
+							</if>
+							<if test="searchPropName != null and searchPropName neq ''.toString()">
+								AND PROP_NAME LIKE '%'||#{searchPropName}||'%'
+							</if>
+							<if test="searchPropTypeCode != null and searchPropTypeCode neq ''.toString()">
+								AND PROP_TYPE_CODE = #{searchPropTypeCode}
+							</if>
+							<if test="searchPropClassCode != null and searchPropClassCode neq ''.toString()">
+								AND PROP_PROP_STAT_CODE = #{searchPropClassCode}
+							</if>			
+						</otherwise>
+					</choose>
+            ) T
+		)
+		SELECT T.*
+		FROM PROPOSAL_MASTER T
+	</sql>
+	<sql id="selectProposalMasterInfoWithPaging">
+		<include refid="selectProposalInfo"></include>
+		WHERE T.ROWIDX BETWEEN (#{currentPageNo}*#{recordCountPerPage}+1-#{recordCountPerPage}) AND (#{currentPageNo}*#{recordCountPerPage})
+		ORDER BY T.IDX DESC
+	</sql>
+	<select id="selectProposalMasterInfo" resultMap="proposalInfoResultMap">
+		<include refid="selectProposalMasterInfoWithPaging"></include>
 	</select>
+	<select id="selectProposalMasterInfoCount" resultType="egovMap">
+		SELECT COUNT(PROP_PROP_STAT_CODE) TOTAL, PROP_PROP_STAT_CODE
+		FROM(<include refid="selectProposalMasterInfoWithPaging"></include>)
+		GROUP BY PROP_PROP_STAT_CODE
+	</select>
+	
+	<select id="selectProposalDetailInfo" resultMap="proposalInfoResultMap">
+		<include refid="selectProposalInfo"></include>
+	</select>
+	
+	<insert id="insertProposalInfo" parameterType="kr.freedi.dev.qproposal.domain.ProposalVO">
+		INSERT INTO TB_PROPOSAL_DETAIL(
+			PROP_SEQ,
+			PROP_NAME,
+			PROP_CATEGORY_CODE,
+			PROP_TYPE_CODE,
+			PROP_PROBLEM,
+			PROP_IMPROVEMENT_CONT,
+			PROP_BENEFIT,
+			PROP_YEAR_EFFECT,
+			PROP_YEAR_EFFECT_CODE,
+			PROP_REL_MEMO_YN,
+			PROP_REL_MEMO_CODE,
+			PROP_GROUP_NAME,
+			PROP_BELT_CODE,
+			PROP_BIZ_PLACE_CODE,
+			PROP_CIRCLE_CODE,
+			PROP_APPROVER_CODE,
+			PROP_PROP_STAT_CODE,
+			PROP_EVAL_SCORE,
+			PROP_EFFECT_SCORE,
+			PROP_SUBSIDY,
+			PROP_PAYMENT_YN,
+			PROP_PAYMENT_DATE,
+			PROP_DATE,
+			PROP_PRACTICE_COMP_DATE,
+			PROP_USER,
+			PROP_REG_DATE,
+			PROP_REG_USER
+		)VALUES(
+			#{propSeq},
+			#{propName, 						jdbcType=VARCHAR},
+			#{propCategoryCode, 				jdbcType=VARCHAR},
+			#{propTypeCode, 					jdbcType=VARCHAR},
+			#{propProblem, 						jdbcType=VARCHAR},
+			#{propImprovementCont, 				jdbcType=VARCHAR},
+			#{propBenefit, 						jdbcType=VARCHAR},
+			#{propYearEffect, 					jdbcType=VARCHAR},
+			#{propYearEffectCode, 				jdbcType=VARCHAR},
+			#{propRelMemoYn, 					jdbcType=VARCHAR},
+			#{propRelMemoCode, 					jdbcType=VARCHAR},
+			#{propGroupName, 					jdbcType=VARCHAR},
+			#{propBeltCode, 					jdbcType=VARCHAR},
+			#{propBizPlaceCode, 				jdbcType=VARCHAR},
+			#{propCircleCode, 					jdbcType=VARCHAR},
+			#{propApproverCode, 				jdbcType=VARCHAR},
+			#{propPropStatCode, 				jdbcType=VARCHAR},
+			#{propEvalScore, 					jdbcType=VARCHAR},
+			#{propEffectScore, 					jdbcType=VARCHAR},
+			#{propSubsidy, 						jdbcType=VARCHAR},
+			#{propPaymentYn, 					jdbcType=VARCHAR},
+			TO_DATE(#{propPaymentDate, 			jdbcType=VARCHAR}, 'YYYY-MM-DD'),
+			TO_DATE(#{propDate, 				jdbcType=VARCHAR}, 'YYYY-MM-DD'),
+			TO_DATE(#{propPracticeCompDate, 	jdbcType=VARCHAR}, 'YYYY-MM-DD'),
+			#{propUser,							jdbcType=VARCHAR},
+			SYSDATE,
+			#{propRegUser, 						jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<update id="updateProposalInfo" parameterType="kr.freedi.dev.qproposal.domain.ProposalVO">
+		UPDATE TB_PROPOSAL_DETAIL
+		SET
+			PROP_NAME 				= #{propName, jdbcType=VARCHAR},
+			PROP_CATEGORY_CODE 		= #{propCategoryCode, jdbcType=VARCHAR},
+			PROP_TYPE_CODE 			= #{propTypeCode, jdbcType=VARCHAR},
+			PROP_PROBLEM 			= #{propProblem, jdbcType=VARCHAR},
+			PROP_IMPROVEMENT_CONT 	= #{propImprovementCont, jdbcType=VARCHAR},
+			PROP_BENEFIT 			= #{propBenefit, jdbcType=VARCHAR},
+			PROP_YEAR_EFFECT 		= #{propYearEffect, jdbcType=VARCHAR},
+			PROP_YEAR_EFFECT_CODE 	= #{propYearEffectCode, jdbcType=VARCHAR},
+			PROP_REL_MEMO_YN 		= #{propRelMemoYn, jdbcType=VARCHAR},
+			PROP_REL_MEMO_CODE 		= #{propRelMemoCode, jdbcType=VARCHAR},
+			PROP_GROUP_NAME 		= #{propGroupName, jdbcType=VARCHAR},
+			PROP_BELT_CODE 			= #{propBeltCode, jdbcType=VARCHAR},
+			PROP_BIZ_PLACE_CODE 	= #{propBizPlaceCode, jdbcType=VARCHAR},
+			PROP_CIRCLE_CODE 		= #{propCircleCode, jdbcType=VARCHAR},
+			PROP_APPROVER_CODE 		= #{propApproverCode, jdbcType=VARCHAR},
+			PROP_PROP_STAT_CODE 	= #{propPropStatCode, jdbcType=VARCHAR},
+			PROP_EVAL_SCORE 		= #{propEvalScore, jdbcType=VARCHAR},
+			PROP_EFFECT_SCORE 		= #{propEffectScore, jdbcType=VARCHAR},
+			PROP_SUBSIDY 			= #{propSubsidy, jdbcType=VARCHAR},
+			PROP_PAYMENT_YN 		= #{propPaymentYn, jdbcType=VARCHAR},
+			PROP_PAYMENT_DATE 		= TO_DATE(#{propPaymentDate, jdbcType=VARCHAR}, 'YYYY-MM-DD'),
+			PROP_DATE 				= TO_DATE(#{propDate, jdbcType=VARCHAR}, 'YYYY-MM-DD'),
+			PROP_PRACTICE_COMP_DATE = TO_DATE(#{propPracticeCompDate, jdbcType=VARCHAR}, 'YYYY-MM-DD'),
+			PROP_USER 				= #{propUser, jdbcType=VARCHAR},
+			PROP_UPDATE_DATE 		= SYSDATE,
+			PROP_UPDATE_USER 		= #{propRegUser, jdbcType=VARCHAR}
+		WHERE PROP_SEQ 				= #{propSeq}
+	</update>
 </mapper>
