@@ -33,7 +33,8 @@
 	                                            <label>조직</label>
 	                                        </div>
                                       		<div class="pd-l10 col s9 input-text search">
-                                      			<input type="text" id="input-proposal-group" name="input-proposal-group" readonly="readonly" style="background-color: #FFF;"/>
+                                      			<form:input path="searchGroupCode" type="hidden" id="input-proposal-group-code" name="input-proposal-group-code"/>
+                                      			<form:input type="text" id="input-proposal-group" name="input-proposal-group" readonly="readonly" style="background-color: #FFF;" path="searchGroupName"/>
                                       			<button type="button" class="btn-proposal-group-search-modal">검색</button>                               		
                                       		</div>
 	                                    </div>
@@ -42,7 +43,7 @@
 	                                            <label>사업장</label>
 	                                        </div>
 	                                        <div class="pd-l10 col s9">
-	                                            <form:select name="" id="" path="">
+	                                            <form:select name="select-bizplace-code" id="select-bizplace-code" path="searchBizPlaceCode">
                                                     <option value="">선택</option>
                                                     <c:forEach var="item" items="${BIZ_PLACE_LIST }">
                                                     	<option value="${item.codeId }">${item.codeNm }</option>
@@ -57,7 +58,8 @@
 	                                            <label>제안자</label>
 	                                        </div>
                                       		<div class="pd-l10 col s9 input-text search">
-                                      			<input type="text" id="input-proposal-member" name="input-proposal-member" readonly="readonly" style="background-color: #FFF;"/>
+                                      			<form:input path="searchPropUser" type="hidden" id="input-proposal-member-code" name="input-proposal-member-code"/>
+                                      			<form:input type="text" id="input-proposal-member" name="input-proposal-member" readonly="readonly" style="background-color: #FFF;" path="searchPropUserName"/>
                                       			<button type="button" class="btn-proposal-member-search-modal">검색</button>                               		
                                       		</div>
 	                                    </div>
@@ -66,7 +68,7 @@
 	                                            <label>실시/쪽지</label>
 	                                        </div>
 	                                        <div class="pd-l10 col s9">
-	                                            <form:select name="" id="" path="">
+	                                            <form:select name="select-type-code" id="select-type-code" path="searchPropTypeCode">
 	                                                <option value="">전체</option>
                                                     <c:forEach var="item" items="${PP_TY_LIST }">
                                                     	<option value="${item.codeId }">${item.codeNm }</option>
@@ -79,7 +81,7 @@
 	                                            <label>등급</label>
 	                                        </div>
 	                                        <div class="pd-l10 col s9">
-	                                            <form:select name="" id="" path="">
+	                                            <form:select name="select-class-code" id="select-class-code" path="searchPropClassCode">
 	                                                <option value="">전체</option>
 	                                                <c:forEach var="item" items="${PP_CL_LIST }">
 	                                                	<c:if test="${item.attr1 eq 'CLASS' }">
@@ -96,7 +98,7 @@
 	                                            <label>제안유형</label>
 	                                        </div>
 	                                        <div class="pd-l10 col s9">
-	                                            <form:select name="" id="" path="">
+	                                            <form:select name="select-category-code" id="select-category-code" path="searchPropCategoryCode">
 	                                                <option value="">전체</option>
 	                                                <c:forEach var="item" items="${PP_CT_LIST }">
                                                     	<option value="${item.codeId }">${item.codeNm }</option>
@@ -109,7 +111,7 @@
 	                                            <label>진행단계</label>
 	                                        </div>
 	                                        <div class="pd-l10 col s9">
-	                                            <form:select name="" id="" path="">
+	                                            <form:select name="select-stat-code" id="select-stat-code" path="searchPropStatCode">
 	                                                <option value="">전체</option>
 	                                                <c:forEach var="item" items="${PP_CL_LIST }">
 	                                                	<c:if test="${item.attr1 eq 'PROC' }">
@@ -125,12 +127,12 @@
 	                                        </div>
 	                                        <div class="pd-l10 col s9">
 	                                        	<div class="col s5 input-date input-date" style="padding-right: 0px; cursor: pointer; width: calc(50% - 10px);">
-		                                            <form:input type="text" id="input-from-date" name="input-from-date" class="datepicker" readonly="readonly" style="background-color: #FFF; cursor: inherit; width: 100px;" value="${PROP_FROM_DATE }" path="searchPropFromDate"/>
+		                                            <form:input type="text" id="input-from-date" name="input-from-date" class="datepicker" readonly="readonly" style="background-color: #FFF; cursor: inherit; width: 100px;" path="searchPropFromDate"/>
 		                                            <i class="ico calendar"></i>                                        	
 	                                        	</div>                                 
 	                                            <span class="col s1 text-bul align-center">~</span>
 	                                            <div class="col s5 input-date input-date" style="padding-right: 0px; cursor: pointer; width: calc(50% - 10px);">
-		                                            <form:input type="text" id="input-to-date" name="input-to-date" class="datepicker" readonly="readonly" style="background-color: #FFF; cursor: inherit; width: 100px;" value="${PROP_TO_DATE }" path="searchPropToDate"/>
+		                                            <form:input type="text" id="input-to-date" name="input-to-date" class="datepicker" readonly="readonly" style="background-color: #FFF; cursor: inherit; width: 100px;" path="searchPropToDate"/>
 		                                            <i class="ico calendar"></i>
 	                                            </div>
 	                                        </div>
@@ -147,7 +149,7 @@
                                 <div class="list-header mg-t20">
                                     <p class="title">조회된 제안</p>
                                     <span class="bar"></span>
-                                    <p class="total">총 100</p>
+                                    <p class="total">총 ${PROP_TOTAL }</p>
 	                                <select name="limit" class="limit" onchange="onchange_recordCountPerPage(this.value)">
 	                                    <option value="10" <c:if test="${proposalSearchVO.recordCountPerPage eq '10' }">selected="selected"</c:if>>10개</option>
 	                                    <option value="50" <c:if test="${proposalSearchVO.recordCountPerPage eq '50' }">selected="selected"</c:if>>50개</option>
@@ -157,7 +159,45 @@
                                 <div class="new_list">
                                     <div class="inr">
                                         <ul>
-                                            <li class="border">
+                                        	<c:forEach items="${PROP_LIST }" var="item">
+                                        		<li class="border">
+                                        			<div>
+                                        				<ul>
+                                        					<c:choose>
+                                        						<c:when test="${item.propPropStatCode eq 'NA' }">
+                                        							<li class="title_gray">
+                                        						</c:when>
+                                        						<c:otherwise>
+                                        							<li class="title">
+                                        						</c:otherwise>
+                                        					</c:choose>
+                                        					<span>${item.propPropStatCodeName }</span>
+                                        					</li>
+                                        					<li>
+                                        						<span>${item.propTypeCodeName }제안</span>
+                                        					</li>
+                                        				</ul>
+                                        			</div>
+                                        			<p class="list">
+                                        				<c:choose>
+                                        					<c:when test="${item.propTypeCode eq 'PP_TY_1' }">
+                                        						<a href="/proposal/detail.do?menuKey=36&propSeq=${item.propSeq }">제안명: ${item.propName }</a>
+                                        					</c:when>
+                                        					<c:otherwise>
+                                        						<a href="/proposal/memodetail.do?menuKey=36&propSeq=${item.propSeq }">제안명: ${item.propName }</a>
+                                        					</c:otherwise>
+                                        				</c:choose>                                        				
+                                        				<span>
+                                        					제안자: ${item.propUserName }, 조직명: ${item.propGroupName }, 분임조: ${item.propCircleCode }, 제안유형: ${item.propCategoryCodeName }, 제안일: ${item.propDate }
+                                        					<c:if test="${item.propTypeCode eq 'PP_TY_1' }">
+                                        						<fmt:formatNumber var="propYearEffect" value="${item.propYearEffect}" type="currency" currencySymbol="₩"/>
+                                        						, 실행완료일: ${item.propPracticeCompDate }, 년간 효과금액: ${item.propYearEffectCodeName } ( ${propYearEffect } )
+                                        					</c:if>
+                                        				</span>
+                                        			</p>
+                                        		</li>
+                                        	</c:forEach>
+<!--                                             <li class="border">
                                                 <div>
                                                     <ul>
                                                         <li class="title">
@@ -172,37 +212,11 @@
                                                     <a href="/app/004_02_search_01.do?menuKey=36" title="바로가기">과제명 : 예시) 23년 신제품 싸움닭 초기 유동관리를 통한 품질 안정화 과제</a>
                                                     <span>활동Process(소) : DMAIC, 활동분야 : 품질개선, 활동유형 : MBB, 부문 : 창호, 사업장 : 청주공장, 과제리더 : 홍길동, 팀원 : 홍길동, 이길동, Process Owner : 홍길동, 챔피언 : 홍길동, 착수(예정)일 : 2023.01.01, 완료(예정)일 : 2023.06.30</span>
                                                 </p>
-                                            </li>
-                                            <li class="border">
-                                                <div>
-                                                    <ul>
-                                                        <li class="title gray">
-                                                            <span>Drop</span>
-                                                        </li>
-                                                        <li>
-                                                            <span>6σ Full Process</span>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                                <p class="list">
-                                                    <a href="" title="바로가기">과제명 : 예시) 23년 신제품 싸움닭 초기 유동관리를 통한 품질 안정화 과제</a>
-                                                    <span>활동Process(소) : DMAIC, 활동분야 : 품질개선, 활동유형 : MBB, 부문 : 창호, 사업장 : 청주공장, 과제리더 : 홍길동, 팀원 : 홍길동, 이길동, Process Owner : 홍길동, 챔피언 : 홍길동, 착수(예정)일 : 2023.01.01, 완료(예정)일 : 2023.06.30</span>
-                                                </p>
-                                            </li>
+                                            </li> -->
                                         </ul>
                                     </div>
                                     <div class="list-footer">
-                                        <div class="pagination">
-                                            <a href="" class="first">처음</a>
-                                            <a href="" class="prev">이전</a>
-                                            <a href="" class="cur num">1</a>
-                                            <a href="" class="num">2</a>
-                                            <a href="" class="num">3</a>
-                                            <a href="" class="num">4</a>
-                                            <a href="" class="num">5</a>
-                                            <a href="" class="next">다음</a>
-                                            <a href="" class="last">끝</a>
-                                        </div>
+										<ui:pagination paginationInfo="${proposalSearchVO}" type="defDefault" jsFunction="cfnPageLink" />
                                         <div class="list-btns">
                                             <button type="button" class="btn-excel">
                                                 <img src="/assets/images/icon_excel.png" alt="">

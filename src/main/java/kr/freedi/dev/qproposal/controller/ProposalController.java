@@ -350,11 +350,25 @@ public class ProposalController {
 		codeVO.setCodeGrpId("WPLACE"); // 제안연간효과코드 조쇠
 		List<EgovMap> bizPlaceList = codeService.selectFullList(codeVO);
 		
+		if(searchVO.getSearchPropFromDate() == null && searchVO.getSearchPropToDate() == null) {
+			DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(new Date());
+			searchVO.setSearchPropToDate(df.format(calendar.getTime()));
+			calendar.add(Calendar.MONTH, -1);
+			searchVO.setSearchPropFromDate(df.format(calendar.getTime()));
+		}
+		
+		List<ProposalVO> resultItems = proposalService.selectProposalMasterInfo(searchVO);
+		EgovMap resultItem = proposalService.selectListCount(searchVO);
+		
 		model.addAttribute("PP_TY_LIST", typeList);
 		model.addAttribute("PP_CT_LIST", categoryList);		
 		model.addAttribute("PP_CL_LIST", classList);
 		model.addAttribute("PP_YE_LIST", yearEffectList);	
 		model.addAttribute("BIZ_PLACE_LIST", bizPlaceList);
+		model.addAttribute("PROP_LIST", resultItems);
+		model.addAttribute("PROP_TOTAL", resultItem.get("count"));
 		return "app/proposal/SearchProposalList";
 	}
 	

@@ -354,7 +354,7 @@
 	                      <div class="form-inline form-select">
 	                         <input type="text" name="input-memo-proposal-name" id="input-memo-proposal-name">
 	                     </div>                                     
-	                     <button type="button" class="btn-submit" onclick="popRelMemo.callData()">조회</button>
+	                     <button type="button" class="btn-submit" onclick="popRelMemo.callData(1)">조회</button>
 	                 </div>
 	             </form>
 	        </div>
@@ -399,7 +399,17 @@
 	                </div>
 	            </div>
 	            <div class="list-footer">
-	                <ui:pagination paginationInfo="${proposalSearchVO}" type="defDefault" jsFunction="cfnPageLink" />
+                    <div class="pagination" id="proposal-rel-memo-pagination">
+<!--                         <a href="" class="first">처음</a>
+                        <a href="" class="prev">이전</a>
+                        <a href="" class="cur num">1</a>
+                        <a href="" class="num">2</a>
+                        <a href="" class="num">3</a>
+                        <a href="" class="num">4</a>
+                        <a href="" class="num">5</a>
+                        <a href="" class="next">다음</a>
+                        <a href="" class="last">끝</a> -->
+                    </div>	            
 	                <div class="btns">
 	                    <button type="button" class="btn-submit" onclick="popRelMemo.onSubmit()">확인</button>
 	                    <button type="button" class="btn-cancel">취소</button>
@@ -407,6 +417,9 @@
 	            </div>
 	            <script type="text/javascript">
 	            	var popRelMemo = {
+	            		pageSize:10,
+	            		totalPages: 0,
+	            		curPage: 1,
 	            		returnObjId: null,
 	            		returnFunc: null,
 	            		open: function(){
@@ -440,17 +453,18 @@
             				this.returnObjId = null;
             				this.returnFunc = null;	            			
 	            		},
-	            		callData: function(){
-	            			$.post('/proposal/memoProposalSearch.do', { propCategoryCode: $('#select-proposal-category-code').val(), propName: $('#input-memo-proposal-name').val() }, this.setData, 'json');
+	            		callData: function(page){
+	            			popRelMemo.curPage = page;
+	            			$.post('/proposal/memoProposalSearch.do', { propCategoryCode: $('#select-proposal-category-code').val(), propName: $('#input-memo-proposal-name').val(), currentPageNo: page }, this.setData, 'json');
 	            		},
 	            		setData: function(data){
-	            			if(data.length == 0){
+	            			if(data.list.length == 0){
 	            				var html = '<td colspan="4" style="text-align: center; height: 30px;">조회된 쪽지제안이 없습니다.</td>';
 	            				$('#tbodyProposalSearch').html(html);
 	            			}else{
 	            				var html = '';
-	            				for(var index = 0; index < data.length; index++){
-	            					var item = data[index];
+	            				for(var index = 0; index < data.list.length; index++){
+	            					var item = data.list[index];
 	                            	html += '<tr class="tr-data" onclick="popRelMemo.onClickTr(this)" data="'+ encodeURIComponent(JSON.stringify(item)) +'">';
 	                            	html += '<td><input type="radio" name="proposal_search_selected" class="radio-selected-proposal" value="' + item.propSeq + '"/></td>';
 	                            	html += '<td>' + item.propName + '</td>';
@@ -461,6 +475,12 @@
 	            				
 	            				$('#tbodyProposalSearch').html(html);
 	            				$("input[name=proposal_search_selected]:eq(0)").prop("checked", true);
+	            				
+	            				html = '';
+	            				var totalCount = data.count;
+	            				popRelMemo.totalPages = Math.ceil(totalCount / popRelMemo.pageSize);
+	            				html = popRelMemo.setPagenation(popRelMemo.curPage, popRelMemo.totalPages);
+	            				$('#proposal-rel-memo-pagination').html(html);
 	            			}
 	            		},
 	            		onClickTr: function(obj){
@@ -477,13 +497,47 @@
     	            		} else {
     	            			alert("반환 함수가 정의되지 않았습니다.");
     	            		}
+	            		},
+	            		setPagenation: function(curPage, totalPages){
+	            			var html = '';
+	            			var pageLimit = 10;
+	            			var startPage = parseInt((curPage - 1) / pageLimit) * pageLimit + 1;
+	            			var endPage = startPage + pageLimit - 1;
+	            			
+	            			if(totalPages < endPage){ endPage = popRelMemo.totalPages;}
+	            			var nextPage = endPage + 1;
+	            			
+	            			//if(curPage > 1 && pageLimit < curPage) {
+	            				html += '<a href="javascript:popRelMemo.callData(1);" class="first">처음</a>';
+	            			//}
+	            			
+	            			//if(curPage > pageLimit){
+	            				html += '<a href="javascript:popRelMemo.callData(' + (startPage == 1 ? 1 : startPage - 1) + ');" class="prev">이전</a>';
+	            			//}
+	            			
+	            			for(var index = startPage; index <= endPage; index++){
+	            				if(index == curPage){
+	            					html += '<a href="javascript:popRelMemo.callData(' + index + ');" class="cur num">' + index + '</a>';
+	            				}else{
+	            					html += '<a href="javascript:popRelMemo.callData(' + index + ');" class="num">' + index + '</a>';
+	            				}
+	            			}
+	            			
+	            			//if(nextPage <= totalPages){
+	            				html += '<a href="javascript:popRelMemo.callData(' + (nextPage < totalPages ? nextPage : totalPages) + ');" class="next">다음</a>';
+	            			//}
+	            			
+	            			//if(curPage < totalPages && nextPage < totalPages){
+	            				html += '<a href="javascript:popRelMemo.callData(' + totalPages + ');" class="last">끝</a>';
+	            			//}
+	            			
+	            			return html;
 	            		}
 	            	}
 	            </script>
 	        </div>
 	    </div>
 </div>
-
 <!-- 78 승인정보 등록 -->
 <div class="org-modal" id="comPopup_apprInfoRegi">
 	<div class="modal-header">
