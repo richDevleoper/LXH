@@ -121,7 +121,7 @@
                                                 <td>${item.idx}</td>
                                                 <td class="align-left" style="padding-left: 10px;">${item.aprovalTypeNm}</td>
                                                 <td class="align-left" style="padding-left: 10px;"><a href="javascript: onclick_reportName('${item.aprovalCode}')">${item.aprovalSubject}</a></td>
-                                                <td>${item.userId}</td>
+                                                <td>${item.userNm}</td>
                                                 <td><fmt:formatDate pattern="yyyy.MM.dd" value="${item.draftingDate}" /></td>
                                                 <td><fmt:formatDate pattern="yyyy.MM.dd" value="${item.aprovalDate}" /></td>
                                                 <td>${item.aprovalStateNm}</td>                                                

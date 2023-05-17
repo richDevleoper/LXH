@@ -149,16 +149,24 @@
                                             <tr>
                                                 <th><form:label path="repLeaderBeltCode"><span class="asterisk">* </span>Leader</form:label>
                                                 </th>
-                                                <td colspan="3">
+                                                <td>
                                                     <div class="row">
-                                                        <div class="col s4 input-text search">
+                                                        <div class="col s12 input-text search">
                                                             <form:input type="hidden" path="repLeaderCode"/>
                                                             <form:input type="text" path="repLeaderName" readonly="true"/>
                                                             <button type="button" class="btn-search-leader">검색</button>
                                                         </div>
                                                     </div>
                                                 </td>
-                                                
+                                                <th><form:label path="repActionTypeCode"><span class="asterisk">*</span>활동분야</form:label></th>
+                                                <td>
+                                                    <div class="row">
+                                                        <div class="col s12 select-group">
+                                                            <form:select path="repActionTypeCode" title="활동분야를 선택하세요." cssClass="validate[required]">
+                                                            </form:select>
+                                                        </div>
+                                                    </div>
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <th style="height: 20px;">분임조</th>

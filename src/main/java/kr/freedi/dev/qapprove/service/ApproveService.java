@@ -65,12 +65,12 @@ public class ApproveService {
 	public void insert(ApproveVO masterVO) throws Exception {
 
 		String aprovalCode = dao.selectOne("Approval.selectNextFkey");
-		masterVO.setAprovalCode(aprovalCode);		
+		masterVO.setAprovalCode(aprovalCode);	
+		masterVO.setAprovalState("2");
 		dao.insert("Approval.insert", masterVO);
 		
 		for (ApproveDetailVO vo : masterVO.getDetailList()) {
 			vo.setAprovalCode(aprovalCode);	//결재코드
-			vo.setAprovalStatCode("2");	// 미결
 			dao.insert("ApprovalDetail.insert", vo);
 		}
 	}

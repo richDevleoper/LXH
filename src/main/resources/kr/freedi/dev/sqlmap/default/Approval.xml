@@ -17,6 +17,7 @@
 		<result property="aprovalDate" column="APROVAL_DATE" />
 		<result property="aprovalStateNm" column="APROVAL_STATE_NM" />
 
+		<result property="userNm" column="USER_NAME" />
 		<result property="refBusType" column="REF_BUS_TYPE" />
 		<result property="refBusTypeNm" column="REF_BUS_TYPE_NM" />
 		<result property="refBusCode" column="REF_BUS_CODE" /> 
