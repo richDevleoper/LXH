@@ -76,6 +76,9 @@
 							<if test="searchPropClassCode != null and searchPropClassCode neq ''.toString()">
 								AND PROP_PROP_STAT_CODE = #{searchPropClassCode}
 							</if>
+							<if test="isAdmin != null and isAdmin eq 'T'.toString()">
+								AND PROP_PROP_STAT_CODE != 'IP'
+							</if>
 						</otherwise>
 					</choose>
 				</where>
@@ -99,6 +102,11 @@
 		SELECT COUNT(PROP_PROP_STAT_CODE) TOTAL, PROP_PROP_STAT_CODE
 		FROM(<include refid="selectProposalInfo"></include>)
 		GROUP BY PROP_PROP_STAT_CODE
+	</select>
+	<select id="selectProposalTypeByCount" resultType="egovMap">
+		SELECT COUNT(PROP_TYPE_CODE) TOTAL, PROP_TYPE_CODE
+		FROM(<include refid="selectProposalInfo"></include>)
+		GROUP BY PROP_TYPE_CODE
 	</select>
 	
 	<select id="selectProposalDetailInfo" resultMap="proposalInfoResultMap">
@@ -200,5 +208,13 @@
 	<select id="selectProposalMasterInfoWithOutPaging" resultMap="proposalInfoResultMap">
 		<include refid="selectProposalInfo"></include>
 		ORDER BY T.IDX DESC
+	</select>
+	
+	<select id="selectApproverCode" resultType="java.lang.String">
+		SELECT APROVAL_CODE
+		FROM TB_APPROVAL_MST
+		WHERE APROVAL_TYPE = #{approvalType, jdbcType=VARCHAR} AND
+			  REF_BUS_CODE = #{refBusCode, jdbcType=VARCHAR} AND
+			  REF_BUS_TYPE = #{refBusType, jdbcType=VARCHAR}
 	</select>
 </mapper>

@@ -47,6 +47,18 @@ public class ProposalVO {
 	private List<AttachFileVO> beforeAttachFileList;
 	private List<AttachFileVO> afterAttachFileList;
 	private List<AttachFileVO> attachFileList;
+	
+	private String propApprovalName;
+	private String propApprovalUser;
+	private String propApprovalLevelCode;
+	private String propApprovalLevel;
+	private String propApprovalDutyCode;
+	private String propApprovalDuty;
+	private String propApprovalBeltCode;
+	private String propApprovalBelt;
+	private String propApprovalGroup;
+	private String propApprovalGroupCode;
+	
 	public Integer getPropSeq() {
 		return propSeq;
 	}
@@ -269,6 +281,64 @@ public class ProposalVO {
 	public void setAttachFileList(List<AttachFileVO> attachFileList) {
 		this.attachFileList = attachFileList;
 	}
-	
-	
+	public String getPropApprovalName() {
+		return propApprovalName;
+	}
+	public void setPropApprovalName(String propApprovalName) {
+		this.propApprovalName = propApprovalName;
+	}
+	public String getPropApprovalUser() {
+		return propApprovalUser;
+	}
+	public void setPropApprovalUser(String propApprovalUser) {
+		this.propApprovalUser = propApprovalUser;
+	}
+	public String getPropApprovalLevelCode() {
+		return propApprovalLevelCode;
+	}
+	public void setPropApprovalLevelCode(String propApprovalLevelCode) {
+		this.propApprovalLevelCode = propApprovalLevelCode;
+	}
+	public String getPropApprovalLevel() {
+		return propApprovalLevel;
+	}
+	public void setPropApprovalLevel(String propApprovalLevel) {
+		this.propApprovalLevel = propApprovalLevel;
+	}
+	public String getPropApprovalDutyCode() {
+		return propApprovalDutyCode;
+	}
+	public void setPropApprovalDutyCode(String propApprovalDutyCode) {
+		this.propApprovalDutyCode = propApprovalDutyCode;
+	}
+	public String getPropApprovalDuty() {
+		return propApprovalDuty;
+	}
+	public void setPropApprovalDuty(String propApprovalDuty) {
+		this.propApprovalDuty = propApprovalDuty;
+	}
+	public String getPropApprovalBeltCode() {
+		return propApprovalBeltCode;
+	}
+	public void setPropApprovalBeltCode(String propApprovalBeltCode) {
+		this.propApprovalBeltCode = propApprovalBeltCode;
+	}
+	public String getPropApprovalBelt() {
+		return propApprovalBelt;
+	}
+	public void setPropApprovalBelt(String propApprovalBelt) {
+		this.propApprovalBelt = propApprovalBelt;
+	}
+	public String getPropApprovalGroup() {
+		return propApprovalGroup;
+	}
+	public void setPropApprovalGroup(String propApprovalGroup) {
+		this.propApprovalGroup = propApprovalGroup;
+	}
+	public String getPropApprovalGroupCode() {
+		return propApprovalGroupCode;
+	}
+	public void setPropApprovalGroupCode(String propApprovalGroupCode) {
+		this.propApprovalGroupCode = propApprovalGroupCode;
+	}
 }

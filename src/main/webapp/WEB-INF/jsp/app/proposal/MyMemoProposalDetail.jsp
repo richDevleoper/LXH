@@ -160,10 +160,10 @@
                                                                     <caption></caption>
                                                                     <colgroup>
                                                                         <col>
-                                                                        <col style="width:70px">
-                                                                        <col style="width:70px">
-                                                                        <col style="width:70px">
-                                                                        <col style="width:70px">
+                                                                        <col style="width:90px">
+                                                                        <col style="width:90px">
+                                                                        <col style="width:90px">
+                                                                        <col style="width:90px">
                                                                     </colgroup>
                                                                     <thead>
                                                                         <tr>
@@ -179,16 +179,22 @@
 	                                                                        <td class="pd3">
 	                                                                            <div class="row">
 	                                                                                <div class="col s12 input-text search">
-	                                                                                	<form:input type="hidden" id="input-approval-hidden" name="input-approval-hidden" path="propApproverCode"/>
-	                                                                                    <input type="text" id="input-approval" name="input-approval" value="" readonly="readonly" style="background-color: #FFF;"/>
+	                                                                                	<form:input type="hidden" id="input-approval-code" name="input-approval-code" path="propApproverCode"/>
+	                                                                                	<form:input type="hidden" id="input-approval-name" name="input-approval-name" path="propApprovalName"/>
+	                                                                                	<form:input type="hidden" id="input-approval-user" name="input-approval-user" path="propApprovalUser"/>
+	                                                                                    <form:input type="hidden" id="input-approval-level" name="input-approval-level" path="propApprovalLevelCode"/>
+	                                                                                    <form:input type="hidden" id="input-approval-duty" name="input-approval-duty" path="propApprovalDutyCode"/>
+	                                                                                    <form:input type="hidden" id="input-approval-belt" name="input-approval-belt" path="propApprovalBeltCode"/>
+	                                                                                    <form:input type="hidden" id="input-approval-group-code" name="input-approval-group-code" path="propApprovalGroupCode"/>
+	                                                                                    <form:input type="text" id="input-approval-group" name="input-approval-group" value="" readonly="readonly" style="background-color: #FFF;" path="propApprovalGroup"/>
 	                                                                                    <button type="button" class="btn-approval-member-search-modal">검색</button>
 	                                                                                </div>
 	                                                                            </div>
 	                                                                        </td>
-	                                                                        <td id="text-approval-name"><input type="hidden" id="input-approval-name" name="input-approval-name"/></td>
-	                                                                        <td id="text-approval-level"><input type="hidden" id="input-approval-level" name="input-approval-level"/></td>
-	                                                                        <td id="text-approval-duty"><input type="hidden" id="input-approval-duty" name="input-approval-duty"/></td>
-	                                                                        <td id="text-approval-belt"><input type="hidden" id="input-approval-belt" name="input-approval-belt"/></td>
+	                                                                        <td id="text-approval-name">${PROP_INFO.propApprovalName }</td>
+	                                                                        <td id="text-approval-level">${PROP_INFO.propApprovalLevel }</td>
+	                                                                        <td id="text-approval-duty">${PROP_INFO.propApprovalDuty }</td>
+	                                                                        <td id="text-approval-belt">${PROP_INFO.propApprovalBelt }</td>
                                                                         </tr>
                                                                     </tbody>
                                                                 </table>
@@ -257,6 +263,21 @@
 <script type="text/javascript">
 	var proposalInfo = {};
 	$(document).ready(function(){
+ 		if($('#propPropStatCode').val() != 'IP' && $('#crud').val() == 'U'){ // 결재진행중 상태
+			$('input').attr('disabled', true);
+			$('textarea').attr('disabled', true);
+			$('button').prop('disabled', true);
+			$('select').attr('disabled', true);
+			$('i').prop('disabled', true);
+		}else{
+			$('input').attr('disabled', false);
+			$('input').attr('disabled', false);
+			$('textarea').attr('disabled', false);
+			$('button').prop('disabled', false);
+			$('select').attr('disabled', false);
+			$('i').prop('disabled', false);
+		}
+ 		
 		//제안자 조회
 		$('.btn-proposal-member-search-modal').off('click').on('click', function(){
 			popEmp.init();
@@ -290,17 +311,43 @@
 	
 	function setProposalMemberInfo(el, d){
 		$('#input-proposal').val(d.userName);
-		/* $('#input-proposal-hidden').val(d.userId); */
-		$('#input-proposal-user').val(d.userId);
+		$('#input-proposal-user').val(d.comNo);
 		$('#text-proposal-group').html(d.deptFullName);
-		//$('#input-proposal-group').val(d.comDepartCode);
 		$('#input-proposal-group').val(d.deptFullName);
 		$('#input-proposal-belt-hidden').val(d.comCertBelt);
-		$('#input-proposal-bizplace-hidden').val(d.comNo);
+		//$('#input-proposal-bizplace-hidden').val(d.comNo);
 	}
 	
 	function setApprovalMemberInfo(el, d){
-		console.log(d);
+		if(d.comPosition == null || d.comPosition == ''){
+			alert('결재권한이 없는 사용자 입니다.\n다시 선택해 주세요.');
+			$('#text-approval-name').html('');
+			$('#text-approval-level').html('');
+			$('#text-approval-duty').html('');
+			$('#text-approval-belt').html('');
+			
+			$('#input-approval-name').val('');
+			$('#input-approval-user').val('');
+			$('#input-approval-level').val('');
+			$('#input-approval-duty').val('');
+			$('#input-approval-belt').val('');
+			$('#input-approval-group-code').val('');
+			$('#input-approval-group').val('');
+			return false;
+		}
+		
+		$('#text-approval-name').html(d.userName);
+		$('#text-approval-level').html(d.comPositionNm);
+		$('#text-approval-duty').html(d.comJobxNm);
+		$('#text-approval-belt').html(d.comCertBeltNm);
+		
+		$('#input-approval-name').val(d.userName);
+		$('#input-approval-user').val(d.comNo);
+		$('#input-approval-level').val(d.comPosition);
+		$('#input-approval-duty').val(d.comJobx);
+		$('#input-approval-belt').val(d.comCertBelt);
+		$('#input-approval-group-code').val(d.comDepartCode);
+		$('#input-approval-group').val(d.deptFullName);
 	}
 	
 	function setProposalInfoTempSave(){
@@ -318,7 +365,42 @@
 	
 	function setProposalInfoApprove(){
 		if(checkValidationInfo()){
+			if($('#input-approval-name').val() == null || $('#input-approval-name').val() == ''){
+				alert('결재자를 선택해 주세요.');
+				return false;
+			}
 			
+			if($('#input-approval-user').val() == null || $('#input-approval-user').val() == ''){
+				alert('결재자를 선택해 주세요.');
+				return false;
+			}
+			
+			if($('#input-approval-level').val() == null || $('#input-approval-level').val() == ''){
+				alert('결재자를 선택해 주세요.');
+				return false;
+			}
+			
+			if($('#input-approval-duty').val() == null || $('#input-approval-duty').val() == ''){
+				alert('결재자를 선택해 주세요.');
+				return false;
+			}
+			
+			if($('#input-approval-group-code').val() == null || $('#input-approval-group-code').val() == ''){
+				alert('결재자를 선택해 주세요.');
+				return false;
+			}
+			
+			if($('#input-approval-group').val() == null || $('#input-approval-group').val() == ''){
+				alert('결재자를 선택해 주세요.');
+				return false;
+			}
+			
+			$('#propTypeCode').val('PP_TY_2'); // 구분코드
+			$('#propPropStatCode').val('EV'); // 결재의뢰		
+			
+			if(confirm('결재를 진행 하시겠습니까?')){
+				$('#defaultForm')[0].submit();
+			}					
 		}		
 	}
 	

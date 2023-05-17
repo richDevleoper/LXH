@@ -14,8 +14,8 @@ import kr.freedi.dev.qpopup.domain.UserVO;
 import kr.freedi.dev.qproposal.domain.ProposalSearchVO;
 import kr.freedi.dev.qproposal.domain.ProposalVO;
 
-@Service("proposalService")
-public class ProposalService {
+@Service("judgeProposalService")
+public class JudgeProposalService {
 
 	protected Log log = LogFactory.getLog(this.getClass());
 	
@@ -23,44 +23,29 @@ public class ProposalService {
 	
 	@Resource(name = "defaultDAO")
 	private DefaultDAO dao;
-
-	public EgovMap selectListCount(ProposalSearchVO searchVO) {
-		// TODO Auto-generated method stub
-		return dao.selectOne("Proposal.selectListCount", searchVO);
-	}
-
+	
 	public List<ProposalVO> selectProposalMasterInfo(ProposalSearchVO searchVO) {
 		// TODO Auto-generated method stub
 		return dao.selectList("Proposal.selectProposalMasterInfo", searchVO);
 	}
 	
-	public List<EgovMap> selectProposalMasterInfoCount(ProposalSearchVO searchVO) {
+	public EgovMap selectListCount(ProposalSearchVO searchVO) {
 		// TODO Auto-generated method stub
-		return dao.selectList("Proposal.selectProposalMasterInfoCount", searchVO);
+		return dao.selectOne("Proposal.selectListCount", searchVO);
 	}
-	
+
+	public List<EgovMap> selectProposalTypeByCount(ProposalSearchVO searchVO) {
+		// TODO Auto-generated method stub
+		return dao.selectList("Proposal.selectProposalTypeByCount", searchVO);
+	}
+
 	public ProposalVO selectProposalDetailInfo(ProposalSearchVO searchVO) {
+		// TODO Auto-generated method stub
 		return dao.selectOne("Proposal.selectProposalDetailInfo", searchVO);
 	}
-	
-	public int insertProposalInfo(ProposalVO proposalVO) {
+
+	public List<EgovMap> selectApproverUserInfo(UserVO userVO) {
 		// TODO Auto-generated method stub
-		return dao.insert("Proposal.insertProposalInfo", proposalVO);
-	}
-	
-	public int updateProposalInfo(ProposalVO proposalVO) {
-		return dao.update("Proposal.updateProposalInfo", proposalVO);
-	}
-	
-	public List<ProposalVO> selectProposalMasterInfoWithOutPaging(ProposalSearchVO searchVO) {
-		return dao.selectList("Proposal.selectProposalMasterInfoWithOutPaging", searchVO);
-	}
-	
-	public String selectApproverCode(EgovMap param) {
-		return dao.selectOne("Proposal.selectApproverCode", param);
-	}
-	
-	public List<EgovMap> selectApproverUserInfo(UserVO userVO){
 		return dao.selectList("Users.selectList", userVO);
 	}
 }

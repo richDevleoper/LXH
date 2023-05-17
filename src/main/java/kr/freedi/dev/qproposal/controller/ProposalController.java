@@ -2,6 +2,7 @@ package kr.freedi.dev.qproposal.controller;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -31,6 +32,9 @@ import kr.freedi.dev.attachfile.domain.AttachFileVO;
 import kr.freedi.dev.attachfile.service.AttachFileService;
 import kr.freedi.dev.code.domain.CodeVO;
 import kr.freedi.dev.code.service.CodeService;
+import kr.freedi.dev.qapprove.domain.ApproveDetailVO;
+import kr.freedi.dev.qapprove.domain.ApproveVO;
+import kr.freedi.dev.qapprove.service.ApproveService;
 import kr.freedi.dev.qproposal.domain.ProposalSearchVO;
 import kr.freedi.dev.qproposal.domain.ProposalVO;
 import kr.freedi.dev.qproposal.service.ProposalService;
@@ -55,6 +59,9 @@ public class ProposalController {
 	
 	@Resource(name = "attachFileService")
 	private AttachFileService attachFileService;
+	
+	@Resource(name = "approveService")
+	private ApproveService approveService;
 	
 	@InitBinder
 	public void customizeBinding(WebDataBinder binder) {
@@ -174,6 +181,30 @@ public class ProposalController {
 			resultItem.setAfterAttachFileList(afterAttachFileList);
 			resultItem.setAttachFileList(attachFileList);
 			
+			//결재자 정보 조회
+			if(!resultItem.getPropPropStatCode().equals("IP")) {
+				kr.freedi.dev.qpopup.domain.UserVO userVO = new kr.freedi.dev.qpopup.domain.UserVO();
+				userVO.setComNo(resultItem.getPropApproverCode());				
+				List<EgovMap> userInfo = proposalService.selectApproverUserInfo(userVO);
+				
+				if(userInfo != null && userInfo.size() > 0) {
+					for(int index = 0; index < userInfo.size(); index++) {
+						EgovMap item = userInfo.get(index);
+						resultItem.setPropApprovalUser(String.valueOf(item.get("compNo")));
+						resultItem.setPropApprovalName(String.valueOf(item.get("userName")));
+						resultItem.setPropApprovalLevelCode(String.valueOf(item.get("comJobx")));
+						resultItem.setPropApprovalLevel(String.valueOf(item.get("comJobxNm")));
+						resultItem.setPropApprovalDutyCode(String.valueOf(item.get("comPosition")));
+						resultItem.setPropApprovalDuty(String.valueOf(item.get("comPositionNm")));
+						resultItem.setPropApprovalBeltCode(String.valueOf(item.get("comCertBelt")));
+						resultItem.setPropApprovalBelt(String.valueOf(item.get("comCertBeltNm")));
+						resultItem.setPropApprovalGroup(String.valueOf(item.get("deptFullName")));
+						resultItem.setPropApprovalGroupCode(String.valueOf(item.get("compDepartCode")));
+					}
+				}
+			}
+
+			
 			model.addAttribute("action", "/proposal/updateProposalInfo.do");
 			model.addAttribute("crud", "U");
 			model.addAttribute("propSeq", resultItem.getPropSeq());
@@ -203,7 +234,6 @@ public class ProposalController {
 			}else {
 				return "redirect:/sub.do?menuKey=49";
 			}
-			
 		}
 		return "redirect:/proposal/detail.do";
 	}
@@ -215,6 +245,47 @@ public class ProposalController {
 			UserVO userSession) throws Exception{
 		
 		proposalVO.setPropRegUser(userSession.getUserId());
+		if(proposalVO.getPropPropStatCode() != null && proposalVO.getPropPropStatCode().equals("EV")) // 결제요청
+		{
+			String approvalType = proposalVO.getPropTypeCode().equals("PP_TY_1")? "6" : "7"; // 6 - 실시제안, 7 - 쪽지제안
+			String refBusType = proposalVO.getPropTypeCode().equals("PP_TY_1")? "4" : "3"; // 4 - 실시제안, 3 - 쪽지제안
+			ApproveVO approveVO = new ApproveVO();
+			approveVO.setAprovalType(approvalType);
+			approveVO.setRefBusType(refBusType);
+			
+			approveVO.setRefBusCode(String.valueOf(proposalVO.getPropSeq())); // 제안코드
+			approveVO.setAprovalSubject(proposalVO.getPropName()); // 제안명
+			approveVO.setUserId(proposalVO.getPropUser()); // 상신자
+			
+			ApproveDetailVO approveDetailVO = new ApproveDetailVO();
+			approveDetailVO.setComNo(proposalVO.getPropApprovalUser()); // 결재자 사번
+			approveDetailVO.setComDepartCode(proposalVO.getPropApprovalGroupCode()); // 결재자 부서코드
+			approveDetailVO.setComJobx(proposalVO.getPropApprovalDutyCode()); //결재자 직위코드
+			approveDetailVO.setComPosition(proposalVO.getPropApprovalLevelCode()); // 결재자 직책코드
+			approveDetailVO.setAprovalReqComNo(proposalVO.getPropUser()); // 결재상신자 사번
+			
+			List<ApproveDetailVO> approveList = new ArrayList<>();
+			approveList.add(approveDetailVO);
+			approveVO.setDetailList(approveList);
+			
+			approveService.insert(approveVO); // 결재선 등록
+			
+			//PROP_APPROVER_CODE 결재코드
+//			EgovMap param = new EgovMap();
+//			param.put("approvalType", approvalType);
+//			param.put("refBusType", refBusType);
+//			param.put("refBusCode", String.valueOf(proposalVO.getPropSeq()));
+//			
+//			String approverCode = proposalService.selectApproverCode(param);
+//			
+//			proposalVO.setPropApproverCode(approverCode);
+			
+			proposalVO.setPropApproverCode(proposalVO.getPropApprovalUser()); // 결재자 사번으로 저장 - 임시
+			
+			// 제안심사에서 결재처리 프로세스 보완 필요
+			// 1.상신자가 제안 의뢰
+			// 2.결재자가 확인 후 결재 또는 반려 - 결재 및 반려 처리시 TB_PROPOSAL_DETAIL에 어떻게 어떤 상태를 변경해줄것인지
+		}
 		int result = proposalService.updateProposalInfo(proposalVO);
 		if(result > 0) {
 			if(proposalVO.getPropTypeCode().equals("PP_TY_1")) {
@@ -316,7 +387,29 @@ public class ProposalController {
 		if(proposalVO.getPropSeq() != null) {
 			//선택된 내용 검색 추가
 			searchVO.setSearchPropSeq(proposalVO.getPropSeq());
-			resultItem = proposalService.selectProposalDetailInfo(searchVO);			
+			resultItem = proposalService.selectProposalDetailInfo(searchVO);
+			//결재자 정보 조회
+			if(!resultItem.getPropPropStatCode().equals("IP")) {
+				kr.freedi.dev.qpopup.domain.UserVO userVO = new kr.freedi.dev.qpopup.domain.UserVO();
+				userVO.setComNo(resultItem.getPropApproverCode());				
+				List<EgovMap> userInfo = proposalService.selectApproverUserInfo(userVO);
+				
+				if(userInfo != null && userInfo.size() > 0) {
+					for(int index = 0; index < userInfo.size(); index++) {
+						EgovMap item = userInfo.get(index);
+						resultItem.setPropApprovalUser(String.valueOf(item.get("compNo")));
+						resultItem.setPropApprovalName(String.valueOf(item.get("userName")));
+						resultItem.setPropApprovalLevelCode(String.valueOf(item.get("comJobx")));
+						resultItem.setPropApprovalLevel(String.valueOf(item.get("comJobxNm")));
+						resultItem.setPropApprovalDutyCode(String.valueOf(item.get("comPosition")));
+						resultItem.setPropApprovalDuty(String.valueOf(item.get("comPositionNm")));
+						resultItem.setPropApprovalBeltCode(String.valueOf(item.get("comCertBelt")));
+						resultItem.setPropApprovalBelt(String.valueOf(item.get("comCertBeltNm")));
+						resultItem.setPropApprovalGroup(String.valueOf(item.get("deptFullName")));
+						resultItem.setPropApprovalGroupCode(String.valueOf(item.get("compDepartCode")));
+					}
+				}
+			}
 			model.addAttribute("action", "/proposal/updateProposalInfo.do");
 			model.addAttribute("crud", "U");
 			model.addAttribute("propSeq", resultItem.getPropSeq());

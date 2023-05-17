@@ -33,6 +33,9 @@ public class ProposalSearchVO extends CommonVO{
 	@ParamField
 	private String searchPropStatCode; // 제안검색 - 진행단계
 	
+	@ParamField
+	private String isAdmin;
+	
 	
 	public String getSearchPropCategoryCode() {
 		return searchPropCategoryCode;
@@ -111,5 +114,11 @@ public class ProposalSearchVO extends CommonVO{
 	}
 	public void setSearchPropStatCode(String searchPropStatCode) {
 		this.searchPropStatCode = searchPropStatCode;
+	}
+	public String getIsAdmin() {
+		return isAdmin;
+	}
+	public void setIsAdmin(String isAdmin) {
+		this.isAdmin = isAdmin;
 	}
 }
