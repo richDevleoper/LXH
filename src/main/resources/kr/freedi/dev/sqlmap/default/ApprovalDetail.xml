@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="ApproveDetail">
+<mapper namespace="ApprovalDetail">
 
 	<resultMap id="approveDetailMap" type="kr.freedi.dev.qapprove.domain.ApproveDetailVO">
 		<result property="aprovalCode" column="APROVAL_CODE" />
@@ -33,6 +33,38 @@
 			</if> -->
 		
 	</sql> 
+	
+		<insert id="insert">
+		Insert into 
+			TB_APPROVAL_DETAIL
+			(
+		        APROVAL_CODE
+		        , APROVAL_SEQ
+		        , COM_NO
+		        , COM_JOBX
+		        , COM_POSITION
+		        , COM_DEPART_CODE
+		        , APROVAL_REG_DATE
+		        , APROVAL_REQ_COM_NO
+		        , APROVAL_COMPLT_DATE
+		        , APROVAL_STAT_CODE
+		        , APROVAL_MAIL_SEND_DATE
+		        , APROVAL_MAIL_SEND_YN
+			) values (
+		          #{aprovalCode}
+		        , (select nvl(Max(APROVAL_SEQ), 0)+1 from TB_APPROVAL_DETAIL where APROVAL_CODE=#{aprovalCode} )
+		        , #{comNo}
+		        , #{comJobx}
+		        , #{comPosition}
+		        , #{comDepartCode}
+		        , sysdate
+		        , #{aprovalReqComNo}
+		        , null
+		        , #{aprovalStatCode}
+		        , #{aprovalMailSendDate}
+		        , #{aprovalMailSendYn}
+			)
+	</insert>
 	
 	<sql id="selectListBasic">
 	    WITH v_approval_mst AS (
@@ -76,31 +108,7 @@
 		SELECT GET_NEW_APROVAL_KEY() AS NEW_APROVAL_CODE FROM DUAL
 	</select>
 	
-	<insert id="insert">
-		Insert into 
-			TB_APPROVAL_MST 
-		(
-			APROVAL_CODE
-			, ACT_REG_NO
-			, ACT_APROVAL_NO
-			, APROVAL_TYPE
-			, APROVAL_STATE
-			, APROVAL_SUBJECT
-			, USER_ID
-			, DRAFTING_DATE
-			, DRAFTING_COMMENT
-		) values (
-			#{aprovalCode}
-			, #{actRegNo}
-			, #{actAprovalNo}
-			, #{aprovalType}
-			, #{aprovalState}
-			, #{aprovalSubject}
-			, #{userId}
-			, #{draftingDate}
-			, #{draftingComment}
-		);
-	</insert>
+
 	
 	<update id="update">
 	

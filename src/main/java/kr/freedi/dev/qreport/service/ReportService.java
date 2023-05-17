@@ -15,6 +15,9 @@ import kr.freedi.dev.attachfile.service.AttachFileService;
 import kr.freedi.dev.code.domain.CodeVO;
 import kr.freedi.dev.code.service.CodeService;
 import kr.freedi.dev.common.dao.DefaultDAO;
+import kr.freedi.dev.qapprove.domain.ApproveDetailVO;
+import kr.freedi.dev.qapprove.domain.ApproveVO;
+import kr.freedi.dev.qapprove.service.ApproveService;
 import kr.freedi.dev.qreport.domain.ReportDetailVO;
 import kr.freedi.dev.qreport.domain.ReportIndicatorVO;
 import kr.freedi.dev.qreport.domain.ReportResultVO;
@@ -74,6 +77,9 @@ public class ReportService {
 	@Resource(name = "codeService")
 	private CodeService codeService;
 	
+	@Resource(name = "approveService")
+	private ApproveService approveService;
+	
 	@Resource(name = "reportIdGnrService")
 	private EgovIdGnrService idGnrService;
 	
@@ -103,7 +109,7 @@ public class ReportService {
 		}
 		
 		// 1. 일정 저장(tb_report_detail)
-		for (ReportDetailVO vo : reportVO.getRepDetailList()) {
+		for (ReportDetailVO vo : reportVO.getRepDetailList()) { //일반과제/10+ : 1건, 6시그마 6건.
 			vo.setRepCode(reportVO.getRepCode());
 			vo.setRepDivisionCode(reportVO.getRepDivisionCode());
 			vo.setRepRegUser(reportVO.getRepRegUser());
@@ -157,6 +163,41 @@ public class ReportService {
 			vo.setRepIndiRegUser(reportVO.getRepRegUser());
 			reportIndicatorService.insert(vo);	
 		}
+		
+		// 결재상신
+		if(reportVO.getRepStatusCode().equals("2")) { // 결재상신 - 과제신청
+			this.regApproveType1(reportVO, teamMember5); // 챔피언 결재 등록
+		}
+	}
+	
+	private void regApproveType1(ReportVO reportVO, ReportTeamVO approveMember) throws Exception {
+		
+		ApproveVO newApprVO = new ApproveVO();
+		newApprVO.setAprovalType("1"); 		// 결재 종류 (1-과제신청, 2-드랍신청, 6시그마프로세스, 10+, 일반과제, 6-실시제안, 7-쪽지제안) (code_grp_id='APR_TYPE')
+		if(reportVO.getRepMenuCode().equals("REPORT")) {
+			newApprVO.setRefBusType("1"); 	// 업무 종류(1-과제)	
+		} else {
+			newApprVO.setRefBusType("2"); 	// 업무 종류(1-과제, 2-분임조, 3-쪽지제안, 4-실시제안) (code_grp_id='BUS_TYPE')
+		}
+		
+		newApprVO.setRefBusCode(reportVO.getRepCode().toString()); 		// 과제번호 등록(업무데이터 코드)
+		newApprVO.setAprovalSubject(reportVO.getRepName());				// 결재문서명
+		newApprVO.setUserId(reportVO.getRepRegUser());					// 상신자
+		
+		ApproveDetailVO newDetail = new ApproveDetailVO();
+		// aprovalCode는  approveService.insert에서 처리
+		newDetail.setComNo(approveMember.getComNo()); 					// 결재자 사번
+		newDetail.setComDepartCode(approveMember.getDeptCode());			// 결재자 부서코드
+		newDetail.setComJobx(approveMember.getComJobxCode());				// 결재자 직위코드
+		newDetail.setComPosition(approveMember.getComPositionCode());		// 결재자 직책코드
+		newDetail.setAprovalReqComNo(reportVO.getRepRegUser());			// 결재상신자 사번
+		
+		List<ApproveDetailVO> newList = new ArrayList<>();
+		newList.add(newDetail);
+		
+		newApprVO.setDetailList(newList);								// 결재선 등록
+		
+		approveService.insert(newApprVO);
 	}
 	
 	public void update(ReportVO reportVO) throws Exception {
@@ -176,8 +217,12 @@ public class ReportService {
 			reportDetailService.save(vo);
 		}
 		
+		ReportTeamVO approveMember = null;
 		for (ReportTeamVO vo : reportVO.getRepTeamMemberList()) {
 			reportTeamService.save(vo);	
+			if(reportVO.getRepStatusCode().equals("2") && vo.getRepTeamMemRole().equals("5")) {
+				approveMember = vo;
+			}
 		}
 		
 		for (ReportResultVO vo : reportVO.getRepResultList()) {
@@ -186,6 +231,12 @@ public class ReportService {
 		
 		for (ReportIndicatorVO vo : reportVO.getRepIndicatorList()) {
 			reportIndicatorService.save(vo);	
+		}
+		
+		// 결재상신할 때 챔피언의 정보 가져오기
+		if(reportVO.getRepStatusCode().equals("2")) { // 결재상신 - 과제신청
+			reportVO.setRepRegUser(reportVO.getRepUpdateUser());   // 결재 상신시 결재자 정보 등록자에 넣기
+			this.regApproveType1(reportVO, approveMember); // 챔피언 결재 등록
 		}
 	}
 	
@@ -327,8 +378,10 @@ public class ReportService {
 		codeVO.setCodeGrpId("6SIG_YN");
 		codeVO.setActFlg("Y"); 
 		List<EgovMap> code6SigYn = codeService.selectFullList(codeVO);
-		if(code6SigYn.size()==3 && code6SigYn.get(2).get("codeNm").toString().startsWith("10+"))
-			code6SigYn.remove(2); // 10+ Poli
+		if(reportVO.getRepMenuCode()!=null && reportVO.getRepMenuCode().equals("TEAM") 
+				&& code6SigYn.size()==3 
+				&& code6SigYn.get(2).get("codeNm").toString().startsWith("10+"))
+			code6SigYn.remove(2); // 분임조 과제에서는 10+ 선택 못하도록 코드 삭제
 		model.addAttribute("divisionCode", code6SigYn);
 		
 		

@@ -11,6 +11,7 @@ import kr.freedi.dev.attachfile.service.AttachFileService;
 import kr.freedi.dev.board.service.BoardService;
 import kr.freedi.dev.board.service.BoardUseService;
 import kr.freedi.dev.common.dao.DefaultDAO;
+import kr.freedi.dev.qapprove.domain.ApproveDetailVO;
 import kr.freedi.dev.qapprove.domain.ApproveSearchVO;
 import kr.freedi.dev.qapprove.domain.ApproveVO;
 import kr.freedi.dev.qreport.domain.ReportDetailVO;
@@ -61,36 +62,17 @@ public class ApproveService {
 		return (ApproveVO)dao.selectOne("Approval.select", vo);
 	}
 
-	public void insert(ReportVO reportVO) throws Exception {
+	public void insert(ApproveVO masterVO) throws Exception {
 
+		String aprovalCode = dao.selectOne("Approval.selectNextFkey");
+		masterVO.setAprovalCode(aprovalCode);		
+		dao.insert("Approval.insert", masterVO);
 		
-		String userId = reportVO.getRepRegUser();
-		
-		dao.insert("Report.insert", reportVO);
-		
+		for (ApproveDetailVO vo : masterVO.getDetailList()) {
+			vo.setAprovalCode(aprovalCode);	//결재코드
+			vo.setAprovalStatCode("2");	// 미결
+			dao.insert("ApprovalDetail.insert", vo);
+		}
 	}
-	
-	public void update(ReportVO reportVO) throws Exception {
-
 		
-		String userId = reportVO.getRepUpdateUser();
-		
-		dao.update("Report.update", reportVO);
-		
-		
-		
-	}
-
-
-	
-	public int selectListCount(ReportSearchVO searchVO) {
-		return (Integer) dao.selectOne("Report.selectListCount", searchVO);
-	}
-	
-	public List<EgovMap> selectListCount2(ReportSearchVO searchVO) {
-		return dao.selectList("Report.selectListCount2", searchVO); // 상태 종류별 카운트 
-	}
-	
-
-	
 }

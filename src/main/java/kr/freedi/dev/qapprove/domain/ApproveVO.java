@@ -18,15 +18,16 @@ public class ApproveVO {
 	private String userId;
 	private Date draftingDate;
 	private String draftingComment;
+	private String refBusType;
+	private String refBusCode;
+	
+	private List<ApproveDetailVO> detailList;
 	
 	private Integer idx;
 	private String aprovalTypeNm;
 	private Date aprovalDate;
 	private String aprovalStateNm;
-	
-	private String refBusType;
-	private String refBusTypeNm;
-	private String refBusCode;
+	private String refBusTypeNm;	
 	
 	public String getAprovalCode() {
 		return aprovalCode;
@@ -82,6 +83,12 @@ public class ApproveVO {
 	public void setDraftingComment(String draftingComment) {
 		this.draftingComment = draftingComment;
 	}
+	public List<ApproveDetailVO> getDetailList() {
+		return detailList;
+	}
+	public void setDetailList(List<ApproveDetailVO> detailList) {
+		this.detailList = detailList;
+	}
 	public Integer getIdx() {
 		return idx;
 	}
@@ -129,8 +136,8 @@ public class ApproveVO {
 		return "ApproveVO [aprovalCode=" + aprovalCode + ", actRegNo=" + actRegNo + ", actAprovalNo=" + actAprovalNo
 				+ ", aprovalType=" + aprovalType + ", aprovalState=" + aprovalState + ", aprovalSubject="
 				+ aprovalSubject + ", userId=" + userId + ", draftingDate=" + draftingDate + ", draftingComment="
-				+ draftingComment + ", idx=" + idx + ", aprovalTypeNm=" + aprovalTypeNm + ", aprovalDate=" + aprovalDate
-				+ ", aprovalStateNm=" + aprovalStateNm + ", refBusType=" + refBusType + ", refBusTypeNm=" + refBusTypeNm
-				+ ", refBusCode=" + refBusCode + "]";
+				+ draftingComment + ", refBusType=" + refBusType + ", refBusCode=" + refBusCode + ", idx=" + idx + ", aprovalTypeNm=" + aprovalTypeNm + ", aprovalDate=" + aprovalDate
+				+ ", aprovalStateNm=" + aprovalStateNm + ", refBusTypeNm=" + refBusTypeNm + ", detailVO="  
+				+ detailList + "]";
 	}	
 }

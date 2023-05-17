@@ -941,6 +941,8 @@
 		</c:forEach>
 	];
 	
+	let vMenuType = "${reportVO.repMenuCode}";
+	
 </script>
 <script type="text/javascript">
 	$(document).ready(init);
@@ -961,7 +963,12 @@
 		cdActionType = codes.filter(function(code){ return code.index==="ACTTYPE"; });
 		cdMbbUseRate = codes.filter(function(code){ return code.index==="MBBUSERT"; });
 		cdRepResultType = codes.filter(function(code){ return code.index==="RESULTTY";});
-		cdRepType1 = codes.filter(function(code){ return code.index==="RP_TY1" && code.value==="DMAIC";});  // 분임조에서는 DMAIC만 적용(화면설계서)
+		if(vMenuType==="REPORT"){
+			cdRepType1 = codes.filter(function(code){ return code.index==="RP_TY1";});  // 분임조에서는 DMAIC만 적용(화면설계서)
+		} else {
+			cdRepType1 = codes.filter(function(code){ return code.index==="RP_TY1" && code.value==="DMAIC";});  // 분임조에서는 DMAIC만 적용(화면설계서)	
+		}
+		
 		cdRepType2 = codes.filter(function(code){ return code.index==="RP_TY2";});
 		cdRepType3 = codes.filter(function(code){ return code.index==="RP_TY3";});
 	}
