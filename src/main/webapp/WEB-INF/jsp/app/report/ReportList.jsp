@@ -149,22 +149,37 @@
                                                 <th>기타</th>
                                             </tr>
                                         </thead>
+<!-- c.code_nm as repResultType
+	       , nvl(s.iny_total, 0) inyTotal
+	       , nvl(s.iny_act_1, 0) inyAct1
+	       , nvl(s.iny_act_2, 0) inyAct2
+	       , nvl(s.iny_act_3, 0) inyAct3
+	       , nvl(s.iny_act_4, 0) inyAct4
+	       , nvl(s.iny_act_5, 0) inyAct5
+	       , nvl(s.y_total, 0) yTotal
+	       , nvl(s.y_act_1, 0) yAct1
+	       , nvl(s.y_act_2, 0) yAct2
+	       , nvl(s.y_act_3, 0) yAct3
+	       , nvl(s.y_act_4, 0) yAct4
+	       , nvl(s.y_act_5, 0) yAct5 -->                                        
                                         <tbody>
+                                        <c:forEach items="${reportList}" var="item" varStatus="i">
                                             <tr class="bg-white">
-                                                <th class="bg-gray font-weight-bold" colspan="2">과제수(건)</th>
-                                                <th class="bg-gray font-weight-bold">65</th>
-                                                <td>8</td>
-                                                <td>8</td>
-                                                <td>8</td>
-                                                <td>8</td>
-                                                <td>8</td>
-                                                <td>8</td>
-                                                <td>8</td>
-                                                <td>8</td>
-                                                <td>8</td>
-                                                <td>8</td>                                                
+                                                <th class="bg-gray font-weight-bold" colspan="2">${item.represulttype}</th>
+                                                <th class="bg-gray font-weight-bold">${item.inytotal}</th>
+                                                <td>${item.inyact1}</td>
+                                                <td>${item.inyact2}</td>
+                                                <td>${item.inyact3}</td>
+                                                <td>${item.inyact4}</td>
+                                                <td>${item.inyact5}</td>
+                                                <td>${item.yact1}</td>
+                                                <td>${item.yact2}</td>
+                                                <td>${item.yact3}</td>
+                                                <td>${item.yact4}</td>
+                                                <td>${item.yact5}</td>                                              
                                             </tr>
-                                            <tr>
+                                        </c:forEach>
+                                            <!-- <tr>
                                                 <th class="bg-gray font-weight-bold" rowspan="3">예상효과</th>
                                                 <th class="bg-gray font-weight-bold" >외부실패</th>
                                                 <td class="bg-gray font-weight-bold">22.2</td>
@@ -220,7 +235,7 @@
                                                 <td>37.1</td>
                                                 <td>37.1</td>
                                                 <td>37.1</td>
-                                            </tr>
+                                            </tr> -->
                                         </tbody>
                                     </table>
                                 </div>

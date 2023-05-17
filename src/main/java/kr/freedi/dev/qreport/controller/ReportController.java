@@ -321,6 +321,17 @@ public class ReportController {
 		return "app/approve/ApprForm"; // 과제 페이지
 	}
 	
+	@RequestMapping({"/ReportList.do"})
+	public String handler_reportList(HttpServletRequest req, ModelMap model,
+			@ModelAttribute("reportVO") ReportVO reportVO,
+			UserVO userSession)throws Exception {
+		
+		reportVO.setRepMenuCode(REP_MENU_CODE);
+		List<EgovMap> reportList = reportService.selectReportList(reportVO);
+		model.addAttribute("reportList", reportList);
+		
+		return "app/report/ReportList";
+	}
 
   
 }

@@ -272,6 +272,13 @@ public class ReportService {
 		return dao.selectList("Report.selectFullList", searchVO);
 	}
 	
+	public List<EgovMap> selectReportList(ReportVO vo) {
+		
+		return dao.selectList("Report.reportSelect", vo);
+	}
+	
+	
+	
 	public int selectListCount(ReportSearchVO searchVO) {
 		return (Integer) dao.selectOne("Report.selectListCount", searchVO);
 	}

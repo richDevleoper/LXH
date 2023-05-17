@@ -204,14 +204,14 @@ public class AppController {
 //
 //	}
 
-	@RequestMapping({"/app/002_03_report.do"})
-	public String handler002_03(HttpServletRequest request, ModelMap model,
-			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
-			UserVO userSession)throws Exception {
-		
-		return "app/qi/002_03_report";
-
-	}
+//	@RequestMapping({"/app/002_03_report.do"})
+//	public String handler002_03(HttpServletRequest request, ModelMap model,
+//			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
+//			UserVO userSession)throws Exception {
+//		
+//		return "app/qi/002_03_report";
+//
+//	}
 	
 	@RequestMapping({"/app/003_01_myworks.do"})
 	public String handler003_01(HttpServletRequest request, ModelMap model,

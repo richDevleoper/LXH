@@ -378,5 +378,84 @@
 		    AND T.REP_CODE = #{repCode}
 	</select>
 	
+	<select id="reportSelect" resultType="egovMap">
+	with raw_data as (   
+	   select get_code_nm('RESULTTY', rep_result_type_code) as rep_result_type
+	          , a.rep_result_type_code
+	          --, get_code_nm('ACTTYPE', m.REP_ACTION_TYPE_CODE) as REP_ACTION_TYPE
+	          , m.REP_ACTION_TYPE_CODE
+	          , a.rep_result_within_year as iny_total
+	          , case when m.REP_ACTION_TYPE_CODE='1' then to_number(a.rep_result_within_year) else 0 end as iny_act_1
+	          , case when m.REP_ACTION_TYPE_CODE='2' then to_number(a.rep_result_within_year) else 0 end as iny_act_2
+	          , case when m.REP_ACTION_TYPE_CODE='3' then to_number(a.rep_result_within_year) else 0 end as iny_act_3
+	          , case when m.REP_ACTION_TYPE_CODE='4' then to_number(a.rep_result_within_year) else 0 end as iny_act_4
+	          , case when m.REP_ACTION_TYPE_CODE='5' then to_number(a.rep_result_within_year) else 0 end as iny_act_5
+	          , a.rep_result_year y_total 
+	          , case when m.REP_ACTION_TYPE_CODE='1' then to_number(a.rep_result_year) else 0 end as y_act_1
+	          , case when m.REP_ACTION_TYPE_CODE='2' then to_number(a.rep_result_year) else 0 end as y_act_2
+	          , case when m.REP_ACTION_TYPE_CODE='3' then to_number(a.rep_result_year) else 0 end as y_act_3
+	          , case when m.REP_ACTION_TYPE_CODE='4' then to_number(a.rep_result_year) else 0 end as y_act_4
+	          , case when m.REP_ACTION_TYPE_CODE='5' then to_number(a.rep_result_year) else 0 end as y_act_5
+	     from tb_report_result a
+	          , tb_report_mst m
+	    where a.rep_code=m.rep_code
+	      and m.rep_menu_code=#{repMenuCode}
+	      -- 사업장, 부서, 조회기간은 작성자를 기준으로 검색한다. (5/17 이종일부장 확인)
+	      <if test="repDivisionCode != null and repDivisionCode != ''">
+	      and m.rep_devision_code=#{repDivisionCode} -- 6시그마 여부
+	      </if>
+	      <if test="repDivisionCode != null and repDivisionCode != ''">
+	      and m.rep_type_code=#{repTypeCode}
+	      </if>
+	      <if test="repLeaderBeltCode != null and repLeaderBeltCode != ''">
+	      and m.rep_leader_belt_code=#{repLeaderBeltCode}
+	      </if>
+	      <if test="repActionTypeCode != null and repActionTypeCode != ''">
+	      and m.rep_action_type_code=#{repActionTypeCode}
+	      </if>
+	      <if test="repActionTypeCode != null and repActionTypeCode != ''">
+	      and m.rep_action_type_code=#{repActionTypeCode}
+	      </if>
+	      <if test="repStatusCode != null and repStatusCode != ''">
+	      and m.rep_status_code=#{repStatusCode}
+	      </if>
+	), v_summary as (
+	    select rep_result_type
+	           , rep_result_type_code
+	           , sum(iny_total) as iny_total
+	           , sum(iny_act_1) as iny_act_1
+	           , sum(iny_act_2) as iny_act_2
+	           , sum(iny_act_3) as iny_act_3
+	           , sum(iny_act_4) as iny_act_4
+	           , sum(iny_act_5) as iny_act_5
+	           , sum(y_total) as y_total
+	           , sum(y_act_1) as y_act_1
+	           , sum(y_act_2) as y_act_2
+	           , sum(y_act_3) as y_act_3
+	           , sum(y_act_4) as y_act_4
+	           , sum(y_act_5) as y_act_5
+	    from raw_data
+	    group by rep_result_type, rep_result_type_code
+	)
+	select c.code_nm as repResultType
+	       , nvl(s.iny_total, 0) inyTotal
+	       , nvl(s.iny_act_1, 0) inyAct1
+	       , nvl(s.iny_act_2, 0) inyAct2
+	       , nvl(s.iny_act_3, 0) inyAct3
+	       , nvl(s.iny_act_4, 0) inyAct4
+	       , nvl(s.iny_act_5, 0) inyAct5
+	       , nvl(s.y_total, 0) yTotal
+	       , nvl(s.y_act_1, 0) yAct1
+	       , nvl(s.y_act_2, 0) yAct2
+	       , nvl(s.y_act_3, 0) yAct3
+	       , nvl(s.y_act_4, 0) yAct4
+	       , nvl(s.y_act_5, 0) yAct5
+	  from tb_code c
+	       , v_summary s
+	  where c.code_grp_id='RESULTTY'
+	    and c.code_id=s.rep_result_type_code(+)
+	    order by view_ord asc 
+	</select>
+	
 </mapper>
 
