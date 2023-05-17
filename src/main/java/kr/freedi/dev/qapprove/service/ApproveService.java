@@ -49,6 +49,17 @@ public class ApproveService {
 
 	@Resource(name = "defaultDAO")
 	private DefaultDAO dao;
+	
+	
+	public List<ApproveVO> selectList(ApproveSearchVO searchVO) {
+		
+		return dao.selectList("Approval.selectList", searchVO);
+	}
+	
+	public ApproveVO select(ApproveVO vo) {
+		
+		return (ApproveVO)dao.selectOne("Approval.select", vo);
+	}
 
 	public void insert(ReportVO reportVO) throws Exception {
 
@@ -70,10 +81,7 @@ public class ApproveService {
 		
 	}
 
-	public List<ApproveVO> selectList(ApproveSearchVO searchVO) {
-		
-		return dao.selectList("Approval.selectList", searchVO);
-	}
+
 	
 	public int selectListCount(ReportSearchVO searchVO) {
 		return (Integer) dao.selectOne("Report.selectListCount", searchVO);
@@ -83,10 +91,6 @@ public class ApproveService {
 		return dao.selectList("Report.selectListCount2", searchVO); // 상태 종류별 카운트 
 	}
 	
-	public ReportVO select(ReportVO reportVO) {
-		ReportVO resultVO = (ReportVO)dao.selectOne("Report.select", reportVO);
-		
-		return resultVO;
-	}
+
 	
 }

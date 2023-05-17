@@ -6,18 +6,19 @@
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
 	
 	<!-- real -->
+	<!-- 
 	<bean id="defaultSqlSession" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="defaultDataSource" />
 		<property name="configLocation" value="classpath:/kr/freedi/dev/sqlmap/sql-map-config.xml" />
 		<property name="mapperLocations" value="classpath*:/kr/freedi/dev/sqlmap/default/*.xml" />
 	</bean>
-	
+	 -->
 	<!-- dev -->
-<!-- 	<bean id="defaultSqlSession-dev" class="kr.freedi.dev.common.config.RefreshableSqlSessionFactoryBean">
+ 	<bean id="defaultSqlSession-dev" class="kr.freedi.dev.common.config.RefreshableSqlSessionFactoryBean">
 		<property name="dataSource" ref="defaultDataSource" />
 		<property name="configLocation" value="classpath:/kr/freedi/dev/sqlmap/sql-map-config.xml" />
 		<property name="mapperLocations" value="classpath*:/kr/freedi/dev/sqlmap/default/*.xml" />
-	</bean> -->
+	</bean>
 	
 <!-- 	<bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
 		<constructor-arg index="0" ref="sqlSession" />
@@ -25,7 +26,7 @@
 	
 	<!-- sqlSessionMapping -->
  	<bean id="defaultDAO" class="kr.freedi.dev.common.dao.DefaultDAO">
-		<property name="sqlSessionFactory" ref="defaultSqlSession" />
+		<property name="sqlSessionFactory" ref="defaultSqlSession-dev" />
 	</bean>
 	
 	

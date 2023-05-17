@@ -24,6 +24,10 @@ public class ApproveVO {
 	private Date aprovalDate;
 	private String aprovalStateNm;
 	
+	private String refBusType;
+	private String refBusTypeNm;
+	private String refBusCode;
+	
 	public String getAprovalCode() {
 		return aprovalCode;
 	}
@@ -102,12 +106,31 @@ public class ApproveVO {
 	public void setAprovalStateNm(String aprovalStateNm) {
 		this.aprovalStateNm = aprovalStateNm;
 	}
+	public String getRefBusType() {
+		return refBusType;
+	}
+	public void setRefBusType(String refBusType) {
+		this.refBusType = refBusType;
+	}
+	public String getRefBusTypeNm() {
+		return refBusTypeNm;
+	}
+	public void setRefBusTypeNm(String refBusTypeNm) {
+		this.refBusTypeNm = refBusTypeNm;
+	}
+	public String getRefBusCode() {
+		return refBusCode;
+	}
+	public void setRefBusCode(String refBusCode) {
+		this.refBusCode = refBusCode;
+	}
 	@Override
 	public String toString() {
 		return "ApproveVO [aprovalCode=" + aprovalCode + ", actRegNo=" + actRegNo + ", actAprovalNo=" + actAprovalNo
 				+ ", aprovalType=" + aprovalType + ", aprovalState=" + aprovalState + ", aprovalSubject="
 				+ aprovalSubject + ", userId=" + userId + ", draftingDate=" + draftingDate + ", draftingComment="
 				+ draftingComment + ", idx=" + idx + ", aprovalTypeNm=" + aprovalTypeNm + ", aprovalDate=" + aprovalDate
-				+ ", aprovalStateNm=" + aprovalStateNm + "]";
+				+ ", aprovalStateNm=" + aprovalStateNm + ", refBusType=" + refBusType + ", refBusTypeNm=" + refBusTypeNm
+				+ ", refBusCode=" + refBusCode + "]";
 	}	
 }

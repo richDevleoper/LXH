@@ -130,17 +130,21 @@ public class ApproveController {
 		model.addAttribute("menuKey", searchVO.getMenuKey());
 		
 		// TODO 결재건 종류에 따른 서브페이지 로딩하기.(조건문 분기하기)
+		ApproveVO savedVO = service.select(approveVO);
 		
-		// TODO 과제 정보 가져오기
-		ReportVO reportVO = new ReportVO();
-		reportVO.setRepCode(Integer.parseInt(approveVO.getAprovalCode())); // 임시로  결재번호를 과제번호로 쓰고 있음. 쿼리 등 다 정리 필요함. (결재프로세스 정립이 안되었음)
-		ReportVO dbReportVO = reportService.proc_reportFormHandler(req, model, searchVO, reportVO, userSession);
-		model.addAttribute("reportVO", dbReportVO);
-		
-		// TODO 분임조 정보 가져오기
+		if("1|2".indexOf(savedVO.getRefBusType())>-1) {
+			// TODO 과제/분임조과제 페이지 이동
+			ReportVO reportVO = new ReportVO();
+			reportVO.setRepCode(Integer.parseInt(savedVO.getRefBusCode())); // 임시로  결재번호를 과제번호로 쓰고 있음. 쿼리 등 다 정리 필요함. (결재프로세스 정립이 안되었음)
+			ReportVO dbReportVO = reportService.proc_reportFormHandler(req, model, searchVO, reportVO, userSession);
+			model.addAttribute("reportVO", dbReportVO);
+			return "app/approve/ApprForm"; // 과제 페이지
+		} else {
+			return "redirect:apprv/list.do?menuKey=73"; // 과제 페이지
+		}
 
 		
-		return "app/approve/ApprForm"; // 과제 페이지
+		
 	}  
 	
 	@RequestMapping({"/insert.do"})

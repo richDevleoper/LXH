@@ -3,54 +3,23 @@
 <mapper namespace="ApproveDetail">
 
 	<resultMap id="approveDetailMap" type="kr.freedi.dev.qapprove.domain.ApproveDetailVO">
-		<!-- <result property="aprovalCode" column="APROVAL_CODE" />
-		<result property="actRegNo" column="ACT_REG_NO" />
-		<result property="actAprovalNo" column="ACT_APROVAL_NO" />
-		<result property="aprovalType" column="APROVAL_TYPE" />
-		<result property="aprovalState" column="APROVAL_STATE" />
-		<result property="aprovalSubject" column="APROVAL_SUBJECT" />
-		<result property="userId" column="USER_ID" />
-		<result property="draftingDate" column="DRAFTING_DATE" />
-		<result property="draftingComment" column="DRAFTING_COMMENT" />
-		<result property="refBusCode" column="REF_BUS_CODE" />
-		<result property="refBusType" column="REF_BUS_TYPE" />
-		
-		<result property="idx" column="IDX" />
-		<result property="userName" column="USER_NAME" />
-		<result property="aprovalTypeNm" column="APROVAL_TYPE_NM" />
-		<result property="aprovalStateNm" column="APROVAL_STATE_NM" />
-		<result property="refBusTypeNm" column="REF_BUS_TYPE_NM" />
-		<result property="aprovalCompltDate" column="APROVAL_COMPLT_DATE" /> -->
+		<result property="aprovalCode" column="APROVAL_CODE" />
+		<result property="aprovalSeq" column="APROVAL_SEQ" />
+		<result property="comNo" column="COM_NO" />
+		<result property="comJobx" column="COM_JOBX" />
+		<result property="comPosition" column="COM_POSITION" />
+		<result property="comDepartCode" column="COM_DEPART_CODE" />
+		<result property="aprovalRegDate" column="APROVAL_REG_DATE" />
+		<result property="aprovalReqComNo" column="APROVAL_REQ_COM_NO" />
+		<result property="aprovalCompltDate" column="APROVAL_COMPLT_DATE" />
+		<result property="aprovalStatCode" column="APROVAL_STAT_CODE" />
+		<result property="aprovalMailSendDate" column="APROVAL_MAIL_SEND_DATE" />
+		<result property="aprovalMailSendYn" column="APROVAL_MAIL_SEND_YN" />
 	</resultMap>
 
-<!--
-
- 	<select id="selectListCount2" resultType="egovMap">
-		SELECT
-		    c.code_id repStatusCode, c.code_nm repStatus, nvl(m.cnt, 0) AS cnt
-		FROM tb_code c,
-		     (
-		        SELECT
-		            rep_status_code, rep_status, COUNT(1) cnt
-		        FROM (
-					<include refid="selectListBasic"></include>
-					 ) a
-		        GROUP BY rep_status_code, rep_status
-		    ) m
-		WHERE c.code_id = m.rep_status_code (+)
-		  AND c.code_grp_id = 'REP_STAT'
-		  AND c.act_flg = 'Y'
-      ORDER BY c.code_id		 
-	 </select>
-	
-	<select id="selectListCount" resultType="int">
-		SELECT COUNT(*) FROM tb_report_mst T 
-		<include refid="defCond"></include>
-	</select> -->
-	
 		<sql id="defCond">
 		
-			<if test="searchRepName != null and searchRepName != ''">
+			<!-- <if test="searchRepName != null and searchRepName != ''">
 				AND T.REP_NAME like '%' || #{searchRepName} || '%'
 			</if>
 			<if test="searchDivision != null and searchDivision != ''">
@@ -61,7 +30,7 @@
 			</if>
 			<if test="searchStatus != null and searchStatus != ''">
 				AND T.REP_STATUS_CODE = #{searchStatus}
-			</if>
+			</if> -->
 		
 	</sql> 
 	
@@ -96,7 +65,7 @@
             <include refid="defCond"></include>
 	</sql>
 	
-	<select id="selectList" resultMap="approveMap">
+	<select id="selectList" resultMap="approveDetailMap">
 		<include refid="selectListBasic"></include>
 		  and rowidx between (#{currentPageNo}*#{recordCountPerPage}+1-#{recordCountPerPage}) and (#{currentPageNo}*#{recordCountPerPage})
 		  order by idx desc
@@ -161,7 +130,7 @@
 		REP_CODE = #{repCode}
 	</update>
 	
-	<select id="select" resultMap="approveMap">
+	<select id="select" resultMap="approveDetailMap">
 		SELECT 
 			REP_CODE
 			, REP_NAME
