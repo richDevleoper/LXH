@@ -87,11 +87,11 @@ public class ProposalController {
 		}
 		
 		CodeVO codeVO = new CodeVO();
-		codeVO.setCodeGrpId("PP_TY"); // 제안구분코드 조회
+		codeVO.setCodeGrpId("PPS_TPY"); // 제안구분코드 조회
 		List<EgovMap> typeList = codeService.selectFullList(codeVO);
-		codeVO.setCodeGrpId("PP_CT"); // 제안유형코드 조쇠
+		codeVO.setCodeGrpId("PPS_CTY"); // 제안유형코드 조쇠
 		List<EgovMap> categoryList = codeService.selectFullList(codeVO);
-		codeVO.setCodeGrpId("PP_CL"); // 제안등급코드 조회
+		codeVO.setCodeGrpId("PPS_CLS"); // 제안등급코드 조회
 		List<EgovMap> classList = codeService.selectFullList(codeVO);
 		
 		//나의 제안 조회
@@ -155,7 +155,7 @@ public class ProposalController {
 		model.addAttribute("menuKey", searchVO.getMenuKey());
 		
 		CodeVO codeVO = new CodeVO();
-		codeVO.setCodeGrpId("PP_CT"); // 제안유형코드 조쇠
+		codeVO.setCodeGrpId("PPS_CTY"); // 제안유형코드 조쇠
 		List<EgovMap> categoryList = codeService.selectFullList(codeVO);
 		codeVO.setCodeGrpId("RESULTTY"); // 제안연간효과코드 조쇠
 		List<EgovMap> yearEffectList = codeService.selectFullList(codeVO);
@@ -315,9 +315,9 @@ public class ProposalController {
 		}
 		searchVO.setSearchPropTypeCode("PP_TY_2");
 		CodeVO codeVO = new CodeVO();
-		codeVO.setCodeGrpId("PP_TY"); // 제안구분코드 조회
+		codeVO.setCodeGrpId("PPS_TPY"); // 제안구분코드 조회
 		List<EgovMap> typeList = codeService.selectFullList(codeVO);
-		codeVO.setCodeGrpId("PP_CT"); // 제안유형코드 조쇠
+		codeVO.setCodeGrpId("PPS_CTY"); // 제안유형코드 조쇠
 		List<EgovMap> categoryList = codeService.selectFullList(codeVO);
 		codeVO.setCodeGrpId("PP_CL"); // 제안등급코드 조회
 		List<EgovMap> classList = codeService.selectFullList(codeVO);
@@ -375,7 +375,7 @@ public class ProposalController {
 		model.addAttribute("menuKey", searchVO.getMenuKey());
 		
 		CodeVO codeVO = new CodeVO();
-		codeVO.setCodeGrpId("PP_CT"); // 제안유형코드 조쇠
+		codeVO.setCodeGrpId("PPS_CTY"); // 제안유형코드 조쇠
 		List<EgovMap> categoryList = codeService.selectFullList(codeVO);
 		codeVO.setCodeGrpId("RESULTTY"); // 제안연간효과코드 조쇠
 		List<EgovMap> yearEffectList = codeService.selectFullList(codeVO);
@@ -432,13 +432,13 @@ public class ProposalController {
 			UserVO userSession) throws Exception{
 		model.addAttribute("menuKey", searchVO.getMenuKey());
 		CodeVO codeVO = new CodeVO();
-		codeVO.setCodeGrpId("PP_TY"); // 제안구분코드 조회
+		codeVO.setCodeGrpId("PPS_TPY"); // 제안구분코드 조회
 		List<EgovMap> typeList = codeService.selectFullList(codeVO);
-		codeVO.setCodeGrpId("PP_CT"); // 제안유형코드 조쇠
+		codeVO.setCodeGrpId("PPS_CTY"); // 제안유형코드 조쇠
 		List<EgovMap> categoryList = codeService.selectFullList(codeVO);
 		codeVO.setCodeGrpId("RESULTTY"); // 제안연간효과코드 조쇠
 		List<EgovMap> yearEffectList = codeService.selectFullList(codeVO);
-		codeVO.setCodeGrpId("PP_CL"); // 제안등급코드 조회
+		codeVO.setCodeGrpId("PPS_CLS"); // 제안등급코드 조회
 		List<EgovMap> classList = codeService.selectFullList(codeVO);
 		codeVO.setCodeGrpId("WPLACE"); // 제안연간효과코드 조쇠
 		List<EgovMap> bizPlaceList = codeService.selectFullList(codeVO);

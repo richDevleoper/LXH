@@ -42,6 +42,9 @@ import kr.freedi.dev.common.util.MapUtil;
 import kr.freedi.dev.qapprove.domain.ApproveSearchVO;
 import kr.freedi.dev.qapprove.domain.ApproveVO;
 import kr.freedi.dev.qapprove.service.ApproveService;
+import kr.freedi.dev.qproposal.domain.ProposalSearchVO;
+import kr.freedi.dev.qproposal.domain.ProposalVO;
+import kr.freedi.dev.qproposal.service.ProposalService;
 import kr.freedi.dev.qreport.domain.ReportDetailVO;
 import kr.freedi.dev.qreport.domain.ReportIndicatorVO;
 import kr.freedi.dev.qreport.domain.ReportResultVO;
@@ -72,6 +75,9 @@ public class ApproveController {
 	
 	@Resource(name = "reportService")
 	private ReportService reportService;
+	
+	@Resource(name = "proposalService")
+	private ProposalService proposalService;
 	
 	
 	
@@ -139,12 +145,15 @@ public class ApproveController {
 			ReportVO dbReportVO = reportService.proc_reportFormHandler(req, model, searchVO, reportVO, userSession);
 			model.addAttribute("reportVO", dbReportVO);
 			return "app/approve/ApprForm"; // 과제 페이지
-		} else {
-			return "redirect:apprv/list.do?menuKey=73"; // 과제 페이지
+		} else if("3|4".indexOf(savedVO.getRefBusType()) > -1) {
+			ProposalSearchVO searchProposalVO = new ProposalSearchVO();
+			searchProposalVO.setSearchPropSeq(Integer.valueOf(savedVO.getRefBusCode()));
+			ProposalVO proposalVO = proposalService.selectProposalDetailInfo(searchProposalVO);
+			model.addAttribute("proposalVO", proposalVO);		
+			return "app/approve/ApprForm"; // 과제 페이지
+			//return "redirect:apprv/list.do?menuKey=73"; // 과제 페이지
 		}
-
-		
-		
+		return "redirect:apprv/list.do?menuKey=73";		
 	}  
 	
 	@RequestMapping({"/insert.do"})
