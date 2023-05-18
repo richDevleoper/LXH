@@ -324,6 +324,13 @@
 		REP_CODE = #{repCode}
 	</update>
 	
+	<update id="updateStatus">
+		UPDATE TB_REPORT_MST
+		SET    REP_STATUS_CODE=#{repStatusCode} 
+		WHERE REP_CODE=#{repCode}
+		    
+	</update>
+	
 	<select id="select" resultMap="reportMap">
 		SELECT 
 			T.REP_CODE

@@ -15,6 +15,11 @@
 		<result property="aprovalStatCode" column="APROVAL_STAT_CODE" />
 		<result property="aprovalMailSendDate" column="APROVAL_MAIL_SEND_DATE" />
 		<result property="aprovalMailSendYn" column="APROVAL_MAIL_SEND_YN" />
+		<result property="aprovalComment" column="APROVAL_COMMENT" />
+		
+		<result property="userName" column="USER_NAME" />
+		<result property="aprovalStat" column="APROVAL_STAT" />
+		<result property="aprovalType" column="APROVAL_TYPE" />
 	</resultMap>
 
 		<sql id="defCond">
@@ -66,42 +71,7 @@
 			)
 	</insert>
 	
-	<sql id="selectListBasic">
-	    WITH v_approval_mst AS (
-            SELECT ROW_NUMBER() OVER( ORDER BY TO_NUMBER(aproval_code) ASC ) idx,
-                ROW_NUMBER() OVER( ORDER BY TO_NUMBER(aproval_code) DESC ) rowidx,
-                m.*
-            FROM  tb_approval_mst m	    
-	    )
-	 	SELECT
-	 	    T.idx,
-		    T.aproval_code,
-		    T.aproval_type,
-		    get_code_nm('APR_TYPE', T.aproval_type)  aproval_type_nm,
-		    T.aproval_state,
-		    get_code_nm('APR_STAT', T.aproval_state) aproval_state_nm,
-		    T.aproval_subject,
-		    T.user_id,
-		    u.user_name,
-		    T.drafting_date,
-		    T.drafting_comment,
-		    (case when T.aproval_state='4' then (select max(aproval_complt_date) from tb_approval_detail where aproval_code=T.aproval_code ) else null end) as aproval_complt_date,
-		    T.ref_bus_type,
-            get_code_nm('BUS_TYPE', T.ref_bus_type) ref_bus_type_nm,
-		    T.ref_bus_code
-		FROM
-		    v_approval_mst T,
-		    tb_user_mst     u
-		WHERE
-		    T.user_id = u.com_no (+)
-            <include refid="defCond"></include>
-	</sql>
 	
-	<select id="selectList" resultMap="approveDetailMap">
-		<include refid="selectListBasic"></include>
-		  and rowidx between (#{currentPageNo}*#{recordCountPerPage}+1-#{recordCountPerPage}) and (#{currentPageNo}*#{recordCountPerPage})
-		  order by idx desc
-	</select>
 	
 	
 	<select id="selectNextFkey" resultType="string">
@@ -110,63 +80,53 @@
 	
 
 	
-	<update id="update">
-	
-		UPDATE TB_REPORT_MST SET 
-			REP_NAME = #{repName} 
-			, REP_DEVISION_CODE = #{repDivisionCode} 
-			, REP_TYPE_CODE = #{repTypeCode} 
-			, REP_SECTOR_CODE = #{repSectorCode} 
-			, REP_PRODUCT_CLASS = #{repProductClass} 
-			, REP_LEADER_BELT_CODE = #{repLeaderBeltCode} 
-			, REP_ACTION_TYPE_CODE = #{repActionTypeCode} 
-			, REP_MBB_USE_RATE_CODE = #{repMbbUseRateCode}
-			, REP_USE_REF_DATE = #{repUseRefDate} 
-			, REP_STATUS_CODE = #{repStatusCode} 
- 
-			, REP_KEYWORD = #{repKeyword} 
-			, REP_UPDATE_USER = #{repRegUser} 
-			, REP_UPDATE_DATE = sysdate
-			, REP_APPROVAL_CODE = #{repApprovalCode} 
-			, REP_USE_YN = #{repUseYn} 
-			, REP_MAIL_SEND_YN = #{repMailSendYn} 
-			, REP_MAIL_SEND_DATE = #{repMailSendDate} 
-			, REP_PLACE_CODE = #{repPlaceCode} 
-			, REP_LEADER_CODE = #{repLeaderCode} 
-			, REP_FILE_YN = #{repFileYn} 
+	<update id="updateStatus">
+		UPDATE tb_approval_detail
+		SET
+			aproval_stat_code = #{aprovalStatCode},
+		    aproval_complt_date = sysdate,
+		    aproval_comment = #{aprovalComment}
 		WHERE
-		REP_CODE = #{repCode}
+	        aproval_code = #{aprovalCode}
+	    AND com_no = #{comNo}
 	</update>
 	
-	<select id="select" resultMap="approveDetailMap">
+	<select id="selectList" resultMap="approveDetailMap">
 		SELECT 
-			REP_CODE
-			, REP_NAME
-			, REP_MENU_CODE
-			, REP_DEVISION_CODE
-			, REP_TYPE_CODE
-			, REP_SECTOR_CODE
-			, REP_PRODUCT_CLASS
-			, REP_LEADER_BELT_CODE
-			, REP_ACTION_TYPE_CODE
-			, REP_MBB_USE_RATE_CODE
-			, REP_USE_REF_DATE
-			, REP_STATUS_CODE
-			, REP_KEYWORD
-			, REP_REG_USER
-			, REP_REG_DATE
-			, REP_UPDATE_USER
-			, REP_UPDATE_DATE
-			, REP_APPROVAL_CODE
-			, REP_USE_YN
-			, REP_MAIL_SEND_YN
-			, REP_MAIL_SEND_DATE
-			, REP_PLACE_CODE
-			, REP_LEADER_CODE
-			, REP_FILE_YN
-		FROM TB_REPORT_MST T  
-		WHERE T.REP_CODE = #{repCode}
+			T.APROVAL_CODE
+			, T.APROVAL_SEQ
+			, T.COM_NO
+			, T.COM_JOBX
+			, T.COM_POSITION
+			, T.COM_DEPART_CODE
+			, T.APROVAL_REG_DATE
+			, T.APROVAL_REQ_COM_NO
+			, T.APROVAL_COMPLT_DATE
+			, T.APROVAL_STAT_CODE
+            , get_code_nm('APR_STAT', T.APROVAL_STAT_CODE) APROVAL_STAT
+            , get_code_nm('APR_TYPE', m.aproval_type)  aproval_type
+			, T.APROVAL_MAIL_SEND_DATE
+			, T.APROVAL_MAIL_SEND_YN
+            , U.USER_NAME
+            , T.APROVAL_COMMENT
+		FROM tb_approval_detail T
+		     , tb_user_mst U
+		     , tb_approval_mst m  
+		WHERE T.COM_NO = U.COM_NO
+		  AND T.APROVAL_CODE = m.APROVAL_CODE
+		  AND T.APROVAL_CODE = #{aprovalCode}
+		ORDER BY APROVAL_SEQ
 	</select>
+	
+	<delete id="delete">
+		DELETE FROM tb_approval_detail 
+		WHERE 
+		<trim prefixOverrides="AND|OR">
+		<if test="aprovalCode != null and aprovalCode != ''">
+			AND APROVAL_CODE = #{aprovalCode}
+		</if>
+		</trim>
+	</delete>
 	
 </mapper>
 

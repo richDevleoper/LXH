@@ -24,9 +24,7 @@
 
 	</resultMap>
 
-
 	<sql id="defCond">
-		
 			<if test="searchRepName != null and searchRepName != ''">
 				AND T.REP_NAME like '%' || #{searchRepName} || '%'
 			</if>
@@ -39,7 +37,23 @@
 			<if test="searchStatus != null and searchStatus != ''">
 				AND T.REP_STATUS_CODE = #{searchStatus}
 			</if>
+	
+	</sql>
+
+
+	<sql id="defCond2">
 		
+		<trim prefixOverrides="AND|OR">
+		<if test="aprovalCode != null and aprovalCode != ''">
+			AND APROVAL_CODE = #{aprovalCode}
+		</if>
+		<if test="aprovalType != null and aprovalType != ''">
+			AND APROVAL_TYPE = #{aprovalType}
+		</if>
+		<if test="refBusCode != null and refBusCode != ''">
+			AND REF_BUS_CODE = #{refBusCode}
+		</if>
+		</trim>
 	</sql> 
 	
 	<sql id="selectListBasic">
@@ -136,7 +150,7 @@
 	
 	<update id="update">
 	
-		UPDATE TB_REPORT_MST SET 
+		<!-- UPDATE TB_REPORT_MST SET 
 			REP_NAME = #{repName} 
 			, REP_DEVISION_CODE = #{repDivisionCode} 
 			, REP_TYPE_CODE = #{repTypeCode} 
@@ -159,7 +173,7 @@
 			, REP_LEADER_CODE = #{repLeaderCode} 
 			, REP_FILE_YN = #{repFileYn} 
 		WHERE
-		REP_CODE = #{repCode}
+		REP_CODE = #{repCode} -->
 	</update>
 	
 	<select id="select" resultMap="approveMap">
@@ -167,6 +181,7 @@
 	            , ACT_REG_NO
 	            , ACT_APROVAL_NO
 	            , APROVAL_TYPE
+	            , get_code_nm('APR_TYPE', APROVAL_TYPE) APROVAL_TYPE_NM
 	            , APROVAL_STATE
 	            , APROVAL_SUBJECT
 	            , USER_ID
@@ -175,8 +190,23 @@
 	            , REF_BUS_CODE
 	            , REF_BUS_TYPE
 	     from tb_approval_mst
-	    where aproval_code=#{aprovalCode}
+	    where 
+	    <include refid="defCond2"></include>
 	</select>
+	
+	<delete id="delete">
+		DELETE FROM TB_APPROVAL_MST 
+		WHERE 
+		<include refid="defCond2"></include>
+	</delete> 
+	
+	<update id="updateStatus">
+		UPDATE TB_APPROVAL_MST
+		SET
+			APROVAL_STATE = #{aprovalState}
+		WHERE
+	        APROVAL_CODE = #{aprovalCode}
+	</update>	
 	
 </mapper>
 

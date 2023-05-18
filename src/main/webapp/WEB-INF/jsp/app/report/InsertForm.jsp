@@ -925,8 +925,16 @@
                         </div>
                         <div class="list-footer">
                             <div class="list-btns">
-                                <button type="button" class="btn light-gray" id="btnSave">임시저장</button>
-                                <button type="button" class="btn bg-gray" id="btnReqApproval">결재의뢰</button>                                <a href="./list.do?menuKey=${menuKey}" class="btn">목록</a>
+							<c:choose>  
+								<c:when test="${reportVO.repStatusCode eq '2'}">
+									<button type="button" class="btn bg-gray" id="btnCancelApproval">결재취소</button>
+								</c:when>
+								<c:otherwise>
+								    <button type="button" class="btn light-gray" id="btnSave">임시저장</button>
+	                                <button type="button" class="btn bg-gray" id="btnReqApproval">결재의뢰</button>
+								</c:otherwise>
+							</c:choose>                            
+                                	<a href="./list.do?menuKey=${menuKey}" class="btn">목록</a>
                             </div>
                         </div>
 
@@ -1085,8 +1093,12 @@
 			};
 		});
 		
-
-	 	
+		// 결재취소버튼
+		$("#btnCancelApproval").off("click").on("click", function(){
+			$("#mode").val("CANCEL");
+			$("#defaultForm")[0].submit();
+		});
+		
 	 	// 검색 이벤트
 		$(".btn-search-emp").off("click").on("click", function(){
 			callPopup_searchEmployee(this);

@@ -27,6 +27,8 @@ public class ApproveSearchVO extends CommonVO {
 	private String searchStatus;
 	
 	private String orderByTyp;
+	
+	private String aprovalCode;
 
 	public String getSearchRepName() {
 		return searchRepName;
@@ -66,5 +68,19 @@ public class ApproveSearchVO extends CommonVO {
 
 	public void setOrderByTyp(String orderByTyp) {
 		this.orderByTyp = orderByTyp;
+	}
+
+	/**
+	 * @return the aprovalCode
+	 */
+	public String getAprovalCode() {
+		return aprovalCode;
+	}
+
+	/**
+	 * @param aprovalCode the aprovalCode to set
+	 */
+	public void setAprovalCode(String aprovalCode) {
+		this.aprovalCode = aprovalCode;
 	}
 }

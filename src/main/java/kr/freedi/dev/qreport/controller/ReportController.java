@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import egovframework.rte.psl.dataaccess.util.EgovMap;
 import kr.freedi.dev.article.domain.ArticleSearchVO;
+import kr.freedi.dev.article.service.ArticleService;
 import kr.freedi.dev.code.domain.CodeVO;
 import kr.freedi.dev.code.service.CodeService;
 import kr.freedi.dev.qapprove.domain.ApproveVO;
@@ -173,7 +174,7 @@ public class ReportController {
 		if(retVO.getRepCode() != null 
 				&& retVO.getRepDivisionCode() !=null 
 				&& !retVO.getRepDivisionCode().equals("1")) {  
-			// 임시저장중인 6시그마 건만 별도 페이지에서 처리. (일정계획의 포멧이 다름)
+			// 임시저장, 상신중 인 6시그마 건만 별도 페이지에서 처리. (일정계획의 포멧이 다름)
 			return "app/report/InsertFormStat1";	
 		} else {
 			return "app/report/InsertForm";
@@ -193,9 +194,15 @@ public class ReportController {
 		
 //		//insert article
 		if(reportVO.getMode().equals("UPDATE")) {
+			// 임시저장 건 결재의뢰/임시저장
 			reportVO.setRepUpdateUser(userId);
 			reportService.update(reportVO);	
+		} else if(reportVO.getMode().equals("CANCEL")) {
+			// 임시저장 건 결재취소 --> 결재데이터 제거 및 임시저장 상태로 변경			
+			reportService.cancelApprove(reportVO);
+			
 		} else {
+			// 신규입력 결재의뢰/임시저장
 			reportVO.setRepRegUser(userId);
 			reportService.insert(reportVO);	
 		}

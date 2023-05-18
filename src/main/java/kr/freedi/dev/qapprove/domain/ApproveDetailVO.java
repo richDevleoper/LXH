@@ -16,6 +16,11 @@ public class ApproveDetailVO {
 	private String aprovalStatCode;		//결재상태
 	private String aprovalMailSendDate;	//이메일 발송일
 	private String aprovalMailSendYn;	//이메일 전송여부
+	private String aprovalComment;	// 결재 코멘트
+	
+	private String aprovalStat;
+	private String aprovalType;
+	private String userName; // 사원명
 	
 	public String getAprovalCode() {
 		return aprovalCode;
@@ -26,6 +31,7 @@ public class ApproveDetailVO {
 	public String getAprovalSeq() {
 		return aprovalSeq;
 	}
+	
 	public void setAprovalSeq(String aprovalSeq) {
 		this.aprovalSeq = aprovalSeq;
 	}
@@ -88,6 +94,60 @@ public class ApproveDetailVO {
 	}
 	public void setAprovalMailSendYn(String aprovalMailSendYn) {
 		this.aprovalMailSendYn = aprovalMailSendYn;
+	}
+	public String getAprovalComment() {
+		return aprovalComment;
+	}
+
+	public void setAprovalComment(String aprovalComment) {
+		this.aprovalComment = aprovalComment;
 	}	
-			 
+
+	/**
+	 * @return the userName
+	 */
+	public String getUserName() {
+		return userName;
+	}
+	/**
+	 * @param userName the userName to set
+	 */
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+	
+	/**
+	 * @return the aprovalStat
+	 */
+	public String getAprovalStat() {
+		return aprovalStat;
+	}
+	/**
+	 * @param aprovalStat the aprovalStat to set
+	 */
+	public void setAprovalStat(String aprovalStat) {
+		this.aprovalStat = aprovalStat;
+	}
+	/**
+	 * @return the aprovalType
+	 */
+	public String getAprovalType() {
+		return aprovalType;
+	}
+	/**
+	 * @param aprovalType the aprovalType to set
+	 */
+	public void setAprovalType(String aprovalType) {
+		this.aprovalType = aprovalType;
+	}
+	@Override
+	public String toString() {
+		return "ApproveDetailVO [aprovalCode=" + aprovalCode + ", aprovalSeq=" + aprovalSeq + ", comNo=" + comNo
+				+ ", comJobx=" + comJobx + ", comPosition=" + comPosition + ", comDepartCode=" + comDepartCode
+				+ ", aprovalRegDate=" + aprovalRegDate + ", aprovalReqComNo=" + aprovalReqComNo + ", aprovalCompltDate="
+				+ aprovalCompltDate + ", aprovalStatCode=" + aprovalStatCode + ", aprovalMailSendDate="
+				+ aprovalMailSendDate + ", aprovalMailSendYn=" + aprovalMailSendYn + ", aprovalComment="
+				+ aprovalComment + ", aprovalStat=" + aprovalStat + ", aprovalType=" + aprovalType + ", userName="
+				+ userName + "]";
+	}
 }

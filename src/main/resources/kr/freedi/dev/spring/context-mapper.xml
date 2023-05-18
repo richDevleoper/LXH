@@ -5,8 +5,7 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
 	
-	<!-- real -->
-	<!-- 
+	<!-- real 
 	<bean id="defaultSqlSession" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="defaultDataSource" />
 		<property name="configLocation" value="classpath:/kr/freedi/dev/sqlmap/sql-map-config.xml" />
@@ -18,12 +17,12 @@
 		<property name="dataSource" ref="defaultDataSource" />
 		<property name="configLocation" value="classpath:/kr/freedi/dev/sqlmap/sql-map-config.xml" />
 		<property name="mapperLocations" value="classpath*:/kr/freedi/dev/sqlmap/default/*.xml" />
-	</bean>
-	
-<!-- 	<bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+	</bean>	
+<!-- 	
+	<bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
 		<constructor-arg index="0" ref="sqlSession" />
-	</bean> -->
-	
+	</bean>
+-->	
 	<!-- sqlSessionMapping -->
  	<bean id="defaultDAO" class="kr.freedi.dev.common.dao.DefaultDAO">
 		<property name="sqlSessionFactory" ref="defaultSqlSession-dev" />

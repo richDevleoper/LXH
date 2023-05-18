@@ -191,6 +191,7 @@ public class ReportService {
 		newDetail.setComJobx(approveMember.getComJobxCode());				// 결재자 직위코드
 		newDetail.setComPosition(approveMember.getComPositionCode());		// 결재자 직책코드
 		newDetail.setAprovalReqComNo(reportVO.getRepRegUser());			// 결재상신자 사번
+		newDetail.setAprovalStatCode("2");
 		
 		List<ApproveDetailVO> newList = new ArrayList<>();
 		newList.add(newDetail);
@@ -238,6 +239,19 @@ public class ReportService {
 			reportVO.setRepRegUser(reportVO.getRepUpdateUser());   // 결재 상신시 결재자 정보 등록자에 넣기
 			this.regApproveType1(reportVO, approveMember); // 챔피언 결재 등록
 		}
+	}
+	
+	// 결재 승인 전 취소
+	public void cancelApprove(ReportVO reportVO) throws Exception {
+		
+		reportVO = this.select(reportVO);	// 값이 바뀐 상태에서 결재취소 하는 경우에 대비 디비에서 불러오기
+		reportVO.setRepStatusCode("1");		// 임시저장 상태로 변경
+		this.update(reportVO);				// 상태 변경 저장
+		
+		ApproveVO vo = new ApproveVO();
+		vo.setAprovalType("1");								// 과제선정 (과제-분임조과제 공통)
+		vo.setRefBusCode(reportVO.getRepCode().toString());	// 과제코드
+		approveService.cancelApprove(vo);					// 해당 결재건 지우기
 	}
 	
 	public void updateStep6Sigma(ReportVO reportVO, String step) throws Exception {
@@ -456,5 +470,17 @@ public class ReportService {
 		}
 		
 		return retVO;
+	}
+	
+	public void updateStatus(ReportVO vo) {
+		ReportVO savedVO = this.select(vo);
+		
+		if(vo.getRepStatusCode().equals("3")) {  // 승인일 경우
+			if(!savedVO.getRepDivisionCode().equals("1")) {  
+				vo.setRepStatusCode("6"); // 일반/10+과제는 완료로 바꿔준다.
+			}
+		} // 반려는 코드 변경 없이 그대로 반영한다.
+		
+		dao.update("Report.updateStatus", vo);
 	}
 }

@@ -23,7 +23,16 @@
 
              <div id="page-container">
                 <div class="inner">
-                    
+					<form:form commandName="frmApprove" id="defaultForm" name="defaultForm" action="${action}" onsubmit="return false" method="post" modelAttribute="approveVO">  
+					<form:input type="hidden" path="aprovalCode"/>
+					<form:input type="hidden" path="aprovalType"/>
+					<form:input type="hidden" path="aprovalState"/>
+					<form:input type="hidden" path="refBusType"/>
+					<form:input type="hidden" path="refBusCode"/>
+					<form:input type="hidden" path="detailList[0].aprovalCode"/>
+					<form:input type="hidden" path="detailList[0].aprovalSeq"/>
+					<form:input type="hidden" path="detailList[0].comNo"/>
+					<form:input type="hidden" path="detailList[0].aprovalStatCode" cssClass="aproval-state-code"/>
                     <section id="page-content">
                         <!-- breadcrumb -->
 <c:if test="${ empty repMenuCode }"><%-- 해당 값은 "과제/분임조과제" 에서만 나옴. --%>
@@ -32,8 +41,8 @@
                                 <li>결제종류 : 과제 > 과제선정	<!-- 과제 > 6σ Full Process > DMAIC > Define --></li>
                             </ul>
 							<div class="header-btns">
-								<button type="button" class="btn bg-gray" onclick="alert('준비중입니다.');">승인</button>
-                                <button type="button" class="btn bg-gray" onclick="alert('준비중입니다.');">반려</button>        
+								<button type="button" class="btn bg-gray" onclick="onclick_procApprove('4')">승인</button>
+                                <button type="button" class="btn bg-gray" onclick="onclick_procApprove('3');">반려</button>        
                                 <a href="/apprv/list.do?menuKey=${menuKey}" class="btn">목록</a>
 							</div>
                         </div>
@@ -571,8 +580,8 @@
 <c:if test="${ empty repMenuCode }"><%-- 해당 값은 "과제/분임조과제" 에서만 나옴. --%>						
                         <div class="list-footer">
                             <div class="list-btns">
-								<button type="button" class="btn bg-gray" onclick="alert('준비중입니다.');">승인</button>
-                                <button type="button" class="btn bg-gray" onclick="alert('준비중입니다.');">반려</button>        
+								<button type="button" class="btn bg-gray" onclick="onclick_procApprove('4')">승인</button>
+                                <button type="button" class="btn bg-gray" onclick="onclick_procApprove('3');">반려</button>        
                                 <a href="/apprv/list.do?menuKey=${menuKey}" class="btn">목록</a>
                             </div>
                         </div>
@@ -581,6 +590,7 @@
 						<div class="list-wrap">
 							<div class="list-content">
 								<div class="list-table list">
+								
 									<table class="centered">
 										<caption></caption>
 										<colgroup>
@@ -597,14 +607,17 @@
 												<th>결재의견</th>
 											</tr>
 										</thead>
-										<tbody>                                            
-											<tr>
-												<td>승인(2023.06.30)</td>
-												<td>홍길동</td>
-												<td class="align-left">과제 > 6σ Full Process > DMAIC > Define</td>
-												<td class="align-left">수고하셧습니다.</td>
+										<tbody>
+										<c:forEach var="item" items="${approveVO.detailList}" varStatus="status">
+										<tr>
+												<td>${item.aprovalStat}</td>
+												<td>${item.userName}</td>
+												<td class="align-left">${item.aprovalType}</td>
+												<td class="align-left">${item.aprovalComment}</td>
 											</tr>
-											<tr>
+										</c:forEach>
+											
+											<!-- <tr>
 												<td>반려(2023.06.30)</td>
 												<td>홍길동</td>
 												<td class="align-left">과제 > 6σ Full Process > DMAIC > Measure</td>
@@ -621,7 +634,7 @@
 												<td>홍길동</td>
 												<td class="align-left">과제 > 6σ Full Process > DMAIC > Measure</td>
 												<td class="align-left">수고하셧습니다.</td>
-											</tr>
+											</tr> -->
 										</tbody>
 									</table>
 								</div>
@@ -629,9 +642,18 @@
 						</div>
 </c:if>						
                     </section>
+                    </form:form>
                 </div>
             </div>
+<script type="text/javascript">
 
+
+function onclick_procApprove(gubn){
+	$("#aprovalState").val(gubn);
+	$(".aproval-state-code").val(gubn);
+	$("#defaultForm")[0].submit();
+}
+</script>
     
 </body>
 </html>

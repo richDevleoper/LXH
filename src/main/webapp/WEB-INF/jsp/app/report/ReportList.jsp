@@ -13,6 +13,9 @@
 	<title>${fn:split(boardVO.boardNm,'>')[fn:length(fn:split(boardVO.boardNm,'>'))-1]}</title>
 	<meta name="keywords" content="" />
 	<meta name="description" content="" />
+    <style>
+   		.num-align { text-align: right !important; padding: 10px !important;}
+   	</style>
 </head>
 <body>
 
@@ -166,17 +169,17 @@
                                         <c:forEach items="${reportList}" var="item" varStatus="i">
                                             <tr class="bg-white">
                                                 <th class="bg-gray font-weight-bold" colspan="2">${item.represulttype}</th>
-                                                <th class="bg-gray font-weight-bold">${item.inytotal}</th>
-                                                <td>${item.inyact1}</td>
-                                                <td>${item.inyact2}</td>
-                                                <td>${item.inyact3}</td>
-                                                <td>${item.inyact4}</td>
-                                                <td>${item.inyact5}</td>
-                                                <td>${item.yact1}</td>
-                                                <td>${item.yact2}</td>
-                                                <td>${item.yact3}</td>
-                                                <td>${item.yact4}</td>
-                                                <td>${item.yact5}</td>                                              
+                                                <th class="bg-gray font-weight-bold num-align"><fmt:formatNumber value="${item.inytotal}" pattern="#,###" /></th>
+                                                <td class="num-align"><fmt:formatNumber value="${item.inyact1}" pattern="#,###" /></td>
+                                                <td class="num-align"><fmt:formatNumber value="${item.inyact2}" pattern="#,###" /></td>
+                                                <td class="num-align"><fmt:formatNumber value="${item.inyact3}" pattern="#,###" /></td>
+                                                <td class="num-align"><fmt:formatNumber value="${item.inyact4}" pattern="#,###" /></td>
+                                                <td class="num-align"><fmt:formatNumber value="${item.inyact5}" pattern="#,###" /></td>
+                                                <td class="num-align"><fmt:formatNumber value="${item.yact1}" pattern="#,###" /></td>
+                                                <td class="num-align"><fmt:formatNumber value="${item.yact2}" pattern="#,###" /></td>
+                                                <td class="num-align"><fmt:formatNumber value="${item.yact3}" pattern="#,###" /></td>
+                                                <td class="num-align"><fmt:formatNumber value="${item.yact4}" pattern="#,###" /></td>
+                                                <td class="num-align"><fmt:formatNumber value="${item.yact5}" pattern="#,###" /></td>                                              
                                             </tr>
                                         </c:forEach>
                                             <!-- <tr>

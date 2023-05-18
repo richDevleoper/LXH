@@ -134,7 +134,7 @@ public class ApproveController {
 			UserVO userSession) throws Exception {
 		
 		model.addAttribute("menuKey", searchVO.getMenuKey());
-		
+		model.addAttribute("action", "/apprv/updateStatus.do");
 		// TODO 결재건 종류에 따른 서브페이지 로딩하기.(조건문 분기하기)
 		ApproveVO savedVO = service.select(approveVO);
 		
@@ -144,6 +144,7 @@ public class ApproveController {
 			reportVO.setRepCode(Integer.parseInt(savedVO.getRefBusCode())); // 임시로  결재번호를 과제번호로 쓰고 있음. 쿼리 등 다 정리 필요함. (결재프로세스 정립이 안되었음)
 			ReportVO dbReportVO = reportService.proc_reportFormHandler(req, model, searchVO, reportVO, userSession);
 			model.addAttribute("reportVO", dbReportVO);
+			model.addAttribute("approveVO", savedVO);
 			return "app/approve/ApprForm"; // 과제 페이지
 		} else if("3|4".indexOf(savedVO.getRefBusType()) > -1) {
 			ProposalSearchVO searchProposalVO = new ProposalSearchVO();
@@ -152,50 +153,39 @@ public class ApproveController {
 			model.addAttribute("proposalVO", proposalVO);		
 			return "app/approve/ApprForm"; // 과제 페이지
 			//return "redirect:apprv/list.do?menuKey=73"; // 과제 페이지
-		}
-		return "redirect:apprv/list.do?menuKey=73";		
+		} else {
+			return "redirect:apprv/list.do?menuKey=73";
+		}		
 	}  
 	
-	@RequestMapping({"/insert.do"})
-	public String insert(HttpServletRequest req, ModelMap model,
-			@ModelAttribute("reportVO") ReportVO reportVO,
-			@ModelAttribute("reportSearchVO") ReportSearchVO searchVO,
+	@RequestMapping({"/updateStatus.do"})
+	public String save(HttpServletRequest req, ModelMap model,
+			@ModelAttribute("approveVO") ApproveVO approveVO,
 			UserVO userSession, 
 			String userIp) throws Exception {
-
-//		//권한체크
-//		boolean isMngr = articleService.isMngr(userSession, articleVO);
-//		boolean isUseGrpForWrite = articleService.isUseGrp(userSession, articleVO, BOARD_USE_TYP_WRITE);
-//		if(!isMngr && !isUseGrpForWrite){
-//			//throw new ArticlePermissionDeniedException();
-//			return getPath(request, "ExcpPermissionDenied", "exception");
-//		}
 		
-//		//기본값 체크
-//		if(StringUtils.isEmpty(articleVO.getNoticeFlg())){
-//			articleVO.setNoticeFlg("N");
-//		}
+		//ApproveVO savedVO = service.select(approveVO);
+		//approveVO.setDetailList(savedVO.getDetailList());  //form에 없는 detailList 조회
 		
-//		if(StringUtils.isEmpty(articleVO.getSecretFlg())){
-//			articleVO.setSecretFlg("N");
-//		}
-
-//		//사용자정보 세팅
-//		articleVO.setFrstOperId(userSession.getUserId());
-//		articleVO.setFrstOperIp(userIp);
-//		reportVO.setRepStatusCode("1");
-	
-		/*String userId = userSession.getUserId();
+		// 결재 갱신
+		service.updateStatus(approveVO);
 		
-		if(reportVO.getMode().equals("UPDATE")) {
-			reportVO.setRepUpdateUser(userId);
-			reportService.update(reportVO);	
-		} else {
-			reportVO.setRepRegUser(userId);
-			reportService.insert(reportVO);	
-		}*/
+		if("1|2".indexOf(approveVO.getRefBusType())>-1) {
+			ReportVO reportVO = new ReportVO();
+			reportVO.setRepCode(Integer.parseInt(approveVO.getRefBusCode()));
+			if(approveVO.getAprovalState().equals("4")) {	//승인
+				// OK : 6시그마 ; 3(진행중), 일반 ; 6(완료)
+				reportVO.setRepStatusCode("3");
+			} else if(approveVO.getAprovalState().equals("3")) { // Drop
+				// DROP : 5
+				reportVO.setRepStatusCode("5");
+			}
+			
+			reportService.updateStatus(reportVO);
+		}
 
-		return "redirect:/sub.do?menuKey=29";
+
+		return "redirect:/sub.do?menuKey=73";
 	}
 	
 	@RequestMapping({"/updateForm.do"})
