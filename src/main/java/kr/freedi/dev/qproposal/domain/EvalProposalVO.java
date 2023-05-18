@@ -12,6 +12,9 @@ public class EvalProposalVO implements Serializable{
 	private String propEvalLvCode;
 	private String propEvalScore;
 	
+	private String propSubsidy;
+	private String propPaymentYn;
+	
 	public int getPropSeq() {
 		return propSeq;
 	}
@@ -29,5 +32,17 @@ public class EvalProposalVO implements Serializable{
 	}
 	public void setPropEvalScore(String propEvalScore) {
 		this.propEvalScore = propEvalScore;
+	}
+	public String getPropSubsidy() {
+		return propSubsidy;
+	}
+	public void setPropSubsidy(String propSubsidy) {
+		this.propSubsidy = propSubsidy;
+	}
+	public String getPropPaymentYn() {
+		return propPaymentYn;
+	}
+	public void setPropPaymentYn(String propPaymentYn) {
+		this.propPaymentYn = propPaymentYn;
 	}
 }

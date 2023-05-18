@@ -78,7 +78,7 @@ public class EvalProposalController {
 		}
 		
 		List<ProposalVO> resultItems = evalProposalService.selectEvalForClassProposalMasterInfo(searchVO);
-		EgovMap resultItem = evalProposalService.selectListCount(searchVO);
+		EgovMap resultItem = evalProposalService.selectForClassListCount(searchVO);
 		
 		model.addAttribute("TYPE_LIST", typeList);
 		model.addAttribute("CATEGORY_LIST", categoryList);		
@@ -96,6 +96,39 @@ public class EvalProposalController {
 			@ModelAttribute("proposalSearchVO") EvalProposalSearchVO searchVO,
 			UserVO userSession) throws Exception{
 		model.addAttribute("menuKey", searchVO.getMenuKey());
+		
+		CodeVO codeVO = new CodeVO();
+		codeVO.setCodeGrpId("PPS_TYP"); // 제안구분코드 조회
+		List<EgovMap> typeList = codeService.selectFullList(codeVO);
+		codeVO.setCodeGrpId("PPS_CTY"); // 제안유형코드 조쇠
+		List<EgovMap> categoryList = codeService.selectFullList(codeVO);
+		codeVO.setCodeGrpId("WPLACE"); // 제안연간효과코드 조쇠
+		List<EgovMap> bizPlaceList = codeService.selectFullList(codeVO);
+		
+		codeVO.setCodeGrpId("PMT_YN"); // 제안연간효과코드 조쇠
+		List<EgovMap> paymentList = codeService.selectFullList(codeVO);		
+		codeVO.setCodeGrpId("PPS_UTYP"); // 제안연간효과코드 조쇠
+		List<EgovMap> userTypeList = codeService.selectFullList(codeVO);
+		
+		if(searchVO.getSearchPropFromDate() == null && searchVO.getSearchPropToDate() == null) {
+			DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(new Date());
+			searchVO.setSearchPropToDate(df.format(calendar.getTime()));
+			calendar.add(Calendar.MONTH, -1);
+			searchVO.setSearchPropFromDate(df.format(calendar.getTime()));
+		}
+		
+		List<ProposalVO> resultItems = evalProposalService.selectEvalForPaymentProposalMasterInfo(searchVO);
+		EgovMap resultItem = evalProposalService.selectForPaymentListCount(searchVO);
+		
+		model.addAttribute("TYPE_LIST", typeList);
+		model.addAttribute("CATEGORY_LIST", categoryList);
+		model.addAttribute("BIZ_PLACE_LIST", bizPlaceList);
+		model.addAttribute("PAYMENT_LIST", paymentList);
+		model.addAttribute("USER_TYPE_LIST", userTypeList);
+		model.addAttribute("PROP_LIST", resultItems);
+		model.addAttribute("PROP_TOTAL", resultItem.get("count"));
 		
 		return "app/proposal/EvalPaymentProposal";
 	}
@@ -122,6 +155,33 @@ public class EvalProposalController {
 			response.setContentType("text/html; charset=euc-kr");
 			PrintWriter out = response.getWriter();
 			out.println("<script>alert('등급평가 항목을 선택해 주세요.'); parent.onclick_search();</script>");
+			out.flush();			
+		}
+
+//		return "<script>alert('등급평가 마감 완료.'); onclick_search();</script>";
+	}
+	
+	@RequestMapping("/eval/procpayment.do")
+	public void/*@ResponseBody String*/ procEvalPayment(HttpServletResponse response, HttpServletRequest request, ModelMap model,
+			@ModelAttribute("proposalVo") ProposalVO proposalVO, 
+			@ModelAttribute("proposalSearchVO") EvalProposalSearchVO searchVO,
+			UserVO userSession) throws Exception{
+		
+		if(proposalVO != null && proposalVO.getEvalProposalList() != null && proposalVO.getEvalProposalList().size() > 0) {
+			
+			List<EvalProposalVO> evalProposalList = proposalVO.getEvalProposalList();
+			for(int index = 0; index < evalProposalList.size(); index++) {
+				EvalProposalVO item = evalProposalList.get(index);				
+				evalProposalService.updatePropPaymentInfo(item);
+			}			
+			response.setContentType("text/html; charset=euc-kr");
+			PrintWriter out = response.getWriter();
+			out.println("<script>alert('제안마감 완료.'); parent.onclick_search();</script>");
+			out.flush();			
+		}else{
+			response.setContentType("text/html; charset=euc-kr");
+			PrintWriter out = response.getWriter();
+			out.println("<script>alert('비용지급 항목을 선택해 주세요.'); parent.onclick_search();</script>");
 			out.flush();			
 		}
 

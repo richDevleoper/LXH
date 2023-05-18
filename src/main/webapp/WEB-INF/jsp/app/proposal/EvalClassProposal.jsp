@@ -200,7 +200,7 @@
 	                                                	<c:otherwise>
 	                                                		<td>
 			                                                    <div class="col s12">
-			                                                    	<select name="select-proposal-class" id="select-proposal-class-${item.propSeq }">
+			                                                    	<select name="select-proposal-class-${item.propSeq }" id="select-proposal-class-${item.propSeq }">
 			                                                        	<option value="">전체</option>
 			                                                        	<c:forEach var="lv" items="${CLASS_LIST }">
 			                                                        		<c:choose>

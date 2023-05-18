@@ -44,6 +44,11 @@ public class EvalProposalSearchVO extends CommonVO{
 	@ParamField
 	private String searchCircleName;
 	
+	@ParamField
+	private String searchUserTypeCode;
+	@ParamField
+	private String searchPaymentCode;
+	
 	public String getSearchPropCategoryCode() {
 		return searchPropCategoryCode;
 	}
@@ -151,5 +156,17 @@ public class EvalProposalSearchVO extends CommonVO{
 	}
 	public void setSearchCircleName(String searchCircleName) {
 		this.searchCircleName = searchCircleName;
+	}
+	public String getSearchUserTypeCode() {
+		return searchUserTypeCode;
+	}
+	public void setSearchUserTypeCode(String searchUserTypeCode) {
+		this.searchUserTypeCode = searchUserTypeCode;
+	}
+	public String getSearchPaymentCode() {
+		return searchPaymentCode;
+	}
+	public void setSearchPaymentCode(String searchPaymentCode) {
+		this.searchPaymentCode = searchPaymentCode;
 	}
 }

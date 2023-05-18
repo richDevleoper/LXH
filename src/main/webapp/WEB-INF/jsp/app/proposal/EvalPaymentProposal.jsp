@@ -18,112 +18,131 @@
 
                         <div class="list-wrap">
                             <div class="list-search">
-                                <div class="search-form row">
-                                    <div class="form-inline form-input col s4">
-                                        <div class="col s4 align-right">
-                                            <label>제안명</label>
-                                        </div>
-                                        <div class="pd-l10 col s8">
-                                            <input type="text" name="">
-                                        </div>
-                                    </div>
-                                    <div class="form-inline form-input col s4 ">
-                                        <div class="col s4 align-right">
-                                            <label>조직</label>
-                                        </div>
-                                        <div class="pd-l10 col s8">
-                                            <input type="text" name="">
-                                        </div>
-                                    </div>
-                                    <div class="form-inline form-input col s4">
-                                        <div class="col s4 align-right">
-                                            <label>사업장</label>
-                                        </div>
-                                        <div class="pd-l10 col s8">
-                                            <select name="" id="">
-                                                <option value="">전체</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="search-form row">
-                                    <div class="form-inline form-input col s4">
-                                        <div class="col s4 align-right">
-                                            <label>제안자/심사자</label>
-                                        </div>
-                                        <div class="pd-l10 col s8">
-                                            <select name="" id="">
-                                                <option value="">전체</option>
-                                            </select>
-                                        </div>
-                                        <div class="col s037 input-text search">
-                                            <input type="text" id="text3" name="" value="">
-                                            <button type="button">검색</button>
-                                        </div>
-                                        
-                                    </div>
-                                    <div class="form-inline form-input col s4 ">
-                                        <div class="col s4 align-right">
-                                            <label>분임조</label>
-                                        </div>
-                                        <div class="pd-l10 col s8">
-                                            <select name="" id="">
-                                                <option value="">전체</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="form-inline form-input col s4">
-                                        <div class="col s4 align-right">
-                                            <label>지급여부</label>
-                                        </div>
-                                        <div class="pd-l10 col s8">
-                                            <select name="" id="">
-                                                <option value="">전체</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="search-form row">
-                                    <div class="form-inline form-input col s8">
-                                        <div class="col s2 align-right">
-                                            <label>제안유형</label>
-                                        </div>
-
-                                        <div class="pd-l10 col s8">
-                                            <select name="" id="">
-                                                <option value="">전체</option>
-                                            </select>
-                                        </div>
-
-                                        <div class="col s2 align-right">
-                                            <label>제안일</label>
-                                        </div>
-                                        <div class="pd-l10 col s8">
-                                            <div class="col s5 input-date">
-                                                <input type="text" class="datepicker">
-                                                <i class="ico calendar"></i>
-                                            </div>
-                                            <span class="col s1 text-bul align-center">~</span>
-                                            <div class="col s5 input-date">
-                                                <input type="text" class="datepicker">
-                                                <i class="ico calendar"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col s4 align-right">
-                                        <button type="button" class="btn-submit">조회</button>
-                                    </div>
-                                </div>
+                            	<form:form commandName="proposalSearchVO" id="defaultForm" method="get" action="paymentlist.do" >
+                            	${proposalSearchVO.superHiddenTag}
+	                                <div class="search-form row">
+	                                    <div class="form-inline form-input col s4">
+	                                        <div class="col s3 align-right">
+	                                            <label>제안명</label>
+	                                        </div>
+	                                        <div class="pd-l10 col s9">
+	                                            <form:input type="text" name="input-proposal-name" id="input-proposal-name" style="width: 130px;" path="searchPropName"/>
+	                                        </div>
+	                                    </div>
+	                                    <div class="form-inline form-input col s4 ">
+	                                        <div class="col s3 align-right">
+	                                            <label>조직</label>
+	                                        </div>
+	                                        <div class="pd-l10 col s9 input-text search">
+                                      			<form:input path="searchGroupCode" type="hidden" id="input-proposal-group-code" name="input-proposal-group-code"/>
+                                      			<form:input type="text" id="input-proposal-group" name="input-proposal-group" readonly="readonly" style="background-color: #FFF;" path="searchGroupName"/>
+                                      			<button type="button" class="btn-proposal-group-search-modal">검색</button> 
+	                                        </div>
+	                                    </div>
+	                                    <div class="form-inline form-input col s4">
+	                                        <div class="col s3 align-right">
+	                                            <label>사업장</label>
+	                                        </div>
+	                                        <div class="pd-l10 col s9">
+	                                            <form:select name="select-bizplace-code" id="select-bizplace-code" path="searchBizPlaceCode">
+                                                    <option value="">선택</option>
+                                                    <c:forEach var="item" items="${BIZ_PLACE_LIST }">
+                                                    	<option value="${item.codeId }">${item.codeNm }</option>
+                                                    </c:forEach>
+	                                            </form:select>
+	                                        </div>
+	                                    </div>
+	                                </div>
+	                                <div class="search-form row">
+	                                    <div class="form-inline form-input col s4">
+	                                        <div class="col s3 align-right">
+	                                            <label style="letter-spacing: -0.13em;">제안자/심사자</label>
+	                                        </div>
+	                                        <div class="pd-l10 col s4">
+	                                            <form:select name="select-user-type-code" id="select-user-type-code" path="searchUserTypeCode">
+                                                    <option value="">선택</option>
+                                                    <c:forEach var="item" items="${USER_TYPE_LIST }">
+                                                    	<option value="${item.codeId }">${item.codeNm }</option>
+                                                    </c:forEach>
+	                                            </form:select>
+	                                        </div>
+	                                        <div class="col s5 input-text search">
+                                      			<form:input path="searchPropUser" type="hidden" id="input-proposal-member-code" name="input-proposal-member-code"/>
+                                      			<form:input type="text" id="input-proposal-member" name="input-proposal-member" readonly="readonly" style="background-color: #FFF;" path="searchPropUserName"/>
+                                      			<button type="button" class="btn-proposal-member-search-modal">검색</button> 
+	                                        </div>
+	                                    </div>
+	                                    <div class="form-inline form-input col s4 ">
+	                                        <div class="col s3 align-right">
+	                                            <label>분임조</label>
+	                                        </div>
+	                                        <div class="pd-l10 col s9">
+	                                            <form:select name="select-circle-code" id="select-circle-code" path="searchCircleCode">
+	                                                <option value="">전체</option>
+	                                            </form:select>
+	                                        </div>
+	                                    </div>
+	                                    <div class="form-inline form-input col s4">
+	                                        <div class="col s3 align-right">
+	                                            <label>지급여부</label>
+	                                        </div>
+	                                        <div class="pd-l10 col s9">
+	                                            <form:select name="select-payment-code" id="select-payment-code" path="searchPaymentCode">
+                                                    <option value="">선택</option>
+                                                    <c:forEach var="item" items="${PAYMENT_LIST }">
+                                                    	<option value="${item.codeId }">${item.codeNm }</option>
+                                                    </c:forEach>
+	                                            </form:select>
+	                                        </div>
+	                                    </div>
+	                                </div>
+	                                <div class="search-form row">
+	                                    <div class="form-inline form-input col s4">
+	                                        <div class="col s3 align-right">
+	                                            <label>제안유형</label>
+	                                        </div>
+	                                        <div class="pd-l10 col s9">
+	                                            <form:select name="select-category-code" id="select-category-code" path="searchPropCategoryCode">
+	                                                <option value="">전체</option>
+	                                                <c:forEach var="item" items="${CATEGORY_LIST }">
+                                                    	<option value="${item.codeId }">${item.codeNm }</option>
+                                                    </c:forEach>	                                                
+	                                            </form:select>
+	                                        </div>
+	                                    </div>
+	                                    <div class="form-inline form-input col s4">
+		                                    <div class="col s3 align-right">
+		                                        <label>제안일</label>
+		                                    </div>
+	                                        <div class="pd-l10 col s9">
+	                                        	<div class="col s5 input-date input-date" style="padding-right: 0px; cursor: pointer; width: calc(50% - 9.5px);">
+		                                            <form:input type="text" id="input-from-date" name="input-from-date" class="datepicker" readonly="readonly" style="background-color: #FFF; cursor: inherit; width: 100px;" path="searchPropFromDate"/>
+		                                            <i class="ico calendar"></i>                                        	
+	                                        	</div>                                 
+	                                            <span class="col s1 text-bul align-center">~</span>
+	                                            <div class="col s5 input-date input-date" style="padding-right: 0px; cursor: pointer; width: calc(50% - 9.5px);">
+		                                            <form:input type="text" id="input-to-date" name="input-to-date" class="datepicker" readonly="readonly" style="background-color: #FFF; cursor: inherit; width: 100px;" path="searchPropToDate"/>
+		                                            <i class="ico calendar"></i>
+	                                            </div>
+	                                        </div>	                                    	                                    
+	                                    </div>
+	                                    <div class="form-inline form-input col s4"></div>
+	                                </div>
+		                            <div class="search-form row">
+	                                    <div class="col s12 align-right">
+	                                        <button type="button" class="btn-submit" id="button-search">조회</button>
+	                                    </div>	                                
+		                            </div>
+                                </form:form>
                             </div>
-
                             <div class="list-header">
                                 <p class="title">심사 완료 제안목록</p>
                                 <span class="bar"></span>
-                                <p class="total">총 100</p>
-                                <select name="limit" class="limit">
-                                    <option value="10">10개</option>
-                                    <option value="50">50개</option>
-                                    <option value="100">100개</option>
+                                <p class="total">총 ${PROP_TOTAL }</p>
+                                <select name="limit" class="limit" onchange="onchange_recordCountPerPage(this.value)">
+                                    <option value="10" <c:if test="${proposalSearchVO.recordCountPerPage eq '10' }">selected="selected"</c:if>>10개</option>
+                                    <option value="50" <c:if test="${proposalSearchVO.recordCountPerPage eq '50' }">selected="selected"</c:if>>50개</option>
+                                    <option value="100" <c:if test="${proposalSearchVO.recordCountPerPage eq '100' }">selected="selected"</c:if>>100개</option>
                                 </select>
                             </div>
                             <div class="list-content">
@@ -133,19 +152,19 @@
                                             <colgroup>
                                                 <col style="width:30px">
                                                 <col>
-                                                <col style="width:70px">
+                                                <col style="width:60px">
                                                 <col style="width:80px">
-                                                <col style="width:100px">
-                                                <col style="width:100px">
                                                 <col style="width:80px">
-                                                <col style="width:50px">
-                                                <col style="width:100px">
+                                                <col style="width:170px">
+                                                <col style="width:80px">
+                                                <col style="width:80px">
+                                                <col style="width:80px">
                                                 <col style="width:80px">
                                                 <col style="width:80px">
                                             </colgroup>
 
                                             <tr>
-                                                <th class="bg-gray font-weight-bold"><input type="checkbox" name="" id="SelAll" value=""><label for="SelAll"></label></th>
+                                                <th class="bg-gray font-weight-bold"><input type="checkbox" name="checkbox-proposal" id="checkbox-proposal" value=""><label for="checkbox-proposal"></label></th>
                                                 <th class="bg-gray font-weight-bold">제안명</th>
                                                 <th class="bg-gray font-weight-bold">제안자</th>
                                                 <th class="bg-gray font-weight-bold">분임조</th>
@@ -159,299 +178,72 @@
                                             </tr>                                            
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td><input type="checkbox" name="" id="10" value=""><label for="10"></label></td>
-                                                <td>예시) 23년 신제품 싸움닭...</td>
-                                                <td>홍길동</td>
-                                                <td>분임조</td>
-                                                <td>생산성향상</td>
-                                                <td>조직명1</td>
-                                                <td>청길동</td>
-                                                <td>C</td>
-                                                <td>2023.01.30</td>
-                                                <td class="pd3">
-                                                    
-                                                        <div class="row">
-                                                            <div class="col s12 input-text">
-                                                                <input type="text" id="text15" name="" value="" title="항목 입력">
-                                                            </div>
-                                                        </div>
-                                                    
-                                                </td>
-                                                <td>
-                                                    <div class="pd-l10 col s12">
-                                                        <select name="" id="">
-                                                            <option value="">전체</option>
-                                                        </select>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td><input type="checkbox" name="" id="9" value=""><label for="9"></label></td>
-                                                <td>예시) 23년 신제품 싸움닭...</td>
-                                                <td>홍길동</td>
-                                                <td>-</td>
-                                                <td>원가개선</td>
-                                                <td>조직명1</td>
-                                                <td>청길동</td>
-                                                <td>C</td>
-                                                <td>2023.01.30</td>
-                                                <td class="pd3">
-                                                    
-                                                    <div class="row">
-                                                        <div class="col s12 input-text">
-                                                            <input type="text" id="text15" name="" value="" title="항목 입력">
-                                                        </div>
-                                                    </div>
-                                                
-                                                </td>   
-                                                <td>
-                                                
-                                                <div class="pd-l10 col s12">
-                                                    <select name="" id="">
-                                                        <option value="">전체</option>
-                                                    </select>
-                                                </div>
-                                                </td>
-                                                
-                                            </tr>
-                                            <tr>
-                                                <td><input type="checkbox" name="" id="8" value=""><label for="8"></label></td>
-                                                <td>예시) 23년 신제품 싸움닭...</td>
-                                                <td>홍길동</td>
-                                                <td>-</td>
-                                                <td>에너지</td>
-                                                <td>조직명1</td>
-                                                <td>청길동</td>
-                                                <td>C</td>
-                                                <td>2023.01.30</td>
-                                                <td class="pd3">
-                                                    
-                                                    <div class="row">
-                                                        <div class="col s12 input-text">
-                                                            <input type="text" id="text15" name="" value="" title="항목 입력">
-                                                        </div>
-                                                    </div>
-                                                
-                                                </td>   
-                                                <td>
-                                                    <div class="pd-l10 col s12">
-                                                        <select name="" id="">
-                                                            <option value="">전체</option>
-                                                        </select>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td><input type="checkbox" name="" id="7" value=""><label for="7"></label></td>
-                                                <td>예시) 23년 신제품 싸움닭...</td>
-                                                <td>홍길동</td>
-                                                <td>-</td>
-                                                <td>기타</td>
-                                                <td>조직명1</td>
-                                                <td>청길동</td>
-                                                <td>C</td>
-                                                <td>2023.01.30</td>
-                                                <td class="pd3">
-                                                    
-                                                    <div class="row">
-                                                        <div class="col s12 input-text">
-                                                            <input type="text" id="text15" name="" value="" title="항목 입력">
-                                                        </div>
-                                                    </div>
-                                                
-                                                </td>   
-                                                <td>
-                                                    <div class="pd-l10 col s12">
-                                                        <select name="" id="">
-                                                            <option value="">전체</option>
-                                                        </select>
-                                                    </div>
-                                                </td>
-                                            </tr>
-
-                                            <tr>
-                                                <td><input type="checkbox" name="" id="6" value=""><label for="6"></label></td>
-                                                <td>예시) 23년 신제품 싸움닭...</td>
-                                                <td>홍길동</td>
-                                                <td>분임조</td>
-                                                <td>생산성향상</td>
-                                                <td>조직명1</td>
-                                                <td>청길동</td>
-                                                <td>C</td>
-                                                <td>2023.01.30</td>
-                                                <td class="pd3">
-                                                    
-                                                    <div class="row">
-                                                        <div class="col s12 input-text">
-                                                            <input type="text" id="text15" name="" value="" title="항목 입력">
-                                                        </div>
-                                                    </div>
-                                                
-                                                </td>   
-                                                <td>
-                                                    <div class="pd-l10 col s12">
-                                                        <select name="" id="">
-                                                            <option value="">전체</option>
-                                                        </select>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td><input type="checkbox" name="" id="5" value=""><label for="5"></label></td>
-                                                <td>예시) 23년 신제품 싸움닭...</td>
-                                                <td>홍길동</td>
-                                                <td>-</td>
-                                                <td>원가개선</td>
-                                                <td>조직명1</td>
-                                                <td>청길동</td>
-                                                <td>C</td>
-                                                <td>2023.01.30</td>
-                                                <td class="pd3">
-                                                    
-                                                    <div class="row">
-                                                        <div class="col s12 input-text">
-                                                            <input type="text" id="text15" name="" value="" title="항목 입력">
-                                                        </div>
-                                                    </div>
-                                                
-                                                </td>   
-                                                <td>
-                                                    <div class="pd-l10 col s12">
-                                                        <select name="" id="">
-                                                            <option value="">전체</option>
-                                                        </select>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td><input type="checkbox" name="" id="4" value=""><label for="4"></label></td>
-                                                <td>예시) 23년 신제품 싸움닭...</td>
-                                                <td>홍길동</td>
-                                                <td>-</td>
-                                                <td>에너지</td>
-                                                <td>조직명1</td>
-                                                <td>청길동</td>
-                                                <td>C</td>
-                                                <td>2023.01.30</td>
-                                                <td class="pd3">
-                                                    
-                                                    <div class="row">
-                                                        <div class="col s12 input-text">
-                                                            <input type="text" id="text15" name="" value="" title="항목 입력">
-                                                        </div>
-                                                    </div>
-                                                
-                                                </td>   
-                                                <td>
-                                                    <div class="pd-l10 col s12">
-                                                        <select name="" id="">
-                                                            <option value="">전체</option>
-                                                        </select>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td><input type="checkbox" name="" id="3" value=""><label for="3"></label></td>
-                                                <td>예시) 23년 신제품 싸움닭...</td>
-                                                <td>홍길동</td>
-                                                <td>-</td>
-                                                <td>기타</td>
-                                                <td>조직명1</td>
-                                                <td>청길동</td>
-                                                <td>C</td>
-                                                <td>2023.01.30</td>
-                                                <td class="pd3">
-                                                    
-                                                    <div class="row">
-                                                        <div class="col s12 input-text">
-                                                            <input type="text" id="text15" name="" value="" title="항목 입력">
-                                                        </div>
-                                                    </div>
-                                                
-                                                </td>   
-                                                <td>
-                                                    <div class="pd-l10 col s12">
-                                                        <select name="" id="">
-                                                            <option value="">전체</option>
-                                                        </select>
-                                                    </div>
-                                                </td>
-                                            </tr>
-
-                                            <tr>
-                                                <td><input type="checkbox" name="" id="2" value=""><label for="2"></label></td>
-                                                <td>예시) 23년 신제품 싸움닭...</td>
-                                                <td>홍길동</td>
-                                                <td>-</td>
-                                                <td>에너지</td>
-                                                <td>조직명1</td>
-                                                <td>청길동</td>
-                                                <td>C</td>
-                                                <td>2023.01.30</td>
-                                                <td class="pd3">
-                                                    
-                                                    <div class="row">
-                                                        <div class="col s12 input-text">
-                                                            <input type="text" id="text15" name="" value="" title="항목 입력">
-                                                        </div>
-                                                    </div>
-                                                
-                                                </td>   
-                                                <td>
-                                                    <div class="pd-l10 col s12">
-                                                        <select name="" id="">
-                                                            <option value="">전체</option>
-                                                        </select>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td><input type="checkbox" name="" id="1" value=""><label for="1"></label></td>
-                                                <td>예시) 23년 신제품 싸움닭...</td>
-                                                <td>홍길동</td>
-                                                <td>-</td>
-                                                <td>기타</td>
-                                                <td>조직명1</td>
-                                                <td>청길동</td>
-                                                <td>C</td>
-                                                <td>2023.01.30</td>
-                                                <td class="pd3">
-                                                    
-                                                    <div class="row">
-                                                        <div class="col s12 input-text">
-                                                            <input type="text" id="text15" name="" value="" title="항목 입력">
-                                                        </div>
-                                                    </div>
-                                                
-                                                </td>   
-                                                <td>
-                                                    <div class="pd-l10 col s12">
-                                                        <select name="" id="">
-                                                            <option value="">전체</option>
-                                                        </select>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                                                  
+                                        	<c:forEach var="item" items="${PROP_LIST }" varStatus="status">
+                                        		<tr>
+                                                	<c:choose>
+                                                		<c:when test="${item.propPropStatCode eq 'PRG_6' }">
+                                                			<td></td>
+                                                		</c:when>
+                                                		<c:otherwise>
+                                                			<td><input type="checkbox" name="checkbox-proposal-info" id="checkbox-proposal-${item.propSeq }" value="${item.propSeq }"><label for="checkbox-proposal-${item.propSeq }"></label></td>
+                                                		</c:otherwise>
+                                                	</c:choose>
+                                                	<td class="align-left"><a href="javascript: onclick_poposalInfo('${item.propSeq}', '${item.propTypeCode }');">${item.propName }</a></td>
+	                                                <td>${item.propUserName }</td>
+	                                                <td>${item.propCircleCode }</td>
+	                                                <td>${item.propCategoryCodeName }</td>
+	                                                <td>${item.propGroupName }</td>
+	                                                <td>${item.propApproverName }</td>
+	                                                <td>${item.propEvalLvCodeName }</td>
+	                                                <td>${item.propDate }</td>
+													<c:choose>
+	                                                	<c:when test="${item.propPropStatCode eq 'PRG_6' }">
+	                                                		<td><fmt:formatNumber var="propSubsidy" value="${item.propSubsidy}" type="currency" currencySymbol="₩"/>${propSubsidy }</td>
+	                                                	</c:when>
+	                                                	<c:otherwise>
+	                                                		<td>
+	                                                			<div class="row">
+	                                                				<div class="col s12 input-text">
+	                                                					<input type="text" name="input-proposal-subsidy-${item.propSeq }" id="input-proposal-subsidy-${item.propSeq }"/>
+	                                                				</div>
+	                                                			</div>
+	                                                		</td>
+	                                                	</c:otherwise>	                                                
+	                                                </c:choose>
+ 	                                                <c:choose>
+	                                                	<c:when test="${item.propPropStatCode eq 'PRG_6' }">
+	                                                		<td>${item.propPaymentYnName }</td>
+	                                                	</c:when>
+	                                                	<c:otherwise>
+	                                                		<td>
+			                                                    <div class="col s12">
+			                                                    	<select name="select-proposal-payment-yn-${item.propSeq }" id="select-proposal-payment-yn-${item.propSeq }">
+			                                                        	<option value="">전체</option>
+			                                                        	<c:forEach var="yn" items="${PAYMENT_LIST }">
+			                                                        		<c:choose>
+			                                                        			<c:when test="${item.propPaymentYn eq yn.codeId }">
+			                                                        				<option value="${yn.codeId }" selected="selected">${yn.codeNm }</option>
+			                                                        			</c:when>
+			                                                        			<c:otherwise>
+			                                                        				<option value="${yn.codeId }">${yn.codeNm }</option>
+			                                                        			</c:otherwise>
+			                                                        		</c:choose>			                                                        		
+			                                                        	</c:forEach>
+			                                                    	</select>
+		                                                    	</div>
+		                                                    </td>
+	                                                	</c:otherwise>
+	                                                </c:choose>	                                                                                                                                                	                                        		
+                                        		</tr>
+                                        	</c:forEach>
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
                             <div class="list-footer">
-                                <div class="pagination">
-                                    <a href="" class="first">처음</a>
-                                    <a href="" class="prev">이전</a>
-                                    <a href="" class="cur num">1</a>
-                                    <a href="" class="num">2</a>
-                                    <a href="" class="num">3</a>
-                                    <a href="" class="num">4</a>
-                                    <a href="" class="num">5</a>
-                                    <a href="" class="next">다음</a>
-                                    <a href="" class="last">끝</a>
-                                </div>
+								<ui:pagination paginationInfo="${proposalSearchVO}" type="defDefault" jsFunction="cfnPageLink" />
                                 <div class="list-btns">
-                                    <button type="button" class="btn bg-gray">                                        
+                                    <button type="button" class="btn bg-gray" id="btn-eval-payment">                                        
                                         <span>마감</span>
                                     </button>
                                     <button type="button" class="btn-excel">
@@ -462,109 +254,120 @@
 
                             </div>
                         </div>
-
-        <!-- 조직도 -->
-        <div class="modal-dimmed"></div>
-        <div class="org-modal">
-            <div class="modal-header">
-                <h4>조직조회</h4>
-                <button type="button" class="btn-close">닫기</button>
-            </div>
-            <div class="modal-content">
-                <div class="list-wrap">
-                    <div class="list-search">
-                        <form id="org-form" onsubmit="org_search();return false;">
-                            <div class="search-form">
-                                <div class="form-inline form-input">
-                                    <label>조직명</label>
-                                    <input type="text" name="">
-                                </div>
-                                <button type="submit" class="btn-submit">조회</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-                <div class="tree-header">
-                    <div>
-                        <input type="checkbox" id="orgSelAll">
-                        <label for="orgSelAll"></label>
-                    </div>
-                    <div>
-                        6σ 인재육성대상 조직명
-                    </div>
-                </div>
-                <div id="org-tree">
-                    <ul>
-                        <li>창호 사업부
-                            <ul>
-                                <li>창호.생산담당
-                                    <ul>
-                                        <li>· 창호.프로파일생산팀</li>
-                                        <li>· 창호.기술팀</li>
-                                        <li>· 창호.공정혁신팀</li>
-                                        <li>· 창호.완성창공정기술팀</li>
-                                    </ul>
-                                </li>
-                                <li>유리</li>
-                                <li>연구소 근무</li>
-                                <li>창호.시스템창사업담당</li>
-                                <li>창호.중문팀</li>
-                                <li>바닥재 사업담당	</li>
-                            </ul>
-                        </li>
-                        <li>단열재 사업담당
-                            <ul>
-                                <li>창호.프로파일생산팀</li>
-                            </ul>
-                        </li>
-                        <li>벽지 사업담당	
-                            <ul>
-                                <li>창호.프로파일생산팀</li>
-                            </ul>
-                        </li>
-                        <li>표면소재 사업담당
-                            <ul>
-                                <li>창호.프로파일생산팀</li>
-                            </ul>
-                        </li>
-                        <li>산업용필름 사업담당
-                            <ul>
-                                <li>창호.프로파일생산팀</li>
-                            </ul>
-                        </li>
-                        <li>자동차소재부품 사업부
-                            <ul>
-                                <li>창호.프로파일생산팀</li>
-                            </ul>
-                        </li>
-                        <li>인테리어 사업부
-                            <ul>
-                                <li>창호.프로파일생산팀</li>
-                            </ul>
-                        </li>
-                        <li>연구소
-                            <ul>
-                                <li>창호.프로파일생산팀</li>
-                            </ul>
-                        </li>
-                        <li>품질 담당
-                            <ul>
-                                <li>창호.프로파일생산팀</li>
-                            </ul>
-                        </li>
-                        <li>생산/기술/R&D/품질 外
-                            <ul>
-                                <li>창호.프로파일생산팀</li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
-                <div class="btns">
-                    <button type="button" class="btn-submit">확인</button>
-                    <button type="button" class="btn-cancel">취소</button>
-                </div>
-            </div>
-        </div>
-    
+<script type="text/javascript">
+	$(document).ready(function(){
+		//제안자 조회
+		$('.btn-proposal-member-search-modal').off('click').on('click', function(){
+			popEmp.init();
+			
+			popEmp.returnObjId = $('#input-proposal');
+			popEmp.returnFunc = setProposalMemberInfo;
+			
+			popEmp.open();
+		});
+		
+		$('#button-search').off('click').on('click', function(){
+			onclick_search();
+		});
+		
+		$('#btn-eval-payment').off('click').on('click', function(){
+			//$("#evalForm")[0].submit();
+			//선택된 로우만 submit			
+			var list = $('input:checkbox[name="checkbox-proposal-info"]:checked');
+			if(list.length > 0){
+				if(confirm('선택된 항목을 마감처리 하시겠습니까?')){
+					var evalForm = $('<form></form>');
+					evalForm.attr('name', 'evalForm');
+					evalForm.attr('method', 'post');
+					evalForm.attr('action', 'procpayment.do');
+					evalForm.attr('target', 'evalFormFrame');
+ 					for(var index = 0; index < list.length; index++){
+						var item = $(list[index]);
+						var subsidy = $('#input-proposal-subsidy-' + item.val() +'').val().trim();
+						var payment = $('#select-proposal-payment-yn-' + item.val()+'').val();
+						if(subsidy == ''){
+							alert('마감시 지급비용이 입력되어야 합니다.');
+							return false;
+						}
+						if(/[0-9]/g.test(subsidy) == false){
+							alert('지급금액은 숫자만 입력가능합니다.');
+							return false;							
+						}
+						if(payment != 'Y'){
+							alert('마감시 비용지급이 완료되어야 합니다');
+							return false;							
+						}
+						evalForm.append($('<input/>', {type: 'hidden', name:'evalProposalList['+ index + '].propSeq', value:item.val()}));
+						evalForm.append($('<input/>', {type: 'hidden', name:'evalProposalList['+ index + '].propSubsidy', value:subsidy}));
+						evalForm.append($('<input/>', {type: 'hidden', name:'evalProposalList['+ index + '].propPaymentYn', value:payment}));
+					}
+					evalForm.appendTo('body');
+					evalForm.submit();
+					
+/* 					var propList = [];
+ 					for(var index = 0; index < list.length; index++){
+						var item = $(list[index]);
+						var lvCode = $('#select-proposal-class-' + item.val() +'').val();
+						if(lvCode == ''){
+							alert('마감시 등급선택은 필수 입니다.');
+							return false;
+						}						
+						propList.push({propSeq: item.val(), propEvalLvCode: lvCode});
+					}
+ 					if(propList.length > 0){
+  	        			$.post( "/proposal/eval/procclass.do", { propList: propList }, function(data){
+ 	        				if(data != null && data.result == 'SUCCESS'){
+ 	        					console.log(data);
+ 	        				}
+ 	        			}, "json" );
+ 					} */
+				}
+			}else{
+				alert('등급평가 항목을 선택해 주세요.');
+			}
+		});
+		
+		$('#checkbox-proposal').change(function(){
+			$('input:checkbox[name="checkbox-proposal-info"]').prop('checked', $(this).prop('checked'));
+		});
+		
+		$('input:checkbox[name="checkbox-proposal-info"]').change(function(){
+			if($(this).prop('checked')){
+				var size = $('input:checkbox[name="checkbox-proposal-info"]').length;
+				var c = true;
+				for(var index = 0; index < size; index++){
+					var checked = $($('input:checkbox[name="checkbox-proposal-info"]')[index]).is(':checked');
+					c = checked
+				}
+				$('#checkbox-proposal').prop('checked', c);
+			}else{
+				$('#checkbox-proposal').prop('checked', $(this).prop('checked'));
+			}
+		});
+	});
+	
+	function setProposalMemberInfo(el, d){
+		$('#input-proposal-member').val(d.userName);
+		$('#input-proposal-member-code').val(d.comNo);
+	}
+	
+	function onclick_search(){
+		$("#defaultForm")[0].submit();				
+	}
+	
+	function onchange_recordCountPerPage(vCount){
+		$("#recordCountPerPage").val(vCount);
+		onclick_search();// 검색 '조회'버튼 클릭
+	}
+	
+	function onclick_poposalInfo(propSeq, propTypeCode){
+		if(propTypeCode == 'PPS_TYP_1'){
+			location.href="/proposal/judge/detail.do?menuKey=52&propSeq="+propSeq;
+		}else{
+			location.href="/proposal/judge/memodetail.do?menuKey=52&propSeq="+propSeq;
+		}		
+	}
+</script>
+<iframe id="evalFormFrame" name="evalFormFrame" width="0" height="0"></iframe>
 </body>
 </html>

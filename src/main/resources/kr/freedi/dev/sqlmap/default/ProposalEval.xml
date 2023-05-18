@@ -39,6 +39,7 @@
 		<result column="PROP_EVAL_LV_CODE_NM" 		property="propEvalLvCodeName"/>
 		<result column="PROP_USER_NM" 				property="propUserName"/>
 		<result column="PROP_APPROVER_NM"			property="propApproverName"/>
+		<result column="PROP_PAYMENT_YN_NM"			property="propPaymentYnName"/>
 		
 		<result column="IDX"						property="idx"/>
 	</resultMap>
@@ -54,7 +55,7 @@
 					   PROP_GROUP_NAME, PROP_BELT_CODE, NVL(PROP_BIZ_PLACE_CODE, '-') AS PROP_BIZ_PLACE_CODE, NVL(PROP_CIRCLE_CODE, '-') AS PROP_CIRCLE_CODE,
 					   PROP_APPROVER_CODE, PROP_PROP_STAT_CODE, GET_CODE_NM('PPS_PRG', PROP_PROP_STAT_CODE) AS PROP_PROP_STAT_CODE_NM,
 					   PROP_EVAL_SCORE, PROP_EVAL_LV_CODE, GET_CODE_NM('PPS_CLS', PROP_EVAL_LV_CODE) AS PROP_EVAL_LV_CODE_NM, 
-					   PROP_EFFECT_SCORE, PROP_SUBSIDY, PROP_PAYMENT_YN, PROP_PAYMENT_DATE, 
+					   PROP_EFFECT_SCORE, PROP_SUBSIDY, PROP_PAYMENT_YN, GET_CODE_NM('PMT_YN', PROP_PAYMENT_YN) AS PROP_PAYMENT_YN_NM, TO_CHAR(PROP_PAYMENT_DATE, 'YYYY-MM-DD') AS PROP_PAYMENT_DATE, 
 				       TO_CHAR(PROP_DATE, 'YYYY-MM-DD') AS PROP_DATE, 
 				       TO_CHAR(PROP_PRACTICE_COMP_DATE, 'YYYY-MM-DD') AS PROP_PRACTICE_COMP_DATE,
 				       PROP_USER, GET_USER_NM(PROP_USER) AS PROP_USER_NM,
@@ -87,11 +88,69 @@
 		<include refid="selectEvalForClassProposalMasterInfoWithPaging"></include>
 	</select>
 	
-	<select id="selectListCount" resultType="egovMap">
+	<select id="selectForClassListCount" resultType="egovMap">
 		SELECT COUNT(*) AS COUNT FROM (<include refid="selectForEvalClassProposalInfo"></include>)
 	</select>
 	
 	<update id="updatePropEvalLvCode" parameterType="kr.freedi.dev.qproposal.domain.EvalProposalVO">
 		UPDATE TB_PROPOSAL_DETAIL SET PROP_EVAL_LV_CODE = #{propEvalLvCode, jdbcType=VARCHAR}, PROP_PROP_STAT_CODE = 'PRG_5' WHERE PROP_SEQ = #{propSeq}
+	</update>
+	
+		<sql id="selectForEvalPaymentProposalInfo">
+		WITH PROPOSAL_MASTER AS (
+            SELECT ROW_NUMBER() OVER( ORDER BY TO_NUMBER(T.PROP_SEQ) ASC ) IDX, ROW_NUMBER() OVER( ORDER BY TO_NUMBER(T.PROP_SEQ) DESC ) ROWIDX, T.*
+            FROM(
+				SELECT PROP_SEQ, PROP_NAME, PROP_CATEGORY_CODE, GET_CODE_NM('PPS_CTY', PROP_CATEGORY_CODE) AS PROP_CATEGORY_CODE_NM, 
+					   PROP_TYPE_CODE, GET_CODE_NM('PPS_TYP', PROP_TYPE_CODE) AS PROP_TYPE_CODE_NM, PROP_PROBLEM, PROP_IMPROVEMENT_CONT,
+					   PROP_BENEFIT, PROP_YEAR_EFFECT, PROP_YEAR_EFFECT_CODE, GET_CODE_NM('RESULTTY', PROP_YEAR_EFFECT_CODE) AS PROP_YEAR_ERRECT_CODE_NM,
+					   PROP_REL_MEMO_YN, PROP_REL_MEMO_CODE, GET_PROP_NM(TO_NUMBER(PROP_REL_MEMO_CODE)) AS PROP_REL_MEMO_CODE_NM, 
+					   PROP_GROUP_NAME, PROP_BELT_CODE, NVL(PROP_BIZ_PLACE_CODE, '-') AS PROP_BIZ_PLACE_CODE, NVL(PROP_CIRCLE_CODE, '-') AS PROP_CIRCLE_CODE,
+					   PROP_APPROVER_CODE, PROP_PROP_STAT_CODE, GET_CODE_NM('PPS_PRG', PROP_PROP_STAT_CODE) AS PROP_PROP_STAT_CODE_NM,
+					   PROP_EVAL_SCORE, PROP_EVAL_LV_CODE, GET_CODE_NM('PPS_CLS', PROP_EVAL_LV_CODE) AS PROP_EVAL_LV_CODE_NM, 
+					   PROP_EFFECT_SCORE, PROP_SUBSIDY, PROP_PAYMENT_YN, GET_CODE_NM('PMT_YN', PROP_PAYMENT_YN) AS PROP_PAYMENT_YN_NM, TO_CHAR(PROP_PAYMENT_DATE, 'YYYY-MM-DD') AS PROP_PAYMENT_DATE, 
+				       TO_CHAR(PROP_DATE, 'YYYY-MM-DD') AS PROP_DATE, 
+				       TO_CHAR(PROP_PRACTICE_COMP_DATE, 'YYYY-MM-DD') AS PROP_PRACTICE_COMP_DATE,
+				       PROP_USER, GET_USER_NM(PROP_USER) AS PROP_USER_NM,
+				       NVL(GET_USER_NM(PROP_APPROVER_CODE), '-') AS PROP_APPROVER_NM
+				FROM TB_PROPOSAL_DETAIL	 
+				WHERE PROP_PROP_STAT_CODE NOT IN ('PRG_1', 'PRG_2', 'PRG_3', 'PRG_4')
+				<if test="searchPropFromDate != null and searchPropFromDate neq ''.toString() and searchPropToDate != null and searchPropToDate neq ''.toString()">
+					AND PROP_DATE BETWEEN TO_DATE(#{searchPropFromDate}, 'YYYY-MM-DD') AND TO_DATE(#{searchPropToDate}, 'YYYY-MM-DD')
+				</if>							
+				<if test="searchPropCategoryCode != null and searchPropCategoryCode neq ''.toString()">
+					AND PROP_CATEGORY_CODE = #{searchPropCategoryCode}
+				</if>
+				<if test="searchPropName != null and searchPropName neq ''.toString()">
+					AND PROP_NAME LIKE '%'||#{searchPropName}||'%'
+				</if>
+            ) T
+		)
+		SELECT T.*
+		FROM PROPOSAL_MASTER T
+	</sql>
+	
+	<sql id="selectEvalForPaymentProposalMasterInfoWithPaging">
+		<include refid="selectForEvalPaymentProposalInfo"></include>
+		WHERE T.ROWIDX BETWEEN (#{currentPageNo}*#{recordCountPerPage}+1-#{recordCountPerPage}) AND 
+			  (#{currentPageNo}*#{recordCountPerPage})		  
+		ORDER BY T.IDX DESC
+	</sql>
+	
+	<select id="selectEvalForPaymentProposalMasterInfo" resultMap="proposalInfoResultMap">
+		<include refid="selectEvalForPaymentProposalMasterInfoWithPaging"></include>
+	</select>
+	
+	<select id="selectForPaymentListCount" resultType="egovMap">
+		SELECT COUNT(*) AS COUNT FROM (<include refid="selectForEvalPaymentProposalInfo"></include>)
+	</select>
+	
+	<update id="updatePropPaymentInfo" parameterType="kr.freedi.dev.qproposal.domain.EvalProposalVO">
+		UPDATE TB_PROPOSAL_DETAIL 
+		SET 
+			PROP_SUBSIDY = #{propSubsidy, jdbcType=VARCHAR}, 
+			PROP_PAYMENT_YN = #{propPaymentYn, jdbcType=VARCHAR}, 
+			PROP_PAYMENT_DATE = SYSDATE, 
+			PROP_PROP_STAT_CODE = 'PRG_6' 
+		WHERE PROP_SEQ = #{propSeq}
 	</update>
 </mapper>

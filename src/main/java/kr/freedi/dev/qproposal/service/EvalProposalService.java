@@ -29,14 +29,29 @@ public class EvalProposalService {
 		return dao.selectList("EvalProposal.selectEvalForClassPoposalMasterInfo", searchVO);
 	}
 
-	public EgovMap selectListCount(EvalProposalSearchVO searchVO) {
+	public EgovMap selectForClassListCount(EvalProposalSearchVO searchVO) {
 		// TODO Auto-generated method stub
-		return dao.selectOne("EvalProposal.selectListCount", searchVO);
+		return dao.selectOne("EvalProposal.selectForClassListCount", searchVO);
 	}
 
 	public int updatePropEvalLvCode(EvalProposalVO param) {
 		// TODO Auto-generated method stub
 		return dao.update("EvalProposal.updatePropEvalLvCode", param);
+	}
+
+	public List<ProposalVO> selectEvalForPaymentProposalMasterInfo(EvalProposalSearchVO searchVO) {
+		// TODO Auto-generated method stub
+		return dao.selectList("EvalProposal.selectEvalForPaymentProposalMasterInfo", searchVO);
+	}
+
+	public EgovMap selectForPaymentListCount(EvalProposalSearchVO searchVO) {
+		// TODO Auto-generated method stub
+		return dao.selectOne("EvalProposal.selectForPaymentListCount", searchVO);
+	}
+	
+	public int updatePropPaymentInfo(EvalProposalVO param) {
+		// TODO Auto-generated method stub
+		return dao.update("EvalProposal.updatePropPaymentInfo", param);
 	}
 
 }
