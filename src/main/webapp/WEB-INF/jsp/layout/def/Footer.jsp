@@ -425,7 +425,7 @@
 	            			/*$.post( "/csl/code/selectFullListByCodeGrpId.do", { codeGrpId: 'PP_TY' }, function(response){
 	            				console.log(response);
 	            			}, "json" );*/
-	            			$.post( "/csl/code/selectFullListByCodeGrpId.do", { codeGrpId: 'PP_CT' }, function(data){
+	            			$.post( "/csl/code/selectFullListByCodeGrpId.do", { codeGrpId: 'PPS_CTY' }, function(data){
 	            				if(data != null && data.codeCnt > 0){
 	            					var options = '<option value="">전체</option>';
 	            					for(var index = 0; index < data.codeCnt; index++){
@@ -435,6 +435,7 @@
 	            					$('#select-proposal-category-code').html(options);
 	            				}
 	            			}, "json" );
+	            			popRelMemo.callData(1);
 	            			$('.modal-dimmed').show();
 	            			$('#comPopup_pmsgSearch').show();
 	            		},

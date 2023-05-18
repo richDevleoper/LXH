@@ -70,7 +70,7 @@
 	                                        <div class="pd-l10 col s9">
 	                                            <form:select name="select-type-code" id="select-type-code" path="searchPropTypeCode">
 	                                                <option value="">전체</option>
-                                                    <c:forEach var="item" items="${PP_TY_LIST }">
+                                                    <c:forEach var="item" items="${TYPE_LIST }">
                                                     	<option value="${item.codeId }">${item.codeNm }</option>
                                                     </c:forEach>	                                                
 	                                            </form:select>
@@ -83,10 +83,8 @@
 	                                        <div class="pd-l10 col s9">
 	                                            <form:select name="select-class-code" id="select-class-code" path="searchPropClassCode">
 	                                                <option value="">전체</option>
-	                                                <c:forEach var="item" items="${PP_CL_LIST }">
-	                                                	<c:if test="${item.attr1 eq 'CLASS' }">
-	                                                		<option value="${item.codeId }">${item.codeNm }</option>
-	                                                	</c:if>                                                    	
+	                                                <c:forEach var="item" items="${CLASS_LIST }">
+														<option value="${item.codeId }">${item.codeNm }</option>                                                   	
                                                     </c:forEach>
 	                                            </form:select>
 	                                        </div>
@@ -100,7 +98,7 @@
 	                                        <div class="pd-l10 col s9">
 	                                            <form:select name="select-category-code" id="select-category-code" path="searchPropCategoryCode">
 	                                                <option value="">전체</option>
-	                                                <c:forEach var="item" items="${PP_CT_LIST }">
+	                                                <c:forEach var="item" items="${CATEGORY_LIST }">
                                                     	<option value="${item.codeId }">${item.codeNm }</option>
                                                     </c:forEach>	                                                
 	                                            </form:select>
@@ -113,10 +111,8 @@
 	                                        <div class="pd-l10 col s9">
 	                                            <form:select name="select-stat-code" id="select-stat-code" path="searchPropStatCode">
 	                                                <option value="">전체</option>
-	                                                <c:forEach var="item" items="${PP_CL_LIST }">
-	                                                	<c:if test="${item.attr1 eq 'PROC' }">
-	                                                		<option value="${item.codeId }">${item.codeNm }</option>
-	                                                	</c:if>                                                    	
+	                                                <c:forEach var="item" items="${PROGRESS_LIST }">
+	                                                	<option value="${item.codeId }">${item.codeNm }</option>                                                    	
                                                     </c:forEach>	                                                
 	                                            </form:select>
 	                                        </div>
@@ -149,7 +145,7 @@
                             <div class="list-header">
                                 <p class="title">제안목록</p>
                                 <span class="bar"></span>
-                                <p class="total">총 ${COUNT_TOTAL } (실시제안 ${COUNT_PP_TY_1 }, 쪽지제안 ${COUNT_PP_TY_2 })</p>
+                                <p class="total">총 ${SUMMARY.tt } (실시제안 ${SUMMARY.ppsTyp1 }, 쪽지제안 ${SUMMARY.ppsTyp2 })</p>
                                 <select name="limit" class="limit" onchange="onchange_recordCountPerPage(this.value)">
                                     <option value="10" <c:if test="${proposalSearchVO.recordCountPerPage eq '10' }">selected="selected"</c:if>>10개</option>
                                     <option value="50" <c:if test="${proposalSearchVO.recordCountPerPage eq '50' }">selected="selected"</c:if>>50개</option>
@@ -243,7 +239,7 @@
 	}
 	
 	function onclick_poposalInfo(propSeq, propTypeCode){
-		if(propTypeCode == 'PP_TY_1'){
+		if(propTypeCode == 'PPS_TYP_1'){
 			location.href="/proposal/judge/detail.do?menuKey=50&propSeq="+propSeq;
 		}else{
 			location.href="/proposal/judge/memodetail.do?menuKey=50&propSeq="+propSeq;

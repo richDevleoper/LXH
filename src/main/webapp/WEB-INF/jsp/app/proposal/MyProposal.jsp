@@ -25,7 +25,7 @@
                                             <label style="margin-right: 5px; letter-spacing: -0.085rem;">구분</label>
                                             <form:select name="select-type-code" id="select-type-code" path="searchPropTypeCode">
                                                 <option value="">전체</option>
-                                                <c:forEach var="item" items="${PP_TY_LIST }">
+                                                <c:forEach var="item" items="${TYPE_LIST }">
                                                 	<c:choose>
                                                 		<c:when test="${item.codeId eq PROP_TYPE_CODE}">
                                                 			<option value="${item.codeId }" selected="selected">${item.codeNm }</option>
@@ -44,7 +44,7 @@
                                             <label style="margin-right: 5px; letter-spacing: -0.085rem;">제안유형</label>                                            
                                             <form:select name="select-category-code" id="select-category-code" path="searchPropCategoryCode">
                                                 <option value="">전체</option>
-                                                <c:forEach var="item" items="${PP_CT_LIST }">
+                                                <c:forEach var="item" items="${CATEGORY_LIST }">
                                                 	<c:choose>
                                                 		<c:when test="${item.codeId eq PROP_CATEGORY_CODE}">
                                                 			<option value="${item.codeId }" selected="selected">${item.codeNm }</option>
@@ -60,7 +60,7 @@
                                             <label style="margin-right: 5px; letter-spacing: -0.085rem;">등급</label>
                                             <form:select name="select-class-code" id="select-class-code" path="searchPropClassCode">
                                                 <option value="">전체</option>
-                                                <c:forEach var="item" items="${PP_CL_LIST }">
+                                                <c:forEach var="item" items="${CLASS_LIST }">
                                                 	<c:choose>
                                                 		<c:when test="${item.codeId eq PROP_CLASS_CODE}">
                                                 			<option value="${item.codeId }" selected="selected">${item.codeNm }</option>
@@ -92,7 +92,7 @@
                             <div class="list-header">
                                 <p class="title">나의 실시제안</p>
                                 <span class="bar"></span>
-                                <p class="total" id="total-summary">총 ${COUNT_TOTAL }(S급 : ${COUNT_S }건, A급 : ${COUNT_A }건, B급 : ${COUNT_B }건, C급 : ${COUNT_C }건, D급 : ${COUNT_D }건, 불체택 : ${COUNT_NA }건, 등급평가중 : ${COUNT_EV }건, 입력중 : ${COUNT_IP }건)</p>
+                                <p class="total" id="total-summary">총 ${SUMMARY.tt }(S급 : ${SUMMARY.s }건, A급 : ${SUMMARY.a }건, B급 : ${SUMMARY.b }건, C급 : ${SUMMARY.c }건, D급 : ${SUMMARY.d }건, 불체택 : ${SUMMARY.na }건, 등급평가중 : ${SUMMARY.prg4 }건, 입력중 : ${SUMMARY.prg1 }건)</p>
                                 <select name="limit" class="limit" onchange="onchange_recordCountPerPage(this.value)">
                                     <option value="10" <c:if test="${proposalSearchVO.recordCountPerPage eq '10' }">selected="selected"</c:if>>10개</option>
                                     <option value="50" <c:if test="${proposalSearchVO.recordCountPerPage eq '50' }">selected="selected"</c:if>>50개</option>
@@ -178,7 +178,7 @@
 	}
 	
 	function onclick_poposalInfo(propSeq, propTypeCode){
-		if(propTypeCode == 'PP_TY_1'){
+		if(propTypeCode == 'PPS_TYP_1'){
 			location.href="/proposal/detail.do?menuKey=48&propSeq="+propSeq;
 		}else{
 			location.href="/proposal/memodetail.do?menuKey=49&propSeq="+propSeq;

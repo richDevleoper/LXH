@@ -24,6 +24,7 @@ public class ProposalVO {
 	private String propCircleCode;
 	private String propApproverCode;
 	private String propPropStatCode;
+	private String propEvalLvCode;
 	private String propEvalScore;
 	private String propEffectScore;
 	private String propSubsidy;
@@ -39,6 +40,7 @@ public class ProposalVO {
 	private String propTypeCodeName;
 	private String propYearEffectCodeName;
 	private String propPropStatCodeName;
+	private String propEvalLvCodeName;
 	
 	private String propUserName;
 	
@@ -167,6 +169,12 @@ public class ProposalVO {
 	public void setPropPropStatCode(String propPropStatCode) {
 		this.propPropStatCode = propPropStatCode;
 	}
+	public String getPropEvalLvCode() {
+		return propEvalLvCode;
+	}
+	public void setPropEvalLvCode(String propEvalLvCode) {
+		this.propEvalLvCode = propEvalLvCode;
+	}
 	public String getPropEvalScore() {
 		return propEvalScore;
 	}
@@ -250,6 +258,12 @@ public class ProposalVO {
 	}
 	public void setPropPropStatCodeName(String propPropStatCodeName) {
 		this.propPropStatCodeName = propPropStatCodeName;
+	}
+	public String getPropEvalLvCodeName() {
+		return propEvalLvCodeName;
+	}
+	public void setPropEvalLvCodeName(String propEvalLvCodeName) {
+		this.propEvalLvCodeName = propEvalLvCodeName;
 	}
 	public String getPropUserName() {
 		return propUserName;

@@ -55,16 +55,18 @@ public class JudgeProposalController {
 			UserVO userSession) throws Exception{
 		model.addAttribute("menuKey", searchVO.getMenuKey());
 		CodeVO codeVO = new CodeVO();
-		codeVO.setCodeGrpId("PP_TY"); // 제안구분코드 조회
+		codeVO.setCodeGrpId("PPS_TYP"); // 제안구분코드 조회
 		List<EgovMap> typeList = codeService.selectFullList(codeVO);
-		codeVO.setCodeGrpId("PP_CT"); // 제안유형코드 조쇠
+		codeVO.setCodeGrpId("PPS_CTY"); // 제안유형코드 조쇠
 		List<EgovMap> categoryList = codeService.selectFullList(codeVO);
 		codeVO.setCodeGrpId("RESULTTY"); // 제안연간효과코드 조쇠
 		List<EgovMap> yearEffectList = codeService.selectFullList(codeVO);
-		codeVO.setCodeGrpId("PP_CL"); // 제안등급코드 조회
+		codeVO.setCodeGrpId("PPS_CLS"); // 제안등급코드 조회
 		List<EgovMap> classList = codeService.selectFullList(codeVO);
 		codeVO.setCodeGrpId("WPLACE"); // 제안연간효과코드 조쇠
 		List<EgovMap> bizPlaceList = codeService.selectFullList(codeVO);
+		codeVO.setCodeGrpId("PPS_PRG"); // 제안연간효과코드 조쇠
+		List<EgovMap> progressList = codeService.selectFullList(codeVO);
 		
 		if(searchVO.getSearchPropFromDate() == null && searchVO.getSearchPropToDate() == null) {
 			DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
@@ -81,8 +83,8 @@ public class JudgeProposalController {
 		List<EgovMap> resultItemsCount = judgeProposalService.selectProposalTypeByCount(searchVO);
 		EgovMap summary = new EgovMap();
 		int total = 0;
-		summary.put("ppTy1", "0");
-		summary.put("ppTy2", "0");
+		summary.put("ppsTyp1", "0");
+		summary.put("ppsTyp2", "0");
 		
 		if(resultItemsCount != null && resultItemsCount.size() > 0) {
 			for(int index = 0; index < resultItemsCount.size(); index++) {
@@ -91,19 +93,18 @@ public class JudgeProposalController {
 			}
 		}
 		
-		total += Integer.parseInt(summary.get("ppTy1").toString());
-		total += Integer.parseInt(summary.get("ppTy2").toString());
+		total += Integer.parseInt(summary.get("ppsTyp1").toString());
+		total += Integer.parseInt(summary.get("ppsTyp2").toString());
 		summary.put("tt", total);
 		
-		model.addAttribute("PP_TY_LIST", typeList);
-		model.addAttribute("PP_CT_LIST", categoryList);		
-		model.addAttribute("PP_CL_LIST", classList);
-		model.addAttribute("PP_YE_LIST", yearEffectList);	
+		model.addAttribute("TYPE_LIST", typeList);
+		model.addAttribute("CATEGORY_LIST", categoryList);		
+		model.addAttribute("CLASS_LIST", classList);
+		model.addAttribute("YEAR_EFFECT_LIST", yearEffectList);	
 		model.addAttribute("BIZ_PLACE_LIST", bizPlaceList);
-		model.addAttribute("PROP_LIST", resultItems);
-		model.addAttribute("COUNT_PP_TY_1", summary.get("ppTy1").toString());
-		model.addAttribute("COUNT_PP_TY_2", summary.get("ppTy2").toString());
-		model.addAttribute("COUNT_TOTAL", summary.get("tt").toString());
+		model.addAttribute("PROGRESS_LIST", progressList);
+		model.addAttribute("SUMMARY", summary);
+		model.addAttribute("PROP_LIST", resultItems);		
 		
 		return "app/proposal/JudgeProposal";
 	}
@@ -119,7 +120,7 @@ public class JudgeProposalController {
 		ProposalVO resultItem = judgeProposalService.selectProposalDetailInfo(searchVO);
 		
 		//결재자 정보 조회
-		if(!resultItem.getPropPropStatCode().equals("IP")) {
+		if(!resultItem.getPropPropStatCode().equals("PRG_1")) {
 			kr.freedi.dev.qpopup.domain.UserVO userVO = new kr.freedi.dev.qpopup.domain.UserVO();
 			userVO.setComNo(resultItem.getPropApproverCode());				
 			List<EgovMap> userInfo = judgeProposalService.selectApproverUserInfo(userVO);
@@ -158,7 +159,7 @@ public class JudgeProposalController {
 		ProposalVO resultItem = judgeProposalService.selectProposalDetailInfo(searchVO);
 		
 		//결재자 정보 조회
-		if(!resultItem.getPropPropStatCode().equals("IP")) {
+		if(!resultItem.getPropPropStatCode().equals("PRG_1")) {
 			kr.freedi.dev.qpopup.domain.UserVO userVO = new kr.freedi.dev.qpopup.domain.UserVO();
 			userVO.setComNo(resultItem.getPropApproverCode());				
 			List<EgovMap> userInfo = judgeProposalService.selectApproverUserInfo(userVO);

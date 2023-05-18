@@ -102,7 +102,7 @@
                                                         <div class="col s12 select-group">
                                                             <form:select name="" id="select-category-code" title="제안유형 선택" path="propCategoryCode">
                                                                 <option value="">선택</option>
-                                                                <c:forEach var="item" items="${PP_CT_LIST }">
+                                                                <c:forEach var="item" items="${CATEGORY_LIST }">
                                                                 	<c:choose>
                                                                 		<c:when test="${item.codeId eq PROP_INFO.propCategoryCode }">
                                                                 			<option value="${item.codeId }" selected="selected">${item.codeNm }</option>
@@ -142,7 +142,7 @@
                                                         <div class="col s6 select-group">
                                                             <form:select name="" id="select-yeareffect-code" title="년간 효과금액 선택" path="propYearEffectCode">
                                                                 <option value="">선택</option>
-                                                                <c:forEach var="item" items="${PP_YE_LIST }">
+                                                                <c:forEach var="item" items="${YEAR_EFFECT_LIST }">
                                                                 	<c:choose>
                                                                 		<c:when test="${item.codeId eq PROP_INFO.propYearEffectCode }">
                                                                 			<option value="${item.codeId }" selected="selected">${item.codeNm }</option>
@@ -378,7 +378,7 @@
 <script type="text/javascript">
 	var proposalInfo = {};
 	$(document).ready(function(){
- 		if($('#propPropStatCode').val() != 'IP' && $('#crud').val() == 'U'){ // 결재진행중 상태
+ 		if($('#propPropStatCode').val() != 'PRG_1' && $('#crud').val() == 'U'){ // 결재진행중 상태
 			$('input').attr('disabled', true);
 			$('textarea').attr('disabled', true);
 			$('button').prop('disabled', true);
@@ -487,9 +487,9 @@
 				$('#propRelMemoYn').val('Y');
 				$('#propRelMemoCode').val($('#input-proposal-memo-hidden').val());
 			}
-			$('#propTypeCode').val('PP_TY_1'); // 구분코드
+			$('#propTypeCode').val('PPS_TYP_1'); // 구분코드
 			if($('#propPropStatCode').val() == '' && $('#crud').val() == 'I'){
-				$('#propPropStatCode').val('IP'); // 제안상태코드
+				$('#propPropStatCode').val('PRG_1'); // 제안상태코드
 			}			
 			
 			if(confirm('저장하시겠습니까?')){
@@ -537,8 +537,8 @@
 				$('#propRelMemoCode').val($('#input-proposal-memo-hidden').val());
 			}
 			
-			$('#propTypeCode').val('PP_TY_1'); // 구분코드
-			$('#propPropStatCode').val('EV'); // 결재의뢰		
+			$('#propTypeCode').val('PPS_TYP_1'); // 구분코드
+			$('#propPropStatCode').val('PRG_2'); // 결재의뢰		
 			
 			if(confirm('결재를 진행 하시겠습니까?')){
 				$('#defaultForm')[0].submit();
@@ -577,7 +577,7 @@
 			return false;
 		}
 		
-		if($('#select-yeareffect-code').val() != '7' && $('#input-yeareffect-remark').val().trim() == ''){
+		if($('#input-yeareffect-remark').val().trim() == ''){
 			alert('년간 효과금액을 입력해 주세요.'); $('#input-yeareffect-remark').focus();
 			return false;
 		}

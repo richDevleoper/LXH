@@ -87,7 +87,7 @@ public class ProposalController {
 		}
 		
 		CodeVO codeVO = new CodeVO();
-		codeVO.setCodeGrpId("PPS_TPY"); // 제안구분코드 조회
+		codeVO.setCodeGrpId("PPS_TYP"); // 제안구분코드 조회
 		List<EgovMap> typeList = codeService.selectFullList(codeVO);
 		codeVO.setCodeGrpId("PPS_CTY"); // 제안유형코드 조쇠
 		List<EgovMap> categoryList = codeService.selectFullList(codeVO);
@@ -97,22 +97,48 @@ public class ProposalController {
 		//나의 제안 조회
 		List<ProposalVO> resultItems = proposalService.selectProposalMasterInfo(searchVO);
 		//등급별 통계
-		List<EgovMap> resultItemsCount = proposalService.selectProposalMasterInfoCount(searchVO);
+		List<EgovMap> progressCount = proposalService.selectProposalStateByCount(searchVO);
 		EgovMap summary = new EgovMap();
 		int total = 0;         // Total Count
+		summary.put("prg1", "0"); // S급
+		summary.put("prg2", "0"); // A급
+		summary.put("prg3", "0"); // B급
+		summary.put("prg4", "0"); // C급
+		summary.put("prg5", "0"); // D급
+		summary.put("prg6", "0"); // 불채택
+		
+		if(progressCount != null && progressCount.size() > 0) {
+			for(int index = 0; index < progressCount.size(); index++) {
+				EgovMap item = progressCount.get(index);
+				if(item.get("propPropStatCode") != null) {
+					summary.put(item.get("propPropStatCode"), item.get("total"));
+				}
+			}
+		}
+		
+		total += Integer.parseInt(summary.get("prg1").toString());
+		total += Integer.parseInt(summary.get("prg2").toString());
+		total += Integer.parseInt(summary.get("prg3").toString());
+		total += Integer.parseInt(summary.get("prg4").toString());
+		total += Integer.parseInt(summary.get("prg5").toString());
+		total += Integer.parseInt(summary.get("prg6").toString());
+		
+		List<EgovMap> classCount = proposalService.selectProposalClassByCount(searchVO);
+		
 		summary.put("s", "0"); // S급
 		summary.put("a", "0"); // A급
 		summary.put("b", "0"); // B급
 		summary.put("c", "0"); // C급
 		summary.put("d", "0"); // D급
 		summary.put("na", "0"); // 불채택
-		summary.put("ev", "0"); // 등급평가중
-		summary.put("ip", "0"); // 입력중
 		
-		if(resultItemsCount != null && resultItemsCount.size() > 0) {
-			for(int index = 0; index < resultItemsCount.size(); index++) {
-				EgovMap item = resultItemsCount.get(index);
-				summary.put(item.get("propPropStatCode"), item.get("total"));
+		if(classCount != null && classCount.size() > 0) {
+			for(int index = 0; index < classCount.size(); index++) {
+				EgovMap item = classCount.get(index);
+				if(item.get("propEvalLvCode") != null){
+					summary.put(item.get("propEvalLvCode"), item.get("total"));
+				}
+				
 			}
 		}
 		total += Integer.parseInt(summary.get("s").toString());
@@ -121,23 +147,14 @@ public class ProposalController {
 		total += Integer.parseInt(summary.get("c").toString());
 		total += Integer.parseInt(summary.get("d").toString());
 		total += Integer.parseInt(summary.get("na").toString());
-		total += Integer.parseInt(summary.get("ev").toString());
-		total += Integer.parseInt(summary.get("ip").toString());
+		
 		summary.put("tt", total);		
 		
-		model.addAttribute("PP_TY_LIST", typeList);
-		model.addAttribute("PP_CT_LIST", categoryList);		
-		model.addAttribute("PP_CL_LIST", classList);
+		model.addAttribute("TYPE_LIST", typeList);
+		model.addAttribute("CATEGORY_LIST", categoryList);		
+		model.addAttribute("CLASS_LIST", classList);
 		model.addAttribute("PROP_LIST", resultItems);
-		model.addAttribute("COUNT_S", summary.get("s").toString());
-		model.addAttribute("COUNT_A", summary.get("a").toString());
-		model.addAttribute("COUNT_B", summary.get("b").toString());
-		model.addAttribute("COUNT_C", summary.get("c").toString());
-		model.addAttribute("COUNT_D", summary.get("d").toString());
-		model.addAttribute("COUNT_NA", summary.get("na").toString());
-		model.addAttribute("COUNT_EV", summary.get("ev").toString());
-		model.addAttribute("COUNT_IP", summary.get("ip").toString());
-		model.addAttribute("COUNT_TOTAL", summary.get("tt"));
+		model.addAttribute("SUMMARY", summary);
 		model.addAttribute("PROP_FROM_DATE", searchVO.getSearchPropFromDate());
 		model.addAttribute("PROP_TO_DATE", searchVO.getSearchPropToDate());
 		model.addAttribute("PROP_TYPE_CODE", searchVO.getSearchPropTypeCode());
@@ -160,8 +177,8 @@ public class ProposalController {
 		codeVO.setCodeGrpId("RESULTTY"); // 제안연간효과코드 조쇠
 		List<EgovMap> yearEffectList = codeService.selectFullList(codeVO);
 		
-		model.addAttribute("PP_CT_LIST", categoryList);		
-		model.addAttribute("PP_YE_LIST", yearEffectList);		
+		model.addAttribute("CATEGORY_LIST", categoryList);		
+		model.addAttribute("YEAR_EFFECT_LIST", yearEffectList);		
 		
 		ProposalVO resultItem = new ProposalVO();
 		if(proposalVO.getPropSeq() != null) {
@@ -182,7 +199,7 @@ public class ProposalController {
 			resultItem.setAttachFileList(attachFileList);
 			
 			//결재자 정보 조회
-			if(!resultItem.getPropPropStatCode().equals("IP")) {
+			if(!resultItem.getPropPropStatCode().equals("PRG_1")) {
 				kr.freedi.dev.qpopup.domain.UserVO userVO = new kr.freedi.dev.qpopup.domain.UserVO();
 				userVO.setComNo(resultItem.getPropApproverCode());				
 				List<EgovMap> userInfo = proposalService.selectApproverUserInfo(userVO);
@@ -229,7 +246,7 @@ public class ProposalController {
 		proposalVO.setPropRegUser(userSession.getUserId());
 		int result = proposalService.insertProposalInfo(proposalVO);
 		if(result > 0) {
-			if(proposalVO.getPropTypeCode().equals("PP_TY_1")) {
+			if(proposalVO.getPropTypeCode().equals("PPS_TYP_1")) {
 				return "redirect:/sub.do?menuKey=48";
 			}else {
 				return "redirect:/sub.do?menuKey=49";
@@ -245,10 +262,10 @@ public class ProposalController {
 			UserVO userSession) throws Exception{
 		
 		proposalVO.setPropRegUser(userSession.getUserId());
-		if(proposalVO.getPropPropStatCode() != null && proposalVO.getPropPropStatCode().equals("EV")) // 결제요청
+		if(proposalVO.getPropPropStatCode() != null && proposalVO.getPropPropStatCode().equals("PRG_2")) // 결제요청
 		{
-			String approvalType = proposalVO.getPropTypeCode().equals("PP_TY_1")? "6" : "7"; // 6 - 실시제안, 7 - 쪽지제안
-			String refBusType = proposalVO.getPropTypeCode().equals("PP_TY_1")? "4" : "3"; // 4 - 실시제안, 3 - 쪽지제안
+			String approvalType = proposalVO.getPropTypeCode().equals("PPS_TYP_1")? "6" : "7"; // 6 - 실시제안, 7 - 쪽지제안
+			String refBusType = proposalVO.getPropTypeCode().equals("PPS_TYP_1")? "4" : "3"; // 4 - 실시제안, 3 - 쪽지제안
 			ApproveVO approveVO = new ApproveVO();
 			approveVO.setAprovalType(approvalType);
 			approveVO.setRefBusType(refBusType);
@@ -288,7 +305,7 @@ public class ProposalController {
 		}
 		int result = proposalService.updateProposalInfo(proposalVO);
 		if(result > 0) {
-			if(proposalVO.getPropTypeCode().equals("PP_TY_1")) {
+			if(proposalVO.getPropTypeCode().equals("PPS_TYP_1")) {
 				return "redirect:/sub.do?menuKey=48";
 			}else {
 				return "redirect:/sub.do?menuKey=49";
@@ -313,34 +330,60 @@ public class ProposalController {
 			calendar.add(Calendar.MONTH, -1);
 			searchVO.setSearchPropFromDate(df.format(calendar.getTime()));
 		}
-		searchVO.setSearchPropTypeCode("PP_TY_2");
+		searchVO.setSearchPropTypeCode("PPS_TYP_2");
 		CodeVO codeVO = new CodeVO();
-		codeVO.setCodeGrpId("PPS_TPY"); // 제안구분코드 조회
+		codeVO.setCodeGrpId("PPS_TYP"); // 제안구분코드 조회
 		List<EgovMap> typeList = codeService.selectFullList(codeVO);
 		codeVO.setCodeGrpId("PPS_CTY"); // 제안유형코드 조쇠
 		List<EgovMap> categoryList = codeService.selectFullList(codeVO);
-		codeVO.setCodeGrpId("PP_CL"); // 제안등급코드 조회
+		codeVO.setCodeGrpId("PPS_CLS"); // 제안등급코드 조회
 		List<EgovMap> classList = codeService.selectFullList(codeVO);
 		
 		//나의 제안 조회
 		List<ProposalVO> resultItems = proposalService.selectProposalMasterInfo(searchVO);
 		//등급별 통계
-		List<EgovMap> resultItemsCount = proposalService.selectProposalMasterInfoCount(searchVO);
+		List<EgovMap> progressCount = proposalService.selectProposalStateByCount(searchVO);
 		EgovMap summary = new EgovMap();
 		int total = 0;         // Total Count
+		summary.put("prg1", "0"); // S급
+		summary.put("prg2", "0"); // A급
+		summary.put("prg3", "0"); // B급
+		summary.put("prg4", "0"); // C급
+		summary.put("prg5", "0"); // D급
+		summary.put("prg6", "0"); // 불채택
+		
+		if(progressCount != null && progressCount.size() > 0) {
+			for(int index = 0; index < progressCount.size(); index++) {
+				EgovMap item = progressCount.get(index);
+				if(item.get("propPropStatCode") != null) {
+					summary.put(item.get("propPropStatCode"), item.get("total"));
+				}
+			}
+		}
+		
+		total += Integer.parseInt(summary.get("prg1").toString());
+		total += Integer.parseInt(summary.get("prg2").toString());
+		total += Integer.parseInt(summary.get("prg3").toString());
+		total += Integer.parseInt(summary.get("prg4").toString());
+		total += Integer.parseInt(summary.get("prg5").toString());
+		total += Integer.parseInt(summary.get("prg6").toString());
+		
+		List<EgovMap> classCount = proposalService.selectProposalClassByCount(searchVO);
+		
 		summary.put("s", "0"); // S급
 		summary.put("a", "0"); // A급
 		summary.put("b", "0"); // B급
 		summary.put("c", "0"); // C급
 		summary.put("d", "0"); // D급
 		summary.put("na", "0"); // 불채택
-		summary.put("ev", "0"); // 등급평가중
-		summary.put("ip", "0"); // 입력중
 		
-		if(resultItemsCount != null && resultItemsCount.size() > 0) {
-			for(int index = 0; index < resultItemsCount.size(); index++) {
-				EgovMap item = resultItemsCount.get(index);
-				summary.put(item.get("propPropStatCode"), item.get("total"));
+		if(classCount != null && classCount.size() > 0) {
+			for(int index = 0; index < classCount.size(); index++) {
+				EgovMap item = classCount.get(index);
+				if(item.get("propEvalLvCode") != null){
+					summary.put(item.get("propEvalLvCode"), item.get("total"));
+				}
+				
 			}
 		}
 		total += Integer.parseInt(summary.get("s").toString());
@@ -349,15 +392,14 @@ public class ProposalController {
 		total += Integer.parseInt(summary.get("c").toString());
 		total += Integer.parseInt(summary.get("d").toString());
 		total += Integer.parseInt(summary.get("na").toString());
-		total += Integer.parseInt(summary.get("ev").toString());
-		total += Integer.parseInt(summary.get("ip").toString());
-		summary.put("tt", total);		
 		
-		model.addAttribute("PP_TY_LIST", typeList);
-		model.addAttribute("PP_CT_LIST", categoryList);		
-		model.addAttribute("PP_CL_LIST", classList);
+		summary.put("tt", total);
+		
+		model.addAttribute("TYPE_LIST", typeList);
+		model.addAttribute("CATEGORY_LIST", categoryList);		
+		model.addAttribute("CLASS_LIST", classList);
 		model.addAttribute("PROP_LIST", resultItems);
-		model.addAttribute("COUNT_TOTAL", summary.get("tt"));
+		model.addAttribute("SUMMARY", summary);
 		model.addAttribute("PROP_FROM_DATE", searchVO.getSearchPropFromDate());
 		model.addAttribute("PROP_TO_DATE", searchVO.getSearchPropToDate());
 		model.addAttribute("PROP_TYPE_CODE", searchVO.getSearchPropTypeCode());
@@ -389,7 +431,7 @@ public class ProposalController {
 			searchVO.setSearchPropSeq(proposalVO.getPropSeq());
 			resultItem = proposalService.selectProposalDetailInfo(searchVO);
 			//결재자 정보 조회
-			if(!resultItem.getPropPropStatCode().equals("IP")) {
+			if(!resultItem.getPropPropStatCode().equals("PRG_1")) {
 				kr.freedi.dev.qpopup.domain.UserVO userVO = new kr.freedi.dev.qpopup.domain.UserVO();
 				userVO.setComNo(resultItem.getPropApproverCode());				
 				List<EgovMap> userInfo = proposalService.selectApproverUserInfo(userVO);
@@ -432,7 +474,7 @@ public class ProposalController {
 			UserVO userSession) throws Exception{
 		model.addAttribute("menuKey", searchVO.getMenuKey());
 		CodeVO codeVO = new CodeVO();
-		codeVO.setCodeGrpId("PPS_TPY"); // 제안구분코드 조회
+		codeVO.setCodeGrpId("PPS_TYP"); // 제안구분코드 조회
 		List<EgovMap> typeList = codeService.selectFullList(codeVO);
 		codeVO.setCodeGrpId("PPS_CTY"); // 제안유형코드 조쇠
 		List<EgovMap> categoryList = codeService.selectFullList(codeVO);
@@ -442,6 +484,8 @@ public class ProposalController {
 		List<EgovMap> classList = codeService.selectFullList(codeVO);
 		codeVO.setCodeGrpId("WPLACE"); // 제안연간효과코드 조쇠
 		List<EgovMap> bizPlaceList = codeService.selectFullList(codeVO);
+		codeVO.setCodeGrpId("PPS_PRG"); // 제안연간효과코드 조쇠
+		List<EgovMap> progressList = codeService.selectFullList(codeVO);
 		
 		if(searchVO.getSearchPropFromDate() == null && searchVO.getSearchPropToDate() == null) {
 			DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
@@ -455,11 +499,12 @@ public class ProposalController {
 		List<ProposalVO> resultItems = proposalService.selectProposalMasterInfo(searchVO);
 		EgovMap resultItem = proposalService.selectListCount(searchVO);
 		
-		model.addAttribute("PP_TY_LIST", typeList);
-		model.addAttribute("PP_CT_LIST", categoryList);		
-		model.addAttribute("PP_CL_LIST", classList);
-		model.addAttribute("PP_YE_LIST", yearEffectList);	
+		model.addAttribute("TYPE_LIST", typeList);
+		model.addAttribute("CATEGORY_LIST", categoryList);		
+		model.addAttribute("CLASS_LIST", classList);
+		model.addAttribute("YEAR_EFFECT_LIST", yearEffectList);	
 		model.addAttribute("BIZ_PLACE_LIST", bizPlaceList);
+		model.addAttribute("PROGRESS_LIST", progressList);
 		model.addAttribute("PROP_LIST", resultItems);
 		model.addAttribute("PROP_TOTAL", resultItem.get("count"));
 		return "app/proposal/SearchProposalList";
@@ -473,7 +518,7 @@ public class ProposalController {
 		searchVO.setSearchPropCategoryCode(String.valueOf(reqMap.get("propCategoryCode")));
 		searchVO.setSearchPropName(String.valueOf(reqMap.get("propName")));
 		searchVO.setCurrentPageNo(Integer.valueOf(String.valueOf(reqMap.get("currentPageNo"))));
-		searchVO.setSearchPropTypeCode("PP_TY_2");
+		searchVO.setSearchPropTypeCode("PPS_TYP_2");
 		List<ProposalVO> resultItems = proposalService.selectProposalMasterInfo(searchVO);
 		EgovMap resultItem = proposalService.selectListCount(searchVO);
 		

@@ -17,7 +17,7 @@
 <body>
                         <div class="list-wrap">
                             <div class="list-search">
-                            	<form:form commandName="proposalSearchVO" id="defaultForm" method="get" action="list.do" >
+                            	<form:form commandName="proposalSearchVO" id="defaultForm" method="get" action="search.do" >
                             	${proposalSearchVO.superHiddenTag}
 	                                <div class="search-form row">
 	                                    <div class="form-inline form-input col s4">
@@ -70,7 +70,7 @@
 	                                        <div class="pd-l10 col s9">
 	                                            <form:select name="select-type-code" id="select-type-code" path="searchPropTypeCode">
 	                                                <option value="">전체</option>
-                                                    <c:forEach var="item" items="${PP_TY_LIST }">
+                                                    <c:forEach var="item" items="${TYPE_LIST }">
                                                     	<option value="${item.codeId }">${item.codeNm }</option>
                                                     </c:forEach>	                                                
 	                                            </form:select>
@@ -83,10 +83,8 @@
 	                                        <div class="pd-l10 col s9">
 	                                            <form:select name="select-class-code" id="select-class-code" path="searchPropClassCode">
 	                                                <option value="">전체</option>
-	                                                <c:forEach var="item" items="${PP_CL_LIST }">
-	                                                	<c:if test="${item.attr1 eq 'CLASS' }">
-	                                                		<option value="${item.codeId }">${item.codeNm }</option>
-	                                                	</c:if>                                                    	
+	                                                <c:forEach var="item" items="${CLASS_LIST }">
+														<option value="${item.codeId }">${item.codeNm }</option>                                                  	
                                                     </c:forEach>
 	                                            </form:select>
 	                                        </div>
@@ -100,7 +98,7 @@
 	                                        <div class="pd-l10 col s9">
 	                                            <form:select name="select-category-code" id="select-category-code" path="searchPropCategoryCode">
 	                                                <option value="">전체</option>
-	                                                <c:forEach var="item" items="${PP_CT_LIST }">
+	                                                <c:forEach var="item" items="${CATEGORY_LIST }">
                                                     	<option value="${item.codeId }">${item.codeNm }</option>
                                                     </c:forEach>	                                                
 	                                            </form:select>
@@ -113,10 +111,8 @@
 	                                        <div class="pd-l10 col s9">
 	                                            <form:select name="select-stat-code" id="select-stat-code" path="searchPropStatCode">
 	                                                <option value="">전체</option>
-	                                                <c:forEach var="item" items="${PP_CL_LIST }">
-	                                                	<c:if test="${item.attr1 eq 'PROC' }">
-	                                                		<option value="${item.codeId }">${item.codeNm }</option>
-	                                                	</c:if>                                                    	
+	                                                <c:forEach var="item" items="${PROGRESS_LIST }">
+	                                                	<option value="${item.codeId }">${item.codeNm }</option>                                                    	
                                                     </c:forEach>	                                                
 	                                            </form:select>
 	                                        </div>
@@ -171,7 +167,14 @@
                                         							<li class="title">
                                         						</c:otherwise>
                                         					</c:choose>
-                                        					<span>${item.propPropStatCodeName }</span>
+                                        					<c:choose>
+                                        						<c:when test="${item.propEvalLvCodeName != null  and item.propEvalLvCodeName ne ''}">
+                                        							<span>${item.propEvalLvCodeName }</span>
+                                        						</c:when>
+                                        						<c:otherwise>
+                                        							<span>${item.propPropStatCodeName }</span>
+                                        						</c:otherwise>
+                                        					</c:choose>                                        					
                                         					</li>
                                         					<li>
                                         						<span>${item.propTypeCodeName }제안</span>
@@ -180,16 +183,17 @@
                                         			</div>
                                         			<p class="list">
                                         				<c:choose>
-                                        					<c:when test="${item.propTypeCode eq 'PP_TY_1' }">
+                                        					<c:when test="${item.propTypeCode eq 'PPS_TYP_1' }">
                                         						<a href="/proposal/detail.do?menuKey=36&propSeq=${item.propSeq }">제안명: ${item.propName }</a>
                                         					</c:when>
                                         					<c:otherwise>
                                         						<a href="/proposal/memodetail.do?menuKey=36&propSeq=${item.propSeq }">제안명: ${item.propName }</a>
                                         					</c:otherwise>
-                                        				</c:choose>                                        				
+                                        				</c:choose>         
+                                        				<br>                               				
                                         				<span>
                                         					제안자: ${item.propUserName }, 조직명: ${item.propGroupName }, 분임조: ${item.propCircleCode }, 제안유형: ${item.propCategoryCodeName }, 제안일: ${item.propDate }
-                                        					<c:if test="${item.propTypeCode eq 'PP_TY_1' }">
+                                        					<c:if test="${item.propTypeCode eq 'PPS_TYP_1' }">
                                         						<fmt:formatNumber var="propYearEffect" value="${item.propYearEffect}" type="currency" currencySymbol="₩"/>
                                         						, 실행완료일: ${item.propPracticeCompDate }, 년간 효과금액: ${item.propYearEffectCodeName } ( ${propYearEffect } )
                                         					</c:if>

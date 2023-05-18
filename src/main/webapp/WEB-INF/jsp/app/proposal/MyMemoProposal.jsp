@@ -47,7 +47,7 @@
                                             <label style="margin-right: 5px;">제안유형</label>                                            
                                             <form:select name="select-category-code" id="select-category-code" path="searchPropCategoryCode">
                                                 <option value="">전체</option>
-                                                <c:forEach var="item" items="${PP_CT_LIST }">
+                                                <c:forEach var="item" items="${CATEGORY_LIST }">
                                                 	<c:choose>
                                                 		<c:when test="${item.codeId eq PROP_CATEGORY_CODE}">
                                                 			<option value="${item.codeId }" selected="selected">${item.codeNm }</option>
@@ -59,11 +59,11 @@
                                                 </c:forEach>
                                             </form:select>
                                         </div>
-                                        <div class="form-inline form-select">
+<%--                                         <div class="form-inline form-select">
                                             <label style="margin-right: 5px;">등급</label>
                                             <form:select name="select-class-code" id="select-class-code" path="searchPropClassCode">
                                                 <option value="">전체</option>
-                                                <c:forEach var="item" items="${PP_CL_LIST }">
+                                                <c:forEach var="item" items="${CLASS_LIST }">
                                                 	<c:choose>
                                                 		<c:when test="${item.codeId eq PROP_CLASS_CODE}">
                                                 			<option value="${item.codeId }" selected="selected">${item.codeNm }</option>
@@ -74,7 +74,7 @@
                                                 	</c:choose>
                                                 </c:forEach>
                                             </form:select>
-                                        </div>
+                                        </div> --%>
                                         
                                         <div class="form-inline form-select inline-calendar">
                                         	<div class="s6 input-text input-date form-inline" style="cursor: pointer;">
@@ -95,7 +95,7 @@
                             <div class="list-header">
                                 <p class="title">나의 쪽지제안</p>
                                 <span class="bar"></span>
-                                <p class="total">총  ${COUNT_TOTAL }</p>
+                                <p class="total">총  ${SUMMARY.tt }</p>
                                 <select name="limit" class="limit" onchange="onchange_recordCountPerPage(this.value)">
                                     <option value="10" <c:if test="${proposalSearchVO.recordCountPerPage eq '10' }">selected="selected"</c:if>>10개</option>
                                     <option value="50" <c:if test="${proposalSearchVO.recordCountPerPage eq '50' }">selected="selected"</c:if>>50개</option>

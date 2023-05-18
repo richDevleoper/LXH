@@ -28,15 +28,20 @@ public class ProposalService {
 		// TODO Auto-generated method stub
 		return dao.selectOne("Proposal.selectListCount", searchVO);
 	}
+	
+	public List<EgovMap> selectProposalStateByCount(ProposalSearchVO searchVO) {
+		// TODO Auto-generated method stub
+		return dao.selectList("Proposal.selectProposalStateByCount", searchVO);
+	}
+	
+	public List<EgovMap> selectProposalClassByCount(ProposalSearchVO searchVO) {
+		// TODO Auto-generated method stub
+		return dao.selectList("Proposal.selectProposalClassByCount", searchVO);
+	}
 
 	public List<ProposalVO> selectProposalMasterInfo(ProposalSearchVO searchVO) {
 		// TODO Auto-generated method stub
 		return dao.selectList("Proposal.selectProposalMasterInfo", searchVO);
-	}
-	
-	public List<EgovMap> selectProposalMasterInfoCount(ProposalSearchVO searchVO) {
-		// TODO Auto-generated method stub
-		return dao.selectList("Proposal.selectProposalMasterInfoCount", searchVO);
 	}
 	
 	public ProposalVO selectProposalDetailInfo(ProposalSearchVO searchVO) {

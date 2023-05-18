@@ -263,7 +263,7 @@
 <script type="text/javascript">
 	var proposalInfo = {};
 	$(document).ready(function(){
- 		if($('#propPropStatCode').val() != 'IP' && $('#crud').val() == 'U'){ // 결재진행중 상태
+ 		if($('#propPropStatCode').val() != 'PRG_1' && $('#crud').val() == 'U'){ // 결재진행중 상태
 			$('input').attr('disabled', true);
 			$('textarea').attr('disabled', true);
 			$('button').prop('disabled', true);
@@ -298,12 +298,12 @@
 			popEmp.open();			
 		});
 		
-		//제안활동 내용 저장 (임시) - IP
+		//제안활동 내용 저장 (임시) - PRG_1
 		$('#btn-temp-save').off('click').on('click', function(){
 			setProposalInfoTempSave();
 		});
 		
-		//제안활동 내용 결재 상신 - EV
+		//제안활동 내용 결재 상신 - PRG_2
 		$('#btn-req-approval').off('click').on('click', function(){
 			setProposalInfoApprove();
 		});
@@ -352,9 +352,9 @@
 	
 	function setProposalInfoTempSave(){
 		if(checkValidationInfo()){
-			$('#propTypeCode').val('PP_TY_2'); // 구분코드
+			$('#propTypeCode').val('PPS_TYP_2'); // 구분코드
 			if($('#propPropStatCode').val() == '' && $('#crud').val() == 'I'){
-				$('#propPropStatCode').val('IP'); // 제안상태코드
+				$('#propPropStatCode').val('PRG_1'); // 제안상태코드
 			}
 			
 			if(confirm('저장하시겠습니까?')){
@@ -395,8 +395,8 @@
 				return false;
 			}
 			
-			$('#propTypeCode').val('PP_TY_2'); // 구분코드
-			$('#propPropStatCode').val('EV'); // 결재의뢰		
+			$('#propTypeCode').val('PPS_TYP_2'); // 구분코드
+			$('#propPropStatCode').val('PRG_2'); // 결재의뢰		
 			
 			if(confirm('결재를 진행 하시겠습니까?')){
 				$('#defaultForm')[0].submit();
