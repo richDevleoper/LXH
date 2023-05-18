@@ -43,6 +43,7 @@ public class ProposalVO {
 	private String propEvalLvCodeName;
 	
 	private String propUserName;
+	private String propApproverName;
 	
 	private Integer idx;
 	
@@ -60,6 +61,12 @@ public class ProposalVO {
 	private String propApprovalBelt;
 	private String propApprovalGroup;
 	private String propApprovalGroupCode;
+	
+	//////////////////////////////////////////////////////////////////////////////////
+	// 마감
+	//////////////////////////////////////////////////////////////////////////////////
+	private List<EvalProposalVO> evalProposalList;
+	
 	
 	public Integer getPropSeq() {
 		return propSeq;
@@ -271,6 +278,12 @@ public class ProposalVO {
 	public void setPropUserName(String propUserName) {
 		this.propUserName = propUserName;
 	}
+	public String getPropApproverName() {
+		return propApproverName;
+	}
+	public void setPropApproverName(String propApproverName) {
+		this.propApproverName = propApproverName;
+	}
 	public Integer getIdx() {
 		return idx;
 	}
@@ -354,5 +367,11 @@ public class ProposalVO {
 	}
 	public void setPropApprovalGroupCode(String propApprovalGroupCode) {
 		this.propApprovalGroupCode = propApprovalGroupCode;
+	}
+	public List<EvalProposalVO> getEvalProposalList() {
+		return evalProposalList;
+	}
+	public void setEvalProposalList(List<EvalProposalVO> evalProposalList) {
+		this.evalProposalList = evalProposalList;
 	}
 }

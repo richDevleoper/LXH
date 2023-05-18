@@ -3,8 +3,8 @@ package kr.freedi.dev.qproposal.domain;
 import kr.freedi.dev.common.annotation.ParamField;
 import kr.freedi.dev.common.domain.CommonVO;
 
-public class ProposalSearchVO extends CommonVO{
-
+public class EvalProposalSearchVO extends CommonVO{
+	
 	@ParamField
 	private String searchPropCategoryCode;
 	@ParamField
@@ -34,6 +34,15 @@ public class ProposalSearchVO extends CommonVO{
 	private String searchPropUserName;
 	@ParamField
 	private String searchPropStatCode; // 제안검색 - 진행단계
+
+	@ParamField
+	private String searchFinalEvalUser;
+	@ParamField
+	private String searchFinalUserName;
+	@ParamField
+	private String searchCircleCode;
+	@ParamField
+	private String searchCircleName;
 	
 	public String getSearchPropCategoryCode() {
 		return searchPropCategoryCode;
@@ -118,5 +127,29 @@ public class ProposalSearchVO extends CommonVO{
 	}
 	public void setSearchPropStatCode(String searchPropStatCode) {
 		this.searchPropStatCode = searchPropStatCode;
+	}
+	public String getSearchFinalEvalUser() {
+		return searchFinalEvalUser;
+	}
+	public void setSearchFinalEvalUser(String searchFinalEvalUser) {
+		this.searchFinalEvalUser = searchFinalEvalUser;
+	}
+	public String getSearchFinalUserName() {
+		return searchFinalUserName;
+	}
+	public void setSearchFinalUserName(String searchFinalUserName) {
+		this.searchFinalUserName = searchFinalUserName;
+	}
+	public String getSearchCircleCode() {
+		return searchCircleCode;
+	}
+	public void setSearchCircleCode(String searchCircleCode) {
+		this.searchCircleCode = searchCircleCode;
+	}
+	public String getSearchCircleName() {
+		return searchCircleName;
+	}
+	public void setSearchCircleName(String searchCircleName) {
+		this.searchCircleName = searchCircleName;
 	}
 }

@@ -189,7 +189,16 @@
 	                                                <td>${item.propCategoryCodeName }</td>
 	                                                <td>${item.propGroupName }</td>
 	                                                <td>${item.propBizPlaceCode }</td>
-	                                                <td>${item.propPropStatCodeName }</td>
+	                                                <td>
+	                                                	<c:choose>
+	                                                		<c:when test="${item.propEvalLvCode != null and item.propEvalLvCode ne '' }">
+	                                                			${item.propPropStatCodeName }(${item.propEvalLvCodeName })
+	                                                		</c:when>	                                                			
+	                                                		<c:otherwise>
+	                                                			${item.propPropStatCodeName }
+	                                                		</c:otherwise>
+	                                                	</c:choose>
+	                                                </td>
 	                                                <td>${item.propDate }</td>                                                
 	                                            </tr>                                        		
                                         	</c:forEach>

@@ -77,7 +77,6 @@ public class JudgeProposalController {
 			searchVO.setSearchPropFromDate(df.format(calendar.getTime()));
 		}
 		
-		searchVO.setIsAdmin("T"); //제안 관리 파라미터, 입력중인 항목 보여줄 필요가 없을것 같음
 		List<ProposalVO> resultItems = judgeProposalService.selectProposalMasterInfo(searchVO);
 		//구분별 통계
 		List<EgovMap> resultItemsCount = judgeProposalService.selectProposalTypeByCount(searchVO);
