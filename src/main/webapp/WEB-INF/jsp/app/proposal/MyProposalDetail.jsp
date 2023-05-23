@@ -79,10 +79,17 @@
                                                 <th><label for="input-proposal-memo"><span class="asterisk">*</span>관련 쪽지 제안</label></th>
                                                 <td>
                                                     <div class="row">
-                                                        <div class="col s12 input-text search">
+                                                        <div class="col s8 input-text search">
                                                         	<form:input type="hidden" id="input-proposal-memo-hidden" name="input-proposal-memo-hidden" value="" path="propRelMemoCode"/>
                                                             <input type="text" id="input-proposal-memo" name="input-proposal-memo" value="${PROP_INFO.propRelMemoCodeName }" readonly="readonly" style="background-color: #FFF;"/>
                                                             <button type="button" class="btn-psmg-search-modal">검색</button>
+                                                        </div>
+                                                        <div class="col s1 pd-l10">
+                                                        	<input type="checkbox" id="checkbox-proposal-memo-yn" name="checkbox-proposal-memo-yn" value="${PROP_INFO.propRelMemoYn }" <c:if test="${PROP_INFO.propRelMemoYn eq 'N' }">checked="checked"</c:if>/>
+                                                        	<label for="checkbox-proposal-memo-yn" style="margin-top: 5px !important;"></label>
+                                                        </div>
+                                                        <div class="col s3 pd-l10">
+                                                        	<span style="margin-top: 8px !important;">해당없음</span>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -431,6 +438,18 @@
 		$('#btn-req-approval').off('click').on('click', function(){
 			setProposalInfoApprove();
 		});
+		
+		$('#checkbox-proposal-memo-yn').change(function(){
+			var checked = $(this).prop('checked');
+			if(checked){
+				$('#input-proposal-memo').val('');
+				$('#input-proposal-memo-hidden').val('');
+				$(this).val('N');
+			}else{
+				$(this).val('Y');
+			}
+			$('.btn-psmg-search-modal').attr('disabled', checked);
+		});
 	});
 	
 	function setProposalMemberInfo(el, d){
@@ -481,12 +500,28 @@
 	
 	function setProposalInfoTempSave(){
 		if(checkValidationInfo()){			
-			if($('#input-proposal-memo-hidden').val() == '' && $('#input-proposal-memo').val() == ''){
-				$('#propRelMemoYn').val('N');
-			}else{
+			//if($('#input-proposal-memo-hidden').val() == '' && $('#input-proposal-memo').val() == ''){
+			//	$('#propRelMemoYn').val('N');
+			//}else{
+			//	$('#propRelMemoYn').val('Y');
+			//	$('#propRelMemoCode').val($('#input-proposal-memo-hidden').val());
+			//}
+			if($('#checkbox-proposal-memo-yn').prop('checked') == false && $('#input-proposal-memo-hidden').val() == '' && $('#input-proposal-memo').val() == ''){
+				alert('관련쪽지제안을 선택해 주세요.');
+				return false;				
+			}
+			//else{
+			//	$('#propRelMemoYn').val('Y');
+			//	$('#propRelMemoCode').val($('#input-proposal-memo-hidden').val());
+			//}
+			
+			if($('#checkbox-proposal-memo-yn').prop('checked')) {
 				$('#propRelMemoYn').val('Y');
 				$('#propRelMemoCode').val($('#input-proposal-memo-hidden').val());
+			}else{
+				$('#propRelMemoYn').val('N');
 			}
+			
 			$('#propTypeCode').val('PPS_TYP_1'); // 구분코드
 			if($('#propPropStatCode').val() == '' && $('#crud').val() == 'I'){
 				$('#propPropStatCode').val('PRG_1'); // 제안상태코드
@@ -529,14 +564,26 @@
 				alert('결재자를 선택해 주세요.');
 				return false;
 			}
-			
+			if($('#checkbox-proposal-memo-yn').prop('checked') == false && $('#input-proposal-memo-hidden').val() == '' && $('#input-proposal-memo').val() == ''){
+				alert('관련쪽지제안을 선택해 주세요.');
+				return false;				
+			}
 			if($('#input-proposal-memo-hidden').val() == '' && $('#input-proposal-memo').val() == ''){
-				$('#propRelMemoYn').val('N');
-			}else{
+				alert('결재자를 선택해 주세요.');
+				return false;
+				//$('#propRelMemoYn').val('N');
+			}
+			//else{
+			//	$('#propRelMemoYn').val('Y');
+			//	$('#propRelMemoCode').val($('#input-proposal-memo-hidden').val());
+			//}
+			
+			if($('#checkbox-proposal-memo-yn').prop('checked')) {
 				$('#propRelMemoYn').val('Y');
 				$('#propRelMemoCode').val($('#input-proposal-memo-hidden').val());
+			}else{
+				$('#propRelMemoYn').val('N');
 			}
-			
 			$('#propTypeCode').val('PPS_TYP_1'); // 구분코드
 			$('#propPropStatCode').val('PRG_2'); // 결재의뢰		
 			

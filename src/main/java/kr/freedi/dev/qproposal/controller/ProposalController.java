@@ -148,7 +148,8 @@ public class ProposalController {
 		total += Integer.parseInt(summary.get("d").toString());
 		total += Integer.parseInt(summary.get("na").toString());
 		
-		summary.put("tt", total);		
+		summary.put("tt", total);
+		searchVO.setTotalRecordCount(total);
 		
 		model.addAttribute("TYPE_LIST", typeList);
 		model.addAttribute("CATEGORY_LIST", categoryList);		
@@ -355,7 +356,7 @@ public class ProposalController {
 		if(progressCount != null && progressCount.size() > 0) {
 			for(int index = 0; index < progressCount.size(); index++) {
 				EgovMap item = progressCount.get(index);
-				if(item.get("propPropStatCode") != null) {
+				if(item.get("propPropStatCode") != null && (item.get("propPropStatCode").equals("prg1") || item.get("propPropStatCode").equals("prg4"))) {
 					summary.put(item.get("propPropStatCode"), item.get("total"));
 				}
 			}
@@ -394,6 +395,7 @@ public class ProposalController {
 		total += Integer.parseInt(summary.get("na").toString());
 		
 		summary.put("tt", total);
+		searchVO.setTotalRecordCount(total);
 		
 		model.addAttribute("TYPE_LIST", typeList);
 		model.addAttribute("CATEGORY_LIST", categoryList);		
