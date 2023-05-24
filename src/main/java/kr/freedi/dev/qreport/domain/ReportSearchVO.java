@@ -32,7 +32,7 @@ public class ReportSearchVO extends CommonVO {
 
 	private String searchPlaceCode; // 사업장
 	
-	private String searchActionTypeCode; //searchActionTypeCode
+	private String searchActionTypeCode; // 활동분야
 	
 	private String searchLeaderBeltCode; // 과제리더벨트
 	

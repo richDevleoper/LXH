@@ -194,9 +194,40 @@ public class ReportService {
 		newDetail.setAprovalStatCode("2");
 		
 		List<ApproveDetailVO> newList = new ArrayList<>();
-		newList.add(newDetail);
-		
+		newList.add(newDetail);		
 		newApprVO.setDetailList(newList);								// 결재선 등록
+		
+		approveService.insert(newApprVO);
+	}
+	
+	public void regApproveType3(ReportVO reportVO, List<ReportTeamVO> approveMemberList) throws Exception {
+	
+		ApproveVO newApprVO = new ApproveVO();
+		newApprVO.setAprovalType("3"); 		// 결재 종류 (1-과제신청, 2-드랍신청, 3-6시그마프로세스, 6-실시제안, 7-쪽지제안) (code_grp_id='APR_TYPE')
+		if(reportVO.getRepMenuCode().equals("REPORT")) {
+			newApprVO.setRefBusType("1"); 	// 업무 종류(1-과제)	
+		} else {
+			newApprVO.setRefBusType("2"); 	// 업무 종류(1-과제, 2-분임조, 3-쪽지제안, 4-실시제안) (code_grp_id='BUS_TYPE')
+		}
+		newApprVO.setRefBusCode(reportVO.getRepCode().toString()); 		// 과제번호 등록(업무데이터 코드)
+		newApprVO.setRefBusSubCode(reportVO.getRepCurrStepCode());
+		newApprVO.setAprovalSubject(reportVO.getRepName());				// 결재문서명
+		newApprVO.setUserId(reportVO.getRepUpdateUser());					// 상신자
+		
+		
+		List<ApproveDetailVO> newList = new ArrayList<>();
+		for (ReportTeamVO approveMember : approveMemberList) {
+			ApproveDetailVO newDetail = new ApproveDetailVO();
+			// aprovalCode는  approveService.insert에서 처리
+			newDetail.setComNo(approveMember.getComNo()); 					// 결재자 사번
+			newDetail.setComDepartCode(approveMember.getDeptCode());		// 결재자 부서코드
+			newDetail.setComJobx(approveMember.getComJobxCode());			// 결재자 직위코드
+			newDetail.setComPosition(approveMember.getComPositionCode());	// 결재자 직책코드
+			newDetail.setAprovalReqComNo(reportVO.getRepRegUser());			// 결재상신자 사번
+			newDetail.setAprovalStatCode("2");
+			newList.add(newDetail);
+		}	
+		newApprVO.setDetailList(newList);	
 		
 		approveService.insert(newApprVO);
 	}
@@ -238,43 +269,71 @@ public class ReportService {
 		if(reportVO.getRepStatusCode().equals("2")) { // 결재상신 - 과제신청
 			reportVO.setRepRegUser(reportVO.getRepUpdateUser());   // 결재 상신시 결재자 정보 등록자에 넣기
 			this.regApproveType1(reportVO, approveMember); // 챔피언 결재 등록
+		} 
+	}
+	
+	
+	public void cancelApprove(ReportVO reportVO) throws Exception {
+		String repStatusCode = reportVO.getRepStatusCode();
+		
+		if(reportVO.getRepCode()!=null) {
+			
+			if(repStatusCode.equals("2")) { // 과제등록시 '선정중' 일 때 취소하면 
+				reportVO = this.select(reportVO);	// 값이 바뀐 상태에서 결재취소 하는 경우에 대비 디비에서 불러오기
+				reportVO.setRepStatusCode("1");		// 임시저장 상태로 변경
+				this.update(reportVO);				// 상태 변경 저장
+				
+				ApproveVO vo = new ApproveVO();
+				vo.setAprovalType("1");								// 과제선정 (과제-분임조과제 공통)
+				vo.setRefBusCode(reportVO.getRepCode().toString());	// 과제코드
+				approveService.cancelApprove(vo);					// 해당 결재건 지우기	
+			} else if (repStatusCode.equals("3")) { // 과제등록시 '진행중'인 상태에서 단계별 결재를 취소하면
+				
+				
+				
+				ApproveVO vo = new ApproveVO();  // 수정대상 검색조건 설정
+				vo.setAprovalType("3");								// 과제선정 (과제-분임조과제 공통)
+				vo.setRefBusCode(reportVO.getRepCode().toString());	// 과제코드
+				vo.setRefBusSubCode(reportVO.getRepCurrStepCode());	// 현재 진행중이던 단계
+				approveService.cancelApprove(vo);					// 해당 결재건 지우기
+				
+			}	
 		}
 	}
 	
-	// 결재 승인 전 취소
-	public void cancelApprove(ReportVO reportVO) throws Exception {
-		
-		reportVO = this.select(reportVO);	// 값이 바뀐 상태에서 결재취소 하는 경우에 대비 디비에서 불러오기
-		reportVO.setRepStatusCode("1");		// 임시저장 상태로 변경
-		this.update(reportVO);				// 상태 변경 저장
-		
-		ApproveVO vo = new ApproveVO();
-		vo.setAprovalType("1");								// 과제선정 (과제-분임조과제 공통)
-		vo.setRefBusCode(reportVO.getRepCode().toString());	// 과제코드
-		approveService.cancelApprove(vo);					// 해당 결재건 지우기
-	}
 	
-	public void updateStep6Sigma(ReportVO reportVO, String step) throws Exception {
+	// 단계별 결재 승인 완료시 상태코드 업데이트하기 (결재상신은 컨트롤러에서)
+	public void updateStep6Sigma(ReportVO reportVO) throws Exception {
+		
 		// report_detail 의 특정 
-		
-	
+		String step = reportVO.getRepCurrStepCode();
 		
 		ReportDetailVO vo = reportVO.getRepDetailList().get(Integer.parseInt(step)-1);
-		vo.setRepCode(reportVO.getRepCode());
+		vo.setRepUpdateUser(reportVO.getRepUpdateUser());
 		reportDetailService.updateStep(vo);
 		
+	}
+	
+	// 단계별 결재 완료시 상태 업데이트하기
+	//public void approveStep6Sigma(ReportVO reportVO) {
+
 		// 임시 : 결재완료시 다음 단계로 진행
-		reportDetailService.updateStepNext(vo);
+		// reportDetailService.updateStepNext(vo);
 		
-	}
-	
-	public void updateStepGeneral(ReportVO reportVO) throws Exception {
-		// report_detail 의 특정 
-	}
-	
-	
-	
-	
+//		vo.setRepStatus("2");
+//		// 마지막 단계 외에는 모두 다음 단계를 활성화 시킨다.
+//		if("1,2,3,4,5".indexOf(step)>-1) {
+//			vo = new ReportDetailVO();
+//			vo.setRepCode(reportVO.getRepCode());
+//			vo.setRepUpdateUser(reportVO.getRepUpdateUser());
+//			vo.setRepStepCode(step); // 쿼리에서 1 더해서 처리
+//			reportDetailService.updateStepNext(vo);	
+//		} else {
+//			// 과제 상태 완료로 변경
+//			// 과제 Detail 마지막 단계 업데이트
+//		}
+	//}
+		
 
 	public List<ReportVO> selectList(ReportSearchVO searchVO) {
 		
@@ -286,7 +345,7 @@ public class ReportService {
 		return dao.selectList("Report.selectFullList", searchVO);
 	}
 	
-	public List<EgovMap> selectReportList(ReportVO vo) {
+	public List<EgovMap> selectReportList(ReportSearchVO vo) {
 		
 		return dao.selectList("Report.reportSelect", vo);
 	}
@@ -483,4 +542,70 @@ public class ReportService {
 		
 		dao.update("Report.updateStatus", vo);
 	}
+	
+	/**
+     * 과제 - 6시그마 단계별 결재 승인 후 다음단계를 활성화한다.
+     *
+     * @param ReportVO vo - repCode, repCurrStepCode
+	 * @throws Exception 
+     */
+	public void update6SigmaStepNext(ReportVO reportVO) throws Exception {
+		ReportVO savedVO = this.select(reportVO);
+		String statusCode = savedVO.getRepStatusCode();
+		String currStepCode = savedVO.getRepCurrStepCode();
+		
+		//1. 6sigma 과제 확인, 진행중 여부 확인
+		if(savedVO.getRepDivisionCode().equals("1") && "3,4".indexOf(statusCode)>-1) {
+			
+			Integer currStepNum = Integer.parseInt(currStepCode);
+			
+			// 현재 단계 완료 처리
+			ReportDetailVO detailVO = savedVO.getRepDetailList().get(currStepNum-1);
+			detailVO.setRepStatus("2"); // 승인한 단계 완료 처리
+			detailVO.setRepUpdateUser(reportVO.getRepUpdateUser());
+			reportDetailService.update(detailVO);
+			
+			if(currStepNum==6) {
+				// 승인은 repStatusCode 6으로, Drop은  5로 처리
+				savedVO.setRepStatusCode("6"); // 완료
+				dao.update("Report.updateStatus", savedVO);
+			} else {
+				// 그 외 결재면 다음 스텝으로 넘어가
+				ReportDetailVO detailNextVO = new ReportDetailVO();
+				detailNextVO.setRepCode(reportVO.getRepCode());
+				detailNextVO.setRepStatus("1");
+				detailNextVO.setRepUpdateUser(reportVO.getRepUpdateUser());
+				detailNextVO.setRepStepCode(Integer.toString(currStepNum+1));
+				reportDetailService.updateStepStatus(detailNextVO	);
+			}
+		}
+	}
+	
+	public void update6SigmaStepBefore(ReportVO reportVO) throws Exception {
+		ReportVO savedVO = this.select(reportVO);
+		String statusCode = savedVO.getRepStatusCode();	// 과제 상태코드(진행중(ON/OFF))
+		String currStepCode = savedVO.getRepCurrStepCode();	// 현재 6시그마 진행단계
+		
+		//1. 6sigma 과제 확인, 진행중 여부 확인
+		if(savedVO.getRepDivisionCode().equals("1") && "3,4".indexOf(statusCode)>-1) {
+			
+			Integer currStepNum = Integer.parseInt(currStepCode);	//현재단게
+			
+			// 현재 단계 0로 처리
+			ReportDetailVO detailVO = savedVO.getRepDetailList().get(currStepNum-1); //현재단계 데이터 가져온다(0-base)
+			detailVO.setRepStatus("0"); // 단계 초기화
+			detailVO.setRepUpdateUser(reportVO.getRepUpdateUser());
+			reportDetailService.update(detailVO);
+			
+			// 이전 스텝 활성화
+			ReportDetailVO detailNextVO = new ReportDetailVO();
+			detailNextVO.setRepCode(reportVO.getRepCode());
+			detailNextVO.setRepStepCode(Integer.toString(currStepNum-1));	//이전단계
+			detailNextVO.setRepStatus("1"); 
+			detailNextVO.setRepUpdateUser(reportVO.getRepUpdateUser());
+			reportDetailService.updateStepStatus(detailNextVO	);
+		}
+	}
+	
+	
 }

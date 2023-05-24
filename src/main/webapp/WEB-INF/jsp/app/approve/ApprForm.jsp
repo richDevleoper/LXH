@@ -101,7 +101,6 @@
                                                         <!-- [D] 상태에따라 열기/닫기 텍스트 구분해주세요. -->
                                                         <span class="blind">열기/닫기</span>
                                                         <ul>
-                                                        	
 		<c:forEach var="item" items="${reportVO.repDetailList}" varStatus="status">
 
 
@@ -109,7 +108,8 @@
                                                             <li> <!-- class="active" -->
                                                                 <div class="list-content">
                                                                     <div class="list-table list">
-                                                                        <table>
+                                                                    
+                                                                        <table <c:if test="${approveVO.refBusSubCode eq item.repStepCode}">style="border: 3px solid #9a3530;"</c:if> >
                                                                             <caption>일정계획 및 수행 테이블</caption>
                                                                             <colgroup>
                                                                                 <col style="width:60px">

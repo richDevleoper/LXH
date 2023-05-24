@@ -236,10 +236,10 @@ public class TeamController {
 		//1. 그냥 저장
 		if(reportVO.getRepDivisionCode().equals("1")) {
 			// 6시그마 저장
-			reportService.updateStep6Sigma(reportVO, currStep);
+			reportService.updateStep6Sigma(reportVO);
 		} else {
-			// 일반/10+ 저장
-			reportService.updateStepGeneral(reportVO);
+			// 일반/10+ 저장 
+		//	reportService.updateStepGeneral(reportVO);
 		}
 		
 		//2. 결재올리기
@@ -339,10 +339,22 @@ public class TeamController {
 	@RequestMapping({"/ReportList.do"})
 	public String handler_reportList(HttpServletRequest req, ModelMap model,
 			@ModelAttribute("reportVO") ReportVO reportVO,
+			@ModelAttribute("reportSearchVO") ReportSearchVO searchVO,
 			UserVO userSession)throws Exception {
 		
-		reportVO.setRepMenuCode(REP_MENU_CODE);
-		List<EgovMap> reportList = reportService.selectReportList(reportVO);
+		model.addAttribute("menuKey", searchVO.getMenuKey());
+		model.addAttribute("repMenuCode", REP_MENU_CODE);
+		
+		CodeVO codeVO = new CodeVO(); 
+		String[] arrCodeGrpIds = {"6SIG_YN", "RP_TY1", "RP_TY2", "RP_TY3", "SECTOR", "ACTTYPE", "LDRBELT", "MBBUSERT", "RESULTTY", "REP_ROLE", "WPLACE", "REP_STAT"};
+		codeVO.setCodeGrpIdList(arrCodeGrpIds);
+		codeVO.setActFlg("Y"); 
+		List<EgovMap> allCodes = codeService.selectFullList(codeVO);		//item.codeGrpId, codeId, codeNm
+		model.addAttribute("allCodes", allCodes);
+		
+		searchVO.setMenuCode(REP_MENU_CODE);
+		
+		List<EgovMap> reportList = reportService.selectReportList(searchVO);
 		model.addAttribute("reportList", reportList);
 		
 		return "app/report/ReportList";

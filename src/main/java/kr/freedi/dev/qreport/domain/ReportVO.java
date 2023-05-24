@@ -52,7 +52,9 @@ public class ReportVO {
 	private String repMbbUseRate;
 	private String repActionType;
 	
+	
 	private List<ReportDetailVO> repDetailList; 	// 단계별 계획 일정
+	private String repCurrStepCode; // 현재 진행중인 단계(6시그마 1~6, 일반 7)
 	private List<ReportTeamVO> repTeamMemberList; 	// 멤버 리스트
 	private List<ReportResultVO> repResultList;	// 과제 성과
 	private List<ReportIndicatorVO> repIndicatorList; // 과제지표
@@ -60,12 +62,13 @@ public class ReportVO {
 
 	private List<AttachFileVO> fileList;
 	
-	
 	private String repTeamLeaderName;
 	private String repTeamMemberName;
 	private String repTeamProcessOwnerName;
 	private String repTeamChapionName;
 	private String repLeaderName;
+	
+	private String repCurrApproveState;
 
 
 	public Integer getRepCode() {
@@ -496,14 +499,29 @@ public class ReportVO {
 				+ repUpdateDate + ", repApprovalCode=" + repApprovalCode + ", repUseYn=" + repUseYn + ", repMailSendYn="
 				+ repMailSendYn + ", repMailSendDate=" + repMailSendDate + ", repPlaceCode=" + repPlaceCode
 				+ ", repLeaderCode=" + repLeaderCode + ", repFileYn=" + repFileYn + ", mode=" + mode + ", idx=" + idx
-				+ ", repDivision=" + repDivision + ", repType=" + repType + ", repStatus=" + repStatus + ", repSector="
-				+ repSector + ", repLeaderBelt=" + repLeaderBelt + ", repMbbUseRate=" + repMbbUseRate
-				+ ", repActionType=" + repActionType + ", repDetailList=" + repDetailList + ", repTeamMemberList="
-				+ repTeamMemberList + ", repResultList=" + repResultList + ", repIndicatorList=" + repIndicatorList
-				+ ", repFileList=" + repFileList + ", fileList=" + fileList + ", repTeamLeaderName=" + repTeamLeaderName
+				+ ", repDivision=" + repDivision + ", repType=" + repType + ", repStatus=" + repStatus + ", repPlace="
+				+ repPlace + ", repSector=" + repSector + ", repLeaderBelt=" + repLeaderBelt + ", repMbbUseRate="
+				+ repMbbUseRate + ", repActionType=" + repActionType + ", repDetailList=" + repDetailList
+				+ ", repCurrStepCode=" + repCurrStepCode + ", repTeamMemberList=" + repTeamMemberList
+				+ ", repResultList=" + repResultList + ", repIndicatorList=" + repIndicatorList + ", repFileList="
+				+ repFileList + ", fileList=" + fileList + ", repTeamLeaderName=" + repTeamLeaderName
 				+ ", repTeamMemberName=" + repTeamMemberName + ", repTeamProcessOwnerName=" + repTeamProcessOwnerName
-				+ ", repTeamChapionName=" + repTeamChapionName + "]";
+				+ ", repTeamChapionName=" + repTeamChapionName + ", repLeaderName=" + repLeaderName + "]";
 	}
 
-	
+	public String getRepCurrApproveState() {
+		return repCurrApproveState;
+	}
+
+	public void setRepCurrApproveState(String repCurrApproveState) {
+		this.repCurrApproveState = repCurrApproveState;
+	}
+
+	public String getRepCurrStepCode() {
+		return repCurrStepCode;
+	}
+
+	public void setRepCurrStepCode(String repCurrStepCode) {
+		this.repCurrStepCode = repCurrStepCode;
+	}	
 }

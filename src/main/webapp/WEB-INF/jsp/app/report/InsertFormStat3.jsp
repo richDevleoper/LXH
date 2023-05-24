@@ -36,6 +36,7 @@
 <form:hidden path="repStatusCode" />
 <form:hidden path="repCode" />
 <form:hidden path="repMenuCode" />
+<form:hidden path="repCurrStepCode" />
 <form:hidden path="mode" />
                         <!-- breadcrumb -->
                         <div class="breadcrumb">
@@ -197,7 +198,7 @@
                                             <tr id="trRepDate1" class="tr-rep-date">
                                                 <th><span class="asterisk">*</span>일정계획<br>(완료예정일)</th>
                                                 <td colspan="3">
-                                                <input type="hidden" id="hidCurrStep" name="detail_curr_step" value="">
+                                                <!-- <input type="hidden" id="hidCurrStep" name="detail_curr_step" value=""> -->
 
 <c:choose>  
 	<c:when test="${reportVO.repDivisionCode eq '1'}">
@@ -248,7 +249,7 @@
                                                                                         	<script> 
                                                                                         	// 아직 진행되지 않은 step의 토글 방지
 	                                                                                        $("#toggleBox_${status.count}").show(); 
-                                                                                        	$("#hidCurrStep").val("${item.repStepCode}");
+                                                                                        	/* $("#hidCurrStep").val("${item.repStepCode}"); */
 	                                                                                        </script>
                                                                                         	</c:when>
                                                                                         	<c:when test="${item.repStatus eq '2'}">
@@ -383,7 +384,8 @@
                                                             <li><!-- [D] 열린상태일 경우 active 클래스를 추가해주세요. -->
                                                                 <div class="list-content">
                                                                     <div class="list-table list">
-                                                                        <table>
+                                                                    	<input type="hidden" name="repDetailList[0].repStepCode" value="7"/>
+                                                                    	<table>
                                                                             <caption>일정계획 및 수행 테이블</caption>
                                                                             <colgroup>
                                                                                 <col style="width:60px">
@@ -962,10 +964,20 @@
                         </div>
                         <div class="list-footer">
                             <div class="list-btns">
-                                <button type="button" class="btn light-gray" id="btnSave">저장</button>
-                                <button type="button" class="btn bg-gray" id="btnReqApproval">결재의뢰</button>
-                                <button type="button" class="btn bg-gray" id="btnReqDrop">Drop신청</button>
-                                <a href="./list.do?menuKey=${menuKey}" class="btn">목록</a>
+							<c:choose>
+								<c:when test="${reportVO.repStatusCode eq '2'}">	<!-- 선정중 -->
+									<button type="button" class="btn bg-gray" id="btnCancelApproval">결재취소</button>
+								</c:when>
+								<c:when test="${reportVO.repStatusCode eq '3' || reportVO.repStatusCode eq '4'}"> <!-- 진행중 -->
+									<button type="button" class="btn bg-gray" id="btnReqApproval">결재의뢰</button>
+									<button type="button" class="btn bg-gray" id="btnReqDrop">Drop신청</button>
+								</c:when>
+								<c:otherwise>
+	                            	<button type="button" class="btn light-gray" id="btnSave">임시저장</button>
+							  		<button type="button" class="btn bg-gray" id="btnReqApproval">결재의뢰</button>   
+								</c:otherwise>
+							</c:choose>                            
+                                	<a href="./list.do?menuKey=${menuKey}" class="btn">목록</a>
                             </div>
                         </div>
 
@@ -1043,7 +1055,9 @@
 		$("#repMbbUseRateCode").val("${reportVO.repMbbUseRateCode}")
 		
 		//setDropDown(".ddl-rep-result-type", cdRepResultType, true);//성과항목
-		$("#lblUseRefDt").text("2023"); $("#hidUseRefDt").val("2023");	//활용율 반영년도
+		const currYear = new Date().getFullYear();
+		$("#lblUseRefDt").text(currYear); $("#repUseRefDate").val(currYear);	//활용율 반영년도
+		
 		
 		onchange_ddlRepDevisionCode();	// 과제유형
 		$("#repTypeCode").val("${reportVO.repTypeCode}");
@@ -1068,6 +1082,9 @@
 				$(".obj-rep-keyword:eq("+i+")").val(o);
 			});
 		}
+		
+		// 브라우저 자동완성 취소
+		$("input[type=text], input[type=number]").attr("autocomplete", "off");
 	}
 	
 	function setEvent(){
@@ -1116,13 +1133,23 @@
 			};
 		});
 		
+	
 		//결재버튼
 		$("#btnReqApproval").off("click").on("click", function(){
-			if(validate()){
+			if($("#defaultForm").validationEngine('validate')){
 				//$("#repStatusCode").val("2"); // 상태 임시저장 으로 저장
 				$("#defaultForm")[0].submit();	
 			};
 		});
+		
+		$("#btnCancelApproval").off("click").on("click", function(){
+			if(confirm('결재를 회수하시겠습니까?')){
+				//$("#repStatusCode").val("2"); // 상태 임시저장 으로 저장
+				$("#mode").val("CANCEL");
+				$("#defaultForm")[0].submit();	
+			};
+		});
+		
 		
 
 	 	
@@ -1131,7 +1158,10 @@
 			callPopup_searchEmployee(this);
 		});
 	 	
-		
+		$(".btn-search-leader").off("click").on("click", function(){
+			callPopup_searchLeader(this);
+		});
+
 		$("#defaultForm").validationEngine('attach', {
 			unbindEngine:false,
 			validationEventTrigger: "submit",
@@ -1156,6 +1186,8 @@
 	
 	function addRow(mode, obj){
 
+		//mode : member(팀원), result(성과), indi(지표)
+		
 		let oParent = $(obj).closest('tr')
 	    let oClone = oParent.clone();
 		let befId = oClone.attr("idSeq");
@@ -1181,17 +1213,21 @@
 	    });
 	    oClone.find(".ico.tip").remove();
 	    oClone.find('.btn-team-'+ mode +'-add').text('삭제');
+	    oClone.find('.btn-team-'+ mode +'-add').removeClass('btn-team-'+ mode +'-add').addClass('btn-team-'+ mode +'-remove');
 	    
 	    if(mode==="member"){
 	    	oClone.find('th > label').text('팀멤버');
 	    	oClone.find('.team-role-cd').val("2");
-	    	
+
 	    	oClone.find('td:nth-child(3), td:nth-child(4), td:nth-child(5), td:nth-child(6)').text('');
 	    	$(oClone).children().eq(1).children().children().children().removeClass("validate[required]"); //벨리데이션 생략
 	    	oParent.after(oClone);
+	    	
+	    	setRepTeamEvent();
 	    } else if(mode==="result"){
 	    	oClone.find('span.only-first').remove();
-		    oClone.find('select.only-first').removeClass('validate[required]');	    	
+		    oClone.find('select.only-first').removeClass('validate[required]');
+		    oParent.after(oClone);
 	    } else {
 	    	oParent.parent().find("tr:last").after(oClone);	
 	    }

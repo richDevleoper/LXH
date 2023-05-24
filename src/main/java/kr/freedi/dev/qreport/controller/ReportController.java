@@ -2,6 +2,7 @@ package kr.freedi.dev.qreport.controller;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -25,7 +26,7 @@ import kr.freedi.dev.code.domain.CodeVO;
 import kr.freedi.dev.code.service.CodeService;
 import kr.freedi.dev.qapprove.domain.ApproveVO;
 import kr.freedi.dev.qreport.domain.ReportSearchVO;
-
+import kr.freedi.dev.qreport.domain.ReportTeamVO;
 import kr.freedi.dev.qreport.domain.ReportVO;
 import kr.freedi.dev.qreport.service.ReportService;
 import kr.freedi.dev.user.domain.UserVO;
@@ -192,20 +193,36 @@ public class ReportController {
 
 		String userId = userSession.getUserId();
 		
-//		//insert article
-		if(reportVO.getMode().equals("UPDATE")) {
-			// 임시저장 건 결재의뢰/임시저장
-			reportVO.setRepUpdateUser(userId);
-			reportService.update(reportVO);	
-		} else if(reportVO.getMode().equals("CANCEL")) {
-			// 임시저장 건 결재취소 --> 결재데이터 제거 및 임시저장 상태로 변경			
-			reportService.cancelApprove(reportVO);
-			
-		} else {
-			// 신규입력 결재의뢰/임시저장
-			reportVO.setRepRegUser(userId);
-			reportService.insert(reportVO);	
-		}
+		// 해당 건의 현재 상태 가져오기
+		// MST.REP_STATUS_CODE=1 >> 임시저장, 2 >> 선정중, 3,4 >> 진행중(On)/(Off)
+//		if("3,4".indexOf(reportVO.getRepStatusCode())>-1) {
+//			
+//			// TODO 마스터 정보 바뀐 것 있나 확인
+//			
+//			// 진행중인 건 단계별 결재 의뢰
+//			if( "1,2,3,4,5".indexOf(reportVO.getRepCurrStepCode())>-1 ) {
+//				// TODO 각 단계 업데이트 및 다음단계 활성화
+//				
+//			} else {
+//				// TODO final 단계 업데이트 및 마스터 종료 처리
+//				
+//			}
+//			
+//		} else {
+			if(reportVO.getMode().equals("UPDATE")) {
+				// 임시저장 건 결재의뢰/임시저장
+				reportVO.setRepUpdateUser(userId);
+				reportService.update(reportVO);	
+			} else if(reportVO.getMode().equals("CANCEL")) {
+				// 임시저장 건 결재취소 --> 결재데이터 제거 및 임시저장 상태로 변경			
+				reportService.cancelApprove(reportVO);
+			} else {
+				// 신규입력 결재의뢰/임시저장
+				reportVO.setRepRegUser(userId);
+				reportService.insert(reportVO);	
+			}			
+		//}
+
 		
 		//return "redirect:/report/002_01_sub01.do?menuKey=29";
 		return "redirect:/sub.do?menuKey=29";
@@ -220,38 +237,51 @@ public class ReportController {
 			String userIp) throws Exception {
 
 		String userId = userSession.getUserId();
-		String currStep = req.getParameter("detail_curr_step");
+		String repCurrStep = reportVO.getRepCurrStepCode();
 		
-		// 수정할 대상 가져오기 
-		// reportVO.getRepDetailList().get(Integer.parseInt(currStep)-1);
-		
-		//1. 그냥 저장
-		if(reportVO.getRepDivisionCode().equals("1")) {
-			// 6시그마 저장
-			reportService.updateStep6Sigma(reportVO, currStep);
+		if(reportVO.getMode().equals("CANCEL")) {
+
+			System.out.println(reportVO);
+			// 마지막 단계 결재상신건 취소하기			
+			reportService.cancelApprove(reportVO);
+			
 		} else {
-			// 일반/10+ 저장
-			reportService.updateStepGeneral(reportVO);
+			//1. 단계저장 - 6시그마  ---------------------------------
+			if(reportVO.getRepDivisionCode().equals("1")) {
+				reportService.updateStep6Sigma(reportVO);
+			} 
+			
+			// 2. 과제마스터 변경사항 체크하기  ---------------------------------
+			List<ReportTeamVO> approveMemberList = new ArrayList<>();
+			
+			Boolean isChangedRepMaster = false;
+			ReportTeamVO memChamp = null;	// 챔피언
+			ReportTeamVO memLeader = null; // 지도사원
+			for (ReportTeamVO memberVO : reportVO.getRepTeamMemberList()) {
+				if(memberVO.getRepTeamMemRole().equals("5")) { // Define, Finish
+					memChamp = memberVO;	// 챔피언(5)
+				} else if(memberVO.getRepTeamMemRole().equals("3")) {  //그 외
+					memLeader = memberVO;	// 지도사원(3)
+				}
+			}
+			// 과제마스터의 변경사항이 있거나 Define, Finish 결재인 경우 챔피언 결재선 추가
+			if(isChangedRepMaster || "1,6".indexOf(repCurrStep)>-1) {
+				approveMemberList.add(memChamp);
+			}
+			// 그 외 중간 진행사항은 지도사원 결재선 추가
+			if("2,3,4,5".indexOf(repCurrStep)>-1) {
+				approveMemberList.add(memLeader);
+			}
+			
+			// 3. 결재올리기  ---------------------------------
+			reportVO.setRepUpdateUser(userId);
+			reportService.regApproveType3(reportVO, approveMemberList);
+
+			// TODO 4. 이메일 전송   ---------------------------------
+		
 		}
 		
-		//2. 결재올리기
-
-		// 3. 기존 데이터 대비 과제 마스터가 바뀐 내용이 있다면 메일 보내기 
 		
-		// 결재 처리부
-		// ㄴ결재 처리하면서  해당 repStepCode는 '2'로 처리하고 그다음 step을 '1'로 처리
-		// ㄴ Drop은 결재 완료시 mst, detail을 
-		
-/*//		//insert article
-		if(reportVO.getMode().equals("UPDATE")) {
-			reportVO.setRepUpdateUser(userId);
-			reportService.update(reportVO);	
-		} else {
-			reportVO.setRepRegUser(userId);
-			reportService.insert(reportVO);	
-		}*/
-		
-		//return "redirect:/report/002_01_sub01.do?menuKey=29";
 		return "redirect:/sub.do?menuKey=29";
 	}
 	
@@ -331,10 +361,23 @@ public class ReportController {
 	@RequestMapping({"/ReportList.do"})
 	public String handler_reportList(HttpServletRequest req, ModelMap model,
 			@ModelAttribute("reportVO") ReportVO reportVO,
+			@ModelAttribute("reportSearchVO") ReportSearchVO searchVO,
 			UserVO userSession)throws Exception {
 		
-		reportVO.setRepMenuCode(REP_MENU_CODE);
-		List<EgovMap> reportList = reportService.selectReportList(reportVO);
+		model.addAttribute("menuKey", searchVO.getMenuKey());
+		model.addAttribute("repMenuCode", REP_MENU_CODE);
+		model.addAttribute("searchVO", searchVO);
+		
+		CodeVO codeVO = new CodeVO(); 
+		String[] arrCodeGrpIds = {"6SIG_YN", "RP_TY1", "RP_TY2", "RP_TY3", "SECTOR", "ACTTYPE", "LDRBELT", "MBBUSERT", "RESULTTY", "REP_ROLE", "WPLACE", "REP_STAT"};
+		codeVO.setCodeGrpIdList(arrCodeGrpIds);
+		codeVO.setActFlg("Y"); 
+		List<EgovMap> allCodes = codeService.selectFullList(codeVO);		//item.codeGrpId, codeId, codeNm
+		model.addAttribute("allCodes", allCodes);
+		
+		searchVO.setMenuCode(REP_MENU_CODE);
+		
+		List<EgovMap> reportList = reportService.selectReportList(searchVO);
 		model.addAttribute("reportList", reportList);
 		
 		return "app/report/ReportList";

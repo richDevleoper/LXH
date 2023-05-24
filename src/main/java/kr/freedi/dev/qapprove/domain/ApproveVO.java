@@ -20,6 +20,7 @@ public class ApproveVO {
 	private String draftingComment;
 	private String refBusType;
 	private String refBusCode;
+	private String refBusSubCode;
 	
 	private List<ApproveDetailVO> detailList;
 	
@@ -138,13 +139,20 @@ public class ApproveVO {
 	public void setUserNm(String userNm) {
 		this.userNm = userNm;
 	}
+	public String getRefBusSubCode() {
+		return refBusSubCode;
+	}
+	public void setRefBusSubCode(String refBusSubCode) {
+		this.refBusSubCode = refBusSubCode;
+	}
 	@Override
 	public String toString() {
 		return "ApproveVO [aprovalCode=" + aprovalCode + ", actRegNo=" + actRegNo + ", actAprovalNo=" + actAprovalNo
 				+ ", aprovalType=" + aprovalType + ", aprovalState=" + aprovalState + ", aprovalSubject="
 				+ aprovalSubject + ", userId=" + userId + ", draftingDate=" + draftingDate + ", draftingComment="
-				+ draftingComment + ", refBusType=" + refBusType + ", refBusCode=" + refBusCode + ", detailList="
-				+ detailList + ", idx=" + idx + ", aprovalTypeNm=" + aprovalTypeNm + ", aprovalDate=" + aprovalDate
-				+ ", aprovalStateNm=" + aprovalStateNm + ", refBusTypeNm=" + refBusTypeNm + ", userNm=" + userNm + "]";
+				+ draftingComment + ", refBusType=" + refBusType + ", refBusCode=" + refBusCode + ", refBusSubCode="
+				+ refBusSubCode + ", detailList=" + detailList + ", idx=" + idx + ", aprovalTypeNm=" + aprovalTypeNm
+				+ ", aprovalDate=" + aprovalDate + ", aprovalStateNm=" + aprovalStateNm + ", refBusTypeNm="
+				+ refBusTypeNm + ", userNm=" + userNm + "]";
 	}	
 }

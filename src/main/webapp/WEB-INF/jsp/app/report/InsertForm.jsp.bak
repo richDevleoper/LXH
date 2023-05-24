@@ -36,7 +36,6 @@
 <form:hidden path="repStatusCode" />
 <form:hidden path="repCode" />
 <form:hidden path="repMenuCode" />
-<form:hidden path="repCurrStepCode" />
 <form:hidden path="mode" />
                         <!-- breadcrumb -->
                         <div class="breadcrumb">
@@ -927,6 +926,10 @@
                         <div class="list-footer">
                             <div class="list-btns">
 							<c:choose>
+							  	<c:when test="${reportVO.repStatusCode eq '1'}"> <!-- 임시저장 -->
+							  		<button type="button" class="btn light-gray" id="btnSave">임시저장</button>
+							  		<button type="button" class="btn bg-gray" id="btnReqApproval">결재의뢰</button>
+							  	</c:when>
 								<c:when test="${reportVO.repStatusCode eq '2'}">	<!-- 선정중 -->
 									<button type="button" class="btn bg-gray" id="btnCancelApproval">결재취소</button>
 								</c:when>
@@ -935,10 +938,9 @@
 									<button type="button" class="btn bg-gray" id="btnReqDrop">Drop신청</button>
 								</c:when>
 								<c:otherwise>
-	                            	<button type="button" class="btn light-gray" id="btnSave">임시저장</button>
-							  		<button type="button" class="btn bg-gray" id="btnReqApproval">결재의뢰</button>   
+	                            	<!-- 5 drop, 6 완료 -->   
 								</c:otherwise>
-							</c:choose>                           
+							</c:choose>                            
                                 	<a href="./list.do?menuKey=${menuKey}" class="btn">목록</a>
                             </div>
                         </div>

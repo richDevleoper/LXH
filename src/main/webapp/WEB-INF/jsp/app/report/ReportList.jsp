@@ -18,7 +18,8 @@
    	</style>
 </head>
 <body>
-
+<form:form commandName="reportSearchVO" id="defaultForm" method="get" action="ReportList.do" >
+	<input type="hidden" name="menuKey" value="${menuKey}" />
                         <div class="list-wrap">
                             <div class="list-search">
                                 <div class="search-form row">
@@ -28,12 +29,12 @@
                                         </div>
                                         <div class="pd-l10 col s9">
                                             <div class="col s5 input-date">
-                                                <input type="text">
+                                                <form:input type="text" path="searchFromDt" cssClass="datepicker"/>
                                                 <i class="ico calendar"></i>
                                             </div>
                                             <span class="col s1 text-bul align-center">~</span>
                                             <div class="col s5 input-date">
-                                                <input type="text">
+                                                <form:input type="text" path="searchToDt" cssClass="datepicker"/>
                                                 <i class="ico calendar"></i>
                                             </div>
                                         </div>
@@ -52,9 +53,8 @@
                                             <label>사업장</label>
                                         </div>
                                         <div class="pd-l10 col s7">
-                                            <select name="" id="">
-                                                <option value="">전체</option>
-                                            </select>
+                                            <form:select path="searchPlaceCode" cssClass="w-90p">
+                                            </form:select>
                                         </div>
                                     </div>
                                 </div>
@@ -64,9 +64,8 @@
                                             <label>6σ Full Process 여부</label>
                                         </div>
                                         <div class="pd-l10 col s9">
-                                            <select name="" id="">
-                                                <option value="">전체</option>
-                                            </select>
+                                            <form:select path="searchDivision" cssClass="w-90p">
+                                            </form:select>
                                         </div>
                                     </div>
                                     <div class="form-inline form-input col s4">
@@ -74,9 +73,8 @@
                                             <label>과제유형</label>
                                         </div>
                                         <div class="pd-l10 col s8">
-                                            <select name="" id="">
-                                                <option value="">전체</option>
-                                            </select>
+                                             <form:select path="searchType" cssClass="w-90p">
+                                            </form:select>
                                         </div>
                                     </div>
                                     <div class="form-inline form-input col s4">
@@ -84,9 +82,8 @@
                                             <label>과제리더벨트</label>
                                         </div>
                                         <div class="pd-l10 col s7">
-                                            <select name="" id="">
-                                                <option value="">전체</option>
-                                            </select>
+                                            <form:select path="searchLeaderBeltCode" cssClass="w-90p">
+                                            </form:select>
                                         </div>
                                     </div>
                                 </div>
@@ -96,9 +93,8 @@
                                             <label>활동분야</label>
                                         </div>
                                         <div class="pd-l10 col s9">
-                                            <select name="" id="">
-                                                <option value="">전체</option>
-                                            </select>
+                                           <form:select path="searchActionTypeCode" cssClass="w-90p">
+                                            </form:select>
                                         </div>
                                     </div>
                                     <div class="form-inline form-input col s4">
@@ -106,18 +102,18 @@
                                             <label>진행현황</label>
                                         </div>
                                         <div class="pd-l10 col s8">
-                                            <select name="" id="">
-                                                <option value="">전체</option>
-                                            </select>
+                                            <form:select path="searchStatus" cssClass="w-90p">
+                                            </form:select>
                                         </div>
                                     </div>
                                     
                                     <div class="col s4 align-right">
-                                        <button type="button" class="btn-submit">조회</button>
+                                        
+                                        <button type="button" class="btn-submit" onclick="onclick_search()">조회</button>
                                     </div>
                                 </div>
                             </div>
-
+</form:form>
                             <div class="list-header">
                                 <p class="title">검색결과(Report)</p>                                
                             </div>
@@ -169,17 +165,17 @@
                                         <c:forEach items="${reportList}" var="item" varStatus="i">
                                             <tr class="bg-white">
                                                 <th class="bg-gray font-weight-bold" colspan="2">${item.represulttype}</th>
-                                                <th class="bg-gray font-weight-bold num-align"><fmt:formatNumber value="${item.inytotal}" pattern="#,###" /></th>
-                                                <td class="num-align"><fmt:formatNumber value="${item.inyact1}" pattern="#,###" /></td>
-                                                <td class="num-align"><fmt:formatNumber value="${item.inyact2}" pattern="#,###" /></td>
-                                                <td class="num-align"><fmt:formatNumber value="${item.inyact3}" pattern="#,###" /></td>
-                                                <td class="num-align"><fmt:formatNumber value="${item.inyact4}" pattern="#,###" /></td>
-                                                <td class="num-align"><fmt:formatNumber value="${item.inyact5}" pattern="#,###" /></td>
-                                                <td class="num-align"><fmt:formatNumber value="${item.yact1}" pattern="#,###" /></td>
-                                                <td class="num-align"><fmt:formatNumber value="${item.yact2}" pattern="#,###" /></td>
-                                                <td class="num-align"><fmt:formatNumber value="${item.yact3}" pattern="#,###" /></td>
-                                                <td class="num-align"><fmt:formatNumber value="${item.yact4}" pattern="#,###" /></td>
-                                                <td class="num-align"><fmt:formatNumber value="${item.yact5}" pattern="#,###" /></td>                                              
+                                                <th class="bg-gray font-weight-bold num-align"><fmt:formatNumber value="${item.inyTotal}" pattern="#,###" /></th>
+                                                <td class="num-align"><fmt:formatNumber value="${item.inyAct1}" pattern="#,###" /></td>
+                                                <td class="num-align"><fmt:formatNumber value="${item.inyAct2}" pattern="#,###" /></td>
+                                                <td class="num-align"><fmt:formatNumber value="${item.inyAct3}" pattern="#,###" /></td>
+                                                <td class="num-align"><fmt:formatNumber value="${item.inyAct4}" pattern="#,###" /></td>
+                                                <td class="num-align"><fmt:formatNumber value="${item.inyAct5}" pattern="#,###" /></td>
+                                                <td class="num-align"><fmt:formatNumber value="${item.yAct1}" pattern="#,###" /></td>
+                                                <td class="num-align"><fmt:formatNumber value="${item.yAct2}" pattern="#,###" /></td>
+                                                <td class="num-align"><fmt:formatNumber value="${item.yAct3}" pattern="#,###" /></td>
+                                                <td class="num-align"><fmt:formatNumber value="${item.yAct4}" pattern="#,###" /></td>
+                                                <td class="num-align"><fmt:formatNumber value="${item.yAct5}" pattern="#,###" /></td>                                              
                                             </tr>
                                         </c:forEach>
                                             <!-- <tr>
@@ -254,7 +250,7 @@
                             </div>
                         </div>
                     
-        <!-- 조직도 -->
+<%--         <!-- 조직도 -->
         <div class="modal-dimmed"></div>
         <div class="org-modal">
             <div class="modal-header">
@@ -355,7 +351,119 @@
                     <button type="button" class="btn-cancel">취소</button>
                 </div>
             </div>
-        </div>
+        </div> --%>
+        <script>        
+        let cdListSector = []; //[{key:1,value:'창호'},{key:2,value:'바닥재'},{key:3,value:'단열재'},{key:4,value:'벽지'},{key:5,value:'표면소재'},{key:6,value:'산업용필름'},{key:7,value:'자동차소재부품'},{key:8,value:'인테리어'},{key:9,value:'연구소'},{key:10,value:'품질'},{key:11,value:'생산기술(제조혁신)'},{key:12,value:'환경안전'},{key:13,value:'기타'}];
+    	let cdLeaderBelt = [];
+    	let cdActionType = [];
+    	let cdMbbUseRate = [];
+    	let cdRepResultType = [];
+    	let cdRepType1 = [];
+    	let cdRepType2 = [];
+    	let cdRepType3 = [];
+    	let cdWPlace = [];
+    	let cdRepStatus = [];
+    	let cd6SigYn = []; 
+    	
+    	let codes = [
+    		<c:forEach var="item" items="${allCodes}">{index:"${item.codeGrpId}",key:"${item.codeId}",value:"${item.codeNm}"},
+    		</c:forEach>
+    	];
+    	
+    	let vMenuType = "${repMenuCode}";
+    	
+    	$(document).ready(init);
+    	
+    	function init(){
+    		
+    		// 코드 데이터 초기화
+    		initCode();
+    		
+    		// 컨트롤 세팅
+    		setControl();
+    	}
+    	
+    	function initCode(){
+    		/**
+    		6SIG_YN - 6σ Full Process 여부
+			RP_TY1~3 - 과제유형
+			LDRBELT - 과제리더벨트
+			ACTTYPE - 활동분야
+			WPLACE - 사업장
+			REP_STAT - 과제현황
+    		****/
+    		cd6SigYn = codes.filter(function(code){ return code.index==="6SIG_YN"; });
+    		cdLeaderBelt = codes.filter(function(code){ return code.index==="LDRBELT"; });
+    		cdActionType = codes.filter(function(code){ return code.index==="ACTTYPE"; });
+    		if(vMenuType==="REPORT"){
+    			cdRepType1 = codes.filter(function(code){ return code.index==="RP_TY1";});
+    		} else {
+    			cdRepType1 = codes.filter(function(code){ return code.index==="RP_TY1" && code.value==="DMAIC";});  // 분임조에서는 DMAIC만 적용(화면설계서)	
+    		}
+    		cdRepType2 = codes.filter(function(code){ return code.index==="RP_TY2";});
+    		cdRepType3 = codes.filter(function(code){ return code.index==="RP_TY3";});
+    		cdWPlace =  codes.filter(function(code){ return code.index==="WPLACE";});
+    		cdRepStatus =  codes.filter(function(code){ return code.index==="REP_STAT";});
+    		
+    	}
+    	
+    	function setControl(){
+    		
+    		
+    		setDropDown("searchPlaceCode", cdWPlace, true, "전체");//사업장
+    		$("#searchPlaceCode").val("${searchVO.searchPlaceCode}");
+    		
+    		setDropDown("searchDivision", cd6SigYn, true, "전체");//6시그마 여부
+    		$("#searchDivision").val("${searchVO.searchDivision}");
+    		
+    		setDropDown("searchType", cdLeaderBelt, true, "전체");//과제유형
+    		$("#searchType").val("${searchVO.searchType}");
+    		
+    		setDropDown("searchLeaderBeltCode", cdLeaderBelt, true, "전체");//과제리더벨트
+    		$("#searchLeaderBeltCode").val("${searchVO.searchLeaderBeltCode}");
+    		
+    		setDropDown("searchActionTypeCode", cdActionType, true, "전체");//활동분야
+    		$("#searchActionTypeCode").val("${searchVO.searchActionTypeCode}");
+    		
+    		setDropDown("searchStatus", cdRepStatus, true, "전체");//활동분야
+    		$("#searchStatus").val("${searchVO.searchStatus}");
+    		
+    		$("#searchDivision").off("change").on("change", onchange_ddlRepDevisionCode); // 6σ Full Process여부
+    		onchange_ddlRepDevisionCode();
+    		$("#searchType").val("${searchVO.searchType}");
+    		
+    		// 브라우저 자동완성 취소
+    		$("input[type=text], input[type=number]").attr("autocomplete", "off");
+    	}
+    	
+    	function onchange_ddlRepDevisionCode(e){
+	
+			let repDevCd = $("#searchDivision").val(); //이벤트 트리거 객체의 값
+			let targetObjId = "searchType";	//바뀔 대상 객체 ID
+			let arrRepType = [];
+			$(".tr-rep-date").hide();
+			switch(repDevCd){
+			case "1": //6sigma
+				arrRepType = cdRepType1;
+				break;
+			case "2": //일반
+				arrRepType = cdRepType2;
+				break;
+			case "3": // 10+No.
+				arrRepType = cdRepType3;
+				break;
+			default:
+				arrRepType = [];
+				break;
+			}
+			setDropDown(targetObjId, arrRepType, true, '전체');
+		}
+    	
+    	function onclick_search(){
+    		$("#defaultForm")[0].submit();
+    	}
+    	
+        </script>
 
 </body>
 </html>

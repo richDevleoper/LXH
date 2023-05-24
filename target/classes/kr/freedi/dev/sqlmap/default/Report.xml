@@ -47,6 +47,10 @@
 		<result property="repTeamChapionName" column="REP_TEAM_CHAMPION_NAME" />
 		<result property="repLeaderName" column="REP_LEADER_NAME" />
 		
+		<result property="repCurrStepCode" column="REP_CURR_STEP_CODE" />
+		<result property="repCurrApproveState" column="CURR_APR_STATE" />
+		
+		
 	</resultMap>
 	
 	<sql id="defCond">
@@ -98,10 +102,10 @@
 				AND T.REP_LEADER_BELT_CODE = #{searchLeaderBeltCode}
 			</if>
 			<if test="searchFromDt != null and searchFromDt != ''">
-				AND d.start_date(+) > to_date(#{searchFromDt}, 'YYYY-MM-DD')
+				AND D.start_date(+) > to_date(#{searchFromDt}, 'YYYY-MM-DD')
 			</if>
 			<if test="searchToDt != null and searchToDt != ''">
-				AND D.end_date = to_date(#{searchToDt}, 'YYYY-MM-DD')
+				AND D.end_date(+) = to_date(#{searchToDt}, 'YYYY-MM-DD')
 			</if>
 	</sql> 
 	
@@ -337,18 +341,18 @@
 			, T.REP_NAME
 			, T.REP_MENU_CODE
 			, T.REP_DEVISION_CODE
-			, c_div.code_nm as REP_DIVISION
+			, get_code_nm('6SIG_YN', T.rep_devision_code) as REP_DIVISION
 			, T.REP_TYPE_CODE
 			, c_ty.code_nm as REP_TYPE
 			, T.REP_SECTOR_CODE
-			, c_sect.code_nm rep_sector
+			, get_code_nm('SECTOR', T.REP_SECTOR_CODE) rep_sector
 			, T.REP_PRODUCT_CLASS
 			, T.REP_LEADER_BELT_CODE
-            , c_belt.code_nm REP_LEADER_BELT
+            , get_code_nm('LDRBELT', T.REP_LEADER_BELT_CODE) REP_LEADER_BELT
 			, T.REP_ACTION_TYPE_CODE
-            , c_act.code_nm REP_ACTION_TYPE
+            , get_code_nm('ACTTYPE', T.REP_ACTION_TYPE_CODE) REP_ACTION_TYPE
 			, T.REP_MBB_USE_RATE_CODE
-            , c_mbbr.code_nm REP_MBB_USE_RATE
+            , get_code_nm('MBBUSERT', T.REP_MBB_USE_RATE_CODE) REP_MBB_USE_RATE
 			, to_char(T.REP_USE_REF_DATE, 'YYYY') REP_USE_REF_DATE
 			, T.REP_STATUS_CODE
 			, T.REP_KEYWORD
@@ -364,69 +368,59 @@
 			, T.REP_LEADER_CODE
 			, (select user_name from tb_user_mst where com_no=T.REP_LEADER_CODE) REP_LEADER_NAME
 			, T.REP_FILE_YN
-			
+			, (select max(rep_step_code) from tb_report_detail where rep_code=T.REP_CODE and rep_status>0) REP_CURR_STEP_CODE
+			, (select aproval_state from (select * from tb_approval_mst where ref_bus_code=#{repCode} order by aproval_code desc) a where rownum=1) CURR_APR_STATE
 		FROM TB_REPORT_MST T,
-            tb_code    c_div,
-            tb_code    c_ty,
-            tb_code    c_sect,
-            tb_code    c_st,
-            tb_code    c_belt,
-            tb_code    c_act,
-            tb_code    c_mbbr
-            
-        WHERE   
-                T.rep_devision_code = c_div.code_id(+) 		AND c_div.code_grp_id(+) = '6SIG_YN' 
-            AND T.rep_type_code = c_ty.code_id(+) 			AND c_ty.code_grp_id(+) IN ('RP_TY1', 'RP_TY2', 'RP_TY3')
-            AND T.rep_status_code = c_st.code_id(+) 		AND c_st.code_grp_id(+) = 'REP_STAT'
-            AND T.REP_SECTOR_CODE = c_sect.code_id(+) 		AND c_sect.code_grp_id(+) = 'SECTOR'
-            AND T.REP_LEADER_BELT_CODE = c_belt.code_id(+) 	AND c_belt.code_grp_id(+) = 'LDRBELT'
-            AND T.REP_ACTION_TYPE_CODE = c_act.code_id(+) 	AND c_act.code_grp_id(+) = 'ACTTYPE'
-            AND T.REP_MBB_USE_RATE_CODE = c_mbbr.code_id(+) AND c_mbbr.code_grp_id(+) = 'MBBUSERT'
-		    AND T.REP_CODE = #{repCode}
+            tb_code    c_ty
+        WHERE    
+                T.rep_type_code = c_ty.code_id(+) 			AND c_ty.code_grp_id(+) IN ('RP_TY1', 'RP_TY2', 'RP_TY3')
+            AND T.REP_CODE = #{repCode}
 	</select>
 	
 	<select id="reportSelect" resultType="egovMap">
 	with raw_data as (   
 	   select get_code_nm('RESULTTY', rep_result_type_code) as rep_result_type
 	          , a.rep_result_type_code
-	          --, get_code_nm('ACTTYPE', m.REP_ACTION_TYPE_CODE) as REP_ACTION_TYPE
-	          , m.REP_ACTION_TYPE_CODE
+	          --, get_code_nm('ACTTYPE', T.REP_ACTION_TYPE_CODE) as REP_ACTION_TYPE
+	          , T.REP_ACTION_TYPE_CODE
 	          , a.rep_result_within_year as iny_total
-	          , case when m.REP_ACTION_TYPE_CODE='1' then to_number(a.rep_result_within_year) else 0 end as iny_act_1
-	          , case when m.REP_ACTION_TYPE_CODE='2' then to_number(a.rep_result_within_year) else 0 end as iny_act_2
-	          , case when m.REP_ACTION_TYPE_CODE='3' then to_number(a.rep_result_within_year) else 0 end as iny_act_3
-	          , case when m.REP_ACTION_TYPE_CODE='4' then to_number(a.rep_result_within_year) else 0 end as iny_act_4
-	          , case when m.REP_ACTION_TYPE_CODE='5' then to_number(a.rep_result_within_year) else 0 end as iny_act_5
+	          , case when T.REP_ACTION_TYPE_CODE='1' then to_number(a.rep_result_within_year) else null end as iny_act_1
+	          , case when T.REP_ACTION_TYPE_CODE='2' then to_number(a.rep_result_within_year) else null end as iny_act_2
+	          , case when T.REP_ACTION_TYPE_CODE='3' then to_number(a.rep_result_within_year) else null end as iny_act_3
+	          , case when T.REP_ACTION_TYPE_CODE='4' then to_number(a.rep_result_within_year) else null end as iny_act_4
+	          , case when T.REP_ACTION_TYPE_CODE='5' then to_number(a.rep_result_within_year) else null end as iny_act_5
 	          , a.rep_result_year y_total 
-	          , case when m.REP_ACTION_TYPE_CODE='1' then to_number(a.rep_result_year) else 0 end as y_act_1
-	          , case when m.REP_ACTION_TYPE_CODE='2' then to_number(a.rep_result_year) else 0 end as y_act_2
-	          , case when m.REP_ACTION_TYPE_CODE='3' then to_number(a.rep_result_year) else 0 end as y_act_3
-	          , case when m.REP_ACTION_TYPE_CODE='4' then to_number(a.rep_result_year) else 0 end as y_act_4
-	          , case when m.REP_ACTION_TYPE_CODE='5' then to_number(a.rep_result_year) else 0 end as y_act_5
+	          , case when T.REP_ACTION_TYPE_CODE='1' then to_number(a.rep_result_year) else null end as y_act_1
+	          , case when T.REP_ACTION_TYPE_CODE='2' then to_number(a.rep_result_year) else null end as y_act_2
+	          , case when T.REP_ACTION_TYPE_CODE='3' then to_number(a.rep_result_year) else null end as y_act_3
+	          , case when T.REP_ACTION_TYPE_CODE='4' then to_number(a.rep_result_year) else null end as y_act_4
+	          , case when T.REP_ACTION_TYPE_CODE='5' then to_number(a.rep_result_year) else null end as y_act_5
 	     from tb_report_result a
-	          , tb_report_mst m
-	    where a.rep_code=m.rep_code
-	      and m.rep_menu_code=#{repMenuCode}
+	          , tb_report_mst T
+	          , (select rep_code, min(rep_plan_start_date) start_date
+                             , (case when rep_devision_code='1' then max(REP_PLAN_START_DATE) else max(REP_PLAN_END_DATE) end) as end_date
+                        from tb_report_detail 
+                       group by rep_code, rep_devision_code) d
+	    where a.rep_code=T.rep_code
+	      and t.rep_code=d.rep_code(+)
 	      -- 사업장, 부서, 조회기간은 작성자를 기준으로 검색한다. (5/17 이종일부장 확인)
-	      <if test="repDivisionCode != null and repDivisionCode != ''">
-	      and m.rep_devision_code=#{repDivisionCode} -- 6시그마 여부
-	      </if>
-	      <if test="repDivisionCode != null and repDivisionCode != ''">
-	      and m.rep_type_code=#{repTypeCode}
-	      </if>
-	      <if test="repLeaderBeltCode != null and repLeaderBeltCode != ''">
-	      and m.rep_leader_belt_code=#{repLeaderBeltCode}
-	      </if>
-	      <if test="repActionTypeCode != null and repActionTypeCode != ''">
-	      and m.rep_action_type_code=#{repActionTypeCode}
-	      </if>
-	      <if test="repActionTypeCode != null and repActionTypeCode != ''">
-	      and m.rep_action_type_code=#{repActionTypeCode}
-	      </if>
-	      <if test="repStatusCode != null and repStatusCode != ''">
-	      and m.rep_status_code=#{repStatusCode}
-	      </if>
-	), v_summary as (
+	      <include refid="defCond"></include>
+	), v_count as (
+
+       select  count(iny_total) as iny_total
+	           , count(iny_act_1) as iny_act_1
+	           , count(iny_act_2) as iny_act_2
+	           , count(iny_act_3) as iny_act_3
+	           , count(iny_act_4) as iny_act_4
+	           , count(iny_act_5) as iny_act_5
+	           , count(y_total) as y_total
+	           , count(y_act_1) as y_act_1
+	           , count(y_act_2) as y_act_2
+	           , count(y_act_3) as y_act_3
+	           , count(y_act_4) as y_act_4
+	           , count(y_act_5) as y_act_5
+          from raw_data    
+    ), v_summary as (
 	    select rep_result_type
 	           , rep_result_type_code
 	           , sum(iny_total) as iny_total
@@ -444,24 +438,27 @@
 	    from raw_data
 	    group by rep_result_type, rep_result_type_code
 	)
-	select c.code_nm as repResultType
-	       , nvl(s.iny_total, 0) inyTotal
-	       , nvl(s.iny_act_1, 0) inyAct1
-	       , nvl(s.iny_act_2, 0) inyAct2
-	       , nvl(s.iny_act_3, 0) inyAct3
-	       , nvl(s.iny_act_4, 0) inyAct4
-	       , nvl(s.iny_act_5, 0) inyAct5
-	       , nvl(s.y_total, 0) yTotal
-	       , nvl(s.y_act_1, 0) yAct1
-	       , nvl(s.y_act_2, 0) yAct2
-	       , nvl(s.y_act_3, 0) yAct3
-	       , nvl(s.y_act_4, 0) yAct4
-	       , nvl(s.y_act_5, 0) yAct5
-	  from tb_code c
+    select '건수' as repResultType
+           , c.iny_total, c.iny_act_1, c.iny_act_2, c.iny_act_3, c.iny_act_4, c.iny_act_5, c.y_total, c.y_act_1, c.y_act_2, c.y_act_3, c.y_act_4, c.y_act_5
+      from v_count c
+    union all 	
+	select c.code_nm as rep_result_type
+	       , nvl(s.iny_total, 0) iny_total
+	       , nvl(s.iny_act_1, 0) iny_act_1
+	       , nvl(s.iny_act_2, 0) iny_act_2
+	       , nvl(s.iny_act_3, 0) iny_act_3
+	       , nvl(s.iny_act_4, 0) iny_act_4
+	       , nvl(s.iny_act_5, 0) iny_act_5
+	       , nvl(s.y_total, 0) y_total
+	       , nvl(s.y_act_1, 0) y_act_1
+	       , nvl(s.y_act_2, 0) y_act_2
+	       , nvl(s.y_act_3, 0) y_act_3
+	       , nvl(s.y_act_4, 0) y_act_4
+	       , nvl(s.y_act_5, 0) y_act_5
+	  from (select * from tb_code where code_grp_id='RESULTTY' order by view_ord) c
 	       , v_summary s
-	  where c.code_grp_id='RESULTTY'
-	    and c.code_id=s.rep_result_type_code(+)
-	    order by view_ord asc 
+	  where c.code_id=s.rep_result_type_code(+)
+	     
 	</select>
 	
 </mapper>

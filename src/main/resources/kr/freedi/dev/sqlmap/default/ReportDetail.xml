@@ -199,15 +199,15 @@
 				, REP_UPDATE_USER = #{repUpdateUser}
 				, REP_UPDATE_DATE = SYSDATE
 		WHERE REP_SEQ = #{repSeq}
-	</update>
+	</update> 
 	
-	<update id="updateStepNext">
+	<update id="updateStepStatus">
 	UPDATE TB_REPORT_DETAIL 
-		   SET REP_STATUS = (REP_STATUS+1)
+		   SET REP_STATUS = #{repStatus}
 				, REP_UPDATE_USER = #{repUpdateUser}
 				, REP_UPDATE_DATE = SYSDATE
 		WHERE REP_CODE = #{repCode} 
-		  and REP_STEP_CODE between #{repStepCode} and (#{repStepCode}+1)
+		  and REP_STEP_CODE = #{repStepCode}
 	</update>
 	
 	<select id="select" resultMap="reportDetailMap">

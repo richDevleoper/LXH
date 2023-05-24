@@ -13,6 +13,7 @@
 
 	<%@ include file="/WEB-INF/jsp/layout/def/Head.jsp" %>
 	<script type="text/javascript" src="<c:out value='/def/js/index.cmmn.js' />"></script>
+	<title>품질혁신지원시스템</title>
 	<decorator:head />
 </head>
 

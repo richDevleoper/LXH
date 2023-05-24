@@ -81,7 +81,7 @@
 
 	
 	<update id="updateStatus">
-		UPDATE tb_approval_detail
+		UPDATE TB_APPROVAL_DETAIL
 		SET
 			aproval_stat_code = #{aprovalStatCode},
 		    aproval_complt_date = sysdate,
@@ -109,7 +109,7 @@
 			, T.APROVAL_MAIL_SEND_YN
             , U.USER_NAME
             , T.APROVAL_COMMENT
-		FROM tb_approval_detail T
+		FROM TB_APPROVAL_DETAIL T
 		     , tb_user_mst U
 		     , tb_approval_mst m  
 		WHERE T.COM_NO = U.COM_NO
@@ -119,7 +119,7 @@
 	</select>
 	
 	<delete id="delete">
-		DELETE FROM tb_approval_detail 
+		DELETE FROM TB_APPROVAL_DETAIL 
 		WHERE 
 		<trim prefixOverrides="AND|OR">
 		<if test="aprovalCode != null and aprovalCode != ''">

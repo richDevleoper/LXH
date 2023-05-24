@@ -79,17 +79,15 @@ public class ApproveService {
 			dao.insert("ApprovalDetail.insert", vo);
 		}
 	}
-	
+	/***
+	 * 결재상신한 것을 취소할 때 사용
+	 * @param vo aprovalCode, aprovalType, refBusCode, refBusSubCode
+	 * @throws Exception
+	 */
 	public void cancelApprove(ApproveVO vo) throws Exception {
-		//param
-		//		aproval_type = 1		// 결재유형
-		//		ref_bus_code = 200		// 업무코드번호
 		
-		/*for (ApproveDetailVO detailVO : vo.getDetailList()) {
-			dao.delete("ApprovalDetail.delete", detailVO);
-		}
-		*/
 		vo = this.select(vo);
+		
 		ApproveVO keyVO = new ApproveVO();
 		keyVO.setAprovalCode(vo.getAprovalCode());
 		
@@ -101,9 +99,9 @@ public class ApproveService {
 		
 		dao.update("ApprovalDetail.updateStatus", vo.getDetailList().get(0));
 		
-		// 전원 결재여부 체크하고 마스터도 업데이트할 것
-		// Drop인 경우 마스터도 Drop 처리
+		// TODO 전원 결재여부 체크하고 마스터도 업데이트할 것
 		
+		// Drop인 경우 마스터도 Drop 처리		
 		dao.update("Approval.updateStatus", vo);
 	}
 		

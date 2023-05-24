@@ -52,10 +52,17 @@ public class ReportDetailService {
 		dao.update("ReportDetail.updateStep", vo);
 	}
 	
-	public void updateStepNext(ReportDetailVO vo) throws Exception {
+	/** 
+	 *  6시그마 다음단계 활성화
+	 *  rep_code	  	과제코드
+	 *  rep_step_code 	현재 스텝코드(이 값 기준 다음스텝 활성화) 
+	 *  rep_status 		1로 세팅
+	 *  rep_update_user 수정계정
+	 **/
+	public void updateStepStatus(ReportDetailVO vo) throws Exception {
 		
 		// TODO  이 쿼리는 결재가 승인될 때 실행된다. 
-		dao.update("ReportDetail.updateStepNext", vo);
+		dao.update("ReportDetail.updateStepStatus", vo);
 	}
 	
 	

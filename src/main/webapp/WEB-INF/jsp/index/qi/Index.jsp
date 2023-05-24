@@ -5,6 +5,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib uri="/WEB-INF/tld/string-taglib.tld" prefix="string"%>
 <head>
+	<title>품질혁신지원시스템</title>
     <script src="./assets/js/chart.js"></script>
 	<script src="./assets/js/handleChart.js"></script>
     <script src="./assets/js/chart.js"></script>

@@ -20,7 +20,9 @@
 		<result property="userNm" column="USER_NAME" />
 		<result property="refBusType" column="REF_BUS_TYPE" />
 		<result property="refBusTypeNm" column="REF_BUS_TYPE_NM" />
-		<result property="refBusCode" column="REF_BUS_CODE" /> 
+		<result property="refBusCode" column="REF_BUS_CODE" />
+		<result property="refBusSubCode" column="REF_BUS_SUB_CODE" />
+		 
 
 	</resultMap>
 
@@ -42,7 +44,6 @@
 
 
 	<sql id="defCond2">
-		
 		<trim prefixOverrides="AND|OR">
 		<if test="aprovalCode != null and aprovalCode != ''">
 			AND APROVAL_CODE = #{aprovalCode}
@@ -52,6 +53,9 @@
 		</if>
 		<if test="refBusCode != null and refBusCode != ''">
 			AND REF_BUS_CODE = #{refBusCode}
+		</if>
+		<if test="refBusSubCode != null and refBusSubCode != ''">
+			AND REF_BUS_SUB_CODE = #{refBusSubCode}
 		</if>
 		</trim>
 	</sql> 
@@ -67,7 +71,7 @@
 	 	    T.idx,
 		    T.aproval_code,
 		    T.aproval_type,
-		    get_code_nm('APR_TYPE', T.aproval_type)  aproval_type_nm,
+		    get_code_nm('APR_TYPE', T.aproval_type) || case TO_CHAR(aproval_type) when '3' then to_char(GET_6SIGMA_STEP_NM(T.ref_bus_code, T.ref_bus_sub_code)) else '' end aproval_type_nm,
 		    T.aproval_state,
 		    get_code_nm('APR_STAT', T.aproval_state) aproval_state_nm,
 		    T.aproval_subject,
@@ -133,6 +137,7 @@
             , DRAFTING_COMMENT
             , REF_BUS_CODE
             , REF_BUS_TYPE
+            , REF_BUS_SUB_CODE
 		) VALUES (
             #{aprovalCode}
             , #{actRegNo}
@@ -145,6 +150,7 @@
             , #{draftingComment}
             , #{refBusCode}
             , #{refBusType}
+            , #{refBusSubCode}
 		)
 	</insert>
 	
@@ -189,6 +195,7 @@
 	            , DRAFTING_COMMENT
 	            , REF_BUS_CODE
 	            , REF_BUS_TYPE
+	            , REF_BUS_SUB_CODE
 	     from tb_approval_mst
 	    where 
 	    <include refid="defCond2"></include>
