@@ -385,6 +385,10 @@
 <script type="text/javascript">
 	var proposalInfo = {};
 	$(document).ready(function(){
+		
+		$($($('.fileinput-button')[0]).children()[2]).text('이미지선택');
+		$($($('.fileinput-button')[1]).children()[2]).text('이미지선택');
+		
  		if($('#propPropStatCode').val() != 'PRG_1' && $('#crud').val() == 'U'){ // 결재진행중 상태
 			$('input').attr('disabled', true);
 			$('textarea').attr('disabled', true);
