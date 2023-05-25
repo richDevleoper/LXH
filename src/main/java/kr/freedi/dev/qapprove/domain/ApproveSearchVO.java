@@ -15,7 +15,7 @@ public class ApproveSearchVO extends CommonVO {
 
 	
 	@ParamField
-	private String searchRepName;
+	private String searchName;
 	
 	@ParamField
 	private String searchDivision;
@@ -29,13 +29,28 @@ public class ApproveSearchVO extends CommonVO {
 	private String orderByTyp;
 	
 	private String aprovalCode;
+	
+	@ParamField
+	private String searchReqEmpNm;  // 결재의뢰자
+	
+	@ParamField
+	private String searchUserId;
+	
+	@ParamField
+	private String searchFromDt; // 조회기간(시작)
+	
+	@ParamField
+	private String searchToDt; // 조회기간(끝)
+	
+	@ParamField
+	private String searchGubun; // 기간조회 기준
 
-	public String getSearchRepName() {
-		return searchRepName;
+	public String getSearchName() {
+		return searchName;
 	}
 
-	public void setSearchRepName(String searchRepName) {
-		this.searchRepName = searchRepName;
+	public void setSearchName(String searchName) {
+		this.searchName = searchName;
 	}
 
 	public String getSearchDivision() {
@@ -70,17 +85,61 @@ public class ApproveSearchVO extends CommonVO {
 		this.orderByTyp = orderByTyp;
 	}
 
-	/**
-	 * @return the aprovalCode
-	 */
 	public String getAprovalCode() {
 		return aprovalCode;
 	}
 
-	/**
-	 * @param aprovalCode the aprovalCode to set
-	 */
 	public void setAprovalCode(String aprovalCode) {
 		this.aprovalCode = aprovalCode;
 	}
+
+	public String getSearchUserId() {
+		return searchUserId;
+	}
+
+	public void setSearchUserId(String searchUserId) {
+		this.searchUserId = searchUserId;
+	}
+
+	public String getSearchFromDt() {
+		return searchFromDt;
+	}
+
+	public void setSearchFromDt(String searchFromDt) {
+		this.searchFromDt = searchFromDt;
+	}
+
+	public String getSearchToDt() {
+		return searchToDt;
+	}
+
+	public void setSearchToDt(String searchToDt) {
+		this.searchToDt = searchToDt;
+	}
+
+	public String getSearchGubun() {
+		return searchGubun;
+	}
+
+	public void setSearchGubun(String searchGubun) {
+		this.searchGubun = searchGubun;
+	}
+
+	public String getSearchReqEmpNm() {
+		return searchReqEmpNm;
+	}
+
+	public void setSearchReqEmpNm(String searchReqEmpNm) {
+		this.searchReqEmpNm = searchReqEmpNm;
+	}
+
+	@Override
+	public String toString() {
+		return "ApproveSearchVO [searchName=" + searchName + ", searchDivision=" + searchDivision + ", searchType="
+				+ searchType + ", searchStatus=" + searchStatus + ", orderByTyp=" + orderByTyp + ", aprovalCode="
+				+ aprovalCode + ", searchReqEmpNm=" + searchReqEmpNm + ", searchUserId=" + searchUserId
+				+ ", searchFromDt=" + searchFromDt + ", searchToDt=" + searchToDt + ", searchGubun=" + searchGubun
+				+ "]";
+	}
+
 }

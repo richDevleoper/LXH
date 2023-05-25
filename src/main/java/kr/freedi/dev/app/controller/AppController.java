@@ -502,29 +502,29 @@ public class AppController {
 		return "app/qi/008_01_02_apprvsugg";
 	}
 	
-	@RequestMapping({"/app/008_02_apprv_req.do"})
-	public String handler008_02(HttpServletRequest request, ModelMap model,
-			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
-			UserVO userSession)throws Exception {
-		
-		return "app/qi/008_02_apprv_req";
-	}
-	
-	@RequestMapping({"/app/008_02_01_apprvcate_req.do"})
-	public String handler008_02_01(HttpServletRequest request, ModelMap model,
-			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
-			UserVO userSession)throws Exception {
-		
-		return "app/qi/008_02_01_apprvcate_req";
-	}
-	
-	@RequestMapping({"/app/008_02_02_apprvsugg_req.do"})
-	public String handler008_02_02(HttpServletRequest request, ModelMap model,
-			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
-			UserVO userSession)throws Exception {
-		
-		return "app/qi/008_02_02_apprvsugg_req";
-	}
+//	@RequestMapping({"/app/008_02_apprv_req.do"})
+//	public String handler008_02(HttpServletRequest request, ModelMap model,
+//			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
+//			UserVO userSession)throws Exception {
+//		
+//		return "app/qi/008_02_apprv_req";
+//	}
+//	
+//	@RequestMapping({"/app/008_02_01_apprvcate_req.do"})
+//	public String handler008_02_01(HttpServletRequest request, ModelMap model,
+//			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
+//			UserVO userSession)throws Exception {
+//		
+//		return "app/qi/008_02_01_apprvcate_req";
+//	}
+//	
+//	@RequestMapping({"/app/008_02_02_apprvsugg_req.do"})
+//	public String handler008_02_02(HttpServletRequest request, ModelMap model,
+//			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
+//			UserVO userSession)throws Exception {
+//		
+//		return "app/qi/008_02_02_apprvsugg_req";
+//	}
 	
 	@RequestMapping({"/app/008_03_apprv_list.do"})
 	public String handler008_03(HttpServletRequest request, ModelMap model,

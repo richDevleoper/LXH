@@ -79,6 +79,9 @@ public class ApproveController {
 	@Resource(name = "proposalService")
 	private ProposalService proposalService;
 	
+	@Resource(name = "codeService")
+	private CodeService codeService;
+	
 	
 	
 	@InitBinder
@@ -98,29 +101,33 @@ public class ApproveController {
 		
 		model.addAttribute("menuKey", searchVO.getMenuKey());
 		
-//		List<EgovMap> countList = service.selectListCount2(searchVO);
-//		
-//		
-		int totalCount = 30;
-//		for (EgovMap egovMap : countList) {
-//			BigDecimal currVal = (BigDecimal)egovMap.get("cnt");
-//			totalCount = totalCount + currVal.intValue();
-//			String codeNm = (String)egovMap.get("repstatuscode");
-//			if(codeNm!=null) {
-//				model.addAttribute("count_"+codeNm, currVal.intValue());
-//			}
-//		}
-//		
-//		//페이징 기본설정8
+		List<EgovMap> countList = service.selectListCount(searchVO);
+		
+		int totalCount = 0;
+		for (EgovMap egovMap : countList) {
+			BigDecimal currVal = (BigDecimal)egovMap.get("cnt");
+			totalCount = totalCount + currVal.intValue();
+			String codeNm = (String)egovMap.get("aprovalState");
+			if(codeNm!=null) {
+				model.addAttribute("count_"+codeNm, currVal.intValue());
+			}
+		}
+		
+		//페이징 기본설정8
 		searchVO.setTotalRecordCount(totalCount);
 		
 		model.addAttribute("approveList", service.selectList(searchVO));
 		model.addAttribute("totalCount", totalCount);
 	
-//		CodeVO codeVO = new CodeVO(); 
-//		codeVO.setCodeGrpId("6SIG_YN");
-//		codeVO.setActFlg("Y"); 
-//		model.addAttribute("searchRepName", codeService.selectFullList(codeVO));
+		// 검색조건 DDL 세팅
+		CodeVO codeVO = new CodeVO(); 
+		codeVO.setCodeGrpId("APR_TYPE");
+		codeVO.setActFlg("Y"); 
+		model.addAttribute("searchTypeCd", codeService.selectFullList(codeVO));
+		
+		codeVO.setCodeGrpId("APR_STAT");
+		codeVO.setActFlg("Y"); 
+		model.addAttribute("searchStatusCd", codeService.selectFullList(codeVO));
 		
 		return "app/approve/List";
 	}
@@ -222,6 +229,69 @@ public class ApproveController {
 			return "redirect:./updateForm.do?menuKey="+searchVO.getMenuKey()+"&repCode="+reportVO.getRepCode();
 		}
 	}
+	
+	@RequestMapping({"/ReqList.do"})
+	public String handler_reqList(HttpServletRequest request, ModelMap model,
+			@ModelAttribute("approveVO") ApproveVO approveVO,
+			@ModelAttribute("approveSearchVO") ApproveSearchVO searchVO,
+			UserVO userSession)throws Exception {
+		
+		model.addAttribute("menuKey", searchVO.getMenuKey());
+		
+
+		List<EgovMap> countList = service.selectMyRequestListCount(searchVO);
+		
+		int totalCount = 0;
+		for (EgovMap egovMap : countList) {
+			BigDecimal currVal = (BigDecimal)egovMap.get("cnt");
+			totalCount = totalCount + currVal.intValue();
+			String codeNm = (String)egovMap.get("aprovalState");
+			if(codeNm!=null) {
+				model.addAttribute("count_"+codeNm, currVal.intValue());
+			}
+		}
+
+		//페이징 기본설정
+		searchVO.setTotalRecordCount(totalCount);
+		searchVO.setSearchUserId(userSession.getUserId());
+		
+		// 검색조건 DDL 세팅
+		CodeVO codeVO = new CodeVO(); 
+		codeVO.setCodeGrpId("APR_TYPE");
+		codeVO.setActFlg("Y"); 
+		model.addAttribute("searchTypeCd", codeService.selectFullList(codeVO));
+		
+		codeVO.setCodeGrpId("APR_STAT");
+		codeVO.setActFlg("Y"); 
+		model.addAttribute("searchStatusCd", codeService.selectFullList(codeVO));
+		
+		List<ApproveVO> approveList = service.selectMyRequestList(searchVO);
+		model.addAttribute("approveList", approveList);
+		model.addAttribute("totalCount", totalCount);
+		
+		return "app/approve/ReqList";
+	}
+	
+	@RequestMapping({"/ReqViewReport.do"})
+	public String handler_reqViewReport(HttpServletRequest request, ModelMap model,
+			@ModelAttribute("approveVO") ApproveVO approveVO,
+			@ModelAttribute("approveSearchVO") ApproveSearchVO searchVO,
+			UserVO userSession)throws Exception {
+		
+		model.addAttribute("menuKey", searchVO.getMenuKey());
+
+		return "app/approve/ReqViewReport";
+	}
   
+	@RequestMapping({"/ReqViewProps.do"})
+	public String handler_reqViewPropose(HttpServletRequest request, ModelMap model,
+			@ModelAttribute("approveVO") ApproveVO approveVO,
+			@ModelAttribute("approveSearchVO") ApproveSearchVO searchVO,
+			UserVO userSession)throws Exception {
+		
+		model.addAttribute("menuKey", searchVO.getMenuKey());
+
+		return "app/approve/ReqViewProps";
+	}
 }
 

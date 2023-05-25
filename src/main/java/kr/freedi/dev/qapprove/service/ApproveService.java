@@ -57,6 +57,10 @@ public class ApproveService {
 		return dao.selectList("Approval.selectList", searchVO);
 	}
 	
+	public List<EgovMap> selectListCount(ApproveSearchVO searchVO) {
+		return dao.selectList("Approval.selectListCount", searchVO); // 상태 종류별 카운트 
+	}
+	
 	public ApproveVO select(ApproveVO vo) {
 		
 		ApproveVO retVO = (ApproveVO)dao.selectOne("Approval.select", vo);
@@ -67,6 +71,15 @@ public class ApproveService {
 		return retVO;
 	}
 
+	public List<ApproveVO> selectMyRequestList(ApproveSearchVO searchVO) {
+		
+		return dao.selectList("Approval.selectMyRequestList", searchVO);
+	}
+	
+	public List<EgovMap> selectMyRequestListCount(ApproveSearchVO searchVO) {
+		return dao.selectList("Approval.selectMyRequestListCount", searchVO); // 상태 종류별 카운트 
+	}
+	
 	public void insert(ApproveVO masterVO) throws Exception {
 
 		String aprovalCode = dao.selectOne("Approval.selectNextFkey");

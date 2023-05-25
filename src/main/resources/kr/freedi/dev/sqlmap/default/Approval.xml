@@ -27,18 +27,31 @@
 	</resultMap>
 
 	<sql id="defCond">
-			<if test="searchRepName != null and searchRepName != ''">
-				AND T.REP_NAME like '%' || #{searchRepName} || '%'
-			</if>
-			<if test="searchDivision != null and searchDivision != ''">
-				AND T.REP_DEVISION_CODE = #{searchDivision}
+			<if test="searchName != null and searchName != ''">
+				AND T.APROVAL_SUBJECT like '%' || #{searchName} || '%'
 			</if>
 			<if test="searchType != null and searchType != ''">
-				AND T.REP_TYPE_CODE = #{searchType}
+				AND T.APROVAL_TYPE = #{searchType}
 			</if>
 			<if test="searchStatus != null and searchStatus != ''">
-				AND T.REP_STATUS_CODE = #{searchStatus}
+				AND T.APROVAL_STATE = #{searchStatus}
 			</if>
+			
+			<if test="searchReqEmpNm != null and searchReqEmpNm != ''">
+				AND U.USER_NAME  like '%'|| #{searchReqEmpNm} ||'%' 
+			</if>
+			
+			
+			
+			
+			<if test="searchFromDt != null and searchFromDt != ''">
+				
+				AND T.drafting_date <![CDATA[>=]]> to_date(#{searchFromDt}, 'YYYY-MM-DD')
+			</if>
+			<if test="searchToDt != null and searchToDt != ''">
+				AND T.drafting_date <![CDATA[<=]]> to_date(#{searchToDt}, 'YYYY-MM-DD')
+			</if>
+			
 	
 	</sql>
 
@@ -64,8 +77,95 @@
 	    WITH v_approval_mst AS (
             SELECT ROW_NUMBER() OVER( ORDER BY TO_NUMBER(aproval_code) ASC ) idx,
                 ROW_NUMBER() OVER( ORDER BY TO_NUMBER(aproval_code) DESC ) rowidx,
-                m.*
+                T.*,
+                u.USER_NAME
+            FROM  tb_approval_mst T,
+		          tb_user_mst     u
+            WHERE 
+                   T.user_id = u.com_no (+)
+            <include refid="defCond"></include>
+	    )
+	 	SELECT
+	 	    T.idx,
+		    T.aproval_code,
+		    T.aproval_type,
+		    get_code_nm('APR_TYPE', T.aproval_type) || case TO_CHAR(aproval_type) when '3' then to_char(GET_6SIGMA_STEP_NM(T.ref_bus_code, T.ref_bus_sub_code)) else '' end aproval_type_nm,
+		    T.aproval_state,
+		    get_code_nm('APR_STAT', T.aproval_state) aproval_state_nm,
+		    T.aproval_subject,
+		    T.user_id,
+		    T.user_name,
+		    T.drafting_date,
+            (case when T.aproval_state='4' then (select max(aproval_complt_date) from tb_approval_detail where aproval_code=T.aproval_code ) else null end) as APROVAL_DATE,
+		    T.drafting_comment,
+		    T.ref_bus_type,
+            get_code_nm('BUS_TYPE', T.ref_bus_type) ref_bus_type_name,
+		    T.ref_bus_code
+		FROM
+		    v_approval_mst T
+		WHERE
+		    1=1
+	</sql>
+	
+	<select id="selectList" resultMap="approveMap">
+		<include refid="selectListBasic"></include>
+		  and rowidx between (#{currentPageNo}*#{recordCountPerPage}+1-#{recordCountPerPage}) and (#{currentPageNo}*#{recordCountPerPage})
+		  order by idx desc
+	</select>
+	
+	<select id="selectListCount" resultType="egovMap">
+          SELECT
+			    c.code_id     aproval_state,
+			    c.code_nm     aproval_state_nm,
+			    nvl(m.cnt, 0) AS cnt
+			FROM
+			    tb_code c,
+			    (
+			        SELECT
+			            aproval_state,
+			            COUNT(1) cnt
+			        FROM
+			            (
+			            <include refid="selectReqList"></include>
+			            ) a
+			        GROUP BY
+			            a.aproval_state
+			    )       m
+			WHERE
+			        c.code_id = m.aproval_state (+)
+			    AND c.code_grp_id = 'APR_STAT'
+			    AND c.act_flg = 'Y'
+			ORDER BY
+			    c.code_id desc	 	
+	
+		
+	 </select>
+	 
+	 
+	 <sql id="selectReqList">
+		WITH v_approval_mst AS (
+            SELECT ROW_NUMBER() OVER( ORDER BY TO_NUMBER(aproval_code) ASC ) idx,
+                ROW_NUMBER() OVER( ORDER BY TO_NUMBER(aproval_code) DESC ) rowidx,
+                m.*,
+                (case when m.aproval_state='4' then (select max(aproval_complt_date) from tb_approval_detail where aproval_code=m.aproval_code ) else null end) as APROVAL_DATE
             FROM  tb_approval_mst m	    
+            
+            <where>
+				<trim prefixOverrides="AND|OR">
+		            <if test="searchUserId != null and searchUserId != ''">
+		            	and m.user_id=#{searchUserId}
+		            </if>
+		            <if test="searchName != null and searchName != ''">
+						AND m.APROVAL_SUBJECT like '%' || #{searchName} || '%'
+					</if>
+					<if test="searchType != null and searchType != ''">
+						AND m.APROVAL_TYPE = #{searchType}
+					</if>
+					<if test="searchStatus != null and searchStatus != ''">
+						AND m.APROVAL_STATE = #{searchStatus}
+					</if>
+	            </trim>
+            </where>
 	    )
 	 	SELECT
 	 	    T.idx,
@@ -78,7 +178,7 @@
 		    T.user_id,
 		    u.user_name,
 		    T.drafting_date,
-            (case when T.aproval_state='4' then (select max(aproval_complt_date) from tb_approval_detail where aproval_code=T.aproval_code ) else null end) as APROVAL_DATE,
+            T.APROVAL_DATE,
 		    T.drafting_comment,
 		    T.ref_bus_type,
             get_code_nm('BUS_TYPE', T.ref_bus_type) ref_bus_type_name,
@@ -88,37 +188,63 @@
 		    tb_user_mst     u
 		WHERE
 		    T.user_id = u.com_no (+)
-            <include refid="defCond"></include>
+			<if test="searchFromDt != null and searchFromDt != ''">
+				 <choose>
+					<when test="searchGubun == 'aproval_date'">
+						AND T.APROVAL_DATE <![CDATA[>=]]> to_date(#{searchFromDt}, 'YYYY-MM-DD')
+					</when>
+					<otherwise>
+					    AND T.drafting_date <![CDATA[>=]]> to_date(#{searchFromDt}, 'YYYY-MM-DD')
+					</otherwise>
+				 </choose> 
+			</if>
+			<if test="searchToDt != null and searchToDt != ''">
+				<choose>
+					<when test="searchGubun == 'aproval_date'">
+						AND T.APROVAL_DATE <![CDATA[<=]]> to_date(#{searchToDt}, 'YYYY-MM-DD')
+					</when>
+					<otherwise>
+					    AND T.drafting_date <![CDATA[<=]]> to_date(#{searchToDt}, 'YYYY-MM-DD')
+					</otherwise>
+				 </choose> 
+			</if>
+			 
 	</sql>
 	
-	<select id="selectList" resultMap="approveMap">
-		<include refid="selectListBasic"></include>
-		  and rowidx between (#{currentPageNo}*#{recordCountPerPage}+1-#{recordCountPerPage}) and (#{currentPageNo}*#{recordCountPerPage})
+	 <select id="selectMyRequestList" resultMap="approveMap">
+		<include refid="selectReqList"></include>
+		and rowidx between (#{currentPageNo}*#{recordCountPerPage}+1-#{recordCountPerPage}) and (#{currentPageNo}*#{recordCountPerPage})
+			
 		  order by idx desc
-	</select>
-	
-	<select id="selectListCount2" resultType="egovMap">
-		SELECT
-		    c.code_id repStatusCode, c.code_nm repStatus, nvl(m.cnt, 0) AS cnt
-		FROM tb_code c,
-		     (
-		        SELECT
-		            rep_status_code, rep_status, COUNT(1) cnt
-		        FROM (
-					<include refid="selectListBasic"></include>
-					 ) a
-		        GROUP BY rep_status_code, rep_status
-		    ) m
-		WHERE c.code_id = m.rep_status_code (+)
-		  AND c.code_grp_id = 'REP_STAT'
-		  AND c.act_flg = 'Y'
-      ORDER BY c.code_id		 
+	 </select>
+	 
+	 <select id="selectMyRequestListCount" resultType="egovMap">
+			SELECT
+			    c.code_id     aproval_state,
+			    c.code_nm     aproval_state_nm,
+			    nvl(m.cnt, 0) AS cnt
+			FROM
+			    tb_code c,
+			    (
+			        SELECT
+			            aproval_state,
+			            COUNT(1) cnt
+			        FROM
+			            (
+			            <include refid="selectReqList"></include>
+			            ) a
+			        GROUP BY
+			            a.aproval_state
+			    )       m
+			WHERE
+			        c.code_id = m.aproval_state (+)
+			    AND c.code_grp_id = 'APR_STAT'
+			    AND c.act_flg = 'Y'
+			ORDER BY
+			    c.code_id desc	 
+		
 	 </select>
 	
-	<select id="selectListCount" resultType="int">
-		SELECT COUNT(*) FROM tb_report_mst T 
-		<include refid="defCond"></include>
-	</select>
 	
 	<select id="selectNextFkey" resultType="string">
 		select get_new_aproval_key() from dual

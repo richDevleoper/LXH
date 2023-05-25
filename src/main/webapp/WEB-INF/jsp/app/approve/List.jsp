@@ -19,17 +19,20 @@
 
                         <div class="list-wrap">
                             <div class="list-search">
-							<form:form commandName="reportSearchVO" id="defaultForm" method="get" action="list.do" >
-                                ${reportSearchVO.superHiddenTag}                            
+							<form:form commandName="approveSearchVO" id="defaultForm" method="get" action="list.do" >
+                            ${approveSearchVO.superHiddenTag}                          
                                 <div class="search-form row">
                                     <div class="form-inline form-input col s4">
                                         <div class="col s3 align-right">
                                             <label>결재종류</label>
                                         </div>
                                         <div class="pd-l10 col s9">
-                                        <select name="" id="">
-                                            <option value="">전체</option>
-                                        </select>
+                                         <form:select path="searchType" cssClass="w-90p">
+                                               <option value="">전체</option>
+                                               <c:forEach var="item" items="${searchTypeCd}">
+												<option value="${item.codeId}" <c:if test="${item.codeId eq approveSearchVO.searchType }">selected="selected"</c:if>>${item.codeNm}</option>
+											</c:forEach>
+                                           </form:select>
                                         </div>
                                     </div>
                                     <div class="form-inline form-input col s8">
@@ -37,7 +40,7 @@
                                             <label>제목</label>
                                         </div>
                                         <div class="pd-l10 col s12">
-                                            <input type="text" name="">
+                                            <form:input path="searchName" title="검색어"  />
                                         </div>
                                     </div>
                                 </div>
@@ -47,7 +50,7 @@
                                             <label>결재의뢰자</label>
                                         </div>
                                         <div class="pd-l10 col s9">
-                                            <input type="text" name="">
+                                           <form:input path="searchReqEmpNm" title="결재의뢰자"  />
                                         </div>
                                     </div>
                                     <div class="form-inline form-input col s4">
@@ -55,9 +58,12 @@
                                             <label>결재상태</label>
                                         </div>
                                         <div class="pd-l10 col s9">
-                                            <select name="" id="">
-                                                <option value="">전체</option>
-                                            </select>                                        
+                                            <form:select path="searchStatus" cssClass="w-90p">
+                                                  <option value="">전체</option>
+                                               <c:forEach var="item" items="${searchStatusCd}">
+											  	  <option value="${item.codeId}" <c:if test="${item.codeId eq approveSearchVO.searchStatus }">selected="selected"</c:if>>${item.codeNm}</option>
+											   </c:forEach>
+                                            </form:select>                                    
                                         </div>
                                     </div>
                                     <div class="form-inline form-input col s4">
@@ -66,12 +72,12 @@
                                         </div>
                                         <div class="pd-l10 col s9">
                                             <div class="col s5 input-date">
-                                                <input type="text">
+                                                <form:input type="text" path="searchFromDt" cssClass="datepicker"/>
                                                 <i class="ico calendar"></i>
                                             </div>
                                             <span class="col s1 text-bul align-center">~</span>
                                             <div class="col s5 input-date">
-                                                <input type="text">
+                                                <form:input type="text" path="searchToDt" cssClass="datepicker"/>
                                                 <i class="ico calendar"></i>
                                             </div>
                                         </div>
@@ -79,7 +85,7 @@
                                 </div>
                                 <div class="search-form row">
                                     <div class="col s12 align-right">
-                                        <button type="button" class="btn-submit">조회</button>
+                                        <button type="button" class="btn-submit" onclick="onclick_search()">조회</button>
                                     </div>
                                 </div>
 								</form:form>
@@ -87,7 +93,7 @@
                             <div class="list-header">
                                 <p class="title">나의 결재의뢰함</p>
                                 <span class="bar"></span>
-                                <p class="total">총 10(승인 : 5건, 반려 : 3건, 미결 2건)</p>
+                                <p class="total">총 ${totalCount}건(승인 : ${count_4}건, 반려 : ${count_3}건, 미결 ${count_2}건)</p>
                                 <select name="limit" class="limit">
                                     <option value="10">10개</option>
                                 </select>
@@ -139,6 +145,29 @@
 
       
     <script type="text/javascript">
+    
+    $(document).ready(init);
+	
+	function init(){
+		
+		
+		$("#defaultForm input").off("keyup").on("keyup", function(e){
+			
+		    if(e.keyCode===13 && this.value.trim().length>0){
+		    	onclick_search();
+		    }
+		});
+	}
+    
+    function onclick_search(){
+		$("#defaultForm")[0].submit();
+	}
+    
+    function onchange_recordCountPerPage(vCount){
+		$("#recordCountPerPage").val(vCount);
+		onclick_search();// 검색 '조회'버튼 클릭
+	}
+    
     function onclick_reportName(aprovalCode){
     	location.href="/apprv/apprForm.do?menuKey=${menuKey}&aprovalCode="+aprovalCode;
 	}
