@@ -10,9 +10,9 @@ public class ApproveDetailVO {
 	private String comJobx;		//결재자_직급
 	private String comPosition;	//결재자_직책
 	private String comDepartCode;	//결재자_부서코드
-	private String aprovalRegDate;	//승인일
+	private Date aprovalRegDate;	//승인일
 	private String aprovalReqComNo;	//결재상신자
-	private String aprovalCompltDate;	//결재일
+	private Date aprovalCompltDate;	//결재일
 	private String aprovalStatCode;		//결재상태
 	private String aprovalMailSendDate;	//이메일 발송일
 	private String aprovalMailSendYn;	//이메일 전송여부
@@ -59,10 +59,10 @@ public class ApproveDetailVO {
 	public void setComDepartCode(String comDepartCode) {
 		this.comDepartCode = comDepartCode;
 	}
-	public String getAprovalRegDate() {
+	public Date getAprovalRegDate() {
 		return aprovalRegDate;
 	}
-	public void setAprovalRegDate(String aprovalRegDate) {
+	public void setAprovalRegDate(Date aprovalRegDate) {
 		this.aprovalRegDate = aprovalRegDate;
 	}
 	public String getAprovalReqComNo() {
@@ -71,10 +71,10 @@ public class ApproveDetailVO {
 	public void setAprovalReqComNo(String aprovalReqComNo) {
 		this.aprovalReqComNo = aprovalReqComNo;
 	}
-	public String getAprovalCompltDate() {
+	public Date getAprovalCompltDate() {
 		return aprovalCompltDate;
 	}
-	public void setAprovalCompltDate(String aprovalCompltDate) {
+	public void setAprovalCompltDate(Date aprovalCompltDate) {
 		this.aprovalCompltDate = aprovalCompltDate;
 	}
 	public String getAprovalStatCode() {

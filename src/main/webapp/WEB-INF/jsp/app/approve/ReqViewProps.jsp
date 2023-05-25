@@ -17,7 +17,8 @@
 </head>
 <body>
    
-
+${proposalVO}<br><br><br>
+${approveVO}
                                         
 						<p class="content_title">승인/반려_결재이력</p>
 						<div class="list-wrap">
@@ -43,23 +44,31 @@
 												<th>결재의견</th>
 											</tr>
 										</thead>
-										<tbody>                                            
-											<tr>
+										<tbody>  
+										    <c:forEach var="item" items="${approveVO.detailHistory}">
+												<tr>
+												<td>
+													${item.aprovalStat}
+													<c:if test="${not empty item.aprovalCompltDate}">
+														(<fmt:formatDate pattern="yyyy.MM.dd" value="${item.aprovalCompltDate}" />)
+													</c:if>
+												</td>
+												<td>${item.userName}</td>
+												<td><!-- 실장 --></td>
+												<td class="align-left">${item.aprovalType}</td>
+												<td><!-- 70점(C) --></td>
+												<td class="align-left">${item.aprovalComment}</td>
+											</tr>
+											</c:forEach>
+<!-- 											<tr>
 												<td>1차 승인(2023.06.30)</td>
 												<td>홍길동</td>
 												<td>실장</td>
 												<td>제안 > 실시제안</td>
 												<td>70점(C)</td>
 												<td class="align-left">수고하셧습니다. 2차 팀장님 결재 의뢰</td>
-											</tr>
-											<tr>
-												<td>2차 승인(2023.06.30)</td>
-												<td>홍길동</td>
-												<td>팀장</td>
-												<td>제안 > 실시제안</td>
-												<td>90점(A)</td>
-												<td class="align-left">심의위원회 제안을 상정하였습니다. 오프라인 제안 심의 후 등급 평가완료 예정</td>
-											</tr>
+											</tr> -->
+											
 										</tbody>
 									</table>									
 								</div>
@@ -87,31 +96,31 @@
                                         <tbody>
                                             <tr>
                                                 <th><label for="text1">제안명</label></th>
-                                                <td colspan="9">제안내용</td>
+                                                <td colspan="9">${proposalVO.propName}</td>
                                             </tr>
                                             <tr>
                                                 <th>제안자</th>
-                                                <td colspan="4">제안자</td>
+                                                <td colspan="4">${proposalVO.propUserName}</td>
                                                 <th>관련 쪽지 제안</th>
-                                                <td colspan="4">관련 쪽지</td>
+                                                <td colspan="4">${proposalVO.propRelMemoCodeName}</td>
                                             </tr>
                                             <tr>
                                                 <th>조직명</th>
-                                                <td colspan="4">조직명</td>
+                                                <td colspan="4">${proposalVO.propGroupName}</td>
                                                 <th>분임조</th>
-                                                <td colspan="4">분임조</td>
+                                                <td colspan="4">${proposalVO.propCircleCode}</td>
                                             </tr>
                                             <tr>
                                                 <th>제안유형</th>
-                                                <td colspan="4">제안유형</td>
+                                                <td colspan="4">${proposalVO.propTypeCodeName}</td>
                                                 <th>제안일</th>
-                                                <td colspan="4">2023.06.30</td>
+                                                <td colspan="4">${proposalVO.propDate}</td>
                                             </tr>
                                             <tr>
                                                 <th>실행 완료일</th>
-                                                <td colspan="4">2023.06.30</td>
+                                                <td colspan="4">${proposalVO.propPracticeCompDate}</td>
                                                 <th>년간 효과 금액</th>
-                                                <td colspan="4">년간 20억</td>
+                                                <td colspan="4">${proposalVO.propYearEffect}</td>
                                             </tr>
 											<tr><th colspan="10" class="align-center">제안내용</th></tr>
                                             <tr>
@@ -119,7 +128,7 @@
                                                 <td colspan="9">
                                                     <div class="row">
                                                         <div class="col s12 input-text">
-                                                            <textarea name="" id="text6" rows="4"></textarea>
+                                                            <textarea name="" id="text6" rows="4">${proposalVO.propProblem}</textarea>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -129,7 +138,7 @@
                                                 <td colspan="9">
                                                     <div class="row">
                                                         <div class="col s12 input-text">
-                                                            <textarea name="" id="text7" rows="4"></textarea>
+                                                            <textarea name="" id="text6" rows="4">${proposalVO.propImprovementCont}</textarea>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -139,7 +148,7 @@
                                                 <td colspan="9">
                                                     <div class="row">
                                                         <div class="col s12 input-text">
-                                                            <textarea name="" id="text8" rows="4"></textarea>
+                                                            <textarea name="" id="text6" rows="4">${proposalVO.propBenefit}</textarea>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -216,8 +225,8 @@
 												<th class="align-center">Belt</th>
 											</tr>
 											<tr>
-												<td colspan="5">소속정보</td>
-												<td class="align-center">홍길동</td>
+												<td colspan="5">${proposalVO.propApprovalGroup}</td>
+												<td class="align-center">${proposalVO.propApproverName}</td>
 												<td class="align-center">책임</td>
 												<td class="align-center">팀장</td>
 												<td class="align-center">MBB</td>
@@ -243,7 +252,9 @@
 												<td>
 													<div class="file-link">
 														<ul>
-															<li><a href="#" title="다운받기">UI표준정의서.pptx</a><a href="#" title="다운받기" class="btn color gray mg-l15">다운받기</a></li>
+<c:forEach var="item" items="${reportVO.fileList}" varStatus="status">														
+															<li><a href="/attachfile/downloadFile.do?fileId=${item.fileId}&fileSeq=${item.fileSeq}" title="다운받기">${item.fileNm}</a><a href="/attachfile/downloadFile.do?fileId=${item.fileId}&fileSeq=${item.fileSeq}" title="다운받기" class="btn color gray mg-l15">다운받기</a></li>
+</c:forEach>
 														</ul>
 													</div>
 												</td>
@@ -255,113 +266,9 @@
 						</div>						
                         <div class="list-footer">
                             <div class="list-btns">
-                                <a href="#" class="btn">목록</a>
+                                <a href="/sub.do?menuKey=${menuKey}" class="btn">목록</a>
                             </div>
                         </div>
-
-                    
-        <!-- 조직도 -->
-        <div class="modal-dimmed"></div>
-        <div class="org-modal">
-            <div class="modal-header">
-                <h4>조직조회</h4>
-                <button type="button" class="btn-close">닫기</button>
-            </div>
-            <div class="modal-content">
-                <div class="list-wrap">
-                    <div class="list-search">
-                        <form id="org-form" onsubmit="org_search();return false;">
-                            <div class="search-form">
-                                <div class="form-inline form-input">
-                                    <label>조직명</label>
-                                    <input type="text" name="">
-                                </div>
-                                <button type="submit" class="btn-submit">조회</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-                <div class="tree-header">
-                    <div>
-                        <input type="checkbox" id="orgSelAll">
-                        <label for="orgSelAll"></label>
-                    </div>
-                    <div>
-                        6σ 인재육성대상 조직명
-                    </div>
-                </div>
-                <div id="org-tree">
-                    <ul>
-                        <li>창호 사업부
-                            <ul>
-                                <li>창호.생산담당
-                                    <ul>
-                                        <li>· 창호.프로파일생산팀</li>
-                                        <li>· 창호.기술팀</li>
-                                        <li>· 창호.공정혁신팀</li>
-                                        <li>· 창호.완성창공정기술팀</li>
-                                    </ul>
-                                </li>
-                                <li>유리</li>
-                                <li>연구소 근무</li>
-                                <li>창호.시스템창사업담당</li>
-                                <li>창호.중문팀</li>
-                                <li>바닥재 사업담당	</li>
-                            </ul>
-                        </li>
-                        <li>단열재 사업담당
-                            <ul>
-                                <li>창호.프로파일생산팀</li>
-                            </ul>
-                        </li>
-                        <li>벽지 사업담당	
-                            <ul>
-                                <li>창호.프로파일생산팀</li>
-                            </ul>
-                        </li>
-                        <li>표면소재 사업담당
-                            <ul>
-                                <li>창호.프로파일생산팀</li>
-                            </ul>
-                        </li>
-                        <li>산업용필름 사업담당
-                            <ul>
-                                <li>창호.프로파일생산팀</li>
-                            </ul>
-                        </li>
-                        <li>자동차소재부품 사업부
-                            <ul>
-                                <li>창호.프로파일생산팀</li>
-                            </ul>
-                        </li>
-                        <li>인테리어 사업부
-                            <ul>
-                                <li>창호.프로파일생산팀</li>
-                            </ul>
-                        </li>
-                        <li>연구소
-                            <ul>
-                                <li>창호.프로파일생산팀</li>
-                            </ul>
-                        </li>
-                        <li>품질 담당
-                            <ul>
-                                <li>창호.프로파일생산팀</li>
-                            </ul>
-                        </li>
-                        <li>생산/기술/R&D/품질 外
-                            <ul>
-                                <li>창호.프로파일생산팀</li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
-                <div class="btns">
-                    <button type="button" class="btn-submit">확인</button>
-                    <button type="button" class="btn-cancel">취소</button>
-                </div>
-            </div>
-        </div>
 
 </body>
 </html>

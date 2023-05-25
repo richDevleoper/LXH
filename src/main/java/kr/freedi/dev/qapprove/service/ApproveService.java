@@ -68,6 +68,11 @@ public class ApproveService {
 		List<ApproveDetailVO> detail = dao.selectList("ApprovalDetail.selectList", retVO);
 		retVO.setDetailList(detail);
 		
+		ApproveVO paramVO = new ApproveVO();
+		paramVO.setRefBusCode(retVO.getRefBusCode());
+		detail = dao.selectList("ApprovalDetail.selectList", paramVO);
+		retVO.setDetailHistory(detail);
+		
 		return retVO;
 	}
 

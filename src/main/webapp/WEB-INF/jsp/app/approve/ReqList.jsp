@@ -127,7 +127,7 @@
                                             <tr>
                                                 <td>${item.idx}</td>
                                                 <td class="align-left" style="padding-left: 10px;">${item.aprovalTypeNm}</td>
-                                                <td class="align-left" style="padding-left: 10px;"><a href="javascript: onclick_reportName('${item.aprovalCode}')">${item.aprovalSubject}</a></td>
+                                                <td class="align-left" style="padding-left: 10px;"><a href="javascript: onclick_approval('${item.aprovalCode}')">${item.aprovalSubject}</a></td>
                                                 <td><fmt:formatDate pattern="yyyy.MM.dd" value="${item.draftingDate}" /></td>
                                                 <td><fmt:formatDate pattern="yyyy.MM.dd" value="${item.aprovalDate}" /></td>
                                                 <td>${item.aprovalStateNm}</td>                                                
@@ -248,14 +248,9 @@
     		onclick_search();// 검색 '조회'버튼 클릭
     	}
         
-        function onclick_approval(code, idx){
+        function onclick_approval(code){
         	
-        	if(idx==="3"||idx==="4"){
-        		pageName = "ReqViewProps";
-        	} else {
-        		pageName = "ReqViewReport";
-        	}
-        	location.href="/apprv/"+ pageName +".do?menuKey=${menuKey}&aprovalCode="+aprovalCode;
+        	location.href="/apprv/viewApprv.do?menuKey=${menuKey}&aprovalCode="+code;
     	}
         </script>
 

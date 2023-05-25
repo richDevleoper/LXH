@@ -272,6 +272,34 @@ public class ApproveController {
 		return "app/approve/ReqList";
 	}
 	
+	
+	/***
+	 * 결재의뢰함 리스트 >> 뷰페이지 링크
+	 * 결재 타입에 따라 뷰페이지 유형을 달리한다.
+	 * ***/
+	@RequestMapping({"/viewApprv.do"})
+	public String handler_viewApprv(HttpServletRequest request, ModelMap model,
+			@ModelAttribute("approveVO") ApproveVO approveVO,
+			@ModelAttribute("approveSearchVO") ApproveSearchVO searchVO,
+			UserVO userSession)throws Exception {
+		
+		
+		
+		approveVO = service.select(approveVO);
+		System.out.println(approveVO);
+		
+		String strParam = "menuKey="+searchVO.getMenuKey()+"&aprovalCode="+approveVO.getAprovalCode();
+		
+		if("1,2".indexOf(approveVO.getRefBusType())>-1) {
+			return "redirect:ReqViewReport.do?"+strParam;	
+		} else {
+			return "redirect:ReqViewProps.do?"+strParam;
+		}
+	}
+	
+	/***
+	 * 결재의뢰함 리스트 >> 뷰페이지 링크 >> 과제 뷰페이지
+	 * ***/
 	@RequestMapping({"/ReqViewReport.do"})
 	public String handler_reqViewReport(HttpServletRequest request, ModelMap model,
 			@ModelAttribute("approveVO") ApproveVO approveVO,
@@ -279,10 +307,25 @@ public class ApproveController {
 			UserVO userSession)throws Exception {
 		
 		model.addAttribute("menuKey", searchVO.getMenuKey());
-
-		return "app/approve/ReqViewReport";
+		
+		ApproveVO savedVO = service.select(approveVO);
+		
+		if("1,2".indexOf(savedVO.getRefBusType())>-1) {
+			// TODO 과제/분임조과제 페이지 이동
+			ReportVO reportVO = new ReportVO();
+			reportVO.setRepCode(Integer.parseInt(savedVO.getRefBusCode())); // 임시로  결재번호를 과제번호로 쓰고 있음. 쿼리 등 다 정리 필요함. (결재프로세스 정립이 안되었음)
+			ReportVO dbReportVO = reportService.select(reportVO);
+			model.addAttribute("reportVO", dbReportVO);
+			model.addAttribute("approveVO", savedVO);
+			return "app/approve/ReqViewReport";
+		} else {
+			return "redirect:list.do";
+		} 
+		
 	}
-  
+	/***
+	 * 결재의뢰함 리스트 >> 뷰페이지 링크 >> 제안 뷰페이지
+	 * ***/
 	@RequestMapping({"/ReqViewProps.do"})
 	public String handler_reqViewPropose(HttpServletRequest request, ModelMap model,
 			@ModelAttribute("approveVO") ApproveVO approveVO,
@@ -290,8 +333,20 @@ public class ApproveController {
 			UserVO userSession)throws Exception {
 		
 		model.addAttribute("menuKey", searchVO.getMenuKey());
-
-		return "app/approve/ReqViewProps";
+		
+		ApproveVO savedVO = service.select(approveVO);
+		
+		if("3,4".indexOf(savedVO.getRefBusType())>-1) {
+			// TODO 과제/분임조과제 페이지 이동
+			ProposalSearchVO searchProposalVO = new ProposalSearchVO();
+			searchProposalVO.setSearchPropSeq(Integer.valueOf(savedVO.getRefBusCode()));
+			ProposalVO proposalVO = proposalService.selectProposalDetailInfo(searchProposalVO);
+			model.addAttribute("proposalVO", proposalVO);
+			model.addAttribute("approveVO", savedVO);
+			return "app/approve/ReqViewProps";
+		} else {
+			return "redirect:list.do";
+		} 
 	}
 }
 

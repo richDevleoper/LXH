@@ -483,4 +483,31 @@ public class ProposalVO {
 	public void setEvalProposalList(List<EvalProposalVO> evalProposalList) {
 		this.evalProposalList = evalProposalList;
 	}
+
+	@Override
+	public String toString() {
+		return "ProposalVO [propSeq=" + propSeq + ", propName=" + propName + ", propCategoryCode=" + propCategoryCode
+				+ ", propTypeCode=" + propTypeCode + ", propProblem=" + propProblem + ", propImprovementCont="
+				+ propImprovementCont + ", propBenefit=" + propBenefit + ", propYearEffect=" + propYearEffect
+				+ ", propYearEffectCode=" + propYearEffectCode + ", propRelMemoYn=" + propRelMemoYn
+				+ ", propRelMemoCode=" + propRelMemoCode + ", propRelMemoCodeName=" + propRelMemoCodeName
+				+ ", propGroupName=" + propGroupName + ", propBeltCode=" + propBeltCode + ", propBizPlaceCode="
+				+ propBizPlaceCode + ", propCircleCode=" + propCircleCode + ", propApproverCode=" + propApproverCode
+				+ ", propPropStatCode=" + propPropStatCode + ", propEvalLvCode=" + propEvalLvCode + ", propEvalScore="
+				+ propEvalScore + ", propEffectScore=" + propEffectScore + ", propSubsidy=" + propSubsidy
+				+ ", propPaymentYn=" + propPaymentYn + ", propPaymentDate=" + propPaymentDate + ", propDate=" + propDate
+				+ ", propPracticeCompDate=" + propPracticeCompDate + ", propUser=" + propUser + ", propRegDate="
+				+ propRegDate + ", propRegUser=" + propRegUser + ", propCategoryCodeName=" + propCategoryCodeName
+				+ ", propTypeCodeName=" + propTypeCodeName + ", propYearEffectCodeName=" + propYearEffectCodeName
+				+ ", propPropStatCodeName=" + propPropStatCodeName + ", propEvalLvCodeName=" + propEvalLvCodeName
+				+ ", propPaymentYnName=" + propPaymentYnName + ", propUserName=" + propUserName + ", propApproverName="
+				+ propApproverName + ", idx=" + idx + ", beforeAttachFileList=" + beforeAttachFileList
+				+ ", afterAttachFileList=" + afterAttachFileList + ", attachFileList=" + attachFileList
+				+ ", propApprovalName=" + propApprovalName + ", propApprovalUser=" + propApprovalUser
+				+ ", propApprovalLevelCode=" + propApprovalLevelCode + ", propApprovalLevel=" + propApprovalLevel
+				+ ", propApprovalDutyCode=" + propApprovalDutyCode + ", propApprovalDuty=" + propApprovalDuty
+				+ ", propApprovalBeltCode=" + propApprovalBeltCode + ", propApprovalBelt=" + propApprovalBelt
+				+ ", propApprovalGroup=" + propApprovalGroup + ", propApprovalGroupCode=" + propApprovalGroupCode
+				+ ", evalProposalList=" + evalProposalList + "]";
+	}
 }

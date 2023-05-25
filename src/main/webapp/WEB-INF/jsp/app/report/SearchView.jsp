@@ -49,7 +49,7 @@
                                                 <th>과제리더벨트</th>
                                                 <td>${reportVO.repLeaderBelt}</td>
                                                 <th>활동분야</th>
-                                                 <td>${reportVO.repActionType}</td>
+                                                <td>${reportVO.repActionType}</td>
                                             </tr>
                                             <tr>
                                                 <th>MBB활용율</th>
@@ -532,7 +532,7 @@
                                                         </ul> -->
                                                         <div class="file-link">								                                                        
                                                             <ul>
-                                                           <c:forEach var="item" items="${reportVO.fileList}" varStatus="status">														
+<c:forEach var="item" items="${reportVO.fileList}" varStatus="status">														
 															<li><a href="/attachfile/downloadFile.do?fileId=${item.fileId}&fileSeq=${item.fileSeq}" title="다운받기">${item.fileNm}</a><a href="/attachfile/downloadFile.do?fileId=${item.fileId}&fileSeq=${item.fileSeq}" title="다운받기" class="btn color gray mg-l15">다운받기</a></li>
 </c:forEach>
                                                             </ul>

@@ -104,7 +104,7 @@
 			, T.APROVAL_COMPLT_DATE
 			, T.APROVAL_STAT_CODE
             , get_code_nm('APR_STAT', T.APROVAL_STAT_CODE) APROVAL_STAT
-            , get_code_nm('APR_TYPE', m.aproval_type)  aproval_type
+            , get_code_nm('APR_TYPE', m.aproval_type) || case TO_CHAR(aproval_type) when '3' then to_char(GET_6SIGMA_STEP_NM(m.ref_bus_code, m.ref_bus_sub_code)) else '' end  AS  aproval_type
 			, T.APROVAL_MAIL_SEND_DATE
 			, T.APROVAL_MAIL_SEND_YN
             , U.USER_NAME
@@ -114,8 +114,13 @@
 		     , tb_approval_mst m  
 		WHERE T.COM_NO = U.COM_NO
 		  AND T.APROVAL_CODE = m.APROVAL_CODE
-		  AND T.APROVAL_CODE = #{aprovalCode}
-		ORDER BY APROVAL_SEQ
+		  <if test="aprovalCode != null and aprovalCode != ''">
+				AND T.APROVAL_CODE = #{aprovalCode}
+		  </if>
+		  <if test="refBusCode != null and refBusCode != ''">
+				AND m.REF_BUS_CODE = #{refBusCode}
+		  </if>
+		ORDER BY T.APROVAL_CODE desc, T.APROVAL_SEQ asc
 	</select>
 	
 	<delete id="delete">
