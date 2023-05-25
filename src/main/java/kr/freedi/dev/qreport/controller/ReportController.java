@@ -355,7 +355,7 @@ public class ReportController {
 		// TODO 분임조 정보 가져오기
 
 		
-		return "app/approve/ApprForm"; // 과제 페이지
+		return "app/report/SearchView"; // 과제 페이지
 	}
 	
 	@RequestMapping({"/ReportList.do"})
