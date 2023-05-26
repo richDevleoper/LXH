@@ -33,6 +33,8 @@ import egovframework.rte.psl.dataaccess.util.EgovMap;
 import kr.freedi.dev.article.domain.ArticleSearchVO;
 import kr.freedi.dev.article.domain.ArticleVO;
 import kr.freedi.dev.article.service.ArticleService;
+import kr.freedi.dev.attachfile.domain.AttachFileVO;
+import kr.freedi.dev.attachfile.service.AttachFileService;
 import kr.freedi.dev.board.domain.BoardVO;
 import kr.freedi.dev.board.service.BoardService;
 import kr.freedi.dev.code.domain.CodeVO;
@@ -42,6 +44,8 @@ import kr.freedi.dev.common.util.MapUtil;
 import kr.freedi.dev.qapprove.domain.ApproveSearchVO;
 import kr.freedi.dev.qapprove.domain.ApproveVO;
 import kr.freedi.dev.qapprove.service.ApproveService;
+import kr.freedi.dev.qcircle.domain.CircleVO;
+import kr.freedi.dev.qcircle.service.CircleService;
 import kr.freedi.dev.qproposal.domain.ProposalSearchVO;
 import kr.freedi.dev.qproposal.domain.ProposalVO;
 import kr.freedi.dev.qproposal.service.ProposalService;
@@ -81,6 +85,12 @@ public class ApproveController {
 	
 	@Resource(name = "codeService")
 	private CodeService codeService;
+	
+	@Resource(name = "attachFileService")
+	private AttachFileService attachFileService;
+	
+	@Resource(name = "circleService")
+	private CircleService circleService;
 	
 	
 	
@@ -152,13 +162,37 @@ public class ApproveController {
 			ReportVO dbReportVO = reportService.proc_reportFormHandler(req, model, searchVO, reportVO, userSession);
 			model.addAttribute("reportVO", dbReportVO);
 			model.addAttribute("approveVO", savedVO);
+			if(savedVO.getRefBusType().equals("2")) {
+				// 분임조 과제이면 분임조 정보 가져오기
+				ReportTeamVO memberVO = new ReportTeamVO();
+				memberVO.setComNo(dbReportVO.getRepRegUser());
+				
+				CircleVO circleVO = circleService.findCircleInfo(memberVO);
+				model.addAttribute("circleVO", circleVO);
+			}
 			return "app/approve/ApprForm"; // 과제 페이지
 		} else if("3|4".indexOf(savedVO.getRefBusType()) > -1) {
 			ProposalSearchVO searchProposalVO = new ProposalSearchVO();
 			searchProposalVO.setSearchPropSeq(Integer.valueOf(savedVO.getRefBusCode()));
 			ProposalVO proposalVO = proposalService.selectProposalDetailInfo(searchProposalVO);
+
+			// 첨부파일 로딩
+			AttachFileVO fileVO = new AttachFileVO();
+			fileVO.setFileId("proposal_before_" + proposalVO.getPropSeq());
+			List<AttachFileVO> beforeAttachFileList = attachFileService.selectFullList(fileVO); // 개선 전
+			fileVO.setFileId("proposal_after_" + proposalVO.getPropSeq());
+			List<AttachFileVO> afterAttachFileList = attachFileService.selectFullList(fileVO); // 개선 후
+			fileVO.setFileId("proposal_attach_" + proposalVO.getPropSeq());
+			List<AttachFileVO> attachFileList = attachFileService.selectFullList(fileVO); //첨부 파일
+			
+			proposalVO.setBeforeAttachFileList(beforeAttachFileList);
+			proposalVO.setAfterAttachFileList(afterAttachFileList);
+			proposalVO.setAttachFileList(attachFileList);
+
+			
+			
 			model.addAttribute("proposalVO", proposalVO);		
-			return "app/approve/ApprForm"; // 과제 페이지
+			return "app/approve/ApprFormPropose"; // 과제 페이지
 			//return "redirect:apprv/list.do?menuKey=73"; // 과제 페이지
 		} else {
 			return "redirect:apprv/list.do?menuKey=73";
@@ -206,6 +240,9 @@ public class ApproveController {
 				reportService.update6SigmaStepNext(reportVO);
 			}
 			
+		}else {
+			// 제안 결재 승인시
+			// 제안마스터의 PROP_PROP_STAT_CODE 값을 3으로 바꿔주기
 		}
 		return "redirect:/sub.do?menuKey=73";
 	}
@@ -340,7 +377,22 @@ public class ApproveController {
 			// TODO 과제/분임조과제 페이지 이동
 			ProposalSearchVO searchProposalVO = new ProposalSearchVO();
 			searchProposalVO.setSearchPropSeq(Integer.valueOf(savedVO.getRefBusCode()));
+			
 			ProposalVO proposalVO = proposalService.selectProposalDetailInfo(searchProposalVO);
+			// 첨부파일 로딩
+			
+			AttachFileVO fileVO = new AttachFileVO();
+			fileVO.setFileId("proposal_before_" + proposalVO.getPropSeq());
+			List<AttachFileVO> beforeAttachFileList = attachFileService.selectFullList(fileVO); // 개선 전
+			fileVO.setFileId("proposal_after_" + proposalVO.getPropSeq());
+			List<AttachFileVO> afterAttachFileList = attachFileService.selectFullList(fileVO); // 개선 후
+			fileVO.setFileId("proposal_attach_" + proposalVO.getPropSeq());
+			List<AttachFileVO> attachFileList = attachFileService.selectFullList(fileVO); //첨부 파일
+			
+			proposalVO.setBeforeAttachFileList(beforeAttachFileList);
+			proposalVO.setAfterAttachFileList(afterAttachFileList);
+			proposalVO.setAttachFileList(attachFileList);
+			
 			model.addAttribute("proposalVO", proposalVO);
 			model.addAttribute("approveVO", savedVO);
 			return "app/approve/ReqViewProps";

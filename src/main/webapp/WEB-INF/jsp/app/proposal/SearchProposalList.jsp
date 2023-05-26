@@ -222,10 +222,10 @@
                                     <div class="list-footer">
 										<ui:pagination paginationInfo="${proposalSearchVO}" type="defDefault" jsFunction="cfnPageLink" />
                                         <div class="list-btns">
-                                            <button type="button" class="btn-excel">
+                                           <!--  <button type="button" class="btn-excel">
                                                 <img src="/assets/images/icon_excel.png" alt="">
                                                 <span>다운로드</span>
-                                            </button>
+                                            </button> -->
                                         </div>
                                     </div>
                                 </div>

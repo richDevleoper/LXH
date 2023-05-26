@@ -81,7 +81,7 @@
 		    , m.CIR_TEAM_LEADER_NO    
 			, (select user_name from tb_user_mst where com_no=m.CIR_TEAM_LEADER_NO) as CIR_LEADER_NAME
 		FROM
-		    tb_report_team t
+		    tb_circle_detail t
 		    , tb_circle_mst m
 		WHERE
 		    t.cir_code=m.cir_code

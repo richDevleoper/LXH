@@ -76,8 +76,10 @@
                                                 <th>제품군</th>
                                                 <td>${reportVO.repProductClass}</td>
                                             </tr>
+<c:choose>  
+	<c:when test="${repMenuCode eq 'REPORT'}">                                            
                                             <tr>
-                                                <th><label for="text4" class="color primary">과제리어벨트</label></th>
+                                                <th><label for="text4" class="color primary">과제리더벨트</label></th>
                                                 <td>${reportVO.repLeaderBelt}</td>
                                                 <th><label for="text4" class="color primary">활동분야</label></th>
                                                 <td>${reportVO.repActionType}</td>
@@ -88,6 +90,23 @@
                                                 <th>활용율 반영년도</th>
                                                 <td>${reportVO.repUseRefDate}년</td>
                                             </tr>
+	</c:when>
+	<c:otherwise>
+                                            <tr>
+                                                <th><label for="text4" class="color primary">Leader</label></th>
+                                                <td>${reportVO.repLeaderName}</td>
+                                                <th><label for="text4" class="color primary">활동분야</label></th>
+                                                <td>${reportVO.repActionType}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>분임조</th>
+                                                <td>${circleVO.deptName}</td>
+                                                <th>분임조장</th>
+                                                <td>${circleVO.cirLeaderName}</td>
+                                            </tr>	
+	</c:otherwise>
+</c:choose>
+	                                            
                                             <tr>
 												<th>일정계획 및 수행</th>
 												<td colspan="3">

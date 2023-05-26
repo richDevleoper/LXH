@@ -192,39 +192,20 @@ public class ReportController {
 			String userIp) throws Exception {
 
 		String userId = userSession.getUserId();
-		
-		// 해당 건의 현재 상태 가져오기
-		// MST.REP_STATUS_CODE=1 >> 임시저장, 2 >> 선정중, 3,4 >> 진행중(On)/(Off)
-//		if("3,4".indexOf(reportVO.getRepStatusCode())>-1) {
-//			
-//			// TODO 마스터 정보 바뀐 것 있나 확인
-//			
-//			// 진행중인 건 단계별 결재 의뢰
-//			if( "1,2,3,4,5".indexOf(reportVO.getRepCurrStepCode())>-1 ) {
-//				// TODO 각 단계 업데이트 및 다음단계 활성화
-//				
-//			} else {
-//				// TODO final 단계 업데이트 및 마스터 종료 처리
-//				
-//			}
-//			
-//		} else {
-			if(reportVO.getMode().equals("UPDATE")) {
-				// 임시저장 건 결재의뢰/임시저장
-				reportVO.setRepUpdateUser(userId);
-				reportService.update(reportVO);	
-			} else if(reportVO.getMode().equals("CANCEL")) {
-				// 임시저장 건 결재취소 --> 결재데이터 제거 및 임시저장 상태로 변경			
-				reportService.cancelApprove(reportVO);
-			} else {
-				// 신규입력 결재의뢰/임시저장
-				reportVO.setRepRegUser(userId);
-				reportService.insert(reportVO);	
-			}			
-		//}
 
+		if(reportVO.getMode().equals("UPDATE")) {
+			// 임시저장 건 결재의뢰/임시저장
+			reportVO.setRepUpdateUser(userId);
+			reportService.update(reportVO);	
+		} else if(reportVO.getMode().equals("CANCEL")) {
+			// 임시저장 건 결재취소 --> 결재데이터 제거 및 임시저장 상태로 변경			
+			reportService.cancelApprove(reportVO);
+		} else {
+			// 신규입력 결재의뢰/임시저장
+			reportVO.setRepRegUser(userId);
+			reportService.insert(reportVO);	
+		}
 		
-		//return "redirect:/report/002_01_sub01.do?menuKey=29";
 		return "redirect:/sub.do?menuKey=29";
 	}
 	
@@ -280,7 +261,6 @@ public class ReportController {
 			// TODO 4. 이메일 전송   ---------------------------------
 		
 		}
-		
 		
 		return "redirect:/sub.do?menuKey=29";
 	}
@@ -382,7 +362,6 @@ public class ReportController {
 		
 		return "app/report/ReportList";
 	}
-
   
 }
 

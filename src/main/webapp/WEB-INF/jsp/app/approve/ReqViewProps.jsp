@@ -16,10 +16,7 @@
 <meta name="description" content="" />
 </head>
 <body>
-   
-${proposalVO}<br><br><br>
-${approveVO}
-                                        
+                                         
 						<p class="content_title">승인/반려_결재이력</p>
 						<div class="list-wrap">
 							<div class="list-content">
@@ -54,7 +51,7 @@ ${approveVO}
 													</c:if>
 												</td>
 												<td>${item.userName}</td>
-												<td><!-- 실장 --></td>
+												<td>${item.comPosition}</td>
 												<td class="align-left">${item.aprovalType}</td>
 												<td><!-- 70점(C) --></td>
 												<td class="align-left">${item.aprovalComment}</td>
@@ -174,37 +171,52 @@ ${approveVO}
                                                                     <tbody>
                                                                         <tr>
                                                                             <td>
-                                                                                <div class="themb-box">
+																				<div class="file-link">
+																					<ul>
+										<c:forEach var="item_sub" items="${proposalVO.beforeAttachFileList}" varStatus="status">
+																																			<li><a href="/attachfile/downloadFile.do?fileId=${item_sub.fileId}&fileSeq=${item_sub.fileSeq}" title="다운받기">${item_sub.fileNm}</a><a href="/attachfile/downloadFile.do?fileId=${item_sub.fileId}&fileSeq=${item_sub.fileSeq}" title="다운받기" class="btn color gray mg-l15">다운받기</a></li>
+										</c:forEach>  															
+																					</ul>
+																				</div>                                                                                
+                                                                                
+                                                                                <!-- <div class="themb-box">
                                                                                     <figure>
                                                                                         <img src="../assets/images/@sample.jpg" alt="" class="btn-org">
                                                                                     </figure>
                                                                                     <button type="button" class="themb_del"><i class="ico file_del"><em>파일삭제</em></i></button>
-                                                                                </div>
+                                                                                </div> -->
                                                                             </td>
                                                                             <td>
-                                                                                <div class="themb-box">
+																				<div class="file-link">
+																					<ul>
+										<c:forEach var="item_sub" items="${proposalVO.afterAttachFileList}" varStatus="status">
+																																			<li><a href="/attachfile/downloadFile.do?fileId=${item_sub.fileId}&fileSeq=${item_sub.fileSeq}" title="다운받기">${item_sub.fileNm}</a><a href="/attachfile/downloadFile.do?fileId=${item_sub.fileId}&fileSeq=${item_sub.fileSeq}" title="다운받기" class="btn color gray mg-l15">다운받기</a></li>
+										</c:forEach>  															
+																					</ul>
+																				</div>
+                                                                                <!-- <div class="themb-box">
                                                                                     <figure>
                                                                                         <img src="../assets/images/@sample.jpg" alt="" class="btn-org">
                                                                                     </figure>
                                                                                     <button type="button" class="themb_del"><i class="ico file_del"><em>파일삭제</em></i></button>
-                                                                                </div>
+                                                                                </div> -->
                                                                             </td>
                                                                         </tr>
                                                                         <tr>
                                                                             <td>
                                                                                 <div class="themb-box">
-                                                                                    <figure>
+                                                                                    <!-- <figure>
                                                                                         <img src="../assets/images/@sample.jpg" alt="" class="btn-org">
                                                                                     </figure>
-                                                                                    <button type="button" class="themb_del"><i class="ico file_del"><em>파일삭제</em></i></button>
+                                                                                    <button type="button" class="themb_del"><i class="ico file_del"><em>파일삭제</em></i></button> -->
                                                                                 </div>
                                                                             </td>
                                                                             <td>
                                                                                 <div class="themb-box">
-                                                                                    <figure>
+                                                                                    <!-- <figure>
                                                                                         <img src="../assets/images/@sample.jpg" alt="" class="btn-org">
                                                                                     </figure>
-                                                                                    <button type="button" class="themb_del"><i class="ico file_del"><em>파일삭제</em></i></button>
+                                                                                    <button type="button" class="themb_del"><i class="ico file_del"><em>파일삭제</em></i></button> -->
                                                                                 </div>
                                                                             </td>
                                                                         </tr>                                                                       
@@ -252,7 +264,7 @@ ${approveVO}
 												<td>
 													<div class="file-link">
 														<ul>
-<c:forEach var="item" items="${reportVO.fileList}" varStatus="status">														
+<c:forEach var="item" items="${proposalVO.attachFileList}" varStatus="status">														
 															<li><a href="/attachfile/downloadFile.do?fileId=${item.fileId}&fileSeq=${item.fileSeq}" title="다운받기">${item.fileNm}</a><a href="/attachfile/downloadFile.do?fileId=${item.fileId}&fileSeq=${item.fileSeq}" title="다운받기" class="btn color gray mg-l15">다운받기</a></li>
 </c:forEach>
 														</ul>

@@ -18,6 +18,8 @@ import kr.freedi.dev.common.dao.DefaultDAO;
 import kr.freedi.dev.qapprove.domain.ApproveDetailVO;
 import kr.freedi.dev.qapprove.domain.ApproveVO;
 import kr.freedi.dev.qapprove.service.ApproveService;
+import kr.freedi.dev.qcircle.domain.CircleVO;
+import kr.freedi.dev.qcircle.service.CircleService;
 import kr.freedi.dev.qreport.domain.ReportDetailVO;
 import kr.freedi.dev.qreport.domain.ReportIndicatorVO;
 import kr.freedi.dev.qreport.domain.ReportResultVO;
@@ -82,6 +84,9 @@ public class ReportService {
 	
 	@Resource(name = "reportIdGnrService")
 	private EgovIdGnrService idGnrService;
+	
+	@Resource(name = "circleService")
+	private CircleService circleService;
 	
 	public void insert(ReportVO reportVO) throws Exception {
 
@@ -472,6 +477,15 @@ public class ReportService {
 			// 수정모드	
 			//ReportVO dbReportVO = new ReportVO();
 			retVO = this.select(reportVO);
+			
+			if(retVO.getRepMenuCode().equals("TEAM")) {
+				// 분임조과제일 경우 작성자를 기준으로 분임조 정보를 가져온다.
+				ReportTeamVO memberVO = new ReportTeamVO();
+				memberVO.setComNo(retVO.getRepRegUser());
+				
+				CircleVO circleVO = circleService.findCircleInfo(memberVO);
+				model.addAttribute("circleVO", circleVO);
+			}
 			// 키 코드가 파라메터로 들어오면 임시저장건 수정모드로 진행
 			retVO.setMode("UPDATE");
 			model.addAttribute("reportVO", retVO);

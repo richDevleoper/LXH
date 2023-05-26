@@ -17,7 +17,19 @@
 </head>
 <body>
 
-
+             <div id="page-container">
+                <div class="inner">
+					<form:form commandName="frmApprove" id="defaultForm" name="defaultForm" action="${action}" onsubmit="return false" method="post" modelAttribute="approveVO">  
+					<form:input type="hidden" path="aprovalCode"/>
+					<form:input type="hidden" path="aprovalType"/>
+					<form:input type="hidden" path="aprovalState"/>
+					<form:input type="hidden" path="refBusType"/>
+					<form:input type="hidden" path="refBusCode"/>
+					<form:input type="hidden" path="detailList[0].aprovalCode"/>
+					<form:input type="hidden" path="detailList[0].aprovalSeq"/>
+					<form:input type="hidden" path="detailList[0].comNo"/>
+					<form:input type="hidden" path="detailList[0].aprovalStatCode" cssClass="aproval-state-code"/>
+                    <section id="page-content">
 
                         <!-- breadcrumb -->
                         <div class="breadcrumb">
@@ -25,9 +37,9 @@
                                 <li>실시 제안정보</li>
                             </ul>
 							<div class="header-btns">
-								<button type="button" class="btn bg-gray">승인</button>
-								<button type="button" class="btn bg-gray">반려</button>        
-								<a href="#" class="btn">목록</a>
+								<button type="button" class="btn bg-gray" onclick="onclick_procApprove('4')">승인</button>
+                                <button type="button" class="btn bg-gray" onclick="onclick_procApprove('3');">반려</button>        
+                                <a href="/apprv/list.do?menuKey=${menuKey}" class="btn">목록</a>
 							</div>
                         </div>
                         <p class="content_title">1. 실시 제안정보</p>
@@ -51,31 +63,31 @@
                                         <tbody>
                                             <tr>
                                                 <th><label for="text1">제안명</label></th>
-                                                <td colspan="9">제안내용</td>
+                                                <td colspan="9">${proposalVO.propName}</td>
                                             </tr>
                                             <tr>
                                                 <th>제안자</th>
-                                                <td colspan="4">제안자</td>
+                                                <td colspan="4">${proposalVO.propUserName}</td>
                                                 <th>관련 쪽지 제안</th>
-                                                <td colspan="4">관련 쪽지</td>
+                                                <td colspan="4">${proposalVO.propRelMemoCodeName}</td>
                                             </tr>
                                             <tr>
                                                 <th>조직명</th>
-                                                <td colspan="4">조직명</td>
+                                                <td colspan="4">${proposalVO.propGroupName}</td>
                                                 <th>분임조</th>
-                                                <td colspan="4">분임조</td>
+                                                <td colspan="4">${proposalVO.propCircleCode}</td>
                                             </tr>
                                             <tr>
                                                 <th>제안유형</th>
-                                                <td colspan="4">제안유형</td>
+                                                <td colspan="4">${proposalVO.propTypeCodeName}</td>
                                                 <th>제안일</th>
-                                                <td colspan="4">2023.06.30</td>
+                                                <td colspan="4">${proposalVO.propDate}</td>
                                             </tr>
                                             <tr>
                                                 <th>실행 완료일</th>
-                                                <td colspan="4">2023.06.30</td>
+                                                <td colspan="4">${proposalVO.propPracticeCompDate}</td>
                                                 <th>년간 효과 금액</th>
-                                                <td colspan="4">년간 20억</td>
+                                                <td colspan="4">${proposalVO.propYearEffect}</td>
                                             </tr>
 											<tr><th colspan="10" class="align-center">제안내용</th></tr>
                                             <tr>
@@ -83,7 +95,7 @@
                                                 <td colspan="9">
                                                     <div class="row">
                                                         <div class="col s12 input-text">
-                                                            <textarea name="" id="text6" rows="4"></textarea>
+                                                            <textarea name="" id="text6" rows="4">${proposalVO.propProblem}</textarea>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -93,7 +105,7 @@
                                                 <td colspan="9">
                                                     <div class="row">
                                                         <div class="col s12 input-text">
-                                                            <textarea name="" id="text7" rows="4"></textarea>
+                                                            <textarea name="" id="text7" rows="4">${proposalVO.propImprovementCont}</textarea>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -103,7 +115,7 @@
                                                 <td colspan="9">
                                                     <div class="row">
                                                         <div class="col s12 input-text">
-                                                            <textarea name="" id="text8" rows="4"></textarea>
+                                                            <textarea name="" id="text8" rows="4">${proposalVO.propBenefit}</textarea>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -130,22 +142,33 @@
                                                                         <tr>
                                                                             <td>
                                                                                 <div class="themb-box">
-                                                                                    <figure>
+                                                                                <ul>
+			<c:forEach var="item_sub" items="${proposalVO.beforeAttachFileList}" varStatus="status">
+																					<li><a href="/attachfile/downloadFile.do?fileId=${item_sub.fileId}&fileSeq=${item_sub.fileSeq}" title="다운받기">${item_sub.fileNm}</a><a href="/attachfile/downloadFile.do?fileId=${item_sub.fileId}&fileSeq=${item_sub.fileSeq}" title="다운받기" class="btn color gray mg-l15">다운받기</a></li>
+			</c:forEach>
+			                                                                    </ul>
+                                                                                
+                                                                                    <!-- <figure>
                                                                                         <img src="../assets/images/@sample.jpg" alt="" class="btn-org">
                                                                                     </figure>
-                                                                                    <button type="button" class="themb_del"><i class="ico file_del"><em>파일삭제</em></i></button>
+                                                                                    <button type="button" class="themb_del"><i class="ico file_del"><em>파일삭제</em></i></button> -->
                                                                                 </div>
                                                                             </td>
                                                                             <td>
                                                                                 <div class="themb-box">
-                                                                                    <figure>
+                                                                                <ul>
+			<c:forEach var="item_sub" items="${proposalVO.afterAttachFileList}" varStatus="status">
+																					<li><a href="/attachfile/downloadFile.do?fileId=${item_sub.fileId}&fileSeq=${item_sub.fileSeq}" title="다운받기">${item_sub.fileNm}</a><a href="/attachfile/downloadFile.do?fileId=${item_sub.fileId}&fileSeq=${item_sub.fileSeq}" title="다운받기" class="btn color gray mg-l15">다운받기</a></li>
+			</c:forEach>
+                                                                                </ul>			
+                                                                                 <!--    <figure>
                                                                                         <img src="../assets/images/@sample.jpg" alt="" class="btn-org">
                                                                                     </figure>
-                                                                                    <button type="button" class="themb_del"><i class="ico file_del"><em>파일삭제</em></i></button>
+                                                                                    <button type="button" class="themb_del"><i class="ico file_del"><em>파일삭제</em></i></button> -->
                                                                                 </div>
                                                                             </td>
                                                                         </tr>
-                                                                        <tr>
+                                                                        <!-- <tr>
                                                                             <td>
                                                                                 <div class="themb-box">
                                                                                     <figure>
@@ -162,7 +185,7 @@
                                                                                     <button type="button" class="themb_del"><i class="ico file_del"><em>파일삭제</em></i></button>
                                                                                 </div>
                                                                             </td>
-                                                                        </tr>                                                                       
+                                                                        </tr> -->                                                                       
                                                                         
                                                                     </tbody>
                                                                 </table>
@@ -207,7 +230,9 @@
 												<td>
 													<div class="file-link">
 														<ul>
-															<li><a href="#" title="다운받기">UI표준정의서.pptx</a><a href="#" title="다운받기" class="btn color gray mg-l15">다운받기</a></li>
+			<c:forEach var="item_sub" items="${proposalVO.attachFileList}" varStatus="status">
+																												<li><a href="/attachfile/downloadFile.do?fileId=${item_sub.fileId}&fileSeq=${item_sub.fileSeq}" title="다운받기">${item_sub.fileNm}</a><a href="/attachfile/downloadFile.do?fileId=${item_sub.fileId}&fileSeq=${item_sub.fileSeq}" title="다운받기" class="btn color gray mg-l15">다운받기</a></li>
+			</c:forEach>  															
 														</ul>
 													</div>
 												</td>
@@ -290,6 +315,10 @@
 								</div>
 							</div>
 						</div>
+
+                    </section>
+                    </form:form>
+						
                     
 
         <!-- 조직도 -->
@@ -394,6 +423,12 @@
                 </div>
             </div>
         </div>
-    
+<script type="text/javascript">
+function onclick_procApprove(gubn){
+	$("#aprovalState").val(gubn);
+	$(".aproval-state-code").val(gubn);
+	$("#defaultForm")[0].submit();
+}    
+</script>   
 </body>
 </html>
