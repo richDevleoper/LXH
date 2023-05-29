@@ -39,6 +39,7 @@ import kr.freedi.dev.code.domain.CodeVO;
 import kr.freedi.dev.code.service.CodeService;
 import kr.freedi.dev.common.util.EncriptUtil;
 import kr.freedi.dev.common.util.MapUtil;
+import kr.freedi.dev.qpopup.domain.DepartVO;
 import kr.freedi.dev.qpopup.domain.UserVO;
 import kr.freedi.dev.qpopup.service.QPopupService;
 import kr.freedi.dev.qreport.domain.ReportIndicatorVO;
@@ -93,12 +94,17 @@ public class QPopupController {
 	
 	// 과제 - 리스트
 	@RequestMapping({"/getEmpSearch.do"})
-	public @ResponseBody String handler002_01(HttpServletRequest request
+	public @ResponseBody String popup_searchEmp(HttpServletRequest request
 			, @ModelAttribute("userVO") UserVO userVo)throws Exception {
 		
 		return new ObjectMapper().writeValueAsString(qPopupService.select(userVo));
 	}
-  
-
+	
+	@RequestMapping({"/getDeptSearch.do"})
+	public @ResponseBody String popup_searchDept(HttpServletRequest request
+			, @ModelAttribute("departVO") DepartVO departVo)throws Exception {
+		
+		return new ObjectMapper().writeValueAsString(qPopupService.selectList(departVo));
+	}
 }
 

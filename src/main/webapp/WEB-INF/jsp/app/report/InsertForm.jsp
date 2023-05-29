@@ -284,7 +284,7 @@
                                                                                     <td class="pd3" colspan="2">
                                                                                         <div class="row">
                                                                                             <div class="col s12 input-text input-date" style="float:none;width:120px;margin:0 auto !important">
-                                                                                                <input type="text" id="repDetailList0_1.repActStartDate" name="repDetailList[0].repActStartDate" class="datepicker"/>
+                                                                                                <input type="text" id="repDetailList0_1.repActStartDate" name="repDetailList[0].repActStartDate" class="datepicker act-date"/>
                                                                                                 <i class="ico calendar"></i>
                                                                                             </div>
                                                                                         </div>
@@ -292,7 +292,7 @@
                                                                                     <td class="pd3" colspan="3">
                                                                                         <div class="row">
                                                                                             <div class="col s12 input-text input-date" style="float:none;width:120px;margin:0 auto !important">
-                                                                                                <input type="text" id="repDetailList0_1.repActEndDate" name="repDetailList[0].repActEndDate" class="datepicker"/>
+                                                                                                <input type="text" id="repDetailList0_1.repActEndDate" name="repDetailList[0].repActEndDate" class="datepicker act-date"/>
                                                                                                 <i class="ico calendar"></i>
                                                                                             </div>
                                                                                         </div>
@@ -665,6 +665,16 @@
                         <div class="list-wrap">
                             <div class="list-content">
                                 <div class="list-table list">
+                                
+<script>
+function onchange_resultType(obj){
+	if(obj.value==="7"){
+		$(obj).closest("tr").find(".txt-result-value").val("").prop("disabled", true);	
+	} else {
+		$(obj).closest("tr").find(".txt-result-value").prop("disabled", false);
+	}
+}
+</script>                                
                                     <table class="centered">
                                         <caption></caption>
                                         <colgroup>
@@ -698,14 +708,14 @@
                                                         
                                                         <c:choose>  
 															<c:when test="${status.first}">
-																<form:select path="repResultList[${status.index}].repResultTypeCode" title="성과항목을 선택하세요" cssClass="only-first validate[required]">
+																<form:select path="repResultList[${status.index}].repResultTypeCode" title="성과항목을 선택하세요" cssClass="only-first validate[required]" onchange="onchange_resultType(this)">
 	                                                            <c:forEach var="option" items="${codeResultTy}" >
 		                                                            <form:option value="${option.codeId}" label="${option.codeNm}" />
 		                                                        </c:forEach>    
 	                                                            </form:select>
 															</c:when>
 															<c:otherwise>
-																<form:select path="repResultList[${status.index}].repResultTypeCode" title="성과항목을 선택하세요">
+																<form:select path="repResultList[${status.index}].repResultTypeCode" title="성과항목을 선택하세요" onchange="onchange_resultType(this)">
 	                                                            <c:forEach var="option" items="${codeResultTy}" >
 		                                                            <form:option value="${option.codeId}" label="${option.codeNm}" />
 		                                                        </c:forEach>    
@@ -720,7 +730,7 @@
                                                 <td class="pd3">
                                                     <div class="row">
                                                         <div class="col s12 input-text">
-                                                            <form:input type="number" path="repResultList[${status.index}].repResultWithinYear" title="년내 입력" />
+                                                            <form:input type="number" path="repResultList[${status.index}].repResultWithinYear" title="년내 입력" cssClass="txt-result-value input-text" />
                                                         </div>
                                                     </div>
                                                 </td>
@@ -728,7 +738,7 @@
                                                 <td class="pd3">
                                                     <div class="row">
                                                         <div class="col s12 input-text">
-                                                            <form:input type="number" path="repResultList[${status.index}].repResultYear" title="년간 입력" />
+                                                            <form:input type="number" path="repResultList[${status.index}].repResultYear" title="년간 입력" cssClass="txt-result-value input-text" />
                                                         </div>
                                                     </div>
                                                 </td>
@@ -736,7 +746,7 @@
                                                 <td class="pd3">
                                                     <div class="row">
                                                         <div class="col s12 input-text">
-                                                        	<form:input type="text" path="repResultList[${status.index}].repResultCalLogic" title="산출 Logic" />
+                                                        	<form:input type="text" path="repResultList[${status.index}].repResultCalLogic" title="산출 Logic" cssClass="txt-result-value input-text" />
                                                         </div>
                                                     </div>
                                                 </td>
@@ -1212,6 +1222,7 @@
 			$("#trRepDate2").show();
 			$("#trRepDate1 input.datepicker").prop("disabled", true);
 			$("#trRepDate2 input.datepicker").prop("disabled", false);
+			
 			break;
 		case "3": // 10+No.
 			arrRepType = cdRepType3;
@@ -1223,6 +1234,14 @@
 		default:
 			break;
 		}
+		
+		if(vMenuType==="TEAM" && repDevCd==="2"){
+			$("#repTypeCode").prop("disabled", true);
+			$(".act-date").prop("disabled", true);  // 실시 일자 Disabled(5월 수정요청)
+		} else {
+			$("#repTypeCode").prop("disabled", false);
+		}
+		
 		changeTitle();
 		setDropDown(targetObjId, arrRepType, true);
 	}

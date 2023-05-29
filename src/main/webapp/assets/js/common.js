@@ -15,28 +15,27 @@ $(function(){
         $(this).toggleClass('active').siblings('.depth2').slideToggle();
     })
 
-
     //조직도
     $('#orgSelAll').change(function() {          
         ($('#orgSelAll').is(":checked"))?$("#org-tree").jstree().check_all(true):$("#org-tree").jstree().uncheck_all(true);
     }); 
 
-    $('#org-tree').jstree({
-        "plugins" : ['checkbox','search'],
-        "search" : {
-            "show_only_matches" : true,
-            "show_only_matches_children" : true,
-        },
-    })
-    .on("check_node.jstree uncheck_node.jstree", function (e, data) {  								
-        if (e.type == "uncheck_node") {
-            $("#orgSelAll").prop( "checked", false );                
-        }
-        else if (e.type == "check_node") {					
-            if ($(this).jstree().get_json('#', {flat:true}).length === $(this).jstree().get_checked(true).length)
-                $("#orgSelAll").prop( "checked", true ); 					
-        }
-    }); 
+//    $('#org-tree').jstree({
+//        "plugins" : ['checkbox','search'],
+//        "search" : {
+//            "show_only_matches" : true,
+//            "show_only_matches_children" : true,
+//        },
+//    })
+//    .on("check_node.jstree uncheck_node.jstree", function (e, data) {  								
+//        if (e.type == "uncheck_node") {
+//            $("#orgSelAll").prop( "checked", false );                
+//        }
+//        else if (e.type == "check_node") {					
+//            if ($(this).jstree().get_json('#', {flat:true}).length === $(this).jstree().get_checked(true).length)
+//                $("#orgSelAll").prop( "checked", true ); 					
+//        }
+//    }); 
 
     // tree 목록형 공통
     $('.tree-list').jstree({

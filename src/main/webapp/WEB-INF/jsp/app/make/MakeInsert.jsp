@@ -79,7 +79,7 @@
                                                         <div class="col s12 input-text search">
                                                             <form:input type="hidden" path="deptCode"/>
                                                             <form:input type="text" path="deptName" readonly="true"/>
-                                                            <button type="button" class="btn-search-emp">검색</button>
+                                                            <button type="button" class="btn-search-dept">검색</button>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -167,10 +167,10 @@
                                                                                         <table id="emptab">
                                                                                             <colgroup>
                                                                                                 <col style="width:20%">
-                                                                                                <col style="width:20%">
-                                                                                                <col style="width:20%">
-                                                                                                <col style="width:20%">
-                                                                                                <col style="width:20%">
+                                                                                                <col style="width:30%">
+                                                                                                <col style="width:25%">
+                                                                                                <col style="width:25%">
+                                                                                                <%-- <col style="width:20%"> --%>
                                                                                             </colgroup>
                                                                                             <thead>
                                                                                                 <tr>
@@ -182,7 +182,7 @@
 																									</th>
                                                                                                     <th><span>이름</span></th>
                                                                                                     <th><span>직책</span></th>
-                                                                                                    <th><span>학력</span></th>
+                                                                                                    <!-- <th><span>학력</span></th> -->
                                                                                                     <th><span>직무</span></th>
                                                                                                 </tr>
                                                                                             </thead>
@@ -210,10 +210,10 @@
                                                                                         <table id="leadertab">
                                                                                             <colgroup>
                                                                                                 <col style="width:20%">
-                                                                                                <col style="width:20%">
-                                                                                                <col style="width:20%">
-                                                                                                <col style="width:20%">
-                                                                                                <col style="width:20%">
+                                                                                                <col style="width:30%">
+                                                                                                <col style="width:25%">
+                                                                                                <col style="width:25%">
+                                                                                                <%-- <col style="width:20%"> --%>
                                                                                             </colgroup>
                                                                                             <thead>
                                                                                                 <tr>
@@ -225,7 +225,7 @@
 																									</th>
                                                                                                     <th><span>이름</span></th>
                                                                                                     <th><span>직책</span></th>
-                                                                                                    <th><span>학력</span></th>
+                                                                                                    <!-- <th><span>학력</span></th> -->
                                                                                                     <th><span>직무</span></th>
                                                                                                 </tr>
                                                                                             </thead>
@@ -254,10 +254,10 @@
                                                                                             <table id="teamtab">
 	                                                                                            <colgroup>
 	                                                                                                <col style="width:20%">
-	                                                                                                <col style="width:20%">
-	                                                                                                <col style="width:20%">
-	                                                                                                <col style="width:20%">
-	                                                                                                <col style="width:20%">
+	                                                                                                <col style="width:30%">
+	                                                                                                <col style="width:25%">
+	                                                                                                <col style="width:25%">
+	                                                                                                <%-- <col style="width:20%"> --%>
 	                                                                                            </colgroup>
 	                                                                                            <thead>
 	                                                                                                <tr>
@@ -269,7 +269,7 @@
 																										</th>
 	                                                                                                    <th><span>이름</span></th>
 	                                                                                                    <th><span>직책</span></th>
-	                                                                                                    <th><span>학력</span></th>
+	                                                                                                    <!-- <th><span>학력</span></th> -->
 	                                                                                                    <th><span>직무</span></th>
 	                                                                                                </tr>
 	                                                                                            </thead>
@@ -335,6 +335,12 @@ $(document).ready(function(){
 		callPopup_searchEmployee(this);
 	});
  	
+ 	// 부서 검색
+	$(".btn-search-dept").off("click").on("click", function(){
+		callPopup_searchDepartment(this);
+	});
+
+ 	
 	$("#AppLeader").on("click", function(){
 		let vhtml = [];	
 		
@@ -376,17 +382,17 @@ $(document).ready(function(){
 					console.log(comDepartCode);
 					
 					vhtml.push("<tr comNo='"+comNo+"' userName='"+userName+"' comDepartCode='"+comDepartCode+"' deptFullName='"+deptFullName+"' comJobx='"+comJobx+"' comPosition='"+comPosition+"' comPositionNm='"+strChk(comPositionNm)+"' comCertBelt='"+comCertBelt+"' comCertBeltNm='"+comCertBeltNm+"' >");
-	        		vhtml.push("<td>"); 
+	        		vhtml.push("<td class='text-align-center'>"); 
 	        		vhtml.push("<div>");
 	        		vhtml.push("<input type='checkbox' id='chkleader_"+i+"' name='chkleader'>");
 	        		vhtml.push("<label for='chkleader_"+i+"'></label>");
 	        		vhtml.push("</div>");
 	        		vhtml.push("</td>");
 	        		 
-					vhtml.push("<td><span>" + strChk(userName) + "</span></td>");
-					vhtml.push("<td><span>" + strChk(comJobxNm) + "</span></td>");
-					vhtml.push("<td><span>" + strChk(comPositionNm)+ "</span></td>");
-					vhtml.push("<td><span>" + strChk(comCertBeltNm) + "</span></td>");
+					vhtml.push("<td class='text-align-center'><span>" + strChk(userName) + "</span></td>");
+					vhtml.push("<td class='text-align-center'><span>" + strChk(comJobxNm) + "</span></td>");
+					vhtml.push("<td class='text-align-center'><span>" + strChk(comPositionNm)+ "</span></td>");
+					//vhtml.push("<td><span>" + strChk(comCertBeltNm) + "</span></td>");
 					vhtml.push("</tr>");
 				}
 			}
@@ -440,17 +446,17 @@ $(document).ready(function(){
 					console.log(comDepartCode);
 					
 					vhtml.push("<tr comNo='"+comNo+"' userName='"+userName+"' comDepartCode='"+comDepartCode+"' deptFullName='"+deptFullName+"' comJobx='"+comJobx+"' comPosition='"+comPosition+"' comPositionNm='"+strChk(comPositionNm)+"' comCertBelt='"+comCertBelt+"' comCertBeltNm='"+comCertBeltNm+"' >");
-	        		vhtml.push("<td>"); 
+	        		vhtml.push("<td class='text-align-center'>"); 
 	        		vhtml.push("<div>");
 	        		vhtml.push("<input type='checkbox' id='chkteam_"+i+"' name='chkteam'>");
 	        		vhtml.push("<label for='chkteam_"+i+"'></label>");
 	        		vhtml.push("</div>");
 	        		vhtml.push("</td>");
 	        		 
-					vhtml.push("<td><span>" + strChk(userName) + "</span></td>");
-					vhtml.push("<td><span>" + strChk(comJobxNm) + "</span></td>");
-					vhtml.push("<td><span>" + strChk(comPositionNm)+ "</span></td>");
-					vhtml.push("<td><span>" + strChk(comCertBeltNm) + "</span></td>");
+					vhtml.push("<td class='text-align-center'><span>" + strChk(userName) + "</span></td>");
+					vhtml.push("<td class='text-align-center'><span>" + strChk(comJobxNm) + "</span></td>");
+					vhtml.push("<td class='text-align-center'><span>" + strChk(comPositionNm)+ "</span></td>");
+					//vhtml.push("<td><span>" + strChk(comCertBeltNm) + "</span></td>");
 					vhtml.push("</tr>");
 				}
 			}
@@ -643,10 +649,7 @@ function callback_popEmp(objId, data){
 	let obj = document.getElementById(objId);
 	let objTr = $(obj).closest("tr");
 	let objIdComNo = objId.replace("deptName", "comNo");
-	
-	console.log(objId);
-	console.log(data);
-	
+
 	$(obj).val(data.comNo);
 	
 	if(objId == "cirTchComNo"){
@@ -658,9 +661,38 @@ function callback_popEmp(objId, data){
 	}else if(objId == "deptCode"){
 		$(objTr).find("#deptName").val(data.userName);
 	}
-
 	
 }
+//팝업 호출 함수(팀원 검색)
+function callPopup_searchEmployee(obj){
+	popEmp.init();
+	// footer.jsp 내 영역 호출
+	popEmp.returnObjId = $(obj).closest("td").find("input[type=text]").attr("id")
+	popEmp.returnFunc = callback_popEmp;
+	popEmp.open();
+}
+
+
+function callback_popDept(objId, data){
+	
+	let obj = document.getElementById(objId);
+	let objTr = $(obj).closest("tr");
+	let objIdComNo = objId.replace("deptName", "comNo");
+	
+	if(objId == "deptCode"){
+		$(obj).val(data.deptCode);
+		$(objTr).find("#deptName").val(data.deptName);
+	}
+}
+
+function callPopup_searchDepartment(obj){
+	popDept.init();
+	// footer.jsp 내 영역 호출
+	popDept.returnObjId = $(obj).closest("td").find("input").attr("id");
+	popDept.returnFunc = callback_popDept;
+	popDept.open();
+}
+
 
 function getEmpSearch(par){
 	let params = {};
@@ -686,17 +718,17 @@ function getEmpSearch(par){
 					let item = data[i];
 				
             		vhtml.push("<tr comNo='"+strChk(item.comNo)+"' userName='"+strChk(item.userName)+"' comDepartCode='"+strChk(item.comDepartCode)+"' deptFullName='"+strChk(item.deptFullName)+"' comJobx='"+strChk(item.comJobx)+"' comJobxNm='"+item.comJobxNm+"' comPosition='"+strChk(item.comPosition)+"' comPositionNm='"+strChk(item.comPositionNm)+"' comCertBelt='"+strChk(item.comCertBelt)+"' comCertBeltNm='"+strChk(item.comCertBeltNm)+"' >");
-            		vhtml.push("<td>"); 
+            		vhtml.push("<td class='text-align-center'>"); 
             		vhtml.push("<div>");
             		vhtml.push("<input type='checkbox' id='chkNo_"+i+"' name='chkNo'>");
             		vhtml.push("<label for='chkNo_"+i+"'></label>");
             		vhtml.push("</div>");
             		vhtml.push("</td>");
             		 
-					vhtml.push("<td><span>" + strChk(item.userName) + "</span></td>");
-					vhtml.push("<td><span>" + strChk(item.comJobxNm) + "</span></td>");
-					vhtml.push("<td><span>" + strChk(item.comPositionNm)+ "</span></td>");
-					vhtml.push("<td><span>" + strChk(item.comCertBeltNm) + "</span></td>");
+					vhtml.push("<td class='text-align-center'><span>" + strChk(item.userName) + "</span></td>");
+					vhtml.push("<td class='text-align-center'><span>" + strChk(item.comJobxNm) + "</span></td>");
+					vhtml.push("<td class='text-align-center'><span>" + strChk(item.comPositionNm)+ "</span></td>");
+					//vhtml.push("<td><span>" + strChk(item.comCertBeltNm) + "</span></td>");
 					vhtml.push("</tr>");
 					
 					cntNum = cntNum+1;

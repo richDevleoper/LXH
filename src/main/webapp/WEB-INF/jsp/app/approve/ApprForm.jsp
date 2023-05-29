@@ -116,6 +116,61 @@
 	<c:when test="${reportVO.repDivisionCode eq '1'}">
 	<!-- 6시그마 -->
 
+		<c:choose>
+			<c:when test="${approveVO.aprovalType eq '1'}">
+			<!-- 6시그마 과제선정 결재(시작) -->
+                                                   <div class="list-wrap">
+                                                        <!-- [D] 상태에따라 열기/닫기 텍스트 구분해주세요. -->
+                                                        
+                                                        <ul>
+                                                            <!-- [D] 열린상태일 경우 active 클래스를 추가해주세요. -->
+                                                            <li> <!-- class="active" -->
+                                                                <div class="list-content">
+                                                                    <div class="list-table list">
+                                                                    
+                                                                        <table>
+                                                                            <caption>일정계획 및 수행 테이블</caption>
+                                                                            <colgroup>
+                                                                                <col>
+				                                                                <col class="dt-6sig">
+				                                                                <col class="dt-6sig">
+				                                                                <col class="dt-6sig">
+				                                                                <col class="dt-6sig">
+				                                                                <col>
+                                                                            </colgroup>
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <th str1="Define" str2="Define">Define</th>
+				                                                                    <th str1="Measure" str2="Measure" class="dt-6sig">Measure</th>
+				                                                                    <th str1="Analyze" str2="Explore" class="dt-6sig">Analyze</th>
+				                                                                    <th str1="Improve" str2="Develop" class="dt-6sig">Improve</th>
+				                                                                    <th str1="Control" str2="Implement" class="dt-6sig">Control</th>
+				                                                                    <th str1="Finish" str2="Finish">Finish</th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                                <tr>
+                                                                <c:forEach var="item" items="${reportVO.repDetailList}" varStatus="status">
+
+                                                                    <td class="pd3">
+                                                                        <div class="row" style="padding: 11px; text-align: center;">
+                                                                       		<fmt:formatDate pattern="yyyy.MM.dd" value="${item.repPlanStartDate}" />
+                                                                        </div>
+                                                                    </td>                                                                
+                                                                </c:forEach>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+
+                                                        </ul>
+                                                    </div>				
+			<!-- 6시그마 과제선정 결재(끝) --> 			
+			</c:when>
+			<c:otherwise>
+			<!-- 6시그마 단계별 결재(시작) -->
                                                    <div class="list-wrap toggle">
                                                         <!-- [D] 상태에따라 열기/닫기 텍스트 구분해주세요. -->
                                                         <span class="blind">열기/닫기</span>
@@ -148,7 +203,7 @@
                                                                             <tbody>
                                                                                 <tr>
                                                                                     <td colspan="6" class="pd0 border0">
-                                                                                        <div class="toggle-box" style="display: block;"><%-- <c:if test="${item.repStatus eq '1'}">style="display: block;"</c:if> --%>
+                                                                                        <div class="toggle-box" <c:if test="${approveVO.refBusSubCode eq item.repStepCode}">style="display: block;"</c:if>><%-- <c:if test="${item.repStatus eq '1'}">style="display: block;"</c:if> --%>
                                                                                             <div class="list-table list">
                                                                                                 <table>
                                                                                                     <caption>일정계획 및 수행 테이블</caption>
@@ -249,7 +304,10 @@
                                                             </li>
 		</c:forEach>
                                                         </ul>
-                                                    </div>		
+                                                    </div>				
+			<!-- 6시그마 단계별 결재(끝) -->			
+			</c:otherwise>
+		</c:choose>	
 	
 	<!-- End of 6시그마 -->
 	</c:when>

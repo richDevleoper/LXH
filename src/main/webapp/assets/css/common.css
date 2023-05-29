@@ -1118,7 +1118,7 @@ p.content_title + .list-wrap{margin-top:9px}
 
 /* input[type=text] */
 .input-text input[type=text]{display:block;width:100%}
-.input-text input[type=text]:read-only{background:#f3f3f3}
+.input-text input[type=text]:read-only, .input-text input[type=number]:read-only{background:#f3f3f3}
 .input-text.search{position:relative}
 .list-table .input-text.search input[type=text]{
     padding-right:26px !important;
