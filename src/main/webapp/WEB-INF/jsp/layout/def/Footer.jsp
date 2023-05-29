@@ -28,98 +28,143 @@
     <div class="modal-content">
         <div class="list-wrap">
             <div class="list-search">
-                <form id="org-form" onsubmit="org_search();return false;">
+                <!-- <form id="org-form" onsubmit="org_search();return false;"> -->
                     <div class="search-form">
                         <div class="form-inline form-input">
                             <label>조직명</label>
-                            <input type="text" name="">
+                            <input type="text" name="dept_name" id="txtSearchDeptName">
                         </div>
-                        <button type="submit" class="btn-submit">조회</button>
+                        <button type="submit" class="btn-submit" onclick="return popDept.callData()">조회</button>
                     </div>
-                </form>
+                <!-- </form> -->
             </div>
         </div>
-        <div class="tree-header">
-            <div>
-                <input type="checkbox" id="orgSelAll">
-                <label for="orgSelAll"></label>
+        
+       	<div class="list-wrap">
+	        <div class="list-content" style="max-height: 300px; overflow: auto;">
+	            <div class="list-table list">
+                <table class="centered tb-popup-table">
+                    <caption></caption>
+                    <colgroup>
+                        <col style="width:50px">
+                        <col>
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th>선택</th>
+                            <th>조직명</th>
+                        </tr>
+                    </thead>
+                    
+                     <tbody id="tbodyDeptSearch" class="tbody-search-result">
+                        <tr class="tr-empty">
+                        	<td colspan="2" style="text-align: center; height:30px;">검색어를 입력하세요.</td>
+                        </tr>
+                    </tbody>
+                    
+                </table>
+                </div>
             </div>
-            <div>
-                6σ 인재육성대상 조직명
-            </div>
-        </div>
-        <div id="org-tree">
-            <ul>
-                <li>창호 사업부
-                    <ul>
-                        <li>창호.생산담당
-                            <ul>
-                                <li>· 창호.프로파일생산팀</li>
-                                <li>· 창호.기술팀</li>
-                                <li>· 창호.공정혁신팀</li>
-                                <li>· 창호.완성창공정기술팀</li>
-                            </ul>
-                        </li>
-                        <li>유리</li>
-                        <li>연구소 근무</li>
-                        <li>창호.시스템창사업담당</li>
-                        <li>창호.중문팀</li>
-                        <li>바닥재 사업담당	</li>
-                    </ul>
-                </li>
-                <li>단열재 사업담당
-                    <ul>
-                        <li>창호.프로파일생산팀</li>
-                    </ul>
-                </li>
-                <li>벽지 사업담당	
-                    <ul>
-                        <li>창호.프로파일생산팀</li>
-                    </ul>
-                </li>
-                <li>표면소재 사업담당
-                    <ul>
-                        <li>창호.프로파일생산팀</li>
-                    </ul>
-                </li>
-                <li>산업용필름 사업담당
-                    <ul>
-                        <li>창호.프로파일생산팀</li>
-                    </ul>
-                </li>
-                <li>자동차소재부품 사업부
-                    <ul>
-                        <li>창호.프로파일생산팀</li>
-                    </ul>
-                </li>
-                <li>인테리어 사업부
-                    <ul>
-                        <li>창호.프로파일생산팀</li>
-                    </ul>
-                </li>
-                <li>연구소
-                    <ul>
-                        <li>창호.프로파일생산팀</li>
-                    </ul>
-                </li>
-                <li>품질 담당
-                    <ul>
-                        <li>창호.프로파일생산팀</li>
-                    </ul>
-                </li>
-                <li>생산/기술/R&D/품질 外
-                    <ul>
-                        <li>창호.프로파일생산팀</li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
-        <div class="btns">
-            <button type="button" class="btn-submit">확인</button>
-            <button type="button" class="btn-cancel">취소</button>
-        </div>
-    </div>
+	        <div class="btns">
+	            <button type="button" class="btn-submit" onclick="popDept.onSubmit()">확인</button>
+	            <button type="button" class="btn-cancel">취소</button>
+	        </div>
+       </div>
 </div>
+	            <script>
+	            
+	            	
+	            
+	            	let popDept = {
+	            			returnObjId : null,  //팝업에서 선택한 사람을 리턴할 객체
+	            			returnFunc : null,
+	            			searchObjId : "txtSearchDeptName",
+	            			modalPopId : "comPopup_orgSearch",
+	            			dataAppendId : "tbodyDeptSearch",
+	            			radioObjClass : "radio-selected",
+	            			open : function(){
+	            				$(".modal-dimmed").show();
+	            				$("#"+this.modalPopId).show();
+	            			},
+	            			close: function(){
+	            				$(".modal-dimmed").hide();
+	            		 		$("#"+this.modalPopId).hide();
+	            		 		
+	            		 		this.init();
+	            			},
+	            			init : function(){
+	            				$(".tr-empty").show();
+	            				$(".tr-data").remove();
+	            				$("#"+this.searchObjId).val("");
+	            				$("#"+this.searchObjId).off("keyup").on("keyup", function(e){
+	            					if(e.keyCode==13){
+	            						popDept.callData();
+	            					}	
+	            				})
+	            				
+	            				this.returnObjId = null;
+	            				this.returnFunc = null;
+	            			},
+	            			callData : function(){
+	            				
+	            				if($("#"+this.searchObjId).val().trim().length<2){
+	            					return false;
+	            				}
+	            				
+	            				var searchText = $("#"+this.searchObjId).val();
+	            				var posting = $.post( "/qpopup/getDeptSearch.do", { deptName: searchText }, this.setData, "json" );
+	            				
+	            				return false; // submit 방지용
+	            			},
+	            			setData : function(data){
+	            				
+	            				const selectObjId = "org_search_selected";//select 객체명
+	            				//{"userId":"parksoomin","userName":"박수민"
+	            				//,"deptFullName":"울산설비팀(전기PM／변전실)"
+	            				//,"comJobx":"FE0","comPosition":"생산파트장","comCertBelt":null}
+	            				$(".tr-empty").hide();
+	            				$(".tr-data").remove();
+	            				if(data.length===0){
+	            					// 데이터가 없습니다. 
+	            					
+	            					let htm = "<tr class='tr-data'> \n"+
+		                                "<td colspan='2' style='text-align: center; height: 30px;'>조회된 사원이 없습니다.</td> \n"+ 
+		                            "</tr>";
+		    	            		$("#"+this.dataAppendId).append(htm);
+	            				}
+	            				for ( var i in data) {
+	            					let item = data[i];
+	            					let htm = "<tr class='tr-data' onclick='popDept.onclickTr(this)' data='"+JSON.stringify(item)+"' > \n"+
+		                                "<td><input type='radio' name='"+ selectObjId +"' class='"+ popDept.radioObjClass +"' value='"+item.deptCode+"'/></td> \n"+
+		                                "<td>"+strChk(item.deptName)+"</td> \n"+ 
+		                            "</tr>";
+		    	            		$("#"+popDept.dataAppendId).append(htm);
+								}
+	            				
+	    	            		$("input[name="+ selectObjId +"]:eq(0)").prop("checked", true);
+	    	            	}, 
+	    	            	
+	    	            	onclickTr : function(obj){
+	    	            		$(obj).find("."+this.radioObjClass).prop("checked", true);
+	    	            	},
+	    	            	onSubmit: function(){
+	    	            		
+	    	            		let checkedItem = $("."+ popDept.radioObjClass +":checked").closest("tr");
+	    	            		let retData = checkedItem.attr("data");
+	    	            		retData = JSON.parse(retData);
+	    	            		
+	    	            		if(this.returnFunc){
+	    	            			this.returnFunc(popDept.returnObjId, retData); //리턴함수 호출, 초기화 전 객체명 넘기기
+	    	            			this.close();	// 팝업 Close, 각 파라메터 초기화
+	    	            		} else {
+	    	            			alert("반환 함수가 정의되지 않았습니다.");
+	    	            		}
+	    	            	}
+	            			
+	            	};
+
+	            </script>
+
 
 <!-- 13 직책조회 -->
 <div class="org-modal" id="comPopup_posSearch">
@@ -172,50 +217,50 @@
 	<div class="modal-content">
 	    <div class="list-wrap">
 	        <div class="list-search">
-	            <form id="org-form" onsubmit="org_search();return false;">
+	            <!-- <form id="org-form" onsubmit="org_search();return false;"> -->
 	                <div class="search-form">
 	                    <div class="form-inline form-input">
 	                        <label>이 름</label>
 	                        <input type="text" name="search_name" id="txtSearchName">
 	                    </div>
-	                    <button type="submit" class="btn-submit" onclick="popEmp.callData()">조회</button>
+	                    <button type="button" class="btn-submit" onclick="return popDept.callData()">조회</button>
 	                </div>
-	            </form>
+	            <!-- </form> -->
 	        </div>
 	    </div>
 	    <div class="list-wrap">
 	        <div class="list-content" style="max-height: 300px; overflow: auto;">
 	            <div class="list-table list">
-	                <table class="centered tb-popup-table">
-	                    <caption></caption>
-	                    <colgroup>
-	                        <col style="width:50px">
-	                        <col style="width:60px">
-	                        <col>
-	                        <col style="width:60px">
-	                        <col style="width:80px">
-	                        <col style="width:70px">
-	                    </colgroup>
-	                        <thead>
-	                            <tr>
-	                                <th>선택</th>
-	                                <th>이름</th>
-	                                <th>소속</th>
-	                                <th>직위</th>
-	                                <th>직책</th>
-	                                <th>Belt</th>
-	                            </tr>
-	                        </thead>
-	                        
- 	                        <tbody id="tbodyMemberSearch" class="tbody-search-result">
-	                            <tr class="tr-empty">
-	                            	<td colspan="6" style="text-align: center; height:30px;">검색어를 입력하세요.</td>
-	                            </tr>
-	                        </tbody>
-	                        
-	                    </table>
-	                </div>
-	            </div>
+                <table class="centered tb-popup-table">
+                    <caption></caption>
+                    <colgroup>
+                        <col style="width:50px">
+                        <col style="width:60px">
+                        <col>
+                        <col style="width:60px">
+                        <col style="width:80px">
+                        <col style="width:70px">
+                    </colgroup>
+                        <thead>
+                            <tr>
+                                <th>선택</th>
+                                <th>이름</th>
+                                <th>소속</th>
+                                <th>직위</th>
+                                <th>직책</th>
+                                <th>Belt</th>
+                            </tr>
+                        </thead>
+                        
+	                        <tbody id="tbodyMemberSearch" class="tbody-search-result">
+                            <tr class="tr-empty">
+                            	<td colspan="6" style="text-align: center; height:30px;">검색어를 입력하세요.</td>
+                            </tr>
+                        </tbody>
+                        
+                    </table>
+                </div>
+            </div>
 	            <script>
 	            	
 	            	let popEmp = {
@@ -249,6 +294,7 @@
 	            				var searchText = $("#txtSearchName").val();
 	            				var posting = $.post( "/qpopup/getEmpSearch.do", { userName: searchText }, this.setData, "json" );
 	            				
+	            				return false; // submit 방지
 	            			},
 	            			setData : function(data){
 	            				
