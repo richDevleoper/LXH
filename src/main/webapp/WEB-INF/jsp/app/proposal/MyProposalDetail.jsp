@@ -27,7 +27,7 @@
 	<script type="text/javascript" src="<c:url value='/def/attachfile/js/attachfile-fileuploader.js'/>"></script>
 </head>
 <body>
-<form:form id="defaultForm" name="defaultForm"  action="${action}" onsubmit="return false" method="post" modelAttribute="proposalVO" commandName="PROP_INFO">
+<form:form id="defaultForm" name="defaultForm"  action="${action}" onsubmit="return false" method="post" modelAttribute="proposalVO" commandName="PROP_INFO" enctype="multipart/form-data">
 <form:hidden value="${propSeq }" path="propSeq" id="propSeq"/>
 <form:hidden path="propTypeCode" id="propTypeCode"/>
 <form:hidden path="propRelMemoYn" id="propRelMemoYn"/>
@@ -222,14 +222,36 @@
                                                                         <tr>
                                                                             <td>
                                                                             <!-- 개선전 -->
-							                                                    <div class="row">
-							                                                        <div class="col s12 input-text file">
-							                                                            <!-- <span class="file-path">
-							                                                                <input type="text" id="file1_text" readonly name="" value="">
-							                                                                <button type="button"><i class="ico file_del"><em>삭제</em></i></button>
-							                                                            </span>
-							                                                            <input type="file" id="file1" name="" value="">
-							                                                            <label path="file1">파일추가</label> -->
+                                                                            	<div class="col s12" id="beforeFileUploadWrap">
+                                                                            		<c:choose>
+                                                                            			<c:when test="${PROP_INFO.beforeAttachFileList != null }">
+                                                                            				<c:forEach items="${PROP_INFO.beforeAttachFileList }" var="item">
+                                                                            					<div class="row" id="before-attach-file-${item.fileSeq }">
+                                                                            						<div class="col 12" style="border-bottom: 1px solid #c3c3c3; padding-bottom: 11px;">
+                                                                            							<input type="hidden" name="hidden-before-fileId" value="${item.fileId }">
+                                                                            							<input type="hidden" name="hidden-before-fileSeq" value="${item.fileSeq }">
+                                                                            							<img src="/attachfile/downloadFile.do?fileId=${item.fileId }&fileSeq=${item.fileSeq}" onclick="popupImageView(this);" style="cursor: pointer;">
+                                                                            							<button type="button" style="position: absolute; margin-left: -22px; margin-top: 5px; opacity: .5;" onclick="deleteImageFile(this);"><i class="ico file_del"><em>삭제</em></i></button>
+                                                                            						</div>
+                                                                            					</div>
+                                                                            				</c:forEach>
+                                                                            			</c:when>
+                                                                            			<c:otherwise>
+                                                                            				<div class="row">
+                                                                            					<div class="col s12 input-text file">
+	                                                                            					<span class="" style="display: block; position: relative; width: calc(100% - 95px) !important;">
+	                                                                            						<input type="text" readonly/>
+	                                                                            						<button type="button" style="position: absolute; top: 6px; right: 4px;" onclick="resetFileInfo(this);"><i class="ico file_del"><em>삭제</em></i></button>
+	                                                                            					</span>
+	                                                                            					<input type="file" name="beforeAttachFiles[]" accept="image/*" onchange="setSelectedFileInfo(this);">
+	                                                                            					<label style="border-radius: 2px; height: 29px; line-height: 27px; text-align: center;" onclick="selectImageFile(this);">파일선택</label>
+                                                                            					</div>
+                                                                            				</div>                                                                           				
+                                                                            			</c:otherwise>
+                                                                            		</c:choose>                                                                 	
+                                                                            	</div>
+<%-- 							                                                    <div class="row">
+							                                                        <div class="col s12 input-text file" id="beforeFileUploadWrap">
 							                                                            <attachfile:fileuploader
 																							objectId="beforeImageUpload"
 																							ctx=""
@@ -240,28 +262,47 @@
 																							maxFileSize="${15*1000000}"
 																							maxNumberOfFiles="3"/>
 							                                                        </div>
-							                                                    </div>                                                                            
+							                                                    </div>  --%>
+						                                                        <div class="row" style="float: right; margin-top: 11px;">
+							                                                        <div class="col">
+																						<button type="button" class="btn light-gray btn" style="height: 27px; padding: 0 21px; font-size: 12px;" id="btn-add-before-image">이미지 추가</button>							                                                        
+							                                                        </div>							                                                        
+							                                                    </div>                                                                         
                                                                             </td>
                                                                             <td>
                                                                             <!-- 개선후 -->
-							                                                    <div class="row">
-							                                                        <div class="col s12 input-text file">
-							                                                            <!-- <span class="file-path">
-							                                                                <input type="text" id="file1_text" readonly name="" value="">
-							                                                                <button type="button"><i class="ico file_del"><em>삭제</em></i></button>
-							                                                            </span>
-							                                                            <input type="file" id="file1" name="" value="">
-							                                                            <label path="file1">파일추가</label> -->
-							                                                            <attachfile:fileuploader
-																							objectId="afterImageUpload"
-																							ctx=""
-																							wrapperId="afterFileUploadWrap"
-																							fileId="proposal_after_${PROP_INFO.propSeq }"
-																							fileGrp="proposal"
-																							autoUpload="false"
-																							maxFileSize="${15*1000000}"
-																							maxNumberOfFiles="3"/>
-							                                                        </div>
+                                                                            	<div class="col s12" id="afterFileUploadWrap">
+                                                                            		<c:choose>
+                                                                            			<c:when test="${PROP_INFO.afterAttachFileList != null }">
+                                                                            				<c:forEach items="${PROP_INFO.afterAttachFileList }" var="item">
+                                                                            					<div class="row" id="after-attach-file-${item.fileSeq }">
+                                                                            						<div class="col 12" style="border-bottom: 1px solid #c3c3c3; padding-bottom: 11px;">
+                                                                            							<input type="hidden" name="hidden-after-fileId" value="${item.fileId }">
+                                                                            							<input type="hidden" name="hidden-after-fileSeq" value="${item.fileSeq }">                                                                            						
+                                                                            							<img src="/attachfile/downloadFile.do?fileId=${item.fileId }&fileSeq=${item.fileSeq}" onclick="popupImageView(this);" style="cursor: pointer;">
+                                                                            							<button type="button" style="position: absolute; margin-left: -22px; margin-top: 5px; opacity: .5;" onclick="deleteImageFile(this);"><i class="ico file_del"><em>삭제</em></i></button>
+                                                                            						</div>
+                                                                            					</div>
+                                                                            				</c:forEach>
+                                                                            			</c:when>
+                                                                            			<c:otherwise>
+                                                                            				<div class="row">
+                                                                            					<div class="col s12 input-text file">
+	                                                                            					<span class="" style="display: block; position: relative; width: calc(100% - 95px) !important;">
+	                                                                            						<input type="text" readonly/>
+	                                                                            						<button type="button" style="position: absolute; top: 6px; right: 4px;" onclick="resetFileInfo(this);"><i class="ico file_del"><em>삭제</em></i></button>
+	                                                                            					</span>
+	                                                                            					<input type="file" name="afterAttachFiles[]" accept="image/*" onchange="setSelectedFileInfo(this);">
+	                                                                            					<label style="border-radius: 2px; height: 29px; line-height: 27px; text-align: center;" onclick="selectImageFile(this);">파일선택</label>
+                                                                            					</div>
+                                                                            				</div>                                                                           				
+                                                                            			</c:otherwise>
+                                                                            		</c:choose>                                                                 	
+                                                                            	</div>
+						                                                        <div class="row" style="float: right; margin-top: 11px;">
+							                                                        <div class="col">
+																						<button type="button" class="btn light-gray btn" style="height: 27px; padding: 0 21px; font-size: 12px;" id="btn-add-after-image">이미지 추가</button>							                                                        
+							                                                        </div>							                                                        
 							                                                    </div>                                                                            
                                                                             </td>
                                                                         </tr>
@@ -359,16 +400,16 @@
                                                     </div>
                                                 </td>
                                             </tr>
-                                            <tr>
+<!--                                             <tr>
                                                 <th>첨부파일 (조회)</th>
                                                 <td>
                                                     <div class="file-link">
                                                         <ul>
-                                                            <!-- <li><a href="#" title="다운받기">UI표준정의서.pptx</a><a href="#" title="다운받기" class="btn color gray mg-l15">다운받기</a></li> -->
+                                                            <li><a href="#" title="다운받기">UI표준정의서.pptx</a><a href="#" title="다운받기" class="btn color gray mg-l15">다운받기</a></li>
                                                         </ul>
                                                     </div>
                                                 </td>
-                                            </tr>
+                                            </tr> -->
                                         </tbody>
                                     </table>
                                 </div>
@@ -385,9 +426,6 @@
 <script type="text/javascript">
 	var proposalInfo = {};
 	$(document).ready(function(){
-		
-		$($($('.fileinput-button')[0]).children()[2]).text('이미지선택');
-		$($($('.fileinput-button')[1]).children()[2]).text('이미지선택');
 		
  		if($('#propPropStatCode').val() != 'PRG_1' && $('#crud').val() == 'U'){ // 결재진행중 상태
 			$('input').attr('disabled', true);
@@ -449,12 +487,117 @@
 				$('#input-proposal-memo').val('');
 				$('#input-proposal-memo-hidden').val('');
 				$(this).val('N');
+				$('#propRelMemoYn').val('N');
 			}else{
+				$('#propRelMemoYn').val('Y');
 				$(this).val('Y');
 			}
 			$('.btn-psmg-search-modal').attr('disabled', checked);
 		});
+		
+		//개선전 이미지 업로드
+		$('#btn-add-before-image').off('click').on('click', function(){
+			var html = '<div class="row" style="margin-top: 4px;"><div class="col s12 input-text file">';
+			html += '<span class="" style="display: block; position: relative; width: calc(100% - 95px) !important;">';
+			html += '<input type="text" readonly>';
+			html += '<button type="button" style="position: absolute; top: 6px; right: 4px;" onclick="resetFileInfo(this);"><i class="ico file_del"><em>삭제</em></i></button>';
+			html += '</span>';
+			html += '<input type="file" name="beforeAttachFiles[]" accept="image/*" onchange="setSelectedFileInfo(this);">';
+			html += '<label style="border-radius: 2px; height: 29px; line-height: 27px; text-align: center;" onclick="selectImageFile(this);">파일선택</label>';
+			html += '</div></div>';
+			$('#beforeFileUploadWrap').append(html);
+		});
+		
+		//개선전 이미지 업로드
+		$('#btn-add-after-image').off('click').on('click', function(){
+			var html = '<div class="row" style="margin-top: 4px;"><div class="col s12 input-text file">';
+			html += '<span class="" style="display: block; position: relative; width: calc(100% - 95px) !important;">';
+			html += '<input type="text" readonly>';
+			html += '<button type="button" style="position: absolute; top: 6px; right: 4px;" onclick="resetFileInfo(this);"><i class="ico file_del"><em>삭제</em></i></button>';
+			html += '</span>';
+			html += '<input type="file" name="afterAttachFiles[]" accept="image/*" onchange="setSelectedFileInfo(this);">';
+			html += '<label style="border-radius: 2px; height: 29px; line-height: 27px; text-align: center;" onclick="selectImageFile(this);">파일선택</label>';
+			html += '</div></div>';
+			$('#afterFileUploadWrap').append(html);			
+		});
 	});
+	
+	function selectImageFile(el){
+		$($(el).prev()).click();
+	}
+	
+	function setSelectedFileInfo(el){
+		//console.log($(el).val());
+		var fileInfo = $(el).val();
+		var fileName = $(el).val().split('\\');
+		//console.log(fileName[fileName.length - 1]);
+		$(el).prev().find('input[type=text]').val(fileName[fileName.length - 1]);
+	}
+	
+	function resetFileInfo(el){
+		// 개선전 사진 삭제
+		if($($(el).parent().parent().parent().parent()).attr('id') == 'beforeFileUploadWrap'){
+			if($('#beforeFileUploadWrap').find('input[type=file]').length > 1){
+				$($(el).parent().parent().parent()).remove();
+			}else if($('#beforeFileUploadWrap').find('img').length > 0){
+				$($(el).parent().parent().parent()).remove();
+			}else{
+				alert('최소 하나이상의 개선전 이미지를 등록해야 합니다');
+			}
+		}
+		// 개선후 사진 삭제
+		if($($(el).parent().parent().parent().parent()).attr('id') == 'afterFileUploadWrap'){
+			if($('#afterFileUploadWrap').find('input[type=file]').length > 1){
+				$($(el).parent().parent().parent()).remove();
+			}else if($('#afterFileUploadWrap').find('img').length > 0){
+				$($(el).parent().parent().parent()).remove();
+			}else{
+				alert('최소 하나이상의 개선전 이미지를 등록해야 합니다');
+			}			
+		}
+	}
+	
+	function popupImageView(el){
+		popBiggerImage.open($(el).attr('src'));
+	}
+	
+	function deleteImageFile(el){
+		var fileId = '';
+		var fileSeq = '';
+		var attachFileGroup = '';
+		if($($(el).parent().parent().parent()).attr('id') == 'beforeFileUploadWrap'){			
+			fileId = $(el).parent().find('input[name="hidden-before-fileId"]').val();
+			fileSeq = $(el).parent().find('input[name="hidden-before-fileSeq"]').val();
+			
+			attachFileGroup = 'before';
+		}
+		
+		if($($(el).parent().parent().parent()).attr('id') == 'afterFileUploadWrap'){			
+			fileId = $(el).parent().find('input[name="hidden-after-fileId"]').val();
+			fileSeq = $(el).parent().find('input[name="hidden-after-fileSeq"]').val();
+			
+			attachFileGroup = 'after';
+		}
+		
+		if(fileId != '' && fileSeq != ''){
+			if(confirm('선택된 파일을 삭제 하시겠습니까?')){
+				$.ajax({
+					url: '/attachfile/delete.do?fileId=' + fileId + '&fileSeq=' + fileSeq,
+					dataType: 'json',
+					success: function(response){
+						if(response.result == 'success'){
+							alert('삭제완료');
+							$('#' + attachFileGroup + '-attach-file-' + fileSeq).remove();
+						}
+					},
+					type: 'DELETE'
+				});
+			}
+		}else{
+			alert('파일을 찾을 수 없습니다.');
+		}
+		
+	}
 	
 	function setProposalMemberInfo(el, d){
 		$('#input-proposal').val(d.userName);
@@ -478,6 +621,7 @@
 			$('#text-approval-duty').html('');
 			$('#text-approval-belt').html('');
 			
+			$('#input-approval-code').val('');
 			$('#input-approval-name').val('');
 			$('#input-approval-user').val('');
 			$('#input-approval-level').val('');
@@ -493,6 +637,7 @@
 		$('#text-approval-duty').html(d.comJobxNm);
 		$('#text-approval-belt').html(d.comCertBeltNm);
 		
+		$('#input-approval-code').val(d.comNo);
 		$('#input-approval-name').val(d.userName);
 		$('#input-approval-user').val(d.comNo);
 		$('#input-approval-level').val(d.comPosition);
@@ -520,16 +665,46 @@
 			//}
 			
 			if($('#checkbox-proposal-memo-yn').prop('checked')) {
-				$('#propRelMemoYn').val('Y');
+				$('#propRelMemoYn').val('N');
 				$('#propRelMemoCode').val($('#input-proposal-memo-hidden').val());
 			}else{
-				$('#propRelMemoYn').val('N');
+				$('#propRelMemoYn').val('Y');
 			}
 			
 			$('#propTypeCode').val('PPS_TYP_1'); // 구분코드
 			if($('#propPropStatCode').val() == '' && $('#crud').val() == 'I'){
 				$('#propPropStatCode').val('PRG_1'); // 제안상태코드
-			}			
+			}
+			
+			if($('#beforeFileUploadWrap').find('input[type=file]').length > 0){
+				for(var index = 0; index < $('#beforeFileUploadWrap').find('input[type=file]').length; index++){
+					var input = $($('#beforeFileUploadWrap').find('input[type=file]')[index]);
+					if(input.val() == ''){
+						alert('최소 하나이상의 개선전 이미지를 등록해야 합니다');
+						return false;
+					}
+				}
+			}else{
+				if($('#beforeFileUploadWrap').find('img').length == 0){
+					alert('최소 하나이상의 개선전 이미지를 등록해야 합니다');
+					return false;
+				}
+			}
+			
+			if($('#afterFileUploadWrap').find('input[type=file]').length > 0){
+				for(var index = 0; index < $('#afterFileUploadWrap').find('input[type=file]').length; index++){
+					var input = $($('#afterFileUploadWrap').find('input[type=file]')[index]);
+					if(input.val() == ''){
+						alert('최소 하나이상의 개선후 이미지를 등록해야 합니다');
+						return false;
+					}
+				}				
+			}else{
+				if($('#afterFileUploadWrap').find('img').length == 0){
+					alert('최소 하나이상의 개선후이미지를 등록해야 합니다');
+					return false;
+				}
+			}
 			
 			if(confirm('저장하시겠습니까?')){
 				$('#defaultForm')[0].submit();
@@ -572,21 +747,12 @@
 				alert('관련쪽지제안을 선택해 주세요.');
 				return false;				
 			}
-			if($('#input-proposal-memo-hidden').val() == '' && $('#input-proposal-memo').val() == ''){
-				alert('결재자를 선택해 주세요.');
-				return false;
-				//$('#propRelMemoYn').val('N');
-			}
-			//else{
-			//	$('#propRelMemoYn').val('Y');
-			//	$('#propRelMemoCode').val($('#input-proposal-memo-hidden').val());
-			//}
 			
 			if($('#checkbox-proposal-memo-yn').prop('checked')) {
-				$('#propRelMemoYn').val('Y');
+				$('#propRelMemoYn').val('N');
 				$('#propRelMemoCode').val($('#input-proposal-memo-hidden').val());
 			}else{
-				$('#propRelMemoYn').val('N');
+				$('#propRelMemoYn').val('Y');
 			}
 			$('#propTypeCode').val('PPS_TYP_1'); // 구분코드
 			$('#propPropStatCode').val('PRG_2'); // 결재의뢰		

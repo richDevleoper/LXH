@@ -23,6 +23,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -192,12 +194,12 @@ public class ProposalController {
 			List<AttachFileVO> beforeAttachFileList = attachFileService.selectFullList(fileVO); // 개선 전
 			fileVO.setFileId("proposal_after_" + proposalVO.getPropSeq());
 			List<AttachFileVO> afterAttachFileList = attachFileService.selectFullList(fileVO); // 개선 후
-			fileVO.setFileId("proposal_attach_" + proposalVO.getPropSeq());
-			List<AttachFileVO> attachFileList = attachFileService.selectFullList(fileVO); //첨부 파일
+//			fileVO.setFileId("proposal_attach_" + proposalVO.getPropSeq());
+//			List<AttachFileVO> attachFileList = attachFileService.selectFullList(fileVO); //첨부 파일
 			
 			resultItem.setBeforeAttachFileList(beforeAttachFileList);
 			resultItem.setAfterAttachFileList(afterAttachFileList);
-			resultItem.setAttachFileList(attachFileList);
+//			resultItem.setAttachFileList(attachFileList);
 			
 			//결재자 정보 조회
 			if(!resultItem.getPropPropStatCode().equals("PRG_1")) {
@@ -241,9 +243,37 @@ public class ProposalController {
 	@RequestMapping("/insertProposalInfo.do")
 	public String insertProposalInfo(HttpServletRequest request, ModelMap model,
 			@ModelAttribute("proposalVo") ProposalVO proposalVO, 
-			@ModelAttribute("proposalSearchVO") ProposalSearchVO searchVO,
+			@ModelAttribute("proposalSearchVO") ProposalSearchVO searchVO, @ModelAttribute("")
 			UserVO userSession) throws Exception{
 		
+		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//첨부파일 등록
+		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		MultipartHttpServletRequest mRequest = (MultipartHttpServletRequest)request;
+		List<MultipartFile> beforeAttachFiles = mRequest.getFiles("beforeAttachFiles[]");
+		List<MultipartFile> afterAttachFiles = mRequest.getFiles("afterAttachFiles[]");
+		
+		//개선전
+		if(beforeAttachFiles != null && beforeAttachFiles.size() > 0) {
+			for(int index = 0; index < beforeAttachFiles.size(); index++) {
+				AttachFileVO attachFileVO = new AttachFileVO();
+				attachFileVO.setFileGrp("proposal");
+				attachFileVO.setFileId("proposal_before_" + proposalVO.getPropSeq());
+				attachFileService.uploadAttachFile(beforeAttachFiles.get(index), attachFileVO);
+			}
+		}
+		//개선후
+		if(afterAttachFiles != null && afterAttachFiles.size() > 0) {
+			for(int index = 0; index < afterAttachFiles.size(); index++) {
+				AttachFileVO attachFileVO = new AttachFileVO();
+				attachFileVO.setFileGrp("proposal");
+				attachFileVO.setFileId("proposal_after_" + proposalVO.getPropSeq());
+				attachFileService.uploadAttachFile(afterAttachFiles.get(index), attachFileVO);
+			}			
+		}		
+		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//제안정보 등록
+		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////		
 		proposalVO.setPropRegUser(userSession.getUserId());
 		int result = proposalService.insertProposalInfo(proposalVO);
 		if(result > 0) {
@@ -263,7 +293,37 @@ public class ProposalController {
 			UserVO userSession) throws Exception{
 		
 		proposalVO.setPropRegUser(userSession.getUserId());
-		if(proposalVO.getPropPropStatCode() != null && proposalVO.getPropPropStatCode().equals("PRG_2")) // 결제요청
+		
+		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//첨부파일 등록
+		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		MultipartHttpServletRequest mRequest = (MultipartHttpServletRequest)request;
+		List<MultipartFile> beforeAttachFiles = mRequest.getFiles("beforeAttachFiles[]");
+		List<MultipartFile> afterAttachFiles = mRequest.getFiles("afterAttachFiles[]");
+		
+		//개선전
+		if(beforeAttachFiles != null && beforeAttachFiles.size() > 0) {
+			for(int index = 0; index < beforeAttachFiles.size(); index++) {
+				AttachFileVO attachFileVO = new AttachFileVO();
+				attachFileVO.setFileGrp("proposal");
+				attachFileVO.setFileId("proposal_before_" + proposalVO.getPropSeq());
+				attachFileService.uploadAttachFile(beforeAttachFiles.get(index), attachFileVO);
+			}
+		}
+		//개선후
+		if(afterAttachFiles != null && afterAttachFiles.size() > 0) {
+			for(int index = 0; index < afterAttachFiles.size(); index++) {
+				AttachFileVO attachFileVO = new AttachFileVO();
+				attachFileVO.setFileGrp("proposal");
+				attachFileVO.setFileId("proposal_after_" + proposalVO.getPropSeq());
+				attachFileService.uploadAttachFile(afterAttachFiles.get(index), attachFileVO);
+			}			
+		}
+		
+		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//제안정보 등록
+		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////		
+		if(proposalVO.getPropPropStatCode() != null && !proposalVO.getPropPropStatCode().equals("PRG_1")) // 결제요청
 		{
 			String approvalType = proposalVO.getPropTypeCode().equals("PPS_TYP_1")? "6" : "7"; // 6 - 실시제안, 7 - 쪽지제안
 			String refBusType = proposalVO.getPropTypeCode().equals("PPS_TYP_1")? "4" : "3"; // 4 - 실시제안, 3 - 쪽지제안
@@ -433,7 +493,7 @@ public class ProposalController {
 			searchVO.setSearchPropSeq(proposalVO.getPropSeq());
 			resultItem = proposalService.selectProposalDetailInfo(searchVO);
 			//결재자 정보 조회
-			if(!resultItem.getPropPropStatCode().equals("PRG_1")) {
+			if(resultItem.getPropPropStatCode() != null && !resultItem.getPropPropStatCode().equals("PRG_1")) {
 				kr.freedi.dev.qpopup.domain.UserVO userVO = new kr.freedi.dev.qpopup.domain.UserVO();
 				userVO.setComNo(resultItem.getPropApproverCode());				
 				List<EgovMap> userInfo = proposalService.selectApproverUserInfo(userVO);

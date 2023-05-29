@@ -840,9 +840,26 @@
             </div>
             <div class="modal-content">
                 <figure>
-                    <img src="../_html2023/assets/images/@sample.jpg" width="100%" alt="">                    
+                    <img src="../_html2023/assets/images/@sample.jpg" width="100%" alt="" id="popup-image-path">                    
                 </figure>
             </div>
+            
+     <script type="text/javascript">
+     	var popBiggerImage = {
+     		open: function(imagePath){
+     			$('.modal-dimmed').show();
+     			$('#comPopup_BiggerImage').show();
+     			if(imagePath != null){
+     				$('#popup-image-path').attr('src', imagePath);
+     			}
+     		},
+     		close: function(){
+     			$('.modal-dimmed').hide();
+     			$('#comPopup_BiggerImage').hide();    			
+     			$('#popup-image-path').attr('src', '');
+     		}
+     	}
+     </script>
 </div>
 
 
