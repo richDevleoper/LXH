@@ -1,6 +1,7 @@
 package kr.freedi.dev.qproposal.service;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -67,5 +68,9 @@ public class ProposalService {
 	
 	public List<EgovMap> selectApproverUserInfo(UserVO userVO){
 		return dao.selectList("Users.selectList", userVO);
+	}
+	
+	public List<EgovMap> selectCircleInfo(Map<String, Object> reqMap) {
+		return dao.selectList("Proposal.selectCircleInfo", reqMap);
 	}
 }

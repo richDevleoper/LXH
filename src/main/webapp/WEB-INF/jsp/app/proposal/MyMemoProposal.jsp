@@ -133,7 +133,7 @@
 	                                                <td>${item.propUserName }</td>
 	                                                <td>${item.propCategoryCodeName }</td>
 	                                                <td>${item.propGroupName }</td>
-	                                                <td>${item.propCircleCode }</td>                                                
+	                                                <td>${item.propCircleName }</td>                                                
 	                                                <td>${item.propDate }</td>                                                
 	                                            </tr>                                        	
                                         	</c:forEach>

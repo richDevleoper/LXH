@@ -64,7 +64,7 @@
                                                 <th><span class="asterisk">*</span>조직명</th>
                                                 <td id="text-proposal-group">${PROP_INFO.propGroupName }</td>
                                                 <th><span class="asterisk">*</span>분임조</th>
-                                                <td id="text-proposal-circle">${PROP_INFO.propCircleCode }</td>
+                                                <td id="text-proposal-circle">${PROP_INFO.propCircleName }</td>
                                             </tr>
                                             <tr>
                                                 <th><label for="select-category-code"><span class="asterisk">*</span>제안유형</label></th>

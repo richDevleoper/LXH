@@ -247,26 +247,28 @@ public class ProposalController {
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		//첨부파일 등록
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		MultipartHttpServletRequest mRequest = (MultipartHttpServletRequest)request;
-		List<MultipartFile> beforeAttachFiles = mRequest.getFiles("beforeAttachFiles[]");
-		List<MultipartFile> afterAttachFiles = mRequest.getFiles("afterAttachFiles[]");
-		
-		//개선전
-		if(beforeAttachFiles != null && beforeAttachFiles.size() > 0) {
-			for(int index = 0; index < beforeAttachFiles.size(); index++) {
-				AttachFileVO attachFileVO = new AttachFileVO();
-				attachFileVO.setFileGrp("proposal");
-				attachFileVO.setFileId("proposal_before_" + proposalVO.getPropSeq());
-				attachFileService.uploadAttachFile(beforeAttachFiles.get(index), attachFileVO);
+		if(proposalVO.getPropTypeCode().equals("PPS_TYP_1")) {
+			MultipartHttpServletRequest mRequest = (MultipartHttpServletRequest)request;
+			List<MultipartFile> beforeAttachFiles = mRequest.getFiles("beforeAttachFiles[]");
+			List<MultipartFile> afterAttachFiles = mRequest.getFiles("afterAttachFiles[]");
+			
+			//개선전
+			if(beforeAttachFiles != null && beforeAttachFiles.size() > 0) {
+				for(int index = 0; index < beforeAttachFiles.size(); index++) {
+					AttachFileVO attachFileVO = new AttachFileVO();
+					attachFileVO.setFileGrp("proposal");
+					attachFileVO.setFileId("proposal_before_" + proposalVO.getPropSeq());
+					attachFileService.uploadAttachFile(beforeAttachFiles.get(index), attachFileVO);
+				}
 			}
-		}
-		//개선후
-		if(afterAttachFiles != null && afterAttachFiles.size() > 0) {
-			for(int index = 0; index < afterAttachFiles.size(); index++) {
-				AttachFileVO attachFileVO = new AttachFileVO();
-				attachFileVO.setFileGrp("proposal");
-				attachFileVO.setFileId("proposal_after_" + proposalVO.getPropSeq());
-				attachFileService.uploadAttachFile(afterAttachFiles.get(index), attachFileVO);
+			//개선후
+			if(afterAttachFiles != null && afterAttachFiles.size() > 0) {
+				for(int index = 0; index < afterAttachFiles.size(); index++) {
+					AttachFileVO attachFileVO = new AttachFileVO();
+					attachFileVO.setFileGrp("proposal");
+					attachFileVO.setFileId("proposal_after_" + proposalVO.getPropSeq());
+					attachFileService.uploadAttachFile(afterAttachFiles.get(index), attachFileVO);
+				}			
 			}			
 		}		
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -291,33 +293,34 @@ public class ProposalController {
 			UserVO userSession) throws Exception{
 		
 		proposalVO.setPropRegUser(userSession.getUserId());
-		
+
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		//첨부파일 등록
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		MultipartHttpServletRequest mRequest = (MultipartHttpServletRequest)request;
-		List<MultipartFile> beforeAttachFiles = mRequest.getFiles("beforeAttachFiles[]");
-		List<MultipartFile> afterAttachFiles = mRequest.getFiles("afterAttachFiles[]");
-		
-		//개선전
-		if(beforeAttachFiles != null && beforeAttachFiles.size() > 0) {
-			for(int index = 0; index < beforeAttachFiles.size(); index++) {
-				AttachFileVO attachFileVO = new AttachFileVO();
-				attachFileVO.setFileGrp("proposal");
-				attachFileVO.setFileId("proposal_before_" + proposalVO.getPropSeq());
-				attachFileService.uploadAttachFile(beforeAttachFiles.get(index), attachFileVO);
+		if(proposalVO.getPropTypeCode().equals("PPS_TYP_1")) {
+			MultipartHttpServletRequest mRequest = (MultipartHttpServletRequest)request;
+			List<MultipartFile> beforeAttachFiles = mRequest.getFiles("beforeAttachFiles[]");
+			List<MultipartFile> afterAttachFiles = mRequest.getFiles("afterAttachFiles[]");
+			
+			//개선전
+			if(beforeAttachFiles != null && beforeAttachFiles.size() > 0) {
+				for(int index = 0; index < beforeAttachFiles.size(); index++) {
+					AttachFileVO attachFileVO = new AttachFileVO();
+					attachFileVO.setFileGrp("proposal");
+					attachFileVO.setFileId("proposal_before_" + proposalVO.getPropSeq());
+					attachFileService.uploadAttachFile(beforeAttachFiles.get(index), attachFileVO);
+				}
 			}
-		}
-		//개선후
-		if(afterAttachFiles != null && afterAttachFiles.size() > 0) {
-			for(int index = 0; index < afterAttachFiles.size(); index++) {
-				AttachFileVO attachFileVO = new AttachFileVO();
-				attachFileVO.setFileGrp("proposal");
-				attachFileVO.setFileId("proposal_after_" + proposalVO.getPropSeq());
-				attachFileService.uploadAttachFile(afterAttachFiles.get(index), attachFileVO);
+			//개선후
+			if(afterAttachFiles != null && afterAttachFiles.size() > 0) {
+				for(int index = 0; index < afterAttachFiles.size(); index++) {
+					AttachFileVO attachFileVO = new AttachFileVO();
+					attachFileVO.setFileGrp("proposal");
+					attachFileVO.setFileId("proposal_after_" + proposalVO.getPropSeq());
+					attachFileService.uploadAttachFile(afterAttachFiles.get(index), attachFileVO);
+				}			
 			}			
-		}
-		
+		}		
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		//제안정보 등록
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////		
@@ -585,6 +588,16 @@ public class ProposalController {
 		resultItem.put("list", resultItems);
 		ObjectMapper mapper = new ObjectMapper();
 		String json = mapper.writeValueAsString(resultItem);
+		return json;
+	}
+	
+	@RequestMapping(value = "/selectCircleInfo.do", method = RequestMethod.POST)
+	public @ResponseBody String selectCircleInfo(HttpServletRequest request,
+			@RequestParam Map<String, Object> reqMap) throws Exception{
+		List<EgovMap> resultItems = proposalService.selectCircleInfo(reqMap);
+		
+		ObjectMapper mapper = new ObjectMapper();
+		String json = mapper.writeValueAsString(resultItems);
 		return json;
 	}
 }

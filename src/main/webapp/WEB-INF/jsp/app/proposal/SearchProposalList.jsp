@@ -192,7 +192,7 @@
                                         				</c:choose>         
                                         				<br>                               				
                                         				<span>
-                                        					제안자: ${item.propUserName }, 조직명: ${item.propGroupName }, 분임조: ${item.propCircleCode }, 제안유형: ${item.propCategoryCodeName }, 제안일: ${item.propDate }
+                                        					제안자: ${item.propUserName }, 조직명: ${item.propGroupName }, 분임조: ${item.propCircleName }, 제안유형: ${item.propCategoryCodeName }, 제안일: ${item.propDate }
                                         					<c:if test="${item.propTypeCode eq 'PPS_TYP_1' }">
                                         						<fmt:formatNumber var="propYearEffect" value="${item.propYearEffect}" type="currency" currencySymbol="₩"/>
                                         						, 실행완료일: ${item.propPracticeCompDate }, 년간 효과금액: ${item.propYearEffectCodeName } ( ${propYearEffect } )

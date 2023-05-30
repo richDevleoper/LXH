@@ -99,7 +99,7 @@
                                                 <td id="text-proposal-group">${PROP_INFO.propGroupName }</td>
                                                 <form:input type="hidden" id="input-proposal-group" name="input-proposal-group" value="" path="propGroupName"/>
                                                 <th><span class="asterisk">*</span>분임조</th>
-                                                <td id="text-proposal-circle"></td>
+                                                <td id="text-proposal-circle">${PROP_INFO.propCircleName }</td>
                                                 <form:input type="hidden" id="input-proposal-circle" name="input-proposal-circle" value="" path="propCircleCode"/>
                                             </tr>
                                             <tr>
@@ -606,6 +606,14 @@
 		$('#input-proposal-group').val(d.deptFullName);
 		$('#input-proposal-belt-hidden').val(d.comCertBelt);
 		//$('#input-proposal-bizplace-hidden').val(d.comNo);
+		
+		$.post( "/proposal/selectCircleInfo.do", { comNo: d.comNo, deptCode: d.comDepartCode }, function(data){
+			if(data != null && data.length > 0){
+				var circleInfo = data[0];
+				$('#input-proposal-circle').val(circleInfo.cirCode);
+				$('#text-proposal-circle').html(circleInfo.cirName);
+			}
+		}, "json" );
 	}
 	
 	function setRelMemoProposal(el, d){
