@@ -79,6 +79,7 @@ public class EvalProposalController {
 		
 		List<ProposalVO> resultItems = evalProposalService.selectEvalForClassProposalMasterInfo(searchVO);
 		EgovMap resultItem = evalProposalService.selectForClassListCount(searchVO);
+		searchVO.setTotalRecordCount(Integer.parseInt(String.valueOf(resultItem.get("count"))));
 		
 		model.addAttribute("TYPE_LIST", typeList);
 		model.addAttribute("CATEGORY_LIST", categoryList);		
@@ -121,6 +122,7 @@ public class EvalProposalController {
 		
 		List<ProposalVO> resultItems = evalProposalService.selectEvalForPaymentProposalMasterInfo(searchVO);
 		EgovMap resultItem = evalProposalService.selectForPaymentListCount(searchVO);
+		searchVO.setTotalRecordCount(Integer.parseInt(String.valueOf(resultItem.get("count"))));
 		
 		model.addAttribute("TYPE_LIST", typeList);
 		model.addAttribute("CATEGORY_LIST", categoryList);
@@ -144,7 +146,12 @@ public class EvalProposalController {
 			List<EvalProposalVO> evalProposalList = proposalVO.getEvalProposalList();
 			for(int index = 0; index < evalProposalList.size(); index++) {
 				EvalProposalVO item = evalProposalList.get(index);
-				
+				if(!item.getPropEvalLvCode().equals("S") && !item.getPropEvalLvCode().equals("NA")) {
+					EgovMap map = evalProposalService.selectSubsidyInfo(item);
+					if(map.get("subsidy") != null) {
+						item.setPropSubsidy(String.valueOf(map.get("subsidy")));
+					}
+				}				
 				evalProposalService.updatePropEvalLvCode(item);
 			}			
 			response.setContentType("text/html; charset=euc-kr");

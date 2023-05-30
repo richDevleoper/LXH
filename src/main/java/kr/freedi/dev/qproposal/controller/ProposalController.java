@@ -102,12 +102,12 @@ public class ProposalController {
 		List<EgovMap> progressCount = proposalService.selectProposalStateByCount(searchVO);
 		EgovMap summary = new EgovMap();
 		int total = 0;         // Total Count
-		summary.put("prg1", "0"); // S급
-		summary.put("prg2", "0"); // A급
-		summary.put("prg3", "0"); // B급
-		summary.put("prg4", "0"); // C급
-		summary.put("prg5", "0"); // D급
-		summary.put("prg6", "0"); // 불채택
+		summary.put("prg1", "0"); // 입력중
+		summary.put("prg2", "0"); // 결재진행중
+		summary.put("prg3", "0"); // 심사대기중
+		summary.put("prg4", "0"); // 심사진행중
+		summary.put("prg5", "0"); // 심사완료
+		summary.put("prg6", "0"); // 마감
 		
 		if(progressCount != null && progressCount.size() > 0) {
 			for(int index = 0; index < progressCount.size(); index++) {
@@ -122,8 +122,6 @@ public class ProposalController {
 		total += Integer.parseInt(summary.get("prg2").toString());
 		total += Integer.parseInt(summary.get("prg3").toString());
 		total += Integer.parseInt(summary.get("prg4").toString());
-		total += Integer.parseInt(summary.get("prg5").toString());
-		total += Integer.parseInt(summary.get("prg6").toString());
 		
 		List<EgovMap> classCount = proposalService.selectProposalClassByCount(searchVO);
 		

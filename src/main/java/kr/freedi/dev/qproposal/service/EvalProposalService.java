@@ -53,5 +53,9 @@ public class EvalProposalService {
 		// TODO Auto-generated method stub
 		return dao.update("EvalProposal.updatePropPaymentInfo", param);
 	}
+	
+	public EgovMap selectSubsidyInfo(EvalProposalVO param) {
+		return dao.selectOne("EvalProposal.selectSubsidyInfo", param);
+	}
 
 }

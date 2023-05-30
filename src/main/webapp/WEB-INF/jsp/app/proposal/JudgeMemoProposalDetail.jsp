@@ -178,16 +178,16 @@
                                                     </div>
                                                 </td>
                                             </tr>
-                                            <tr>
+ <!--                                            <tr>
                                                 <th>첨부파일 (조회)</th>
                                                 <td>
                                                     <div class="file-link">
                                                         <ul>
-                                                            <!-- <li><a href="#" title="다운받기">UI표준정의서.pptx</a><a href="#" title="다운받기" class="btn color gray mg-l15">다운받기</a></li> -->
+                                                            <li><a href="#" title="다운받기">UI표준정의서.pptx</a><a href="#" title="다운받기" class="btn color gray mg-l15">다운받기</a></li>
                                                         </ul>
                                                     </div>
                                                 </td>
-                                            </tr>
+                                            </tr> -->
                                         </tbody>
                                     </table>
                                 </div>

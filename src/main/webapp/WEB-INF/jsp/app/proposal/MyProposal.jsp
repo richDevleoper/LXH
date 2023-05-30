@@ -134,7 +134,16 @@
                                             		<td>${item.propUserName }</td>
                                             		<td>${item.propCategoryCodeName }</td>
                                             		<td>${item.propGroupName }</td>
-                                            		<td>${item.propPropStatCodeName }</td>
+                                            		<td>
+                                            			<c:choose>
+                                            				<c:when test="${item.propPropStatCode ne 'PRG_5' && item.propPropStatCode ne 'PRG_6' }">
+                                            					${item.propPropStatCodeName }
+                                            				</c:when>
+                                            				<c:otherwise>
+                                            					${item.propEvalLvCodeName }
+                                            				</c:otherwise>
+                                            			</c:choose>
+                                            		</td>
                                             		<td>${item.propDate }</td>
                                             		<td>${item.propPracticeCompDate }</td>
                                             		<c:choose>

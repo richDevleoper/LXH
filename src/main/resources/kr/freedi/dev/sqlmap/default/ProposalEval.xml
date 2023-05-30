@@ -93,7 +93,12 @@
 	</select>
 	
 	<update id="updatePropEvalLvCode" parameterType="kr.freedi.dev.qproposal.domain.EvalProposalVO">
-		UPDATE TB_PROPOSAL_DETAIL SET PROP_EVAL_LV_CODE = #{propEvalLvCode, jdbcType=VARCHAR}, PROP_PROP_STAT_CODE = 'PRG_5' WHERE PROP_SEQ = #{propSeq}
+		UPDATE TB_PROPOSAL_DETAIL 
+		SET 
+			PROP_EVAL_LV_CODE = #{propEvalLvCode, jdbcType=VARCHAR}, 
+			PROP_PROP_STAT_CODE = 'PRG_5',
+			PROP_SUBSIDY = CASE WHEN #{propEvalLvCode, jdbcType=VARCHAR} = 'S' THEN NULL WHEN #{propEvalLvCode, jdbcType=VARCHAR} = 'NA' THEN NULL ELSE #{propSubsidy, jdbcType=VARCHAR} END 
+		WHERE PROP_SEQ = #{propSeq}
 	</update>
 	
 		<sql id="selectForEvalPaymentProposalInfo">
@@ -153,4 +158,8 @@
 			PROP_PROP_STAT_CODE = 'PRG_6' 
 		WHERE PROP_SEQ = #{propSeq}
 	</update>
+	
+	<select id="selectSubsidyInfo" resultType="egovMap">
+		SELECT GET_EV_SUSIDY(#{propEvalLvCode}) AS SUBSIDY FROM DUAL
+	</select>
 </mapper>

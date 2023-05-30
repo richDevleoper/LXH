@@ -136,47 +136,65 @@
                                                                         <tr>
                                                                             <td>
                                                                             <!-- 개선전 -->
-							                                                    <div class="row">
-							                                                        <div class="col s12 input-text file">
-							                                                            <!-- <span class="file-path">
-							                                                                <input type="text" id="file1_text" readonly name="" value="">
-							                                                                <button type="button"><i class="ico file_del"><em>삭제</em></i></button>
-							                                                            </span>
-							                                                            <input type="file" id="file1" name="" value="">
-							                                                            <label path="file1">파일추가</label> -->
-							                                                            <attachfile:fileuploader
-																							objectId="beforeImageUpload"
-																							ctx=""
-																							wrapperId="beforeFileUploadWrap"
-																							fileId="proposal_before_${PROP_INFO.propSeq }"
-																							fileGrp="proposal"
-																							autoUpload="false"
-																							maxFileSize="${15*1000000}"
-																							maxNumberOfFiles="3"/>
-							                                                        </div>
-							                                                    </div>                                                                            
+                                                                            	<div class="col s12" id="beforeFileUploadWrap">
+                                                                            		<c:choose>
+                                                                            			<c:when test="${PROP_INFO.beforeAttachFileList != null }">
+                                                                            				<c:forEach items="${PROP_INFO.beforeAttachFileList }" var="item">
+                                                                            					<div class="row" id="before-attach-file-${item.fileSeq }">
+                                                                            						<div class="col 12" style="border-bottom: 1px solid #c3c3c3; padding-bottom: 11px;">
+                                                                            							<input type="hidden" name="hidden-before-fileId" value="${item.fileId }">
+                                                                            							<input type="hidden" name="hidden-before-fileSeq" value="${item.fileSeq }">
+                                                                            							<img src="/attachfile/downloadFile.do?fileId=${item.fileId }&fileSeq=${item.fileSeq}" onclick="popupImageView(this);" style="cursor: pointer;">
+                                                                            							<button type="button" style="position: absolute; margin-left: -22px; margin-top: 5px; opacity: .5;" onclick="deleteImageFile(this);"><i class="ico file_del"><em>삭제</em></i></button>
+                                                                            						</div>
+                                                                            					</div>
+                                                                            				</c:forEach>
+                                                                            			</c:when>
+                                                                            			<c:otherwise>
+                                                                            				<div class="row">
+                                                                            					<div class="col s12 input-text file">
+	                                                                            					<span class="" style="display: block; position: relative; width: calc(100% - 95px) !important;">
+	                                                                            						<input type="text" readonly/>
+	                                                                            						<button type="button" style="position: absolute; top: 6px; right: 4px;" onclick="resetFileInfo(this);"><i class="ico file_del"><em>삭제</em></i></button>
+	                                                                            					</span>
+	                                                                            					<input type="file" name="beforeAttachFiles[]" accept="image/*" onchange="setSelectedFileInfo(this);">
+	                                                                            					<label style="border-radius: 2px; height: 29px; line-height: 27px; text-align: center;" onclick="selectImageFile(this);">파일선택</label>
+                                                                            					</div>
+                                                                            				</div>                                                                           				
+                                                                            			</c:otherwise>
+                                                                            		</c:choose>                                                                 	
+                                                                            	</div>                                                                            
                                                                             </td>
                                                                             <td>
                                                                             <!-- 개선후 -->
-							                                                    <div class="row">
-							                                                        <div class="col s12 input-text file">
-							                                                            <!-- <span class="file-path">
-							                                                                <input type="text" id="file1_text" readonly name="" value="">
-							                                                                <button type="button"><i class="ico file_del"><em>삭제</em></i></button>
-							                                                            </span>
-							                                                            <input type="file" id="file1" name="" value="">
-							                                                            <label path="file1">파일추가</label> -->
-							                                                            <attachfile:fileuploader
-																							objectId="afterImageUpload"
-																							ctx=""
-																							wrapperId="afterFileUploadWrap"
-																							fileId="proposal_after_${PROP_INFO.propSeq }"
-																							fileGrp="proposal"
-																							autoUpload="false"
-																							maxFileSize="${15*1000000}"
-																							maxNumberOfFiles="3"/>
-							                                                        </div>
-							                                                    </div>                                                                            
+                                                                            	<div class="col s12" id="afterFileUploadWrap">
+                                                                            		<c:choose>
+                                                                            			<c:when test="${PROP_INFO.afterAttachFileList != null }">
+                                                                            				<c:forEach items="${PROP_INFO.afterAttachFileList }" var="item">
+                                                                            					<div class="row" id="after-attach-file-${item.fileSeq }">
+                                                                            						<div class="col 12" style="border-bottom: 1px solid #c3c3c3; padding-bottom: 11px;">
+                                                                            							<input type="hidden" name="hidden-after-fileId" value="${item.fileId }">
+                                                                            							<input type="hidden" name="hidden-after-fileSeq" value="${item.fileSeq }">                                                                            						
+                                                                            							<img src="/attachfile/downloadFile.do?fileId=${item.fileId }&fileSeq=${item.fileSeq}" onclick="popupImageView(this);" style="cursor: pointer;">
+                                                                            							<button type="button" style="position: absolute; margin-left: -22px; margin-top: 5px; opacity: .5;" onclick="deleteImageFile(this);"><i class="ico file_del"><em>삭제</em></i></button>
+                                                                            						</div>
+                                                                            					</div>
+                                                                            				</c:forEach>
+                                                                            			</c:when>
+                                                                            			<c:otherwise>
+                                                                            				<div class="row">
+                                                                            					<div class="col s12 input-text file">
+	                                                                            					<span class="" style="display: block; position: relative; width: calc(100% - 95px) !important;">
+	                                                                            						<input type="text" readonly/>
+	                                                                            						<button type="button" style="position: absolute; top: 6px; right: 4px;" onclick="resetFileInfo(this);"><i class="ico file_del"><em>삭제</em></i></button>
+	                                                                            					</span>
+	                                                                            					<input type="file" name="afterAttachFiles[]" accept="image/*" onchange="setSelectedFileInfo(this);">
+	                                                                            					<label style="border-radius: 2px; height: 29px; line-height: 27px; text-align: center;" onclick="selectImageFile(this);">파일선택</label>
+                                                                            					</div>
+                                                                            				</div>                                                                           				
+                                                                            			</c:otherwise>
+                                                                            		</c:choose>                                                                 	
+                                                                            	</div>                                                                            
                                                                             </td>
                                                                         </tr>
                                                                     </tbody>
@@ -259,16 +277,16 @@
                                                     </div>
                                                 </td>
                                             </tr>
-                                            <tr>
+<!--                                             <tr>
                                                 <th>첨부파일 (조회)</th>
                                                 <td>
                                                     <div class="file-link">
                                                         <ul>
-                                                            <!-- <li><a href="#" title="다운받기">UI표준정의서.pptx</a><a href="#" title="다운받기" class="btn color gray mg-l15">다운받기</a></li> -->
+                                                            <li><a href="#" title="다운받기">UI표준정의서.pptx</a><a href="#" title="다운받기" class="btn color gray mg-l15">다운받기</a></li>
                                                         </ul>
                                                     </div>
                                                 </td>
-                                            </tr>
+                                            </tr> -->
                                         </tbody>
                                     </table>
                                 </div>
@@ -322,10 +340,6 @@
 </form:form> 
 <script type="text/javascript">
 	var proposalInfo = {};
-	$(document).ready(function(){
-		$($($('.fileinput-button')[0]).children()[2]).text('이미지선택');
-		$($($('.fileinput-button')[1]).children()[2]).text('이미지선택');
-	});
 </script>
 </body>
 </html>

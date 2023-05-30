@@ -197,8 +197,15 @@
 	                                                <td>${item.propEvalLvCodeName }</td>
 	                                                <td>${item.propDate }</td>
 													<c:choose>
-	                                                	<c:when test="${item.propPropStatCode eq 'PRG_6' }">
-	                                                		<td><fmt:formatNumber var="propSubsidy" value="${item.propSubsidy}" type="currency" currencySymbol="₩"/>${propSubsidy }</td>
+	                                                	<c:when test="${item.propPropStatCode eq 'PRG_6' or item.propEvalLvCode ne 'S'}">
+	                                                		<c:choose>
+	                                                			<c:when test="${item.propEvalLvCode eq 'S' }">
+	                                                				<td><fmt:formatNumber var="propSubsidy" value="${item.propSubsidy}" type="currency" currencySymbol="₩"/>${propSubsidy }</td>
+	                                                			</c:when>
+	                                                			<c:otherwise>
+	                                                				<td><%-- <fmt:formatNumber var="propSubsidy" value="${item.propSubsidy}" type="currency" currencySymbol="₩"/> --%>${item.propSubsidy }</td>
+	                                                			</c:otherwise>
+	                                                		</c:choose>	                                                		
 	                                                	</c:when>
 	                                                	<c:otherwise>
 	                                                		<td>

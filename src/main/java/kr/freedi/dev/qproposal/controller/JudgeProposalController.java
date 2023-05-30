@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import egovframework.rte.psl.dataaccess.util.EgovMap;
+import kr.freedi.dev.attachfile.domain.AttachFileVO;
+import kr.freedi.dev.attachfile.service.AttachFileService;
 import kr.freedi.dev.code.domain.CodeVO;
 import kr.freedi.dev.code.service.CodeService;
 import kr.freedi.dev.qproposal.domain.ProposalSearchVO;
@@ -40,6 +42,9 @@ public class JudgeProposalController {
 	
 	@Resource(name = "judgeProposalService")
 	private JudgeProposalService judgeProposalService;
+	
+	@Resource(name = "attachFileService")
+	private AttachFileService attachFileService;
 	
 	@InitBinder
 	public void customizeBinding(WebDataBinder binder) {
@@ -95,6 +100,7 @@ public class JudgeProposalController {
 		total += Integer.parseInt(summary.get("ppsTyp1").toString());
 		total += Integer.parseInt(summary.get("ppsTyp2").toString());
 		summary.put("tt", total);
+		searchVO.setTotalRecordCount(total);
 		
 		model.addAttribute("TYPE_LIST", typeList);
 		model.addAttribute("CATEGORY_LIST", categoryList);		
@@ -117,6 +123,15 @@ public class JudgeProposalController {
 		
 		searchVO.setSearchPropSeq(proposalVO.getPropSeq());
 		ProposalVO resultItem = judgeProposalService.selectProposalDetailInfo(searchVO);
+		
+		AttachFileVO fileVO = new AttachFileVO();
+		fileVO.setFileId("proposal_before_" + proposalVO.getPropSeq());
+		List<AttachFileVO> beforeAttachFileList = attachFileService.selectFullList(fileVO); // 개선 전
+		fileVO.setFileId("proposal_after_" + proposalVO.getPropSeq());
+		List<AttachFileVO> afterAttachFileList = attachFileService.selectFullList(fileVO); // 개선 후
+		
+		resultItem.setBeforeAttachFileList(beforeAttachFileList);
+		resultItem.setAfterAttachFileList(afterAttachFileList);
 		
 		//결재자 정보 조회
 		if(!resultItem.getPropPropStatCode().equals("PRG_1")) {
