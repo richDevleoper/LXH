@@ -135,10 +135,16 @@
                                                         <div class="list-content">
                                                             <div class="list-group" style="margin:0 -1px">
                                                                 <div class="inr">
-                                                                    <p>분임조 선정</p>
+                                                                    <p>분임조 선정</p><%-- ${deptList.get(1) }
+																				${deptList.get(2) } --%>
+<!-- DepartVO [deptCode=50000002, deptName=본부Staff, deptUperCode=50000000, deptSortOrder=null, deptLevel=2, deptStateCode=null
+, comCode=null, deptLv1Code=null, deptLv2Code=null, deptLv3Code=null, deptLv4Code=null, deptLv1Name=null, deptLv2Name=null
+, deptLv3Name=null, deptLv4Name=null, regDate=null, updateDate=null, comNo=null] -->
+
                                                                     <div class="tree-list">
+																				
                                                                         <ul>
-                                                                            <li onClick="javascript: getEmpSearch('IE26')">QCS</li>
+                                                                            <!-- <li onClick="javascript: getEmpSearch('IE26')">QCS</li>
                                                                                                                                                        
                                                                             <li>LX HSAI
                                                                                 <ul>
@@ -152,8 +158,9 @@
                                                                                 <ul>
                                                                                     <li onClick="javascript: getEmpSearch('50006242')">(청주생산팀(LVT1실)</li>
                                                                                 </ul>
-                                                                            </li>
-                         
+                                                                            </li> -->
+                                                                            
+                                                                            
                                                                         </ul>
                                                                     </div>
                                                                 </div>
@@ -322,9 +329,23 @@
       
 
 <script type="text/javascript">
+
+var deptList = ${deptList};
+
 $(document).ready(function(){
 	//init();
 	//initCode();
+	
+	$('.tree-list').jstree({
+        "plugins" : ['search'],
+        "search" : {
+            "show_only_matches" : true,
+            "show_only_matches_children" : true,
+        },
+        "core":{
+        	"data": deptList
+        }
+    });
 	
  	$("#btnRegMake").on("click", function(){
 		location.href="./makeinsert.do?menuKey=70";
@@ -402,6 +423,11 @@ $(document).ready(function(){
 		
 		let lCnt = $("#leadertab").children("tbody:first").children("tr[comNo]").length;
 		$("#leaderTit").text("총 "+lCnt+"명");
+		
+		/* $('#dept-tree-list').jstree();
+		$('#dept-tree-list').jstree(true).settings.core.data = deptList;
+		$('#dept-tree-list').jstree(true).refresh(); */
+		
 	});	
 	
 	

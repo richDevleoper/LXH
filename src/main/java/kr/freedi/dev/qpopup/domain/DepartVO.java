@@ -28,6 +28,8 @@ public class DepartVO {
 	private Date updateDate;      // 수정일 (YYYY-MM-DD HH:MM:SS)
 	private String comNo;
 	
+	private List<DepartVO> childs;
+	
 	public String getDeptCode() {
 		return deptCode;
 	}
@@ -137,6 +139,12 @@ public class DepartVO {
 		this.comNo = comNo;
 	}
 	
+	public List<DepartVO> getChilds() {
+		return childs;
+	}
+	public void setChilds(List<DepartVO> childs) {
+		this.childs = childs;
+	}
 	@Override
 	public String toString() {
 		return "DepartVO [deptCode=" + deptCode + ", deptName=" + deptName + ", deptUperCode=" + deptUperCode

@@ -1,5 +1,7 @@
 package kr.freedi.dev.qreport.controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -10,11 +12,15 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Service;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 import egovframework.rte.fdl.idgnr.EgovIdGnrService;
 import egovframework.rte.psl.dataaccess.util.EgovMap;
@@ -24,7 +30,9 @@ import kr.freedi.dev.qreport.domain.ReportVO;
 import kr.freedi.dev.qreport.service.MakeService;
 import kr.freedi.dev.code.domain.CodeVO;
 import kr.freedi.dev.code.service.CodeService;
+import kr.freedi.dev.qpopup.domain.DepartVO;
 import kr.freedi.dev.qpopup.domain.UserVO;
+import kr.freedi.dev.qpopup.service.QPopupService;
 
 @Controller
 @RequestMapping({"/team"})
@@ -39,6 +47,9 @@ public class MakeController {
 	
 	@Resource(name = "codeService")
 	private CodeService codeService;
+	
+	@Resource(name = "qPopupService")
+	private QPopupService qPopupService;
 	
 	@RequestMapping({"/makelist.do"})
 	public String makelist(HttpServletRequest request, ModelMap model,
@@ -77,6 +88,43 @@ public class MakeController {
 		
 		model.addAttribute("menuKey", searchVO.getMenuKey());
 		searchVO.setSearchUserid(userSession.getUserId());
+		
+		List<DepartVO> dbList = qPopupService.selectTreeList();
+		
+		 // jstree 데이터 구조 생성
+        JsonArray jsonArray = new JsonArray();
+        for (DepartVO dept: dbList) {
+        	
+        	String parentCode = dept.getDeptUperCode();
+        	if(parentCode==null)
+        		parentCode="0";
+            JsonObject node = new JsonObject();
+            node.addProperty("id", dept.getDeptCode());
+            node.addProperty("text", dept.getDeptName());
+            node.addProperty("parent", parentCode);
+            jsonArray.add(node);
+        }
+        
+      
+		
+//		String befId = null;
+//		String befLevel = null;
+//		String befPId = null;
+		
+		//List<DepartVO> treeList = new ArrayList<DepartVO>();
+		
+		//dbList.get(index);
+		//dbList.remove(index);
+		/*HashMap<String, DepartVO> treeList = new HashMap<>();
+		
+		for (DepartVO dept: dbList) {
+			System.out.println(dept.getDeptLevel()+", "+dept.getDeptCode()+", "+dept.getDeptName());
+			if(dept.getDeptLevel().equals("1")) {
+				treeList.put(dept.getDeptCode(), dept);
+			}
+		}*/
+		
+		model.addAttribute("deptList", jsonArray);
 		
 		// 페이지 바인딩
 		model.addAttribute("action", "/team/insertMakeInfo.do");
