@@ -39,6 +39,7 @@
 		<result column="PROP_EVAL_LV_CODE_NM" 		property="propEvalLvCodeName"/>
 		<result column="PROP_USER_NM" 				property="propUserName"/>
 		<result column="PROP_APPROVER_NM"			property="propApproverName"/>
+		<result column="PROP_PAYMENT_YN_NM"			property="propPaymentYnName"/>
 		<result column="PROP_CIRCLE_NM"				property="propCircleName"/>
 		
 		<result column="IDX"						property="idx"/>
