@@ -90,8 +90,7 @@
 			, DEPT_LV2_NAME
 			, DEPT_LV3_NAME
 			, DEPT_LV4_NAME
-			, UPDATE_DATE
-			, REG_DATE
+			
 		FROM 
 		  tb_depart_mst T 
 		<include refid="defCond"></include>

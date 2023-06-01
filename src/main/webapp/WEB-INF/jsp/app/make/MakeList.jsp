@@ -39,7 +39,7 @@
 					</div>
 					<div class="form-inline form-select">
 						<label>사업장</label>
-						<form:select path="searchPlaceCode" title="부문을 선택하세요."
+						<form:select path="searchPlaceCode" title="사업장을 선택하세요."
 							cssClass="validate[required]">
 						</form:select>
 					</div>
@@ -55,15 +55,15 @@
 		<div class="list-header">
 			<p class="title">분임조 편성 현황</p>
 			<span class="bar"></span>
-			<p class="total">총 10</p>
+			<p class="total">총 ${totalCount}건</p>
 			<select name="limit" class="limit"
 				onchange="onchange_recordCountPerPage(this.value)">
 				<option value="10"
-					<c:if test="${EducationSearchVO.recordCountPerPage eq '10' }">selected="selected"</c:if>>10개</option>
+					<c:if test="${MakeSearchVO.recordCountPerPage eq '10' }">selected="selected"</c:if>>10개</option>
 				<option value="50"
-					<c:if test="${EducationSearchVO.recordCountPerPage eq '50' }">selected="selected"</c:if>>50개</option>
+					<c:if test="${MakeSearchVO.recordCountPerPage eq '50' }">selected="selected"</c:if>>50개</option>
 				<option value="100"
-					<c:if test="${EducationSearchVO.recordCountPerPage eq '100' }">selected="selected"</c:if>>100개</option>
+					<c:if test="${MakeSearchVO.recordCountPerPage eq '100' }">selected="selected"</c:if>>100개</option>
 			</select>
 		</div>
 		<div class="list-content">
@@ -270,7 +270,7 @@ function initCode(){
 	
 	cdWPlace = codes.filter(function(code){ return code.index==="WPLACE";});
 	
-	setDropDown("searchPlaceCode", cdWPlace, true, "전체");
+	setDropDownCustom("searchPlaceCode", cdWPlace, true, "전체");
 	$("#searchPlaceCode").val("${MakeSearchVO.searchPlaceCode}")
 }
 
@@ -282,6 +282,36 @@ function onchange_recordCountPerPage(vCount){
 	$("#recordCountPerPage").val(vCount);
 	onclick_search();// 검색 '조회'버튼 클릭
 }
+
+function setDropDownCustom(objId, cdList, flagFirstEmptyYn, emptyTitle){
+	htm = "";
+	
+	if(!emptyTitle){
+		emptyTitle = "선택하세요";
+	}
+	
+	if(flagFirstEmptyYn){
+		htm += "<option value=''>"+ emptyTitle +"</option>";
+	}
+	for(i in cdList){
+		let item = cdList[i];
+		let strSelected = "";
+		if(item.selected){
+			strSelected = " selected='selected'"
+		}
+		htm += "<option value='"+item.value+"' "+ strSelected +">"+item.value+"</option>";
+	}
+	if(objId.indexOf(".")===0){
+		// Class Name
+		$(objId).each(function(i,o){
+			$(o).empty().append(htm);
+		})
+	} else {
+		$("#"+objId).empty().append(htm);	
+	}
+	
+}
+
 </script>
 
 </body>

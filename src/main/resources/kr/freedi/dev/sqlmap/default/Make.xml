@@ -62,7 +62,8 @@
 					AND T.CIR_LEADER_DEPTNAME like '%' || #{searchText} || '%' 
 				</when>
 				<otherwise>
-					
+					AND T.CIR_TCH_COM_NO || '|' || T.CIR_LEADER_NAME || '|' || T.CIR_LEADER_DEPTNAME || '|' || T.CIR_LEADER_DEPTNAME
+					like '%'|| #{searchText} ||'%' 
 				</otherwise>
 			</choose>
 		</if>
@@ -70,7 +71,7 @@
 			AND C.CIR_CODE = #{cirCode}
 		</if>
 		<if test="searchPlaceCode != null and searchPlaceCode != ''">
-			AND T.DEPT_CODE = #{searchText}
+			AND U.COM_WORK_PLACE = #{searchPlaceCode}
 		</if>
 		<if test="searchName != null and searchName != ''">
 			AND T.DEPT_CODE = #{searchName}
@@ -79,22 +80,17 @@
 	
 	<select id="selectCirclListCount" resultType="int">
 		SELECT COUNT(*) 
-		  FROM TB_CIRCLE_MST
-		 WHERE 1=1
-		<include refid="defCond"></include>
+		  FROM (
+		  <include refid="circleBaseQuery"></include>
+		  ) T
 	</select>
 	
-	<select id="selectCirclList" resultMap="MakeMap">
-		WITH CIRCLE_MASTER AS (
-            SELECT ROW_NUMBER() OVER( ORDER BY TO_NUMBER(T.CIR_CODE) ASC ) IDX, ROW_NUMBER() OVER( ORDER BY TO_NUMBER(T.CIR_CODE) DESC ) ROWIDX, 
-            	   
-            	   T.*
-            FROM(
+	<sql id="circleBaseQuery">
 				SELECT 
 					 	CIR_CODE,
 						CIR_REG_NUM,
-						C.DEPT_CODE,
-						C.DEPT_NAME,
+						T.DEPT_CODE,
+						T.DEPT_NAME,
 						U.COM_WORK_PLACE,
 						CIR_TCH_COM_NO,
 						GET_USER_NM(CIR_TCH_COM_NO) CIR_TCH_COM_NAME, 
@@ -110,10 +106,19 @@
 						CIR_LEADER_DEPTNAME,  
 						CIR_REG_USER,
 					 	CIR_REG_DATE
-				FROM TB_CIRCLE_MST C
+				FROM TB_CIRCLE_MST T
                      , tb_USER_mst U
-				WHERE C.CIR_TEAM_LEADER_NO=U.COM_NO
+				WHERE T.CIR_TEAM_LEADER_NO=U.COM_NO
 				<include refid="defCond"></include>
+	</sql>
+	
+	<select id="selectCirclList" resultMap="MakeMap">
+		WITH CIRCLE_MASTER AS (
+            SELECT ROW_NUMBER() OVER( ORDER BY TO_NUMBER(T.CIR_CODE) ASC ) IDX, ROW_NUMBER() OVER( ORDER BY TO_NUMBER(T.CIR_CODE) DESC ) ROWIDX, 
+            	   
+            	   T.*
+            FROM(
+				<include refid="circleBaseQuery"></include>
             ) T
 		)
 		SELECT *

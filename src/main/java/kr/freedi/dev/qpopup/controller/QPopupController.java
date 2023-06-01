@@ -104,7 +104,9 @@ public class QPopupController {
 	public @ResponseBody String popup_searchDept(HttpServletRequest request
 			, @ModelAttribute("departVO") DepartVO departVo)throws Exception {
 		
-		return new ObjectMapper().writeValueAsString(qPopupService.selectList(departVo));
+		List<EgovMap> list = qPopupService.selectList(departVo);
+		
+		return new ObjectMapper().writeValueAsString(list);
 	}
 }
 

@@ -670,7 +670,7 @@ function checkValidation(){
 function callPopup_searchEmployee(obj){
 	popEmp.init();
 	// footer.jsp 내 영역 호출
-	popEmp.returnObjId = $(obj).closest("td").find("input").attr("id");
+	popEmp.returnObjId = $(obj).closest("td").find("input[type=hidden]").attr("id");
 	popEmp.returnFunc = callback_popEmp;
 	popEmp.open();
 }
@@ -678,12 +678,12 @@ function callPopup_searchEmployee(obj){
 //팝업에서 돌아올 때 함수
 function callback_popEmp(objId, data){
 	
+	
 	let obj = document.getElementById(objId);
 	let objTr = $(obj).closest("tr");
 	let objIdComNo = objId.replace("deptName", "comNo");
 
 	$(obj).val(data.comNo);
-	
 	if(objId == "cirTchComNo"){
 		$(objTr).find("#cirTchComName").val(data.userName);
 	}else if(objId == "cirWorkMemNo"){
@@ -695,15 +695,6 @@ function callback_popEmp(objId, data){
 	}
 	
 }
-//팝업 호출 함수(팀원 검색)
-function callPopup_searchEmployee(obj){
-	popEmp.init();
-	// footer.jsp 내 영역 호출
-	popEmp.returnObjId = $(obj).closest("td").find("input[type=text]").attr("id")
-	popEmp.returnFunc = callback_popEmp;
-	popEmp.open();
-}
-
 
 function callback_popDept(objId, data){
 	
