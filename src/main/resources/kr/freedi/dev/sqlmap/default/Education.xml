@@ -1,0 +1,414 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Education">
+	<resultMap id="EducationMap" type="kr.freedi.dev.qeducation.domain.EducationVO">		
+			
+		<result column="EDU_CODE"                    property="eduCode"/>                    
+		<result column="EDU_NAME"                    property="eduName"/>                   
+		<result column="EDU_CLASS"                   property="eduClass"/>           
+		<result column="EDU_CLASS_TYPE"              property="eduClassType"/>               
+		<result column="EDU_CLASS_DIVISION"          property="eduClassDivision"/>                
+		<result column="EDU_CLASS_TARGET"            property="eduClassTarget"/>        
+		<result column="EDU_CLASS_INTRO"             property="eduClassIntro"/>                
+		<result column="EDU_CLASS_SUMMARY"           property="eduClassSummary"/>             
+		<result column="EDU_COST"                    property="eduCost"/>         
+		<result column="EDU_INSURANCE_YN"            property="eduInstanceYn"/>              
+		<result column="EDU_DEMO_URL"                property="eduDemoUrl"/>            
+		<result column="EDU_CONTENTS_URL"            property="edContentsUrl"/>        
+		<result column="EDU_ESSENTIAL_TYPE"          property="eduEssentialType"/>              
+		<result column="EDU_COMPANY"                 property="eduCompany"/>               
+		<result column="EDU_COM_CLASS_CODE"          property="eduComClassCode"/>           
+		<result column="EDU_CLASS_EXTERNAL_YN"       property="eduClassExternalYn"/>             
+		<result column="EDU_COMPLETE_SCORE"          property="eduCompleteScore"/>           
+		<result column="EDU_COMPLETE_TIME"           property="eduCompleteTime"/>           
+		<result column="EDU_USE_YN"                  property="eduUseYn"/>             
+		<result column="EDU_REG_USER"                property="eduRegUser"/>              
+		<result column="EDU_REG_DATE"                property="eduRegDate"/>            
+		<result column="EDU_UPDATE_USER"             property="eduUpdateUser"/>                
+		<result column="EDU_UPDATE_DATE" 	         property="eduUpdateDate"/>   
+		<result column="REG_DATE"                	 property="regDate"/>            
+		<result column="UPDATE_DATE" 	         	 property="updateDate"/>              
+			        
+		<result column="EDU_YEAR"		 	         property="eduYear"/>   
+		<result column="EDU_BELTCODE" 	         	 property="eduBeltCode"/>   
+		<result column="EDU_NUMBER" 	         	 property="eduNumber"/>   
+		<result column="EDU_DATE" 	  			     property="eduDate"/>   
+		<result column="EDU_FIXED"	 	         	 property="eduFixed"/>   
+		<result column="EDU_ITEM"	 	         	 property="eduItem"/>
+		<result column="EDU_FILE_CODE"	 	         property="eduFileCode"/>
+		
+		
+		<result column="EDU_CLASS_TYPE_NAME"	 	 property="eduClassTypeName"/>
+		<result column="EDU_CLASS_DIVISION_NAME"	 property="eduClassDivisionName"/>
+		<result column="EDU_BELTCODE_NAME"	 	     property="eduBeltCodeName"/>
+		
+		<result column="EDU_CODE01"	 	 			 property="eduCode01"/>
+		<result column="EDU_NAME01"	 	 			 property="eduName01"/>
+		<result column="EDU_CODE02"	 	 			 property="eduCode02"/>
+		<result column="EDU_NAME02"	 	 			 property="eduName02"/>
+		<result column="EDU_CODE03"	 	 			 property="eduCode03"/>
+		<result column="EDU_NAME03"	 	 			 property="eduName03"/>
+		<result column="EDU_CODE04"	 	 			 property="eduCode04"/>
+		<result column="EDU_NAME04"	 	 			 property="eduName04"/>
+		
+		<result column="TSD_CNT"	 	     		 property="tsdCnt"/>
+	                                         
+	</resultMap>           
+	
+	<sql id="defCond">
+		<if test="searchEduFromDt != null and searchEduFromDt neq ''.toString() and searchEduToDt != null and searchEduToDt neq ''.toString()">
+			<!-- AND EDU_REG_DATE BETWEEN TO_DATE(#{searchEduFromDt}, 'YYYY-MM-DD') AND TO_DATE(#{searchEduToDt}, 'YYYY-MM-DD') -->
+			AND TO_CHAR(EDU_REG_DATE, 'YYYY-MM-DD') <![CDATA[>=]]> #{searchEduFromDt} AND TO_CHAR(EDU_REG_DATE, 'YYYY-MM-DD') <![CDATA[<=]]> #{searchEduToDt}
+		</if>	
+		<if test="searchEduName != null and searchEduName != ''">
+			AND EDU_NAME like '%' || #{searchEduName} || '%'
+		</if>
+		<if test="searchEduYear != null and searchEduYear neq ''.toString()">
+			AND EDU_YEAR = #{searchEduYear}
+		</if>
+		<if test="searchbeltCode != null and searchbeltCode neq ''.toString()">
+			AND EDU_BELTCODE = #{searchbeltCode}
+		</if>
+		<if test="searchEduType != null and searchEduType neq ''.toString()">
+			AND EDU_CLASS_TYPE = #{searchEduType}
+		</if>
+		<if test="searchEduDivision != null and searchEduDivision neq ''.toString()">
+			AND EDU_CLASS_DIVISION = #{searchEduDivision}
+		</if>
+		<if test="searchEduNumber != null and searchEduNumber neq ''.toString()">
+			AND EDU_NUMBER = #{searchEduNumber}
+		</if>
+	</sql>
+	
+	<select id="selectEducationMstCount" resultType="int">
+		SELECT COUNT(*) 
+		  FROM TB_EDUCATION_MST
+		 WHERE 1=1
+		<include refid="defCond"></include>
+	</select>
+	
+	<select id="selectEducationMstList" resultMap="EducationMap">
+		WITH EDU_MASTER AS (
+            SELECT ROW_NUMBER() OVER( ORDER BY RS.SDATE ASC ) IDX, ROW_NUMBER() OVER( ORDER BY RS.SDATE DESC ) ROWIDX, 
+            	   RS.*
+            FROM(
+				SELECT 
+					 	T.EDU_CODE,
+					 	T.EDU_NAME,
+						T.EDU_CLASS,
+						T.EDU_CLASS_TYPE,
+						(SELECT CODE_NM FROM TB_CODE WHERE 1=1 AND CODE_GRP_ID='ED_TY1' AND CODE_ID = T.EDU_CLASS_TYPE) AS EDU_CLASS_TYPE_NAME,
+						T.EDU_CLASS_DIVISION,
+						(SELECT CODE_NM FROM TB_CODE WHERE 1=1 AND CODE_GRP_ID='ED_TY3' AND CODE_ID = T.EDU_CLASS_DIVISION) AS EDU_CLASS_DIVISION_NAME,
+						T.EDU_CLASS_TARGET,
+						T.EDU_CLASS_INTRO,
+						T.EDU_CLASS_SUMMARY,
+						T.EDU_COST,
+						T.EDU_INSURANCE_YN,
+						T.EDU_DEMO_URL,
+						T.EDU_CONTENTS_URL,
+						T.EDU_ESSENTIAL_TYPE,
+						T.EDU_COMPANY,
+						T.EDU_COM_CLASS_CODE,
+						T.EDU_CLASS_EXTERNAL_YN,
+						T.EDU_COMPLETE_SCORE,
+						T.EDU_COMPLETE_TIME,
+						T.EDU_USE_YN,
+						T.EDU_YEAR,
+						T.EDU_BELTCODE,
+						(SELECT CODE_NM FROM TB_CODE WHERE 1=1 AND CODE_GRP_ID='ED_TY2' AND CODE_ID = T.EDU_BELTCODE) AS EDU_BELTCODE_NAME,
+						T.EDU_NUMBER,
+						T.EDU_DATE,
+						T.EDU_FIXED,
+						(SELECT COUNT(*) FROM TB_STUDENT_DETAIL TS WHERE 1=1 AND TS.EDU_CODE = T.EDU_CODE AND TS.STD_STATUS = 'Y') AS TSD_CNT,
+						T.EDU_ITEM,
+						T.EDU_FILE_CODE,
+						T.EDU_REG_USER,
+						T.EDU_REG_DATE AS SDATE,
+						TO_CHAR(T.EDU_REG_DATE, 'YYYY-MM-DD') AS EDU_REG_DATE,
+						T.EDU_UPDATE_USER,
+						TO_CHAR(T.EDU_REG_DATE, 'YYYY-MM-DD') AS EDU_UPDATE_DATE
+				FROM 
+						(
+							SELECT * FROM TB_EDUCATION_MST
+							 WHERE 1=1 
+							 <include refid="defCond"></include>
+							 ORDER BY EDU_REG_DATE DESC
+						) T
+            ) RS
+		)
+		SELECT *
+		FROM EDU_MASTER T
+		WHERE T.ROWIDX BETWEEN (#{currentPageNo}*#{recordCountPerPage}+1-#{recordCountPerPage}) AND (#{currentPageNo}*#{recordCountPerPage})
+		ORDER BY T.IDX DESC
+	</select>
+	
+	
+	<select id="selectEducationMstInfo" resultMap="EducationMap">
+		SELECT 
+			 	RS.EDU_CODE,
+			 	RS.EDU_NAME,
+				RS.EDU_CLASS,
+				RS.EDU_CLASS_TYPE,
+				RS.EDU_CLASS_TYPE_NAME,
+				RS.EDU_CLASS_DIVISION,
+				RS.EDU_CLASS_DIVISION_NAME,
+				RS.EDU_CLASS_TARGET,
+				RS.EDU_CLASS_INTRO,
+				<!-- REPLACE (RS.EDU_CLASS_INTRO, chr(13)||chr(10), '<![CDATA[<br>]]>' ) AS EDU_CLASS_INTRO, -->
+				
+				RS.EDU_CLASS_SUMMARY,
+				RS.EDU_COST,
+				RS.EDU_INSURANCE_YN,
+				RS.EDU_DEMO_URL,
+				RS.EDU_CONTENTS_URL,
+				RS.EDU_ESSENTIAL_TYPE,
+				RS.EDU_COMPANY,
+				RS.EDU_COM_CLASS_CODE,
+				RS.EDU_CLASS_EXTERNAL_YN,
+				RS.EDU_COMPLETE_SCORE,
+				RS.EDU_COMPLETE_TIME,
+				RS.EDU_USE_YN,
+				RS.EDU_YEAR,
+				RS.EDU_BELTCODE,
+				RS.EDU_BELTCODE_NAME,
+				RS.EDU_NUMBER,
+				RS.EDU_DATE,
+				RS.EDU_FIXED,
+				RS.EDU_ITEM,
+				RS.EDU_FILE_CODE,
+				NVL(RS.TSD_CNT, 0) AS TSD_CNT,
+				RS.EDU_REG_USER,
+				RS.REG_DATE,
+				RS.EDU_UPDATE_USER,
+				RS.UPDATE_DATE
+		FROM 	
+			 (
+			 	SELECT T.*,
+					 	(SELECT CODE_NM FROM TB_CODE WHERE 1=1 AND CODE_GRP_ID='ED_TY2' AND CODE_ID=T.EDU_BELTCODE) AS EDU_BELTCODE_NAME,
+						(SELECT CODE_NM FROM TB_CODE WHERE 1=1 AND CODE_GRP_ID='ED_TY1' AND CODE_ID=T.EDU_CLASS_TYPE) AS EDU_CLASS_TYPE_NAME,
+						(SELECT CODE_NM FROM TB_CODE WHERE 1=1 AND CODE_GRP_ID='ED_TY3' AND CODE_ID=T.EDU_CLASS_DIVISION) AS EDU_CLASS_DIVISION_NAME,
+						TO_CHAR(T.EDU_REG_DATE, 'YYYY-MM-DD') AS REG_DATE,
+						TO_CHAR(T.EDU_UPDATE_DATE, 'YYYY-MM-DD') AS UPDATE_DATE,
+					    (SELECT COUNT(*) FROM TB_STUDENT_DETAIL TS WHERE 1=1 AND TS.EDU_CODE = T.EDU_CODE AND TS.STD_STATUS = 'Y') AS TSD_CNT	
+				  FROM (
+							SELECT * FROM TB_EDUCATION_MST	
+							WHERE 1=1 
+							<if test="eduCode != null and eduCode neq ''.toString()">
+							  AND EDU_CODE = #{eduCode}
+							</if>
+				  	   )T
+			 ) RS
+		WHERE 1=1 
+	</select>
+	
+	<insert id="insertEducationMst" parameterType="kr.freedi.dev.qeducation.domain.EducationVO">
+		INSERT INTO	TB_EDUCATION_MST( 
+			EDU_CODE,
+			EDU_NAME,
+			EDU_CLASS,
+			EDU_CLASS_TYPE,
+			EDU_CLASS_DIVISION,
+			EDU_CLASS_TARGET,
+			EDU_CLASS_INTRO,
+			EDU_CLASS_SUMMARY,
+			EDU_COST,
+			EDU_INSURANCE_YN,
+			EDU_DEMO_URL,
+			EDU_CONTENTS_URL,
+			EDU_ESSENTIAL_TYPE,
+			EDU_COMPANY,
+			EDU_COM_CLASS_CODE,
+			EDU_CLASS_EXTERNAL_YN,
+			EDU_COMPLETE_SCORE,
+			EDU_COMPLETE_TIME,
+			EDU_USE_YN,
+			EDU_REG_USER,
+			EDU_REG_DATE,
+			EDU_YEAR,
+			EDU_BELTCODE,
+			EDU_NUMBER,
+			EDU_DATE,
+			EDU_FIXED,
+			EDU_ITEM,
+			EDU_FILE_CODE
+		)VALUES(
+			#{eduCode} 
+		   ,#{eduName} 
+		   ,#{eduClass} 
+		   ,#{eduClassType} 
+		   ,#{eduClassDivision} 
+		   ,#{eduClassTarget} 
+		   ,#{eduClassIntro} 
+		   ,#{eduClassSummary} 
+		   ,#{eduCost} 
+		   ,#{eduInstanceYn} 
+		   ,#{eduDemoUrl} 
+		   ,#{edContentsUrl} 
+		   ,#{eduEssentialType} 
+		   ,#{eduCompany} 
+		   ,#{eduComClassCode} 
+		   ,#{eduClassExternalYn} 
+		   ,#{eduCompleteScore} 
+		   ,#{eduCompleteTime} 
+		   ,#{eduUseYn} 
+		   ,#{eduRegUser} 
+		   ,SYSDATE
+		   ,#{eduYear} 
+		   ,#{eduBeltCode} 
+		   ,#{eduNumber} 
+		   ,#{eduDate} 
+		   ,#{eduFixed} 
+		   ,#{eduItem}
+		   ,#{eduFileCode}
+		)
+	</insert>               
+	
+	<update id="updateEducationMst" parameterType="kr.freedi.dev.qeducation.domain.EducationVO">
+		UPDATE TB_EDUCATION_MST
+		   SET 	EDU_NAME = #{eduName}, 
+				EDU_CLASS = #{eduClass},
+				EDU_CLASS_TYPE = #{eduClassType},
+				EDU_CLASS_DIVISION = #{eduClassDivision},
+				EDU_CLASS_TARGET = #{eduClassTarget},
+				EDU_CLASS_INTRO = #{eduClassIntro},
+				EDU_CLASS_SUMMARY = #{eduClassSummary},
+				EDU_COST = #{eduCost},
+				EDU_INSURANCE_YN = #{eduInstanceYn},
+				EDU_DEMO_URL = #{eduDemoUrl},
+				EDU_CONTENTS_URL = #{edContentsUrl},
+				EDU_ESSENTIAL_TYPE = #{eduEssentialType},
+				EDU_COMPANY = #{eduCompany},
+				EDU_COM_CLASS_CODE = #{eduComClassCode},
+				EDU_CLASS_EXTERNAL_YN = #{eduClassExternalYn},
+				EDU_COMPLETE_SCORE = #{eduCompleteScore},
+				EDU_COMPLETE_TIME = #{eduCompleteTime},
+				EDU_USE_YN = #{eduUseYn},
+				EDU_YEAR = #{eduYear},
+				EDU_BELTCODE = #{eduBeltCode},
+				EDU_NUMBER = #{eduNumber},
+				EDU_DATE = #{eduDate},
+				EDU_FIXED = #{eduFixed},
+				EDU_ITEM = #{eduItem},
+				EDU_UPDATE_USER = #{eduUpdateUser},
+				EDU_UPDATE_DATE = SYSDATE
+		 WHERE EDU_CODE	= #{eduCode}
+	</update>
+	
+	
+	<select id="selectYearPlanList" resultMap="EducationMap">
+		SELECT 
+				ED.EDU_CODE AS EDU_CODE,
+				ED.EDU_BELTCODE AS EDU_BELTCODE,
+				ED.EDU_BELTCODE_NAME AS EDU_BELTCODE_NAME,
+				ED.EDU_CLASS_TYPE AS EDU_CLASS_TYPE,
+				ED.EDU_CLASS_TYPE_NAME AS EDU_CLASS_TYPE_NAME,
+				ED.EDU_CLASS_DIVISION AS EDU_CLASS_DIVISION,
+				ED.EDU_CLASS_DIVISION_NAME AS EDU_CLASS_DIVISION_NAME,
+				CASE ED.QUARTER WHEN '1' THEN ED.EDU_CODE END AS EDU_CODE01,
+				CASE ED.QUARTER WHEN '1' THEN ED.EDU_NAME END AS EDU_NAME01,
+				CASE ED.QUARTER WHEN '2' THEN ED.EDU_CODE END AS EDU_CODE02,
+				CASE ED.QUARTER WHEN '2' THEN ED.EDU_NAME END AS EDU_NAME02,
+				CASE ED.QUARTER WHEN '3' THEN ED.EDU_CODE END AS EDU_CODE03,
+				CASE ED.QUARTER WHEN '3' THEN ED.EDU_NAME END AS EDU_NAME03,
+				CASE ED.QUARTER WHEN '4' THEN ED.EDU_CODE END AS EDU_CODE04,
+				CASE ED.QUARTER WHEN '4' THEN ED.EDU_NAME END AS EDU_NAME04
+		  FROM (
+		  			SELECT 
+							MAX(T.EDU_CODE) AS EDU_CODE,
+							MAX(T.EDU_NAME) AS EDU_NAME,
+							MAX(T.QUARTER) AS QUARTER,
+							T.EDU_BELTCODE, 
+							MAX(T.EDU_BELTCODE_NAME) AS EDU_BELTCODE_NAME,
+							T.EDU_CLASS_TYPE,
+							MAX(T.EDU_CLASS_TYPE_NAME) AS EDU_CLASS_TYPE_NAME,
+							T.EDU_CLASS_DIVISION,
+							MAX(T.EDU_CLASS_DIVISION_NAME) AS EDU_CLASS_DIVISION_NAME
+					  FROM (
+								SELECT 
+								 	   	EDU_CODE,
+									 	EDU_NAME,
+									 	TO_CHAR(EDU_REG_DATE, 'Q') AS QUARTER,
+										TO_CHAR(EDU_REG_DATE, 'YYYY-MM-DD') AS CIR_REG_DATE,
+										EDU_BELTCODE,
+									 	EDU_CLASS_TYPE,
+										EDU_CLASS_DIVISION,
+										(SELECT CODE_NM FROM TB_CODE WHERE 1=1 AND CODE_GRP_ID='ED_TY1' AND CODE_ID=EDU_CLASS_TYPE) AS EDU_CLASS_TYPE_NAME,
+										(SELECT CODE_NM FROM TB_CODE WHERE 1=1 AND CODE_GRP_ID='ED_TY3' AND CODE_ID=EDU_CLASS_DIVISION) AS EDU_CLASS_DIVISION_NAME,
+									 	(SELECT CODE_NM FROM TB_CODE WHERE 1=1 AND CODE_GRP_ID='ED_TY2' AND CODE_ID=EDU_BELTCODE) AS EDU_BELTCODE_NAME		
+								  FROM TB_EDUCATION_MST	
+								 WHERE 1=1
+						) T
+					 WHERE 1=1
+				  GROUP BY T.EDU_BELTCODE, T.EDU_CLASS_TYPE, T.EDU_CLASS_DIVISION 
+				  ORDER BY T.EDU_BELTCODE, T.EDU_CLASS_TYPE, T.EDU_CLASS_DIVISION
+			   ) ED
+		 WHERE 1=1
+	</select>
+	
+	<select id="selectYearPlanInfo" resultType="egovMap">
+		SELECT 
+			 	RS.EDU_CODE,
+			 	RS.EDU_NAME,
+				RS.EDU_CLASS,
+				RS.EDU_CLASS_TYPE,
+				RS.EDU_CLASS_TYPE_NAME,
+				RS.EDU_CLASS_DIVISION,
+				RS.EDU_CLASS_DIVISION_NAME,
+				RS.EDU_CLASS_TARGET,
+				RS.EDU_CLASS_INTRO,
+				RS.EDU_CLASS_SUMMARY,
+				RS.EDU_COST,
+				RS.EDU_INSURANCE_YN,
+				RS.EDU_DEMO_URL,
+				RS.EDU_CONTENTS_URL,
+				RS.EDU_ESSENTIAL_TYPE,
+				RS.EDU_COMPANY,
+				RS.EDU_COM_CLASS_CODE,
+				RS.EDU_CLASS_EXTERNAL_YN,
+				RS.EDU_COMPLETE_SCORE,
+				RS.EDU_COMPLETE_TIME,
+				RS.EDU_USE_YN,
+				RS.EDU_YEAR,
+				RS.EDU_BELTCODE,
+				RS.EDU_BELTCODE_NAME,
+				RS.EDU_NUMBER,
+				RS.EDU_DATE,
+				RS.EDU_FIXED,
+				RS.EDU_ITEM,
+				RS.EDU_FILE_CODE,
+				NVL(RS.TSD_CNT, 0) AS TSD_CNT,
+				RS.EDU_REG_USER,
+				RS.REG_DATE,
+				RS.EDU_UPDATE_USER,
+				RS.UPDATE_DATE
+		FROM 	
+			 (
+			 	SELECT T.*,
+					 	(SELECT CODE_NM FROM TB_CODE WHERE 1=1 AND CODE_GRP_ID='ED_TY2' AND CODE_ID=T.EDU_BELTCODE) AS EDU_BELTCODE_NAME,
+						(SELECT CODE_NM FROM TB_CODE WHERE 1=1 AND CODE_GRP_ID='ED_TY1' AND CODE_ID=T.EDU_CLASS_TYPE) AS EDU_CLASS_TYPE_NAME,
+						(SELECT CODE_NM FROM TB_CODE WHERE 1=1 AND CODE_GRP_ID='ED_TY3' AND CODE_ID=T.EDU_CLASS_DIVISION) AS EDU_CLASS_DIVISION_NAME,
+						TO_CHAR(T.EDU_REG_DATE, 'YYYY-MM-DD') AS REG_DATE,
+						TO_CHAR(T.EDU_UPDATE_DATE, 'YYYY-MM-DD') AS UPDATE_DATE,
+					    (SELECT COUNT(*) FROM TB_STUDENT_DETAIL TS WHERE 1=1 AND TS.EDU_CODE = T.EDU_CODE AND TS.STD_STATUS = 'Y') AS TSD_CNT	
+				  FROM (
+							SELECT * FROM TB_EDUCATION_MST	
+							WHERE 1=1 
+							<if test="eduCode != null and eduCode neq ''.toString()">
+							  AND EDU_CODE = #{eduCode}
+							</if>
+				  	   )T
+			 ) RS
+		WHERE 1=1 
+		
+	
+	</select>
+	                                      
+</mapper>                                 
+                                          
+                                          
+                                          
+                                          
+                                          
+                                          
+                                          

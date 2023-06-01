@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Student">
+	<resultMap id="StudentMap" type="kr.freedi.dev.qeducation.domain.StudentVO">		
+		<result column="STD_SEQ"                    property="stdSeq"/>   
+		<result column="COM_NO"                    	property="comNo"/>     
+		<result column="EDU_CODE"                   property="eduCode"/>    
+		<result column="STD_USERID"                 property="stdUserId"/>
+		<result column="STD_NAME"                   property="stdName"/>  
+		<result column="STD_DEPART"                 property="stdDepart"/>     
+		<result column="STD_JOBX"                   property="stdJbox"/>     
+		<result column="STD_POSITION"               property="stdPosition"/>     
+		<result column="STD_BELT_CODE"              property="stdBeltCode"/> 
+		<result column="STD_STATUS"              	property="stdStatus"/>
+		<result column="STD_COMPLETE_YN"            property="stdCompleteYn"/> 
+		<result column="STD_CERT_CODE"              property="stdCertCode"/> 
+		<result column="STD_CERT_DATE"              property="stdCertDate"/> 
+		<result column="STD_REAPPLY_YN"             property="stdReapplyYn"/> 
+		<result column="STD_REG_USER"               property="stdRegUser"/> 
+		<result column="STD_REG_DATE"               property="stdRegDate"/> 
+		<result column="STD_UPDATE_USER"            property="stdUpdateUser"/> 
+		<result column="STD_UPDATE_DATE"            property="stdUpdateDate"/> 
+		
+		<result column="STD_DEPART_NM"            	property="stdDepartNm"/> 
+		<result column="STD_JOBX_NM"            	property="stdJobxNm"/> 
+		<result column="STD_POS_NM"            		property="stdPosNm"/> 
+		<result column="STD_BELT_NM"            	property="stdBeltNm"/> 
+		
+	</resultMap>
+	
+	<sql id="defCond">
+		<if test="stdSeq != null and stdSeq neq ''.toString()">
+			AND STD_SEQ = #{stdSeq}
+		</if>
+		<if test="eduCode != null and eduCode neq ''.toString()">
+			AND EDU_CODE = #{eduCode}
+		</if>
+		<if test="comNo != null and comNo neq ''.toString()">
+			AND COM_NO = #{comNo}
+		</if>
+		<if test="stdUserId != null and stdUserId neq ''.toString()">
+			AND STD_USERID = #{stdUserId}
+		</if>
+		<if test="stdStatus != null and stdStatus neq ''.toString()">
+			AND STD_STATUS = #{stdStatus}
+		</if>
+	</sql>
+	
+	<select id="selectstdCount" resultType="int">
+		SELECT COUNT(*) 
+		  FROM TB_STUDENT_DETAIL
+		 WHERE STD_STATUS = 'Y'
+		<include refid="defCond"></include>
+	</select>
+	
+	<select id="selectStudentList" resultMap="StudentMap">
+		WITH STD_DETAIL AS (
+           SELECT ROW_NUMBER() OVER( ORDER BY TO_NUMBER(RS.EDU_CODE) ASC ) IDX, ROW_NUMBER() OVER( ORDER BY TO_NUMBER(RS.EDU_CODE) DESC ) ROWIDX, 
+            	   RS.*
+             FROM (
+					SELECT 
+						 	T.STD_SEQ,
+							T.COM_NO,
+							T.EDU_CODE,
+							T.STD_NAME,
+							T.STD_USERID,
+							T.STD_DEPART,
+							(select dept_name from tb_depart_mst d where dept_code=T.STD_DEPART) AS STD_DEPART_NM,  
+							T.STD_JOBX,
+							cd_job.code_nm AS STD_JOBX_NM,    
+							T.STD_POSITION,
+							cd_pos.code_nm AS STD_POS_NM,   
+							T.STD_BELT_CODE,
+							cd_blt.code_nm AS STD_BELT_NM,  
+							T.STD_STATUS,
+							T.STD_COMPLETE_YN,
+							T.STD_CERT_CODE,
+							T.STD_CERT_DATE,
+							T.STD_REAPPLY_YN,
+							T.STD_REG_USER,
+						 	TO_CHAR(T.STD_REG_DATE, 'YYYY-MM-DD') AS STD_REG_DATE
+					  FROM 
+							(
+								SELECT * FROM TB_STUDENT_DETAIL
+								 WHERE STD_STATUS = 'Y' 
+								 <include refid="defCond"></include>
+							) T
+							LEFT OUTER JOIN tb_code cd_job ON cd_job.code_grp_id='JOBX' AND cd_job.code_id = T.STD_JOBX
+							LEFT OUTER JOIN tb_code cd_pos ON cd_pos.code_grp_id='POSITION' AND cd_pos.code_id = T.STD_POSITION 
+                   			LEFT OUTER JOIN tb_code cd_blt ON cd_blt.code_grp_id='LDRBELT' AND cd_blt.code_id = T.STD_BELT_CODE 
+            ) RS
+		)
+		SELECT *
+		FROM STD_DETAIL T
+		WHERE 1=1
+		<!-- WHERE T.ROWIDX BETWEEN (#{currentPageNo}*#{recordCountPerPage}+1-#{recordCountPerPage}) AND (#{currentPageNo}*#{recordCountPerPage}) -->
+		ORDER BY T.IDX DESC	
+	</select>
+	
+	<select id="selectLReqCount" resultType="int">
+		SELECT COUNT(*) 
+		  FROM TB_STUDENT_DETAIL
+		 WHERE 1=1
+		<include refid="defCond"></include>
+	</select>
+	
+	<select id="selectStdDetailInfo" resultMap="StudentMap">
+		SELECT 
+			    STD_SEQ,
+				COM_NO,
+				EDU_CODE,
+				STD_NAME,
+				STD_USERID,
+				STD_DEPART,
+				STD_JOBX,
+				STD_POSITION,
+				STD_BELT_CODE,
+				STD_STATUS,
+				STD_COMPLETE_YN,
+				STD_CERT_CODE,
+				STD_CERT_DATE,
+				STD_REAPPLY_YN,
+				STD_REG_USER,
+				STD_REG_DATE	
+		  FROM TB_STUDENT_DETAIL
+		 WHERE 1=1
+		<include refid="defCond"></include>
+	</select>
+	
+	<insert id="insertStdDetail" parameterType="kr.freedi.dev.qeducation.domain.StudentVO">
+		INSERT INTO	TB_STUDENT_DETAIL (
+			STD_SEQ,
+			COM_NO,
+			EDU_CODE,
+			STD_NAME,
+			STD_USERID,
+			STD_DEPART,
+			STD_JOBX,
+			STD_POSITION,
+			STD_BELT_CODE,
+			STD_STATUS,
+			STD_COMPLETE_YN,
+			STD_CERT_CODE,
+			STD_CERT_DATE,
+			STD_REAPPLY_YN,
+			STD_REG_USER,
+			STD_REG_DATE
+		) VALUES (
+			#{stdSeq},         
+			#{comNo},          
+			#{eduCode},        
+			#{stdName},        
+			#{stdUserId},      
+			#{stdDepart},      
+			#{stdJbox},        
+			#{stdPosition},    
+			#{stdBeltCode},    
+			#{stdStatus},      
+			'N',  
+			'N',    
+			#{stdCertDate},    
+			'N',   
+			#{stdRegUser},     
+			SYSDATE  
+		)
+	</insert>
+	
+	<update id="updateStdDetail" parameterType="kr.freedi.dev.qeducation.domain.StudentVO">
+		UPDATE TB_STUDENT_DETAIL
+		   SET
+				<if test="comNo != null and comNo neq ''.toString()">COM_NO = #{comNo},</if>          
+				<!-- <if test="eduCode != null and eduCode neq ''.toString()">EDU_CODE = #{eduCode},</if>    -->      
+				<if test="stdName != null and stdName neq ''.toString()">STD_NAME = #{stdName},</if>         
+				<if test="stdUserId != null and stdUserId neq ''.toString()">STD_USERID = #{stdUserId},</if>       
+				<if test="stdDepart != null and stdDepart neq ''.toString()">STD_DEPART = #{stdDepart},</if>       
+				<if test="stdJbox != null and stdJbox neq ''.toString()">STD_JOBX = #{stdJbox},</if>         
+				<if test="stdPosition != null and stdPosition neq ''.toString()">STD_POSITION = #{stdPosition},</if>     
+				<if test="stdBeltCode != null and stdBeltCode neq ''.toString()">STD_BELT_CODE = #{stdBeltCode},</if>     
+				<if test="stdStatus != null and stdStatus neq ''.toString()">STD_STATUS = #{stdStatus},</if>       
+				<if test="stdCompleteYn != null and stdCompleteYn neq ''.toString()">STD_COMPLETE_YN = #{stdCompleteYn},</if>   
+				<if test="stdCertCode != null and stdCertCode neq ''.toString()">STD_CERT_CODE = #{stdCertCode},</if>     
+				<if test="stdCertDate != null and stdCertDate neq ''.toString()">STD_CERT_DATE = #{stdCertDate},</if>     
+				<if test="stdReapplyYn != null and stdReapplyYn neq ''.toString()">STD_REAPPLY_YN = #{stdReapplyYn},</if>    
+				STD_UPDATE_USER = #{stdUpdateUser},
+				STD_UPDATE_DATE = SYSDATE
+		 WHERE 1=1 
+		 <if test="stdSeq != null and stdSeq neq ''.toString()">
+			AND STD_SEQ = #{stdSeq}
+		 </if>
+		 <if test="stdUserId != null and stdUserId neq ''.toString()">
+			AND STD_USERID = #{stdUserId}
+		 </if>
+	</update>
+	
+	<sql id="detCond">
+		<where>
+			<if test="userId != null and userId != ''">
+				AND T.user_id = #{userId}
+			</if>
+			<if test="comNo != null and comNo != ''">
+				AND T.com_no = #{comNo}
+			</if>
+		</where>
+	</sql>
+	
+	<select id="selectUserInfo" resultType="egovMap">
+     SELECT *
+	   FROM (
+            SELECT 	  t.com_no
+					, t.user_id            
+					, t.user_name               
+					, t.com_depart_code          
+					, (select dept_name from tb_depart_mst d where dept_code=t.com_depart_code) dept_full_name    
+					, t.com_jobx        
+					, cd_job.code_nm com_jobx_nm                     
+					, t.com_position                    
+					, com_position com_position_nm            
+					, t.com_cert_belt              
+					, cd_blt.code_nm com_cert_belt_nm       
+              FROM tb_user_mst T
+                   LEFT OUTER JOIN tb_code cd_job ON cd_job.code_grp_id='JOBX' AND cd_job.code_id=T.com_jobx
+                   LEFT OUTER JOIN tb_code cd_blt ON cd_blt.code_grp_id='LDRBELT' AND cd_blt.code_id=T.com_cert_belt 
+		<include refid="detCond"></include>
+		    )
+		ORDER BY COM_JOBX ASC, USER_NAME
+	</select>
+	
+</mapper>
