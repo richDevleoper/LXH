@@ -31,23 +31,23 @@
                                         <tbody>
                                             <tr>
                                                 <th>분임조명</th>
-                                                <td colspan="3">분임조명1 </td>
+                                                <td colspan="3">${makeVO.cirName} </td>
                                             </tr>
                                             <tr>
                                                 <th>등록번호</th>
-                                                <td>1231112</td>
+                                                <td>${makeVO.cirRegNum}</td>
                                                 <th>조직명</th>
-                                                <td>조직명1</td>
+                                                <td>${makeVO.deptName}</td>
                                             </tr>
                                             <tr>
                                                 <th>지도사원</th>
-                                                <td>홍길동1</td>
+                                                <td>${makeVO.cirTchComName}</td>
                                                 <th>사무국</th>
-                                                <td>사무국1</td>
+                                                <td>${makeVO.cirWorkMemName}</td>
                                             </tr>
                                             <tr>
                                                 <th>팀장</th>
-                                                <td colspan="3">홍길동2</td>                                                
+                                                <td colspan="3">${makeVO.cirTeamLeaderName}</td>                                                
                                             </tr>                                            
                                             <tr>
                                                 <th>분임조원</th>
@@ -76,15 +76,17 @@
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
+                                                                    <c:forEach items="${makeVO.teamMemList}" var="item" varStatus="i">
                                                                         <tr>
-                                                                            <td>분임조장</td>
-                                                                            <td class="align-left">소속정보</td>
-                                                                            <td>홍길동</td>
-                                                                            <td>책임</td>
-                                                                            <td>팀장</td>
-                                                                            <td>BB</td>          
+                                                                            <td class="align-center">${item.repTeamMemRoleNm}</td>
+                                                                            <td class="align-left">${item.deptName}</td>
+                                                                            <td class="align-center">${item.repTeamMemName}</td>
+                                                                            <td class="align-center">${item.comJobxNm}</td>
+                                                                            <td class="align-center">${item.comPositionNm}</td>
+                                                                            <td class="align-center">${item.beltNm}</td>          
                                                                         </tr>
-                                                                        <tr>
+                                                                    </c:forEach>
+                                                                        <!-- <tr>
                                                                             <td>팀원</td>
                                                                             <td class="align-left">소속정보</td>
                                                                             <td>홍길동</td>
@@ -131,7 +133,7 @@
                                                                             <td>책임</td>
                                                                             <td>침장</td>
                                                                             <td>BB</td>          
-                                                                        </tr>
+                                                                        </tr> -->
                                                                     </tbody>                                                                   
                                                                 </table>
                                                             </div>
@@ -143,7 +145,7 @@
                                                 <th><label for="select6"><span class="asterisk">*</span>이력내용</label></th>
                                                 <td colspan="3">
                                                     <div class="row">
-                                                        <div class="col s8">상세내용<br><br><br><br><br><br><br><br><br><br><br></div>                                                        
+                                                        <div class="col s8" style="min-height: 35px;">${makeVO.cirRecordCont}</div>                                                        
                                                     </div>
                                                 </td>
                                             </tr>
@@ -152,8 +154,8 @@
                                 </div>
                                 <div class="list-footer">
                                     <div class="list-btns">
-                                        <button type="button" class="btn light-gray" onclick="location.href='/app/003_03_mkteam_02.do?menuKey=70';">수정</button>                                        
-                                        <a href="/app/003_03_mkteam.do?menuKey=70" class="btn">목록</a>
+                                        <button type="button" class="btn light-gray" onclick="location.href='/team/makeinsert.do?menuKey=${menuKey}&cirCode=${makeVO.cirCode}';">수정</button>                                        
+                                        <a href="/team/makelist.do?menuKey=${menuKey}" class="btn">목록</a>
                                     </div>
                             </div>
                         </div>

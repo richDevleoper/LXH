@@ -1,5 +1,6 @@
 package kr.freedi.dev.qreport.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -14,6 +15,9 @@ import kr.freedi.dev.common.dao.DefaultDAO;
 import kr.freedi.dev.qpopup.domain.UserVO;
 import kr.freedi.dev.qreport.domain.MakeSearchVO;
 import kr.freedi.dev.qreport.domain.MakeVO;
+import kr.freedi.dev.qreport.domain.ReportDetailVO;
+import kr.freedi.dev.qreport.domain.ReportTeamVO;
+import kr.freedi.dev.qreport.domain.ReportVO;
 
 @Service("makeService")
 public class MakeService {
@@ -24,6 +28,9 @@ public class MakeService {
 	
 	@Resource(name = "reportIdGnrService")
 	private EgovIdGnrService idGnrService;
+	
+	@Resource(name = "reportTeamService")
+	private ReportTeamService reportTeamService;
 	
 	public List<EgovMap> selectEmpSearch(UserVO userVO) {
 		return dao.selectList("Make.selectEmpSearch", userVO); 
@@ -36,6 +43,22 @@ public class MakeService {
 	public List<MakeVO> selectFullList(MakeSearchVO searchVO) {
 		
 		return dao.selectList("Make.selectCirclList", searchVO);
+	}
+	
+	public List<ReportTeamVO> selectMemberList(ReportTeamVO teamVO) {
+		
+		return dao.selectList("Make.ReportTeamVO", teamVO);
+	}
+	
+	public MakeVO select(MakeVO makeVO) {
+		
+		makeVO = (MakeVO)dao.selectOne("Make.select", makeVO);
+		
+		ReportTeamVO reportTeamVO = new ReportTeamVO();
+		reportTeamVO.setCirCode(makeVO.getCirCode());
+		makeVO.setTeamMemList(reportTeamService.selectCircleFullList(reportTeamVO));
+		
+		return makeVO;
 	}
 
 	

@@ -61,6 +61,12 @@ public class ReportTeamService {
 		return dao.selectList("ReportTeam.selectFullList", reportTeamVO);
 	}
 	
+	public List<ReportTeamVO> selectCircleFullList(ReportTeamVO reportTeamVO) {
+		
+		return dao.selectList("ReportTeam.selectCircleFullList", reportTeamVO);
+	}
+	
+	
 	public ReportTeamVO selectCircleInfo(ReportTeamVO teamVO) throws Exception {
 	
 		return null;

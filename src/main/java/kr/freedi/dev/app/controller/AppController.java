@@ -277,21 +277,21 @@ public class AppController {
 		return "app/qi/003_03_mkteam";
 	}
 	
-	@RequestMapping({"/app/003_03_mkteam_01.do"})
-	public String handler003_03_01(HttpServletRequest request, ModelMap model,
-			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
-			UserVO userSession)throws Exception {
-		
-		return "app/qi/003_03_mkteam_01";
-	}
+//	@RequestMapping({"/app/003_03_mkteam_01.do"})
+//	public String handler003_03_01(HttpServletRequest request, ModelMap model,
+//			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
+//			UserVO userSession)throws Exception {
+//		
+//		return "app/qi/003_03_mkteam_01";
+//	}
 	
-	@RequestMapping({"/app/003_03_mkteam_02.do"})
-	public String handler003_03_02(HttpServletRequest request, ModelMap model,
-			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
-			UserVO userSession)throws Exception {
-		
-		return "app/qi/003_03_mkteam_02";
-	}
+//	@RequestMapping({"/app/003_03_mkteam_02.do"})
+//	public String handler003_03_02(HttpServletRequest request, ModelMap model,
+//			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
+//			UserVO userSession)throws Exception {
+//		
+//		return "app/qi/003_03_mkteam_02";
+//	}
 	
 	@RequestMapping({"/app/003_04_report.do"})
 	public String handler003_04(HttpServletRequest request, ModelMap model,

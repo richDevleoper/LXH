@@ -110,17 +110,6 @@
                             </div>
                             <div class="list-footer">
                             	<ui:pagination paginationInfo="${reportSearchVO}" type="defDefault" jsFunction="cfnPageLink" />
-                                <!-- <div class="pagination">
-                                    <a href="" class="first">처음</a>
-                                    <a href="" class="prev">이전</a>
-                                    <a href="" class="cur num">1</a>
-                                    <a href="" class="num">2</a>
-                                    <a href="" class="num">3</a>
-                                    <a href="" class="num">4</a>
-                                    <a href="" class="num">5</a>
-                                    <a href="" class="next">다음</a>
-                                    <a href="" class="last">끝</a>
-                                </div> -->
                                 <div class="list-btns">
                                     <button type="button" class="btn bg-gray" onclick="location.href='./insertForm.do?menuKey=${menuKey}'">                                        
                                         <span>과제등록</span>

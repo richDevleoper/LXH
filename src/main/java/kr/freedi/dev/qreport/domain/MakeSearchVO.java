@@ -9,6 +9,8 @@ public class MakeSearchVO extends CommonVO {
 	private String searchText;			// 검색내용
 	private String searchPlaceCode; // 사업장
 	private String searchName;			// 조직
+	private String cirCode;
+	
 	public String getSearchDiv() {
 		return searchDiv;
 	}
@@ -33,6 +35,15 @@ public class MakeSearchVO extends CommonVO {
 	public void setSearchName(String searchName) {
 		this.searchName = searchName;
 	}
-	
-	
+	public String getCirCode() {
+		return cirCode;
+	}
+	public void setCirCode(String cirCode) {
+		this.cirCode = cirCode;
+	}
+	@Override
+	public String toString() {
+		return "MakeSearchVO [searchDiv=" + searchDiv + ", searchText=" + searchText + ", searchPlaceCode="
+				+ searchPlaceCode + ", searchName=" + searchName + ", cirCode=" + cirCode + "]";
+	}
 }

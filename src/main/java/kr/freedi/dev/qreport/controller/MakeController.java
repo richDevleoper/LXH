@@ -20,6 +20,7 @@ import egovframework.rte.fdl.idgnr.EgovIdGnrService;
 import egovframework.rte.psl.dataaccess.util.EgovMap;
 import kr.freedi.dev.qreport.domain.MakeSearchVO;
 import kr.freedi.dev.qreport.domain.MakeVO;
+import kr.freedi.dev.qreport.domain.ReportVO;
 import kr.freedi.dev.qreport.service.MakeService;
 import kr.freedi.dev.code.domain.CodeVO;
 import kr.freedi.dev.code.service.CodeService;
@@ -81,6 +82,22 @@ public class MakeController {
 		model.addAttribute("action", "/team/insertMakeInfo.do");
 		
 		return "app/make/MakeInsert";
+		
+	}
+	
+	@RequestMapping({"/view.do"})
+	public String handler_view(HttpServletRequest request, ModelMap model,
+		@ModelAttribute("MakeSearchVO") MakeSearchVO searchVO, 
+		@ModelAttribute("MakeVO") MakeVO makeVO, 
+		UserVO userSession)throws Exception {
+		
+		model.addAttribute("menuKey", searchVO.getMenuKey());
+		searchVO.setSearchUserid(userSession.getUserId());
+		
+		makeVO = makeService.select(makeVO);
+		model.addAttribute("makeVO", makeVO);
+		
+		return "app/make/view";
 		
 	}
 	

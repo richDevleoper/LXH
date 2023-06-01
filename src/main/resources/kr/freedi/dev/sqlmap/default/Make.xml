@@ -6,8 +6,9 @@
 		<result column="CIR_CODE"                    	property="cirCode"/>     
 		<result column="CIR_REG_NUM"                    property="cirRegNum"/>     
 		<result column="DEPT_CODE"                    	property="deptCode"/>     
-		<result column="DEPT_NAME"                    	property="deptName"/>     
-		<result column="CIR_TCH_COM_NO"                 property="cirTchComNo"/>     
+		<result column="DEPT_NAME"                    	property="deptName"/>
+		<result column="COM_WORK_PLACE"                 property="comWorkPlace"/>     
+		<result column="CIR_TCH_COM_NO"                 property="cirTchComNo"/>
 		<result column="CIR_WORK_MEM_NO"                property="cirWorkMemNo"/>     
 		<result column="CIR_TEAM_LEADER_NO"             property="cirTeamLeaderNo"/>     
 		<result column="CIR_RECORD_CONT"                property="cirRecordCont"/>     
@@ -32,7 +33,11 @@
 		<result column="BELT_CODE"                    	property="cirMemName"/>      
 		<result column="CIR_MEM_NAME"                   property="cirMemRole"/>      
 		<result column="CIR_MEM_EDU_CODE"               property="cirMemEduCode"/>      
-		<result column="CIR_MEM_ROLE"                   property="cirMemRole"/>      		    
+		<result column="CIR_MEM_ROLE"                   property="cirMemRole"/>   
+		
+		<result column="CIR_TCH_COM_NAME"               property="cirTchComName"/>
+		<result column="CIR_WORK_MEM_NAME"              property="cirWorkMemName"/>
+		<result column="CIR_TEAM_LEADER_NAME"           property="cirTeamLeaderName"/>
 	</resultMap>
 	
 	<sql id="defCond">
@@ -61,6 +66,9 @@
 				</otherwise>
 			</choose>
 		</if>
+		<if test="cirCode != null and cirCode != ''">
+			AND C.CIR_CODE = #{cirCode}
+		</if>
 		<if test="searchPlaceCode != null and searchPlaceCode != ''">
 			AND T.DEPT_CODE = #{searchText}
 		</if>
@@ -85,21 +93,26 @@
 				SELECT 
 					 	CIR_CODE,
 						CIR_REG_NUM,
-						DEPT_CODE,
-						DEPT_NAME,
+						C.DEPT_CODE,
+						C.DEPT_NAME,
+						U.COM_WORK_PLACE,
 						CIR_TCH_COM_NO,
+						GET_USER_NM(CIR_TCH_COM_NO) CIR_TCH_COM_NAME, 
 						CIR_WORK_MEM_NO,
+						GET_USER_NM(CIR_WORK_MEM_NO) CIR_WORK_MEM_NAME,
 						CIR_TEAM_LEADER_NO,
+						GET_USER_NM(CIR_TEAM_LEADER_NO) CIR_TEAM_LEADER_NAME, -- 분임조 팀장
 						CIR_RECORD_CONT,
 						CIR_MEM_CNT,
 						CIR_MEM_STATUS,
 						CIR_NAME,
-						CIR_LEADER_NAME,
+						CIR_LEADER_NAME,		-- 분임조장
 						CIR_LEADER_DEPTNAME,  
 						CIR_REG_USER,
-					 	TO_CHAR(CIR_REG_DATE, 'YYYY-MM-DD') AS CIR_REG_DATE
-				FROM TB_CIRCLE_MST	
-				WHERE 1=1 
+					 	CIR_REG_DATE
+				FROM TB_CIRCLE_MST C
+                     , tb_USER_mst U
+				WHERE C.CIR_TEAM_LEADER_NO=U.COM_NO
 				<include refid="defCond"></include>
             ) T
 		)
@@ -107,6 +120,34 @@
 		FROM CIRCLE_MASTER T
 		WHERE T.ROWIDX BETWEEN (#{currentPageNo}*#{recordCountPerPage}+1-#{recordCountPerPage}) AND (#{currentPageNo}*#{recordCountPerPage})
 		ORDER BY T.IDX DESC
+	</select>
+	
+	<select id="select" resultMap="MakeMap">
+		        
+		select        
+				CIR_CODE
+				, CIR_REG_NUM
+				, DEPT_CODE
+				, DEPT_NAME
+				, CIR_TCH_COM_NO
+				, GET_USER_NM(CIR_TCH_COM_NO) CIR_TCH_COM_NAME
+				, CIR_WORK_MEM_NO
+				, CIR_TEAM_LEADER_NO
+				, CIR_RECORD_CONT
+				, CIR_MEM_CNT
+				, CIR_REG_USER
+				, CIR_REG_DATE
+				, CIR_UPDATE_USER
+				, CIR_UPDATE_DATE
+				, CIR_MEM_STATUS
+				, CIR_NAME
+				, CIR_LEADER_NAME
+				, CIR_LEADER_DEPTNAME
+				
+				, GET_USER_NM(T.CIR_WORK_MEM_NO) CIR_WORK_MEM_NAME
+				, GET_USER_NM(T.CIR_TEAM_LEADER_NO) CIR_TEAM_LEADER_NAME -- 분임조 팀장   
+		FROM TB_CIRCLE_MST T
+        WHERE T.CIR_CODE = #{cirCode}
 	</select>
 	
 	<insert id="insertCircleMst" parameterType="kr.freedi.dev.qreport.domain.MakeVO">
