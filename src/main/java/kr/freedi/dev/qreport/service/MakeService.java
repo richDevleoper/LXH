@@ -1,6 +1,7 @@
 package kr.freedi.dev.qreport.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -9,9 +10,14 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Service;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+
 import egovframework.rte.fdl.idgnr.EgovIdGnrService;
 import egovframework.rte.psl.dataaccess.util.EgovMap;
 import kr.freedi.dev.common.dao.DefaultDAO;
+import kr.freedi.dev.qpopup.domain.DepartVO;
 import kr.freedi.dev.qpopup.domain.UserVO;
 import kr.freedi.dev.qreport.domain.MakeSearchVO;
 import kr.freedi.dev.qreport.domain.MakeVO;
@@ -148,6 +154,32 @@ public class MakeService {
 		
 	}
 	
+	public JsonArray convertTreeJson(List<DepartVO> list) {
+        
+		JsonArray jsonArray = buildTree(list, null);
+        return jsonArray;
+	}
 	
-	
+	public JsonArray buildTree(List<DepartVO> list, String parentId) {
+        JsonArray resultArray = new JsonArray();
+
+        for (int i = 0; i < list.size(); i++) {
+        	DepartVO dept = list.get(i);
+            String id = dept.getDeptCode();
+            String name = dept.getDeptName();
+            String parent = dept.getDeptUperCode();
+
+            if ((parentId == null && parent == null) || (parentId != null && parentId.equals(parent))) {
+                JsonObject node = new JsonObject();
+                node.addProperty("id", id);
+                node.addProperty("text", name);
+                JsonArray children = buildTree(list, id);
+                if (children.size() > 0) {
+                    node.add("children", children);
+                }
+                resultArray.add(node);
+            }
+        }
+        return resultArray;
+    }
 }

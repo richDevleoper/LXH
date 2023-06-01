@@ -90,41 +90,10 @@ public class MakeController {
 		searchVO.setSearchUserid(userSession.getUserId());
 		
 		List<DepartVO> dbList = qPopupService.selectTreeList();
+		JsonArray deptList = makeService.convertTreeJson(dbList);
 		
-		 // jstree 데이터 구조 생성
-        JsonArray jsonArray = new JsonArray();
-        for (DepartVO dept: dbList) {
-        	
-        	String parentCode = dept.getDeptUperCode();
-        	if(parentCode==null)
-        		parentCode="0";
-            JsonObject node = new JsonObject();
-            node.addProperty("id", dept.getDeptCode());
-            node.addProperty("text", dept.getDeptName());
-            node.addProperty("parent", parentCode);
-            jsonArray.add(node);
-        }
-        
-      
 		
-//		String befId = null;
-//		String befLevel = null;
-//		String befPId = null;
-		
-		//List<DepartVO> treeList = new ArrayList<DepartVO>();
-		
-		//dbList.get(index);
-		//dbList.remove(index);
-		/*HashMap<String, DepartVO> treeList = new HashMap<>();
-		
-		for (DepartVO dept: dbList) {
-			System.out.println(dept.getDeptLevel()+", "+dept.getDeptCode()+", "+dept.getDeptName());
-			if(dept.getDeptLevel().equals("1")) {
-				treeList.put(dept.getDeptCode(), dept);
-			}
-		}*/
-		
-		model.addAttribute("deptList", jsonArray);
+		model.addAttribute("deptList", deptList);
 		
 		// 페이지 바인딩
 		model.addAttribute("action", "/team/insertMakeInfo.do");

@@ -144,7 +144,7 @@
                                                                     <div class="tree-list">
 																				
                                                                         <ul>
-                                                                            <!-- <li onClick="javascript: getEmpSearch('IE26')">QCS</li>
+                                                                            <li onClick="javascript: getEmpSearch('IE26')">QCS</li>
                                                                                                                                                        
                                                                             <li>LX HSAI
                                                                                 <ul>
@@ -158,7 +158,7 @@
                                                                                 <ul>
                                                                                     <li onClick="javascript: getEmpSearch('50006242')">(청주생산팀(LVT1실)</li>
                                                                                 </ul>
-                                                                            </li> -->
+                                                                            </li>
                                                                             
                                                                             
                                                                         </ul>
@@ -345,7 +345,13 @@ $(document).ready(function(){
         "core":{
         	"data": deptList
         }
-    });
+    }).on('select_node.jstree', function(event, data) {
+        var selectedNodeId = data.node.id;
+        /* var selectedNodeText = data.node.text;
+        console.log('Selected Node ID:', selectedNodeId);
+        console.log('Selected Node Text:', selectedNodeText); */
+        getEmpSearch(selectedNodeId);
+      });
 	
  	$("#btnRegMake").on("click", function(){
 		location.href="./makeinsert.do?menuKey=70";
