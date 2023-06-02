@@ -38,13 +38,13 @@ $(function(){
 //    }); 
 
     // tree 목록형 공통
-    $('.tree-list').jstree({
+    /*$('.tree-list').jstree({
         "plugins" : ['search'],
         "search" : {
             "show_only_matches" : true,
             "show_only_matches_children" : true,
         },
-    });
+    });*/
 
     // tree 체크형 공통
     $('.tree-check').jstree({

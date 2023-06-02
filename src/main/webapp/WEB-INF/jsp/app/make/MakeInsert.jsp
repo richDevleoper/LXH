@@ -135,8 +135,14 @@
                                                         <div class="list-content">
                                                             <div class="list-group" style="margin:0 -1px">
                                                                 <div class="inr">
-                                                                    <p>분임조 선정</p>
+                                                                    <p>분임조 선정</p><%-- ${deptList.get(1) }
+																				${deptList.get(2) } --%>
+<!-- DepartVO [deptCode=50000002, deptName=본부Staff, deptUperCode=50000000, deptSortOrder=null, deptLevel=2, deptStateCode=null
+, comCode=null, deptLv1Code=null, deptLv2Code=null, deptLv3Code=null, deptLv4Code=null, deptLv1Name=null, deptLv2Name=null
+, deptLv3Name=null, deptLv4Name=null, regDate=null, updateDate=null, comNo=null] -->
+
                                                                     <div class="tree-list">
+																				
                                                                         <ul>
                                                                             <li onClick="javascript: getEmpSearch('IE26')">QCS</li>
                                                                                                                                                        
@@ -153,7 +159,8 @@
                                                                                     <li onClick="javascript: getEmpSearch('50006242')">(청주생산팀(LVT1실)</li>
                                                                                 </ul>
                                                                             </li>
-                         
+                                                                            
+                                                                            
                                                                         </ul>
                                                                     </div>
                                                                 </div>
@@ -322,9 +329,29 @@
       
 
 <script type="text/javascript">
+
+var deptList = ${deptList};
+
 $(document).ready(function(){
 	//init();
 	//initCode();
+	
+	$('.tree-list').jstree({
+        "plugins" : ['search'],
+        "search" : {
+            "show_only_matches" : true,
+            "show_only_matches_children" : true,
+        },
+        "core":{
+        	"data": deptList
+        }
+    }).on('select_node.jstree', function(event, data) {
+        var selectedNodeId = data.node.id;
+        /* var selectedNodeText = data.node.text;
+        console.log('Selected Node ID:', selectedNodeId);
+        console.log('Selected Node Text:', selectedNodeText); */
+        getEmpSearch(selectedNodeId);
+      });
 	
  	$("#btnRegMake").on("click", function(){
 		location.href="./makeinsert.do?menuKey=70";
@@ -402,6 +429,11 @@ $(document).ready(function(){
 		
 		let lCnt = $("#leadertab").children("tbody:first").children("tr[comNo]").length;
 		$("#leaderTit").text("총 "+lCnt+"명");
+		
+		/* $('#dept-tree-list').jstree();
+		$('#dept-tree-list').jstree(true).settings.core.data = deptList;
+		$('#dept-tree-list').jstree(true).refresh(); */
+		
 	});	
 	
 	
@@ -638,7 +670,7 @@ function checkValidation(){
 function callPopup_searchEmployee(obj){
 	popEmp.init();
 	// footer.jsp 내 영역 호출
-	popEmp.returnObjId = $(obj).closest("td").find("input").attr("id");
+	popEmp.returnObjId = $(obj).closest("td").find("input[type=hidden]").attr("id");
 	popEmp.returnFunc = callback_popEmp;
 	popEmp.open();
 }
@@ -646,12 +678,12 @@ function callPopup_searchEmployee(obj){
 //팝업에서 돌아올 때 함수
 function callback_popEmp(objId, data){
 	
+	
 	let obj = document.getElementById(objId);
 	let objTr = $(obj).closest("tr");
 	let objIdComNo = objId.replace("deptName", "comNo");
 
 	$(obj).val(data.comNo);
-	
 	if(objId == "cirTchComNo"){
 		$(objTr).find("#cirTchComName").val(data.userName);
 	}else if(objId == "cirWorkMemNo"){
@@ -663,15 +695,6 @@ function callback_popEmp(objId, data){
 	}
 	
 }
-//팝업 호출 함수(팀원 검색)
-function callPopup_searchEmployee(obj){
-	popEmp.init();
-	// footer.jsp 내 영역 호출
-	popEmp.returnObjId = $(obj).closest("td").find("input[type=text]").attr("id")
-	popEmp.returnFunc = callback_popEmp;
-	popEmp.open();
-}
-
 
 function callback_popDept(objId, data){
 	

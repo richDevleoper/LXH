@@ -43,31 +43,34 @@
 	</select>
 
 	<select id="selectTreeList" resultMap="deptMap">
-        SELECT 
-			  LEVEL AS level1 
-			, DEPT_CODE
-			, DEPT_NAME
-			, DEPT_UPER_CODE
-			, DEPT_SORT_ORDER
-			, DEPT_LEVEL
-			, DEPT_STATE_CODE
-			, COM_CODE
-			, DEPT_LV1_CODE
-			, DEPT_LV2_CODE
-			, DEPT_LV3_CODE
-			, DEPT_LV4_CODE
-			, DEPT_LV1_NAME
-			, DEPT_LV2_NAME
-			, DEPT_LV3_NAME
-			, DEPT_LV4_NAME
-			, UPDATE_DATE
-			, REG_DATE
-		FROM 
-		  tb_depart_mst T
-		START WITH 
-		  dept_uper_code is null
-		CONNECT BY PRIOR 
-		  dept_code = dept_uper_code
+ 
+          	SELECT 
+					  LEVEL AS level1 
+					, DEPT_CODE
+					, DEPT_NAME
+					, DEPT_UPER_CODE
+					, DEPT_SORT_ORDER
+					, DEPT_LEVEL
+					, DEPT_STATE_CODE
+					, COM_CODE
+					, DEPT_LV1_CODE
+					, DEPT_LV2_CODE
+					, DEPT_LV3_CODE
+					, DEPT_LV4_CODE
+					, DEPT_LV1_NAME
+					, DEPT_LV2_NAME
+					, DEPT_LV3_NAME
+					, DEPT_LV4_NAME
+					, UPDATE_DATE
+					, REG_DATE
+				FROM 
+				  tb_depart_mst T
+				START WITH 
+				  dept_uper_code is null
+				CONNECT BY PRIOR 
+				  dept_code = dept_uper_code          
+          
+          
 	</select>
 	
 	<select id="selectList" resultType="egovMap">
@@ -87,11 +90,25 @@
 			, DEPT_LV2_NAME
 			, DEPT_LV3_NAME
 			, DEPT_LV4_NAME
-			, UPDATE_DATE
-			, REG_DATE
+			
 		FROM 
 		  tb_depart_mst T 
 		<include refid="defCond"></include>
+	</select>
+	
+	
+	<select id="selectActDept" resultMap="deptMap">
+		SELECT * FROM TB_MENU
+		WHERE MENU_TYP = #{menuTyp}
+		AND ACT_FLG = 'Y'
+		ORDER BY FKEY, GKEY, OKEY
+	</select>
+
+	<select id="selectTopDept" resultMap="deptMap">
+		SELECT * FROM TB_MENU
+		WHERE PKEY = 0
+		AND MENU_TYP = #{menuTyp}
+		ORDER BY FKEY
 	</select>
 
 </mapper>

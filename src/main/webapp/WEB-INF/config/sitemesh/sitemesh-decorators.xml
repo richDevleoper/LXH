@@ -48,6 +48,7 @@
 		<pattern>/suggest/*</pattern>
 		<pattern>/teach/*</pattern>
 		<pattern>/apprv/*</pattern>
+		<pattern>/education/*</pattern>
 		
 		<pattern>/article/*</pattern> 
 		<pattern>/content/view.do</pattern> 

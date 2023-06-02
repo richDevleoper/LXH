@@ -57,5 +57,10 @@ public class QPopupService {
 		
 		return dao.selectList("Depart.selectList", departVO); 
 	}
+	
+	public List<DepartVO> selectTreeList() {
+		
+		return dao.selectList("Depart.selectTreeList"); 
+	}
 		
 }
