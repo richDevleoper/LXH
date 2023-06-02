@@ -223,7 +223,7 @@
 	                        <label>이 름</label>
 	                        <input type="text" name="search_name" id="txtSearchName">
 	                    </div>
-	                    <button type="button" class="btn-submit" onclick="return popDept.callData()">조회</button>
+	                    <button type="button" class="btn-submit" onclick="return popEmp.callData()">조회</button>
 	                </div>
 	            <!-- </form> -->
 	        </div>
