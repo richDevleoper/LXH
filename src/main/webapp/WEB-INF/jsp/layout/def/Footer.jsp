@@ -301,6 +301,7 @@
 	            				//{"userId":"parksoomin","userName":"박수민"
 	            				//,"deptFullName":"울산설비팀(전기PM／변전실)"
 	            				//,"comJobx":"FE0","comPosition":"생산파트장","comCertBelt":null}
+	            				debugger;
 	            				$(".tr-empty").hide();
 	            				$(".tr-data").remove();
 	            				if(data.length===0){
