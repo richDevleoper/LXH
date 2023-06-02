@@ -34,6 +34,7 @@ public class ReportTeamVO {
 	private String beltNm; //벨트(명)
 	
 	private String cirName; 		// 분임조명
+	private String cirMemCode;
 	
 	
 	public Integer getRepTeamCode() {
@@ -175,6 +176,12 @@ public class ReportTeamVO {
 	public void setCirName(String cirName) {
 		this.cirName = cirName;
 	}
+	public String getCirMemCode() {
+		return cirMemCode;
+	}
+	public void setCirMemCode(String cirMemCode) {
+		this.cirMemCode = cirMemCode;
+	}
 	@Override
 	public String toString() {
 		return "ReportTeamVO [repTeamCode=" + repTeamCode + ", repCode=" + repCode + ", comNo=" + comNo + ", deptCode="
@@ -185,9 +192,7 @@ public class ReportTeamVO {
 				+ repTeamUpdateUser + ", repTeamUpdateDate=" + repTeamUpdateDate + ", repTeamMemStatus="
 				+ repTeamMemStatus + ", repTeamMemRoleNm=" + repTeamMemRoleNm + ", comJobxNm=" + comJobxNm
 				+ ", comPositionNm=" + comPositionNm + ", repTeamMemEduNm=" + repTeamMemEduNm + ", beltNm=" + beltNm
-				+ "]";
+				+ ", cirName=" + cirName + ", cirMemCode=" + cirMemCode + "]";
 	}
-	
 
-	
 }

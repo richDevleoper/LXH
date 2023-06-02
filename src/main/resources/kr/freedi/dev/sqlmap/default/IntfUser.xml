@@ -23,6 +23,7 @@
 	       , COM_POSITION as comPosition
 	       , COM_GROUP_JOBX as comGroupJobx
 	       , COM_DEPART_CODE as comDepartCode
+	       , GET_DEPART_NM(COM_DEPART_CODE) as comDepartName
 	       , COM_WORK_PLACE as comWorkPlace
 	       , COM_SIX_SIGMA_CODE as comSixSigmaCode
 	       , COM_POST_BELT as comPostBelt

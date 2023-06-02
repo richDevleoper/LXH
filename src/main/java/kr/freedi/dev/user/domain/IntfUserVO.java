@@ -36,6 +36,7 @@ public class IntfUserVO implements Serializable {
 	private String comPosition;
 	private String comGroupJobx;
 	private String comDepartCode;
+	private String comDepartName;
 	private String comWorkPlace;
 	private String comSixSigmaCode;
 	private String comPostBelt;
@@ -382,8 +383,13 @@ public class IntfUserVO implements Serializable {
 	public void setAuthId(String authId) {
 		this.authId = authId;
 	}
+	public String getComDepartName() {
+		return comDepartName;
+	}
+	public void setComDepartName(String comDepartName) {
+		this.comDepartName = comDepartName;
+	}
 	public String toString(){
 		return ToStringBuilder.reflectionToString(this);
 	}
-
 }

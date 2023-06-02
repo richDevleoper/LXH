@@ -245,7 +245,7 @@
 					, t.com_jobx        
 					, cd_job.code_nm com_jobx_nm                     
 					, t.com_position                    
-					, com_position com_position_nm            
+					, GET_CODE_NM('POSITION', com_position) com_position_nm            
 					, t.com_cert_belt              
 					, cd_blt.code_nm com_cert_belt_nm       
               FROM tb_user_mst T

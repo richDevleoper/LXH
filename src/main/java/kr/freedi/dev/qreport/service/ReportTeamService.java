@@ -46,6 +46,8 @@ public class ReportTeamService {
 		
 		if(teamVO.getComNo()!=null && !teamVO.getComNo().isEmpty()) {
 			Integer teamCode = (Integer)dao.selectOne("ReportTeam.selectNextFkey");
+			if(teamCode==null)
+				teamCode = 1;
 			teamVO.setRepTeamCode(teamCode);
 			dao.insert("ReportTeam.insert", teamVO);
 		}

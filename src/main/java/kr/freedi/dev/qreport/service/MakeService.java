@@ -69,6 +69,7 @@ public class MakeService {
 
 	
 	public void insert(MakeVO makeVO) throws Exception {
+		
 		int cirCode = idGnrService.getNextIntegerId();
 		makeVO.setCirCode(Integer.toString(cirCode));
 		
@@ -152,6 +153,10 @@ public class MakeService {
 		dao.insert("Make.insertCircleMst", makeVO);
 		
 		
+	}
+	
+	public void update(MakeVO makeVO) throws Exception {
+		//dao.insert("Make.insertCircleMst", makeVO);
 	}
 	
 	public JsonArray convertTreeJson(List<DepartVO> list) {

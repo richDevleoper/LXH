@@ -38,6 +38,7 @@ public class UserVO implements Serializable {
 	private String ipAddr;
 	private String sessionId;
 	
+
 	private List<Integer> cslMenuUseKeys;
 	
 	private ArticleVO currentArticleVO;
@@ -216,20 +217,24 @@ public class UserVO implements Serializable {
 	public void setCurrentArticleVO(ArticleVO currentArticleVO) {
 		this.currentArticleVO = currentArticleVO;
 	}
-	
-	public String toString(){
-		return ToStringBuilder.reflectionToString(this);
-	}
-
-
 	public IntfUserVO getIntfUserVO() {
 		return intfUserVO;
 	}
-
-
 	public void setIntfUserVO(IntfUserVO intfUserVO) {
 		this.intfUserVO = intfUserVO;
 	}
+	
+	@Override
+	public String toString() {
+		return "UserVO [USER_TYP_MNGR=" + USER_TYP_MNGR + ", USER_TYP_GENR=" + USER_TYP_GENR + ", USER_TYP_CORP="
+				+ USER_TYP_CORP + ", USER_TYP_INTF=" + USER_TYP_INTF + ", USER_TYP_GUEST=" + USER_TYP_GUEST
+				+ ", userTyp=" + userTyp + ", mngrUserVO=" + mngrUserVO + ", genrUserVO=" + genrUserVO + ", corpUserVO="
+				+ corpUserVO + ", intfUserVO=" + intfUserVO + ", loginYmdt=" + loginYmdt + ", locale=" + locale
+				+ ", ipAddr=" + ipAddr + ", sessionId=" + sessionId + ", cslMenuUseKeys="
+				+ cslMenuUseKeys + ", currentArticleVO=" + currentArticleVO + "]";
+	}
+	
+	
 }
 
 

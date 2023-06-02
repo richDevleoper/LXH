@@ -1004,6 +1004,7 @@ function onchange_resultType(obj){
 	let cdRepType1 = [];
 	let cdRepType2 = [];
 	let cdRepType3 = [];
+	let cdBusGrp = [];
 	
 	let codes = [
 		<c:forEach var="item" items="${allCodes}">{index:"${item.codeGrpId}",key:"${item.codeId}",value:"${item.codeNm}"},
@@ -1035,6 +1036,7 @@ function onchange_resultType(obj){
 		cdRepType1 = codes.filter(function(code){ return code.index==="RP_TY1";});
 		cdRepType2 = codes.filter(function(code){ return code.index==="RP_TY2";});
 		cdRepType3 = codes.filter(function(code){ return code.index==="RP_TY3";});
+		cdBusGrp = codes.filter(function(code){ return code.index==="BUSGRP"})
 		
 		let arrTypeCodeNm;
 		if($("#repDivisionCode").val()==="1"){
@@ -1074,6 +1076,9 @@ function onchange_resultType(obj){
 		onchange_ddlRepDevisionCode();	// 과제유형
 		$("#repTypeCode").val("${reportVO.repTypeCode}");
 		
+		setDropDown("repProductClass", [], true);
+		$("#repProductClass").val("${reportVO.repProductClass}");
+		
 		if($("#mode").val()==="UPDATE"){
 			//$("#repDivisionCode option").prop("disabled", true); // 바꿀 수 없도록 설정
 			/* $("#repDivisionCode").on("change", function(){
@@ -1106,6 +1111,9 @@ function onchange_resultType(obj){
 		$("#repDivisionCode").off("change").on("change", onchange_ddlRepDevisionCode); // 6σ Full Process여부
 		$("#repTypeCode").off("change").on("change", onchange_ddlRepTypeCode); // 과제유형
 		// onchange_ddlRepDevisionCode : 과제유형, 일정계획 입력창 변경
+		
+		$("#repSectorCode").off("change").on("change", onchange_ddlRepSectorCode); // 부문 선택
+
 		
 		//팀멤버 추가
 		$('.btn-team-member-add').off("click").on('click', function() {
@@ -1145,7 +1153,6 @@ function onchange_resultType(obj){
 			};
 		});
 		
-	
 		//결재버튼
 		$("#btnReqApproval").off("click").on("click", function(){
 			if($("#defaultForm").validationEngine('validate')){
@@ -1302,6 +1309,17 @@ function onchange_resultType(obj){
 		if($("#ddlRepTypeCode").length>0){
 			$("#ddlRepTypeCode").val($("#repTypeCode").val());
 		}
+	}
+	
+	
+	function onchange_ddlRepSectorCode(e){
+		// 부문 선택시 해당하는 제품군만 리스트에 보여준다.
+		let sectorCode = this.value;		//부문
+		let targetObjId = "repTypeCode";	//제품군
+		let cdBusGrpFiltered = cdBusGrp.filter(function(code){
+		    return code.key.startsWith('0'+sectorCode);
+		});
+		setDropDown("repProductClass", cdBusGrpFiltered, true);
 	}
 	
 	function onchange_ddlRepTypeCode(e){

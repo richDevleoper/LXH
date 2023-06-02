@@ -102,8 +102,18 @@
                                                 <th><form:label path="repProductClass"><span class="asterisk">*</span>제품군</form:label></th>
                                                 <td>
                                                     <div class="row">
-                                                        <div class="col s12 input-text">
-                                                            <form:input type="text" path="repProductClass" title="제품군을 입력해주세요." cssClass="validate[required]" />
+                                                        <div class="col s12 select-group">
+                                                            <%-- <form:input type="text" path="repProductClass" title="제품군을 입력해주세요." cssClass="validate[required]" /> --%>
+                                                            <form:select path="repProductClass" title="제품군을 선택하세요." cssClass="validate[required]">
+                                                            </form:select>
+                                                            <!-- <select name="repProductClass">
+                                                            	<option value="">선택하세요</option>
+                                                            	<option value="PL">PL</option>
+																<option value="중문">중문</option>
+																<option value="복층유리">복층유리</option>
+																<option value="복층유리">복층유리</option>
+																<option value="코팅유리">코팅유리</option>
+                                                            </select> -->
                                                         </div>
                                                     </div>
                                                 </td>
@@ -966,6 +976,7 @@ function onchange_resultType(obj){
 	let cdRepType1 = [];
 	let cdRepType2 = [];
 	let cdRepType3 = [];
+	let cdBusGrp = [];
 	
 	let codes = [
 		<c:forEach var="item" items="${allCodes}">{index:"${item.codeGrpId}",key:"${item.codeId}",value:"${item.codeNm}"},
@@ -985,7 +996,6 @@ function onchange_resultType(obj){
 		setControl()
 		
 		setEvent();
-		
 	}
 	
 	function initCode(){
@@ -1002,6 +1012,7 @@ function onchange_resultType(obj){
 		
 		cdRepType2 = codes.filter(function(code){ return code.index==="RP_TY2";});
 		cdRepType3 = codes.filter(function(code){ return code.index==="RP_TY3";});
+		cdBusGrp = codes.filter(function(code){ return code.index==="BUSGRP"});
 	}
 	
 	function setControl(){
@@ -1018,16 +1029,18 @@ function onchange_resultType(obj){
 		setDropDown("repMbbUseRateCode", cdMbbUseRate, false);//MBB활용율
 		const vRepMbbUseRate = "${reportVO.repMbbUseRateCode}";
 		if(vRepMbbUseRate){
-			$("#repMbbUseRateCode").val()	
+			$("#repMbbUseRateCode").val(vRepMbbUseRate)	;
 		}
 		
 		//setDropDown(".ddl-rep-result-type", cdRepResultType, true);//성과항목
 		const currYear = new Date().getFullYear();
 		$("#lblUseRefDt").text(currYear); $("#repUseRefDate").val(currYear);	//활용율 반영년도
-		
-		
+
 		onchange_ddlRepDevisionCode();	// 과제유형
 		$("#repTypeCode").val("${reportVO.repTypeCode}");
+		
+		setDropDown("repProductClass", [], true);
+		$("#repProductClass").val("${reportVO.repProductClass}");
 		
 		if($("#mode").val()==="UPDATE"){
 			//$("#repDivisionCode option").prop("disabled", true); // 바꿀 수 없도록 설정
@@ -1061,6 +1074,9 @@ function onchange_resultType(obj){
 		$("#repDivisionCode").off("change").on("change", onchange_ddlRepDevisionCode); // 6σ Full Process여부
 		$("#repTypeCode").off("change").on("change", onchange_ddlRepTypeCode); // 과제유형
 		// onchange_ddlRepDevisionCode : 과제유형, 일정계획 입력창 변경
+		
+		$("#repSectorCode").off("change").on("change", onchange_ddlRepSectorCode); // 부문 선택
+
 		
 		//팀멤버 추가
 		$('.btn-team-member-add').off("click").on('click', function() {
@@ -1103,7 +1119,7 @@ function onchange_resultType(obj){
 		//결재버튼
 		$("#btnReqApproval").off("click").on("click", function(){
 			if($("#defaultForm").validationEngine('validate')){
-				$("#repStatusCode").val("2"); // 상태 '선정중'으로 변경
+				$("#repStatusCode").val("2"); // 상태 임시저장 으로 저장
 				$("#defaultForm")[0].submit();	
 			};
 		});
@@ -1244,6 +1260,16 @@ function onchange_resultType(obj){
 		
 		changeTitle();
 		setDropDown(targetObjId, arrRepType, true);
+	}
+	
+	function onchange_ddlRepSectorCode(e){
+		// 부문 선택시 해당하는 제품군만 리스트에 보여준다.
+		let sectorCode = this.value;		//부문
+		let targetObjId = "repTypeCode";	//제품군
+		let cdBusGrpFiltered = cdBusGrp.filter(function(code){
+		    return code.key.startsWith('0'+sectorCode);
+		});
+		setDropDown("repProductClass", cdBusGrpFiltered, true);
 	}
 	
 	function onchange_ddlRepTypeCode(e){

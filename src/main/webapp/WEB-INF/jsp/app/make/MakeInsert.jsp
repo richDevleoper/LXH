@@ -16,7 +16,7 @@
 	<meta name="description" content="" />
 </head>
 <body>
-
+${makeVO}
                         <!-- breadcrumb -->
                         <div class="breadcrumb">
                             <ul>
@@ -24,23 +24,25 @@
                             </ul>
                         </div>
                         
-                        <form:form commandName="frmMake" id="defaultForm" name="defaultForm"  action="${action}" onsubmit="return false" method="post" modelAttribute="MakeVO">
+                        <form:form commandName="frmMake" id="defaultForm" name="defaultForm"  action="${action}" onsubmit="return false" method="post" modelAttribute="makeVO">
                         
-                        <form:hidden path="leader1" id="leader1"/>
-                        <form:hidden path="leader2" id="leader2"/>
-                        <form:hidden path="leader3" id="leader3"/>
-                        <form:hidden path="leader4" id="leader4"/>
-                        <form:hidden path="leader5" id="leader5"/>
-                        <form:hidden path="leader6" id="leader6"/>
-                        <form:hidden path="leader7" id="leader7"/>
+                        <form:hidden path="cirCode"/>
                         
-                        <form:hidden path="team1" id="team1"/>
-                        <form:hidden path="team2" id="team2"/>
-                        <form:hidden path="team3" id="team3"/>
-                        <form:hidden path="team4" id="team4"/>
-                        <form:hidden path="team5" id="team5"/>
-                        <form:hidden path="team6" id="team6"/>
-                        <form:hidden path="team7" id="team7"/>
+                        <form:hidden path="leader1"/> <!-- 저장용 -->
+                        <form:hidden path="leader2"/>
+                        <form:hidden path="leader3"/>
+                        <form:hidden path="leader4"/>
+                        <form:hidden path="leader5"/>
+                        <form:hidden path="leader6"/>
+                        <form:hidden path="leader7"/>
+                        
+                        <form:hidden path="team1"/>
+                        <form:hidden path="team2"/>
+                        <form:hidden path="team3"/>
+                        <form:hidden path="team4"/>
+                        <form:hidden path="team5"/>
+                        <form:hidden path="team6"/>
+                        <form:hidden path="team7"/>
                         
                         <div class="list-wrap mg-t20">
                             <div class="list-content">
@@ -143,7 +145,7 @@
 
                                                                     <div class="tree-list">
 																				
-                                                                        <ul>
+                                                                       <!--  <ul>
                                                                             <li onClick="javascript: getEmpSearch('IE26')">QCS</li>
                                                                                                                                                        
                                                                             <li>LX HSAI
@@ -161,7 +163,7 @@
                                                                             </li>
                                                                             
                                                                             
-                                                                        </ul>
+                                                                        </ul> -->
                                                                     </div>
                                                                 </div>
                                                                 <div class="inr" style="overflow: auto">
@@ -188,12 +190,13 @@
 																					                    </div>
 																									</th>
                                                                                                     <th><span>이름</span></th>
-                                                                                                    <th><span>직책</span></th>
+                                                                                                    <th><span>직위</span></th>
                                                                                                     <!-- <th><span>학력</span></th> -->
-                                                                                                    <th><span>직무</span></th>
+                                                                                                    <th><span>직책</span></th>
                                                                                                 </tr>
                                                                                             </thead>
                                                                                             <tbody>
+                                                                                            	
                                                                                             </tbody>
                                                                                         </table>
                                                                                     </div>
@@ -231,12 +234,23 @@
 																					                    </div>
 																									</th>
                                                                                                     <th><span>이름</span></th>
-                                                                                                    <th><span>직책</span></th>
+                                                                                                    <th><span>직위</span></th>
                                                                                                     <!-- <th><span>학력</span></th> -->
-                                                                                                    <th><span>직무</span></th>
+                                                                                                    <th><span>직책</span></th>
                                                                                                 </tr>
                                                                                             </thead>
                                                                                             <tbody>
+                                                                                            <c:forEach var="item" items="${makeVO.teamMemList}">
+                                                                                            	<c:if test="${item.repTeamMemRole eq 'LEADER'}">
+																									<tr comno="${item.comNo}" username="${item.repTeamMemName}" comdepartcode="${item.deptCode}" deptfullname="${item.deptName}" 
+																										comjobx="${item.comJobxCode}" composition="${item.comPositionCode}" compositionnm="${item.comPositionNm}" comcertbelt="${item.beltCode}" comcertbeltnm="${item.beltNm}">
+																										<td class="text-align-center"><div><input type="checkbox" id="chkleader_0" name="chkleader">
+																										<label for="chkleader_0"></label></div></td>
+																										<td class="text-align-center"><span>${item.repTeamMemName}</span></td>
+																										<td class="text-align-center"><span>${item.comJobxNm}</span></td>
+																										<td class="text-align-center"><span>${item.comPositionNm}</span></td></tr>
+																								</c:if>
+																							</c:forEach>
                                                                                             </tbody>
                                                                                         </table>
                                                                                     </div>
@@ -275,12 +289,24 @@
 																						                    </div>
 																										</th>
 	                                                                                                    <th><span>이름</span></th>
-	                                                                                                    <th><span>직책</span></th>
+	                                                                                                    <th><span>직위</span></th>
 	                                                                                                    <!-- <th><span>학력</span></th> -->
-	                                                                                                    <th><span>직무</span></th>
+	                                                                                                    <th><span>직첵</span></th>
 	                                                                                                </tr>
 	                                                                                            </thead>
 	                                                                                            <tbody>
+	                                                                                            <c:forEach var="item" items="${makeVO.teamMemList}" varStatus="status">
+                                                                                            	<c:if test="${item.repTeamMemRole eq 'TEAM'}">
+																									<tr comno="${item.comNo}" username="${item.repTeamMemName}" comdepartcode="${item.deptCode}" deptfullname="${item.deptName}" 
+																										comjobx="${item.comJobxCode}" composition="${item.comPositionCode}" compositionnm="${item.comPositionNm}" comcertbelt="${item.beltCode}" comcertbeltnm="${item.beltNm}">
+																										<td class="text-align-center"><div><input type="checkbox" id="chkteam_0" name="chkteam">
+																											<label for="chkteam_0"></label></div></td>
+																										<td class="text-align-center"><span>${item.repTeamMemName}</span></td>
+																										<td class="text-align-center"><span>${item.comJobxNm}</span></td>
+																										<td class="text-align-center"><span>${item.comPositionNm}</span></td>
+																									</tr>
+																								</c:if>
+																							</c:forEach>
 	                                                                                            </tbody>
 	                                                                                        </table>
                                                                                         </div>
@@ -317,10 +343,17 @@
                         </div>
                         <div class="list-footer">
                             <div class="list-btns center">
+                            <c:if test="${empty makeVO.cirCode}">
                                 <button type="button" class="btn bg-gray" id="btnSave">                                        
                                     <span>대상선정</span>
                                 </button>
-                                <a href="/team/makelist.do?menuKey=70" class="btn">목록</a>                               
+                            </c:if>
+                            <c:if test="${not empty makeVO.cirCode}">
+                                <button type="button" class="btn bg-gray" id="btnSave">                                        
+                                    <span>저장</span>
+                                </button>
+                            </c:if>
+                                <a href="/sub.do?menuKey=${menuKey}" class="btn">목록</a>                               
                             </div>
                         </div>
                 </form:form>
@@ -333,9 +366,8 @@
 var deptList = ${deptList};
 
 $(document).ready(function(){
-	//init();
-	//initCode();
 	
+	// 부서 Tree 초기화
 	$('.tree-list').jstree({
         "plugins" : ['search'],
         "search" : {
@@ -381,7 +413,6 @@ $(document).ready(function(){
 		$("#emptab").children("tbody:first").children("tr[comNo]").each(function(i){
 			var comNo = $(this).attr("comNo");
 			var userName   = $(this).attr("userName");
-			
 			var comDepartCode   = $(this).attr("comDepartCode");
 			var deptFullName   = $(this).attr("deptFullName");
 			var comJobx   = $(this).attr("comJobx");
@@ -393,8 +424,6 @@ $(document).ready(function(){
 			
 			let res = true;
 			
-			
-			
 			$("#leadertab").children("tbody:first").children("tr[comNo]").each(function(i){
 				var leadercomNo = $(this).attr("comNo");
 				if(comNo==leadercomNo){
@@ -405,8 +434,8 @@ $(document).ready(function(){
 			
 			if(res){
 				if($(this).find("input:checkbox[name='chkNo']").is(":checked")){
-					console.log(comNo);
-					console.log(comDepartCode);
+					//console.log(comNo);
+					//console.log(comDepartCode);
 					
 					vhtml.push("<tr comNo='"+comNo+"' userName='"+userName+"' comDepartCode='"+comDepartCode+"' deptFullName='"+deptFullName+"' comJobx='"+comJobx+"' comPosition='"+comPosition+"' comPositionNm='"+strChk(comPositionNm)+"' comCertBelt='"+comCertBelt+"' comCertBeltNm='"+comCertBeltNm+"' >");
 	        		vhtml.push("<td class='text-align-center'>"); 
@@ -600,7 +629,7 @@ function checkValidation(){
 		leader7 += deptFullName + ",";
 		
 	});
-    
+    debugger;
     leader1 = leader1.substring(0, leader1.length-1);
     leader2 = leader2.substring(0, leader2.length-1);
     leader3 = leader3.substring(0, leader3.length-1);
