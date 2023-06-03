@@ -16,7 +16,6 @@
 	<meta name="description" content="" />
 </head>
 <body>
-${makeVO}
                         <!-- breadcrumb -->
                         <div class="breadcrumb">
                             <ul>
@@ -35,6 +34,7 @@ ${makeVO}
                         <form:hidden path="leader5"/>
                         <form:hidden path="leader6"/>
                         <form:hidden path="leader7"/>
+                        <form:hidden path="leader8"/>
                         
                         <form:hidden path="team1"/>
                         <form:hidden path="team2"/>
@@ -43,6 +43,9 @@ ${makeVO}
                         <form:hidden path="team5"/>
                         <form:hidden path="team6"/>
                         <form:hidden path="team7"/>
+                        <form:hidden path="team8"/>
+                        
+                        <form:hidden path="removeMemberIds"/>
                         
                         <div class="list-wrap mg-t20">
                             <div class="list-content">
@@ -240,15 +243,25 @@ ${makeVO}
                                                                                                 </tr>
                                                                                             </thead>
                                                                                             <tbody>
-                                                                                            <c:forEach var="item" items="${makeVO.teamMemList}">
+                                                                                            <c:forEach var="item" items="${makeVO.teamMemList}" varStatus="status">
                                                                                             	<c:if test="${item.repTeamMemRole eq 'LEADER'}">
-																									<tr comno="${item.comNo}" username="${item.repTeamMemName}" comdepartcode="${item.deptCode}" deptfullname="${item.deptName}" 
-																										comjobx="${item.comJobxCode}" composition="${item.comPositionCode}" compositionnm="${item.comPositionNm}" comcertbelt="${item.beltCode}" comcertbeltnm="${item.beltNm}">
-																										<td class="text-align-center"><div><input type="checkbox" id="chkleader_0" name="chkleader">
-																										<label for="chkleader_0"></label></div></td>
+																									<tr comno="${item.comNo}" 
+																									    username="${item.repTeamMemName}" 
+																									    comdepartcode="${item.deptCode}" 
+																									    deptfullname="${item.deptName}" 
+																										comjobx="${item.comJobxCode}" 
+																										composition="${item.comPositionCode}" 
+																										compositionnm="${item.comPositionNm}" 
+																										comcertbelt="${item.beltCode}" 
+																										comcertbeltnm="${item.beltNm}"
+																										cirMemCode="${item.cirMemCode}"
+																										>
+																										<td class="text-align-center"><div><input type="checkbox" id="chkleader_${status.index}" name="chkleader">
+																										<label for="chkleader_${status.index}"></label></div></td>
 																										<td class="text-align-center"><span>${item.repTeamMemName}</span></td>
 																										<td class="text-align-center"><span>${item.comJobxNm}</span></td>
-																										<td class="text-align-center"><span>${item.comPositionNm}</span></td></tr>
+																										<td class="text-align-center"><span>${item.comPositionNm}</span></td>
+																									</tr>
 																								</c:if>
 																							</c:forEach>
                                                                                             </tbody>
@@ -297,16 +310,24 @@ ${makeVO}
 	                                                                                            <tbody>
 	                                                                                            <c:forEach var="item" items="${makeVO.teamMemList}" varStatus="status">
                                                                                             	<c:if test="${item.repTeamMemRole eq 'TEAM'}">
-																									<tr comno="${item.comNo}" username="${item.repTeamMemName}" comdepartcode="${item.deptCode}" deptfullname="${item.deptName}" 
-																										comjobx="${item.comJobxCode}" composition="${item.comPositionCode}" compositionnm="${item.comPositionNm}" comcertbelt="${item.beltCode}" comcertbeltnm="${item.beltNm}">
-																										<td class="text-align-center"><div><input type="checkbox" id="chkteam_0" name="chkteam">
-																											<label for="chkteam_0"></label></div></td>
+																									<tr comno="${item.comNo}" 
+																									    username="${item.repTeamMemName}" 
+																									    comdepartcode="${item.deptCode}" 
+																									    deptfullname="${item.deptName}" 
+																										comjobx="${item.comJobxCode}" 
+																										composition="${item.comPositionCode}" 
+																										compositionnm="${item.comPositionNm}" 
+																										comcertbelt="${item.beltCode}" 
+																										comcertbeltnm="${item.beltNm}"
+																										cirMemCode="${item.cirMemCode}">
+																										<td class="text-align-center"><div><input type="checkbox" id="chkteam_${status.index}" name="chkteam">
+																											<label for="chkteam_${status.index}"></label></div></td>
 																										<td class="text-align-center"><span>${item.repTeamMemName}</span></td>
 																										<td class="text-align-center"><span>${item.comJobxNm}</span></td>
 																										<td class="text-align-center"><span>${item.comPositionNm}</span></td>
 																									</tr>
 																								</c:if>
-																							</c:forEach>
+																								</c:forEach>
 	                                                                                            </tbody>
 	                                                                                        </table>
                                                                                         </div>
@@ -421,6 +442,7 @@ $(document).ready(function(){
 			var comPositionNm   = $(this).attr("comPositionNm");
 			var comCertBelt   = $(this).attr("comCertBelt");
 			var comCertBeltNm   = $(this).attr("comCertBeltNm");
+			var cirMemCode = $(this).attr("cirMemCode");
 			
 			let res = true;
 			
@@ -437,7 +459,7 @@ $(document).ready(function(){
 					//console.log(comNo);
 					//console.log(comDepartCode);
 					
-					vhtml.push("<tr comNo='"+comNo+"' userName='"+userName+"' comDepartCode='"+comDepartCode+"' deptFullName='"+deptFullName+"' comJobx='"+comJobx+"' comPosition='"+comPosition+"' comPositionNm='"+strChk(comPositionNm)+"' comCertBelt='"+comCertBelt+"' comCertBeltNm='"+comCertBeltNm+"' >");
+					vhtml.push("<tr comNo='"+comNo+"' userName='"+userName+"' comDepartCode='"+comDepartCode+"' deptFullName='"+deptFullName+"' comJobx='"+comJobx+"' comPosition='"+comPosition+"' comPositionNm='"+strChk(comPositionNm)+"' comCertBelt='"+comCertBelt+"' comCertBeltNm='"+comCertBeltNm+"' cirMemCode=''>");
 	        		vhtml.push("<td class='text-align-center'>"); 
 	        		vhtml.push("<div>");
 	        		vhtml.push("<input type='checkbox' id='chkleader_"+i+"' name='chkleader'>");
@@ -469,9 +491,14 @@ $(document).ready(function(){
 	$("#delLeader").on("click", function(){
 		$("#leadertab").children("tbody:first").children("tr[comNo]").each(function(i){
 			if($(this).find("input:checkbox[name='chkleader']").is(":checked")){
+
 				var $check_idx = $(this).closest("tr").index();
-				console.log($check_idx);
-				
+				var removeId = $("#leadertab tbody tr").eq($check_idx).attr("cirmemcode");
+				let removeList = $("#removeMemberIds").val();
+				if(removeList)
+					removeList += ",";
+				removeList += removeId;
+				$("#removeMemberIds").val(removeList)
 				$("#leadertab tbody tr").eq($check_idx).remove();
 				$(this).closest("tr").remove();
 			}
@@ -491,6 +518,7 @@ $(document).ready(function(){
 			var comPositionNm   = $(this).attr("comPositionNm");
 			var comCertBelt   = $(this).attr("comCertBelt");
 			var comCertBeltNm   = $(this).attr("comCertBeltNm");
+			var cirMemCode = $(this).attr("cirMemCode");
 			
 			let res = true;
 			$("#teamtab").children("tbody:first").children("tr[comNo]").each(function(i){
@@ -506,7 +534,7 @@ $(document).ready(function(){
 					console.log(comNo);
 					console.log(comDepartCode);
 					
-					vhtml.push("<tr comNo='"+comNo+"' userName='"+userName+"' comDepartCode='"+comDepartCode+"' deptFullName='"+deptFullName+"' comJobx='"+comJobx+"' comPosition='"+comPosition+"' comPositionNm='"+strChk(comPositionNm)+"' comCertBelt='"+comCertBelt+"' comCertBeltNm='"+comCertBeltNm+"' >");
+					vhtml.push("<tr comNo='"+comNo+"' userName='"+userName+"' comDepartCode='"+comDepartCode+"' deptFullName='"+deptFullName+"' comJobx='"+comJobx+"' comPosition='"+comPosition+"' comPositionNm='"+strChk(comPositionNm)+"' comCertBelt='"+comCertBelt+"' comCertBeltNm='"+comCertBeltNm+"' cirMemCode=''>");
 	        		vhtml.push("<td class='text-align-center'>"); 
 	        		vhtml.push("<div>");
 	        		vhtml.push("<input type='checkbox' id='chkteam_"+i+"' name='chkteam'>");
@@ -534,7 +562,14 @@ $(document).ready(function(){
 	$("#delTeam").on("click", function(){
 		$("#teamtab").children("tbody:first").children("tr[comNo]").each(function(i){
 			if($(this).find("input:checkbox[name='chkteam']").is(":checked")){
+				debugger;
 				var $check_idx = $(this).closest("tr").index();
+				var removeId = $("#teamtab tbody tr").eq($check_idx).attr("cirmemcode");
+				let removeList = $("#removeMemberIds").val();
+				if(removeList)
+					removeList += ",";
+				removeList += removeId;
+				$("#removeMemberIds").val(removeList)
 				$("#teamtab tbody tr").eq($check_idx).remove();
 				$(this).closest("tr").remove();
 			}
@@ -607,6 +642,7 @@ function checkValidation(){
     var leader5 = "";
     var leader6 = "";
     var leader7 = "";
+    var leader8 = "";
     
     $("#leadertab").children("tbody:first").children("tr[comNo]").each(function(i){
     	var comNo = $(this).attr("comNo");
@@ -619,6 +655,7 @@ function checkValidation(){
 		var comCertBelt   = $(this).attr("comCertBelt");
 		var comCertBeltNm   = $(this).attr("comCertBeltNm");
 		var deptFullName   = $(this).attr("deptFullName");
+		var cirMemCode = $(this).attr("cirMemCode");
 		
 		leader1 += comNo + ",";
 		leader2 += userName + ",";
@@ -627,9 +664,10 @@ function checkValidation(){
 		leader5 += comPosition + ",";
 		leader6 += comCertBelt + ",";
 		leader7 += deptFullName + ",";
+		leader8 += cirMemCode + ",";
 		
 	});
-    debugger;
+
     leader1 = leader1.substring(0, leader1.length-1);
     leader2 = leader2.substring(0, leader2.length-1);
     leader3 = leader3.substring(0, leader3.length-1);
@@ -637,6 +675,7 @@ function checkValidation(){
     leader5 = leader5.substring(0, leader5.length-1);
     leader6 = leader6.substring(0, leader6.length-1);
     leader7 = leader7.substring(0, leader7.length-1);
+    leader8 = leader8.substring(0, leader8.length-1);
     
     $("#leader1").val(leader1);
     $("#leader2").val(leader2);
@@ -645,6 +684,7 @@ function checkValidation(){
     $("#leader5").val(leader5);
     $("#leader6").val(leader6);
     $("#leader7").val(leader7);
+    $("#leader8").val(leader8);
     
     var team1 = "";
     var team2 = "";
@@ -653,6 +693,7 @@ function checkValidation(){
     var team5 = "";
     var team6 = "";
     var team7 = "";
+    var team8 = "";
     
     $("#teamtab").children("tbody:first").children("tr[comNo]").each(function(i){
     	var comNo = $(this).attr("comNo");
@@ -665,6 +706,7 @@ function checkValidation(){
 		var comCertBelt   = $(this).attr("comCertBelt");
 		var comCertBeltNm   = $(this).attr("comCertBeltNm");
 		var deptFullName   = $(this).attr("deptFullName");
+		var cirMemCode = $(this).attr("cirMemCode");
 		
 		team1 += comNo + ",";
 		team2 += userName + ",";
@@ -673,7 +715,7 @@ function checkValidation(){
 		team5 += comPosition + ",";
 		team6 += comCertBelt + ",";
 		team7 += deptFullName + ",";
-		
+		team8 += cirMemCode + ",";
 	});
     
     team1 = team1.substring(0, team1.length-1);
@@ -683,6 +725,7 @@ function checkValidation(){
     team5 = team5.substring(0, team5.length-1);
     team6 = team6.substring(0, team6.length-1);
     team7 = team7.substring(0, team7.length-1);
+    team8 = team8.substring(0, team8.length-1);
     
     $("#team1").val(team1);
     $("#team2").val(team2);
@@ -691,6 +734,7 @@ function checkValidation(){
     $("#team5").val(team5);
     $("#team6").val(team6);
     $("#team7").val(team7);
+    $("#team8").val(team8);
 	
 	return true;
 }

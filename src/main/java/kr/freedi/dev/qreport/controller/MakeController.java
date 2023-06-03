@@ -154,7 +154,7 @@ public class MakeController {
 			makeService.insert(makeVO);	
 		} else {
 			makeVO.setCirUpdateUser(userSession.getUserId());
-			//makeService.update(makeVO);
+			makeService.update(makeVO);
 		}
 		
 		

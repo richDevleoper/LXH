@@ -223,7 +223,46 @@
 			,#{cirRegUser} 
 			,SYSDATE
 		)
-	</insert>       
+	</insert>    
+	
+	
+	<insert id="updateCircleMst" parameterType="kr.freedi.dev.qreport.domain.MakeVO">
+		 update TB_CIRCLE_MST 
+			set CIR_REG_NUM = #{cirRegNum}
+				, DEPT_CODE = #{deptCode}
+				, DEPT_NAME = #{deptName}
+				, CIR_TCH_COM_NO = #{cirTchComNo}
+				, CIR_WORK_MEM_NO = #{cirWorkMemNo}
+				, CIR_TEAM_LEADER_NO = #{cirTeamLeaderNo}
+				, CIR_RECORD_CONT = #{cirRecordCont}
+				, CIR_MEM_CNT = #{cirMemCnt}
+				, CIR_MEM_STATUS = #{cirMemStatus}
+				, CIR_NAME = #{cirName}
+				, CIR_LEADER_NAME = #{cirLName}
+				, CIR_LEADER_DEPTNAME = #{cirLeaderdeptName}
+				, CIR_UPDATE_USER = #{cirUpdateUser}
+				, CIR_UPDATE_DATE = SYSDATE
+		  where CIR_CODE = #{cirCode}
+	</insert>
+	
+	<update id="updateCircleDtl" parameterType="kr.freedi.dev.qreport.domain.MakeVO">
+		update TB_CIRCLE_DETAIL set
+				 CIR_CODE = #{cirCode} 
+				, COM_NO = #{ComNo} 
+				, DEPT_CODE = #{cirDeptCode} 
+				, DEPT_NAME = #{cirDeptName} 
+				, COM_JOBX_CODE = #{comJobxCode}
+				, COM_POSITION_CODE = #{comPositionCode}
+				, BELT_CODE = #{beltCode}
+				, CIR_MEM_NAME = #{cirMemName}
+				, CIR_MEM_EDU_CODE = #{cirMemEduCode}
+				, CIR_MEM_ROLE = #{cirMemRole}
+				, CIR_MEM_STATUS = #{cirMemStatus} 
+				, CIR_UPDATE_USER = #{cirUpdateUser} 
+				, CIR_UPDATE_DATE = SYSDATE
+		where CIR_MEM_CODE = #{cirMemCode}
+		 
+	</update>       
 	
 	
 	<sql id="detCond">
@@ -255,5 +294,9 @@
 		    )
 		ORDER BY COM_JOBX ASC, USER_NAME
 	</select>
+	
+	<delete id="deleteCircleDtl">
+		DELETE FROM TB_CIRCLE_DETAIL WHERE CIR_MEM_CODE = #{cirMemCode}
+	</delete>
 	
 </mapper>
