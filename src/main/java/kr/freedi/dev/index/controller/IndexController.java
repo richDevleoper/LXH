@@ -130,6 +130,9 @@ public class IndexController {
 	@RequestMapping("/index.do")
 	public String indexHandler(HttpServletRequest request, ModelMap model,
 			@RequestParam(required = false, value = "login_no") String empNo) throws Exception {
+		
+		menuService.setHeaderInormation(request); 
+		
 		return "index/qi/Index";
 	}
 

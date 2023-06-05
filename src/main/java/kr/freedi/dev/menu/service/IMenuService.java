@@ -3,10 +3,13 @@ package kr.freedi.dev.menu.service;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import kr.freedi.dev.common.exception.NotAllowFileExtException;
 import kr.freedi.dev.common.exception.OverflowFileSizeException;
 import kr.freedi.dev.menu.domain.MenuVO;
 
+import org.springframework.ui.ModelMap;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.googlecode.ehcache.annotations.Cacheable;
@@ -72,6 +75,7 @@ public interface IMenuService {
 	
 	public abstract void refreshEcache();
 
+	public abstract void setHeaderInormation(HttpServletRequest request);
 
 }
 

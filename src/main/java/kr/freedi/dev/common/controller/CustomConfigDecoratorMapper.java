@@ -140,6 +140,8 @@ public class CustomConfigDecoratorMapper extends ConfigDecoratorMapper {
 					request.setAttribute("currentMenu", menuVO);
 					request.setAttribute("historyMenuList", menuService.getHistoryMenuList(menuVO.getMenuKey()));
 					
+					menuService.setHeaderInormation(request);
+					
 					/*if(decorator.getName().equals("def")){
 			        	ApplicationContext ac = ContextLoader.getCurrentWebApplicationContext();
 			        	IBannerService bannerService = (IBannerService)ac.getBean("bannerService");
@@ -150,6 +152,8 @@ public class CustomConfigDecoratorMapper extends ConfigDecoratorMapper {
 			    		request.setAttribute("subBanner", bannerService.selectFullList(visualBannerVO).get(0));
 			        }*/
 				}
+				
+				
 			//eng
 			}else if(decorator.getName().equals("eng") || decorator.getName().equals("engIndex")){
 				request.setAttribute("treeMenuList", menuService.getActTreeList(MENU_TYP_ENG));
@@ -201,6 +205,5 @@ public class CustomConfigDecoratorMapper extends ConfigDecoratorMapper {
 		request.getSession().setAttribute("currentUrl", currentUrl);
 
 		return decorator;
-
 	}
 }

@@ -7,11 +7,13 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.googlecode.ehcache.annotations.Cacheable;
@@ -610,6 +612,14 @@ public class MenuService implements IMenuService {
 	@TriggersRemove(cacheName = "cache", removeAll = true)
 	public void refreshEcache() {
 		log.debug("clear cache = ok");
+	}
+
+	@Override
+	public void setHeaderInormation(HttpServletRequest request) {
+		// TODO Auto-generated method stub HEADER.jsp 정보 가져오기.
+		request.setAttribute("countReport",1);
+		request.setAttribute("countApprove",2);
+		request.setAttribute("countEducation",3);
 	}
 }
 
