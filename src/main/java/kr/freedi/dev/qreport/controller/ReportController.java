@@ -76,11 +76,14 @@ public class ReportController {
 		model.addAttribute("repMenuCode", REP_MENU_CODE);
 		
 		searchVO.setMenuCode(REP_MENU_CODE);
-		searchVO.setSearchUserid(userSession.getUserId());
+		String pSearchUser = userSession.getUserId();
+		if(pSearchUser==null)
+			pSearchUser = "x";
+		searchVO.setSearchUserid(pSearchUser);
+		
 		
 		List<EgovMap> countList = reportService.selectListCount2(searchVO);
-		
-		
+				
 		int totalCount = 0;
 		for (EgovMap egovMap : countList) {
 			BigDecimal currVal = (BigDecimal)egovMap.get("cnt");
@@ -176,7 +179,7 @@ public class ReportController {
 				&& retVO.getRepDivisionCode() !=null 
 				&& !retVO.getRepDivisionCode().equals("1")) {  
 			// 임시저장, 상신중 인 6시그마 건만 별도 페이지에서 처리. (일정계획의 포멧이 다름)
-			return "app/report/InsertFormStat1";	
+			return "app/report/InsertFormStat1";
 		} else {
 			return "app/report/InsertForm";
 		}

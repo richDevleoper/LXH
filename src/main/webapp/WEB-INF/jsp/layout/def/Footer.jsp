@@ -95,12 +95,12 @@
 	            			init : function(){
 	            				$(".tr-empty").show();
 	            				$(".tr-data").remove();
-	            				$("#"+this.searchObjId).val("");
-	            				$("#"+this.searchObjId).off("keyup").on("keyup", function(e){
+	            				$("#"+popDept.searchObjId).val("");
+	            				$("#"+popDept.searchObjId).off("keyup").on("keyup", function(e){
 	            					if(e.keyCode==13){
 	            						popDept.callData();
 	            					}	
-	            				})
+	            				});
 	            				
 	            				this.returnObjId = null;
 	            				this.returnFunc = null;
@@ -281,6 +281,11 @@
 	            				$(".tr-empty").show();
 	            				$(".tr-data").remove();
 	            				$("#txtSearchName").val("");
+	            				$("#txtSearchName").off("keyup").on("keyup", function(e){
+	            					if(e.keyCode==13){
+	            						popEmp.callData();
+	            					}	
+	            				});
 	            				
 	            				this.returnObjId = null;
 	            				this.returnFunc = null;
@@ -630,14 +635,14 @@
                            <td>년 1천만원이상(8백 이상 25점)</td>
                            <td>년 6백만원이상(4백 이상 15점)</td>
                            <td>년 2백만원이상(2백 미만 56점)</td>
-                           <td rowspan=3">
-                           	<select name="">
+                           <td rowspan=3" class="col s12 select-group">
+                           	<select id="apprItem1" class="appr-item">
 				              <option value="">선택</option>		
-				              <option value="">5</option>
-				              <option value="">4</option>
-				              <option value="">3</option>
-				              <option value="">2</option>
-				              <option value="">1</option>				                             
+				              <option value="5">5</option>
+				              <option value="4">4</option>
+				              <option value="3">3</option>
+				              <option value="2">2</option>
+				              <option value="1">1</option>				                             
                            	</select> 
      					</td>                                                                                                                                                
                        </tr>
@@ -667,14 +672,14 @@
                            <td>모방적이나 착안점이 우수함</td>
                            <td>모방적이나 약간의 노력이 있음</td>
                            <td>단순 모방임</td>    
-                           <td>
-                           	<select name="">
+                           <td class="col s12 select-group">
+                           	<select id="apprItem4" class="appr-item">
 				              <option value="">선택</option>	
-				              <option value="">5</option>
-				              <option value="">4</option>
-				              <option value="">3</option>
-				              <option value="">2</option>
-				              <option value="">1</option>					                             
+				              <option value="5">5</option>
+				              <option value="4">4</option>
+				              <option value="3">3</option>
+				              <option value="2">2</option>
+				              <option value="1">1</option>					                             
                            	</select> 
      					</td>                                                                                                                                                                                               
                        </tr>
@@ -686,14 +691,14 @@
                            <td>팀내(전 라인)적용 가능</td>
                            <td>라인 일부 가능</td>
                            <td>개인차원의 효과</td>    
-                           <td>
-                           	<select name="">
+                           <td class="col s12 select-group">
+                           	<select id="apprItem5" class="appr-item">
 				              <option value="">선택</option>	
-				              <option value="">5</option>
-				              <option value="">4</option>
-				              <option value="">3</option>
-				              <option value="">2</option>
-				              <option value="">1</option>					                             
+				              <option value="5">5</option>
+				              <option value="4">4</option>
+				              <option value="3">3</option>
+				              <option value="2">2</option>
+				              <option value="1">1</option>					                             
                            	</select> 
      					</td>                                                                                                                                                                                               
                        </tr>
@@ -705,14 +710,14 @@
                            <td>장기간(5년이상)</td>
                            <td>단기적(1년이상)</td>
                            <td>일시적(1년미만)</td>    
-                           <td>
-                           	<select name="">
+                           <td class="col s12 select-group">
+                           	<select id="apprItem6" class="appr-item">
 				              <option value="">선택</option>		
-				              <option value="">5</option>
-				              <option value="">4</option>
-				              <option value="">3</option>
-				              <option value="">2</option>
-				              <option value="">1</option>				                             
+				              <option value="5">5</option>
+				              <option value="4">4</option>
+				              <option value="3">3</option>
+				              <option value="2">2</option>
+				              <option value="1">1</option>				                             
                            	</select> 
      					</td>                                                                                                                                                                                               
                        </tr>
@@ -724,14 +729,14 @@
                            <td>-</td>
                            <td>어느 정도의 노력이 엿보임</td>
                            <td>거의 노력이 엿보이지 않음</td>    
-                           <td>
-                           	<select name="">
+                           <td class="col s12 select-group">
+                           	<select id="apprItem7" class="appr-item">
 				              <option value="">선택</option>						                             
-				              <option value="">5</option>
-				              <option value="">4</option>
-				              <option value="">3</option>
-				              <option value="">2</option>
-				              <option value="">1</option>
+				              <option value="5">5</option>
+				              <option value="4">4</option>
+				              <option value="3">3</option>
+				              <option value="2">2</option>
+				              <option value="1">1</option>
                            	</select> 
      					</td>                                                                                                                                                                                               
                        </tr>
@@ -740,7 +745,7 @@
                        	<th class="font-weight-bold" colspan="7">배점합계</th>
                            <td>
                            	<div class="col s12 input-text">
-                           		<input type="text" id="" name="" value="" title="">
+                           		<input type="text" id="apprItemSum" class="align-right" readonly="readonly">
                                </div>
                           	</td>                                                                                                                                                                                                                                               
                        </tr>
@@ -748,7 +753,7 @@
                        	<td colspan="8">
                                <div class="row">
                                    <div class="col s12 input-text">
-                                       <textarea name="" id="" rows="4"></textarea>
+                                       <textarea name="POP_APPR_COMMENT" id="popAppr_comment" rows="4"></textarea>
                                    </div>
                                </div>
                            </td>
@@ -758,16 +763,89 @@
               </div>
               <div class="list-footer">
      				<div class="list-btns center">
-           		<button type="button" class="btn bg-gray">                                        
+           		<button type="button" class="btn bg-gray" onclick="popApprove.onSubmit()">                                        
                		<span>결재승인</span>
            		</button>
-           			<a href="" class="btn">취소</a>                               
+           			<a href="javascript:popApprove.close();" class="btn">취소</a>                               
       				</div>
               </div>	    
   				
 	    </div>
 	</div>
 </div>
+<script>
+
+let popApprove = {
+		returnObjId : null,  //팝업에서 선택한 사람을 리턴할 객체
+		returnFunc : null,
+		searchObjId : "popAppr_comment",
+		modalPopId : "comPopup_apprInfoRegi",
+		//dataAppendId : "tbodyDeptSearch",
+		//radioObjClass : "radio-selected",
+		open : function(){
+			$(".modal-dimmed").show();
+			$("#"+this.modalPopId).show();
+		},
+		close: function(){
+			$(".modal-dimmed").hide();
+	 		$("#"+this.modalPopId).hide();
+	 		
+	 		this.init();
+		},
+		init : function(){
+			
+			$("#"+popApprove.searchObjId).val("");
+			
+			
+			$(".appr-item").val("").off("change").on("change", function(){
+				let scoreTotal = 0;
+				$(".appr-item").each(function(i,o){
+					scoreTotal += Number($(o).val());
+				});
+				$("#apprItemSum").val(scoreTotal);
+			});
+			$("#apprItemSum").val("0");
+			
+			this.returnObjId = null;
+			this.returnFunc = null;
+		},
+    	onSubmit: function(){
+    		
+    		let boolFlag = true;
+    		
+    		$(".appr-item").each(function(i,o){
+				if($(o).val()===""){
+					boolFlag = false;
+				}
+			});
+    		
+    		if(!boolFlag){
+    			alert("배점을 입력해주세요.");
+    			boolFlag = false;
+				return false;
+    		}
+    		
+    		let letData = {
+    				txtComment:$("#"+popApprove.searchObjId).val(),
+    				score1:$("#apprItem1").val(),
+    				score4:$("#apprItem4").val(),
+    				score5:$("#apprItem5").val(),
+    				score6:$("#apprItem6").val(),
+    				score7:$("#apprItem7").val(),
+    				scoreTotal:$("#apprItemSum").val()
+    				};
+    		
+    		if(this.returnFunc){
+    			this.returnFunc(popDept.returnObjId, letData); //리턴함수 호출, 초기화 전 객체명 넘기기
+    			this.close();	// 팝업 Close, 각 파라메터 초기화
+    		} else {
+    			alert("반환 함수가 정의되지 않았습니다.");
+    		}
+    	}
+};
+
+</script>
+
 
 <!-- 79 반려의견 등록 -->
 <div class="org-modal" id="comPopup_rejectCommentsRegi">
@@ -788,7 +866,7 @@
 						<td>
 							<div class="row">
 								<div class="col s12 input-text">
-								<textarea name="" id="" rows="10"></textarea>
+								<textarea id="popReject_comment" rows="10"></textarea>
 								</div>
 							</div>
 						</td>
@@ -799,15 +877,56 @@
 	    </div>
 	    <div class="list-footer">
 			<div class="list-btns center">
-  				<button type="button" class="btn bg-gray">                                        
+  				<button type="button" class="btn bg-gray" onclick="popReject.onSubmit()">                                        
       				<span>결재반려</span>
   				</button>
-  					<a href="" class="btn">취소</a>                               
+  					<a href="javascript:popReject.close();" class="btn">취소</a>                               
 			</div>
      	</div>
    	</div>
 </div>
+<script>
 
+let popReject = {
+		returnObjId : null,  //팝업에서 선택한 사람을 리턴할 객체
+		returnFunc : null,
+		searchObjId : "popReject_comment",
+		modalPopId : "comPopup_rejectCommentsRegi",
+		//dataAppendId : "tbodyDeptSearch",
+		//radioObjClass : "radio-selected",
+		open : function(){
+			$(".modal-dimmed").show();
+			$("#"+this.modalPopId).show();
+		},
+		close: function(){
+			$(".modal-dimmed").hide();
+	 		$("#"+this.modalPopId).hide();
+	 		
+	 		this.init();
+		},
+		init : function(){
+			
+			$("#"+popReject.searchObjId).val("");
+			
+			this.returnObjId = null;
+			this.returnFunc = null;
+		},
+    	onSubmit: function(){
+    		
+    		let letData = {
+    				txtComment:$("#"+popReject.searchObjId).val()
+    				};
+    		
+    		if(this.returnFunc){
+    			this.returnFunc(popReject.returnObjId, letData); //리턴함수 호출, 초기화 전 객체명 넘기기
+    			this.close();	// 팝업 Close, 각 파라메터 초기화
+    		} else {
+    			alert("반환 함수가 정의되지 않았습니다.");
+    		}
+    	}
+};
+
+</script>
 
 <!-- 19 상세정보(사원정보) -->
 <div class="org-modal" id="comPopup_detailMemberInfo">

@@ -29,6 +29,14 @@
 					<form:input type="hidden" path="detailList[0].aprovalSeq"/>
 					<form:input type="hidden" path="detailList[0].comNo"/>
 					<form:input type="hidden" path="detailList[0].aprovalStatCode" cssClass="aproval-state-code"/>
+					<form:input type="hidden" path="detailList[0].aprovalComment" cssClass="detail-comment"/>
+					<form:input type="hidden" path="detailList[0].score1" cssClass="detail-score1"/>
+					<form:input type="hidden" path="detailList[0].score4" cssClass="detail-score4"/>
+					<form:input type="hidden" path="detailList[0].score5" cssClass="detail-score5"/>
+					<form:input type="hidden" path="detailList[0].score6" cssClass="detail-score6"/>
+					<form:input type="hidden" path="detailList[0].score7" cssClass="detail-score8"/>
+					<form:input type="hidden" path="detailList[0].scoreTotal" cssClass="detail-total"/>
+										
                     <section id="page-content">
 
                         <!-- breadcrumb -->
@@ -37,9 +45,11 @@
                                 <li>실시 제안정보</li>
                             </ul>
 							<div class="header-btns">
+							<c:if test="${approveVO.aprovalState ne '3' && approveVO.aprovalState ne '4'}">							
 								<button type="button" class="btn bg-gray" onclick="onclick_procApprove('4')">승인</button>
-                                <button type="button" class="btn bg-gray" onclick="onclick_procApprove('3');">반려</button>        
-                                <a href="/apprv/list.do?menuKey=${menuKey}" class="btn">목록</a>
+                                <button type="button" class="btn bg-gray" onclick="onclick_procApprove('3');">반려</button>
+                            </c:if>        
+                                <a href="/sub.do?menuKey=${menuKey}" class="btn">목록</a>
 							</div>
                         </div>
                         <p class="content_title">1. 실시 제안정보</p>
@@ -244,9 +254,11 @@
 						</div>						
                         <div class="list-footer">
                             <div class="list-btns">
-								<button type="button" class="btn bg-gray">승인</button>
-                                <button type="button" class="btn bg-gray">반려</button>        
-                                <a href="#" class="btn">목록</a>
+                            <c:if test="${approveVO.aprovalState ne '3' && approveVO.aprovalState ne '4'}">
+								<button type="button" class="btn bg-gray" onclick="onclick_procApprove('4');">승인</button>
+                                <button type="button" class="btn bg-gray" onclick="onclick_procApprove('3');">반려</button>
+                            </c:if>
+                                <a href="/sub.do?menuKey=${menuKey}" class="btn">목록</a>
                             </div>
                         </div>
 						<div class="line_bar mg-t20"></div>
@@ -278,16 +290,18 @@
 												<th colspan="5">결재의견</th>
 											</tr>
 										</thead>
-										<tbody>                                            
+										<tbody>
+										<c:forEach var="item" items="${approveVO.detailList}" varStatus="status">
 											<tr>
-												<td>승인(2023.06.30)</td>
-												<td>홍길동</td>
-												<td>실장</td>
-												<td>제안 > 실시제안</td>
-												<td>70점(C)</td>
-												<td colspan="5"><div class="comment-btn"><div>수고하셧습니다.</div><button type="button" class="btn bg-gray">결재의뢰</button></div></td>
+												<td>${item.aprovalStat}(2023.06.30)</td>
+												<td>${item.userName}</td>
+												<td>x실장</td>
+												<td>${item.aprovalType}</td>
+												<td>x70점(C)</td>
+												<td colspan="5"><div class="comment-btn"><div>${item.aprovalComment}</div><button type="button" class="btn bg-gray">결재의뢰</button></div></td>
 												
 											</tr>
+										</c:forEach>
 											<tr>
 												<th rowspan="2"><span class="asterisk">*</span>결재자 지정</th>
 												<th colspan="5" class="align-center">소속</th>
@@ -319,116 +333,52 @@
                     </section>
                     </form:form>
 						
-                    
 
-        <!-- 조직도 -->
-        <div class="modal-dimmed"></div>
-        <div class="org-modal">
-            <div class="modal-header">
-                <h4>조직조회</h4>
-                <button type="button" class="btn-close">닫기</button>
-            </div>
-            <div class="modal-content">
-                <div class="list-wrap">
-                    <div class="list-search">
-                        <form id="org-form" onsubmit="org_search();return false;">
-                            <div class="search-form">
-                                <div class="form-inline form-input">
-                                    <label>조직명</label>
-                                    <input type="text" name="">
-                                </div>
-                                <button type="submit" class="btn-submit">조회</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-                <div class="tree-header">
-                    <div>
-                        <input type="checkbox" id="orgSelAll">
-                        <label for="orgSelAll"></label>
-                    </div>
-                    <div>
-                        6σ 인재육성대상 조직명
-                    </div>
-                </div>
-                <div id="org-tree">
-                    <ul>
-                        <li>창호 사업부
-                            <ul>
-                                <li>창호.생산담당
-                                    <ul>
-                                        <li>· 창호.프로파일생산팀</li>
-                                        <li>· 창호.기술팀</li>
-                                        <li>· 창호.공정혁신팀</li>
-                                        <li>· 창호.완성창공정기술팀</li>
-                                    </ul>
-                                </li>
-                                <li>유리</li>
-                                <li>연구소 근무</li>
-                                <li>창호.시스템창사업담당</li>
-                                <li>창호.중문팀</li>
-                                <li>바닥재 사업담당	</li>
-                            </ul>
-                        </li>
-                        <li>단열재 사업담당
-                            <ul>
-                                <li>창호.프로파일생산팀</li>
-                            </ul>
-                        </li>
-                        <li>벽지 사업담당	
-                            <ul>
-                                <li>창호.프로파일생산팀</li>
-                            </ul>
-                        </li>
-                        <li>표면소재 사업담당
-                            <ul>
-                                <li>창호.프로파일생산팀</li>
-                            </ul>
-                        </li>
-                        <li>산업용필름 사업담당
-                            <ul>
-                                <li>창호.프로파일생산팀</li>
-                            </ul>
-                        </li>
-                        <li>자동차소재부품 사업부
-                            <ul>
-                                <li>창호.프로파일생산팀</li>
-                            </ul>
-                        </li>
-                        <li>인테리어 사업부
-                            <ul>
-                                <li>창호.프로파일생산팀</li>
-                            </ul>
-                        </li>
-                        <li>연구소
-                            <ul>
-                                <li>창호.프로파일생산팀</li>
-                            </ul>
-                        </li>
-                        <li>품질 담당
-                            <ul>
-                                <li>창호.프로파일생산팀</li>
-                            </ul>
-                        </li>
-                        <li>생산/기술/R&D/품질 外
-                            <ul>
-                                <li>창호.프로파일생산팀</li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
-                <div class="btns">
-                    <button type="button" class="btn-submit">확인</button>
-                    <button type="button" class="btn-cancel">취소</button>
-                </div>
-            </div>
-        </div>
 <script type="text/javascript">
+
+
 function onclick_procApprove(gubn){
+	
 	$("#aprovalState").val(gubn);
 	$(".aproval-state-code").val(gubn);
+	
+	let popup;
+	if(gubn==='4'){ // 승인
+		popup = popApprove; 
+		popup.init();
+		
+		popup.returnFunc = callback_popApprove;
+		popup.returnObjId = null; //$(obj).closest("td").find("input").attr("id");
+	} else { // 반려
+		popup = popReject;
+		popup.init();
+		
+		popup.returnFunc = callback_popReject;
+		popup.returnObjId = null; //$(obj).closest("td").find("input").attr("id");
+	}
+	
+	popup.open();
+}
+
+function callback_popReject(obj, data){
+
+	$(".detail-comment").val(data.txtComment);
 	$("#defaultForm")[0].submit();
-}    
-</script>   
+}
+
+function callback_popApprove(obj, data){
+	
+	$(".detail-score1").val(data.score1);
+	$(".detail-score4").val(data.score4);
+	$(".detail-score5").val(data.score5);
+	$(".detail-score6").val(data.score6);
+	$(".detail-score7").val(data.score7);
+	$(".detail-total").val(data.scoreTotal);
+	$(".detail-comment").val(data.txtComment);	
+	
+	$("#defaultForm")[0].submit();
+}
+</script>
+    
 </body>
 </html>

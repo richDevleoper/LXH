@@ -49,7 +49,7 @@
 		
 		<result property="repCurrStepCode" column="REP_CURR_STEP_CODE" />
 		<result property="repCurrApproveState" column="CURR_APR_STATE" />
-		
+		<result property="repProductClassName" column="REP_PRODUCT_CLASS_NAME" />
 		
 	</resultMap>
 	
@@ -347,6 +347,7 @@
 			, T.REP_SECTOR_CODE
 			, get_code_nm('SECTOR', T.REP_SECTOR_CODE) rep_sector
 			, T.REP_PRODUCT_CLASS
+			, get_code_nm('BUSGRP', T.REP_PRODUCT_CLASS) REP_PRODUCT_CLASS_NAME
 			, T.REP_LEADER_BELT_CODE
             , get_code_nm('LDRBELT', T.REP_LEADER_BELT_CODE) REP_LEADER_BELT
 			, T.REP_ACTION_TYPE_CODE

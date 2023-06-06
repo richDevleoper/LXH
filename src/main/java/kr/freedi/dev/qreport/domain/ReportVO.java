@@ -67,7 +67,7 @@ public class ReportVO {
 	private String repTeamProcessOwnerName;
 	private String repTeamChapionName;
 	private String repLeaderName;
-	
+	private String repProductClassName;	
 	private String repCurrApproveState;
 
 
@@ -487,6 +487,31 @@ public class ReportVO {
 		this.repLeaderName = repLeaderName;
 	}
 
+	public String getRepCurrApproveState() {
+		return repCurrApproveState;
+	}
+
+	public void setRepCurrApproveState(String repCurrApproveState) {
+		this.repCurrApproveState = repCurrApproveState;
+	}
+
+	public String getRepCurrStepCode() {
+		return repCurrStepCode;
+	}
+
+	public void setRepCurrStepCode(String repCurrStepCode) {
+		this.repCurrStepCode = repCurrStepCode;
+	}
+
+	public String getRepProductClassName() {
+		return repProductClassName;
+	}
+
+	public void setRepProductClassName(String repProductClassName) {
+		this.repProductClassName = repProductClassName;
+	}
+	
+
 	@Override
 	public String toString() {
 		return "ReportVO [repCode=" + repCode + ", repName=" + repName + ", repMenuCode=" + repMenuCode
@@ -508,20 +533,5 @@ public class ReportVO {
 				+ ", repTeamMemberName=" + repTeamMemberName + ", repTeamProcessOwnerName=" + repTeamProcessOwnerName
 				+ ", repTeamChapionName=" + repTeamChapionName + ", repLeaderName=" + repLeaderName + "]";
 	}
-
-	public String getRepCurrApproveState() {
-		return repCurrApproveState;
-	}
-
-	public void setRepCurrApproveState(String repCurrApproveState) {
-		this.repCurrApproveState = repCurrApproveState;
-	}
-
-	public String getRepCurrStepCode() {
-		return repCurrStepCode;
-	}
-
-	public void setRepCurrStepCode(String repCurrStepCode) {
-		this.repCurrStepCode = repCurrStepCode;
-	}	
+	
 }

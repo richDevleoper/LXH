@@ -33,6 +33,14 @@
 					<form:input type="hidden" path="detailList[0].aprovalSeq"/>
 					<form:input type="hidden" path="detailList[0].comNo"/>
 					<form:input type="hidden" path="detailList[0].aprovalStatCode" cssClass="aproval-state-code"/>
+					<form:input type="hidden" path="detailList[0].aprovalComment" cssClass="detail-comment"/>
+					<form:input type="hidden" path="detailList[0].score1" cssClass="detail-score1"/>
+					<form:input type="hidden" path="detailList[0].score4" cssClass="detail-score4"/>
+					<form:input type="hidden" path="detailList[0].score5" cssClass="detail-score5"/>
+					<form:input type="hidden" path="detailList[0].score6" cssClass="detail-score6"/>
+					<form:input type="hidden" path="detailList[0].score7" cssClass="detail-score8"/>
+					<form:input type="hidden" path="detailList[0].scoreTotal" cssClass="detail-total"/>
+										
                     <section id="page-content">
                         <!-- breadcrumb -->
 <c:if test="${ empty repMenuCode }"><%-- 해당 값은 "과제/분임조과제" 에서만 나옴. --%>
@@ -41,8 +49,10 @@
                                 <li>결제종류 : 과제 > 과제선정	<!-- 과제 > 6σ Full Process > DMAIC > Define --></li>
                             </ul>
 							<div class="header-btns">
+							<c:if test="${approveVO.aprovalState ne '3' && approveVO.aprovalState ne '4'}">
 								<button type="button" class="btn bg-gray" onclick="onclick_procApprove('4')">승인</button>
-                                <button type="button" class="btn bg-gray" onclick="onclick_procApprove('3');">반려</button>        
+                                <button type="button" class="btn bg-gray" onclick="onclick_procApprove('3');">반려</button>
+                            </c:if>        
                                 <a href="/apprv/list.do?menuKey=${menuKey}" class="btn">목록</a>
 							</div>
                         </div>
@@ -74,7 +84,7 @@
                                                 <th><label for="text4" class="color primary">부문</label></th>
                                                 <td>${reportVO.repSector}</td>
                                                 <th>제품군</th>
-                                                <td>${reportVO.repProductClass}</td>
+                                                <td>${reportVO.repProductClassName}</td>
                                             </tr>
 <c:choose>  
 	<c:when test="${repMenuCode eq 'REPORT'}">                                            
@@ -693,25 +703,6 @@
 												<td class="align-left">${item.aprovalComment}</td>
 											</tr>
 										</c:forEach>
-											
-											<!-- <tr>
-												<td>반려(2023.06.30)</td>
-												<td>홍길동</td>
-												<td class="align-left">과제 > 6σ Full Process > DMAIC > Measure</td>
-												<td class="align-left">첨부파일 수정 필요.</td>
-											</tr>
-											<tr>
-												<td>반려(2023.06.30)</td>
-												<td>홍길동</td>
-												<td class="align-left">과제 > 6σ Full Process > DMAIC > Measure</td>
-												<td class="align-left">첨부파일 수정 필요.</td>
-											</tr>
-											<tr>
-												<td>승인(2023.06.30)</td>
-												<td>홍길동</td>
-												<td class="align-left">과제 > 6σ Full Process > DMAIC > Measure</td>
-												<td class="align-left">수고하셧습니다.</td>
-											</tr> -->
 										</tbody>
 									</table>
 								</div>
@@ -726,8 +717,44 @@
 
 
 function onclick_procApprove(gubn){
+	
 	$("#aprovalState").val(gubn);
 	$(".aproval-state-code").val(gubn);
+	
+	let popup;
+	if(gubn==='4'){ // 승인
+		popup = popApprove; 
+		popup.init();
+		
+		popup.returnFunc = callback_popApprove;
+		popup.returnObjId = null; //$(obj).closest("td").find("input").attr("id");
+	} else { // 반려
+		popup = popReject;
+		popup.init();
+		
+		popup.returnFunc = callback_popReject;
+		popup.returnObjId = null; //$(obj).closest("td").find("input").attr("id");
+	}
+	
+	popup.open();
+}
+
+function callback_popReject(obj, data){
+	
+	$(".detail-comment").val(data.txtComment);
+	$("#defaultForm")[0].submit();
+}
+
+function callback_popApprove(obj, data){
+	
+	$(".detail-score1").val(data.score1);
+	$(".detail-score4").val(data.score4);
+	$(".detail-score5").val(data.score5);
+	$(".detail-score6").val(data.score6);
+	$(".detail-score7").val(data.score7);
+	$(".detail-total").val(data.scoreTotal);
+	$(".detail-comment").val(data.txtComment);	
+	
 	$("#defaultForm")[0].submit();
 }
 </script>

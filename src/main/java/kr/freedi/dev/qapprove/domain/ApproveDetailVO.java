@@ -18,127 +18,147 @@ public class ApproveDetailVO {
 	private String aprovalMailSendYn;	//이메일 전송여부
 	private String aprovalComment;	// 결재 코멘트
 	
+	private String score1;
+	private String score4;
+	private String score5;
+	private String score6;
+	private String score7;
+	private String scoreTotal;
+	
 	private String aprovalStat;
 	private String aprovalType;
 	private String userName; // 사원명
-	
 	public String getAprovalCode() {
 		return aprovalCode;
-	}
-	public void setAprovalCode(String aprovalCode) {
-		this.aprovalCode = aprovalCode;
 	}
 	public String getAprovalSeq() {
 		return aprovalSeq;
 	}
-	
-	public void setAprovalSeq(String aprovalSeq) {
-		this.aprovalSeq = aprovalSeq;
-	}
 	public String getComNo() {
 		return comNo;
-	}
-	public void setComNo(String comNo) {
-		this.comNo = comNo;
 	}
 	public String getComJobx() {
 		return comJobx;
 	}
-	public void setComJobx(String comJobx) {
-		this.comJobx = comJobx;
-	}
 	public String getComPosition() {
 		return comPosition;
-	}
-	public void setComPosition(String comPosition) {
-		this.comPosition = comPosition;
 	}
 	public String getComDepartCode() {
 		return comDepartCode;
 	}
-	public void setComDepartCode(String comDepartCode) {
-		this.comDepartCode = comDepartCode;
-	}
 	public Date getAprovalRegDate() {
 		return aprovalRegDate;
-	}
-	public void setAprovalRegDate(Date aprovalRegDate) {
-		this.aprovalRegDate = aprovalRegDate;
 	}
 	public String getAprovalReqComNo() {
 		return aprovalReqComNo;
 	}
-	public void setAprovalReqComNo(String aprovalReqComNo) {
-		this.aprovalReqComNo = aprovalReqComNo;
-	}
 	public Date getAprovalCompltDate() {
 		return aprovalCompltDate;
-	}
-	public void setAprovalCompltDate(Date aprovalCompltDate) {
-		this.aprovalCompltDate = aprovalCompltDate;
 	}
 	public String getAprovalStatCode() {
 		return aprovalStatCode;
 	}
-	public void setAprovalStatCode(String aprovalStatCode) {
-		this.aprovalStatCode = aprovalStatCode;
-	}
 	public String getAprovalMailSendDate() {
 		return aprovalMailSendDate;
-	}
-	public void setAprovalMailSendDate(String aprovalMailSendDate) {
-		this.aprovalMailSendDate = aprovalMailSendDate;
 	}
 	public String getAprovalMailSendYn() {
 		return aprovalMailSendYn;
 	}
-	public void setAprovalMailSendYn(String aprovalMailSendYn) {
-		this.aprovalMailSendYn = aprovalMailSendYn;
-	}
 	public String getAprovalComment() {
 		return aprovalComment;
 	}
-
-	public void setAprovalComment(String aprovalComment) {
-		this.aprovalComment = aprovalComment;
-	}	
-
-	/**
-	 * @return the userName
-	 */
-	public String getUserName() {
-		return userName;
+	public String getScore1() {
+		return score1;
 	}
-	/**
-	 * @param userName the userName to set
-	 */
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public String getScore4() {
+		return score4;
 	}
-	
-	/**
-	 * @return the aprovalStat
-	 */
+	public String getScore5() {
+		return score5;
+	}
+	public String getScore6() {
+		return score6;
+	}
+	public String getScore7() {
+		return score7;
+	}
+	public String getScoreTotal() {
+		return scoreTotal;
+	}
 	public String getAprovalStat() {
 		return aprovalStat;
 	}
-	/**
-	 * @param aprovalStat the aprovalStat to set
-	 */
-	public void setAprovalStat(String aprovalStat) {
-		this.aprovalStat = aprovalStat;
-	}
-	/**
-	 * @return the aprovalType
-	 */
 	public String getAprovalType() {
 		return aprovalType;
 	}
-	/**
-	 * @param aprovalType the aprovalType to set
-	 */
+	public String getUserName() {
+		return userName;
+	}
+	public void setAprovalCode(String aprovalCode) {
+		this.aprovalCode = aprovalCode;
+	}
+	public void setAprovalSeq(String aprovalSeq) {
+		this.aprovalSeq = aprovalSeq;
+	}
+	public void setComNo(String comNo) {
+		this.comNo = comNo;
+	}
+	public void setComJobx(String comJobx) {
+		this.comJobx = comJobx;
+	}
+	public void setComPosition(String comPosition) {
+		this.comPosition = comPosition;
+	}
+	public void setComDepartCode(String comDepartCode) {
+		this.comDepartCode = comDepartCode;
+	}
+	public void setAprovalRegDate(Date aprovalRegDate) {
+		this.aprovalRegDate = aprovalRegDate;
+	}
+	public void setAprovalReqComNo(String aprovalReqComNo) {
+		this.aprovalReqComNo = aprovalReqComNo;
+	}
+	public void setAprovalCompltDate(Date aprovalCompltDate) {
+		this.aprovalCompltDate = aprovalCompltDate;
+	}
+	public void setAprovalStatCode(String aprovalStatCode) {
+		this.aprovalStatCode = aprovalStatCode;
+	}
+	public void setAprovalMailSendDate(String aprovalMailSendDate) {
+		this.aprovalMailSendDate = aprovalMailSendDate;
+	}
+	public void setAprovalMailSendYn(String aprovalMailSendYn) {
+		this.aprovalMailSendYn = aprovalMailSendYn;
+	}
+	public void setAprovalComment(String aprovalComment) {
+		this.aprovalComment = aprovalComment;
+	}
+	public void setScore1(String score1) {
+		this.score1 = score1;
+	}
+	public void setScore4(String score4) {
+		this.score4 = score4;
+	}
+	public void setScore5(String score5) {
+		this.score5 = score5;
+	}
+	public void setScore6(String score6) {
+		this.score6 = score6;
+	}
+	public void setScore7(String score7) {
+		this.score7 = score7;
+	}
+	public void setScoreTotal(String scoreTotal) {
+		this.scoreTotal = scoreTotal;
+	}
+	public void setAprovalStat(String aprovalStat) {
+		this.aprovalStat = aprovalStat;
+	}
 	public void setAprovalType(String aprovalType) {
 		this.aprovalType = aprovalType;
+	}
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 	@Override
 	public String toString() {
@@ -147,7 +167,8 @@ public class ApproveDetailVO {
 				+ ", aprovalRegDate=" + aprovalRegDate + ", aprovalReqComNo=" + aprovalReqComNo + ", aprovalCompltDate="
 				+ aprovalCompltDate + ", aprovalStatCode=" + aprovalStatCode + ", aprovalMailSendDate="
 				+ aprovalMailSendDate + ", aprovalMailSendYn=" + aprovalMailSendYn + ", aprovalComment="
-				+ aprovalComment + ", aprovalStat=" + aprovalStat + ", aprovalType=" + aprovalType + ", userName="
-				+ userName + "]";
+				+ aprovalComment + ", score1=" + score1 + ", score4=" + score4 + ", score5=" + score5 + ", score6="
+				+ score6 + ", score7=" + score7 + ", scoreTotal=" + scoreTotal + ", aprovalStat=" + aprovalStat
+				+ ", aprovalType=" + aprovalType + ", userName=" + userName + "]";
 	}
 }
