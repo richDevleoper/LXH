@@ -548,13 +548,53 @@
 			<version>8.0.32</version>
 		</dependency>		
 		
-		<dependency>
+<!-- 		<dependency>
 			<groupId>encryptUtil</groupId>
 			<artifactId>encryptUtil</artifactId>
 			<version>1.2</version>
 			<scope>system</scope>
 			<systemPath>${basedir}/lib/encryptUtil-1.2_jdk1.6.jar</systemPath>
+		</dependency> -->
+		
+<!-- 		<dependency>
+			<groupId>external</groupId>
+			<artifactId>external</artifactId>
+			<version>4.2.0.14</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/lib/external_v4.2.0.14.jar</systemPath>
 		</dependency>
+		
+		<dependency>
+			<groupId>INICrypto</groupId>
+			<artifactId>INICrypto</artifactId>
+			<version>4.0.12</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/lib/INICrypto_v4.0.12.jar</systemPath>
+		</dependency>
+		
+		<dependency>
+			<groupId>jdom</groupId>
+			<artifactId>jdom</artifactId>
+			<version>1.0.0</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/lib/jdom.jar</systemPath>
+		</dependency>
+		
+		<dependency>
+			<groupId>poolit</groupId>
+			<artifactId>poolit</artifactId>
+			<version>1.0.0</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/lib/poolit.jar</systemPath>
+		</dependency>
+		
+		<dependency>
+			<groupId>xercesImpl</groupId>
+			<artifactId>xercesImpl</artifactId>
+			<version>1.0.0</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/lib/xercesImpl.jar</systemPath>
+		</dependency> -->
 	</dependencies>
 
 </project>

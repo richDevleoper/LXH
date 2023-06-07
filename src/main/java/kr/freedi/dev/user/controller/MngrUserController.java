@@ -1,10 +1,12 @@
 package kr.freedi.dev.user.controller;
 
+import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
@@ -18,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.lgcns.encypt.EncryptUtil;
 
 import egovframework.rte.psl.dataaccess.util.EgovMap;
 import kr.freedi.dev.menu.service.MenuUseService;
@@ -155,6 +159,21 @@ public class MngrUserController extends UserController {
 
 		MngrUserVO mngrUserVO = new MngrUserVO();
 		model.addAttribute("mngrUserVO", mngrUserVO);
+		
+		Cookie[] cookies = request.getCookies();
+//		if(cookies != null) {
+//			for(int index = 0; index < cookies.length; index++) {
+//				Cookie cookie = cookies[index];
+//				
+//				if(cookie.getName().equals("URLENCODED_LG_GP_SI")) {
+//					String encUid = cookie.getValue();
+//					System.out.println("ENC UID : " + encUid);
+//					
+//					String plainUid = EncryptUtil.decryptText(URLDecoder.decode(encUid, "UTF-8"), "ThisIsIkepSecurityKey");
+//					System.out.println("PLAIN UID : " + plainUid);
+//				}
+//			}
+//		}
 
 		return "user/mngr/csl/LoginForm";
 	}
