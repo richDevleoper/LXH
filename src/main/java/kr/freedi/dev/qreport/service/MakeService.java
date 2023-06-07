@@ -14,6 +14,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import egovframework.rte.fdl.cmmn.exception.FdlException;
 import egovframework.rte.fdl.idgnr.EgovIdGnrService;
 import egovframework.rte.psl.dataaccess.util.EgovMap;
 import kr.freedi.dev.common.dao.DefaultDAO;
@@ -69,8 +70,23 @@ public class MakeService {
 
 	
 	public void insert(MakeVO makeVO) throws Exception {
+		
 		int cirCode = idGnrService.getNextIntegerId();
 		makeVO.setCirCode(Integer.toString(cirCode));
+		
+		makeVO = this.memberSave(makeVO);		// member 정보 가공해서 저장하기. 이후 마스터 저장하기(인원수 처리때문)
+		
+		dao.insert("Make.insertCircleMst", makeVO);
+	}
+	
+	public void update(MakeVO makeVO) throws Exception {
+
+		makeVO = this.memberSave(makeVO);		// member 정보 가공해서 저장하기. 이후 마스터 저장하기(인원수 처리때문)
+		
+		dao.insert("Make.updateCircleMst", makeVO);
+	}
+		
+	public MakeVO memberSave(MakeVO makeVO) throws FdlException {
 		
 		int totCnt = 0;
 		
@@ -81,6 +97,7 @@ public class MakeService {
 		String anLeaderStr5 = makeVO.getLeader5();
 		String anLeaderStr6 = makeVO.getLeader6();
 		String anLeaderStr7 = makeVO.getLeader7();
+		String anLeaderStr8 = makeVO.getLeader8();
 		
 		String[] anLeader1 = anLeaderStr1.split(",", -1);
 		String[] anLeader2 = anLeaderStr2.split(",", -1);
@@ -89,12 +106,20 @@ public class MakeService {
 		String[] anLeader5 = anLeaderStr5.split(",", -1);
 		String[] anLeader6 = anLeaderStr6.split(",", -1);
 		String[] anLeader7 = anLeaderStr7.split(",", -1);
+		String[] anLeader8 = anLeaderStr8.split(",", -1);
 		
 		if(!anLeaderStr1.equals("")){
 			for(int j=0; j<anLeader1.length; j++){
-				int cirMemCode = idGnrService.getNextIntegerId();
-				makeVO.setCirMemCode(Integer.toString(cirMemCode));
 				
+				//cirMemCode가 있으면 update, 없으면 신규 추가
+				String cirMemCode = "";
+				
+				if(anLeader8[j].trim().length()>0) {
+					cirMemCode = anLeader8[j].trim();  // 코드 있음. 기존 추가됐던 멤버
+				} else {
+					cirMemCode = Integer.toString(idGnrService.getNextIntegerId());	// 신규 추가 멤버
+				} 
+				makeVO.setCirMemCode(cirMemCode);
 				makeVO.setComNo(anLeader1[j].trim());
 				makeVO.setCirMemName(anLeader2[j].trim());
 				makeVO.setCirDeptCode(anLeader3[j].trim());
@@ -104,9 +129,14 @@ public class MakeService {
 				makeVO.setCirLeaderdeptName(anLeader7[j].trim());
 				makeVO.setCirMemRole("LEADER");
 				
-				System.out.println(anLeader1[j].trim());
-				dao.insert("Make.insertCircleDtl", makeVO);
-				totCnt = totCnt+1;
+				
+				if(anLeader8[j].trim().length()>0) {
+					dao.update("Make.updateCircleDtl", makeVO);	
+				} else {
+					dao.insert("Make.insertCircleDtl", makeVO);
+				}
+				
+				totCnt++;
 			}
 		}
 		
@@ -117,6 +147,7 @@ public class MakeService {
 		String anTeamStr5 = makeVO.getTeam5();
 		String anTeamStr6 = makeVO.getTeam6();
 		String anTeamStr7 = makeVO.getTeam7();
+		String anTeamStr8 = makeVO.getTeam8();
 		
 		String[] anTeam1 = anTeamStr1.split(",", -1);
 		String[] anTeam2 = anTeamStr2.split(",", -1);
@@ -125,11 +156,18 @@ public class MakeService {
 		String[] anTeam5 = anTeamStr5.split(",", -1);
 		String[] anTeam6 = anTeamStr6.split(",", -1);
 		String[] anTeam7 = anTeamStr7.split(",", -1);
+		String[] anTeam8 = anTeamStr8.split(",", -1);
 		
 		if(!anTeamStr1.equals("")){
 			for(int j=0; j<anTeam1.length; j++){
-				int cirMemCode = idGnrService.getNextIntegerId();
-				makeVO.setCirMemCode(Integer.toString(cirMemCode));
+				
+				String cirMemCode = "";
+				if(anTeam8[j].trim().length()>0) {
+					cirMemCode = anTeam8[j].trim();  // 코드 있음. 기존 추가됐던 멤버
+				} else {
+					cirMemCode = Integer.toString(idGnrService.getNextIntegerId());	// 신규 추가 멤버
+				} 
+				makeVO.setCirMemCode(cirMemCode);
 				
 				makeVO.setComNo(anTeam1[j].trim());
 				makeVO.setCirMemName(anTeam2[j].trim());
@@ -139,25 +177,36 @@ public class MakeService {
 				makeVO.setBeltCode(anTeam6[j].trim());
 				makeVO.setCirMemRole("TEAM");
 				
-				System.out.println(anTeam1[j].trim());
-				dao.insert("Make.insertCircleDtl", makeVO);
-				totCnt = totCnt+1;
+				if(anTeam8[j].trim().length()>0) {
+					dao.update("Make.updateCircleDtl", makeVO);	
+				} else {
+					dao.insert("Make.insertCircleDtl", makeVO);
+				}				
+				totCnt++;
 			}
 		}
 		
-		System.out.println("totCnt : " + totCnt);
+		String strRemoveMemberIds = makeVO.getRemoveMemberIds();
+		
+		if(strRemoveMemberIds.length()>0) {
+			String[] removeMemberIds = strRemoveMemberIds.split(",", -1);
+			for(int j=0; j<removeMemberIds.length; j++){
+				
+				MakeVO paramVO = new MakeVO();
+				paramVO.setCirMemCode(removeMemberIds[j]);
+				dao.delete("Make.deleteCircleDtl", paramVO);
+				totCnt--;
+			}
+		}
+		
 		makeVO.setCirMemCnt(Integer.toString(totCnt));
-		makeVO.setCirLName(anLeaderStr2);
-		
-		dao.insert("Make.insertCircleMst", makeVO);
-		
-		
+		makeVO.setCirLName(anLeaderStr2);		
+		return makeVO;
 	}
 	
 	public JsonArray convertTreeJson(List<DepartVO> list) {
         
-		JsonArray jsonArray = buildTree(list, null);
-        return jsonArray;
+        return buildTree(list, null);
 	}
 	
 	public JsonArray buildTree(List<DepartVO> list, String parentId) {

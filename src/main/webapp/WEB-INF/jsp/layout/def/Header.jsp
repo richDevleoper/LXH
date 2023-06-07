@@ -32,13 +32,30 @@ hr { display:none; }
                         <span>품질혁신지원시스템</span>
                     </h1>
                     <div class="header-util">
-                        <p>홍길동(품질관리팀) 과제 <a href="/intf/login.do?com_no=00206083" class="lx-red">3</a>건, 결재 <a href="" class="lx-red">1</a>건, 교육 <a href="" class="lx-red">1</a>건</p>
-                        <ul>
-                            <li><a href="/sub.do?menuKey=73"><img src="/assets/images/icon_mypage.png" alt=""><span>마이페이지</span></a></li>
-                            <li><a href=""><img src="/assets/images/icon_help.png" alt=""><span>도움말</span></a></li>
-                            <li><a href=""><img src="/assets/images/icon_logout.png" alt=""><span>로그아웃</span></a></li>
-                            <li><a href=""><img src="/assets/images/icon_admin.png" alt=""></a></li>
-                        </ul>
+                    <c:choose>
+                    	<c:when test="${not empty userSession.intfUserVO}">
+                        	<p>${userSession.intfUserVO.userName}(${userSession.intfUserVO.comDepartName}) &nbsp;
+                        	과제 <a href="/sub.do?menuKey=29" class="lx-red">${countReport}</a>건, 
+                        	결재 <a href="/sub.do?menuKey=73" class="lx-red">${countApprove}</a>건, 
+                        	교육 <a href="/sub.do?menuKey=38" class="lx-red">${countEducation}</a>건</p>
+                        	<ul>
+	                            <li><a href="/sub.do?menuKey=73"><img src="/assets/images/icon_mypage.png" alt=""><span>마이페이지</span></a></li>
+	                            <li><a href=""><img src="/assets/images/icon_help.png" alt=""><span>도움말</span></a></li>
+	                            <li><a href="/intf/logout.do"><img src="/assets/images/icon_logout.png" alt=""><span>로그아웃</span></a></li>
+	                            <li><a href="/csl"><img src="/assets/images/icon_admin.png" alt=""></a></li>
+	                        </ul>
+                    	</c:when>
+                    	<c:otherwise>
+                    		<a href="/intf/login.do?com_no=89893">(로그인)</a>&nbsp;&nbsp;
+                    		<ul>
+	                            <li><a href=""><img src="/assets/images/icon_help.png" alt=""><span>도움말</span></a></li>
+	                            <li><a href="/intf/logout.do"><img src="/assets/images/icon_logout.png" alt=""><span>로그아웃</span></a></li>
+	                            <li><a href="/csl"><img src="/assets/images/icon_admin.png" alt=""></a></li>
+	                        </ul>
+                    	</c:otherwise>
+                    </c:choose>
+                    
+                        
                     </div>
                 </div>
             </div>

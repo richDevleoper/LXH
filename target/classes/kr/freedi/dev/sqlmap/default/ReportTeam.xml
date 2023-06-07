@@ -26,6 +26,8 @@
 		<result property="comPositionNm" 	column="COM_POSITION_NM" />
 		<result property="repTeamMemEduNm" 	column="REP_TEAM_MEM_EDU_NM" />
 		<result property="beltNm" 			column="BELT_NM" />
+		
+		<result property="cirMemCode" 		column="CIR_MEM_CODE" />
 	</resultMap>
 	
 	<sql id="defCond">
@@ -179,7 +181,7 @@
 	</select>
 	
 	<select id="selectNextFkey" resultType="int">
-		SELECT MAX(TO_NUMBER(NVL(REP_TEAM_CODE, 0))) + 1 REP_TEAM_CODE FROM TB_REPORT_TEAM
+		SELECT NVL(MAX(TO_NUMBER(REP_TEAM_CODE)), 0) + 1 REP_TEAM_CODE FROM TB_REPORT_TEAM
 	</select>
 	
 

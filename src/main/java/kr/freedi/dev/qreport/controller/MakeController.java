@@ -92,6 +92,7 @@ public class MakeController {
 		List<DepartVO> dbList = qPopupService.selectTreeList();
 		JsonArray deptList = makeService.convertTreeJson(dbList);
 		
+		model.addAttribute("makeVO", makeVO);
 		
 		model.addAttribute("deptList", deptList);
 		
@@ -99,7 +100,28 @@ public class MakeController {
 		model.addAttribute("action", "/team/insertMakeInfo.do");
 		
 		return "app/make/MakeInsert";
+	}
+	
+	@RequestMapping({"/makeUpdate.do"})
+	public String makeUpdate(HttpServletRequest request, ModelMap model,
+		@ModelAttribute("MakeSearchVO") MakeSearchVO searchVO, 
+		@ModelAttribute("MakeVO") MakeVO makeVO, 
+		UserVO userSession)throws Exception {
 		
+		model.addAttribute("menuKey", searchVO.getMenuKey());
+		searchVO.setSearchUserid(userSession.getUserId());
+		
+		makeVO = makeService.select(makeVO);
+		model.addAttribute("makeVO", makeVO);
+		
+		List<DepartVO> dbList = qPopupService.selectTreeList();
+		JsonArray deptList = makeService.convertTreeJson(dbList);
+		model.addAttribute("deptList", deptList);
+		
+		// 페이지 바인딩
+		model.addAttribute("action", "/team/insertMakeInfo.do");
+		
+		return "app/make/MakeInsert";
 	}
 	
 	@RequestMapping({"/view.do"})
@@ -127,8 +149,15 @@ public class MakeController {
 		model.addAttribute("menuKey", searchVO.getMenuKey());
 		searchVO.setSearchUserid(userSession.getUserId());
 		
-		makeVO.setCirRegUser(userSession.getUserId());
-		makeService.insert(makeVO);
+		if(makeVO.getCirCode()==null) {
+			makeVO.setCirRegUser(userSession.getUserId());
+			makeService.insert(makeVO);	
+		} else {
+			makeVO.setCirUpdateUser(userSession.getUserId());
+			makeService.update(makeVO);
+		}
+		
+		
 		
 		//return "app/make/MakeList";
 		return "redirect:/sub.do?menuKey=70";

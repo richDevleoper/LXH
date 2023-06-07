@@ -96,6 +96,15 @@ public class IntfUserController extends UserController {
 			return "redirect:" + redirectUrl;
 		}
 	}
+	
+	@RequestMapping(value = "/intf/logout.do", method = RequestMethod.GET)
+	public String defLogout(HttpServletRequest request) throws Exception {
+		
+		request.getSession().invalidate();
+		
+		return "redirect:/index.do";
+	}
+	
 }
 
 

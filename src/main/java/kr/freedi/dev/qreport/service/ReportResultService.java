@@ -31,6 +31,8 @@ public class ReportResultService {
 	public void insert(ReportResultVO vo) throws Exception {
 		
 		Integer newKey = (Integer)dao.selectOne("ReportResult.selectNextFkey");
+		if(newKey==null)
+			newKey = 1;
 		vo.setRepResultCode(newKey);
 		dao.insert("ReportResult.insert", vo);
 	}

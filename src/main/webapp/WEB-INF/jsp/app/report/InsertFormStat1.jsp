@@ -122,8 +122,10 @@
                                                 <th><form:label path="repProductClass"><span class="asterisk">*</span>제품군</form:label></th>
                                                 <td>
                                                     <div class="row">
-                                                        <div class="col s12 input-text">
-                                                            <form:input type="text" path="repProductClass" title="제품군을 입력해주세요." cssClass="validate[required]" />
+                                                        <div class="col s12 select-group">
+                                                            <%-- <form:input type="text" path="repProductClass" title="제품군을 입력해주세요." cssClass="validate[required]" /> --%>
+                                                            <form:select path="repProductClass" title="제품군을 선택하세요." cssClass="validate[required]">
+                                                            </form:select>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -966,6 +968,7 @@ function onchange_resultType(obj){
 	let cdRepType1 = [];
 	let cdRepType2 = [];
 	let cdRepType3 = [];
+	let cdBusGrp = [];
 	
 	let codes = [
 		<c:forEach var="item" items="${allCodes}">{index:"${item.codeGrpId}",key:"${item.codeId}",value:"${item.codeNm}"},
@@ -985,7 +988,6 @@ function onchange_resultType(obj){
 		setControl()
 		
 		setEvent();
-		
 	}
 	
 	function initCode(){
@@ -997,12 +999,19 @@ function onchange_resultType(obj){
 		cdRepType1 = codes.filter(function(code){ return code.index==="RP_TY1";});
 		cdRepType2 = codes.filter(function(code){ return code.index==="RP_TY2";});
 		cdRepType3 = codes.filter(function(code){ return code.index==="RP_TY3";});
+		cdBusGrp = codes.filter(function(code){ return code.index==="BUSGRP"})
 	}
 	
 	function setControl(){
 		
+		debugger;
+		/*
+		${reportVO}
+		*/
 		setDropDown("repSectorCode", cdListSector, true);//부문코드
 		$("#repSectorCode").val("${reportVO.repSectorCode}")
+		onchange_ddlRepSectorCode();
+		$("#repProductClass").val("${reportVO.repProductClass}");
 		
 		setDropDown("repLeaderBeltCode", cdLeaderBelt, true);//리더벨트
 		$("#repLeaderBeltCode").val("${reportVO.repLeaderBeltCode}")
@@ -1016,10 +1025,13 @@ function onchange_resultType(obj){
 		//setDropDown(".ddl-rep-result-type", cdRepResultType, true);//성과항목
 		const currYear = new Date().getFullYear();
 		$("#lblUseRefDt").text(currYear); $("#repUseRefDate").val(currYear);	//활용율 반영년도
-		
-		
+
 		onchange_ddlRepDevisionCode();	// 과제유형
 		$("#repTypeCode").val("${reportVO.repTypeCode}");
+		
+		
+		//setDropDown("repProductClass", [], true);
+		
 		
 		if($("#mode").val()==="UPDATE"){
 			//$("#repDivisionCode option").prop("disabled", true); // 바꿀 수 없도록 설정
@@ -1053,6 +1065,9 @@ function onchange_resultType(obj){
 		$("#repDivisionCode").off("change").on("change", onchange_ddlRepDevisionCode); // 6σ Full Process여부
 		$("#repTypeCode").off("change").on("change", onchange_ddlRepTypeCode); // 과제유형
 		// onchange_ddlRepDevisionCode : 과제유형, 일정계획 입력창 변경
+		
+		$("#repSectorCode").off("change").on("change", onchange_ddlRepSectorCode); // 부문 선택
+
 		
 		//팀멤버 추가
 		$('.btn-team-member-add').off("click").on('click', function() {
@@ -1248,6 +1263,17 @@ function onchange_resultType(obj){
 			$("#ddlRepTypeCode").val($("#repTypeCode").val());
 		}
 	}
+
+	function onchange_ddlRepSectorCode(e){
+		
+		// 부문 선택시 해당하는 제품군만 리스트에 보여준다.
+		let sectorCode = $("#repSectorCode").val();		//부문
+		let targetObjId = "repTypeCode";	//제품군
+		let cdBusGrpFiltered = cdBusGrp.filter(function(code){
+		    return code.key.startsWith('0'+sectorCode);
+		});
+		setDropDown("repProductClass", cdBusGrpFiltered, true);
+	}
 	
 	function onchange_ddlRepTypeCode(e){
 		
@@ -1378,6 +1404,7 @@ function onchange_resultType(obj){
 		$(objTr).find(".team-dept-cd").val(data.comDepartCode);
 		$(objTr).find(".team-com-no").val(data.comNo);
 		$(objTr).find(".team-jobx-cd").val(data.comJobx);
+		$(objTr).find(".team-position-cd").val(data.comPosition);
 		$(objTr).find(".team-mem-nm").val(data.userName);
 		
 		$(objTr).find(".report-code").val('${reportVO.repCode}');

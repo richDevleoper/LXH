@@ -191,7 +191,9 @@ public class ApproveController {
 
 			
 			
-			model.addAttribute("proposalVO", proposalVO);		
+			model.addAttribute("proposalVO", proposalVO);
+			model.addAttribute("approveVO", savedVO);
+			
 			return "app/approve/ApprFormPropose"; // 과제 페이지
 			//return "redirect:apprv/list.do?menuKey=73"; // 과제 페이지
 		} else {
@@ -243,6 +245,34 @@ public class ApproveController {
 		}else {
 			// 제안 결재 승인시
 			// 제안마스터의 PROP_PROP_STAT_CODE 값을 3으로 바꿔주기
+			
+			
+			ProposalSearchVO searchProposalVO = new ProposalSearchVO();
+			searchProposalVO.setSearchPropSeq(Integer.valueOf(approveVO.getRefBusCode()));
+			ProposalVO proposalVO = proposalService.selectProposalDetailInfo(searchProposalVO);
+			
+			proposalVO.setPropPropStatCode("PRG_3");
+			proposalVO.setPropRegUser(userSession.getUserId());
+			proposalService.updateProposalInfo(proposalVO);
+			
+//
+//			// 첨부파일 로딩
+//			AttachFileVO fileVO = new AttachFileVO();
+//			fileVO.setFileId("proposal_before_" + proposalVO.getPropSeq());
+//			List<AttachFileVO> beforeAttachFileList = attachFileService.selectFullList(fileVO); // 개선 전
+//			fileVO.setFileId("proposal_after_" + proposalVO.getPropSeq());
+//			List<AttachFileVO> afterAttachFileList = attachFileService.selectFullList(fileVO); // 개선 후
+//			fileVO.setFileId("proposal_attach_" + proposalVO.getPropSeq());
+//			List<AttachFileVO> attachFileList = attachFileService.selectFullList(fileVO); //첨부 파일
+//			
+//			proposalVO.setBeforeAttachFileList(beforeAttachFileList);
+//			proposalVO.setAfterAttachFileList(afterAttachFileList);
+//			proposalVO.setAttachFileList(attachFileList);
+
+			
+			
+//			model.addAttribute("proposalVO", proposalVO);		
+			
 		}
 		return "redirect:/sub.do?menuKey=73";
 	}
