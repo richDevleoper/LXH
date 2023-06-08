@@ -262,6 +262,26 @@
 				, CIR_UPDATE_DATE = SYSDATE
 		where CIR_MEM_CODE = #{cirMemCode}
 		 
+	</update>  
+	
+	
+	<update id="updateKpiUserDtl" parameterType="kr.freedi.dev.qreport.domain.MakeVO">
+		update TB_CIRCLE_DETAIL set
+				 CIR_CODE = #{cirCode} 
+				, COM_NO = #{ComNo} 
+				, DEPT_CODE = #{cirDeptCode} 
+				, DEPT_NAME = #{cirDeptName} 
+				, COM_JOBX_CODE = #{comJobxCode}
+				, COM_POSITION_CODE = #{comPositionCode}
+				, BELT_CODE = #{beltCode}
+				, CIR_MEM_NAME = #{cirMemName}
+				, CIR_MEM_EDU_CODE = #{cirMemEduCode}
+				, CIR_MEM_ROLE = #{cirMemRole}
+				, CIR_MEM_STATUS = #{cirMemStatus} 
+				, CIR_UPDATE_USER = #{cirUpdateUser} 
+				, CIR_UPDATE_DATE = SYSDATE
+		where CIR_MEM_CODE = #{cirMemCode}
+		 
 	</update>       
 	
 	

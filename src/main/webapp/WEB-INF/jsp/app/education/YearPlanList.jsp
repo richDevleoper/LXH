@@ -45,8 +45,8 @@
 						<c:forEach var="yearPlanResult" items="${selectYearPlanList}" varStatus="status">
 				        	<tr>
                                 <td class="bg-white align-center" id="t${yearPlanResult.eduBeltCode}">${yearPlanResult.eduBeltCodeName}</td>
-								<td class="bg-white align-center" id="t${yearPlanResult.eduClassType}">${yearPlanResult.eduClassTypeName}</td>
-								<td class="bg-white align-center" id="t${yearPlanResult.eduClassDivision}">${yearPlanResult.eduClassDivisionName}</td>
+								<td class="bg-white align-center" id="t${yearPlanResult.eduBeltCode}${yearPlanResult.eduClassType}">${yearPlanResult.eduClassTypeName}</td>
+								<td class="bg-white align-center" id="t${yearPlanResult.eduBeltCode}${yearPlanResult.eduClassDivision}">${yearPlanResult.eduClassDivisionName}</td>
 								<td>
 									<div class="link-group">
 										<ul>
@@ -205,8 +205,8 @@ $(document).ready(function(){
 function init(){
 	$("#detailDiv").hide();
 	$("#listTab").find("tbody").mergeClassRowspan(0);
-	//$("#listTab").find("tbody").mergeClassRowspan(1);
-	//$("#listTab").find("tbody").mergeClassRowspan(2);
+	$("#listTab").find("tbody").mergeClassRowspan(1);
+	$("#listTab").find("tbody").mergeClassRowspan(2);
 }
 
 function reqeustSave(){
@@ -277,11 +277,25 @@ function detailView(eduCode){
 			$("#eduCode").val(data.eduCode);
 			$("#detailDiv").show();
 			$("#eduCol1").text(data.eduName);
-			$("#eduCol2").text(data.eduClassIntro);
-			$("#eduCol3").text(data.eduClassTarget);
-			$("#eduCol4").text(data.eduClassSummary);
-			$("#eduCol5").text(data.eduItem);
+			$("#eduCol2").html(data.eduClassIntro);
+			$("#eduCol3").html(data.eduClassTarget);
+			$("#eduCol4").html(data.eduClassSummary);
+			$("#eduCol5").html(data.eduItem);
 			
+			$("#eduCol6").html("");
+			let fileList = data.fileList;
+			if(data.fileList.length > 0){
+				console.log(fileList);
+				var flHtml = [];
+				for(var i=0; i<fileList.length; i++){
+					//fileList[i].fileId
+					//fileList[i].fileMsk
+					//fileList[i].fileNm
+					//fileList[i].fileSeq
+					flHtml.push("<li>"+fileList[i].fileNm+"</li>");
+				}
+				$("#eduCol6").html(flHtml.join(''));
+			}
 		}
 	});
 	

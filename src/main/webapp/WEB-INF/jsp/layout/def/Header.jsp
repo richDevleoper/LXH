@@ -49,8 +49,6 @@ hr { display:none; }
                     		<a href="/intf/login.do?com_no=89893">(로그인)</a>&nbsp;&nbsp;
                     		<ul>
 	                            <li><a href=""><img src="/assets/images/icon_help.png" alt=""><span>도움말</span></a></li>
-	                            <li><a href="/intf/logout.do"><img src="/assets/images/icon_logout.png" alt=""><span>로그아웃</span></a></li>
-	                            <li><a href="/csl"><img src="/assets/images/icon_admin.png" alt=""></a></li>
 	                        </ul>
                     	</c:otherwise>
                     </c:choose>

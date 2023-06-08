@@ -1,5 +1,6 @@
 package kr.freedi.dev.qeducation.service;
 
+import java.util.HashMap;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -10,6 +11,8 @@ import org.springframework.stereotype.Service;
 
 import egovframework.rte.fdl.idgnr.EgovIdGnrService;
 import egovframework.rte.psl.dataaccess.util.EgovMap;
+import kr.freedi.dev.attachfile.domain.AttachFileVO;
+import kr.freedi.dev.attachfile.service.AttachFileService;
 import kr.freedi.dev.common.dao.DefaultDAO;
 import kr.freedi.dev.qeducation.domain.EducationSearchVO;
 import kr.freedi.dev.qeducation.domain.EducationVO;
@@ -25,6 +28,9 @@ public class StudentService {
 	@Resource(name = "proposalIdGnrService")
 	private EgovIdGnrService idGnrService;
 	
+	@Resource
+	private AttachFileService attachFileService;
+	
 	@Resource(name = "defaultDAO")
 	private DefaultDAO dao;
 	
@@ -36,12 +42,24 @@ public class StudentService {
 		return dao.selectList("Student.selectStudentList", studentVO);
 	}
 	
+	public List<HashMap<String,Object>> selectExcelStudentList(StudentVO studentVO) {
+		return dao.selectList("Student.selectStudentExcelList", studentVO);
+	}
+	
 	public List<EducationVO> selectYearPlanList(EducationSearchVO searchVO) {
 		return dao.selectList("Education.selectYearPlanList", searchVO);
 	}
 	
-	public EgovMap selectYearPlanInfo(EducationVO educationVO) {
-		return dao.selectOne("Education.selectYearPlanInfo", educationVO); 
+	public EducationVO selectYearPlanInfo(EducationVO educationVO) {
+		EducationVO resultVO = (EducationVO)dao.selectOne("Education.selectEducationMstInfo", educationVO);
+		if(resultVO != null){
+			AttachFileVO attachFileVO = null;
+			attachFileVO = new AttachFileVO();
+			attachFileVO.setFileId(ATTACH_PREFIX + "_" + resultVO.getEduFileCode());
+			attachFileVO.setDeleteFlg("N");
+			resultVO.setFileList(attachFileService.selectFullList(attachFileVO));
+		}
+		return resultVO; 
 	}
 	
 	public int selectLReqCount(StudentVO studentVO) {

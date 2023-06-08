@@ -111,32 +111,32 @@ public class AppController {
 	
 
 	
-	@RequestMapping({"/app/001_05_01_kpi_list.do"})
-	public String handler001_05_01(HttpServletRequest request, ModelMap model,
-			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
-			UserVO userSession)throws Exception {
-		
-		return "app/qi/001_05_01_kpi_list";
-
-	}
-
-	@RequestMapping({"/app/001_05_01_sub.do"})
-	public String handler001_05_01_01(HttpServletRequest request, ModelMap model,
-			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
-			UserVO userSession)throws Exception {
-		
-		return "app/qi/001_05_01_sub";
-
-	}
+//	@RequestMapping({"/app/001_05_01_kpi_list.do"})
+//	public String handler001_05_01(HttpServletRequest request, ModelMap model,
+//			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
+//			UserVO userSession)throws Exception {
+//		
+//		return "app/qi/001_05_01_kpi_list";
+//
+//	}
+//
+//	@RequestMapping({"/app/001_05_01_sub.do"})
+//	public String handler001_05_01_01(HttpServletRequest request, ModelMap model,
+//			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
+//			UserVO userSession)throws Exception {
+//		
+//		return "app/qi/001_05_01_sub";
+//
+//	}
 	
-	@RequestMapping({"/app/001_05_02_plan.do"})
-	public String handler001_05_02(HttpServletRequest request, ModelMap model,
-			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
-			UserVO userSession)throws Exception {
-		
-		return "app/qi/001_05_02_plan";
-
-	}
+//	@RequestMapping({"/app/001_05_02_plan.do"})
+//	public String handler001_05_02(HttpServletRequest request, ModelMap model,
+//			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
+//			UserVO userSession)throws Exception {
+//		
+//		return "app/qi/001_05_02_plan";
+//
+//	}
 	
 	
 	/*
