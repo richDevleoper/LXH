@@ -18,11 +18,14 @@ import egovframework.rte.fdl.cmmn.exception.FdlException;
 import egovframework.rte.fdl.idgnr.EgovIdGnrService;
 import egovframework.rte.psl.dataaccess.util.EgovMap;
 import kr.freedi.dev.common.dao.DefaultDAO;
+import kr.freedi.dev.qkpi.domain.KpiManageVO;
+import kr.freedi.dev.qkpi.domain.KpiSearchVO;
 import kr.freedi.dev.qpopup.domain.DepartVO;
 import kr.freedi.dev.qpopup.domain.UserVO;
 import kr.freedi.dev.qreport.domain.MakeSearchVO;
 import kr.freedi.dev.qreport.domain.MakeVO;
 import kr.freedi.dev.qreport.domain.ReportDetailVO;
+import kr.freedi.dev.qreport.domain.ReportSearchVO;
 import kr.freedi.dev.qreport.domain.ReportTeamVO;
 import kr.freedi.dev.qreport.domain.ReportVO;
 
@@ -211,7 +214,7 @@ public class MakeService {
 	}
 	
 	
-	public void insertKpi(MakeVO makeVO) throws Exception {
+	public void saveKpi(MakeVO makeVO) throws Exception {
 		
 		//int cirCode = idGnrService.getNextIntegerId();
 		//makeVO.setCirCode(Integer.toString(cirCode));
@@ -219,13 +222,6 @@ public class MakeService {
 		this.memberKpiSave(makeVO);		// member 정보 가공해서 저장하기. 이후 마스터 저장하기(인원수 처리때문)
 		
 		//dao.insert("Make.insertKpiMst", makeVO);
-	}
-	
-	public void updateKpi(MakeVO makeVO) throws Exception {
-
-		this.memberKpiSave(makeVO);		// member 정보 가공해서 저장하기. 이후 마스터 저장하기(인원수 처리때문)
-		
-		//dao.insert("Make.updateKpiMst", makeVO);
 	}
 	
 	public MakeVO memberKpiSave(MakeVO makeVO) throws FdlException {
@@ -238,7 +234,7 @@ public class MakeService {
 		String anLeaderStr4 = makeVO.getLeader4();
 		String anLeaderStr5 = makeVO.getLeader5();
 		String anLeaderStr6 = makeVO.getLeader6();
-		String anLeaderStr7 = makeVO.getLeader7();
+		//String anLeaderStr7 = makeVO.getLeader7();
 		String anLeaderStr8 = makeVO.getLeader8();
 		
 		String[] anLeader1 = anLeaderStr1.split(",", -1);
@@ -247,7 +243,7 @@ public class MakeService {
 		String[] anLeader4 = anLeaderStr4.split(",", -1);
 		String[] anLeader5 = anLeaderStr5.split(",", -1);
 		String[] anLeader6 = anLeaderStr6.split(",", -1);
-		String[] anLeader7 = anLeaderStr7.split(",", -1);
+		//String[] anLeader7 = anLeaderStr7.split(",", -1);
 		String[] anLeader8 = anLeaderStr8.split(",", -1);
 		
 		if(!anLeaderStr1.equals("")){
@@ -268,14 +264,16 @@ public class MakeService {
 				makeVO.setComJobxCode(anLeader4[j].trim());
 				makeVO.setComPositionCode(anLeader5[j].trim());
 				makeVO.setBeltCode(anLeader6[j].trim());
-				makeVO.setCirLeaderdeptName(anLeader7[j].trim());
-				makeVO.setCirMemRole("LEADER");
+				//makeVO.setCirLeaderdeptName(anLeader7[j].trim());
+				//makeVO.setCirMemRole("LEADER");
 				
+				
+				makeVO.setKudChkTypeCode("KUD001"); // 품질인재
 				
 				if(anLeader8[j].trim().length()>0) {
-					dao.update("Make.updateKpiUserDtl", makeVO);	
+					dao.update("KPI.updateDtl", makeVO);	
 				} else {
-					dao.insert("Make.insertKpiUserDtl", makeVO);
+					dao.insert("KPI.insertDtl", makeVO);
 				}
 				
 				totCnt++;
@@ -288,7 +286,7 @@ public class MakeService {
 		String anTeamStr4 = makeVO.getTeam4();
 		String anTeamStr5 = makeVO.getTeam5();
 		String anTeamStr6 = makeVO.getTeam6();
-		String anTeamStr7 = makeVO.getTeam7();
+//		String anTeamStr7 = makeVO.getTeam7();
 		String anTeamStr8 = makeVO.getTeam8();
 		
 		String[] anTeam1 = anTeamStr1.split(",", -1);
@@ -297,7 +295,7 @@ public class MakeService {
 		String[] anTeam4 = anTeamStr4.split(",", -1);
 		String[] anTeam5 = anTeamStr5.split(",", -1);
 		String[] anTeam6 = anTeamStr6.split(",", -1);
-		String[] anTeam7 = anTeamStr7.split(",", -1);
+//		String[] anTeam7 = anTeamStr7.split(",", -1);
 		String[] anTeam8 = anTeamStr8.split(",", -1);
 		
 		if(!anTeamStr1.equals("")){
@@ -317,13 +315,15 @@ public class MakeService {
 				makeVO.setComJobxCode(anTeam4[j].trim());
 				makeVO.setComPositionCode(anTeam5[j].trim());
 				makeVO.setBeltCode(anTeam6[j].trim());
-				makeVO.setCirMemRole("TEAM");
+				//makeVO.setCirMemRole("TEAM");
+				
+				makeVO.setKudChkTypeCode("KUD002"); // 품질인재
 				
 				if(anTeam8[j].trim().length()>0) {
-					dao.update("Make.updateCircleDtl", makeVO);	
+					dao.update("KPI.updateDtl", makeVO);	
 				} else {
-					dao.insert("Make.insertCircleDtl", makeVO);
-				}				
+					dao.insert("KPI.insertDtl", makeVO);
+				}
 				totCnt++;
 			}
 		}
@@ -336,7 +336,7 @@ public class MakeService {
 				
 				MakeVO paramVO = new MakeVO();
 				paramVO.setCirMemCode(removeMemberIds[j]);
-				dao.delete("Make.deleteKpiUserDtl", paramVO);
+				dao.delete("KPI.deleteUserDtl", paramVO);
 				totCnt--;
 			}
 		}
@@ -375,4 +375,20 @@ public class MakeService {
         }
         return resultArray;
     }
+	
+	public List<KpiManageVO> selectKpiUserDetailList(MakeVO makeVO) throws Exception {
+		
+		return dao.selectList("KPI.selectUserDetail", makeVO);
+	}
+	
+	public List<KpiManageVO> selectKpiFullList(KpiSearchVO searchVO) {
+		
+		return dao.selectList("KPI.selectFullList", searchVO);
+	}
+	
+	public int selectKpiListCount(KpiSearchVO searchVO) {
+		return (Integer) dao.selectOne("KPI.selectCirclListCount", searchVO);
+	}
+	
+	
 }

@@ -27,6 +27,8 @@ import kr.freedi.dev.article.service.ArticleService;
 import kr.freedi.dev.code.domain.CodeVO;
 import kr.freedi.dev.code.service.CodeService;
 import kr.freedi.dev.qapprove.domain.ApproveVO;
+import kr.freedi.dev.qkpi.domain.KpiManageVO;
+import kr.freedi.dev.qkpi.domain.KpiSearchVO;
 import kr.freedi.dev.qpopup.domain.DepartVO;
 import kr.freedi.dev.qpopup.service.QPopupService;
 import kr.freedi.dev.qreport.domain.MakeSearchVO;
@@ -78,11 +80,21 @@ public class KpiController {
 	
 	@RequestMapping({"/MgrList.do"})
 	public String handler_mgrList(HttpServletRequest request, ModelMap model,
-			@ModelAttribute("reportVO") ReportVO reportVO,
-			@ModelAttribute("reportSearchVO") ReportSearchVO searchVO,
+			@ModelAttribute("makeVO") MakeVO makeVO,
+			@ModelAttribute("searchVO") KpiSearchVO searchVO,
 			UserVO userSession)throws Exception {
 		
 		model.addAttribute("menuKey", searchVO.getMenuKey());
+		
+		String pKudIdx = makeVO.getKudIdx();
+		if(pKudIdx==null)
+			searchVO.setKudIdx("6SIG");
+
+		Integer totalCount = makeService.selectKpiListCount(searchVO);
+		searchVO.setTotalRecordCount(totalCount);
+		
+		List<KpiManageVO> list = makeService.selectKpiFullList(searchVO);
+		model.addAttribute("mgrList", list);	
 	
 		return "app/kpi/MgrList";
 	}
@@ -101,8 +113,16 @@ public class KpiController {
 		List<DepartVO> dbList = qPopupService.selectTreeList();
 		JsonArray deptList = makeService.convertTreeJson(dbList);
 		
-		
 		model.addAttribute("deptList", deptList);
+		
+		String pKudIdx = makeVO.getKudIdx();
+		if(pKudIdx==null)
+			makeVO.setKudIdx("6SIG");
+		
+		List<KpiManageVO> kpiMgrList = makeService.selectKpiUserDetailList(makeVO);
+		model.addAttribute("kpiMgrList", kpiMgrList);
+		// select 6sig 품질/인재
+		// select 6sig 품질 외 인재
 		
 		// 페이지 바인딩
 		model.addAttribute("action", "/kpi/insertKpiUserInfo.do");
@@ -129,16 +149,13 @@ public class KpiController {
 		model.addAttribute("menuKey", searchVO.getMenuKey());
 		searchVO.setSearchUserid(userSession.getUserId());
 		
-		if(makeVO.getCirCode()==null) {
-			makeVO.setCirRegUser(userSession.getUserId());
-			makeService.insertKpi(makeVO);	
-		} else {
-			makeVO.setCirUpdateUser(userSession.getUserId());
-			makeService.updateKpi(makeVO);
-		}
+		makeVO.setCirRegUser(userSession.getUserId());
+		makeVO.setCirUpdateUser(userSession.getUserId());
+		
+		makeService.saveKpi(makeVO);
 		
 		//return "app/make/MakeList";
-		return "redirect:/sub.do?menuKey="+searchVO.getMenuKey();
+		return "redirect:/sub.do?menuKey=46";
 		
 	}			
 }

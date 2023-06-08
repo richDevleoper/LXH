@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="KPI">
+	<resultMap id="KpiMap" type="kr.freedi.dev.qkpi.domain.KpiManageVO">
+		<result column="IDX" property="idx"/>	
+		<result column="STD_SEQ" property="stdSeq"/>
+		<result column="KUD_IDX" property="kudIdx" />
+		<result column="COM_NO" property="comNo" />
+		<result column="KUD_YEAR" property="kudYear" /> 
+		<result column="KUD_CHK_TYPE_CODE" property="kudChkTypeCode" />
+		<result column="KUD_DEPART" property="kudDepart" />
+		<result column="KUD_JOBX" property="kudJobx" />
+		<result column="KUD_POSITION" property="kudPosition" />
+		<result column="KUD_TEAM_NAME" property="kudTeamName" />
+		<result column="KUD_USER_NAME" property="kudUserName" />
+		<result column="KUD_BELONG_NAME" property="kudBelongName" />
+		<result column="KUD_PART" property="kudPart" />
+		<result column="KUD_PLACE" property="kudPlace" />
+		<result column="KUD_USER_IDENTITY" property="kudUserIdentity" />
+		<result column="KUD_JOIN_DATE" property="kudJoinDate" />
+		<result column="KUD_LAST_DEGREE" property="kudLastDegree" />
+		<result column="KUD_REG_USER" property="kudRegUser" />
+		<result column="KUD_REG_DATE" property="kudRegDate" />
+		<result column="KUD_UPDATE_USER" property="kudUpdateUser" />
+		<result column="KUD_UPDATE_DATE" property="kudUpdateDate" />
+		<result column="KUD_CERT_BELT" property="kudCertBelt" />
+	</resultMap>
+	
+	<sql id="defCond">
+		/*searchYear, searchDepart, searchBelt, searchIdx, , searchText, orderByTyp*/
+	</sql>
+	
+	<select id="selectCirclListCount" resultType="int">
+		SELECT COUNT(*) 
+		  FROM (
+		  <include refid="kpiMgrBaseQuery"></include>
+		  ) T
+	</select>
+	
+	<sql id="kpiMgrBaseQuery"> 
+				SELECT
+				    std_seq, 
+				    com_no,
+				    kud_user_name,
+				    kud_place,
+				    kud_part,
+				    kud_belong_name,
+				    kud_team_name,
+				    kud_jobx,
+				    kud_position,  
+				    get_code_nm('LDRBELT', kud_cert_belt) kud_cert_belt
+				FROM
+				    tb_kpi_user_detail T
+				WHERE
+				    kud_idx = #{kudIdx}
+				/*ORDER BY std_seq DESC*/
+				<include refid="defCond"></include>
+	</sql>
+	
+	<select id="selectFullList" resultMap="KpiMap">
+		WITH CIRCLE_MASTER AS (
+            SELECT ROW_NUMBER() OVER( ORDER BY TO_NUMBER(T.STD_SEQ) ASC ) IDX
+            , ROW_NUMBER() OVER( ORDER BY TO_NUMBER(T.STD_SEQ) DESC ) ROWIDX
+            , T.*
+            FROM(
+				<include refid="kpiMgrBaseQuery"></include>
+            ) T
+		)
+		SELECT *
+		FROM CIRCLE_MASTER T
+		WHERE T.ROWIDX BETWEEN (#{currentPageNo}*#{recordCountPerPage}+1-#{recordCountPerPage}) AND (#{currentPageNo}*#{recordCountPerPage})
+		ORDER BY T.IDX DESC
+	</select>
+	
+	<select id="select" resultMap="KpiMap">
+		        
+		select        
+				CIR_CODE
+				, CIR_REG_NUM
+				, DEPT_CODE
+				, DEPT_NAME
+				, CIR_TCH_COM_NO
+				, GET_USER_NM(CIR_TCH_COM_NO) CIR_TCH_COM_NAME
+				, CIR_WORK_MEM_NO
+				, CIR_TEAM_LEADER_NO
+				, CIR_RECORD_CONT
+				, CIR_MEM_CNT
+				, CIR_REG_USER
+				, CIR_REG_DATE
+				, CIR_UPDATE_USER
+				, CIR_UPDATE_DATE
+				, CIR_MEM_STATUS
+				, CIR_NAME
+				, CIR_LEADER_NAME
+				, CIR_LEADER_DEPTNAME
+				
+				, GET_USER_NM(T.CIR_WORK_MEM_NO) CIR_WORK_MEM_NAME
+				, GET_USER_NM(T.CIR_TEAM_LEADER_NO) CIR_TEAM_LEADER_NAME -- 분임조 팀장   
+		FROM TB_CIRCLE_MST T
+        WHERE T.CIR_CODE = #{cirCode}
+	</select>
+	
+	<select id="selectUserDetail" resultMap="KpiMap">
+		        
+		select STD_SEQ, COM_NO, KUD_YEAR, KUD_CHK_TYPE_CODE, KUD_DEPART, KUD_JOBX, KUD_POSITION, KUD_TEAM_NAME, KUD_USER_NAME, KUD_BELONG_NAME, KUD_PART, KUD_PLACE, KUD_USER_IDENTITY, KUD_JOIN_DATE, KUD_LAST_DEGREE
+		  from tb_kpi_user_detail
+		 where KUD_IDX=#{kudIdx}
+	</select>
+	
+	
+	<insert id="insertDtl" parameterType="kr.freedi.dev.qreport.domain.MakeVO">
+		insert into TB_KPI_USER_DETAIL (
+		    STD_SEQ
+		    , COM_NO
+		    , KUD_IDX
+		    , KUD_YEAR
+		    , KUD_CHK_TYPE_CODE
+		    , KUD_DEPART
+		    , KUD_JOBX
+		    , KUD_POSITION
+		    , KUD_TEAM_NAME
+		    , KUD_USER_NAME
+		    , KUD_BELONG_NAME
+		    , KUD_PART
+		    , KUD_PLACE
+		    , KUD_USER_IDENTITY
+		    , KUD_JOIN_DATE
+		    , KUD_LAST_DEGREE
+		    , KUD_CERT_BELT
+		    , KUD_REG_USER
+		    , KUD_REG_DATE
+		) values (
+		    #{cirMemCode} 
+		    , #{ComNo}
+		    , #{kudIdx}
+		    , #{kudYear}
+		    , #{kudChkTypeCode}
+		    , get_depart_nm(#{cirDeptCode})
+		    , get_code_nm('JOBX', #{comJobxCode})
+		    , get_code_nm('POSITION', #{comPositionCode})
+		    , null
+		    , #{cirMemName}
+		    , null
+		    , null
+		    , (select com_work_place from tb_user_mst where com_no=#{ComNo})
+		    , null
+		    , (select com_join_date from tb_user_mst where com_no=#{ComNo})
+		    , null
+		    , #{beltCode}
+		    , #{cirRegUser}
+		    , sysdate
+		)
+	</insert>    
+	
+	<update id="updateDtl" parameterType="kr.freedi.dev.qreport.domain.MakeVO">
+		 update TB_KPI_USER_DETAIL 
+			set KUD_YEAR =  #{kudYear}
+			    , KUD_CHK_TYPE_CODE =  #{kudChkTypeCode}
+			    , KUD_DEPART = get_depart_nm(#{cirDeptCode})
+			    , KUD_JOBX =  get_code_nm('JOBX', #{comJobxCode})
+			    , KUD_POSITION =  get_code_nm('POSITION', #{comPositionCode})
+			    , KUD_TEAM_NAME =  null
+			    , KUD_USER_NAME =  #{cirMemName}
+			    , KUD_BELONG_NAME =  null
+			    , KUD_PART =  null
+			    , KUD_PLACE =  (select com_work_place from tb_user_mst where com_no=#{ComNo})
+			    , KUD_USER_IDENTITY =  null
+			    , KUD_JOIN_DATE =  (select com_join_date from tb_user_mst where com_no=#{ComNo})
+			    , KUD_LAST_DEGREE =  null
+			    , KUD_CERT_BELT = #{beltCode}
+			    , KUD_UPDATE_USER =  #{cirUpdateUser}
+			    , KUD_UPDATE_DATE =  sysdate
+		  where STD_SEQ = #{cirMemCode}
+		    and KUD_IDX = #{kudIdx}
+		    and COM_NO =  #{ComNo}
+
+	</update>       
+	
+	
+	<sql id="detCond">
+		<where>
+			<if test="comDepartCode != null and comDepartCode != ''">
+				AND T.COM_DEPART_CODE = #{comDepartCode}
+			</if>
+		</where>
+	</sql>
+	
+	<select id="selectEmpSearch" resultType="egovMap">
+     SELECT *
+	   FROM (
+            SELECT t.com_no
+					, t.user_id            
+					, t.user_name               
+					, t.com_depart_code          
+					, (select dept_name from tb_depart_mst d where dept_code=t.com_depart_code) dept_full_name    
+					, t.com_jobx        
+					, cd_job.code_nm com_jobx_nm                     
+					, t.com_position                    
+					, GET_CODE_NM('POSITION', com_position) com_position_nm            
+					, t.com_cert_belt              
+					, cd_blt.code_nm com_cert_belt_nm       
+              FROM tb_user_mst T
+                   LEFT OUTER JOIN tb_code cd_job ON cd_job.code_grp_id='JOBX' AND cd_job.code_id=T.com_jobx
+                   LEFT OUTER JOIN tb_code cd_blt ON cd_blt.code_grp_id='LDRBELT' AND cd_blt.code_id=T.com_cert_belt 
+		<include refid="detCond"></include>
+		    )
+		ORDER BY COM_JOBX ASC, USER_NAME
+	</select>
+	
+	<delete id="deleteUserDtl">
+		DELETE FROM TB_KPI_USER_DETAIL WHERE STD_SEQ = #{cirMemCode}
+	</delete>
+	
+	
+	
+</mapper>

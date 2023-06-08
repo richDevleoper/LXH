@@ -20,43 +20,52 @@
 <meta name="description" content="" />
 </head>
 <body>
+
 	<div class="tab-group">
 		<div class="tab-btn">
-			<button type="button" class="on">6σ 인재 관리 대상</button>
-			<button type="button">팀장MBB 관리 대상</button>
+			<button type="button" <c:if test="${makeVO.kudIdx eq '6SIG'}">class="on"</c:if> onclick="onclick_tab('6SIG')">6σ 인재 관리 대상</button>
+			<button type="button" <c:if test="${makeVO.kudIdx eq 'MBB'}">class="on"</c:if> onclick="onclick_tab('MBB')">팀장MBB 관리 대상</button>
 		</div>
 		<form:form commandName="frmMake" id="defaultForm" name="defaultForm"
 			action="${action}" onsubmit="return false" method="post"
 			modelAttribute="makeVO">
 			
-			            <form:hidden path="leader1"/> <!-- 저장용 -->
-                        <form:hidden path="leader2"/>
-                        <form:hidden path="leader3"/>
-                        <form:hidden path="leader4"/>
-                        <form:hidden path="leader5"/>
-                        <form:hidden path="leader6"/>
-                        <form:hidden path="leader7"/>
-                        <form:hidden path="leader8"/>
-                        
-                        <form:hidden path="team1"/>
-                        <form:hidden path="team2"/>
-                        <form:hidden path="team3"/>
-                        <form:hidden path="team4"/>
-                        <form:hidden path="team5"/>
-                        <form:hidden path="team6"/>
-                        <form:hidden path="team7"/>
-                        <form:hidden path="team8"/>
-                        
-                        <form:hidden path="removeMemberIds"/>
+			<form:hidden path="kudIdx"/> <!-- 6sigma / MBB 구분 -->
+			
+         	<form:hidden path="leader1"/> <!-- 저장용 -->
+            <form:hidden path="leader2"/>
+            <form:hidden path="leader3"/>
+            <form:hidden path="leader4"/>
+            <form:hidden path="leader5"/>
+            <form:hidden path="leader6"/>
+            <form:hidden path="leader7"/>
+            <form:hidden path="leader8"/>
+            
+            <form:hidden path="team1"/>
+            <form:hidden path="team2"/>
+            <form:hidden path="team3"/>
+            <form:hidden path="team4"/>
+            <form:hidden path="team5"/>
+            <form:hidden path="team6"/>
+            <form:hidden path="team7"/>
+            <form:hidden path="team8"/>
+            
+            <form:hidden path="removeMemberIds"/>
 			
 			<div class="tab-inr">
 				<div class="tab-box on">
 					<div class="list-wrap">
 						<div class="list-header mg-t20">
 							<p class="title">대상연도 선택</p>
-							<select name="limit" class="limit">
-								<option value="10">2023년</option>
-							</select>
+						
+							<jsp:useBean id="now" class="java.util.Date" />
+							<fmt:formatDate value="${now}" pattern="yyyy" var="yearStart"/>
+							<form:select path="kudYear" class="limit">
+							<c:forEach begin="0" end="3" var="result" step="1">
+								<option value="<c:out value="${yearStart - result}" />" <c:if test="${(yearStart - result) == searchVO.bsnsYear}"> selected="selected"</c:if>><c:out value="${yearStart - result}" /></option>
+							</c:forEach>
+							</form:select>
+							
 						</div>
 						<div class="list-content">
 							<div class="list-group">
@@ -64,7 +73,7 @@
 									<p>6σ 인재 관리 대상 선정</p>
 									<div class="tree-list"></div>
 								</div>
-								<div class="inr">
+								<div class="inr" style="overflow: auto">
 									<p>사원목록<span id="empTit"></span></p>
 									                                                                                <div class="list-wrap">
                                                                                     <div class="list-table list">
@@ -102,7 +111,7 @@
 										<p>
 											생산/기술/R&D/품질 인재<span id="leaderTit"></span>
 										</p>
-										<div style="overflow: auto">
+										<div style="overflow: auto; height: 326px;">
                                                                          <div class="list-wrap">
                                                                                     <div class="list-table list">
                                                                                         <table id="leadertab">
@@ -128,24 +137,23 @@
                                                                                                 </tr>
                                                                                             </thead>
                                                                                             <tbody>
-                                                                                            <c:forEach var="item" items="${makeVO.teamMemList}" varStatus="status">
-                                                                                            	<c:if test="${item.repTeamMemRole eq 'LEADER'}">
+                                                                                            <c:forEach var="item" items="${kpiMgrList}" varStatus="status">
+                                                                                            	<c:if test="${item.kudChkTypeCode eq 'KUD001'}">
 																									<tr comno="${item.comNo}" 
-																									    username="${item.repTeamMemName}" 
-																									    comdepartcode="${item.deptCode}" 
-																									    deptfullname="${item.deptName}" 
-																										comjobx="${item.comJobxCode}" 
-																										composition="${item.comPositionCode}" 
-																										compositionnm="${item.comPositionNm}" 
-																										comcertbelt="${item.beltCode}" 
-																										comcertbeltnm="${item.beltNm}"
-																										cirMemCode="${item.cirMemCode}"
+																									    username="${item.kudUserName}" 
+																									    comdepartcode="${item.kudDepart}" 
+																									    deptfullname="${item.kudDepart}" 
+																										comjobx="${item.kudJobx}" 
+																										composition="${item.kudPosition}" 
+																										kudPlace="${item.kudPlace}" 
+																										comCertBelt="${item.kudCertBelt}"
+																										cirMemCode="${item.stdSeq}"
 																										>
 																										<td class="text-align-center"><div><input type="checkbox" id="chkleader_${status.index}" name="chkleader">
 																										<label for="chkleader_${status.index}"></label></div></td>
-																										<td class="text-align-center"><span>${item.repTeamMemName}</span></td>
-																										<td class="text-align-center"><span>${item.comJobxNm}</span></td>
-																										<td class="text-align-center"><span>${item.comPositionNm}</span></td>
+																										<td class="text-align-center"><span>${item.kudUserName}</span></td>
+																										<td class="text-align-center"><span>${item.kudJobx}</span></td>
+																										<td class="text-align-center"><span>${item.kudPosition}</span></td>
 																									</tr>
 																								</c:if>
 																							</c:forEach>
@@ -166,7 +174,7 @@
 										<p>
 											생산/기술/R&D/품질 외 인재<span id="teamTit"></span>
 										</p>
-                                                                        <div style="overflow: auto">
+                                                                        <div style="overflow: auto; height: 326px;">
                                                                         			<div class="list-wrap">
                                                                                         <div class="list-table list">
                                                                                             <table id="teamtab">
@@ -192,23 +200,23 @@
 	                                                                                                </tr>
 	                                                                                            </thead>
 	                                                                                            <tbody>
-	                                                                                            <c:forEach var="item" items="${makeVO.teamMemList}" varStatus="status">
-                                                                                            	<c:if test="${item.repTeamMemRole eq 'TEAM'}">
+	                                                                                            <c:forEach var="item" items="${kpiMgrList}" varStatus="status">
+                                                                                            	<c:if test="${item.kudChkTypeCode eq 'KUD002'}">
 																									<tr comno="${item.comNo}" 
-																									    username="${item.repTeamMemName}" 
-																									    comdepartcode="${item.deptCode}" 
-																									    deptfullname="${item.deptName}" 
-																										comjobx="${item.comJobxCode}" 
-																										composition="${item.comPositionCode}" 
-																										compositionnm="${item.comPositionNm}" 
-																										comcertbelt="${item.beltCode}" 
-																										comcertbeltnm="${item.beltNm}"
-																										cirMemCode="${item.cirMemCode}">
+																									    username="${item.kudUserName}" 
+																									    comdepartcode="${item.kudDepart}" 
+																									    deptfullname="${item.kudDepart}" 
+																										comjobx="${item.kudJobx}" 
+																										composition="${item.kudPosition}" 
+																										kudPlace="${item.kudPlace}" 
+																										comCertBelt="${item.kudCertBelt}"
+																										cirMemCode="${item.stdSeq}"
+																										>
 																										<td class="text-align-center"><div><input type="checkbox" id="chkteam_${status.index}" name="chkteam">
-																											<label for="chkteam_${status.index}"></label></div></td>
-																										<td class="text-align-center"><span>${item.repTeamMemName}</span></td>
-																										<td class="text-align-center"><span>${item.comJobxNm}</span></td>
-																										<td class="text-align-center"><span>${item.comPositionNm}</span></td>
+																										<label for="chkteam_${status.index}"></label></div></td>
+																										<td class="text-align-center"><span>${item.kudUserName}</span></td>
+																										<td class="text-align-center"><span>${item.kudJobx}</span></td>
+																										<td class="text-align-center"><span>${item.kudPosition}</span></td>
 																									</tr>
 																								</c:if>
 																								</c:forEach>
@@ -231,7 +239,7 @@
 						<div class="list-footer">
 							<div class="list-btns center">
 								<button type="button" class="btn bg-gray" id="btnSave">
-									<span>대상선정</span>
+									<span>저장</span>
 								</button>
 								 <a href="/sub.do?menuKey=${menuKey}" class="btn">목록</a>
 							</div>
@@ -244,105 +252,6 @@
 		</form:form>
 	</div>
 
-	<!-- 조직도 -->
-	<div class="modal-dimmed"></div>
-	<div class="org-modal">
-		<div class="modal-header">
-			<h4>조직조회</h4>
-			<button type="button" class="btn-close">닫기</button>
-		</div>
-		<div class="modal-content">
-			<div class="list-wrap">
-				<div class="list-search">
-					<form id="org-form" onsubmit="org_search();return false;">
-						<div class="search-form">
-							<div class="form-inline form-input">
-								<label>조직명</label> <input type="text" name="">
-							</div>
-							<button type="submit" class="btn-submit">조회</button>
-						</div>
-					</form>
-				</div>
-			</div>
-			<div class="tree-header">
-				<div>
-					<input type="checkbox" id="orgSelAll"> <label
-						for="orgSelAll"></label>
-				</div>
-				<div>6σ 인재육성대상 조직명</div>
-			</div>
-			<div id="org-tree">
-				<ul>
-					<li>창호 사업부
-						<ul>
-							<li>창호.생산담당
-								<ul>
-									<li>· 창호.프로파일생산팀</li>
-									<li>· 창호.기술팀</li>
-									<li>· 창호.공정혁신팀</li>
-									<li>· 창호.완성창공정기술팀</li>
-								</ul>
-							</li>
-							<li>유리</li>
-							<li>연구소 근무</li>
-							<li>창호.시스템창사업담당</li>
-							<li>창호.중문팀</li>
-							<li>바닥재 사업담당</li>
-						</ul>
-					</li>
-					<li>단열재 사업담당
-						<ul>
-							<li>창호.프로파일생산팀</li>
-						</ul>
-					</li>
-					<li>벽지 사업담당
-						<ul>
-							<li>창호.프로파일생산팀</li>
-						</ul>
-					</li>
-					<li>표면소재 사업담당
-						<ul>
-							<li>창호.프로파일생산팀</li>
-						</ul>
-					</li>
-					<li>산업용필름 사업담당
-						<ul>
-							<li>창호.프로파일생산팀</li>
-						</ul>
-					</li>
-					<li>자동차소재부품 사업부
-						<ul>
-							<li>창호.프로파일생산팀</li>
-						</ul>
-					</li>
-					<li>인테리어 사업부
-						<ul>
-							<li>창호.프로파일생산팀</li>
-						</ul>
-					</li>
-					<li>연구소
-						<ul>
-							<li>창호.프로파일생산팀</li>
-						</ul>
-					</li>
-					<li>품질 담당
-						<ul>
-							<li>창호.프로파일생산팀</li>
-						</ul>
-					</li>
-					<li>생산/기술/R&D/품질 外
-						<ul>
-							<li>창호.프로파일생산팀</li>
-						</ul>
-					</li>
-				</ul>
-			</div>
-			<div class="btns">
-				<button type="button" class="btn-submit">확인</button>
-				<button type="button" class="btn-cancel">취소</button>
-			</div>
-		</div>
-	</div>
 	<script type="text/javascript">
 		
 
@@ -384,11 +293,11 @@
 		$("#AppLeader").on("click", function(){
 			let vhtml = [];	
 			
-			let chkCnt = $("#leadertab").children("tbody:first").children("tr[comNo]").length;
+			/* let chkCnt = $("#leadertab").children("tbody:first").children("tr[comNo]").length;
 			if(chkCnt==1){
 				alert("분임조장은 한명만 지정가능합니다.");
 				return false;
-			}
+			} */
 			
 			
 			$("#emptab").children("tbody:first").children("tr[comNo]").each(function(i){
@@ -466,6 +375,7 @@
 		});
 		
 		$("#AppTeam").on("click", function(){
+
 			let vhtml = [];	
 			$("#emptab").children("tbody:first").children("tr[comNo]").each(function(i){
 				var comNo = $(this).attr("comNo");
@@ -522,7 +432,6 @@
 		$("#delTeam").on("click", function(){
 			$("#teamtab").children("tbody:first").children("tr[comNo]").each(function(i){
 				if($(this).find("input:checkbox[name='chkteam']").is(":checked")){
-					debugger;
 					var $check_idx = $(this).closest("tr").index();
 					var removeId = $("#teamtab tbody tr").eq($check_idx).attr("cirmemcode");
 					let removeList = $("#removeMemberIds").val();
@@ -542,11 +451,13 @@
 		});
 		
 		$("#leaderDelAll").click(function() {
+		
 			if($("#leaderDelAll").is(":checked")) $("input[name=chkleader]").prop("checked", true);
 			else $("input[name=chkleader]").prop("checked", false);
 		});
 		
 		$("#teamDelAll").click(function() {
+		
 			if($("#teamDelAll").is(":checked")) $("input[name=chkteam]").prop("checked", true);
 			else $("input[name=chkteam]").prop("checked", false);
 		});
@@ -557,7 +468,14 @@
 					$('#defaultForm')[0].submit();
 				}			
 			}
-		}); 
+		});
+		
+		$(".tab-group > .tab-btn > button").on('click',function() {
+	        var $idx = $(this).index();
+
+	        $(this).addClass("on").siblings().removeClass("on");
+	        $(this).closest(".tab-group").children(".tab-inr").find(" > .tab-box:eq("+ $idx +")").addClass("on").siblings().removeClass("on");
+	    });
 	 	
 	 	
 	});
@@ -615,12 +533,6 @@
 		
 		function checkValidation(){
 
-			debugger;
-		    if($('#cirRecordCont').val().trim() == ''){
-				alert('이력내용을 입력해 주세요.'); $('#cirRecordCont').focus();
-				return false;
-			}
-		    
 		    var leader1 = "";
 		    var leader2 = "";
 		    var leader3 = "";
@@ -724,6 +636,10 @@
 		    $("#team8").val(team8);
 			
 			return true;
+		}
+		
+		function onclick_tab(idx){
+			location.href="/kpi/MgrSelect.do?menuKey=${menuKey}&kudIdx="+idx;
 		}
 		
 		var deptList = ${deptList};

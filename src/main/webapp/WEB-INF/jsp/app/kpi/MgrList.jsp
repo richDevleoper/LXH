@@ -16,14 +16,24 @@
 
 </head>
 <body>
-   
+
+<c:choose>
+	<c:when test="${makeVO.kudIdx eq 'MBB'}">
+		<c:set var="cssOn1" value=""></c:set>
+		<c:set var="cssOn2" value="on"></c:set>
+	</c:when>
+	<c:otherwise>
+		<c:set var="cssOn1" value="on"></c:set>
+		<c:set var="cssOn2" value=""></c:set>
+	</c:otherwise>
+</c:choose>   
 
                         <div class="tab-group">
-                            <div class="tab-btn">
-                                <!-- [D] 현재 활성화된 메뉴에 on클래스 추가해주세요. -->
-                                <button type="button" class="on">6σ 인재 관리 대상</button>
-                                <button type="button">팀장MBB 관리 대상</button>
-                            </div>
+							<div class="tab-btn">
+								<button type="button" class="${cssOn1}" onclick="onclick_tab('6SIG')">6σ 인재 관리 대상</button>
+								<button type="button" class="${cssOn2}" onclick="onclick_tab('MBB')">팀장MBB 관리 대상</button>
+							</div>                        
+                            
                             <div class="tab-inr">
                                 <div class="tab-box on">
                                     <div class="tab-group underline-type">
@@ -111,249 +121,33 @@
                                                         </tr>                                            
                                                     </thead>
                                                     <tbody>
-                                                        <tr>                                                            
-                                                            <td>305</td>
+                                                    <c:forEach var="item" items="${mgrList}" varStatus="status">
+                            			                 <tr id="tr_${item.comNo}" >                                                            
+                                                            <td>${item.idx}</td>
                                                             <td>
                                                                 <div class="link-group center">
                                                                     <ul>
-                                                                        <li><a href="#" title="바로가기" class="btn-org">FB0000</a></li>                                                                
+                                                                        <li><a href="javascript:onclick_userid('${item.comNo}')" title="바로가기" class="btn-org">${item.comNo}</a></li>                                                                
                                                                     </ul>
                                                                 </div>                                                                   
-                                                            <td>홍길동</td>
-                                                            <td>청주공장</td>
-                                                            <td>자동차소재부품</td>
-                                                            <td>창호생산담당</td>
-                                                            <td>창호프로파일생산팀</td>
-                                                            <td>창호프로파일생산팀</td>
-                                                            <td>책임</td>
-                                                            <td>팀장</td>
-                                                            <td>MBB</td>
+                                                            <td>${item.kudUserName}</td>
+                                                            <td>${item.kudPlace}</td>
+                                                            <td>${item.kudPart}</td>
+                                                            <td>${item.kudBelongName}</td>
+                                                            <td>${item.kudTeamName}</td>
+                                                            <td></td>
+                                                            <td>${item.kudJobx}</td>
+                                                            <td>${item.kudPosition}</td>
+                                                            <td>${item.kudCertBelt}</td>
                                                         </tr>
-                                                        <tr>
-                                                            <td>304</td>
-                                                            <td>
-                                                                <div class="link-group center">
-                                                                    <ul>
-                                                                        <li><a href="#" class="btn-org" title="바로가기">FB0000</a></li>
-                                                                    </ul>
-                                                                </div>                                                            
-                                                            </td>
-                                                            <td>홍길동</td>
-                                                            <td>울산공장</td>
-                                                            <td>인테리어</td>
-                                                            <td>유리생산담당</td>
-                                                            <td>창호기술팀</td>
-                                                            <td>창호기술팀</td>
-                                                            <td>책임</td>
-                                                            <td>팀장</td>
-                                                            <td>BB</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>303</td>
-                                                            <td>
-                                                                <div class="link-group center">
-                                                                    <ul>
-                                                                        <li><a href="#" title="바로가기">FB0000</a></li>
-                                                                    </ul>
-                                                                </div>                                                            
-                                                            </td>
-                                                            <td>홍길동</td>
-                                                            <td>청주공장</td>
-                                                            <td>자동차소재부품</td>
-                                                            <td>창호생산담당</td>
-                                                            <td>창호프로파일생산팀</td>
-                                                            <td>창호프로파일생산팀</td>
-                                                            <td>책임</td>
-                                                            <td>팀장</td>
-                                                            <td>MBB</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>302</td>
-                                                            <td>
-                                                                <div class="link-group center">
-                                                                    <ul>
-                                                                        <li><a href="#" title="바로가기">FB0000</a></li>
-                                                                    </ul>
-                                                                </div>                                                            
-                                                            </td>
-                                                            <td>홍길동</td>
-                                                            <td>울산공장</td>
-                                                            <td>인테리어</td>
-                                                            <td>유리생산담당</td>
-                                                            <td>창호기술팀</td>
-                                                            <td>창호기술팀</td>
-                                                            <td>책임</td>
-                                                            <td>팀장</td>
-                                                            <td>BB</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>301</td>
-                                                            <td>
-                                                                <div class="link-group center">
-                                                                    <ul>
-                                                                        <li><a href="#" title="바로가기">FB0000</a></li>
-                                                                    </ul>
-                                                                </div>                                                            
-                                                            </td>
-                                                            <td>홍길동</td>
-                                                            <td>청주공장</td>
-                                                            <td>자동차소재부품</td>
-                                                            <td>창호생산담당</td>
-                                                            <td>창호프로파일생산팀</td>
-                                                            <td>창호프로파일생산팀</td>
-                                                            <td>책임</td>
-                                                            <td>팀장</td>
-                                                            <td>MBB</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>300</td>
-                                                            <td>
-                                                                <div class="link-group center">
-                                                                    <ul>
-                                                                        <li><a href="#" title="바로가기">FB0000</a></li>
-                                                                    </ul>
-                                                                </div>                                                            
-                                                            </td>
-                                                            <td>홍길동</td>
-                                                            <td>울산공장</td>
-                                                            <td>인테리어</td>
-                                                            <td>유리생산담당</td>
-                                                            <td>창호기술팀</td>
-                                                            <td>창호기술팀</td>
-                                                            <td>책임</td>
-                                                            <td>팀장</td>
-                                                            <td>BB</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>299</td>
-                                                            <td>
-                                                                <div class="link-group center">
-                                                                    <ul>
-                                                                        <li><a href="#" title="바로가기">FB0000</a></li>
-                                                                    </ul>
-                                                                </div>                                                            
-                                                            </td>
-                                                            <td>홍길동</td>
-                                                            <td>청주공장</td>
-                                                            <td>자동차소재부품</td>
-                                                            <td>창호생산담당</td>
-                                                            <td>창호프로파일생산팀</td>
-                                                            <td>창호프로파일생산팀</td>
-                                                            <td>책임</td>
-                                                            <td>팀장</td>
-                                                            <td>MBB</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>298</td>
-                                                            <td>
-                                                                <div class="link-group center">
-                                                                    <ul>
-                                                                        <li><a href="#" title="바로가기">FB0000</a></li>
-                                                                    </ul>
-                                                                </div>                                                            
-                                                            </td>
-                                                            <td>홍길동</td>
-                                                            <td>울산공장</td>
-                                                            <td>인테리어</td>
-                                                            <td>유리생산담당</td>
-                                                            <td>창호기술팀</td>
-                                                            <td>창호기술팀</td>
-                                                            <td>책임</td>
-                                                            <td>팀장</td>
-                                                            <td>BB</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>297</td>
-                                                            <td>
-                                                                <div class="link-group center">
-                                                                    <ul>
-                                                                        <li><a href="#" title="바로가기">FB0000</a></li>
-                                                                    </ul>
-                                                                </div>                                                            
-                                                            </td>
-                                                            <td>홍길동</td>
-                                                            <td>청주공장</td>
-                                                            <td>자동차소재부품</td>
-                                                            <td>창호생산담당</td>
-                                                            <td>창호프로파일생산팀</td>
-                                                            <td>창호프로파일생산팀</td>
-                                                            <td>책임</td>
-                                                            <td>팀장</td>
-                                                            <td>MBB</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>296</td>
-                                                            <td>
-                                                                <div class="link-group center">
-                                                                    <ul>
-                                                                        <li><a href="#" title="바로가기">FB0000</a></li>
-                                                                    </ul>
-                                                                </div>                                                            
-                                                            </td>
-                                                            <td>홍길동</td>
-                                                            <td>울산공장</td>
-                                                            <td>인테리어</td>
-                                                            <td>유리생산담당</td>
-                                                            <td>창호기술팀</td>
-                                                            <td>창호기술팀</td>
-                                                            <td>책임</td>
-                                                            <td>팀장</td>
-                                                            <td>BB</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>295</td>
-                                                            <td>
-                                                                <div class="link-group center">
-                                                                    <ul>
-                                                                        <li><a href="#" title="바로가기">FB0000</a></li>
-                                                                    </ul>
-                                                                </div>                                                            
-                                                            </td>
-                                                            <td>홍길동</td>
-                                                            <td>청주공장</td>
-                                                            <td>자동차소재부품</td>
-                                                            <td>창호생산담당</td>
-                                                            <td>창호프로파일생산팀</td>
-                                                            <td>창호프로파일생산팀</td>
-                                                            <td>책임</td>
-                                                            <td>팀장</td>
-                                                            <td>MBB</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>294</td>
-                                                            <td>
-                                                                <div class="link-group center">
-                                                                    <ul>
-                                                                        <li><a href="#" title="바로가기">FB0000</a></li>
-                                                                    </ul>
-                                                                </div>                                                            
-                                                            </td>
-                                                            <td>홍길동</td>
-                                                            <td>울산공장</td>
-                                                            <td>인테리어</td>
-                                                            <td>유리생산담당</td>
-                                                            <td>창호기술팀</td>
-                                                            <td>창호기술팀</td>
-                                                            <td>책임</td>
-                                                            <td>팀장</td>
-                                                            <td>BB</td>
-                                                        </tr>            
+                                                    </c:forEach>       
                                                     </tbody>
                                                 </table>
                                             </div>
                                         </div>
                                         <div class="list-footer">
-                                            <div class="pagination">
-                                                <a href="" class="first">처음</a>
-                                                <a href="" class="prev">이전</a>
-                                                <a href="" class="cur num">1</a>
-                                                <a href="" class="num">2</a>
-                                                <a href="" class="num">3</a>
-                                                <a href="" class="num">4</a>
-                                                <a href="" class="num">5</a>
-                                                <a href="" class="next">다음</a>
-                                                <a href="" class="last">끝</a>
-                                            </div>
+                                        	
+                                            <ui:pagination paginationInfo="${searchVO}" type="defDefault" jsFunction="cfnPageLink" />
                                             <div class="list-btns">
                                                 <button type="button" class="btn bg-gray" onclick="location.href='./MgrSelect.do?menuKey=${menuKey}';">                                        
                                                     <span>대상선정</span>
@@ -374,8 +168,8 @@
                         </div>
                     
         <!-- 상세정보 팝업 -->
-        <div class="modal-dimmed"></div>
-        <div class="org-modal">
+        <div class="modal-dimmed modal-custom"></div>
+        <div class="org-modal userinfo">
             <div class="modal-header">
                 <h4>상세정보</h4>
                 <button type="button" class="btn-close">닫기</button>
@@ -443,6 +237,14 @@
                 </div>                
             </div>
         </div> 
-    </div>
+
+
+<script type="text/javascript">
+	function onclick_userid(comNo){
+		$(".modal-custom, .userinfo").show();
+	}
+</script>
+
+
 </body>
 </html>
