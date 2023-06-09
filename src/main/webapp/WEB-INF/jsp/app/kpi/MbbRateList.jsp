@@ -196,7 +196,7 @@
 		});
 		
 		function onclickCell(e, cell){
-			location.href="001_04_mbb_use_sub.do?idx="+cell.getColumn().getDefinition().field+"&seq="+cell.getRow().getData().id+"&menuKey=26";
+			location.href="MbbRateView.do?idx="+cell.getColumn().getDefinition().field+"&seq="+cell.getRow().getData().id+"&menuKey=${menuKey}";
 			//alert( cell.getRow().getData().id);
 			console.log(cell.getColumn().getDefinition().field, cell.getRow().getData().id);
 		}

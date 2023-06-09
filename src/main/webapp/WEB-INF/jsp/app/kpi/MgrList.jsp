@@ -243,6 +243,10 @@
 	function onclick_userid(comNo){
 		$(".modal-custom, .userinfo").show();
 	}
+	
+	function onclick_tab(idx){
+		location.replace("/kpi/MgrSelect.do?menuKey=${menuKey}&kudIdx="+idx)
+	}
 </script>
 
 

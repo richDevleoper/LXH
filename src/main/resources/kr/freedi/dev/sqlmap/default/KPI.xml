@@ -211,6 +211,37 @@
 		DELETE FROM TB_KPI_USER_DETAIL WHERE STD_SEQ = #{cirMemCode}
 	</delete>
 	
+	<select id="selectMgrPlan" resultType="egovMap">
+ 
+          	SELECT 
+					  LEVEL AS level1 
+					, DEPT_CODE
+					, DEPT_NAME
+					, DEPT_UPER_CODE
+					, DEPT_SORT_ORDER
+					, DEPT_LEVEL
+					, DEPT_STATE_CODE
+					, COM_CODE
+					, DEPT_LV1_CODE
+					, DEPT_LV2_CODE
+					, DEPT_LV3_CODE
+					, DEPT_LV4_CODE
+					, DEPT_LV1_NAME
+					, DEPT_LV2_NAME
+					, DEPT_LV3_NAME
+					, DEPT_LV4_NAME
+					, UPDATE_DATE
+					, REG_DATE
+				FROM 
+				  tb_depart_mst T
+				where dept_code in ('50000000','50000526','58186122','58137924','58188920','58141801','58163549','58188922','58190041','58167404','58179155','58185388','58190596','58199750','58200076','58190595','58195653','58195655','50004199','50004233','58129827','50004269','50004382','58141848','50004792','58183530','58147314','58150554','58157784','58167489','50004655','50004740','50004744', '58117903', '50005356', '50087398', '58069540', '58118002', '58024015')
+				START WITH 
+				  dept_uper_code is null
+				CONNECT BY PRIOR 
+				  dept_code = dept_uper_code          
+          
+          
+	</select>
 	
 	
 </mapper>

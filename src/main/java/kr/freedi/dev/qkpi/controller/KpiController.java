@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -23,19 +24,17 @@ import com.google.gson.JsonArray;
 
 import egovframework.rte.psl.dataaccess.util.EgovMap;
 import kr.freedi.dev.article.domain.ArticleSearchVO;
-import kr.freedi.dev.article.service.ArticleService;
-import kr.freedi.dev.code.domain.CodeVO;
+import kr.freedi.dev.article.domain.ArticleVO;
 import kr.freedi.dev.code.service.CodeService;
-import kr.freedi.dev.qapprove.domain.ApproveVO;
 import kr.freedi.dev.qkpi.domain.KpiManageVO;
 import kr.freedi.dev.qkpi.domain.KpiSearchVO;
+import kr.freedi.dev.qkpi.domain.KpiVO;
+import kr.freedi.dev.qkpi.service.KpiService;
 import kr.freedi.dev.qpopup.domain.DepartVO;
 import kr.freedi.dev.qpopup.service.QPopupService;
 import kr.freedi.dev.qreport.domain.MakeSearchVO;
 import kr.freedi.dev.qreport.domain.MakeVO;
 import kr.freedi.dev.qreport.domain.ReportSearchVO;
-import kr.freedi.dev.qreport.domain.ReportTeamVO;
-import kr.freedi.dev.qreport.domain.ReportVO;
 import kr.freedi.dev.qreport.service.MakeService;
 import kr.freedi.dev.qreport.service.ReportService;
 import kr.freedi.dev.user.domain.UserVO;
@@ -69,6 +68,9 @@ public class KpiController {
 	
 	@Resource(name = "makeService")
 	private MakeService makeService;
+	
+	@Resource(name = "kpiService")
+	private KpiService kpiService;
 	
 	
 	@InitBinder
@@ -132,10 +134,14 @@ public class KpiController {
 	
 	@RequestMapping({"/MgrPlan.do"})
 	public String handler_mgrPlan(HttpServletRequest request, ModelMap model,
-			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
+			@ModelAttribute("kpiSearchVO") KpiSearchVO searchVO, 
 			UserVO userSession)throws Exception {
 		
 		model.addAttribute("menuKey", searchVO.getMenuKey());
+		
+		
+		JsonArray resultArray = kpiService.getPlanData(searchVO);
+		model.addAttribute("tableData", resultArray);
 		
 		return "app/kpi/MgrPlan";
 	}
@@ -157,6 +163,69 @@ public class KpiController {
 		//return "app/make/MakeList";
 		return "redirect:/sub.do?menuKey=46";
 		
-	}			
+	}
+	
+	@RequestMapping({"/status6SIG.do"})
+	public String handler_statusList6SIG(HttpServletRequest request, ModelMap model,
+			@ModelAttribute("kpiSearchVO") KpiSearchVO searchVO, 
+			UserVO userSession)throws Exception {
+		
+		model.addAttribute("menuKey", searchVO.getMenuKey());
+		model.addAttribute("kudIdx", "6SIG");
+		
+		JsonArray resultArray = kpiService.getPlanData(searchVO);
+		model.addAttribute("tableData", resultArray);
+		
+		
+		return "app/kpi/StatusList";
+	}
+	
+	@RequestMapping({"/statusMBB.do"})
+	public String handler_statusListMBB(HttpServletRequest request, ModelMap model,
+			@ModelAttribute("kpiSearchVO") KpiSearchVO searchVO, 
+			UserVO userSession)throws Exception {
+		
+		model.addAttribute("menuKey", searchVO.getMenuKey());
+		model.addAttribute("kudIdx", "MBB");
+		
+		JsonArray resultArray = kpiService.getPlanData(searchVO);
+		model.addAttribute("tableData", resultArray);
+		
+		return "app/kpi/StatusList";
+	}
+	
+	@RequestMapping({"/statusView.do"})
+	public String handler_statusList6SIG(HttpServletRequest request, ModelMap model,
+			@ModelAttribute("kpiVO") KpiVO kpiVO,
+			@ModelAttribute("kpiSearchVO") KpiSearchVO searchVO, 
+			UserVO userSession)throws Exception {
+		
+		model.addAttribute("menuKey", searchVO.getMenuKey());
+		
+		
+		
+		return "app/kpi/StatusView";
+	}
+	
+	
+	@RequestMapping({"/MbbRateList.do"})
+	public String handler_mbbRateList(HttpServletRequest request, ModelMap model,
+			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
+			UserVO userSession)throws Exception {
+		
+		model.addAttribute("menuKey", searchVO.getMenuKey());
+		
+		return "app/kpi/MbbRateList";
+	}
+	
+	@RequestMapping({"/MbbRateView.do"})
+	public String handler_mbbRateView(HttpServletRequest request, ModelMap model,
+			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
+			UserVO userSession)throws Exception {
+		model.addAttribute("menuKey", searchVO.getMenuKey());
+		
+		return "app/kpi/MbbRateView";
+	}
+	
 }
 
