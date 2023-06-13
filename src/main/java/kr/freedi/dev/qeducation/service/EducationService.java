@@ -1,6 +1,8 @@
 package kr.freedi.dev.qeducation.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -21,6 +23,8 @@ import kr.freedi.dev.code.service.CodeService;
 import kr.freedi.dev.common.dao.DefaultDAO;
 import kr.freedi.dev.qeducation.domain.EducationSearchVO;
 import kr.freedi.dev.qeducation.domain.EducationVO;
+import kr.freedi.dev.qeducation.domain.MyEducationVO;
+import kr.freedi.dev.qeducation.domain.StudentVO;
 import kr.freedi.dev.user.domain.UserVO;
 
 @Service("educationService")
@@ -47,6 +51,10 @@ public class EducationService {
 	
 	public List<EducationVO> selectEducationList(EducationSearchVO searchVO) {
 		return dao.selectList("Education.selectEducationMstList", searchVO);
+	}
+	
+	public List<HashMap<String,Object>> selectEducationExcel(EducationSearchVO searchVO) {
+		return dao.selectList("Education.selectEducationExcel", searchVO);
 	}
 	
 	public void insertEduInfo(EducationVO educationVO) throws Exception {
@@ -104,9 +112,6 @@ public class EducationService {
 			model.addAttribute("action", "/education/insertEduInfo.do");
 		}
 		
-		
-		
-		
 		return eduVo;
 	}
 	
@@ -123,10 +128,38 @@ public class EducationService {
 		return resultVO;
 	}
 	
-	
 	public EducationVO selectEducationMstInfo(EducationVO educationVO) {
 		return dao.selectOne("Education.selectEducationMstInfo", educationVO); 
 	}
+	
+	public List<EducationVO> selectMyBeltEduist(EducationVO educationVO) {
+		return dao.selectList("Education.selectMyBeltEduist", educationVO);
+	}
+	
+	public List<MyEducationVO> selectMyReportList(MyEducationVO myEducationVO) {
+		return dao.selectList("Education.selectMyReportList", myEducationVO);
+	}
+	
+	public int selectMngListCnt(EducationSearchVO searchVO) {
+		return (Integer) dao.selectOne("Education.selectMngListCnt", searchVO);
+	}
+	
+	public List<EducationVO> selectMngList(EducationSearchVO searchVO) {
+		return dao.selectList("Education.selectMngList", searchVO);
+	}
+	
+	public List<HashMap<String,Object>> selectMngListExcel(EducationSearchVO searchVO) {
+		return dao.selectList("Education.selectMngListExcel", searchVO);
+	}
+	
+	public Map<String, Object> selectMyStatistics(StudentVO studentVO) {
+		return dao.selectOne("Education.selectMyStatistics", studentVO);
+	}
+	
+	
+	
+	
+	
 	
 	
 	

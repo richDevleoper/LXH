@@ -13,330 +13,333 @@
 	<title>${fn:split(boardVO.boardNm,'>')[fn:length(fn:split(boardVO.boardNm,'>'))-1]}</title>
 	<meta name="keywords" content="" />
 	<meta name="description" content="" />
-	<script type="text/javascript" src="/assets/js/xlsx.full.min.js"></script>
 	
-<script type="text/javascript">
-
-$(function() {
-	if($("#defaultForm").validationEngine){
-		$("#defaultForm").validationEngine('attach', {
-			unbindEngine:false,
-			customFunctions : {
-				//	
-			},
-			onValidationComplete: function(form, status){
-				if(status == true) {
-					return true;	
-				}
-				return false;
-			}
-		});	
-	}
-	
-	
-	//달력
-	if($('.datepicker').datepicker){
-		$('.datepicker').datepicker({
-			showOn: "both",
-			dateFormat: "yy-mm-dd",
-			changeYear: true,
-			changeMonth: true,
-			buttonImage: "/def/img/article/btn_calender.gif",
-			buttonImageOnly: true,
-			showButtonPanel: true,
-			closeText: "닫기",
-			onClose: function(){/**/}
-		}).next('img').css('vertical-align', 'middle').css('margin-left','5px');	
-	}	
-});
-
-//검색
-function searchList(){
-	$('#currentPageNo').val('1');
-	$("#defaultForm").submit();
-}
-//추가
-function insertForm(){
-	$("#defaultForm").attr('action', 'insertForm.do');
-	$("#defaultForm").submit();
-}
-//조회
-function view(key){
-	$("#defaultForm").attr('action', 'view.do');
-	$("#articleKey").attr('value', key);
-	$("#defaultForm").submit();
-}
-
-</script>
 </head>
 <body>
-
-                    
-                        <div class="list-wrap">
-                            <div class="list-search">
-                                <form>
-                                    <div class="search-form">
-                                        <div class="form-inline form-input">
-                                            <label>조회연도</label>
-                                            <select name="">
-                                                <option value="">2023년</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-inline form-input">
-                                            <label>조회월</label>
-                                            <select name="">
-                                                <option value="">2023년</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-inline form-input">
-                                            <label>조직</label>
-                                            <input type="text" name="">
-                                            <button type="button" class="btn-org">검색</button>
-                                        </div>
-                                        <div class="form-inline form-input">
-                                            <label>사업장</label>
-                                            <select name="" style="width:120px">
-                                                <option value="">전체</option>
-                                            </select>
-                                        </div>
-                                        <button type="button" class="btn-submit">조회</button>
-                                    </div>
-                                </form>
-                            </div>
-                            <!-- tabulator-->
-                            <div class="list-wrap">
-                                <div class="list-content">
-                                    <div id="example-table" class="list-table list tabulator point-type"></div>
-                                </div>
-                            </div>
-                            <!-- //tabulator-->
-                            <div class="list-footer">
-                                <div class="list-btns">
-                                    <button type="button" class="btn-excel" onclick="getDownloadXls()">
-                                        <img src="/assets/images/icon_excel.png" alt="">
-                                        <span>다운로드</span>
-                                    </button>
-                                </div>
-                            </div>
+	<div class="tab-group">
+	    <div class="tab-btn">
+		    <!-- [D] 현재 활성화된 메뉴에 on클래스 추가해주세요. -->
+            <c:forEach var="allCodes" items="${allCodes}" varStatus="status">
+            	<button type="button" id="${allCodes.codeId}">${allCodes.codeNm}</button>
+            </c:forEach>
+	    </div>
+	    
+	    <form:form commandName="EducationSearchVO" id="defaultForm" method="get" action="sigmalist.do" >
+	    ${EducationSearchVO.superHiddenTag}
+	    <form:hidden path="tabId" />
+	    
+	    <div class="list-search mg-t20">
+	    
+			<div class="search-form row">
+				<div class="form-inline form-input col s4">
+					<div class="col s3 align-right"><label>이름</label></div>
+					<div class="pd-l10 col s8"><form:input type="text" path="searchStdName" /></div>
+				</div>
+				<div class="form-inline form-input col s4">
+					<div class="col s3 align-right"><label>조직</label></div>
+					<div class="pd-l10 col s8 form-inline"><form:input type="text" path="searchStdDepart" /></div>
+				</div>
+				<div class="form-inline form-input col s4">
+					<div class="col s3 align-right"><label>직책</label></div>
+					<div class="pd-l10 col s8 form-inline"><form:input type="text" path="searchStdPosition" /></div>
+				</div>
+			</div>
+			
+			<div class="search-form row">
+                <div class="form-inline form-input col s8">
+                    <div class="col s2 align-right">
+                        <label>조회기간</label>
+                    </div>
+                    <div class="pd-l10 col s8">
+                        <div class="col s5 input-date">
+                            <form:input type="text" path="searchCertFromDt" cssClass="datepicker"/> 
+                            <i class="ico calendar"></i>
                         </div>
-
-
-        <!-- //container -->
-        <!-- 조직도 -->
-        <div class="modal-dimmed"></div>
-        <div class="org-modal">
-            <div class="modal-header">
-                <h4>직책조회</h4>
-                <button type="button" class="btn-close">닫기</button>
-            </div>
-            <div class="modal-content">
-                <div class="list-wrap">
-                    <div class="list-search">
-                        <form id="org-form" onsubmit="org_search();return false;">
-                            <div class="search-form">
-                                <div class="form-inline form-input">
-                                    <label>직책명</label>
-                                    <input type="text" name="">
-                                </div>
-                                <button type="submit" class="btn-submit">조회</button>
-                            </div>
-                        </form>
+                        <span class="col s1 text-bul align-center">~</span>
+                        <div class="col s5 input-date">
+                            <form:input type="text" path="searchCertToDt" cssClass="datepicker"/>
+                            <i class="ico calendar"></i>
+                        </div>
+                       
+                       
                     </div>
                 </div>
-                <div class="tree-header">
-                    <div>
-                        <input type="checkbox" id="orgSelAll">
-                        <label for="orgSelAll"></label>
-                    </div>
-                    <div>
-                        직책선택
+                <div class="form-inline form-input col s2">
+                    <div class="pd-l10 col s8">
+                         <form:select path="searchEduYear">
+                            <option value="">전체</option>
+                            <option value="">인증대상자</option>
+                         </form:select>			 
+                         <!-- <div class="form-check col s2">
+                         	<input type="checkbox" name="" id="aa" checked="">
+						 	<label for="aa">인증대상자</label>
+                         </div> -->
                     </div>
                 </div>
-                <div id="org-tree">
-                    <ul>
-                        <li>사업부장</li>
-                        <li>담당</li>
-                        <li>팀장</li>
-                        <li>책임</li>
-                        <li>선임</li>
-                        <li>사원1</li>
-                        <li>사원2</li>
-                        <li>사원3</li>
-                        <li>사원4</li>
-                        <li>사원5</li>
-                        <li>사원6</li>
-                        <li>사원7</li>
-                        <li>사원8</li>
-                        <li>사원9</li>
-                        <li>사원10</li>
-                        <li>사원11</li>
-                    </ul>
-                </div>
-                <div class="btns">
-                    <button type="button" class="btn-submit">확인</button>
-                    <button type="button" class="btn-cancel">취소</button>
+              
+                <div class="col s2 align-right">
+                    <button type="button" class="btn-submit" onclick="onclick_search()">조회</button>
                 </div>
             </div>
+		</div>
+		</form:form>
+		
+		<div class="tab-inr">
+			<div class="tab-box on">
+				<div class="list-header mg-t20">
+					<p class="title">대상인원</p>
+					<span class="bar"></span>
+					<p class="total">총 ${totalCount}</p>							
+				</div>
+				<div class="list-content mg-t10">
+					<div class="list-table">
+						<!-- <table class="even" id="tab"></table> -->
+						
+						<table class="even" id="chTab">
+							<caption></caption>
+							<colgroup>
+								<col style="width:50px">
+								<col style="width:80px">
+								<col style="width:90px">
+								<col>
+								<col style="width:80px">
+								<col style="width:70px">
+								<col style="width:70px">
+								<col style="width:130px">
+								<col style="width:100px">
+								<c:if test="${gb eq '04'}">
+									<col style="width:130px">
+									<col style="width:100px">
+								</c:if>
+								
+							</colgroup>
+							<thead>
+								<tr>
+									<th class="bg-gray font-weight-bold"><input type="checkbox" name="ch_list" id="ch_all" /><label for="ch_all"></label></th>
+									<th class="bg-gray font-weight-bold">성명${gb}</th>
+									<th class="bg-gray font-weight-bold">사번</th>
+									<th class="bg-gray font-weight-bold">1차 교육 / 2차 통계 / 3차 과제Test</th>
+									<th class="bg-gray font-weight-bold">조직</th>
+									<th class="bg-gray font-weight-bold">직위</th>
+									<th class="bg-gray font-weight-bold">직책</th>
+									<th class="bg-gray font-weight-bold">인증일</th>
+									<th class="bg-gray font-weight-bold">인증여부</th>
+									<c:if test="${gb eq '04'}">
+										<th class="bg-gray font-weight-bold">자질평가일</th>
+										<th class="bg-gray font-weight-bold">합격여부</th>
+									</c:if>
+								</tr>                                            
+							</thead>
+							<tbody>
+								<c:choose>
+								    <c:when test="${fn:length(selectMngList) == 0}">
+								        <tr>
+                                               <td colspan="9"><span>조회결과가 없습니다.</span></td>
+                                           </tr>
+								    </c:when>
+								    <c:otherwise>
+								        <c:forEach var="selectMngList" items="${selectMngList}" varStatus="status">
+								            <tr stdSeq=${selectMngList.stdSeq}>
+                                                <td><input type="checkbox" name="ch_list" id="ch_${selectMngList.idx}" /><label for="ch_${selectMngList.idx}"></td>
+                                                <td>${selectMngList.stdName}</td>
+												<td>${selectMngList.comNo}</td>
+												<td class="align-left pd-l10">${selectMngList.mngTit}</td>
+												<td>${selectMngList.stdDepartNm}</td>
+												<td>${selectMngList.stdJobxNm}</td>
+												<td>${selectMngList.stdPosNm}</td>
+												<td><div class="row">
+												<div class="col input-text input-date">
+												<input type="text" class="datepick" name="stdCertDate" id="stdCertDate_${selectMngList.idx}" value="${selectMngList.stdCertDate}" /> 
+												<i class="ico calendar"></i>
+												</div>
+												</div></td>
+												<td class="select-table">
+												<div class="pd-l10 col s8">
+													<select name="stdCertCode" id="stdCertCode_${selectMngList.idx}">
+														<option value="">선택</option>
+														<option value="Y" <c:if test ="${selectMngList.stdCertCode eq 'Y'}">selected="selected"</c:if>>인증</option>
+														<option value="N" <c:if test ="${selectMngList.stdCertCode eq 'N'}">selected="selected"</c:if>>미인증</option>
+													</select>
+												</div>
+												</td>
+												
+												<c:if test="${gb eq '04'}">
+													<td><div class="row">
+													<div class="col input-text input-date">
+													<input type="text" class="datepick" name="stdTestDate" id="stdTestDate_${selectMngList.idx}" value="${selectMngList.stdTestDate}" /> 
+													<i class="ico calendar"></i>
+													</div>
+													</div></td>
+													<td class="select-table">
+													<div class="pd-l10 col s8">
+														<select name="stdTestCode" id="stdTestCode_${selectMngList.idx}">
+															<option value="">선택</option>
+															<option value="Y" <c:if test ="${selectMngList.stdTestCode eq 'Y'}">selected="selected"</c:if>>합격</option>
+															<option value="N" <c:if test ="${selectMngList.stdTestCode eq 'N'}">selected="selected"</c:if>>불합격</option>
+														</select>
+													</div>
+													</td>
+												</c:if>	
+												
+                                            </tr>
+								        </c:forEach>
+								    </c:otherwise> 
+								</c:choose>
+								
+								
+							</tbody>
+						</table>
+						
+					</div>
+				</div>							
+			</div>
+		</div>
+    </div>
+    
+    
+    <div class="list-footer">
+		<ui:pagination paginationInfo="${EducationSearchVO}" type="defDefault" jsFunction="cfnPageLink" />
+        <div class="list-btns">
+			<button type="button" class="btn light-gray" id="btnSave">저장</button>
+			<button type="button" class="btn-excel" id="btnExcel">
+				<img src="/assets/images/icon_excel.png" alt="">
+				<span>다운로드</span>
+			</button>  
         </div>
     </div>
-    <script>
-		var tableDataNested = [
-            {id:101, name:"생산/기술/R&D/품질",GB1_1:"193",GB1_2:"30",BB1_1:"193",BB1_2:"30",MBB1_1:"193",MBB1_2:"30",BB이상1_1:"193",BB이상1_2:"30",GB2_1:"193",GB2_2:"30",BB2_1:"193",BB2_2:"30",MBB2_1:"193",MBB2_2:"30",BB이상2_1:"193",BB이상2_2:"30",GB3_1:"193",GB3_2:"30",BB3_1:"193",BB3_2:"30",MBB3_1:"193",MBB3_2:"30",BB이상3_1:"193",BB이상3_2:"30",name5:"1"},
-			{id:102, name:"창호 사업부",GB1_1:"193",GB1_2:"30",BB1_1:"193",BB1_2:"30",MBB1_1:"193",MBB1_2:"30",BB이상1_1:"193",BB이상1_2:"30",GB2_1:"193",GB2_2:"30",BB2_1:"193",BB2_2:"30",MBB2_1:"193",MBB2_2:"30",BB이상2_1:"193",BB이상2_2:"30",GB3_1:"193",GB3_2:"30",BB3_1:"193",BB3_2:"30",MBB3_1:"193",MBB3_2:"30",BB이상3_1:"193",BB이상3_2:"30",name5:"1",
-                _children:[
-                    {id:106, name:"창호 사업부",GB1_1:"193",GB1_2:"30",BB1_1:"193",BB1_2:"30",MBB1_1:"193",MBB1_2:"30",BB이상1_1:"193",BB이상1_2:"30",GB2_1:"193",GB2_2:"30",BB2_1:"193",BB2_2:"30",MBB2_1:"193",MBB2_2:"30",BB이상2_1:"193",BB이상2_2:"30",GB3_1:"193",GB3_2:"30",BB3_1:"193",BB3_2:"30",MBB3_1:"193",MBB3_2:"30",BB이상3_1:"193",BB이상3_2:"30",name5:"1",
-                    _children:[
-                        {id: 107, name:"창호 사업부",GB1_1:"193",GB1_2:"30",BB1_1:"193",BB1_2:"30",MBB1_1:"193",MBB1_2:"30",BB이상1_1:"193",BB이상1_2:"30",GB2_1:"193",GB2_2:"30",BB2_1:"193",BB2_2:"30",MBB2_1:"193",MBB2_2:"30",BB이상2_1:"193",BB이상2_2:"30",GB3_1:"193",GB3_2:"30",BB3_1:"193",BB3_2:"30",MBB3_1:"193",MBB3_2:"30",BB이상3_1:"193",BB이상3_2:"30",name5:"1"}
-                    ]}
-                ]
-            },
-            {id:103, name:"창호.생산담당",GB1_1:"33",GB1_2:"30",BB1_1:"193",BB1_2:"30",MBB1_1:"193",MBB1_2:"30",BB이상1_1:"193",BB이상1_2:"30",GB2_1:"193",GB2_2:"30",BB2_1:"193",BB2_2:"30",MBB2_1:"193",MBB2_2:"30",BB이상2_1:"193",BB이상2_2:"30",GB3_1:"193",GB3_2:"30",BB3_1:"193",BB3_2:"30",MBB3_1:"193",MBB3_2:"30",BB이상3_1:"193",BB이상3_2:"30",name5:"1",
-                _children:[
-                    {id:108, name:"창호.프로파일생산팀",GB1_1:"193",GB1_2:"30",BB1_1:"193",BB1_2:"30",MBB1_1:"193",MBB1_2:"30",BB이상1_1:"193",BB이상1_2:"30",GB2_1:"193",GB2_2:"30",BB2_1:"193",BB2_2:"30",MBB2_1:"193",MBB2_2:"30",BB이상2_1:"193",BB이상2_2:"30",GB3_1:"193",GB3_2:"30",BB3_1:"193",BB3_2:"30",MBB3_1:"193",MBB3_2:"30",BB이상3_1:"193",BB이상3_2:"30",name5:"1"},
-                    {id:109, name:"창호.기술팀",GB1_1:"193",GB1_2:"30",BB1_1:"193",BB1_2:"30",MBB1_1:"193",MBB1_2:"30",BB이상1_1:"193",BB이상1_2:"30",GB2_1:"193",GB2_2:"30",BB2_1:"193",BB2_2:"30",MBB2_1:"193",MBB2_2:"30",BB이상2_1:"193",BB이상2_2:"30",GB3_1:"193",GB3_2:"30",BB3_1:"193",BB3_2:"30",MBB3_1:"193",MBB3_2:"30",BB이상3_1:"193",BB이상3_2:"30",name5:"1"},
-                    {id:110, name:"창호.공정혁신팀",GB1_1:"193",GB1_2:"30",BB1_1:"193",BB1_2:"30",MBB1_1:"193",MBB1_2:"30",BB이상1_1:"193",BB이상1_2:"30",GB2_1:"193",GB2_2:"30",BB2_1:"193",BB2_2:"30",MBB2_1:"193",MBB2_2:"30",BB이상2_1:"193",BB이상2_2:"30",GB3_1:"193",GB3_2:"30",BB3_1:"193",BB3_2:"30",MBB3_1:"193",MBB3_2:"30",BB이상3_1:"193",BB이상3_2:"30",name5:"1"},
-                    {id:111, name:"창호.완성창공정기술팀",GB1_1:"193",GB1_2:"30",BB1_1:"193",BB1_2:"30",MBB1_1:"193",MBB1_2:"30",BB이상1_1:"193",BB이상1_2:"30",GB2_1:"193",GB2_2:"30",BB2_1:"193",BB2_2:"30",MBB2_1:"193",MBB2_2:"30",BB이상2_1:"193",BB이상2_2:"30",GB3_1:"193",GB3_2:"30",BB3_1:"193",BB3_2:"30",MBB3_1:"193",MBB3_2:"30",BB이상3_1:"193",BB이상3_2:"30",name5:"1"},
-                ]
-            },
-            {id:104, name:"창호 사업부",GB1_1:"193",GB1_2:"30",BB1_1:"193",BB1_2:"30",MBB1_1:"193",MBB1_2:"30",BB이상1_1:"193",BB이상1_2:"30",GB2_1:"193",GB2_2:"30",BB2_1:"193",BB2_2:"30",MBB2_1:"193",MBB2_2:"30",BB이상2_1:"193",BB이상2_2:"30",GB3_1:"193",GB3_2:"30",BB3_1:"193",BB3_2:"30",MBB3_1:"193",MBB3_2:"30",BB이상3_1:"193",BB이상3_2:"30",name5:"1",
-                _children:[
-                    {id:112, name:"창호 사업부",GB1_1:"193",GB1_2:"30",BB1_1:"193",BB1_2:"30",MBB1_1:"193",MBB1_2:"30",BB이상1_1:"193",BB이상1_2:"30",GB2_1:"193",GB2_2:"30",BB2_1:"193",BB2_2:"30",MBB2_1:"193",MBB2_2:"30",BB이상2_1:"193",BB이상2_2:"30",GB3_1:"193",GB3_2:"30",BB3_1:"193",BB3_2:"30",MBB3_1:"193",MBB3_2:"30",BB이상3_1:"193",BB이상3_2:"30",name5:"1",
-                    _children:[
-                        {id:113, name:"창호 사업부",GB1_1:"193",GB1_2:"30",BB1_1:"193",BB1_2:"30",MBB1_1:"193",MBB1_2:"30",BB이상1_1:"193",BB이상1_2:"30",GB2_1:"193",GB2_2:"30",BB2_1:"193",BB2_2:"30",MBB2_1:"193",MBB2_2:"30",BB이상2_1:"193",BB이상2_2:"30",GB3_1:"193",GB3_2:"30",BB3_1:"193",BB3_2:"30",MBB3_1:"193",MBB3_2:"30",BB이상3_1:"193",BB이상3_2:"30",name5:"1"}
-                    ]}
-                ]
-            },
-            {id:105, name:"생산/기술/R&D/품질 外",GB1_1:"193",GB1_2:"30",BB1_1:"193",BB1_2:"30",MBB1_1:"193",MBB1_2:"30",BB이상1_1:"193",BB이상1_2:"30",GB2_1:"193",GB2_2:"30",BB2_1:"193",BB2_2:"30",MBB2_1:"193",MBB2_2:"30",BB이상2_1:"193",BB이상2_2:"30",GB3_1:"193",GB3_2:"30",BB3_1:"193",BB3_2:"30",MBB3_1:"193",MBB3_2:"30",BB이상3_1:"193",BB이상3_2:"30",name5:"1"},
-		];
+    
+<script type="text/javascript">
+	$(document).ready(function(){
+		init();
+		$('.tab-btn > button').on('click',function(e){
+			$('#defaultForm').attr("action","/education/sigmalist.do");
+			let tabInx = $('.tab-btn > button').index(this);
+			let tabId = e.target.id;
+			selectData(tabInx, tabId);
+		})
+		
+		$('.datepick').each(function(){ 
+			$(this).datepicker(); 
+		});
+		
+		$("#btnSave").on("click", function(){
+			chkBoxSave();
+		});
+		
+		$("#btnExcel").on("click", function(){
+			let gb = "${gb}";
+			console.log(gb);
+			$('#tabId').val(gb);
+	 		$('#defaultForm').attr("action","/education/excelmnglist.do");
+			$('#defaultForm').submit();
+		});
+		
+	});
+	
+	function init(){
+		let gb = "${gb}";
+		$("#"+gb).addClass('on');
+		
+		$("#defaultForm input").off("keyup").on("keyup", function(e){
+		    if(e.keyCode===13 && this.value.trim().length>0){
+		    	onclick_search();
+		    }
+		});
+	}
+	
+	function selectData(tabInx, tabId){
+		$('#tabId').val(tabId);
+		$('#defaultForm')[0].submit();
+		$("#"+tabId).addClass('on');
+	}
+	
+	function onclick_search(){
+		$('#defaultForm').attr("action","/education/sigmalist.do");
+		$("#defaultForm")[0].submit();
+	}
 
-		if(Tabulator){
-			var table = new Tabulator("#example-table", {
-				data:tableDataNested,
-				dataTree:true,
-				dataTreeStartExpanded:true,
-	            columnHeaderVertAlign:"middle", //align header contents to bottom of cell
-				columns:[
-	                {title:"대상구분", field:"name",headerSort:false, width:160},
-	                {//create column group
-	                    title:"‘22년(직전년도)",field:"name2",
-	                    columns:[
-	                        {
-	                            title:"GB",field:"GB1",
-	                            columns:[
-	                                {title:"인원", field:"GB1_1",headerSort:false, width:40, hozAlign: 'right', cssClass:"font-small", hozAlign: 'right', cssClass:"font-small", cellClick: onclickCell},
-	                                {title:"율(%)", field:"GB1_2",headerSort:false, width:40},
-	                            ],
-	                        },
-	                        {
-	                            title:"BB",field:"BB1",
-	                            columns:[
-	                                {title:"인원", field:"BB1_1",headerSort:false, width:40, hozAlign: 'right', cssClass:"font-small", cellClick:onclickCell },
-	                                {title:"율(%)", field:"BB1_2",headerSort:false, width:40},
-	                            ],
-	                            
-	                        },
-	                        {
-	                            title:"MBB",field:"MBB1",
-	                            columns:[
-	                                {title:"인원", field:"MBB1_1",headerSort:false, width:40, hozAlign: 'right', cssClass:"font-small", cellClick:onclickCell },
-	                                {title:"율(%)", field:"MBB1_2",headerSort:false, width:40},
-	                            ],
-	                        },
-	                        {
-	                            title:"BB이상",field:"BB이상1",
-	                            columns:[
-	                                {title:"인원", field:"BB이상1_1",headerSort:false, width:40, hozAlign: 'right', cssClass:"font-small", cellClick:onclickCell },
-	                                {title:"율(%)", field:"BB이상1_2",headerSort:false, width:40},
-	                            ],
-	                        }
-	                    ],
-	                },
-	                {//create column group
-	                    title:"‘23년 육성 계획",field:"name3",
-	                    columns:[
-	                        {
-	                            title:"GB",field:"GB2",
-	                            columns:[
-	                                {title:"인원", field:"GB2_1",headerSort:false, width:40, hozAlign: 'right', cssClass:"font-small", cellClick:onclickCell },
-	                                {title:"율(%)", field:"GB2_2",headerSort:false, width:40},
-	                            ],
-	                        },
-	                        {
-	                            title:"BB",field:"BB2",
-	                            columns:[
-	                                {title:"인원", field:"BB2_1",headerSort:false, width:40, hozAlign: 'right', cssClass:"font-small", cellClick:onclickCell },
-	                                {title:"율(%)", field:"BB2_2",headerSort:false, width:40},
-	                            ],
-	                            
-	                        },
-	                        {
-	                            title:"MBB",field:"MBB2",
-	                            columns:[
-	                                {title:"인원", field:"MBB2_1",headerSort:false, width:40, hozAlign: 'right', cssClass:"font-small", cellClick:onclickCell },
-	                                {title:"율(%)", field:"MBB2_2",headerSort:false, width:40},
-	                            ],
-	                        },
-	                        {
-	                            title:"BB이상",field:"BB이상2",
-	                            columns:[
-	                                {title:"인원", field:"BB이상2_1",headerSort:false, width:40, hozAlign: 'right', cssClass:"font-small", cellClick:onclickCell },
-	                                {title:"율(%)", field:"BB이상2_2",headerSort:false, width:40},
-	                            ],
-	                        }
-	                    ],
-	                },
-	                {//create column group
-	                    title:"<span class='color primary'>‘23년 6월 1일 기준</span>",field:"name4",
-	                    columns:[
-	                        {
-	                            title:"GB",field:"GB3",
-	                            columns:[
-	                                {title:"인원", field:"GB3_1",headerSort:false, width:40, hozAlign: 'right', cssClass:"font-small", cellClick:onclickCell, tooltip: true },
-	                                {title:"율(%)", field:"GB3_2",headerSort:false, width:40},
-	                            ],
-	                        },
-	                        {
-	                            title:"BB",field:"BB3",
-	                            columns:[
-	                                {title:"인원", field:"BB3_1",headerSort:false, width:40, hozAlign: 'right', cssClass:"font-small", cellClick:onclickCell },
-	                                {title:"율(%)", field:"BB3_2",headerSort:false, width:40},
-	                            ],
-	                            
-	                        },
-	                        {
-	                            title:"MBB",field:"MBB3",
-	                            columns:[
-	                                {title:"인원", field:"MBB3_1",headerSort:false, width:40, hozAlign: 'right', cssClass:"font-small", cellClick:onclickCell },
-	                                {title:"율(%)", field:"MBB3_2",headerSort:false, width:40},
-	                            ],
-	                        },
-	                        {
-	                            title:"BB이상",field:"BB이상3",
-	                            columns:[
-	                                {title:"인원", field:"BB이상3_1",headerSort:false, width:40, hozAlign: 'right', cssClass:"font-small", cellClick:onclickCell },
-	                                {title:"율(%)", field:"BB이상3_2",headerSort:false, width:40},
-	                            ],
-	                        }
-	                    ],
-	                },
-	                {title:"대상인원", field:"name5",headerSort:false, width:60},
-	            ],
+	function chkBoxSave(){
+		let gb = "${gb}";
+		let arrSeq = "";
+		let arrCertDate = "";
+		let arrCertCode = "";
+		let arrTestDate = "";
+		let arrTestCode = "";
+		
+		let chkNum = 0;
+		$("#chTab").children("tbody:first").children("tr[stdSeq]").each(function(i){
+			var stdSeq = $(this).attr("stdSeq");
+			 
+			if($(this).find("input:checkbox[name='ch_list']").is(":checked")){
+				let stdCertDate = $(this).find("input[name=stdCertDate]").val();
+				let stdCertCode = $(this).find("select[name=stdCertCode]").val();
+				
+				console.log(stdCertDate);
+				
+				arrSeq += stdSeq + ",";
+				arrCertDate += stdCertDate + ",";
+				arrCertCode += stdCertCode + ",";
+				
+				if(gb == "04"){
+					let stdTestDate = $(this).find("input[name=stdTestDate]").val();
+					let stdTestCode = $(this).find("select[name=stdTestCode]").val();
+					arrTestDate += stdTestDate + ",";
+					arrTestCode += stdTestCode + ",";
+					
+				}
+				
+				chkNum = chkNum+1;
+			}
+		});
+		
+		if(chkNum==0){
+			alert("선택된 인원이 없습니다.");
+			return false;
+		}
+		
+		arrSeq = arrSeq.substring(0, arrSeq.length-1);
+		arrCertDate = arrCertDate.substring(0, arrCertDate.length-1);
+		arrCertCode = arrCertCode.substring(0, arrCertCode.length-1);
+		
+		if(gb == "04"){
+			arrTestDate = arrTestDate.substring(0, arrTestDate.length-1);
+			arrTestCode = arrTestCode.substring(0, arrTestCode.length-1);
+		}
+		
+		console.log(arrTestDate);
+		console.log(arrTestCode);
+
+		if(confirm("저장하시겠습니까?")) {
+			let params = {};
+			params.gb = gb;
+			params.arrSeq = arrSeq;		
+			params.arrCertDate = arrCertDate;	
+			params.arrCertCode = arrCertCode;	
+			
+			if(gb == "04"){
+				params.arrTestDate = arrTestDate;
+				params.arrTestCode = arrTestCode;
+			}
+			
+			$.ajax({
+				url:'/education/mngupdate.do',
+				type: 'POST',
+				data: params,
+				dataType : 'json',
+				success:function(data){
+					alert("저장되었습니다.");
+					location.reload();	
+				}
 			});
 		}
 		
-		function onclickCell(e, cell){
-			location.href="001_01_sigma_sub.do?idx="+cell.getColumn().getDefinition().field+"&seq="+cell.getRow().getData().id+"&menuKey=23";
-			//alert(cell.getColumn().getDefinition().field +", "+ cell.getRow().getData().id);
-			console.log(cell.getColumn().getDefinition().field, cell.getRow().getData().id);
-		}
-		
-		function getDownloadXls(){
-			table.download("xlsx", "6σ인재현황.xlsx", {sheetName:"6σ인재현황"});
-		}
-		
-	</script>
-	<style>
-	.font-small{ padding-left: 0px !important; padding-right: 5px !important; text-decoration: underline; cursor: pointer; }
-	</style>
+
+	}
+	
+	
+	
+	
+	
+</script>
 </body>
 </html>

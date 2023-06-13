@@ -185,13 +185,16 @@
                             <div class="list-footer">
                                 <ui:pagination paginationInfo="${EducationSearchVO}" type="defDefault" jsFunction="cfnPageLink" />
                                 <div class="list-btns">
-                                    <button type="button" class="btn-excel">
+                                    <button type="button" class="btn-excel" id="btnExcel">
                                         <img src="/assets/images/icon_excel.png" alt="">
                                         <span>다운로드</span>
                                     </button>
                                 </div>
                             </div>
                         </div>
+                        
+                        <form:form commandName="paramForm" id="paramForm" name="paramForm"  action="/education/excelstdpfm.do" onsubmit="return false" method="post" modelAttribute="studentVO">
+				  		</form:form>
                         
 <script type="text/javascript">
 	$(document).ready(function(){
@@ -201,6 +204,13 @@
 	 	$("#btnRegEdu").on("click", function(){
 			location.href="./buildupinsert.do?menuKey=67";
 		});
+	 	
+	 	$("#btnExcel").on("click", function(){
+	 		$('#defaultForm').attr("action","/education/excelstdpfm.do");
+			$('#defaultForm').submit();
+		});
+	 	
+	 	
 	 	
 	 	
 	});
@@ -227,13 +237,14 @@
 		$("#searchbeltCode").val("${EducationSearchVO.searchbeltCode}");
 		
 		setDropDown("searchEduType", cdEduType1, true, "전체");				//교육유형
-		$("#searchEduType").val("${EducationSearchVO.searchEduType}")
+		$("#searchEduType").val("${EducationSearchVO.searchEduType}");
 		
 		setDropDown("searchEduDivision", cdEduType3, true, "전체");			//상세유형
 		$("#searchEduDivision").val("${EducationSearchVO.searchEduDivision}");
 	}
 	
 	function onclick_search(){
+		$('#defaultForm').attr("action","/education/pfmsubmit.do");
 		$("#defaultForm")[0].submit();
 	}
 	

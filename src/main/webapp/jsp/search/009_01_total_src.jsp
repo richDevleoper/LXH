@@ -361,6 +361,15 @@
                 </div>
             </div>
         </div>
+<script type="text/javascript">
+$(document).ready(function(){
+	$(".tab-group > .tab-btn > button").on('click',function() {
+        var $idx = $(this).index();
 
+        $(this).addClass("on").siblings().removeClass("on");
+        $(this).closest(".tab-group").children(".tab-inr").find(" > .tab-box:eq("+ $idx +")").addClass("on").siblings().removeClass("on");
+    });
+});
+</script>
 </body>
 </html>

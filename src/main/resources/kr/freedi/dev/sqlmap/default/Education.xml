@@ -37,10 +37,31 @@
 		<result column="EDU_ITEM"	 	         	 property="eduItem"/>
 		<result column="EDU_FILE_CODE"	 	         property="eduFileCode"/>
 		
-		
 		<result column="EDU_CLASS_TYPE_NAME"	 	 property="eduClassTypeName"/>
 		<result column="EDU_CLASS_DIVISION_NAME"	 property="eduClassDivisionName"/>
 		<result column="EDU_BELTCODE_NAME"	 	     property="eduBeltCodeName"/>
+		
+		<result column="COM_NO"                    	 property="comNo"/>     
+		<result column="STD_USERID"	 	     	 	 property="stdUserId"/>
+		<result column="STD_NAME"                    property="stdName"/>  
+		<result column="STD_DEPART"                  property="stdDepart"/>     
+		<result column="STD_JOBX"                    property="stdJbox"/>     
+		<result column="STD_POSITION"                property="stdPosition"/>     
+		<result column="STD_BELT_CODE"               property="stdBeltCode"/> 
+		<result column="STD_STATUS"              	 property="stdStatus"/>
+		<result column="STD_COMPLETE_YN"             property="stdCompleteYn"/> 
+		<result column="STD_REAPPLY_YN"              property="stdReapplyYn"/> 
+		<result column="STD_CERT_CODE"	 	     	 property="stdCertCode"/> 
+		<result column="STD_CERT_DATE"	 	     	 property="stdCertDate"/> 
+		<result column="STD_TEST_CODE"	 	     	 property="stdTestCode"/> 
+		<result column="STD_TEST_DATE"	 	     	 property="stdTestDate"/> 
+		
+		<result column="STD_DEPART_NM"            	 property="stdDepartNm"/> 
+		<result column="STD_JOBX_NM"            	 property="stdJobxNm"/> 
+		<result column="STD_POS_NM"            		 property="stdPosNm"/> 
+		<result column="STD_BELT_NM"            	 property="stdBeltNm"/> 
+		<result column="STD_COMPLETE_NN"	 	     property="stdCompleteNm"/>
+		<result column="STD_STATUS_NM"	 	     	 property="stdStatusNm"/>
 		
 		<result column="EDU_CODE01"	 	 			 property="eduCode01"/>
 		<result column="EDU_NAME01"	 	 			 property="eduName01"/>
@@ -52,8 +73,26 @@
 		<result column="EDU_NAME04"	 	 			 property="eduName04"/>
 		
 		<result column="TSD_CNT"	 	     		 property="tsdCnt"/>
-	                                         
-	</resultMap>           
+		<result column="MNG_TIT"	 	     		 property="mngTit"/>
+		
+	</resultMap>       
+	
+	<resultMap id="MyEducationMap" type="kr.freedi.dev.qeducation.domain.MyEducationVO">	
+		<result column="REP_CODE"	 	 			 property="repCode"/>
+		<result column="REP_LEADER_BELT_CODE"	 	 property="repLeaderBeltCode"/>
+		<result column="REP_NAME"	 	 			 property="repName"/>
+		<result column="REP_TYPE_CODE"	 	 		 property="repTypeCode"/>
+		<result column="TYPENM"	 	 	 			 property="typeNm"/>
+		<result column="REP_STATUS_CODE"	 	 	 property="repStatusCode"/>
+		<result column="STATUSNM"	 	 			 property="statusNm"/>
+		<result column="REP_TEAM_MEM_ROLE"	 	 	 property="repTeamMemRole"/>
+		<result column="ROLENM"	 	 	 			 property="roleNm"/>
+		<result column="REP_START_DATE"	 	 		 property="repStartDate"/>
+		<result column="REP_FINISH_DATE"	 	 	 property="repFinishDate"/>
+		<result column="COM_NO"	 	 			 	 property="comNo"/>
+		<result column="USER_ID"	 	 			 property="userId"/> 
+		<result column="CNT"	 	     		 	 property="cnt"/>	
+	</resultMap>    
 	
 	<sql id="defCond">
 		<if test="searchEduFromDt != null and searchEduFromDt neq ''.toString() and searchEduToDt != null and searchEduToDt neq ''.toString()">
@@ -140,6 +179,63 @@
 		SELECT *
 		FROM EDU_MASTER T
 		WHERE T.ROWIDX BETWEEN (#{currentPageNo}*#{recordCountPerPage}+1-#{recordCountPerPage}) AND (#{currentPageNo}*#{recordCountPerPage})
+		ORDER BY T.IDX DESC
+	</select>
+	
+	<select id="selectEducationExcel" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		WITH EDU_MASTER AS (
+            SELECT ROW_NUMBER() OVER( ORDER BY RS.SDATE ASC ) IDX, ROW_NUMBER() OVER( ORDER BY RS.SDATE DESC ) ROWIDX, 
+            	   RS.*,
+            	   EDU_FIXED || '/' || TSD_CNT AS ET
+            FROM(
+				SELECT 
+					 	T.EDU_CODE,
+					 	T.EDU_NAME,
+						T.EDU_CLASS,
+						T.EDU_CLASS_TYPE,
+						(SELECT CODE_NM FROM TB_CODE WHERE 1=1 AND CODE_GRP_ID='ED_TY1' AND CODE_ID = T.EDU_CLASS_TYPE) AS EDU_CLASS_TYPE_NAME,
+						T.EDU_CLASS_DIVISION,
+						(SELECT CODE_NM FROM TB_CODE WHERE 1=1 AND CODE_GRP_ID='ED_TY3' AND CODE_ID = T.EDU_CLASS_DIVISION) AS EDU_CLASS_DIVISION_NAME,
+						T.EDU_CLASS_TARGET,
+						T.EDU_CLASS_INTRO,
+						T.EDU_CLASS_SUMMARY,
+						T.EDU_COST,
+						T.EDU_INSURANCE_YN,
+						T.EDU_DEMO_URL,
+						T.EDU_CONTENTS_URL,
+						T.EDU_ESSENTIAL_TYPE,
+						T.EDU_COMPANY,
+						T.EDU_COM_CLASS_CODE,
+						T.EDU_CLASS_EXTERNAL_YN,
+						T.EDU_COMPLETE_SCORE,
+						T.EDU_COMPLETE_TIME,
+						T.EDU_USE_YN,
+						T.EDU_YEAR,
+						T.EDU_BELTCODE,
+						(SELECT CODE_NM FROM TB_CODE WHERE 1=1 AND CODE_GRP_ID='ED_TY2' AND CODE_ID = T.EDU_BELTCODE) AS EDU_BELTCODE_NAME,
+						T.EDU_NUMBER,
+						T.EDU_DATE,
+						T.EDU_FIXED,
+						(SELECT COUNT(*) FROM TB_STUDENT_DETAIL TS WHERE 1=1 AND TS.EDU_CODE = T.EDU_CODE AND TS.STD_STATUS = 'Y') AS TSD_CNT,
+						T.EDU_ITEM,
+						T.EDU_FILE_CODE,
+						T.EDU_REG_USER,
+						T.EDU_REG_DATE AS SDATE,
+						TO_CHAR(T.EDU_REG_DATE, 'YYYY-MM-DD') AS EDU_REG_DATE,
+						T.EDU_UPDATE_USER,
+						TO_CHAR(T.EDU_REG_DATE, 'YYYY-MM-DD') AS EDU_UPDATE_DATE
+				FROM 
+						(
+							SELECT * FROM TB_EDUCATION_MST
+							 WHERE 1=1 
+							 <include refid="defCond"></include>
+							 ORDER BY EDU_REG_DATE DESC
+						) T
+            ) RS
+		)
+		SELECT *
+		FROM EDU_MASTER T
+		WHERE 1=1
 		ORDER BY T.IDX DESC
 	</select>
 	
@@ -315,7 +411,56 @@
 				CASE ED.QUARTER WHEN '4' THEN ED.EDU_NAME END AS EDU_NAME04
 		  FROM (
 		  			SELECT 
-							MAX(T.EDU_CODE) AS EDU_CODE,
+							T.EDU_CODE,
+							T.EDU_BELTCODE, 
+							MAX(T.EDU_CLASS_TYPE) AS EDU_CLASS_TYPE,
+							MAX(T.EDU_CLASS_DIVISION) AS EDU_CLASS_DIVISION,								
+							MAX(T.EDU_NAME) AS EDU_NAME,
+							MAX(T.QUARTER) AS QUARTER,
+							MAX(T.EDU_BELTCODE_NAME) AS EDU_BELTCODE_NAME,
+							MAX(T.EDU_CLASS_TYPE_NAME) AS EDU_CLASS_TYPE_NAME,
+							MAX(T.EDU_CLASS_DIVISION_NAME) AS EDU_CLASS_DIVISION_NAME
+					  FROM (
+								SELECT 
+								 	   	EDU_CODE,
+									 	EDU_NAME,
+									 	TO_CHAR(EDU_REG_DATE, 'Q') AS QUARTER,
+										TO_CHAR(EDU_REG_DATE, 'YYYY-MM-DD') AS CIR_REG_DATE,
+										EDU_BELTCODE,
+									 	EDU_CLASS_TYPE,
+										EDU_CLASS_DIVISION,
+										(SELECT CODE_NM FROM TB_CODE WHERE 1=1 AND CODE_GRP_ID='ED_TY1' AND CODE_ID=EDU_CLASS_TYPE) AS EDU_CLASS_TYPE_NAME,
+										(SELECT CODE_NM FROM TB_CODE WHERE 1=1 AND CODE_GRP_ID='ED_TY3' AND CODE_ID=EDU_CLASS_DIVISION) AS EDU_CLASS_DIVISION_NAME,
+									 	(SELECT CODE_NM FROM TB_CODE WHERE 1=1 AND CODE_GRP_ID='ED_TY2' AND CODE_ID=EDU_BELTCODE) AS EDU_BELTCODE_NAME		
+								  FROM TB_EDUCATION_MST	
+								 WHERE 1=1
+						) T
+					 WHERE 1=1
+				  GROUP BY T.EDU_CODE, T.EDU_BELTCODE 
+				  ORDER BY T.EDU_BELTCODE, MAX(T.EDU_CLASS_TYPE), MAX(T.EDU_CLASS_DIVISION)
+			   ) ED
+		 WHERE 1=1	
+	
+	
+<!-- 		SELECT 
+				ED.EDU_CODE AS EDU_CODE,
+				ED.EDU_BELTCODE AS EDU_BELTCODE,
+				ED.EDU_BELTCODE_NAME AS EDU_BELTCODE_NAME,
+				ED.EDU_CLASS_TYPE AS EDU_CLASS_TYPE,
+				ED.EDU_CLASS_TYPE_NAME AS EDU_CLASS_TYPE_NAME,
+				ED.EDU_CLASS_DIVISION AS EDU_CLASS_DIVISION,
+				ED.EDU_CLASS_DIVISION_NAME AS EDU_CLASS_DIVISION_NAME,
+				CASE ED.QUARTER WHEN '1' THEN ED.EDU_CODE END AS EDU_CODE01,
+				CASE ED.QUARTER WHEN '1' THEN ED.EDU_NAME END AS EDU_NAME01,
+				CASE ED.QUARTER WHEN '2' THEN ED.EDU_CODE END AS EDU_CODE02,
+				CASE ED.QUARTER WHEN '2' THEN ED.EDU_NAME END AS EDU_NAME02,
+				CASE ED.QUARTER WHEN '3' THEN ED.EDU_CODE END AS EDU_CODE03,
+				CASE ED.QUARTER WHEN '3' THEN ED.EDU_NAME END AS EDU_NAME03,
+				CASE ED.QUARTER WHEN '4' THEN ED.EDU_CODE END AS EDU_CODE04,
+				CASE ED.QUARTER WHEN '4' THEN ED.EDU_NAME END AS EDU_NAME04
+		  FROM (
+		  			SELECT 
+							T.EDU_CODE AS EDU_CODE,
 							MAX(T.EDU_NAME) AS EDU_NAME,
 							MAX(T.QUARTER) AS QUARTER,
 							T.EDU_BELTCODE, 
@@ -340,10 +485,10 @@
 								 WHERE 1=1
 						) T
 					 WHERE 1=1
-				  GROUP BY T.EDU_BELTCODE, T.EDU_CLASS_TYPE, T.EDU_CLASS_DIVISION 
-				  ORDER BY T.EDU_BELTCODE, T.EDU_CLASS_TYPE, T.EDU_CLASS_DIVISION
+				  GROUP BY T.EDU_CODE, T.EDU_BELTCODE, T.EDU_CLASS_TYPE, T.EDU_CLASS_DIVISION 
+				  ORDER BY T.EDU_CODE, T.EDU_BELTCODE, T.EDU_CLASS_TYPE, T.EDU_CLASS_DIVISION
 			   ) ED
-		 WHERE 1=1
+		 WHERE 1=1 -->
 	</select>
 	
 	<select id="selectYearPlanInfo" resultType="egovMap">
@@ -355,9 +500,9 @@
 				RS.EDU_CLASS_TYPE_NAME,
 				RS.EDU_CLASS_DIVISION,
 				RS.EDU_CLASS_DIVISION_NAME,
-				RS.EDU_CLASS_TARGET,
-				RS.EDU_CLASS_INTRO,
-				RS.EDU_CLASS_SUMMARY,
+				REPLACE (RS.EDU_CLASS_TARGET, chr(13)||chr(10), '<![CDATA[<br/>]]>' ) AS EDU_CLASS_TARGET,
+				REPLACE (RS.EDU_CLASS_INTRO, chr(13)||chr(10), '<![CDATA[<br/>]]>' ) AS EDU_CLASS_INTRO,
+				REPLACE (RS.EDU_CLASS_SUMMARY, chr(13)||chr(10), '<![CDATA[<br/>]]>' ) AS EDU_CLASS_SUMMARY,
 				RS.EDU_COST,
 				RS.EDU_INSURANCE_YN,
 				RS.EDU_DEMO_URL,
@@ -375,7 +520,7 @@
 				RS.EDU_NUMBER,
 				RS.EDU_DATE,
 				RS.EDU_FIXED,
-				RS.EDU_ITEM,
+				REPLACE (RS.EDU_ITEM, chr(13)||chr(10), '<![CDATA[<br/>]]>' ) AS EDU_ITEM,
 				RS.EDU_FILE_CODE,
 				NVL(RS.TSD_CNT, 0) AS TSD_CNT,
 				RS.EDU_REG_USER,
@@ -402,6 +547,311 @@
 		WHERE 1=1 
 		
 	
+	</select>
+	
+	<select id="selectMyBeltEduist" resultMap="EducationMap">
+		SELECT RS.*
+		  FROM (
+		  			SELECT 
+	 	   				   	M.EDU_CODE, 
+					 	   	M.EDU_NAME,
+					 	   	M.EDU_YEAR,
+					 	   	M.EDU_NUMBER,
+					 	   	M.EDU_DATE,
+					 	   	M.EDU_BELTCODE,
+					 	   	M.EDU_CLASS_TYPE,
+					 	   	D.STD_COMPLETE_YN,
+							CASE WHEN M.EDU_CLASS_TYPE = '01' THEN
+								CASE WHEN D.STD_COMPLETE_YN = 'Y' THEN '이수' ELSE '미이수' END
+							ELSE
+								CASE WHEN D.STD_COMPLETE_YN = 'Y' THEN '합격' ELSE '불합격' END
+							END AS STD_COMPLETE_NN,
+					 	   	D.STD_STATUS,
+					 	   	CASE WHEN D.STD_STATUS = 'Y' THEN '신청완료' ELSE '신청취소' END AS STD_STATUS_NM	
+					  FROM TB_EDUCATION_MST M
+				 LEFT JOIN TB_STUDENT_DETAIL D 
+					    ON M.EDU_CODE = D.EDU_CODE 
+					 WHERE 1=1 
+					 <if test="eduBeltCode != null and eduBeltCode neq ''.toString()">
+					   AND M.EDU_BELTCODE = #{eduBeltCode}
+					 </if>	
+					 <if test="stdUserId != null and stdUserId neq ''.toString()">
+					   AND D.STD_USERID = #{stdUserId}
+					 </if>	    
+		  	   ) RS 
+		 WHERE 1=1
+	</select>
+	
+	
+	<select id="selectMyReportList" resultMap="MyEducationMap">
+		SELECT RS.*
+		  FROM (
+		  			SELECT 
+							A.REP_CODE,
+							A.REP_LEADER_BELT_CODE,
+							A.REP_NAME, 
+							A.REP_TYPE_CODE,
+							D.CODE_NM AS TYPENM, 
+							A.REP_STATUS_CODE,
+							E.CODE_NM AS STATUSNM,
+							B.REP_TEAM_MEM_ROLE,
+							F.CODE_NM AS ROLENM,
+							(SELECT MIN(TO_CHAR(M.REP_PLAN_START_DATE, 'YYYY-MM-DD')) FROM TB_REPORT_DETAIL M WHERE M.REP_CODE = A.REP_CODE) REP_START_DATE,
+							(SELECT CASE WHEN REP_DEVISION_CODE='1' THEN MAX(TO_CHAR(REP_PLAN_START_DATE, 'YYYY-MM-DD')) ELSE MAX(TO_CHAR(REP_PLAN_END_DATE, 'YYYY-MM-DD')) END AS REP_FINISH_DATE FROM TB_REPORT_DETAIL M WHERE M.REP_CODE = A.REP_CODE GROUP BY REP_CODE, M.REP_DEVISION_CODE) REP_FINISH_DATE,
+							B.COM_NO,
+							C.USER_ID 	
+					  FROM TB_REPORT_MST A 
+				 LEFT JOIN TB_REPORT_TEAM B ON A.REP_CODE = B.REP_CODE
+				 LEFT JOIN TB_USER_MST C ON B.COM_NO = C.COM_NO
+				 LEFT JOIN TB_CODE D ON A.REP_TYPE_CODE = D.CODE_ID AND D.CODE_GRP_ID IN ('RP_TY1', 'RP_TY2', 'RP_TY3')
+				 LEFT JOIN TB_CODE E ON A.REP_STATUS_CODE = E.CODE_ID AND E.CODE_GRP_ID = 'REP_STAT'
+				 LEFT JOIN TB_CODE F ON B.REP_TEAM_MEM_ROLE = F.CODE_ID AND F.CODE_GRP_ID = 'REP_ROLE'
+					 WHERE 1=1
+					 <if test="leaderBeltCode != null and leaderBeltCode neq ''.toString()">
+					   AND A.REP_LEADER_BELT_CODE = #{leaderBeltCode}
+					 </if>	
+					 <if test="repUserId != null and repUserId neq ''.toString()">
+					   AND C.USER_ID = #{repUserId}
+					 </if>	    
+		  	   ) RS 
+		 WHERE 1=1
+	</select>
+	
+	<select id="selectMyStatistics" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT
+ 				 SUM(M1) AS M1,
+				 SUM(M2) AS M2,
+				 SUM(M3) AS M3,
+				 SUM(M4) AS M4,
+				 SUM(M5) AS M5,
+				 SUM(M6) AS M6,
+				 SUM(M7) AS M7,
+				 SUM(M8) AS M8
+		  FROM (
+		 		SELECT M1, M2, M3, M4, M5, M6, M7, M8
+				 FROM (
+						 SELECT 
+						 	   	M.EDU_BELTCODE AS EDU_BELTCODE,
+						 	   	M.EDU_CLASS_TYPE AS EDU_CLASS_TYPE,
+						 	   	M.EDU_BELTCODE || M.EDU_CLASS_TYPE AS DIVCODE,
+						 	   	D.COM_NO AS COM_NO,
+						 	   	D.STD_USERID AS STD_USERID
+						   FROM TB_EDUCATION_MST M
+				LEFT OUTER JOIN TB_STUDENT_DETAIL D ON M.EDU_CODE = D.EDU_CODE 
+						  WHERE D.STD_NAME IS NOT NULL
+						  <if test="stdUserId != null and stdUserId neq ''.toString()">
+						    AND D.STD_USERID = #{stdUserId}
+						  </if>	    
+					  )
+				 PIVOT (
+						COUNT(COM_NO) FOR DIVCODE IN(
+							'0101' AS M1, '0102' AS M2, '0201' AS M3, '0202' AS M4, '0301' AS M5, '0302' AS M6, '0401' AS M7, '0402' AS M8
+					   )
+				 )
+			   )
+	</select>
+	
+	<select id="selectMngListCnt" resultType="int">
+		SELECT NVL(COUNT(RS.EDU_CODE), 0) AS CNT
+		  FROM (
+		  			SELECT 
+	 	   				   	M.EDU_CODE, 
+					 	   	M.EDU_NAME,
+					 	   	M.EDU_YEAR,
+					 	   	M.EDU_NUMBER,
+					 	   	M.EDU_DATE,
+					 	   	M.EDU_BELTCODE,
+					 	   	M.EDU_CLASS_TYPE,
+					 	   	M.EDU_REG_DATE,
+					 	   	D.STD_SEQ,
+					 	   	D.COM_NO,
+					 	   	D.STD_NAME,
+							D.STD_USERID,
+							D.STD_DEPART,
+							(select dept_name from tb_depart_mst d where dept_code=D.STD_DEPART) AS STD_DEPART_NM,
+							D.STD_JOBX,
+							cd_job.code_nm AS STD_JOBX_NM,    
+							D.STD_POSITION,
+							cd_pos.code_nm AS STD_POS_NM,   
+							D.STD_BELT_CODE,
+							cd_blt.code_nm AS STD_BELT_NM,  
+							D.STD_STATUS,
+							CASE WHEN D.STD_STATUS = 'Y' THEN '신청완료' ELSE '신청취소' END AS STD_STATUS_NM,
+					 	   	D.STD_COMPLETE_YN,
+							CASE WHEN M.EDU_CLASS_TYPE = '01' THEN
+								CASE WHEN D.STD_COMPLETE_YN = 'Y' THEN '이수' ELSE '미이수' END
+							ELSE
+								CASE WHEN D.STD_COMPLETE_YN = 'Y' THEN '합격' ELSE '불합격' END
+							END AS STD_COMPLETE_NN,
+							D.STD_CERT_CODE,
+							TO_CHAR(D.STD_CERT_DATE, 'YYYY-MM-DD') AS STD_CERT_DATE,
+							D.STD_TEST_CODE,
+							TO_CHAR(D.STD_TEST_DATE, 'YYYY-MM-DD') AS STD_TEST_DATE
+					   FROM TB_EDUCATION_MST M
+				 LEFT OUTER JOIN TB_STUDENT_DETAIL D ON M.EDU_CODE = D.EDU_CODE 
+				 LEFT OUTER JOIN tb_code cd_job ON cd_job.code_grp_id='JOBX' AND cd_job.code_id = D.STD_JOBX
+				 LEFT OUTER JOIN tb_code cd_pos ON cd_pos.code_grp_id='POSITION' AND cd_pos.code_id = D.STD_POSITION 
+				 LEFT OUTER JOIN tb_code cd_blt ON cd_blt.code_grp_id='LDRBELT' AND cd_blt.code_id = D.STD_BELT_CODE 
+					 WHERE STD_NAME IS NOT NULL
+		  	   ) RS 
+		 WHERE 1=1
+		 <if test="searchbeltCode != null and searchbeltCode neq ''.toString()">
+			AND RS.EDU_BELTCODE = #{searchbeltCode}
+		 </if>  
+		 <if test="searchStdName != null and searchStdName neq ''.toString()">
+			AND RS.STD_NAME like '%' || #{searchStdName} || '%'
+		 </if>  
+		 <if test="searchStdDepart != null and searchStdDepart neq ''.toString()">
+			AND RS.STD_DEPART_NM like '%' || #{searchStdDepart} || '%'
+		 </if>  
+		 <if test="searchStdPosition != null and searchStdPosition neq ''.toString()">
+			AND RS.STD_POS_NM like '%' || #{searchStdPosition} || '%'
+		 </if>  
+		 <if test="searchCertFromDt != null and searchCertFromDt neq ''.toString() and searchCertToDt != null and searchCertToDt neq ''.toString()">
+			AND TO_CHAR(EDU_REG_DATE, 'YYYY-MM-DD') <![CDATA[>=]]> #{searchCertFromDt} AND TO_CHAR(EDU_REG_DATE, 'YYYY-MM-DD') <![CDATA[<=]]> #{searchCertToDt}
+		 </if>	
+	</select>
+	
+	<select id="selectMngList" resultMap="EducationMap">
+			WITH EDU_MNG AS (
+					SELECT  ROW_NUMBER() OVER( ORDER BY RS.EDU_CODE DESC, RS.STD_NAME ASC ) IDX, ROW_NUMBER() OVER( ORDER BY RS.EDU_CODE DESC, RS.STD_NAME ASC ) ROWIDX, 
+					   		RS.*,
+					   		RS.EDU_NUMBER || '차 ' || RS.STD_COMPLETE_NN AS MNG_TIT
+					  FROM (
+					  			SELECT 
+				 	   				   	M.EDU_CODE, 
+								 	   	M.EDU_NAME,
+								 	   	M.EDU_YEAR,
+								 	   	M.EDU_NUMBER,
+								 	   	M.EDU_DATE,
+								 	   	M.EDU_BELTCODE,
+								 	   	M.EDU_CLASS_TYPE,
+								 	   	M.EDU_REG_DATE,
+								 	   	D.STD_SEQ,
+								 	   	D.COM_NO,
+								 	   	D.STD_NAME,
+										D.STD_USERID,
+										D.STD_DEPART,
+										(select dept_name from tb_depart_mst d where dept_code=D.STD_DEPART) AS STD_DEPART_NM,
+										D.STD_JOBX,
+										cd_job.code_nm AS STD_JOBX_NM,    
+										D.STD_POSITION,
+										cd_pos.code_nm AS STD_POS_NM,   
+										D.STD_BELT_CODE,
+										cd_blt.code_nm AS STD_BELT_NM,  
+										D.STD_STATUS,
+										CASE WHEN D.STD_STATUS = 'Y' THEN '신청완료' ELSE '신청취소' END AS STD_STATUS_NM,
+								 	   	D.STD_COMPLETE_YN,
+										CASE WHEN M.EDU_CLASS_TYPE = '01' THEN
+											CASE WHEN D.STD_COMPLETE_YN = 'Y' THEN '이수' ELSE '미이수' END
+										ELSE
+											CASE WHEN D.STD_COMPLETE_YN = 'Y' THEN '합격' ELSE '불합격' END
+										END AS STD_COMPLETE_NN,
+										D.STD_CERT_CODE,
+										TO_CHAR(D.STD_CERT_DATE, 'YYYY-MM-DD') AS STD_CERT_DATE,
+										D.STD_TEST_CODE,
+										TO_CHAR(D.STD_TEST_DATE, 'YYYY-MM-DD') AS STD_TEST_DATE
+								   FROM TB_EDUCATION_MST M
+							 LEFT OUTER JOIN TB_STUDENT_DETAIL D ON M.EDU_CODE = D.EDU_CODE 
+							 LEFT OUTER JOIN tb_code cd_job ON cd_job.code_grp_id='JOBX' AND cd_job.code_id = D.STD_JOBX
+							 LEFT OUTER JOIN tb_code cd_pos ON cd_pos.code_grp_id='POSITION' AND cd_pos.code_id = D.STD_POSITION 
+							 LEFT OUTER JOIN tb_code cd_blt ON cd_blt.code_grp_id='LDRBELT' AND cd_blt.code_id = D.STD_BELT_CODE 
+								 WHERE STD_NAME IS NOT NULL
+					  	   ) RS 
+					 WHERE 1=1
+					 <if test="searchbeltCode != null and searchbeltCode neq ''.toString()">
+						AND RS.EDU_BELTCODE = #{searchbeltCode}
+					 </if>  
+					 <if test="searchStdName != null and searchStdName neq ''.toString()">
+						AND RS.STD_NAME like '%' || #{searchStdName} || '%'
+					 </if>  
+					 <if test="searchStdDepart != null and searchStdDepart neq ''.toString()">
+						AND RS.STD_DEPART_NM like '%' || #{searchStdDepart} || '%'
+					 </if>  
+					 <if test="searchStdPosition != null and searchStdPosition neq ''.toString()">
+						AND RS.STD_POS_NM like '%' || #{searchStdPosition} || '%'
+					 </if>  
+					 <if test="searchCertFromDt != null and searchCertFromDt neq ''.toString() and searchCertToDt != null and searchCertToDt neq ''.toString()">
+						AND TO_CHAR(EDU_REG_DATE, 'YYYY-MM-DD') <![CDATA[>=]]> #{searchCertFromDt} AND TO_CHAR(EDU_REG_DATE, 'YYYY-MM-DD') <![CDATA[<=]]> #{searchCertToDt}
+					 </if>	
+					ORDER BY RS.EDU_CODE DESC, RS.STD_NAME ASC
+			)
+			SELECT *
+			  FROM EDU_MNG T
+			 WHERE ROWIDX BETWEEN (#{currentPageNo}*#{recordCountPerPage}+1-#{recordCountPerPage}) AND (#{currentPageNo}*#{recordCountPerPage})
+		  ORDER BY T.IDX DESC		
+	</select>
+	
+	<select id="selectMngListExcel" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+			WITH EDU_MNG AS (
+					SELECT  ROW_NUMBER() OVER( ORDER BY RS.EDU_CODE DESC, RS.STD_NAME ASC ) IDX, ROW_NUMBER() OVER( ORDER BY RS.EDU_CODE DESC, RS.STD_NAME ASC ) ROWIDX, 
+					   		RS.*,
+					   		RS.EDU_NUMBER || '차 ' || RS.STD_COMPLETE_NN AS MNG_TIT
+					  FROM (
+					  			SELECT 
+				 	   				   	M.EDU_CODE, 
+								 	   	M.EDU_NAME,
+								 	   	M.EDU_YEAR,
+								 	   	M.EDU_NUMBER,
+								 	   	M.EDU_DATE,
+								 	   	M.EDU_BELTCODE,
+								 	   	M.EDU_CLASS_TYPE,
+								 	   	M.EDU_REG_DATE,
+								 	   	D.STD_SEQ,
+								 	   	D.COM_NO,
+								 	   	D.STD_NAME,
+										D.STD_USERID,
+										D.STD_DEPART,
+										(select dept_name from tb_depart_mst d where dept_code=D.STD_DEPART) AS STD_DEPART_NM,
+										D.STD_JOBX,
+										cd_job.code_nm AS STD_JOBX_NM,    
+										D.STD_POSITION,
+										cd_pos.code_nm AS STD_POS_NM,   
+										D.STD_BELT_CODE,
+										cd_blt.code_nm AS STD_BELT_NM,  
+										D.STD_STATUS,
+										CASE WHEN D.STD_STATUS = 'Y' THEN '신청완료' ELSE '신청취소' END AS STD_STATUS_NM,
+								 	   	D.STD_COMPLETE_YN,
+										CASE WHEN M.EDU_CLASS_TYPE = '01' THEN
+											CASE WHEN D.STD_COMPLETE_YN = 'Y' THEN '이수' ELSE '미이수' END
+										ELSE
+											CASE WHEN D.STD_COMPLETE_YN = 'Y' THEN '합격' ELSE '불합격' END
+										END AS STD_COMPLETE_NN,
+										D.STD_CERT_CODE,
+										CASE WHEN D.STD_CERT_CODE = 'Y' THEN '인증' ELSE '미인증' END AS STD_CERT_NM,
+										TO_CHAR(D.STD_CERT_DATE, 'YYYY-MM-DD') AS STD_CERT_DATE,
+										D.STD_TEST_CODE,
+										CASE WHEN D.STD_TEST_CODE = 'Y' THEN '합격' ELSE '불합격' END AS STD_TEST_NM,
+										TO_CHAR(D.STD_TEST_DATE, 'YYYY-MM-DD') AS STD_TEST_DATE
+								   FROM TB_EDUCATION_MST M
+							 LEFT OUTER JOIN TB_STUDENT_DETAIL D ON M.EDU_CODE = D.EDU_CODE 
+							 LEFT OUTER JOIN tb_code cd_job ON cd_job.code_grp_id='JOBX' AND cd_job.code_id = D.STD_JOBX
+							 LEFT OUTER JOIN tb_code cd_pos ON cd_pos.code_grp_id='POSITION' AND cd_pos.code_id = D.STD_POSITION 
+							 LEFT OUTER JOIN tb_code cd_blt ON cd_blt.code_grp_id='LDRBELT' AND cd_blt.code_id = D.STD_BELT_CODE 
+								 WHERE STD_NAME IS NOT NULL
+					  	   ) RS 
+					 WHERE 1=1
+					 <if test="searchbeltCode != null and searchbeltCode neq ''.toString()">
+						AND RS.EDU_BELTCODE = #{searchbeltCode}
+					 </if>  
+					 <if test="searchStdName != null and searchStdName neq ''.toString()">
+						AND RS.STD_NAME like '%' || #{searchStdName} || '%'
+					 </if>  
+					 <if test="searchStdDepart != null and searchStdDepart neq ''.toString()">
+						AND RS.STD_DEPART_NM like '%' || #{searchStdDepart} || '%'
+					 </if>  
+					 <if test="searchStdPosition != null and searchStdPosition neq ''.toString()">
+						AND RS.STD_POS_NM like '%' || #{searchStdPosition} || '%'
+					 </if>  
+					 <if test="searchCertFromDt != null and searchCertFromDt neq ''.toString() and searchCertToDt != null and searchCertToDt neq ''.toString()">
+						AND TO_CHAR(EDU_REG_DATE, 'YYYY-MM-DD') <![CDATA[>=]]> #{searchCertFromDt} AND TO_CHAR(EDU_REG_DATE, 'YYYY-MM-DD') <![CDATA[<=]]> #{searchCertToDt}
+					 </if>	
+					ORDER BY RS.EDU_CODE DESC, RS.STD_NAME ASC
+			)
+			SELECT *
+			  FROM EDU_MNG T
+			 WHERE 1=1
+		  ORDER BY T.IDX DESC		
 	</select>
 	                                      
 </mapper>                                 

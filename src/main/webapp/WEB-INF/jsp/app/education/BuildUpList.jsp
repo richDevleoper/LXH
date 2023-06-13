@@ -197,7 +197,7 @@
                                         <span>교육등록</span>
                                     </button>
                                     
-                                    <button type="button" class="btn-excel">
+                                    <button type="button" class="btn-excel" id="btnExcel">
                                         <img src="/assets/images/icon_excel.png" alt="">
                                         <span>다운로드</span>
                                     </button>
@@ -215,6 +215,12 @@
 	 	$("#btnRegEdu").on("click", function(){
 			location.href="./buildupinsert.do?menuKey=67";
 		});
+	 	
+	 	$("#btnExcel").on("click", function(){
+	 		$('#defaultForm').attr("action","/education/excelbuild.do");
+			$('#defaultForm').submit();
+		});
+	 	
 	 	
 	 	
 	});
@@ -248,6 +254,7 @@
 	}
 	
 	function onclick_search(){
+		$('#defaultForm').attr("action","/education/buildup.do");
 		$("#defaultForm")[0].submit();
 	}
 	

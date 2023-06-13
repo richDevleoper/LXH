@@ -73,70 +73,70 @@ public class AppController {
 		return "app/qi/001_01_sigma";
 	}
 	
-	@RequestMapping({"/app/001_01_sigma_sub.do"})
-	public String handler001_01_sub(HttpServletRequest request, ModelMap model,
-			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
-			UserVO userSession)throws Exception {
-		
-		return "app/qi/001_01_sigma_sub";
-
-	}
+//	@RequestMapping({"/app/001_01_sigma_sub.do"})
+//	public String handler001_01_sub(HttpServletRequest request, ModelMap model,
+//			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
+//			UserVO userSession)throws Exception {
+//		
+//		return "app/qi/001_01_sigma_sub";
+//
+//	}
 	
-	@RequestMapping({"/app/001_03_t_mbb.do"})
-	public String handler001_03(HttpServletRequest request, ModelMap model,
-			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
-			UserVO userSession)throws Exception {
-		
-		return "app/qi/001_03_t_mbb";
-
-	}
+//	@RequestMapping({"/app/001_03_t_mbb.do"})
+//	public String handler001_03(HttpServletRequest request, ModelMap model,
+//			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
+//			UserVO userSession)throws Exception {
+//		
+//		return "app/qi/001_03_t_mbb";
+//
+//	}
 	
-	@RequestMapping({"/app/001_04_mbb_use.do"})
-	public String handler001_04(HttpServletRequest request, ModelMap model,
-			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
-			UserVO userSession)throws Exception {
-		
-		return "app/qi/001_04_mbb_use";
-
-	}
+//	@RequestMapping({"/app/001_04_mbb_use.do"})
+//	public String handler001_04(HttpServletRequest request, ModelMap model,
+//			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
+//			UserVO userSession)throws Exception {
+//		
+//		return "app/qi/001_04_mbb_use";
+//
+//	}
+//	
+//	@RequestMapping({"/app/001_04_mbb_use_sub.do"})
+//	public String handler001_04_sub(HttpServletRequest request, ModelMap model,
+//			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
+//			UserVO userSession)throws Exception {
+//		
+//		return "app/qi/001_04_mbb_use_sub";
+//
+//	}
 	
-	@RequestMapping({"/app/001_04_mbb_use_sub.do"})
-	public String handler001_04_sub(HttpServletRequest request, ModelMap model,
-			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
-			UserVO userSession)throws Exception {
-		
-		return "app/qi/001_04_mbb_use_sub";
-
-	}
-	
 
 	
-	@RequestMapping({"/app/001_05_01_kpi_list.do"})
-	public String handler001_05_01(HttpServletRequest request, ModelMap model,
-			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
-			UserVO userSession)throws Exception {
-		
-		return "app/qi/001_05_01_kpi_list";
-
-	}
-
-	@RequestMapping({"/app/001_05_01_sub.do"})
-	public String handler001_05_01_01(HttpServletRequest request, ModelMap model,
-			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
-			UserVO userSession)throws Exception {
-		
-		return "app/qi/001_05_01_sub";
-
-	}
+//	@RequestMapping({"/app/001_05_01_kpi_list.do"})
+//	public String handler001_05_01(HttpServletRequest request, ModelMap model,
+//			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
+//			UserVO userSession)throws Exception {
+//		
+//		return "app/qi/001_05_01_kpi_list";
+//
+//	}
+//
+//	@RequestMapping({"/app/001_05_01_sub.do"})
+//	public String handler001_05_01_01(HttpServletRequest request, ModelMap model,
+//			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
+//			UserVO userSession)throws Exception {
+//		
+//		return "app/qi/001_05_01_sub";
+//
+//	}
 	
-	@RequestMapping({"/app/001_05_02_plan.do"})
-	public String handler001_05_02(HttpServletRequest request, ModelMap model,
-			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
-			UserVO userSession)throws Exception {
-		
-		return "app/qi/001_05_02_plan";
-
-	}
+//	@RequestMapping({"/app/001_05_02_plan.do"})
+//	public String handler001_05_02(HttpServletRequest request, ModelMap model,
+//			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
+//			UserVO userSession)throws Exception {
+//		
+//		return "app/qi/001_05_02_plan";
+//
+//	}
 	
 	
 	/*

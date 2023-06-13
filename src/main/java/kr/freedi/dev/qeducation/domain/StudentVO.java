@@ -24,6 +24,8 @@ public class StudentVO extends CommonVO {
 	private String stdRegDate;             // 등록일 
 	private String stdUpdateUser;          // 수정자 
 	private String stdUpdateDate;          // 수정일 
+	private String stdTestCode;
+	private String stdTestDate;
 	
 	private String stdDepartNm;
 	private String stdJobxNm;
@@ -36,6 +38,9 @@ public class StudentVO extends CommonVO {
 	private String mode;		       	
 	private String idx;
 	private String result;
+	
+	private String stdCompleteNm;
+	private String stdStatusNm;
 	
 	private List<AttachFileVO> fileList;
 
@@ -183,6 +188,22 @@ public class StudentVO extends CommonVO {
 		this.stdUpdateDate = stdUpdateDate;
 	}
 
+	public String getStdTestCode() {
+		return stdTestCode;
+	}
+
+	public void setStdTestCode(String stdTestCode) {
+		this.stdTestCode = stdTestCode;
+	}
+
+	public String getStdTestDate() {
+		return stdTestDate;
+	}
+
+	public void setStdTestDate(String stdTestDate) {
+		this.stdTestDate = stdTestDate;
+	}
+
 	public String getStdDepartNm() {
 		return stdDepartNm;
 	}
@@ -261,6 +282,22 @@ public class StudentVO extends CommonVO {
 
 	public void setResult(String result) {
 		this.result = result;
+	}
+
+	public String getStdCompleteNm() {
+		return stdCompleteNm;
+	}
+
+	public void setStdCompleteNm(String stdCompleteNm) {
+		this.stdCompleteNm = stdCompleteNm;
+	}
+
+	public String getStdStatusNm() {
+		return stdStatusNm;
+	}
+
+	public void setStdStatusNm(String stdStatusNm) {
+		this.stdStatusNm = stdStatusNm;
 	}
 	
 	

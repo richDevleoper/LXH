@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.lgcns.encypt.EncryptUtil;
+//import com.lgcns.encypt.EncryptUtil;
 
 import egovframework.rte.psl.dataaccess.util.EgovMap;
 import kr.freedi.dev.menu.service.MenuUseService;

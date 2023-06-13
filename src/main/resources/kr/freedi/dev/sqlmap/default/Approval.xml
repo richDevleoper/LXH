@@ -89,7 +89,7 @@
 	 	    T.idx,
 		    T.aproval_code,
 		    T.aproval_type,
-		    get_code_nm('APR_TYPE', T.aproval_type) || case TO_CHAR(aproval_type) when '3' then to_char(GET_6SIGMA_STEP_NM(T.ref_bus_code, T.ref_bus_sub_code)) else '' end aproval_type_nm,
+		    case when T.ref_bus_type in ('1', '2') then get_code_nm('BUS_TYPE', T.ref_bus_type) || ' > ' else '' end || get_code_nm('APR_TYPE', T.aproval_type) || case TO_CHAR(aproval_type) when '3' then to_char(GET_6SIGMA_STEP_NM(T.ref_bus_code, T.ref_bus_sub_code)) else '' end aproval_type_nm,
 		    T.aproval_state,
 		    get_code_nm('APR_STAT', T.aproval_state) aproval_state_nm,
 		    T.aproval_subject,

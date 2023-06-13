@@ -20,11 +20,16 @@
 		<result column="STD_REG_DATE"               property="stdRegDate"/> 
 		<result column="STD_UPDATE_USER"            property="stdUpdateUser"/> 
 		<result column="STD_UPDATE_DATE"            property="stdUpdateDate"/> 
+		<result column="STD_TEST_CODE"	 	     	property="stdTestCode"/> 
+		<result column="STD_TEST_DATE"	 	     	property="stdTestDate"/> 
 		
 		<result column="STD_DEPART_NM"            	property="stdDepartNm"/> 
 		<result column="STD_JOBX_NM"            	property="stdJobxNm"/> 
 		<result column="STD_POS_NM"            		property="stdPosNm"/> 
 		<result column="STD_BELT_NM"            	property="stdBeltNm"/> 
+		<result column="STD_COMPLETE_NN"	 	    property="stdCompleteNm"/>
+		<result column="STD_STATUS_NM"	 	     	property="stdStatusNm"/>
+		
 		
 	</resultMap>
 	
@@ -54,6 +59,50 @@
 	</select>
 	
 	<select id="selectStudentList" resultMap="StudentMap">
+		WITH STD_DETAIL AS (
+           SELECT ROW_NUMBER() OVER( ORDER BY TO_NUMBER(RS.EDU_CODE) ASC ) IDX, ROW_NUMBER() OVER( ORDER BY TO_NUMBER(RS.EDU_CODE) DESC ) ROWIDX, 
+            	   RS.*
+             FROM (
+					SELECT 
+						 	T.STD_SEQ,
+							T.COM_NO,
+							T.EDU_CODE,
+							T.STD_NAME,
+							T.STD_USERID,
+							T.STD_DEPART,
+							(select dept_name from tb_depart_mst d where dept_code=T.STD_DEPART) AS STD_DEPART_NM,  
+							T.STD_JOBX,
+							cd_job.code_nm AS STD_JOBX_NM,    
+							T.STD_POSITION,
+							cd_pos.code_nm AS STD_POS_NM,   
+							T.STD_BELT_CODE,
+							cd_blt.code_nm AS STD_BELT_NM,  
+							T.STD_STATUS,
+							T.STD_COMPLETE_YN,
+							T.STD_CERT_CODE,
+							T.STD_CERT_DATE,
+							T.STD_REAPPLY_YN,
+							T.STD_REG_USER,
+						 	TO_CHAR(T.STD_REG_DATE, 'YYYY-MM-DD') AS STD_REG_DATE
+					  FROM 
+							(
+								SELECT * FROM TB_STUDENT_DETAIL
+								 WHERE STD_STATUS = 'Y' 
+								 <include refid="defCond"></include>
+							) T
+							LEFT OUTER JOIN tb_code cd_job ON cd_job.code_grp_id='JOBX' AND cd_job.code_id = T.STD_JOBX
+							LEFT OUTER JOIN tb_code cd_pos ON cd_pos.code_grp_id='POSITION' AND cd_pos.code_id = T.STD_POSITION 
+                   			LEFT OUTER JOIN tb_code cd_blt ON cd_blt.code_grp_id='LDRBELT' AND cd_blt.code_id = T.STD_BELT_CODE 
+            ) RS
+		)
+		SELECT *
+		FROM STD_DETAIL T
+		WHERE 1=1
+		<!-- WHERE T.ROWIDX BETWEEN (#{currentPageNo}*#{recordCountPerPage}+1-#{recordCountPerPage}) AND (#{currentPageNo}*#{recordCountPerPage}) -->
+		ORDER BY T.IDX DESC	
+	</select>
+	
+	<select id="selectStudentExcelList" parameterType="java.util.HashMap" resultType="java.util.HashMap">
 		WITH STD_DETAIL AS (
            SELECT ROW_NUMBER() OVER( ORDER BY TO_NUMBER(RS.EDU_CODE) ASC ) IDX, ROW_NUMBER() OVER( ORDER BY TO_NUMBER(RS.EDU_CODE) DESC ) ROWIDX, 
             	   RS.*
@@ -181,6 +230,8 @@
 				<if test="stdCertCode != null and stdCertCode neq ''.toString()">STD_CERT_CODE = #{stdCertCode},</if>     
 				<if test="stdCertDate != null and stdCertDate neq ''.toString()">STD_CERT_DATE = #{stdCertDate},</if>     
 				<if test="stdReapplyYn != null and stdReapplyYn neq ''.toString()">STD_REAPPLY_YN = #{stdReapplyYn},</if>    
+				<if test="stdTestCode != null and stdTestCode neq ''.toString()">STD_TEST_CODE = #{stdTestCode},</if>     
+				<if test="stdTestDate != null and stdTestDate neq ''.toString()">STD_TEST_DATE = #{stdTestDate},</if>    
 				STD_UPDATE_USER = #{stdUpdateUser},
 				STD_UPDATE_DATE = SYSDATE
 		 WHERE 1=1 

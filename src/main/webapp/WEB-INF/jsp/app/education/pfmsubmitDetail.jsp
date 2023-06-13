@@ -72,7 +72,7 @@
 					<p class="total">총 ${totalCount}</p>							
 				  </div>
                   
-				  <form:form commandName="frmPfSubmit" id="defaultForm" name="defaultForm"  action="${action}" onsubmit="return false" method="post" modelAttribute="StudentVO">
+				  <form:form commandName="frmPfSubmit" id="defaultForm" name="defaultForm"  action="${action}" onsubmit="return false" method="post" modelAttribute="studentVO">
 		            ${StudentVO.superHiddenTag}
 		            <form:hidden path="eduCode" />
 					<form:hidden path="mode" />
@@ -152,7 +152,7 @@
                       <div class="list-btns">
                           <button type="button" class="btn light-gray" id="btnSave">저장</button>
                           	<a href="/education/pfmsubmit.do?menuKey=67" class="btn">목록</a>
-							<button type="button" class="btn-excel">
+							<button type="button" class="btn-excel" id="btnExcel">
 								<img src="/assets/images/icon_excel.png" alt="">
 								<span>다운로드</span>
 							</button>  
@@ -160,6 +160,10 @@
                   </div>
 							
 				  </form:form>	
+				  
+				  <form:form commandName="paramForm" id="paramForm" name="paramForm"  action="/education/excelstddtl.do" onsubmit="return false" method="post" modelAttribute="studentVO">
+				  	<form:hidden path="eduCode" />
+				  </form:form>
                   
 
 <script type="text/javascript">
@@ -168,6 +172,12 @@ $(document).ready(function(){
  	$("#btnSave").on("click", function(){
 		chkBoxSave();
 	});
+ 	
+ 	$("#btnExcel").on("click", function(){
+ 		//$('#paramForm').attr("action","/education/excelstddtl.do");
+		//$('#paramForm').submit();
+		$('#paramForm')[0].submit();
+ 	});
  	
  	
 });
@@ -190,10 +200,6 @@ function chkBoxSave(){
 		}
 	});
 	
-	console.log(arrSeq);
-	console.log(arrVal);
-	console.log(chkNum);
-	
 	if(chkNum==0){
 		alert("선택된 인원이 없습니다.");
 		return false;
@@ -213,9 +219,8 @@ function chkBoxSave(){
 		data: params,
 		dataType : 'json',
 		success:function(data){
-			console.log(data);
-				
-
+			alert("저장되었습니다.");
+			location.reload();	
 		}
 	});
 	

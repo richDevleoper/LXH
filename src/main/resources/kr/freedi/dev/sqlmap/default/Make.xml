@@ -262,9 +262,8 @@
 				, CIR_UPDATE_DATE = SYSDATE
 		where CIR_MEM_CODE = #{cirMemCode}
 		 
-	</update>       
-	
-	
+	</update>  
+	  
 	<sql id="detCond">
 		<where>
 			<if test="comDepartCode != null and comDepartCode != ''">

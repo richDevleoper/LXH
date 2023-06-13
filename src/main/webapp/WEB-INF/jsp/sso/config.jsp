@@ -8,15 +8,15 @@
 <%@page import="com.initech.eam.api.NXContext"%>
 <%!
 /**[INISAFE NEXESS JAVA AGENT]**********************************************************************
-* ¾÷¹«½Ã½ºÅÛ ¼³Á¤ »çÇ× (¾÷¹« È¯°æ¿¡ ¸Â°Ô º¯°æ)
+* ì—…ë¬´ì‹œìŠ¤í…œ ì„¤ì • ì‚¬í•­ (ì—…ë¬´ í™˜ê²½ì— ë§žê²Œ ë³€ê²½)
 ***************************************************************************************************/
 
 
-/***[SERVICE CONFIGURATION : ¾÷¹«½Ã½ºÅÛ ¼³Á¤]***********************************************************************/
-	private String SERVICE_NAME = "G-PORTAL"; //¼­ºñ½º ÀÌ¸§ : ½Ã½ºÅÛº°·Î Áßº¹µÇÁö ¾Êµµ·Ï ¼³Á¤
-	private String SERVER_URL 	= "http://lxh.lghausys.com/"; //½Ã½ºÅÛ Á¢¼Ó URL
-	private String SERVER_PORT = "8080"; // ½Ã½ºÅÛ Á¢¼Ó Æ÷Æ®
-	private String ASCP_URL = SERVER_URL + ":" + SERVER_PORT + "/sso/login_exec.do"; //¹èÆ÷ µÈ login_exec.jsp Á¢±Ù °æ·Î
+/***[SERVICE CONFIGURATION : ì—…ë¬´ì‹œìŠ¤í…œ ì„¤ì •]***********************************************************************/
+	private String SERVICE_NAME = "G-PORTAL"; //ì„œë¹„ìŠ¤ ì´ë¦„ : ì‹œìŠ¤í…œë³„ë¡œ ì¤‘ë³µë˜ì§€ ì•Šë„ë¡ ì„¤ì •
+	private String SERVER_URL 	= "http://lxh.lghausys.com/"; //ì‹œìŠ¤í…œ ì ‘ì† URL
+	private String SERVER_PORT = "8080"; // ì‹œìŠ¤í…œ ì ‘ì† í¬íŠ¸
+	private String ASCP_URL = SERVER_URL + ":" + SERVER_PORT + "/sso/login_exec.do"; //ë°°í¬ ëœ login_exec.jsp ì ‘ê·¼ ê²½ë¡œ
 	
 	//Custom Login Url
 	//private String custom_url = SERVER_URL + ":" + SERVER_PORT + "/agent/sso/loginFormPageCoustom.jsp";
@@ -24,7 +24,7 @@
 /*************************************************************************************************/
 
 
-/***[SSO CONFIGURATION] : ·Î±×ÀÎ ¼­¹ö ¹× µ¥¸ó ¼­¹ö ¼³Á¤]***********************************************************************/
+/***[SSO CONFIGURATION] : ë¡œê·¸ì¸ ì„œë²„ ë° ë°ëª¬ ì„œë²„ ì„¤ì •]***********************************************************************/
 	private String NLS_URL 		 = "http://lxhsso.lghausys.com";
 	private String NLS_PORT 	 = "8001";
 	private String NLS_LOGIN_URL = NLS_URL + ":" + NLS_PORT + "/nls3/clientLogin.jsp";
@@ -38,7 +38,7 @@
 
 	private static final int COOKIE_SESSTION_TIME_OUT = 43200;
 
-	// ÀÎÁõ Å¸ÀÔ (ID/PW ¹æ½Ä : 1, ÀÎÁõ¼­ : 3)
+	// ì¸ì¦ íƒ€ìž… (ID/PW ë°©ì‹ : 1, ì¸ì¦ì„œ : 3)
 	private String TOA = "1";
 	private String SSO_DOMAIN = ".lghausys.com";
 
@@ -55,23 +55,23 @@
 		PROVIDER_LIST.add("http://lxhsso.lghausys.com");
 		//PROVIDER_LIST.add("sso.lghausys.com");
 		
-		//NLS3 web.xmlÀÇ CookiePadding °ª°ú °°¾Æ¾ß ÇÑ´Ù. ¾È±×·³ °ËÁõ ÆäÀÏ³²
-		//InitechEamUID +"_V42" .... ÇüÅÂ·Î Äí¸í »ý¼ºµÊ
+		//NLS3 web.xmlì˜ CookiePadding ê°’ê³¼ ê°™ì•„ì•¼ í•œë‹¤. ì•ˆê·¸ëŸ¼ ê²€ì¦ íŽ˜ì¼ë‚¨
+		//InitechEamUID +"_V42" .... í˜•íƒœë¡œ ì¿ ëª… ìƒì„±ë¨
 		SECode.setCookiePadding("");
 	}
 
-	// ÅëÇÕ SSO ID Á¶È¸
+	// í†µí•© SSO ID ì¡°íšŒ
 	public String getSsoId(HttpServletRequest request) {
 		String sso_id = null;
 		sso_id = CookieManager.getCookieValue(SECode.USER_ID, request);
 		return sso_id;
 	}
-	// ÅëÇÕ SSO ·Î±×ÀÎÆäÀÌÁö ÀÌµ¿
+	// í†µí•© SSO ë¡œê·¸ì¸íŽ˜ì´ì§€ ì´ë™
 	public void goLoginPage(HttpServletResponse response)throws Exception {
 		CookieManager.addCookie(SECode.USER_URL, ASCP_URL, SSO_DOMAIN, response);
 		CookieManager.addCookie(SECode.R_TOA, TOA, SSO_DOMAIN, response);
 		
-	       //ÀÚÃ¼ ·Î±×ÀÎÀ» ÇÒ°æ¿ì ·Î±×ÀÎ ÆäÀÌÁö Setting
+	       //ìžì²´ ë¡œê·¸ì¸ì„ í• ê²½ìš° ë¡œê·¸ì¸ íŽ˜ì´ì§€ Setting
 	    if(custom_url.equals(""))
 	   	{
 	    	//CookieManager.addCookie("CLP", "", SSO_DOMAIN, response);
@@ -82,7 +82,7 @@
 		response.sendRedirect(NLS_LOGIN_URL);
 	}
 
-	// ÅëÇÕÀÎÁõ ¼¼¼ÇÀ» Ã¼Å© ÇÏ±â À§ÇÏ¿© »ç¿ëµÇ´Â API
+	// í†µí•©ì¸ì¦ ì„¸ì…˜ì„ ì²´í¬ í•˜ê¸° ìœ„í•˜ì—¬ ì‚¬ìš©ë˜ëŠ” API
 	public String getEamSessionCheckAndAgentVaild(HttpServletRequest request,HttpServletResponse response){
 		String retCode = "";
 		try {
@@ -94,7 +94,7 @@
 	}
 	
 	
-	// ÅëÇÕÀÎÁõ ¼¼¼ÇÀ» Ã¼Å© ÇÏ±â À§ÇÏ¿© »ç¿ëµÇ´Â API(Agent ÀÎÁõ ¾ø´Â ÇÔ¼ö, »ç¿ëÀÚÁ¦)
+	// í†µí•©ì¸ì¦ ì„¸ì…˜ì„ ì²´í¬ í•˜ê¸° ìœ„í•˜ì—¬ ì‚¬ìš©ë˜ëŠ” API(Agent ì¸ì¦ ì—†ëŠ” í•¨ìˆ˜, ì‚¬ìš©ìžì œ)
 	//@deprecated
 	public String getEamSessionCheck(HttpServletRequest request,HttpServletResponse response){
 		String retCode = "";
@@ -107,7 +107,7 @@
 	}
 	
 	
-	//ND API¸¦ »ç¿ëÇØ¼­ ÄíÅ°°ËÁõÇÏ´Â°Í(ÇöÀç Ç¥ÁØ¿¡¼­´Â »ç¿ë¾ÈÇÔ, ±Ùµ¥ ÇØµµ µÇ±â´Â ÇÔ)
+	//ND APIë¥¼ ì‚¬ìš©í•´ì„œ ì¿ í‚¤ê²€ì¦í•˜ëŠ”ê²ƒ(í˜„ìž¬ í‘œì¤€ì—ì„œëŠ” ì‚¬ìš©ì•ˆí•¨, ê·¼ë° í•´ë„ ë˜ê¸°ëŠ” í•¨)
 	public String getEamSessionCheck2(HttpServletRequest request,HttpServletResponse response)
 	{
 		String retCode = "";
@@ -120,7 +120,7 @@
 		return retCode;
 	}
 
-	// SSO ¿¡·¯ÆäÀÌÁö URL
+	// SSO ì—ëŸ¬íŽ˜ì´ì§€ URL
 	public void goErrorPage(HttpServletResponse response, int error_code)throws Exception {
 		CookieManager.removeNexessCookie(SSO_DOMAIN, response);
 		CookieManager.addCookie(SECode.USER_URL, ASCP_URL, SSO_DOMAIN, response);

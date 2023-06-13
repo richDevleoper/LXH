@@ -13,6 +13,7 @@ import kr.freedi.dev.attachfile.service.AttachFileService;
 import kr.freedi.dev.board.service.BoardService;
 import kr.freedi.dev.board.service.BoardUseService;
 import kr.freedi.dev.common.dao.DefaultDAO;
+import kr.freedi.dev.qkpi.domain.KpiSearchVO;
 import kr.freedi.dev.qpopup.domain.DepartVO;
 import kr.freedi.dev.qpopup.domain.UserVO;
 import kr.freedi.dev.qreport.domain.ReportDetailVO;
@@ -61,6 +62,11 @@ public class QPopupService {
 	public List<DepartVO> selectTreeList() {
 		
 		return dao.selectList("Depart.selectTreeList"); 
+	}
+	
+	public List<EgovMap> selectMgrPlan(KpiSearchVO vo) {
+		
+		return dao.selectList("KPI.selectMgrPlan", vo); 
 	}
 		
 }

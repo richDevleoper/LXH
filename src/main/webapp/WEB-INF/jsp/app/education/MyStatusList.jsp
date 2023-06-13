@@ -21,127 +21,62 @@
                                 <div class="list-table list even">
                                     <table class="centered">
                                         <caption></caption>
-                                        <colgroup>
-                                            <col style="width:50px">
-                                            <col>
-                                            <col>
-                                            <col>
-                                            <col>
-                                            <col>
-                                            <col>
-                                            <col>
-                                            <col>
-                                            <col>
-                                            <col>
-                                            <col>
-                                            <col>
-                                            <col>
-                                            <col>
-                                            <col>
-                                            <col>
-                                            <col>
-                                            <col>
-                                            <col>
-                                        </colgroup>
+                                       
                                         <thead>
                                             <tr>
                                                 <th class="bg-gray">Belt</th>
-                                                <th class="bg-gray" colspan="3">GB</th>
-                                                <th class="bg-gray" colspan="5">MGB</th>
-                                                <th class="bg-gray" colspan="5">BB</th>
-                                                <th class="bg-gray" colspan="6">MBB</th>
+                                                <th class="bg-gray" colspan="2">GB</th>
+                                                <th class="bg-gray" colspan="2">MGB</th>
+                                                <th class="bg-gray" colspan="2">BB</th>
+                                                <th class="bg-gray" colspan="2">MBB</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <td>항목</td>
-                                                <td>교육이수</td>
-                                                <td>필기test</td>
-                                                <td>인증</td>
-                                                <td>교육이수</td>
-                                                <td>필기test</td>
-                                                <td>과제수행</td>
-                                                <td>과제Test</td>
-                                                <td>인증</td>
-                                                <td>교육이수</td>
-                                                <td>PaperTest</td>
-                                                <td>과제수행</td>
-                                                <td>과제Test</td>
-                                                <td>인증</td>
-                                                <td>교육이수</td>
-                                                <td>통계Test</td>
-                                                <td>과제수행</td>
-                                                <td>과제Test</td>
-                                                <td>자질평가</td>
-                                                <td>인증</td>
+                                                <th class="bg-white align-center">항목</th>
+                                                <td class="bg-white align-center">교육</td>
+                                                <td class="bg-white align-center">TEST</td>
+                                                <td class="bg-white align-center">교육</td>
+                                                <td class="bg-white align-center">TEST</td>
+                                                <td class="bg-white align-center">교육</td>
+                                                <td class="bg-white align-center">TEST</td>
+                                                <td class="bg-white align-center">교육</td>
+                                                <td class="bg-white align-center">TEST</td>
                                             </tr>
                                             <tr>
-                                                <td>현황</td>
-                                                <td>이수완료</td>
-                                                <td>합격</td>
-                                                <td>인증완료</td>
-                                                <td>비대상</td>
-                                                <td>비대상</td>
-                                                <td>비대상</td>
-                                                <td>비대상</td>
-                                                <td>비대상</td>
-                                                <td>이수완료</td>
-                                                <td>합격</td>
-                                                <td>수행완료</td>
-                                                <td>합격</td>
-                                                <td>완료</td>
-                                                <td>신청완료</td>
-                                                <td>미신청</td>
-                                                <td>2건필요</td>
-                                                <td>-</td>
-                                                <td>-</td>
-                                                <td>-</td>
+                                                <th class="bg-white align-center">건수</th>
+                                                <td class="bg-white align-center">${selectMyStatistics.M1}</td>
+                                                <td class="bg-white align-center">${selectMyStatistics.M2}</td>
+                                                <td class="bg-white align-center">${selectMyStatistics.M3}</td>
+                                                <td class="bg-white align-center">${selectMyStatistics.M4}</td>
+                                                <td class="bg-white align-center">${selectMyStatistics.M5}</td>
+                                                <td class="bg-white align-center">${selectMyStatistics.M6}</td>
+                                                <td class="bg-white align-center">${selectMyStatistics.M7}</td>
+                                                <td class="bg-white align-center">${selectMyStatistics.M8}</td>
                                             </tr>
-                                            <tr>
-                                                <td>처리일</td>
-                                                <td>20.01.101</td>
-                                                <td>20.02.30</td>
-                                                <td>20.01.01</td>
-                                                <td>비대상</td>
-                                                <td>비대상</td>
-                                                <td>비대상</td>
-                                                <td>비대상</td>
-                                                <td>비대상</td>
-                                                <td>20.01.01</td>
-                                                <td>20.02.30</td>
-                                                <td>20.01.01</td>
-                                                <td>20.02.30</td>
-                                                <td>20.02.30</td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                            </tr>
+                                            
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
                         </div>
+                        
                         <div class="tab-group">
                             <div class="tab-btn">
+                            
                                 <!-- [D] 현재 활성화된 메뉴에 on클래스 추가해주세요. -->
-                                <button type="button">GB</button>
-                                <button type="button">MGB</button>
-                                <button type="button">BB</button>
-                                <button type="button" class="on">MBB</button>
+                                <c:forEach var="allCodes" items="${allCodes}" varStatus="status">
+                                	<button type="button" id="${allCodes.codeId}">${allCodes.codeNm}</button>
+                                </c:forEach>
                             </div>
-                            <div class="tab-inr">
-                                <div class="tab-box"></div>
-                                <div class="tab-box"></div>
-                                <div class="tab-box"></div>
-                                <div class="tab-box on">
-                                    <div class="list-header mg-t20">
+                            
+			  				<div class="tab-inr">
+                                <div class="tab-box">
+                                	<div class="list-header mg-t20">
                                         <p class="title">1.교육</p>
                                     </div>
                                     <div class="list-table list">
-                                        <table class="centered">
+                                        <table class="centered" id="tab1">
                                             <caption></caption>
                                             <colgroup>
                                                 <col>
@@ -159,22 +94,14 @@
                                                     <th>수강신청</th>
                                                 </tr>
                                             </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>MBB 교육과정명(ooooooooooooooooo)</td>
-                                                    <td>22년 1차</td>
-                                                    <td>2023년 1월 20일 ~ 2023년 2월 10일</td>
-                                                    <td>미이수</td>
-                                                    <td>신청완료</td>
-                                                </tr>
-                                            </tbody>
+                                            <tbody></tbody>
                                         </table>
                                     </div>
                                     <div class="list-header">
                                         <p class="title">2. 과제활동 현황</p>
                                     </div>
                                     <div class="list-table list">
-                                        <table class="centered">
+                                        <table class="centered" id="tab2">
                                             <caption></caption>
                                             <colgroup>
                                                 <col>
@@ -194,23 +121,14 @@
                                                     <th>과제Test 응시자격</th>
                                                 </tr>
                                             </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>나의 과제의 과제명</td>
-                                                    <td>생산성</td>
-                                                    <td>2023년 1월 20일 ~ 2023년 2월 10일</td>
-                                                    <td>팀 멤버</td>
-                                                    <td>완료</td>
-                                                    <td>총 2건 중 1건(미확보)</td>
-                                                </tr>
-                                            </tbody>
+                                            <tbody></tbody>
                                         </table>
                                     </div>
                                     <div class="list-header">
                                         <p class="title">3. Test 응시 현황</p>
                                     </div>
                                     <div class="list-table list">
-                                        <table class="centered">
+                                        <table class="centered" id="tab3">
                                             <caption></caption>
                                             <colgroup>
                                                 <col>
@@ -228,123 +146,173 @@
                                                     <th>Test신청</th>
                                                 </tr>
                                             </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>Test명(OOOOOOOOOOOOOOOOO)</td>
-                                                    <td>00차</td>
-                                                    <td>2023년 1월 20일 ~ 2023년 2월 10일</td>
-                                                    <td>미응시</td>
-                                                    <td>신청완료</td>
-                                                </tr>
-                                            </tbody>
+                                            <tbody></tbody>
                                         </table>
                                     </div>
+                                    
+                                    
+                                    
                                 </div>
-                            </div>
+                               
+                           	</div>
+                            <form:form commandName="paramForm" id="paramForm" name="paramForm" onsubmit="return false" method="post" modelAttribute="studentVO">	
+				  			</form:form>
+                            
                         </div>
                
-        <!-- 조직도 -->
-        <div class="modal-dimmed"></div>
-        <div class="org-modal">
-            <div class="modal-header">
-                <h4>조직조회</h4>
-                <button type="button" class="btn-close">닫기</button>
-            </div>
-            <div class="modal-content">
-                <div class="list-wrap">
-                    <div class="list-search">
-                        <form id="org-form" onsubmit="org_search();return false;">
-                            <div class="search-form">
-                                <div class="form-inline form-input">
-                                    <label>조직명</label>
-                                    <input type="text" name="">
-                                </div>
-                                <button type="submit" class="btn-submit">조회</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-                <div class="tree-header">
-                    <div>
-                        <input type="checkbox" id="orgSelAll">
-                        <label for="orgSelAll"></label>
-                    </div>
-                    <div>
-                        6σ 인재육성대상 조직명
-                    </div>
-                </div>
-                <div id="org-tree">
-                    <ul>
-                        <li>창호 사업부
-                            <ul>
-                                <li>창호.생산담당
-                                    <ul>
-                                        <li>· 창호.프로파일생산팀</li>
-                                        <li>· 창호.기술팀</li>
-                                        <li>· 창호.공정혁신팀</li>
-                                        <li>· 창호.완성창공정기술팀</li>
-                                    </ul>
-                                </li>
-                                <li>유리</li>
-                                <li>연구소 근무</li>
-                                <li>창호.시스템창사업담당</li>
-                                <li>창호.중문팀</li>
-                                <li>바닥재 사업담당	</li>
-                            </ul>
-                        </li>
-                        <li>단열재 사업담당
-                            <ul>
-                                <li>창호.프로파일생산팀</li>
-                            </ul>
-                        </li>
-                        <li>벽지 사업담당	
-                            <ul>
-                                <li>창호.프로파일생산팀</li>
-                            </ul>
-                        </li>
-                        <li>표면소재 사업담당
-                            <ul>
-                                <li>창호.프로파일생산팀</li>
-                            </ul>
-                        </li>
-                        <li>산업용필름 사업담당
-                            <ul>
-                                <li>창호.프로파일생산팀</li>
-                            </ul>
-                        </li>
-                        <li>자동차소재부품 사업부
-                            <ul>
-                                <li>창호.프로파일생산팀</li>
-                            </ul>
-                        </li>
-                        <li>인테리어 사업부
-                            <ul>
-                                <li>창호.프로파일생산팀</li>
-                            </ul>
-                        </li>
-                        <li>연구소
-                            <ul>
-                                <li>창호.프로파일생산팀</li>
-                            </ul>
-                        </li>
-                        <li>품질 담당
-                            <ul>
-                                <li>창호.프로파일생산팀</li>
-                            </ul>
-                        </li>
-                        <li>생산/기술/R&D/품질 外
-                            <ul>
-                                <li>창호.프로파일생산팀</li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
-                <div class="btns">
-                    <button type="button" class="btn-submit">확인</button>
-                    <button type="button" class="btn-cancel">취소</button>
-                </div>
-            </div>
-        </div>
+<script type="text/javascript">
+	$(document).ready(function(){
+		
+		$('.tab-btn > button').on('click',function(e){
+			let tabInx = $('.tab-btn > button').index(this);
+			let tabId = e.target.id;
+			selectMyEdu(tabId);
+		})
+		
+		$('.tab-btn > button').eq(0).click();
+	});
+	
+	function selectMyEdu(tabId){
+		let eduBeltCode = tabId;
+		console.log(tabId);
+		
+		let leaderBeltCode = "";
+		/* 
+			과제 활동 - 리더벨트코드
+			GB - D000
+			BB - D001
+			MBB - D002
+			MGB - D003
+		 */
+		 switch (tabId) {
+		    case "01" :
+		    	leaderBeltCode = "D000";
+		    	break;
+		    case "02" :
+		    	leaderBeltCode = "D003";
+		    	break;
+		    case "03" :
+		    	leaderBeltCode = "D001";
+		    	break;
+		    case "04" :
+		    	leaderBeltCode = "D002";
+		    	break;
+		    default :
+		} 
+		
+		let params = {};
+		params.eduBeltCode = eduBeltCode;	
+		params.leaderBeltCode = leaderBeltCode;
+		
+		$.ajax({
+			url:'/education/searchmyedu.do',
+			type: 'POST',
+			data: params,
+			dataType : 'json',
+			success:function(data){
+				let myList = data.myList;
+				let reportList = data.reportList;
+				
+				console.log(myList.length);
+				console.log(reportList);
+
+				var vHtml = [];
+				var vHtml2 = [];
+				var rHtml = [];
+				
+				let myListTr = 0;
+				let myListTr2 = 0;
+				
+				if(myList.length>0){
+					for(var i=0; i<myList.length; i++){
+						let eduName = myList[i].eduName;
+						let eduYear = myList[i].eduYear;
+						let eduNumber = myList[i].eduNumber;
+						let eduDate = myList[i].eduDate;
+						let stdCompleteNm = myList[i].stdCompleteNm;
+						let stdStatusNm = myList[i].stdStatusNm;
+						let eduClassType = myList[i].eduClassType;
+						
+						if(eduClassType == "01"){
+							vHtml.push("<tr>");
+							vHtml.push("<td>"+eduName+"</td>");
+							vHtml.push("<td class='bg-white align-center'>"+eduYear+"년 "+eduNumber+"차</td>");
+							vHtml.push("<td class='bg-white align-center'>"+eduDate+"</td>");
+							vHtml.push("<td class='bg-white align-center'>"+stdCompleteNm+"</td>");
+							vHtml.push("<td class='bg-white align-center'>"+stdStatusNm+"</td>");
+							vHtml.push("</tr>");
+							myListTr = myListTr + 1;
+						}else if(eduClassType == "02"){
+							vHtml2.push("<tr>");
+							vHtml2.push("<td>"+eduName+"</td>");
+							vHtml2.push("<td class='bg-white align-center'>"+eduNumber+"차</td>");
+							vHtml2.push("<td class='bg-white align-center'>"+eduDate+"</td>");
+							vHtml2.push("<td class='bg-white align-center'>"+stdCompleteNm+"</td>");
+							vHtml2.push("<td class='bg-white align-center'>"+stdStatusNm+"</td>");
+							vHtml2.push("</tr>");
+							myListTr2 = myListTr2 + 1;
+						}
+												
+					}
+				}else{
+					//vHtml.push("<tr>");
+					//vHtml.push("<td class='bg-white align-center' colspan='5'>데이터가 없습니다.</td>");
+					//vHtml.push("</tr>");	 
+				}
+				
+				console.log(myListTr);
+				
+				if(myListTr==0){
+					vHtml.push("<tr>");
+					vHtml.push("<td class='bg-white align-center' colspan='5'>데이터가 없습니다.</td>");
+					vHtml.push("</tr>");
+				}
+				
+				if(myListTr2==0){
+					vHtml2.push("<tr>");
+					vHtml2.push("<td class='bg-white align-center' colspan='5'>데이터가 없습니다.</td>");
+					vHtml2.push("</tr>");
+				}
+				
+				$("#tab1").find("tbody").html(vHtml.join(''));
+				$("#tab3").find("tbody").html(vHtml2.join(''));
+				
+				if(reportList.length>0){
+					
+					for(var i=0; i<reportList.length; i++){
+						let repName = reportList[i].repName;
+						let typeNm = reportList[i].typeNm;
+						let statusNm = reportList[i].statusNm;
+						let roleNm = reportList[i].roleNm;
+						let repStartDate = reportList[i].repStartDate;
+						let repFinishDate = reportList[i].repFinishDate;
+						
+						rHtml.push("<tr>");
+						rHtml.push("<td>"+repName+"</td>");
+						rHtml.push("<td class='bg-white align-center'>"+typeNm+"</td>");
+						rHtml.push("<td class='bg-white align-center'>"+repStartDate+" ~ "+repFinishDate+"</td>");
+						rHtml.push("<td class='bg-white align-center'>"+roleNm+"</td>");
+						rHtml.push("<td class='bg-white align-center'>"+statusNm+"</td>");
+						rHtml.push("<td class='bg-white align-center'>총 2건 중 1건(미확보)</td>");
+						rHtml.push("</tr>");
+					}
+				}else{
+					rHtml.push("<tr>");
+					rHtml.push("<td class='bg-white align-center' colspan='6'>데이터가 없습니다.</td>");
+					rHtml.push("</tr>");	 
+				}
+				$("#tab2").find("tbody").html(rHtml.join(''));
+				
+			}
+		});
+		
+
+
+		
+
+	}
+
+</script>
 
 </body>
 </html>
