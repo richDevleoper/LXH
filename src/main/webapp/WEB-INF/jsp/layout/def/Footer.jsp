@@ -292,7 +292,7 @@
 	            			},
 	            			callData : function(){
 	            				
-	            				if($("#txtSearchName").val().trim().length<2){
+	            				if($("#txtSearchName").val().trim().length<1){
 	            					return false;
 	            				}
 	            				
@@ -306,7 +306,6 @@
 	            				//{"userId":"parksoomin","userName":"박수민"
 	            				//,"deptFullName":"울산설비팀(전기PM／변전실)"
 	            				//,"comJobx":"FE0","comPosition":"생산파트장","comCertBelt":null}
-	            				debugger;
 	            				$(".tr-empty").hide();
 	            				$(".tr-data").remove();
 	            				if(data.length===0){
@@ -400,6 +399,10 @@
 	                     <div class="form-inline form-select">
 	                         <label>제안유형</label>                                            
 	                         <select name="select-proposal-category-code" id="select-proposal-category-code">
+	                             	<option value="">선택</option>
+                                    <c:forEach var="item" items="${CATEGORY_LIST }">
+                                   		<option value="${item.codeId }">${item.codeNm }</option>                	
+                                    </c:forEach>
 	                         </select>                                            
 	                     </div>
 	                      <div class="form-inline form-select">

@@ -79,7 +79,7 @@ public class ReportProposalController {
 		//구분별 통계
 		List<EgovMap> resultItemsCount = reportProposalService.selectProposalTypeByCount(searchVO);
 		//등급별 통계
-		List<EgovMap> progressCount = reportProposalService.selectProposalStateByCount(searchVO);
+//		List<EgovMap> progressCount = reportProposalService.selectProposalStateByCount(searchVO);
 		EgovMap summary = new EgovMap();
 		int total = 0;         // Total Count
 		
@@ -96,29 +96,29 @@ public class ReportProposalController {
 		total += Integer.parseInt(summary.get("ppsTyp1").toString());
 		total += Integer.parseInt(summary.get("ppsTyp2").toString());
 		
-		summary.put("prg1", "0"); // 입력중
-		summary.put("prg2", "0"); // 결재진행중
-		summary.put("prg3", "0"); // 심사대기중
-		summary.put("prg4", "0"); // 심사진행중
-		summary.put("prg5", "0"); // 심사완료
-		summary.put("prg6", "0"); // 마감
+//		summary.put("prg1", "0"); // 입력중
+//		summary.put("prg2", "0"); // 결재진행중
+//		summary.put("prg3", "0"); // 심사대기중
+//		summary.put("prg4", "0"); // 심사진행중
+//		summary.put("prg5", "0"); // 심사완료
+//		summary.put("prg6", "0"); // 마감
+//		
+//		if(progressCount != null && progressCount.size() > 0) {
+//			for(int index = 0; index < progressCount.size(); index++) {
+//				EgovMap item = progressCount.get(index);
+//				if(item.get("propPropStatCode") != null) {
+//					summary.put(item.get("propPropStatCode"), item.get("total"));
+//				}
+//			}
+//		}
 		
-		if(progressCount != null && progressCount.size() > 0) {
-			for(int index = 0; index < progressCount.size(); index++) {
-				EgovMap item = progressCount.get(index);
-				if(item.get("propPropStatCode") != null) {
-					summary.put(item.get("propPropStatCode"), item.get("total"));
-				}
-			}
-		}
+//		int prgCount = 0;
+//		prgCount += Integer.parseInt(summary.get("prg1").toString());
+//		prgCount += Integer.parseInt(summary.get("prg2").toString());
+//		prgCount += Integer.parseInt(summary.get("prg3").toString());
+//		prgCount += Integer.parseInt(summary.get("prg4").toString());
 		
-		int prgCount = 0;
-		prgCount += Integer.parseInt(summary.get("prg1").toString());
-		prgCount += Integer.parseInt(summary.get("prg2").toString());
-		prgCount += Integer.parseInt(summary.get("prg3").toString());
-		prgCount += Integer.parseInt(summary.get("prg4").toString());
-		
-		List<EgovMap> classCount = reportProposalService.selectProposalClassByCount(searchVO);
+//		List<EgovMap> classCount = reportProposalService.selectProposalClassByCount(searchVO);
 		
 		summary.put("s", "0"); // S급
 		summary.put("a", "0"); // A급
@@ -128,24 +128,15 @@ public class ReportProposalController {
 		summary.put("na", "0"); // 불채택
 		summary.put("prg", "0"); // 심사중
 		
-		if(classCount != null && classCount.size() > 0) {
-			for(int index = 0; index < classCount.size(); index++) {
-				EgovMap item = classCount.get(index);
-				if(item.get("propEvalLvCode") != null){
-					summary.put(item.get("propEvalLvCode"), item.get("total"));
-				}
-				
-			}
-		}
-		
-		int clsCount = 0;
-		clsCount += Integer.parseInt(summary.get("s").toString());
-		clsCount += Integer.parseInt(summary.get("a").toString());
-		clsCount += Integer.parseInt(summary.get("b").toString());
-		clsCount += Integer.parseInt(summary.get("c").toString());
-		clsCount += Integer.parseInt(summary.get("d").toString());
-		clsCount += Integer.parseInt(summary.get("na").toString());
-		clsCount += Integer.parseInt(summary.get("prg").toString());
+//		if(classCount != null && classCount.size() > 0) {
+//			for(int index = 0; index < classCount.size(); index++) {
+//				EgovMap item = classCount.get(index);
+//				if(item.get("propEvalLvCode") != null){
+//					summary.put(item.get("propEvalLvCode"), item.get("total"));
+//				}
+//				
+//			}
+//		}
 		
 		List<EgovMap> paymentCount = reportProposalService.selectProposalPaymentByCount(searchVO);
 		summary.put("pys", "0");
@@ -175,6 +166,26 @@ public class ReportProposalController {
 			}
 		}
 		
+		
+		summary.put("s", (Integer.parseInt(summary.get("pys").toString()) + Integer.parseInt(summary.get("pns").toString())));
+		summary.put("a", (Integer.parseInt(summary.get("pya").toString()) + Integer.parseInt(summary.get("pna").toString())));
+		summary.put("b", (Integer.parseInt(summary.get("pyb").toString()) + Integer.parseInt(summary.get("pnb").toString())));
+		summary.put("c", (Integer.parseInt(summary.get("pyc").toString()) + Integer.parseInt(summary.get("pnc").toString())));
+		summary.put("d", (Integer.parseInt(summary.get("pyd").toString()) + Integer.parseInt(summary.get("pnd").toString())));
+		summary.put("na", (Integer.parseInt(summary.get("pyna").toString()) + Integer.parseInt(summary.get("pnna").toString())));
+		summary.put("prg", (Integer.parseInt(summary.get("pyprg").toString()) + Integer.parseInt(summary.get("pnprg").toString())));
+		
+		
+		int clsCount = 0;
+		clsCount += Integer.parseInt(summary.get("s").toString());
+		clsCount += Integer.parseInt(summary.get("a").toString());
+		clsCount += Integer.parseInt(summary.get("b").toString());
+		clsCount += Integer.parseInt(summary.get("c").toString());
+		clsCount += Integer.parseInt(summary.get("d").toString());
+		clsCount += Integer.parseInt(summary.get("na").toString());
+		clsCount += Integer.parseInt(summary.get("prg").toString());
+		
+		
 		int pymtYCount = 0;
 		int pymtNCount = 0;
 		
@@ -195,7 +206,7 @@ public class ReportProposalController {
 		pymtNCount += Integer.parseInt(summary.get("pnprg").toString());
 		
 		summary.put("tt", total);
-		summary.put("prg", prgCount);
+		//summary.put("prg", prgCount);
 		summary.put("cls", clsCount);
 		
 		summary.put("pymtY", pymtYCount);

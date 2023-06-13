@@ -243,7 +243,7 @@
 	            			},
 	            			callData : function(){
 	            				
-	            				if($("#txtSearchName").val().trim().length<2){
+	            				if($("#txtSearchName").val().trim().length<1){
 	            					return false;
 	            				}
 	            				
@@ -349,6 +349,10 @@
 	                     <div class="form-inline form-select">
 	                         <label>제안유형</label>                                            
 	                         <select name="select-proposal-category-code" id="select-proposal-category-code">
+                             	<option value="">선택</option>
+                                   <c:forEach var="item" items="${CATEGORY_LIST }">
+                               			<option value="${item.codeId }">${item.codeNm }</option>                                                            	
+                                   </c:forEach>	                         
 	                         </select>                                            
 	                     </div>
 	                      <div class="form-inline form-select">

@@ -78,7 +78,7 @@
                                                 </td>                                               
                                             </tr>
                                             <tr>
-                                                <th><label for="input-proposal-memo"><span class="asterisk">*</span>관련 쪽지 제안</label></th>
+                                                <th><label for="input-proposal-memo"><span class="asterisk">*</span>조직명</label></th>
                                                 <td id="text-proposal-group">${PROP_INFO.propGroupName }</td>
                                                 <form:input type="hidden" id="input-proposal-group" name="input-proposal-group" value="" path="propGroupName"/>
                                                 <th><span class="asterisk">*</span>분임조</th>

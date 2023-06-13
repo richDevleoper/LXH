@@ -87,7 +87,7 @@ public class ProposalController {
 			calendar.add(Calendar.MONTH, -1);
 			searchVO.setSearchPropFromDate(df.format(calendar.getTime()));
 		}
-		
+		searchVO.setSearchPropTypeCode("PPS_TYP_1");
 		CodeVO codeVO = new CodeVO();
 		codeVO.setCodeGrpId("PPS_TYP"); // 제안구분코드 조회
 		List<EgovMap> typeList = codeService.selectFullList(codeVO);
@@ -561,6 +561,8 @@ public class ProposalController {
 		
 		List<ProposalVO> resultItems = proposalService.selectProposalMasterInfo(searchVO);
 		EgovMap resultItem = proposalService.selectListCount(searchVO);
+		
+		searchVO.setTotalRecordCount(Integer.parseInt(String.valueOf(resultItem.get("count"))));
 		
 		model.addAttribute("TYPE_LIST", typeList);
 		model.addAttribute("CATEGORY_LIST", categoryList);		

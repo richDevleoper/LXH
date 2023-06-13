@@ -73,6 +73,15 @@
 					<if test="searchPropName != null and searchPropName neq ''.toString()">
 						AND PROP_NAME LIKE '%'||#{searchPropName}||'%'
 					</if>
+					<if test="searchPropUser != null and searchPropUser neq ''.toString()">
+						AND PROP_USER = #{searchPropUser}
+					</if>
+					<if test="searchPropTypeCode != null and searchPropTypeCode neq ''.toString()">
+						AND PROP_TYPE_CODE = #{searchPropTypeCode}
+					</if>
+					<if test="searchPropClassCode != null and searchPropClassCode neq ''.toString()">
+						AND PROP_EVAL_LV_CODE = #{searchPropClassCode}
+					</if>
 				</where>
             ) T
 		)
@@ -101,7 +110,7 @@
 	<select id="selectProposalClassByCount" resultType="egovMap">
 		SELECT COUNT(PROP_EVAL_LV_CODE) TOTAL, PROP_EVAL_LV_CODE
 		FROM(<include refid="selectProposalInfo"></include>)
-		WHERE PROP_TYPE_CODE = 'PPS_TYP_1'
+		WHERE PROP_TYPE_CODE = 'PPS_TYP_1' AND (PROP_PROP_STAT_CODE = 'PRG_5' OR PROP_PROP_STAT_CODE = 'PRG_6')
 		GROUP BY PROP_EVAL_LV_CODE
 	</select>
 	

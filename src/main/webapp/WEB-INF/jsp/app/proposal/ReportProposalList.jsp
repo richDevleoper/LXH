@@ -35,7 +35,7 @@
 	                                        </div>
 	                                        <div class="pd-l10 col s9 input-text search">
                                       			<form:input path="searchGroupCode" type="hidden" id="input-proposal-group-code" name="input-proposal-group-code"/>
-                                      			<form:input type="text" id="input-proposal-group" name="input-proposal-group" readonly="readonly" style="background-color: #FFF;" path="searchGroupName"/>
+                                      			<form:input type="text" id="input-proposal-group" name="input-proposal-group" readonly="true" style="background-color: #FFF;" path="searchGroupName"/>
                                       			<button type="button" class="btn-proposal-group-search-modal">검색</button> 
 	                                        </div>
 	                                    </div>
@@ -57,7 +57,7 @@
 	                                        </div>
 	                                        <div class="pd-l10 col s9 input-text search">
                                       			<form:input path="searchPropUser" type="hidden" id="input-proposal-member-code" name="input-proposal-member-code"/>
-                                      			<form:input type="text" id="input-proposal-member" name="input-proposal-member" readonly="readonly" style="background-color: #FFF;" path="searchPropUserName"/>
+                                      			<form:input type="text" id="input-proposal-member" name="input-proposal-member" path="searchPropUserName" readonly="true" style="background-color:#FFF;"/>
                                       			<button type="button" class="btn-proposal-member-search-modal">검색</button> 
 	                                        </div>
 	                                    </div>
@@ -69,7 +69,14 @@
 	                                            <form:select name="select-type-code" id="select-type-code" path="searchPropTypeCode">
 	                                                <option value="">전체</option>
                                                     <c:forEach var="item" items="${TYPE_LIST }">
-                                                    	<option value="${item.codeId }">${item.codeNm }</option>
+                                                    	<c:choose>
+                                                    		<c:when test="${PROP_TYPE_CODE eq item.codeId }">
+                                                    			<option value="${item.codeId }" selected="selected">${item.codeNm }</option>
+                                                    		</c:when>
+                                                    		<c:otherwise>
+                                                    			<option value="${item.codeId }">${item.codeNm }</option>
+                                                    		</c:otherwise>
+                                                    	</c:choose>
                                                     </c:forEach>	                                                
 	                                            </form:select>
 	                                        </div>
@@ -82,7 +89,14 @@
 	                                            <form:select name="select-class-code" id="select-class-code" path="searchPropClassCode">
 	                                                <option value="">전체</option>
 	                                                <c:forEach var="item" items="${CLASS_LIST }">
-														<option value="${item.codeId }">${item.codeNm }</option>                                                  	
+	                                                	<c:choose>
+	                                                		<c:when test="${PROP_CLASS_CODE eq item.codeId }">
+	                                                			<option value="${item.codeId }" selected="selected">${item.codeNm }</option>
+	                                                		</c:when>
+	                                                		<c:otherwise>
+	                                                			<option value="${item.codeId }">${item.codeNm }</option>          
+	                                                		</c:otherwise>
+	                                                	</c:choose>                                            	
                                                     </c:forEach>
 	                                            </form:select>
 	                                        </div>
@@ -349,8 +363,13 @@
 	});
 	
 	function setProposalMemberInfo(el, d){
-		$('#input-proposal-member').val(d.userName);
-		$('#input-proposal-member-code').val(d.comNo);
+		if(d != null){
+			$('#input-proposal-member').val('');
+			$('#input-proposal-member-code').val('');			
+		}else{
+			$('#input-proposal-member').val(d.userName);
+			$('#input-proposal-member-code').val(d.comNo);			
+		}
 	}
 	
 	function onclick_search(){
@@ -369,12 +388,6 @@
 			location.href="/proposal/judge/memodetail.do?menuKey=50&propSeq="+propSeq;
 		}
 	}
-	
-	/*function init(){
-		$("#tb1 tbody tr").on("click", function(){
-			location.href="./004_06_report_01.do?menuKey=55";
-		}).css("cursor", "pointer");
-	}*/
 </script>
                     
 </body>

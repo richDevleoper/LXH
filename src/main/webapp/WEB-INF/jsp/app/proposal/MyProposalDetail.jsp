@@ -162,7 +162,7 @@
                                                             </form:select>
                                                         </div>
                                                         <div class="col s6 input-text pd-l10">
-                                                            <form:input type="text" id="input-yeareffect-remark" name="input-yeareffect-remark" value="" path="propYearEffect"/>
+                                                            <form:input type="text" id="input-yeareffect-remark" name="input-yeareffect-remark" value="" style="background-color: #FFF;" path="propYearEffect"/>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -441,6 +441,15 @@
 			$('select').attr('disabled', false);
 			$('i').prop('disabled', false);
 		}
+ 		
+  		if($('#checkbox-proposal-memo-yn').val() == 'N'){
+ 			$('.btn-psmg-search-modal').attr('disabled', true);
+ 		}
+  		
+  		if($('#select-yeareffect-code').val() == '7'){
+  			$('#input-yeareffect-remark').attr('readonly', true);
+  		}
+ 		
 		//제안자 조회
 		$('.btn-proposal-member-search-modal').off('click').on('click', function(){
 			popEmp.init();
@@ -519,6 +528,16 @@
 			html += '<label style="border-radius: 2px; height: 29px; line-height: 27px; text-align: center;" onclick="selectImageFile(this);">파일선택</label>';
 			html += '</div></div>';
 			$('#afterFileUploadWrap').append(html);			
+		});
+		
+		$('#select-yeareffect-code').change(function(){
+			if($(this).val() == '7'){
+				$('#input-yeareffect-remark').val('0');
+				$('#input-yeareffect-remark').attr('readonly', true);
+			}else{
+				$('#input-yeareffect-remark').val('');
+				$('#input-yeareffect-remark').attr('readonly', false);
+			}
 		});
 	});
 	

@@ -17,7 +17,7 @@
 <body>
                         <div class="list-wrap">
                             <div class="list-search">
-                            	<form:form commandName="proposalSearchVO" id="defaultForm" method="get" action="search.do" >
+                            	<form:form commandName="proposalSearchVO" id="defaultForm" method="get" action="list.do" >
                             	${proposalSearchVO.superHiddenTag}
 	                                <div class="search-form row">
 	                                    <div class="form-inline form-input col s4">
@@ -59,7 +59,7 @@
 	                                        </div>
                                       		<div class="pd-l10 col s9 input-text search">
                                       			<form:input path="searchPropUser" type="hidden" id="input-proposal-member-code" name="input-proposal-member-code"/>
-                                      			<form:input type="text" id="input-proposal-member" name="input-proposal-member" readonly="readonly" style="background-color: #FFF;" path="searchPropUserName"/>
+                                      			<form:input type="text" id="input-proposal-member" name="input-proposal-member" readonly="true" style="background-color: #FFF;" path="searchPropUserName"/>
                                       			<button type="button" class="btn-proposal-member-search-modal">검색</button>                               		
                                       		</div>
 	                                    </div>
@@ -71,7 +71,14 @@
 	                                            <form:select name="select-type-code" id="select-type-code" path="searchPropTypeCode">
 	                                                <option value="">전체</option>
                                                     <c:forEach var="item" items="${TYPE_LIST }">
-                                                    	<option value="${item.codeId }">${item.codeNm }</option>
+                                                    	<c:choose>
+                                                    		<c:when test="${PROP_TYPE_CODE eq item.codeId }">
+                                                    			<option value="${item.codeId }" selected="selected">${item.codeNm }</option>
+                                                    		</c:when>
+                                                    		<c:otherwise>
+                                                    			<option value="${item.codeId }">${item.codeNm }</option>
+                                                    		</c:otherwise>
+                                                    	</c:choose>
                                                     </c:forEach>	                                                
 	                                            </form:select>
 	                                        </div>
@@ -84,7 +91,14 @@
 	                                            <form:select name="select-class-code" id="select-class-code" path="searchPropClassCode">
 	                                                <option value="">전체</option>
 	                                                <c:forEach var="item" items="${CLASS_LIST }">
-														<option value="${item.codeId }">${item.codeNm }</option>                                                  	
+	                                                	<c:choose>
+	                                                		<c:when test="${PROP_CLASS_CODE eq item.codeId }">
+	                                                			<option value="${item.codeId }" selected="selected">${item.codeNm }</option>
+	                                                		</c:when>
+	                                                		<c:otherwise>
+	                                                			<option value="${item.codeId }">${item.codeNm }</option>          
+	                                                		</c:otherwise>
+	                                                	</c:choose>                         	
                                                     </c:forEach>
 	                                            </form:select>
 	                                        </div>
@@ -236,6 +250,16 @@
 		$('#button-search').off('click').on('click', function(){
 			onclick_search();
 		});
+		
+		//제안자 조회
+		$('.btn-proposal-member-search-modal').off('click').on('click', function(){
+			popEmp.init();
+			
+			popEmp.returnObjId = $('#input-proposal');
+			popEmp.returnFunc = setProposalMemberInfo;
+			
+			popEmp.open();
+		});
 	});
 	
 	function onclick_search(){
@@ -245,6 +269,11 @@
 	function onchange_recordCountPerPage(vCount){
 		$("#recordCountPerPage").val(vCount);
 		onclick_search();// 검색 '조회'버튼 클릭
+	}
+	
+	function setProposalMemberInfo(el, d){
+		$('#input-proposal-member').val(d.userName);
+		$('#input-proposal-member-code').val(d.comNo);
 	}
 </script>
 </body>

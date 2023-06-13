@@ -84,6 +84,9 @@
 							<if test="searchPropClassCode != null and searchPropClassCode neq ''.toString()">
 								AND PROP_PROP_STAT_CODE = #{searchPropClassCode}
 							</if>
+							<if test="searchPropUser != null and searchPropUser neq ''.toString()">
+								AND PROP_USER = #{searchPropUser}
+							</if>				
 						</otherwise>
 					</choose>
 				</where>
