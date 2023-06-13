@@ -82,6 +82,9 @@
 					<if test="searchPropClassCode != null and searchPropClassCode neq ''.toString()">
 						AND PROP_EVAL_LV_CODE = #{searchPropClassCode}
 					</if>
+					<if test="searchGroupName != null and searchGroupName neq ''.toString()">
+						AND PROP_GROUP_NAME = #{searchGroupName}
+					</if>					
 				</where>
             ) T
 		)

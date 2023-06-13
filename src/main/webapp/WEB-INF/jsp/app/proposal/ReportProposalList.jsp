@@ -360,15 +360,24 @@
 		$('#button-search').off('click').on('click', function(){
 			onclick_search();
 		});
+		
+		$('.btn-proposal-group-search-modal').off('click').on('click', function(){
+			popDept.init();
+			
+			popDept.returnObjId = $('#input-proposal-group');
+			popDept.returnFunc = setProposalGroupInfo;
+			
+			popDept.open();			
+		});
 	});
 	
 	function setProposalMemberInfo(el, d){
 		if(d != null){
-			$('#input-proposal-member').val('');
-			$('#input-proposal-member-code').val('');			
-		}else{
 			$('#input-proposal-member').val(d.userName);
-			$('#input-proposal-member-code').val(d.comNo);			
+			$('#input-proposal-member-code').val(d.comNo);				
+		}else{
+			$('#input-proposal-member').val('');
+			$('#input-proposal-member-code').val('');
 		}
 	}
 	
@@ -387,6 +396,17 @@
 		}else{
 			location.href="/proposal/judge/memodetail.do?menuKey=50&propSeq="+propSeq;
 		}
+	}
+	
+	function setProposalGroupInfo(el, d){
+		if(d != null){
+			$('#input-proposal-group').val(d.deptName);
+			$('#input-proposal-group-code').val(d.comCode);			
+		}else{
+			$('#input-proposal-group').val('');
+			$('#input-proposal-group-code').val('');	
+		}
+
 	}
 </script>
                     

@@ -67,7 +67,7 @@
             </div>
 	        <div class="btns">
 	            <button type="button" class="btn-submit" onclick="popDept.onSubmit()">확인</button>
-	            <button type="button" class="btn-cancel">취소</button>
+	            <button type="button" class="btn-cancel" onclick="popDept.close()">취소</button>
 	        </div>
        </div>
 </div>
@@ -86,10 +86,13 @@
 	            				$(".modal-dimmed").show();
 	            				$("#"+this.modalPopId).show();
 	            			},
-	            			close: function(){
+	            			close: function(flag){
 	            				$(".modal-dimmed").hide();
 	            		 		$("#"+this.modalPopId).hide();
 	            		 		
+	    	            		if(!flag && this.returnFunc){
+	    	            			this.returnFunc(popDept.returnObjId, null); //리턴함수 호출, 초기화 전 객체명 넘기기
+	    	            		}	    	            		
 	            		 		this.init();
 	            			},
 	            			init : function(){
@@ -107,7 +110,7 @@
 	            			},
 	            			callData : function(){
 	            				
-	            				if($("#"+this.searchObjId).val().trim().length<2){
+	            				if($("#"+this.searchObjId).val().trim().length<1){
 	            					return false;
 	            				}
 	            				
@@ -155,7 +158,7 @@
 	    	            		
 	    	            		if(this.returnFunc){
 	    	            			this.returnFunc(popDept.returnObjId, retData); //리턴함수 호출, 초기화 전 객체명 넘기기
-	    	            			this.close();	// 팝업 Close, 각 파라메터 초기화
+	    	            			this.close(true);	// 팝업 Close, 각 파라메터 초기화
 	    	            		} else {
 	    	            			alert("반환 함수가 정의되지 않았습니다.");
 	    	            		}
@@ -271,9 +274,13 @@
 	            				$(".modal-dimmed").show();
 	            				$("#comPopup_memberSearch").show();
 	            			},
-	            			close: function(){
+	            			close: function(flag){
 	            				$(".modal-dimmed").hide();
 	            		 		$("#comPopup_memberSearch").hide();
+	            		 		
+	    	            		if(!flag && this.returnFunc){
+	    	            			this.returnFunc(popDept.returnObjId, null); //리턴함수 호출, 초기화 전 객체명 넘기기
+	    	            		}
 	            		 		
 	            		 		this.init();
 	            			},
@@ -347,7 +354,7 @@
 	    	            		
 	    	            		if(this.returnFunc){
 	    	            			this.returnFunc(this.returnObjId, retData); //리턴함수 호출, 초기화 전 객체명 넘기기
-	    	            			this.close();	// 팝업 Close, 각 파라메터 초기화
+	    	            			this.close(true);	// 팝업 Close, 각 파라메터 초기화
 	    	            		} else {
 	    	            			alert("반환 함수가 정의되지 않았습니다.");
 	    	            		}
@@ -374,7 +381,7 @@
 	                </div>
 	                <div class="btns">
 	                    <button class="btn-submit" onclick="popEmp.onSubmit()">확인</button>
-	                    <button class="btn-cancel">취소</button>
+	                    <button class="btn-cancel" onclick="popEmp.close()">취소</button>
 	                </div>
 	            </div>
 	        </div>

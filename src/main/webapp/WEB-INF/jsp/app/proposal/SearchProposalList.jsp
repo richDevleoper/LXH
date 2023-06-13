@@ -17,7 +17,7 @@
 <body>
                         <div class="list-wrap">
                             <div class="list-search">
-                            	<form:form commandName="proposalSearchVO" id="defaultForm" method="get" action="list.do" >
+                            	<form:form commandName="proposalSearchVO" id="defaultForm" method="get" action="search.do" >
                             	${proposalSearchVO.superHiddenTag}
 	                                <div class="search-form row">
 	                                    <div class="form-inline form-input col s4">
@@ -34,7 +34,7 @@
 	                                        </div>
                                       		<div class="pd-l10 col s9 input-text search">
                                       			<form:input path="searchGroupCode" type="hidden" id="input-proposal-group-code" name="input-proposal-group-code"/>
-                                      			<form:input type="text" id="input-proposal-group" name="input-proposal-group" readonly="readonly" style="background-color: #FFF;" path="searchGroupName"/>
+                                      			<form:input type="text" id="input-proposal-group" name="input-proposal-group" readonly="true" style="background-color: #FFF;" path="searchGroupName"/>
                                       			<button type="button" class="btn-proposal-group-search-modal">검색</button>                               		
                                       		</div>
 	                                    </div>
@@ -260,6 +260,15 @@
 			
 			popEmp.open();
 		});
+		
+		$('.btn-proposal-group-search-modal').off('click').on('click', function(){
+			popDept.init();
+			
+			popDept.returnObjId = $('#input-proposal-group');
+			popDept.returnFunc = setProposalGroupInfo;
+			
+			popDept.open();			
+		});
 	});
 	
 	function onclick_search(){
@@ -272,8 +281,23 @@
 	}
 	
 	function setProposalMemberInfo(el, d){
-		$('#input-proposal-member').val(d.userName);
-		$('#input-proposal-member-code').val(d.comNo);
+		if(d != null){
+			$('#input-proposal-member').val(d.userName);
+			$('#input-proposal-member-code').val(d.comNo);				
+		}else{
+			$('#input-proposal-member').val('');
+			$('#input-proposal-member-code').val('');
+		}
+	}
+	
+	function setProposalGroupInfo(el, d){
+		if(d != null){
+			$('#input-proposal-group').val(d.deptName);
+			$('#input-proposal-group-code').val(d.comCode);			
+		}else{
+			$('#input-proposal-group').val('');
+			$('#input-proposal-group-code').val('');	
+		}
 	}
 </script>
 </body>

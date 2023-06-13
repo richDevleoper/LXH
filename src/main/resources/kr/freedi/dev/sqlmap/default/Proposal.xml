@@ -86,7 +86,10 @@
 							</if>
 							<if test="searchPropUser != null and searchPropUser neq ''.toString()">
 								AND PROP_USER = #{searchPropUser}
-							</if>				
+							</if>	
+							<if test="searchGroupName != null and searchGroupName neq ''.toString()">
+								AND PROP_GROUP_NAME = #{searchGroupName}
+							</if>										
 						</otherwise>
 					</choose>
 				</where>
