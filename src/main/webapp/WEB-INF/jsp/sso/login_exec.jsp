@@ -7,7 +7,18 @@
 	//http://nlstest.initech.com:8090/agent/sso/login_exec.jsp : 꼭 도메인으로 호출해야 된다.
 	//1.SSO ID 수신
 	String sso_id = getSsoId(request);
-	System.out.println("*================== [login_exec.jsp]  sso_id = "+sso_id);
+	if(sso_id!=null)
+	{
+		System.out.println("*================== [login_exec.jsp]  sso_id = "+sso_id);
+		String retCode = getEamSessionCheckAndAgentVaild(request,response);
+		System.out.println("*================== [retCode]  retCode = " + retCode);
+		response.sendRedirect("/intf/login.do?user_id="+sso_id);
+		//out.flush();
+		//out.close();
+		return;
+	}
+
+	
 	if (sso_id == null || sso_id.equals("")) {
 		goLoginPage(response);
 		return;
@@ -30,7 +41,7 @@
 		out.println("SSO 인증 성공!!");
 
 		//6.업무시스템 페이지 호출(세션 페이지 또는 메인페이지 지정)  --> 업무시스템에 맞게 URL 수정!
-		response.sendRedirect("app01.jsp");
+		//response.sendRedirect("app01.jsp");
 		//out.println("인증성공");
 	}
 %>

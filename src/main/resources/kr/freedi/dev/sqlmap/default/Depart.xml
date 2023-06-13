@@ -2,7 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="Depart">
 
-	<resultMap id="deptMap" type="kr.freedi.dev.qpopup.domain.DepartVO">		
+	<resultMap id="deptMap"
+		type="kr.freedi.dev.qpopup.domain.DepartVO">
 		<result property="deptCode" column="DEPT_CODE" />
 		<result property="deptName" column="DEPT_NAME" />
 		<result property="deptUperCode" column="DEPT_UPER_CODE" />
@@ -20,11 +21,13 @@
 		<result property="deptLv4Name" column="DEPT_LV4_NAME" />
 		<result property="updateDate" column="UPDATE_DATE" />
 		<result property="regDate" column="REG_DATE" />
-		<result property="comNo" column="COM_NO" /> 
+		<result property="comNo" column="COM_NO" />
 	</resultMap>
 
 	<sql id="defCond">
 		<where>
+			dept_state_code <![CDATA[<>]]>
+			'D'
 			<if test="deptName != null and deptName != ''">
 				AND T.DEPT_NAME like '%' || #{deptName} || '%'
 			</if>
@@ -35,78 +38,83 @@
 	</sql>
 
 
-	
-	
+
+
 	<select id="selectListCount" resultType="int">
-		SELECT COUNT(*) FROM TB_USER_MST T 
+		SELECT COUNT(*) FROM TB_USER_MST T
 		<include refid="defCond"></include>
 	</select>
 
 	<select id="selectTreeList" resultMap="deptMap">
- 
-          	SELECT 
-					  LEVEL AS level1 
-					, DEPT_CODE
-					, DEPT_NAME
-					, DEPT_UPER_CODE
-					, DEPT_SORT_ORDER
-					, DEPT_LEVEL
-					, DEPT_STATE_CODE
-					, COM_CODE
-					, DEPT_LV1_CODE
-					, DEPT_LV2_CODE
-					, DEPT_LV3_CODE
-					, DEPT_LV4_CODE
-					, DEPT_LV1_NAME
-					, DEPT_LV2_NAME
-					, DEPT_LV3_NAME
-					, DEPT_LV4_NAME
-					, UPDATE_DATE
-					, REG_DATE
-				FROM 
-				  tb_depart_mst T
-				START WITH 
-				  dept_uper_code is null
-				CONNECT BY PRIOR 
-				  dept_code = dept_uper_code          
-          
-          
+
+		SELECT
+		LEVEL AS level1
+		, DEPT_CODE
+		, DEPT_NAME
+		, DEPT_UPER_CODE
+		, DEPT_SORT_ORDER
+		, DEPT_LEVEL
+		, DEPT_STATE_CODE
+		, COM_CODE
+		, DEPT_LV1_CODE
+		, DEPT_LV2_CODE
+		, DEPT_LV3_CODE
+		, DEPT_LV4_CODE
+		, DEPT_LV1_NAME
+		, DEPT_LV2_NAME
+		, DEPT_LV3_NAME
+		, DEPT_LV4_NAME
+		, UPDATE_DATE
+		, REG_DATE
+		FROM
+		tb_depart_mst T
+		WHERE
+		T.dept_state_code <![CDATA[<>]]>
+		'D'
+		START WITH
+		dept_code = '50000000'
+		CONNECT BY PRIOR
+		dept_code = dept_uper_code
+
+
 	</select>
-	
+
 	<select id="selectList" resultType="egovMap">
-        SELECT 
-			  DEPT_CODE
-			, DEPT_NAME
-			, DEPT_UPER_CODE
-			, DEPT_SORT_ORDER
-			, DEPT_LEVEL
-			, DEPT_STATE_CODE
-			, COM_CODE
-			, DEPT_LV1_CODE
-			, DEPT_LV2_CODE
-			, DEPT_LV3_CODE
-			, DEPT_LV4_CODE
-			, DEPT_LV1_NAME
-			, DEPT_LV2_NAME
-			, DEPT_LV3_NAME
-			, DEPT_LV4_NAME
-			
-		FROM 
-		  tb_depart_mst T 
+		SELECT
+		DEPT_CODE
+		, DEPT_NAME
+		, DEPT_UPER_CODE
+		, DEPT_SORT_ORDER
+		, DEPT_LEVEL
+		, DEPT_STATE_CODE
+		, COM_CODE
+		, DEPT_LV1_CODE
+		, DEPT_LV2_CODE
+		, DEPT_LV3_CODE
+		, DEPT_LV4_CODE
+		, DEPT_LV1_NAME
+		, DEPT_LV2_NAME
+		, DEPT_LV3_NAME
+		, DEPT_LV4_NAME
+
+		FROM
+		tb_depart_mst T
 		<include refid="defCond"></include>
 	</select>
-	
-	
+
+
 	<select id="selectActDept" resultMap="deptMap">
 		SELECT * FROM TB_MENU
-		WHERE MENU_TYP = #{menuTyp}
+		WHERE
+		MENU_TYP = #{menuTyp}
 		AND ACT_FLG = 'Y'
 		ORDER BY FKEY, GKEY, OKEY
 	</select>
 
 	<select id="selectTopDept" resultMap="deptMap">
 		SELECT * FROM TB_MENU
-		WHERE PKEY = 0
+		WHERE
+		PKEY = 0
 		AND MENU_TYP = #{menuTyp}
 		ORDER BY FKEY
 	</select>

@@ -27,6 +27,9 @@ import kr.freedi.dev.common.exception.NotAllowFileExtException;
 import kr.freedi.dev.common.exception.OverflowFileSizeException;
 import kr.freedi.dev.common.service.FileService;
 import kr.freedi.dev.menu.domain.MenuVO;
+import kr.freedi.dev.qapprove.domain.ApproveSearchVO;
+import kr.freedi.dev.qreport.domain.ReportSearchVO;
+import kr.freedi.dev.user.domain.UserVO;
 
 
 /**
@@ -616,10 +619,31 @@ public class MenuService implements IMenuService {
 
 	@Override
 	public void setHeaderInormation(HttpServletRequest request) {
-		// TODO Auto-generated method stub HEADER.jsp 정보 가져오기.
-		request.setAttribute("countReport",1);
-		request.setAttribute("countApprove",2);
-		request.setAttribute("countEducation",3);
+		
+		
+		UserVO userSession = (UserVO)request.getSession().getAttribute("userSession");
+		
+		String userId = null;
+		if(userSession!=null) {
+			userId = userSession.getUserId();
+		}
+		
+		int countReport = 0;
+		int countApprove = 0;
+		if(userId!=null) {
+			ReportSearchVO reportSearchVO = new ReportSearchVO();
+			reportSearchVO.setSearchUserid(userSession.getUserId());
+			reportSearchVO.setMenuCode("REPORT");
+			countReport = (Integer) dao.selectOne("Report.selectFullListTotalCount", reportSearchVO);
+			
+			ApproveSearchVO approveSearchVO = new ApproveSearchVO();
+			approveSearchVO.setSearchUserid(userSession.getUserId());
+			countApprove = (Integer) dao.selectOne("Approval.selectListTotalCount", approveSearchVO);	
+		}
+		
+		request.setAttribute("countReport", countReport);
+		request.setAttribute("countApprove", countApprove);
+		request.setAttribute("countEducation", 0);
 	}
 }
 
