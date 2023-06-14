@@ -36,6 +36,7 @@
 		<result column="EDU_FIXED"	 	         	 property="eduFixed"/>   
 		<result column="EDU_ITEM"	 	         	 property="eduItem"/>
 		<result column="EDU_FILE_CODE"	 	         property="eduFileCode"/>
+		<result column="EDU_QUARTER"	 	         property="eduQuater"/>
 		
 		<result column="EDU_CLASS_TYPE_NAME"	 	 property="eduClassTypeName"/>
 		<result column="EDU_CLASS_DIVISION_NAME"	 property="eduClassDivisionName"/>
@@ -162,6 +163,7 @@
 						(SELECT COUNT(*) FROM TB_STUDENT_DETAIL TS WHERE 1=1 AND TS.EDU_CODE = T.EDU_CODE AND TS.STD_STATUS = 'Y') AS TSD_CNT,
 						T.EDU_ITEM,
 						T.EDU_FILE_CODE,
+						T.EDU_QUARTER,
 						T.EDU_REG_USER,
 						T.EDU_REG_DATE AS SDATE,
 						TO_CHAR(T.EDU_REG_DATE, 'YYYY-MM-DD') AS EDU_REG_DATE,
@@ -219,6 +221,7 @@
 						(SELECT COUNT(*) FROM TB_STUDENT_DETAIL TS WHERE 1=1 AND TS.EDU_CODE = T.EDU_CODE AND TS.STD_STATUS = 'Y') AS TSD_CNT,
 						T.EDU_ITEM,
 						T.EDU_FILE_CODE,
+						T.EDU_QUARTER,
 						T.EDU_REG_USER,
 						T.EDU_REG_DATE AS SDATE,
 						TO_CHAR(T.EDU_REG_DATE, 'YYYY-MM-DD') AS EDU_REG_DATE,
@@ -273,6 +276,7 @@
 				RS.EDU_FIXED,
 				RS.EDU_ITEM,
 				RS.EDU_FILE_CODE,
+				RS.EDU_QUARTER,
 				NVL(RS.TSD_CNT, 0) AS TSD_CNT,
 				RS.EDU_REG_USER,
 				RS.REG_DATE,
@@ -327,7 +331,8 @@
 			EDU_DATE,
 			EDU_FIXED,
 			EDU_ITEM,
-			EDU_FILE_CODE
+			EDU_FILE_CODE,
+			EDU_QUARTER
 		)VALUES(
 			#{eduCode} 
 		   ,#{eduName} 
@@ -357,6 +362,7 @@
 		   ,#{eduFixed} 
 		   ,#{eduItem}
 		   ,#{eduFileCode}
+		   ,#{eduQuater}
 		)
 	</insert>               
 	
@@ -386,6 +392,7 @@
 				EDU_DATE = #{eduDate},
 				EDU_FIXED = #{eduFixed},
 				EDU_ITEM = #{eduItem},
+				EDU_QUARTER = #{eduQuater},
 				EDU_UPDATE_USER = #{eduUpdateUser},
 				EDU_UPDATE_DATE = SYSDATE
 		 WHERE EDU_CODE	= #{eduCode}
@@ -416,7 +423,7 @@
 							MAX(T.EDU_CLASS_TYPE) AS EDU_CLASS_TYPE,
 							MAX(T.EDU_CLASS_DIVISION) AS EDU_CLASS_DIVISION,								
 							MAX(T.EDU_NAME) AS EDU_NAME,
-							MAX(T.QUARTER) AS QUARTER,
+							MAX(T.EDU_QUARTER) AS QUARTER,
 							MAX(T.EDU_BELTCODE_NAME) AS EDU_BELTCODE_NAME,
 							MAX(T.EDU_CLASS_TYPE_NAME) AS EDU_CLASS_TYPE_NAME,
 							MAX(T.EDU_CLASS_DIVISION_NAME) AS EDU_CLASS_DIVISION_NAME
@@ -424,14 +431,14 @@
 								SELECT 
 								 	   	EDU_CODE,
 									 	EDU_NAME,
-									 	TO_CHAR(EDU_REG_DATE, 'Q') AS QUARTER,
-										TO_CHAR(EDU_REG_DATE, 'YYYY-MM-DD') AS CIR_REG_DATE,
+										TO_CHAR(EDU_REG_DATE, 'YYYY-MM-DD') AS EDU_REG_DATE,
 										EDU_BELTCODE,
 									 	EDU_CLASS_TYPE,
 										EDU_CLASS_DIVISION,
 										(SELECT CODE_NM FROM TB_CODE WHERE 1=1 AND CODE_GRP_ID='ED_TY1' AND CODE_ID=EDU_CLASS_TYPE) AS EDU_CLASS_TYPE_NAME,
 										(SELECT CODE_NM FROM TB_CODE WHERE 1=1 AND CODE_GRP_ID='ED_TY3' AND CODE_ID=EDU_CLASS_DIVISION) AS EDU_CLASS_DIVISION_NAME,
-									 	(SELECT CODE_NM FROM TB_CODE WHERE 1=1 AND CODE_GRP_ID='ED_TY2' AND CODE_ID=EDU_BELTCODE) AS EDU_BELTCODE_NAME		
+									 	(SELECT CODE_NM FROM TB_CODE WHERE 1=1 AND CODE_GRP_ID='ED_TY2' AND CODE_ID=EDU_BELTCODE) AS EDU_BELTCODE_NAME,
+									 	TO_CHAR(EDU_QUARTER) AS EDU_QUARTER	
 								  FROM TB_EDUCATION_MST	
 								 WHERE 1=1
 						) T
@@ -522,6 +529,7 @@
 				RS.EDU_FIXED,
 				REPLACE (RS.EDU_ITEM, chr(13)||chr(10), '<![CDATA[<br/>]]>' ) AS EDU_ITEM,
 				RS.EDU_FILE_CODE,
+				RS.EDU_QUARTER,
 				NVL(RS.TSD_CNT, 0) AS TSD_CNT,
 				RS.EDU_REG_USER,
 				RS.REG_DATE,

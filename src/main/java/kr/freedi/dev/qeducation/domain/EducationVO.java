@@ -41,6 +41,8 @@ public class EducationVO {
 	private String eduFixed;       		// 교육정원
 	private String eduItem;       		// 준비사항
 	private String eduFileCode;       	// 파일첨부 키
+	private String eduQuater;       	// 분기
+	
 	private String eduClassTypeName;  
 	private String eduClassDivisionName;  
 	private String eduBeltCodeName;  
@@ -291,6 +293,12 @@ public class EducationVO {
 		this.eduFileCode = eduFileCode;
 	}
 		
+	public String getEduQuater() {
+		return eduQuater;
+	}
+	public void setEduQuater(String eduQuater) {
+		this.eduQuater = eduQuater;
+	}
 	public String getEduClassTypeName() {
 		return eduClassTypeName;
 	}

@@ -41,6 +41,7 @@
                         <form:form commandName="frmEducation" id="defaultForm" name="defaultForm"  action="${action}" onsubmit="return false" method="post" modelAttribute="educationVO">
                         <form:hidden path="eduCode" />
                         <form:hidden path="eduFileCode" />
+                        <form:hidden path="eduQuater" />
 						<form:hidden path="mode" />
                         
                         <div class="list-wrap  mg-t20">
@@ -257,9 +258,11 @@
 $(document).ready(function(){
 	initCode();
 	
-	//$("#eduDate").off("keyup").on("keyup", function(e){
-	   // console.log("##");
-	//});
+	$("#eduDate").off("keyup").on("keyup", function(e){
+		$("#eduDate2").val("");
+		let eduDate = $("#eduDate").val();
+		$("#eduDate2").val(eduDate);
+	});
 	 
 	$("#eduDate").datepicker({
         dateFormat:"yy/mm/dd",
@@ -357,6 +360,7 @@ function initCode(){
 
 
 function checkValidation(){
+
 	if($('#eduName').val().trim() == ''){
 		alert('교육과정명을 입력해 주세요.'); $('#eduName').focus();
 		return false;
@@ -405,8 +409,36 @@ function checkValidation(){
 		alert('준비사항을 입력해 주세요.'); $('#eduItem').focus();
 		return false;
 	}
+ 	
+	//분기계산
+	let eduDate = $('#eduDate').val();
+	setQuater(eduDate);
 	
 	return true;
 }
+
+function setQuater(eduDate){
+	// 교육일정의 첫째날짜 기준으로 분기계산
+	const arrDate = eduDate.split(',');
+	let qDate = arrDate[0];
+	console.log(qDate);
+	
+	const arrMonth = qDate.split('/');
+	let qMonth = arrMonth[0];
+	console.log(qMonth);
+	
+	let quater = Math.ceil( qMonth / 3 );
+	console.log(quater);
+	$("#eduQuater").val(quater);
+}
+
+
+
+
+
+
+
+
+
 </script>
  

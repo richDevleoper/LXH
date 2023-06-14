@@ -165,31 +165,31 @@ $(document).ready(function(){
  			data: params,
  			dataType : 'json',
  			success:function(data){
- 				console.log(data);
- 				console.log(data.stdMyCnt);
- 				console.log(data.stdReqCnt);
- 				console.log(eduFixed);
- 				
- 				let result = true;
- 				let rCnt = data.stdReqCnt;	// 신청개수
- 				let mCnt = data.stdMyCnt;   // 내 신청개수
- 				
- 				if(Number(rCnt) >= Number(eduFixed)){
- 					result = false;
- 					alert("교육 인원 정원이 마감되었습니다.");
- 					return false;
+ 				if(data.result == "Y"){
+ 					let result = true;
+ 	 				let rCnt = data.stdReqCnt;	// 신청개수
+ 	 				let mCnt = data.stdMyCnt;   // 내 신청개수
+ 	 				
+ 	 				if(Number(rCnt) >= Number(eduFixed)){
+ 	 					result = false;
+ 	 					alert("교육 인원 정원이 마감되었습니다.");
+ 	 					return false;
+ 	 				}
+ 	 				
+ 	 				if(Number(mCnt) > 0){
+ 	 					result = false;
+ 	 					alert("이미 신청한 교육입니다.");
+ 	 					return false;
+ 	 					
+ 	 				}
+ 	 				
+ 	 				if(result){
+ 	 					reqeustSave();
+ 	 				}
+ 				}else if(data.result == "S"){
+ 					alert("접속정보가 없습니다.");
  				}
  				
- 				if(Number(mCnt) > 0){
- 					result = false;
- 					alert("이미 신청한 교육입니다.");
- 					return false;
- 					
- 				}
- 				
- 				if(result){
- 					reqeustSave();
- 				}
  				
  			}
  		});
@@ -227,6 +227,8 @@ function reqeustSave(){
 				if(data.result == "Y"){
 					alert(tit + " 교육이 신청되었습니다.");
 					location.reload();
+				}else if(data.result == "S"){
+					alert("접속정보가 없습니다.");
 				}
 			}
 		});
@@ -251,7 +253,9 @@ function cnacleSave(){
 				if(data.result == "Y"){
 					alert(tit + " 교육이 취소되었습니다.");
 					location.reload();
-				}else{
+				}else if(data.result == "S"){
+					alert("접속정보가 없습니다.");
+				}else if(data.result == "N"){
 					alert("신청한 정보가 없습니다.");
 				}
 			}
