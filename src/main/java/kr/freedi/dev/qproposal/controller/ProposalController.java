@@ -417,7 +417,7 @@ public class ProposalController {
 		if(progressCount != null && progressCount.size() > 0) {
 			for(int index = 0; index < progressCount.size(); index++) {
 				EgovMap item = progressCount.get(index);
-				if(item.get("propPropStatCode") != null && (item.get("propPropStatCode").equals("prg1") || item.get("propPropStatCode").equals("prg4"))) {
+				if(item.get("propPropStatCode") != null) {
 					summary.put(item.get("propPropStatCode"), item.get("total"));
 				}
 			}
@@ -430,30 +430,30 @@ public class ProposalController {
 		total += Integer.parseInt(summary.get("prg5").toString());
 		total += Integer.parseInt(summary.get("prg6").toString());
 		
-		List<EgovMap> classCount = proposalService.selectProposalClassByCount(searchVO);
-		
-		summary.put("s", "0"); // S급
-		summary.put("a", "0"); // A급
-		summary.put("b", "0"); // B급
-		summary.put("c", "0"); // C급
-		summary.put("d", "0"); // D급
-		summary.put("na", "0"); // 불채택
-		
-		if(classCount != null && classCount.size() > 0) {
-			for(int index = 0; index < classCount.size(); index++) {
-				EgovMap item = classCount.get(index);
-				if(item.get("propEvalLvCode") != null){
-					summary.put(item.get("propEvalLvCode"), item.get("total"));
-				}
-				
-			}
-		}
-		total += Integer.parseInt(summary.get("s").toString());
-		total += Integer.parseInt(summary.get("a").toString());
-		total += Integer.parseInt(summary.get("b").toString());
-		total += Integer.parseInt(summary.get("c").toString());
-		total += Integer.parseInt(summary.get("d").toString());
-		total += Integer.parseInt(summary.get("na").toString());
+//		List<EgovMap> classCount = proposalService.selectProposalClassByCount(searchVO);
+//		
+//		summary.put("s", "0"); // S급
+//		summary.put("a", "0"); // A급
+//		summary.put("b", "0"); // B급
+//		summary.put("c", "0"); // C급
+//		summary.put("d", "0"); // D급
+//		summary.put("na", "0"); // 불채택
+//		
+//		if(classCount != null && classCount.size() > 0) {
+//			for(int index = 0; index < classCount.size(); index++) {
+//				EgovMap item = classCount.get(index);
+//				if(item.get("propEvalLvCode") != null){
+//					summary.put(item.get("propEvalLvCode"), item.get("total"));
+//				}
+//				
+//			}
+//		}
+//		total += Integer.parseInt(summary.get("s").toString());
+//		total += Integer.parseInt(summary.get("a").toString());
+//		total += Integer.parseInt(summary.get("b").toString());
+//		total += Integer.parseInt(summary.get("c").toString());
+//		total += Integer.parseInt(summary.get("d").toString());
+//		total += Integer.parseInt(summary.get("na").toString());
 		
 		summary.put("tt", total);
 		searchVO.setTotalRecordCount(total);
