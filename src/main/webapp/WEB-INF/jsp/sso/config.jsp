@@ -11,7 +11,7 @@
 	***************************************************************************************************/
 
 	/***[SERVICE CONFIGURATION : 업무시스템 설정]***********************************************************************/
-	private String SERVICE_NAME = "sixsigma_dev"; //서비스 이름 : 시스템별로 중복되지 않도록 설정
+	private String SERVICE_NAME = "sixsigma_prd"; //서비스 이름 : 시스템별로 중복되지 않도록 설정
 	private String SERVER_URL = "http://6sigma2.lxhausys.com"; //시스템 접속 URL
 	private String SERVER_PORT = "80"; // 시스템 접속 포트
 	private String ASCP_URL = SERVER_URL + ":" + SERVER_PORT + "/sso/login_exec.do"; //배포 된 login_exec.jsp 접근 경로
@@ -22,14 +22,14 @@
 	/*************************************************************************************************/
 
 	/***[SSO CONFIGURATION] : 로그인 서버 및 데몬 서버 설정]***********************************************************************/
-	private String NLS_URL = "http://ssodev.lghausys.com";
+	private String NLS_URL = "http://lxhsso.lxhausys.com";
 	private String NLS_PORT = "8001";
 	private String NLS_LOGIN_URL = NLS_URL + ":" + NLS_PORT + "/nls3/clientLogin.jsp";
 	//private String NLS_LOGIN_URL = NLS_URL + ":" + NLS_PORT + "/nls3/cookieLogin.jsp";
 	private String NLS_LOGOUT_URL = NLS_URL + ":" + NLS_PORT + "/nls3/NCLogout.jsp";
 	private String NLS_ERROR_URL = NLS_URL + ":" + NLS_PORT + "/nls3/error.jsp";
-	private static String ND_URL1 = "http://ssodev.lghausys.com:5481";
-	private static String ND_URL2 = "http://ssodev.lghausys.com:5481";
+	private static String ND_URL1 = "http://lxhsso.lxhausys.com:5481";
+	private static String ND_URL2 = "http://lxhsso.lxhausys.com:5481";
 
 	private static Vector PROVIDER_LIST = new Vector();
 
@@ -37,7 +37,7 @@
 
 	// 인증 타입 (ID/PW 방식 : 1, 인증서 : 3)
 	private String TOA = "1";
-	private String SSO_DOMAIN = ".lghausys.com";
+	private String SSO_DOMAIN = ".lxhausys.com";
 
 	private static final int timeout = 15000;
 	private static NXContext context = null;
@@ -49,8 +49,8 @@
 		context = new NXContext(serverurlList, timeout);
 		CookieManager.setEncStatus(true);
 
-		PROVIDER_LIST.add("ssodev.lghausys.com");
-		PROVIDER_LIST.add("sso.lghausys.com");
+		PROVIDER_LIST.add("lxhsso.lxhausys.com");
+		PROVIDER_LIST.add("sso.lxhausys.com");
 
 		//NLS3 web.xml의 CookiePadding 값과 같아야 한다. 안그럼 검증 페일남
 		//InitechEamUID +"_V42" .... 형태로 쿠명 생성됨

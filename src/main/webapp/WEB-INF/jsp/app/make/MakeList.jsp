@@ -72,11 +72,11 @@
 					<caption></caption>
 					<colgroup>
 						<col style="width: 60px">
-						<col style="width: 110px">
+						<col style="width: 140px">
+						<col>
 						<col>
 						<col style="width: 120px">
-						<col>
-						<col>
+						<col style="width: 100px">
 						<col style="width: 100px">
 						<col style="width: 100px">
 					</colgroup>
@@ -84,10 +84,10 @@
 						<tr>
 							<th class="bg-gray font-weight-bold">NO</th>
 							<th class="bg-gray font-weight-bold">분임조명</th>
+							<th class="bg-gray font-weight-bold">부문</th>							
 							<th class="bg-gray font-weight-bold">소속</th>
 							<th class="bg-gray font-weight-bold">사업장</th>
 							<th class="bg-gray font-weight-bold">분임조장</th>
-							<th class="bg-gray font-weight-bold">부문</th>
 							<th class="bg-gray font-weight-bold">분임조원수</th>
 							<th class="bg-gray font-weight-bold">등록일</th>
 						</tr>
@@ -103,10 +103,11 @@
 											<li><a href="view.do?menuKey=${menuKey}&cirCode=${item.cirCode}" title="바로가기">${item.cirName }</a></li>
 										</ul>
 									</div>
+								</td>
+								<td></td>
 								<td>${item.cirLeaderdeptName}</td>
 								<td>${item.comWorkPlace}</td>
 								<td>${item.cirLName }</td>
-								<td></td>
 								<td>${item.cirMemCnt }</td>
 								<td><fmt:formatDate pattern="yyyy.MM.dd" value="${item.cirRegDate }" /></td>
 							</tr>

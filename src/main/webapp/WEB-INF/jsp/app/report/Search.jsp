@@ -186,6 +186,12 @@ ${item.repDivision} ${item.cnt}건
                                                 </p>
                                             </li>
 </c:forEach>
+<c:if test="${fn:length(reportList) eq 0}">
+<li style="height: 80px; width:100%; text-align:center; margin: auto; line-height: 7em;">
+검색결과가 없습니다.
+</li>
+</c:if>
+
                                             <!-- <li class="border">
                                                 <div>
                                                     <ul>
@@ -346,10 +352,10 @@ ${item.repDivision} ${item.cnt}건
                                             <a href="" class="last">끝</a>
                                         </div> -->
                                         <div class="list-btns">
-                                            <!-- <button type="button" class="btn-excel">
+                                            <button type="button" class="btn-excel">
                                                 <img src="/assets/images/icon_excel.png" alt="">
                                                 <span>다운로드</span>
-                                            </button> -->
+                                            </button>
                                         </div>
                                     </div>
                                 </div>

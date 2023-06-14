@@ -4,10 +4,12 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import egovframework.rte.psl.dataaccess.util.EgovMap;
 import kr.freedi.dev.article.domain.ArticleSearchVO;
@@ -25,6 +28,11 @@ import kr.freedi.dev.article.service.ArticleService;
 import kr.freedi.dev.code.domain.CodeVO;
 import kr.freedi.dev.code.service.CodeService;
 import kr.freedi.dev.qapprove.domain.ApproveVO;
+import kr.freedi.dev.qeducation.controller.EducationController;
+import kr.freedi.dev.qeducation.domain.EducationSearchVO;
+import kr.freedi.dev.qeducation.domain.EducationVO;
+import kr.freedi.dev.qeducation.domain.StudentVO;
+import kr.freedi.dev.qeducation.excel.ExcelFunction;
 import kr.freedi.dev.qreport.domain.ReportSearchVO;
 import kr.freedi.dev.qreport.domain.ReportTeamVO;
 import kr.freedi.dev.qreport.domain.ReportVO;
@@ -364,6 +372,29 @@ public class ReportController {
 		model.addAttribute("reportList", reportList);
 		
 		return "app/report/ReportList";
+	}
+	
+	@RequestMapping({"/reportExcelbuild.do"})
+	public @ResponseBody void excelBuild(HttpServletRequest request, HttpServletResponse response, 
+		@ModelAttribute("reportVO") ReportVO reportVO,
+		@ModelAttribute("reportSearchVO") ReportSearchVO searchVO,
+		   UserVO userSession){
+		
+		EducationController xlsController = new EducationController();
+		
+		try {
+			String[] colIdArr = {"IDX", "EDU_YEAR", "EDU_BELTCODE_NAME", "EDU_CLASS_TYPE_NAME", "EDU_CLASS_DIVISION_NAME", "EDU_NUMBER", "EDU_NAME", "EDU_DATE", "EDU_FIXED"};
+			String[] colNameArr = {"NO", "교육연도", "벨트", "교육유형", "상세유형", "교육차수", "교육과정명", "교육일정", "정원"};
+			
+			String fileName = "과제활동_" + xlsController.getCurrentDate() + xlsController.getCurrentTime() + ".xlsx";
+			List<HashMap<String,Object>> reportList  = reportService.selectFullListExcel(searchVO);
+			//List<ReportVO> reportList = reportService.selectFullList(searchVO);
+			
+			ExcelFunction.excelWriter(request, response, reportList, fileName, colIdArr, colNameArr);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
   
 }

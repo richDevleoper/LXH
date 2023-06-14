@@ -350,6 +350,11 @@ public class ReportService {
 		return dao.selectList("Report.selectFullList", searchVO);
 	}
 	
+	public List<HashMap<String,Object>> selectFullListExcel(ReportSearchVO searchVO) {
+		
+		return dao.selectList("Report.selectFullListExcel", searchVO);
+	}
+	
 	public List<EgovMap> selectReportList(ReportSearchVO vo) {
 		
 		return dao.selectList("Report.reportSelect", vo);
