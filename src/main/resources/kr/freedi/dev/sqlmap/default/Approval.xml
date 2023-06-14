@@ -141,6 +141,14 @@
 		
 	 </select>
 	 
+	 <select id="selectListTotalCount" resultType="int">
+           SELECT COUNT(1) cnt
+			 FROM
+			      (
+			        <include refid="selectReqList"></include>
+			      ) a
+	 </select>
+	 
 	 
 	 <sql id="selectReqList">
 		WITH v_approval_mst AS (

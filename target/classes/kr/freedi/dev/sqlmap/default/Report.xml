@@ -220,6 +220,14 @@
 	  ORDER BY rep_devision_code
 				 
 	 </select>
+	 
+	 <select id="selectFullListTotalCount" resultType="int">
+		
+		SELECT COUNT(1) cnt
+          FROM (
+		<include refid="selectFullListBasic"></include>
+		       ) 
+	 </select>
 	
 	<select id="selectListCount2" resultType="egovMap">
 		SELECT
@@ -379,7 +387,13 @@
 	</select>
 	
 	<select id="reportSelect" resultType="egovMap">
-	with raw_data as (   
+	with tb_report_result_custom as (
+       select rep_code
+              , case when to_char(rep_result_type_code) in ('4','5','6','7') then '8' else to_char(rep_result_type_code) end as rep_result_type_code
+              , rep_result_within_year
+              , rep_result_year
+         from tb_report_result
+    ),raw_data as (  
 	   select get_code_nm('RESULTTY', rep_result_type_code) as rep_result_type
 	          , a.rep_result_type_code
 	          --, get_code_nm('ACTTYPE', T.REP_ACTION_TYPE_CODE) as REP_ACTION_TYPE
@@ -396,7 +410,7 @@
 	          , case when T.REP_ACTION_TYPE_CODE='3' then to_number(a.rep_result_year) else null end as y_act_3
 	          , case when T.REP_ACTION_TYPE_CODE='4' then to_number(a.rep_result_year) else null end as y_act_4
 	          , case when T.REP_ACTION_TYPE_CODE='5' then to_number(a.rep_result_year) else null end as y_act_5
-	     from tb_report_result a
+	     from tb_report_result_custom a
 	          , tb_report_mst T
 	          , (select rep_code, min(rep_plan_start_date) start_date
                              , (case when rep_devision_code='1' then max(REP_PLAN_START_DATE) else max(REP_PLAN_END_DATE) end) as end_date
@@ -456,7 +470,7 @@
 	       , nvl(s.y_act_3, 0) y_act_3
 	       , nvl(s.y_act_4, 0) y_act_4
 	       , nvl(s.y_act_5, 0) y_act_5
-	  from (select * from tb_code where code_grp_id='RESULTTY' order by view_ord) c
+	  from (select * from tb_code where code_grp_id='RESULTTY' and code_id not in ('4','5','6','7') order by view_ord) c
 	       , v_summary s
 	  where c.code_id=s.rep_result_type_code(+)
 	     

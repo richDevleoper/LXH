@@ -431,7 +431,7 @@
 			});
 		}
 	</script>
-	<style>
+<style>
 .font-small {
 	padding-left: 0px !important;
 	padding-right: 5px !important;

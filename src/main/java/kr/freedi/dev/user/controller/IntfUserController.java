@@ -68,7 +68,9 @@ public class IntfUserController extends UserController {
 		
 		IntfUserVO paramVo = new IntfUserVO();
 		String pComNo = request.getParameter("com_no");
+		String pUserId = request.getParameter("user_id");
 		paramVo.setComNo(pComNo);
+		paramVo.setUserId(pUserId);
 		IntfUserVO loginVO = intfUserService.selectByComNo(paramVo);
 		
 		if(loginVO == null || StringUtils.isEmpty(loginVO.getUserId())){
