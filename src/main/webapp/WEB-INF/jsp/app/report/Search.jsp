@@ -352,7 +352,7 @@ ${item.repDivision} ${item.cnt}건
                                             <a href="" class="last">끝</a>
                                         </div> -->
                                         <div class="list-btns">
-                                            <button type="button" class="btn-excel">
+                                            <button type="button" class="btn-excel" id="btnExcel">
                                                 <img src="/assets/images/icon_excel.png" alt="">
                                                 <span>다운로드</span>
                                             </button>
@@ -463,10 +463,15 @@ ${item.repDivision} ${item.cnt}건
 		onchange_ddlRepDevisionCode();	// 과제유형
 		$("#searchType").val("${reportSearchVO.searchType}");
 		
-		
+		$("#btnExcel").off("click").on("click", function(){
+			
+			$('#defaultForm').attr("action","reportExcelbuild.do");
+			$('#defaultForm')[0].submit();
+		});		
 	}
 	
 	function onclick_search(){
+		$('#defaultForm').attr("action","Search.do");
 		$("#defaultForm")[0].submit();
 	}
 	

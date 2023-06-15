@@ -102,10 +102,10 @@
 				AND T.REP_LEADER_BELT_CODE = #{searchLeaderBeltCode}
 			</if>
 			<if test="searchFromDt != null and searchFromDt != ''">
-				AND D.start_date <![CDATA[>]]> to_date(#{searchFromDt}, 'YYYY-MM-DD')
+				AND D.start_date <![CDATA[>=]]> to_date(#{searchFromDt}, 'YYYY-MM-DD')
 			</if>
 			<if test="searchToDt != null and searchToDt != ''">
-				AND D.end_date <![CDATA[<]]> to_date(#{searchToDt}, 'YYYY-MM-DD')
+				AND D.end_date <![CDATA[<=]]> to_date(#{searchToDt}, 'YYYY-MM-DD') 
 			</if>
 	</sql> 
 	
@@ -208,8 +208,7 @@
 	</select>
 	
 	<select id="selectFullListExcel" resultType="java.util.HashMap">
-			<include refid="selectFullListBasic"></include>
-			and rowidx between (#{currentPageNo}*#{recordCountPerPage}+1-#{recordCountPerPage}) and (#{currentPageNo}*#{recordCountPerPage})
+			<include refid="selectFullListBasic"></include> 
 		    order by idx desc
 	</select>
 	
@@ -392,7 +391,15 @@
             AND T.REP_CODE = #{repCode}
 	</select>
 	
+	
+	<select id="reportSelectExcel" resultType="java.util.HashMap">
+		<include refid="reportSelectBase"></include>
+	</select>
+	
 	<select id="reportSelect" resultType="egovMap">
+		<include refid="reportSelectBase"></include>
+	</select>
+	<sql id="reportSelectBase">
 	with tb_report_result_custom as (
        select rep_code
               , case when to_char(rep_result_type_code) in ('4','5','6','7') then '8' else to_char(rep_result_type_code) end as rep_result_type_code
@@ -480,7 +487,7 @@
 	       , v_summary s
 	  where c.code_id=s.rep_result_type_code(+)
 	     
-	</select>
+	</sql>
 	
 </mapper>
 

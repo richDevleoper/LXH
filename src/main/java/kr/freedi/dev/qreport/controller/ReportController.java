@@ -383,12 +383,38 @@ public class ReportController {
 		EducationController xlsController = new EducationController();
 		
 		try {
-			String[] colIdArr = {"IDX", "EDU_YEAR", "EDU_BELTCODE_NAME", "EDU_CLASS_TYPE_NAME", "EDU_CLASS_DIVISION_NAME", "EDU_NUMBER", "EDU_NAME", "EDU_DATE", "EDU_FIXED"};
-			String[] colNameArr = {"NO", "교육연도", "벨트", "교육유형", "상세유형", "교육차수", "교육과정명", "교육일정", "정원"};
+			String[] colIdArr = {"IDX", "REP_NAME", "REP_DIVISION", "REP_TYPE", "REP_STATUS", "REP_START_DATE", "REP_FINISH_DATE", "REP_ACTION_TYPE", "REP_MBB_USE_RATE", "REP_SECTOR"};
+			String[] colNameArr = {"NO", "과제명", "6σ Full Process여부", "과제유형", "진행현황", "시작일", "종료일", "활동분야", "MBB활용율", "활동분야"};
 			
 			String fileName = "과제활동_" + xlsController.getCurrentDate() + xlsController.getCurrentTime() + ".xlsx";
+			searchVO.setMenuCode(REP_MENU_CODE);
 			List<HashMap<String,Object>> reportList  = reportService.selectFullListExcel(searchVO);
 			//List<ReportVO> reportList = reportService.selectFullList(searchVO);
+			
+			ExcelFunction.excelWriter(request, response, reportList, fileName, colIdArr, colNameArr);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	
+	@RequestMapping({"/reportSummary.do"})
+	public @ResponseBody void excelSummaryBuild(HttpServletRequest request, HttpServletResponse response, 
+		@ModelAttribute("reportVO") ReportVO reportVO,
+		@ModelAttribute("reportSearchVO") ReportSearchVO searchVO,
+		   UserVO userSession){
+		
+		EducationController xlsController = new EducationController();
+		
+		try {
+			String[] colIdArr = {"REPRESULTTYPE","INY_TOTAL","INY_ACT_1","INY_ACT_2","INY_ACT_3","INY_ACT_4","INY_ACT_5","Y_ACT_1","Y_ACT_2","Y_ACT_3","Y_ACT_4","Y_ACT_5"};
+			String[] colNameArr = {"구분","년내Total","(년내)품질개선","(년내)개발","(년내)생산성향상","(년내)원가개선","(년내)기타","(년간)품질개선","(년간)개발","(년간)생산성향상","(년간)원가개선","(년간)기타"};
+			
+			String fileName = "REPORT_과제_" + xlsController.getCurrentDate() + xlsController.getCurrentTime() + ".xlsx";
+			searchVO.setMenuCode(REP_MENU_CODE);
+			List<HashMap<String,Object>> reportList  = reportService.reportSelectExcel(searchVO);
+			//List<EgovMap> reportList = reportService.selectReportList(searchVO);
 			
 			ExcelFunction.excelWriter(request, response, reportList, fileName, colIdArr, colNameArr);
 		}catch(Exception e) {

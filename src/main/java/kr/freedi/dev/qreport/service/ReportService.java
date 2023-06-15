@@ -360,6 +360,11 @@ public class ReportService {
 		return dao.selectList("Report.reportSelect", vo);
 	}
 	
+	public List<HashMap<String,Object>> reportSelectExcel(ReportSearchVO vo) {
+		
+		return dao.selectList("Report.reportSelectExcel", vo);
+	}
+	
 	
 	
 	public int selectListCount(ReportSearchVO searchVO) {

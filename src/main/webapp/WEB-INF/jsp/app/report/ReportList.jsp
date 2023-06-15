@@ -241,10 +241,10 @@
                             </div>
                             <div class="list-footer">                               
                                 <div class="list-btns">
-                                    <!-- <button type="button" class="btn-excel">
+                                    <button type="button" class="btn-excel" id="btnExcel">
                                         <img src="/assets/images/icon_excel.png" alt="">
                                         <span>다운로드</span>
-                                    </button> -->
+                                    </button>
                                 </div>
 
                             </div>
@@ -434,6 +434,13 @@
     		
     		// 브라우저 자동완성 취소
     		$("input[type=text], input[type=number]").attr("autocomplete", "off");
+    		
+    		$("#btnExcel").off("click").on("click", function(){
+    			
+    			$('#defaultForm').attr("action","reportSummary.do");
+    			$('#defaultForm')[0].submit();
+    		});		
+    		
     	}
     	
     	function onchange_ddlRepDevisionCode(e){
@@ -460,6 +467,7 @@
 		}
     	
     	function onclick_search(){
+    		$('#defaultForm').attr("action","ReportList.do");
     		$("#defaultForm")[0].submit();
     	}
     	

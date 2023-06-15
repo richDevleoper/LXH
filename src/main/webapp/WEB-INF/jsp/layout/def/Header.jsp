@@ -46,7 +46,7 @@ hr { display:none; }
 	                        </ul>
                     	</c:when>
                     	<c:otherwise>
-                    		<a href="/intf/login.do?com_no=89893">(로그인)</a>&nbsp;&nbsp;
+                    		<a href="/sso/login_exec.do">(로그인)</a>&nbsp;&nbsp;
                     		<ul>
 	                            <li><a href=""><img src="/assets/images/icon_help.png" alt=""><span>도움말</span></a></li>
 	                        </ul>
