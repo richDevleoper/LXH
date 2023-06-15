@@ -32,7 +32,7 @@ import kr.freedi.dev.qeducation.domain.EducationVO;
 import kr.freedi.dev.qeducation.domain.StudentVO;
 import kr.freedi.dev.qeducation.excel.ExcelFunction;
 import kr.freedi.dev.qeducation.service.StudentService;
-import kr.freedi.dev.qpopup.domain.UserVO;
+import kr.freedi.dev.user.domain.UserVO;
 
 @Controller
 @RequestMapping({"/education"})
@@ -67,7 +67,7 @@ protected Log log = LogFactory.getLog(this.getClass());
 	public @ResponseBody String requestStd(HttpServletRequest request,
 		   @ModelAttribute("EducationSearchVO") EducationSearchVO searchVO, 
 		   @ModelAttribute("StudentVO") StudentVO studentVO,
-		   @ModelAttribute("userVO") UserVO userVo,
+		   @ModelAttribute("userVO") kr.freedi.dev.qpopup.domain.UserVO pUserVo,
 		   @RequestParam Map<String, Object> params,
 		   UserVO userSession)throws Exception {
 		
@@ -76,13 +76,13 @@ protected Log log = LogFactory.getLog(this.getClass());
 		
 		// 사용자 마스터 정보조회
 		String myUserId = userSession.getUserId();
-		userVo.setUserId(myUserId);
+		pUserVo.setComNo(myUserId);
 		//userVo.setUserId("limjinah");
 		
 		if(myUserId == null) {
 			studentVO.setResult("S"); // 결과값
 		}else {
-			EgovMap resVO = studentService.selectUserInfo(userVo);
+			EgovMap resVO = studentService.selectUserInfo(pUserVo);
 			
 			String comNo = (String)resVO.get("comNo");	//사번
 			String userId = (String)resVO.get("userId");	//사용자 ID
@@ -117,7 +117,7 @@ protected Log log = LogFactory.getLog(this.getClass());
 	public @ResponseBody String cancleStd(HttpServletRequest request,
 		   @ModelAttribute("EducationSearchVO") EducationSearchVO searchVO, 
 		   @ModelAttribute("StudentVO") StudentVO studentVO,
-		   @ModelAttribute("userVO") UserVO userVo,
+		   @ModelAttribute("userVO") kr.freedi.dev.qpopup.domain.UserVO pUserVo,
 		   @RequestParam Map<String, Object> params,
 		   UserVO userSession)throws Exception {
 		
@@ -127,13 +127,13 @@ protected Log log = LogFactory.getLog(this.getClass());
 		
 		// 사용자 마스터 정보조회
 		String myUserId = userSession.getUserId();
-		userVo.setUserId(myUserId);
+		pUserVo.setComNo(myUserId);
 		//userVo.setUserId("limjinah");
 		
 		if(myUserId == null) {
 			studentVO.setResult("S"); // 결과값
 		}else {
-			EgovMap resVO = studentService.selectUserInfo(userVo);
+			EgovMap resVO = studentService.selectUserInfo(pUserVo);
 			
 			String comNo = (String)resVO.get("comNo");	//사번
 			String userId = (String)resVO.get("userId");	//사용자 ID
@@ -206,7 +206,7 @@ protected Log log = LogFactory.getLog(this.getClass());
 			
 			studentVO.setStdReqCnt(Integer.toString(countList));
 			studentVO.setStdMyCnt(Integer.toString(countList2));
-			studentVO.setResult("S"); // 결과값
+			studentVO.setResult("Y"); // 결과값
 		}
 		
 		return new ObjectMapper().writeValueAsString(studentVO);
