@@ -39,28 +39,31 @@
                                     <div class="tab-group underline-type">
                                         <div class="list-wrap">
                                         <div class="list-search">
-                                        <form>
+                                        <form:form commandName="searchVO" id="defaultForm" name="defaultForm"  action="MgrList.do" onsubmit="return false" method="get" modelAttribute="searchVO">
+                                        ${searchVO.superHiddenTag}
+                                        <form:hidden path="kudIdx"/>
                                             <div class="search-form">
                                                 <div class="form-inline form-input">
                                                     <label>연도</label>
-                                                    <select name="">
+                                                    <select name="searchYear">
                                                         <option value="">2023년</option>
                                                     </select>
                                                 </div>
                                                 <div class="form-inline form-select">
                                                     <label>조직</label>                                            
-                                                    <input type="text" name="">
-                                                    <button type="button" class="btn-org">검색</button>
+                                                    <form:input type="hidden" path="searchDepart"/>
+                                                    <form:input type="text" path="searchDepartName" disabled="true" />
+                                                    <button type="button" class="btn-org btn-search-dept">검색</button>
                                                 </div>
                                                 <div class="form-inline form-select">
                                                     <label>인증현황</label>
-                                                    <select name="">
+                                                    <select name="searchBelt">
                                                         <option value="">전체</option>
                                                     </select>
                                                 </div>
                                                 <div class="form-inline form-select">
                                                     <label>구분</label>
-                                                    <select name="">
+                                                    <select name="searchIdx">
                                                         <option value="">전체</option>
                                                         <option value="">사번</option>
                                                         <option value="">이름</option>
@@ -71,11 +74,11 @@
                                                     </select>                                                    
                                                 </div>
                                                 <div class="form-inline form-select">
-                                                    <input type="text" name="">
+                                                    <input type="text" name="searchText">
                                                 </div>
-                                                <button type="button" class="btn-submit">조회</button>
+                                                <button type="button" class="btn-submit" onclick="onclick_search()">조회</button>
                                             </div>
-                                        </form>
+                                        </form:form>
                                         </div>
 
                                         <div class="list-header">
@@ -240,12 +243,48 @@
 
 
 <script type="text/javascript">
+
+	$(document).ready(init);
+	function init(){
+		setEvent();
+	}
+	
+	function setEvent(){
+		
+		// 부서검색
+		$(".btn-search-dept").off("click").on("click", function(){
+			callPopup_searchDepartment(this);
+		});
+	}
+	
+	// 조직 조회 호출부
+	function callPopup_searchDepartment(obj){
+
+		popDept.init();
+		// footer.jsp 내 영역 호출
+		popDept.returnObjId = "searchDepart";
+		popDept.returnFunc = callback_popDept;
+		popDept.open();
+	}
+	
+	// 조직 조회 콜백부
+	function callback_popDept(objId, data){
+		
+		$("#"+objId).val(data.deptCode);
+		$("#searchDepartName").val(data.deptName);
+	}
+
 	function onclick_userid(comNo){
 		$(".modal-custom, .userinfo").show();
 	}
 	
 	function onclick_tab(idx){
-		location.replace("/kpi/MgrSelect.do?menuKey=${menuKey}&kudIdx="+idx)
+		location.replace("/kpi/MgrList.do?menuKey=${menuKey}&kudIdx="+idx)
+	}
+	
+	function onclick_search(){
+		$("#defaultForm").attr("action", "MgrList.do");
+		$("#defaultForm")[0].submit();
 	}
 </script>
 

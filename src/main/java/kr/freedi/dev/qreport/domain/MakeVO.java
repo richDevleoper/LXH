@@ -38,6 +38,7 @@ public class MakeVO {
 	private String leader6;
 	private String leader7;
 	private String leader8;
+	private String leader9;
 	
 	private String team1;
 	private String team2;
@@ -47,6 +48,7 @@ public class MakeVO {
 	private String team6;
 	private String team7;
 	private String team8;
+	private String team9;
 	
 	private String removeMemberIds;
 	
@@ -434,6 +436,18 @@ public class MakeVO {
 	public void setKudPositionName(String kudPositionName) {
 		this.kudPositionName = kudPositionName;
 	}
+	public String getLeader9() {
+		return leader9;
+	}
+	public String getTeam9() {
+		return team9;
+	}
+	public void setLeader9(String leader9) {
+		this.leader9 = leader9;
+	}
+	public void setTeam9(String team9) {
+		this.team9 = team9;
+	}
 	@Override
 	public String toString() {
 		return "MakeVO [cirCode=" + cirCode + ", cirRegNum=" + cirRegNum + ", cirName=" + cirName + ", deptCode="
@@ -445,15 +459,16 @@ public class MakeVO {
 				+ cirUpdateDate + ", cirMemStatus=" + cirMemStatus + ", teamMemList=" + teamMemList + ", cirTchName="
 				+ cirTchName + ", cirWorkName=" + cirWorkName + ", cirLeaderName=" + cirLeaderName + ", leader1="
 				+ leader1 + ", leader2=" + leader2 + ", leader3=" + leader3 + ", leader4=" + leader4 + ", leader5="
-				+ leader5 + ", leader6=" + leader6 + ", leader7=" + leader7 + ", leader8=" + leader8 + ", team1="
-				+ team1 + ", team2=" + team2 + ", team3=" + team3 + ", team4=" + team4 + ", team5=" + team5 + ", team6="
-				+ team6 + ", team7=" + team7 + ", team8=" + team8 + ", removeMemberIds=" + removeMemberIds
-				+ ", cirMemCode=" + cirMemCode + ", ComNo=" + ComNo + ", cirDeptCode=" + cirDeptCode + ", cirDeptName="
-				+ cirDeptName + ", comJobxCode=" + comJobxCode + ", comPositionCode=" + comPositionCode + ", beltCode="
-				+ beltCode + ", cirMemName=" + cirMemName + ", cirMemEduCode=" + cirMemEduCode + ", cirMemRole="
-				+ cirMemRole + ", cirLName=" + cirLName + ", cirLeaderdeptName=" + cirLeaderdeptName + ", idx=" + idx
-				+ ", kudIdx=" + kudIdx + ", kudChkTypeCode=" + kudChkTypeCode + ", kudYear=" + kudYear + ", kudPlace="
-				+ kudPlace + ", kudJoinDate=" + kudJoinDate + ", kudJobxName=" + kudJobxName + ", kudPositionName="
+				+ leader5 + ", leader6=" + leader6 + ", leader7=" + leader7 + ", leader8=" + leader8 + ", leader9="
+				+ leader9 + ", team1=" + team1 + ", team2=" + team2 + ", team3=" + team3 + ", team4=" + team4
+				+ ", team5=" + team5 + ", team6=" + team6 + ", team7=" + team7 + ", team8=" + team8 + ", team9=" + team9
+				+ ", removeMemberIds=" + removeMemberIds + ", cirMemCode=" + cirMemCode + ", ComNo=" + ComNo
+				+ ", cirDeptCode=" + cirDeptCode + ", cirDeptName=" + cirDeptName + ", comJobxCode=" + comJobxCode
+				+ ", comPositionCode=" + comPositionCode + ", beltCode=" + beltCode + ", cirMemName=" + cirMemName
+				+ ", cirMemEduCode=" + cirMemEduCode + ", cirMemRole=" + cirMemRole + ", cirLName=" + cirLName
+				+ ", cirLeaderdeptName=" + cirLeaderdeptName + ", idx=" + idx + ", kudIdx=" + kudIdx
+				+ ", kudChkTypeCode=" + kudChkTypeCode + ", kudYear=" + kudYear + ", kudPlace=" + kudPlace
+				+ ", kudJoinDate=" + kudJoinDate + ", kudJobxName=" + kudJobxName + ", kudPositionName="
 				+ kudPositionName + "]";
 	}
 }

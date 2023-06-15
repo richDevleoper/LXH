@@ -51,6 +51,8 @@ public class MenuVO implements Serializable{
 	private String lastOperId;
 	private Date lastOperDt;
 	
+	private String admFlg;
+	
 	private List<MenuVO> childList;
 
 	
@@ -285,6 +287,16 @@ public class MenuVO implements Serializable{
 	public void setChildList(List<MenuVO> childList) {
 		this.childList = childList;
 	}
+
+	public String getAdmFlg() {
+		return admFlg;
+	}
+
+
+	public void setAdmFlg(String admFlg) {
+		this.admFlg = admFlg;
+	}
+
 
 	public String toString(){
 		return ToStringBuilder.reflectionToString(this);

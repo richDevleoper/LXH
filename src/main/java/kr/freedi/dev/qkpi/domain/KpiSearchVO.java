@@ -24,6 +24,9 @@ public class KpiSearchVO extends CommonVO {
 	private String searchDepart;		// 조직
 	
 	@ParamField
+	private String searchDepartName;		// 조직
+	
+	@ParamField
 	private String searchBelt;	// 인증현황(MBB / BB / ,,,)
 	
 	private String searchIdx;	// 검색구분
@@ -103,11 +106,21 @@ public class KpiSearchVO extends CommonVO {
 	}
 
 
+	public String getSearchDepartName() {
+		return searchDepartName;
+	}
+
+
+	public void setSearchDepartName(String searchDepartName) {
+		this.searchDepartName = searchDepartName;
+	}
+
+
 	@Override
 	public String toString() {
 		return "KpiSearchVO [kudIdx=" + kudIdx + ", searchYear=" + searchYear + ", searchDepart=" + searchDepart
-				+ ", searchBelt=" + searchBelt + ", searchIdx=" + searchIdx + ", searchText=" + searchText
-				+ ", orderByTyp=" + orderByTyp + "]";
+				+ ", searchDepartName=" + searchDepartName + ", searchBelt=" + searchBelt + ", searchIdx=" + searchIdx
+				+ ", searchText=" + searchText + ", orderByTyp=" + orderByTyp + "]";
 	}
 	
 }

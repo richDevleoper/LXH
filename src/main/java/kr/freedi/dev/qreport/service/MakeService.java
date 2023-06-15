@@ -230,11 +230,11 @@ public class MakeService {
 		
 		String anLeaderStr1 = makeVO.getLeader1();
 		String anLeaderStr2 = makeVO.getLeader2();
-		String anLeaderStr3 = makeVO.getLeader3();
+		String anLeaderStr3 = makeVO.getLeader3();  // deptcode
 		String anLeaderStr4 = makeVO.getLeader4();
 		String anLeaderStr5 = makeVO.getLeader5();
 		String anLeaderStr6 = makeVO.getLeader6();
-		//String anLeaderStr7 = makeVO.getLeader7();
+		String anLeaderStr7 = makeVO.getLeader7();	// deptname
 		String anLeaderStr8 = makeVO.getLeader8();
 		
 		String[] anLeader1 = anLeaderStr1.split(",", -1);
@@ -243,7 +243,7 @@ public class MakeService {
 		String[] anLeader4 = anLeaderStr4.split(",", -1);
 		String[] anLeader5 = anLeaderStr5.split(",", -1);
 		String[] anLeader6 = anLeaderStr6.split(",", -1);
-		//String[] anLeader7 = anLeaderStr7.split(",", -1);
+		String[] anLeader7 = anLeaderStr7.split(",", -1);
 		String[] anLeader8 = anLeaderStr8.split(",", -1);
 		
 		if(!anLeaderStr1.equals("")){
@@ -264,7 +264,7 @@ public class MakeService {
 				makeVO.setComJobxCode(anLeader4[j].trim());
 				makeVO.setComPositionCode(anLeader5[j].trim());
 				makeVO.setBeltCode(anLeader6[j].trim());
-				//makeVO.setCirLeaderdeptName(anLeader7[j].trim());
+				makeVO.setCirDeptName(anLeader7[j].trim());
 				//makeVO.setCirMemRole("LEADER");
 				
 				

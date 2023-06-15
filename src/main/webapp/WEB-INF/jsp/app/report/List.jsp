@@ -35,7 +35,16 @@
                                             <form:select path="searchDivision" cssClass="w-90p">
                                                 <option value="">전체</option>
                                                 <c:forEach var="item" items="${searchRepName}">
-													<option value="${item.codeId}" <c:if test="${item.codeId eq reportSearchVO.searchDivision }">selected="selected"</c:if>>${item.codeNm}</option>
+                                                	<c:choose>
+                                                		<c:when test="${repMenuCode eq 'TEAM'}">
+	                                                		<c:if test="${item.codeId ne '3'}">
+																<option value="${item.codeId}" <c:if test="${item.codeId eq reportSearchVO.searchDivision }">selected="selected"</c:if>>${item.codeNm}</option>
+															</c:if>
+                                                		</c:when>
+                                                		<c:otherwise>
+                                                		<option value="${item.codeId}" <c:if test="${item.codeId eq reportSearchVO.searchDivision }">selected="selected"</c:if>>${item.codeNm}</option>
+                                                		</c:otherwise>
+                                                	</c:choose>
 												</c:forEach>
                                             </form:select>
                                         </div>
@@ -118,17 +127,19 @@
 
                             </div>
                         </div>
+
 <script type="text/javascript">
+	$(document).ready(init);
+	let paramSearchType = '${reportSearchVO.searchType}';
+	let repMenuCode = '${repMenuCode}';
 	
 	let cdRepType1 = [<c:forEach var="item" items="${typeCode1}">{key:${item.codeId},value:"${item.codeNm}"},</c:forEach>];
 	let cdRepType2 = [<c:forEach var="item" items="${typeCode2}">{key:${item.codeId},value:"${item.codeNm}"},</c:forEach>];
 	let cdRepType3 = [<c:forEach var="item" items="${typeCode3}">{key:${item.codeId},value:"${item.codeNm}"},</c:forEach>];
 	
-</script>
-<script type="text/javascript">
-	$(document).ready(init);
-	let paramSearchType = '${reportSearchVO.searchType}';
-	let repMenuCode = '${repMenuCode}';
+	if(repMenuCode==="TEAM"){
+		cdRepType1 = cdRepType1.filter(function(code){ return code.value==="DMAIC";});  // 분임조에서는 DMAIC만 적용(화면설계서)	
+	}
 	
 	function init(){
 		$("#searchDivision").off("change").on("change", onchange_ddlRepDevisionCode); // 6σ Full Process여부

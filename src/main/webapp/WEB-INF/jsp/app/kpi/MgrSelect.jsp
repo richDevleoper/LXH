@@ -141,7 +141,7 @@
                                                                                             	<c:if test="${item.kudChkTypeCode eq 'KUD001'}">
 																									<tr comno="${item.comNo}" 
 																									    username="${item.kudUserName}" 
-																									    comdepartcode="${item.kudDepart}" 
+																									    comdepartcode="${item.comDepartCode}" 
 																									    deptfullname="${item.kudDepart}" 
 																										comjobx="${item.kudJobx}" 
 																										composition="${item.kudPosition}" 
@@ -204,7 +204,7 @@
                                                                                             	<c:if test="${item.kudChkTypeCode eq 'KUD002'}">
 																									<tr comno="${item.comNo}" 
 																									    username="${item.kudUserName}" 
-																									    comdepartcode="${item.kudDepart}" 
+																									    comdepartcode="${item.comDepartCode}" 
 																									    deptfullname="${item.kudDepart}" 
 																										comjobx="${item.kudJobx}" 
 																										composition="${item.kudPosition}" 

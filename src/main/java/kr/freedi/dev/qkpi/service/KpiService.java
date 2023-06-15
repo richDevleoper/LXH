@@ -59,34 +59,34 @@ public class KpiService {
             if ((parentId == null && parent == null) || (parentId != null && parentId.equals(parent))) {
                 JsonObject node = new JsonObject();
                 node.addProperty("id", id);
-                if(name.equals("CEO"))
-                	name="생산/기술/R&D/품질";
+//                if(name.equals("CEO"))
+//                	name="생산/기술/R&D/품질";
                 node.addProperty("name", name);
-        		node.addProperty("GB1_1", 193+i);
-        		node.addProperty("GB1_2", 30+i);
-        		node.addProperty("BB1_1", 193+i);
-        		node.addProperty("BB1_2", 30+i);
-        		node.addProperty("MBB1_1", 30+i);
-        		node.addProperty("MBB1_2", 30+i);
-        		node.addProperty("BB이상1_1", 180+i);
-        		node.addProperty("BB이상1_2", 180+i*2);
-        		node.addProperty("GB2_1", 193);
-        		node.addProperty("GB2_2", 30+i);
-        		node.addProperty("BB2_1", 150+i);
-        		node.addProperty("BB2_2", i+1);
-        		node.addProperty("MBB2_1", 110+i*5);
-        		node.addProperty("MBB2_2", 30+i);
-        		node.addProperty("BB이상2_1", 180+i);
-        		node.addProperty("BB이상2_2", 30+i);
-        		node.addProperty("GB3_1", 180+i*2);
-        		node.addProperty("GB3_2", 30+i);
-        		node.addProperty("BB3_1", 180+i*2);
-        		node.addProperty("BB3_2", 30+i);
-        		node.addProperty("MBB3_1", 180+i*2);
-        		node.addProperty("MBB3_2", 30+i);
-        		node.addProperty("BB이상3_1", 180+i);
-        		node.addProperty("BB이상3_2", 30+i);
-        		node.addProperty("name5", i+i);
+        		node.addProperty("GB1_1", String.valueOf(item.get("gbCnt1")));
+        		node.addProperty("GB1_2", String.valueOf(item.get("gbRat1")));
+        		node.addProperty("BB1_1", String.valueOf(item.get("bbCnt1")));
+        		node.addProperty("BB1_2", String.valueOf(item.get("bbRat1")));
+        		node.addProperty("MBB1_1", String.valueOf(item.get("mbbCnt1")));
+        		node.addProperty("MBB1_2", String.valueOf(item.get("mbbRat1")));
+        		node.addProperty("BB이상1_1", String.valueOf(item.get("bbuCnt1")));
+        		node.addProperty("BB이상1_2", String.valueOf(item.get("bbuRat1")));
+        		node.addProperty("GB2_1", String.valueOf(item.get("gbCnt2")));
+        		node.addProperty("GB2_2", String.valueOf(item.get("gbRat2")));
+        		node.addProperty("BB2_1", String.valueOf(item.get("bbCnt2")));
+        		node.addProperty("BB2_2", String.valueOf(item.get("bbRat2")));
+        		node.addProperty("MBB2_1", String.valueOf(item.get("mbbCnt2")));
+        		node.addProperty("MBB2_2", String.valueOf(item.get("mbbRat2")));
+        		node.addProperty("BB이상2_1", String.valueOf(item.get("bbuCnt2")));
+        		node.addProperty("BB이상2_2", String.valueOf(item.get("bbuRat2")));
+        		node.addProperty("GB3_1", String.valueOf(item.get("gbCnt3")));
+        		node.addProperty("GB3_2", String.valueOf(item.get("gbRat3")));
+        		node.addProperty("BB3_1", String.valueOf(item.get("bbCnt3")));
+        		node.addProperty("BB3_2", String.valueOf(item.get("bbRat3")));
+        		node.addProperty("MBB3_1", String.valueOf(item.get("mbbCnt3")));
+        		node.addProperty("MBB3_2", String.valueOf(item.get("mbbRat3")));
+        		node.addProperty("BB이상3_1", String.valueOf(item.get("bbuCnt3")));
+        		node.addProperty("BB이상3_2", String.valueOf(item.get("bbuRat3")));
+        		node.addProperty("name5", String.valueOf(item.get("bbuRat3")));
                 
                 
                 JsonArray children = buildTree(list, id);
@@ -97,35 +97,7 @@ public class KpiService {
             }
         }
         
-        JsonObject node = new JsonObject();
-		node.addProperty("name", "생산/기술/R&D/품질 외");
-		node.addProperty("GB1_1", "193");
-		node.addProperty("GB1_2", "30");
-		node.addProperty("BB1_1", "193");
-		node.addProperty("BB1_2", "30");
-		node.addProperty("MBB1_1", "193");
-		node.addProperty("MBB1_2", "30");
-		node.addProperty("BB이상1_1", "193");
-		node.addProperty("BB이상1_2", "30");
-		node.addProperty("GB2_1", "193");
-		node.addProperty("GB2_2", "30");
-		node.addProperty("BB2_1", "193");
-		node.addProperty("BB2_2", "30");
-		node.addProperty("MBB2_1", "193");
-		node.addProperty("MBB2_2", "30");
-		node.addProperty("BB이상2_1", "193");
-		node.addProperty("BB이상2_2", "30");
-		node.addProperty("GB3_1", "193");
-		node.addProperty("GB3_2", "30");
-		node.addProperty("BB3_1", "193");
-		node.addProperty("BB3_2", "30");
-		node.addProperty("MBB3_1", "193");
-		node.addProperty("MBB3_2", "30");
-		node.addProperty("BB이상3_1", "193");
-		node.addProperty("BB이상3_2", "30");
-		node.addProperty("name5", "1");
-		
-		resultArray.add(node);
+        
         
         return resultArray;
     }

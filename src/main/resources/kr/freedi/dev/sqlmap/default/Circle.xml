@@ -86,6 +86,8 @@
 		WHERE
 		    t.cir_code=m.cir_code
 		    AND t.com_no = #{comNo}
+		    AND ROWNUM=1
+		order by cir_code desc
 	</select>
 	
 	

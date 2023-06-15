@@ -53,6 +53,7 @@ public class IntfUserVO implements Serializable {
 	private Date updateDate;
 	private Date regDate;
 	private String authId;
+	private String isAdmin; // 0 이면 Admin 아님.1 이면 Admin
 	
 	public String getUserId() {
 		return userId;
@@ -389,7 +390,26 @@ public class IntfUserVO implements Serializable {
 	public void setComDepartName(String comDepartName) {
 		this.comDepartName = comDepartName;
 	}
-	public String toString(){
-		return ToStringBuilder.reflectionToString(this);
+	public String getIsAdmin() {
+		return isAdmin;
+	}
+	public void setIsAdmin(String isAdmin) {
+		this.isAdmin = isAdmin;
+	}
+	@Override
+	public String toString() {
+		return "IntfUserVO [userId=" + userId + ", userPw=" + userPw + ", userSchool=" + userSchool + ", userMajor="
+				+ userMajor + ", userName=" + userName + ", userState=" + userState + ", userSecurityLv="
+				+ userSecurityLv + ", userPhoneNo=" + userPhoneNo + ", userEmail=" + userEmail + ", userType="
+				+ userType + ", userComState=" + userComState + ", userLevelFlag=" + userLevelFlag + ", comCode="
+				+ comCode + ", comNo=" + comNo + ", comLeaderNo=" + comLeaderNo + ", comJobx=" + comJobx
+				+ ", comPosition=" + comPosition + ", comGroupJobx=" + comGroupJobx + ", comDepartCode=" + comDepartCode
+				+ ", comDepartName=" + comDepartName + ", comWorkPlace=" + comWorkPlace + ", comSixSigmaCode="
+				+ comSixSigmaCode + ", comPostBelt=" + comPostBelt + ", comPostType=" + comPostType + ", comPostRange="
+				+ comPostRange + ", comCertBelt=" + comCertBelt + ", comCertBlet2=" + comCertBlet2 + ", comChargeWork="
+				+ comChargeWork + ", comJoinDate=" + comJoinDate + ", costCenter=" + costCenter + ", lastChangePwDate="
+				+ lastChangePwDate + ", lastLoginDate=" + lastLoginDate + ", appointmentDate=" + appointmentDate
+				+ ", updateDate=" + updateDate + ", regDate=" + regDate + ", authId=" + authId + ", isAdmin=" + isAdmin
+				+ "]";
 	}
 }

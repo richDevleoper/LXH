@@ -28,6 +28,7 @@ public class KpiManageVO {
 	private Date kudUpdateDate;
 	private String kudIdx;
 	private String kudCertBelt;
+	private String comDepartCode;
 
 	public String getStdSeq() {
 		return stdSeq;
@@ -205,6 +206,14 @@ public class KpiManageVO {
 
 	public void setKudCertBelt(String kudCertBelt) {
 		this.kudCertBelt = kudCertBelt;
+	}
+
+	public String getComDepartCode() {
+		return comDepartCode;
+	}
+
+	public void setComDepartCode(String comDepartCode) {
+		this.comDepartCode = comDepartCode;
 	}
 
 	@Override

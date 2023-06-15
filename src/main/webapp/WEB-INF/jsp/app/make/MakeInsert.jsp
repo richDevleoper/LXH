@@ -745,7 +745,7 @@ function callback_popEmp(objId, data){
 function callback_popDept(objId, data){
 	
 	let obj = document.getElementById(objId);
-	let objTr = $(obj).closest("tr");
+	let objTr = $(obj).closest("div");
 	let objIdComNo = objId.replace("deptName", "comNo");
 	
 	if(objId == "deptCode"){

@@ -69,7 +69,7 @@
 	</select>
 	
 	<select id="selectNextFkey" resultType="int">
-		SELECT MAX(TO_NUMBER(NVL(rep_indi_code, 0))) + 1  FROM TB_REPORT_INDICATORS
+		SELECT NVL(MAX(TO_NUMBER(rep_indi_code)), 0) + 1  FROM TB_REPORT_INDICATORS
 	</select>
 	
 	<insert id="insert">

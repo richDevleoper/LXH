@@ -298,7 +298,7 @@ public class TeamController {
 
 		model.addAttribute("allCodes", allCodes);
 
-		searchVO.setSearchUserid(userSession.getUserId());
+		//searchVO.setSearchUserid(userSession.getUserId());
 		List<EgovMap> countList = reportService.selectFullListCount(searchVO);
 
 		int totalCount = 0;
