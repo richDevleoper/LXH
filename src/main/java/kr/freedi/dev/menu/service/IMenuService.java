@@ -69,6 +69,8 @@ public interface IMenuService {
 	
 	public abstract List<MenuVO> getActTreeList(String menuTyp);
 	
+	public abstract List<MenuVO> getActTreeList(String menuTyp, String isAdmin);
+	
 	public abstract List<MenuVO> getHistoryMenuList(Integer MenuKey);
 	
 	public abstract MenuVO getAvailChildMenu(MenuVO menuVO);

@@ -65,6 +65,9 @@
 		SELECT * FROM TB_MENU
 		WHERE MENU_TYP = #{menuTyp}
 		AND ACT_FLG = 'Y'
+		<if test="isAdmin != null and isAdmin != ''">
+		AND NVL(ADM_FLG, 'N') != 'Y'
+		</if>
 		ORDER BY FKEY, GKEY, OKEY
 	</select>
 

@@ -29,6 +29,7 @@ import kr.freedi.dev.board.domain.BoardVO;
 import kr.freedi.dev.board.service.BoardService;
 import kr.freedi.dev.menu.domain.MenuVO;
 import kr.freedi.dev.menu.service.IMenuService;
+import kr.freedi.dev.user.domain.UserVO;
 
 /**
  * @project : dev_default
@@ -134,7 +135,10 @@ public class CustomConfigDecoratorMapper extends ConfigDecoratorMapper {
 		if(decorator != null){
 			//def
 			if(decorator.getName().equals("def") || decorator.getName().equals("defIndex")){
-				request.setAttribute("treeMenuList", menuService.getActTreeList(MENU_TYP_DEF));
+				UserVO userSession = (UserVO) request.getSession().getAttribute("userSession");
+				String isAdmin = userSession.getIntfUserVO().getIsAdmin();
+				
+				request.setAttribute("treeMenuList", menuService.getActTreeList(MENU_TYP_DEF, isAdmin));
 				if(request.getParameter("menuKey") != null && !request.getParameter("menuKey").equals("")){
 					MenuVO menuVO = menuService.select(Integer.parseInt(request.getParameter("menuKey")));
 					request.setAttribute("currentMenu", menuVO);

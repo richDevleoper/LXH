@@ -21,6 +21,7 @@ import com.googlecode.ehcache.annotations.TriggersRemove;
 
 import egovframework.rte.fdl.cmmn.exception.FdlException;
 import egovframework.rte.fdl.property.EgovPropertyService;
+import egovframework.rte.psl.dataaccess.util.EgovMap;
 import kr.freedi.dev.common.dao.DefaultDAO;
 import kr.freedi.dev.common.domain.FileVO;
 import kr.freedi.dev.common.exception.NotAllowFileExtException;
@@ -71,12 +72,27 @@ public class MenuService implements IMenuService {
 	
 	@Cacheable(cacheName = "cache")
 	public List<MenuVO> selectMenuList(String menuTyp) {
-		return dao.selectList("Menu.selectMenuList", menuTyp);
+		
+		EgovMap param = new EgovMap();
+		param.put("menuTyp", menuTyp);
+		param.put("isAdmin", "");
+		
+		return dao.selectList("Menu.selectMenuList", param);
 	}
 	
 	@Cacheable(cacheName = "cache")
 	public List<MenuVO> selectActMenuList(String menuTyp) {
-		return dao.selectList("Menu.selectActMenuList", menuTyp);
+		EgovMap param = new EgovMap();
+		param.put("menuTyp", menuTyp);
+		param.put("isAdmin", ""); //admin
+		//param.put("isAdmin", "0"); //user
+		return this.selectActMenuList(param);
+	}
+	
+	@Cacheable(cacheName = "cache")
+	public List<MenuVO> selectActMenuList(EgovMap param) {
+		
+		return dao.selectList("Menu.selectActMenuList", param);
 	}
 	
 	@Cacheable(cacheName = "cache")
@@ -487,6 +503,25 @@ public class MenuService implements IMenuService {
 		
 		List<MenuVO> parentMenuList = this.selectActTopMenuList(menuTyp);
 		List<MenuVO> menuList = this.selectActMenuList(menuTyp);
+		
+		treeList = this.getMakeTreeList(parentMenuList, menuList);
+		
+		return treeList;
+	}
+	
+	public List<MenuVO> getActTreeList(String menuTyp, String isAdmin){
+		List<MenuVO> treeList = new ArrayList<MenuVO>();
+		
+		List<MenuVO> parentMenuList = this.selectActTopMenuList(menuTyp);
+		EgovMap param = new EgovMap();
+		param.put("menuTyp", menuTyp);
+		if(isAdmin.equals("1")) {
+			param.put("isAdmin", ""); // admin
+		} else {
+			param.put("isAdmin", "0"); // 일반유저
+		} 	
+		
+		List<MenuVO> menuList = this.selectActMenuList(param);
 		
 		treeList = this.getMakeTreeList(parentMenuList, menuList);
 		
