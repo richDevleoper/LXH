@@ -25,23 +25,41 @@
                                         <thead>
                                             <tr>
                                                 <th class="bg-gray">Belt</th>
-                                                <th class="bg-gray" colspan="2">GB</th>
-                                                <th class="bg-gray" colspan="2">MGB</th>
-                                                <th class="bg-gray" colspan="2">BB</th>
-                                                <th class="bg-gray" colspan="2">MBB</th>
+                                                <th class="bg-gray" colspan="4">GB</th>
+                                                <th class="bg-gray" colspan="4">MGB</th>
+                                                <th class="bg-gray" colspan="4">BB</th>
+                                                <th class="bg-gray" colspan="4">MBB</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <th class="bg-white align-center">항목</th>
-                                                <td class="bg-white align-center">교육</td>
-                                                <td class="bg-white align-center">TEST</td>
-                                                <td class="bg-white align-center">교육</td>
-                                                <td class="bg-white align-center">TEST</td>
-                                                <td class="bg-white align-center">교육</td>
-                                                <td class="bg-white align-center">TEST</td>
-                                                <td class="bg-white align-center">교육</td>
-                                                <td class="bg-white align-center">TEST</td>
+                                                <th rowspan="2" class="bg-white align-center">항목</th>
+                                                <td colspan="2" class="bg-white align-center">교육</td>
+                                                <td colspan="2" class="bg-white align-center">TEST</td>
+                                                <td colspan="2" class="bg-white align-center">교육</td>
+                                                <td colspan="2" class="bg-white align-center">TEST</td>
+                                                <td colspan="2" class="bg-white align-center">교육</td>
+                                                <td colspan="2" class="bg-white align-center">TEST</td>
+                                                <td colspan="2" class="bg-white align-center">교육</td>
+                                                <td colspan="2" class="bg-white align-center">TEST</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="bg-white align-center">이수</td>
+                                                <td class="bg-white align-center">미이수</td>
+                                                <td class="bg-white align-center">이수</td>
+                                                <td class="bg-white align-center">미이수</td>
+                                                <td class="bg-white align-center">이수</td>
+                                                <td class="bg-white align-center">미이수</td>
+                                                <td class="bg-white align-center">이수</td>
+                                                <td class="bg-white align-center">미이수</td>
+                                                <td class="bg-white align-center">이수</td>
+                                                <td class="bg-white align-center">미이수</td>
+                                                <td class="bg-white align-center">이수</td>
+                                                <td class="bg-white align-center">미이수</td>
+                                                <td class="bg-white align-center">이수</td>
+                                                <td class="bg-white align-center">미이수</td>
+                                                <td class="bg-white align-center">이수</td>
+                                                <td class="bg-white align-center">미이수</td>
                                             </tr>
                                             <tr>
                                                 <th class="bg-white align-center">건수</th>
@@ -53,6 +71,14 @@
                                                 <td class="bg-white align-center">${selectMyStatistics.M6}</td>
                                                 <td class="bg-white align-center">${selectMyStatistics.M7}</td>
                                                 <td class="bg-white align-center">${selectMyStatistics.M8}</td>
+                                                <td class="bg-white align-center">${selectMyStatistics.M9}</td>
+                                                <td class="bg-white align-center">${selectMyStatistics.M10}</td>
+                                                <td class="bg-white align-center">${selectMyStatistics.M11}</td>
+                                                <td class="bg-white align-center">${selectMyStatistics.M12}</td>
+                                                <td class="bg-white align-center">${selectMyStatistics.M13}</td>
+                                                <td class="bg-white align-center">${selectMyStatistics.M14}</td>
+                                                <td class="bg-white align-center">${selectMyStatistics.M15}</td>
+                                                <td class="bg-white align-center">${selectMyStatistics.M16}</td>
                                             </tr>
                                             
                                         </tbody>

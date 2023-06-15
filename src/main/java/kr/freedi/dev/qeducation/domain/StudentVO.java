@@ -32,6 +32,14 @@ public class StudentVO extends CommonVO {
 	private String stdPosNm;
 	private String stdBeltNm;
 	
+	private String userId;
+	private String userName;
+	private String comDepartCode;
+	private String comJobx;
+	private String comPosition;
+	private String comCertBelt;
+	
+	
 	private String stdReqCnt;          	   // 교육과정신청개수
 	private String stdMyCnt;              // 내가 신청한 개수(교육과정코드)
 	
@@ -234,6 +242,54 @@ public class StudentVO extends CommonVO {
 
 	public void setStdBeltNm(String stdBeltNm) {
 		this.stdBeltNm = stdBeltNm;
+	}
+	
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	public String getComDepartCode() {
+		return comDepartCode;
+	}
+
+	public void setComDepartCode(String comDepartCode) {
+		this.comDepartCode = comDepartCode;
+	}
+
+	public String getComJobx() {
+		return comJobx;
+	}
+
+	public void setComJobx(String comJobx) {
+		this.comJobx = comJobx;
+	}
+
+	public String getComPosition() {
+		return comPosition;
+	}
+
+	public void setComPosition(String comPosition) {
+		this.comPosition = comPosition;
+	}
+
+	public String getComCertBelt() {
+		return comCertBelt;
+	}
+
+	public void setComCertBelt(String comCertBelt) {
+		this.comCertBelt = comCertBelt;
 	}
 
 	public String getStdReqCnt() {

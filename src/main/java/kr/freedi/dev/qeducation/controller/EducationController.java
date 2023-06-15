@@ -28,7 +28,6 @@ import kr.freedi.dev.code.domain.CodeVO;
 import kr.freedi.dev.code.service.CodeService;
 import kr.freedi.dev.qeducation.domain.EducationSearchVO;
 import kr.freedi.dev.qeducation.domain.EducationVO;
-import kr.freedi.dev.qeducation.domain.MyEducationVO;
 import kr.freedi.dev.qeducation.domain.StudentVO;
 import kr.freedi.dev.qeducation.excel.ExcelFunction;
 import kr.freedi.dev.qeducation.service.EducationService;
@@ -71,9 +70,6 @@ public class EducationController {
 			searchVO.setSearchEduFromDt(df.format(calendar.getTime()));
 		}
 		
-		int countList = educationService.selectListCount(searchVO);
-		System.out.println("countList : " + countList);
-		
 		CodeVO codeVO = new CodeVO(); 
 		String[] arrCodeGrpIds = {"ED_TY1", "ED_TY2", "ED_TY3"};
 		
@@ -82,6 +78,10 @@ public class EducationController {
 		List<EgovMap> allCodes = codeService.selectFullList(codeVO);		//item.codeGrpId, codeId, codeNm
 
 		model.addAttribute("allCodes", allCodes);
+		
+		int countList = educationService.selectListCount(searchVO);
+		System.out.println("countList : " + countList);
+		searchVO.setTotalRecordCount(countList);
 		
 		List<EducationVO> selectEducationList = educationService.selectEducationList(searchVO);
 		model.addAttribute("selectEducationList", selectEducationList);
@@ -129,6 +129,7 @@ public class EducationController {
 		model.addAttribute("allCodes", allCodes);
 		
 		int countList = educationService.selectListCount(searchVO);
+		searchVO.setTotalRecordCount(countList);
 		List<EducationVO> selectEducationList = educationService.selectEducationList(searchVO);
 		model.addAttribute("selectEducationList", selectEducationList);
 		model.addAttribute("totalCount", countList);
@@ -255,7 +256,7 @@ public class EducationController {
 		
 		int countList = educationService.selectMngListCnt(searchVO);
 		searchVO.setCnt(countList);
-		
+		searchVO.setTotalRecordCount(countList);
 		List<EducationVO> selectMngList = educationService.selectMngList(searchVO);
 		searchVO.setDataList(selectMngList);
 		
@@ -376,6 +377,44 @@ public class EducationController {
 			List<HashMap<String,Object>> selectEducationList = educationService.selectEducationExcel(searchVO);
 			
 			ExcelFunction.excelWriter(request, response, selectEducationList, fileName, colIdArr, colNameArr);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	@RequestMapping({"/excelmnglist.do"})
+	public @ResponseBody void excelMngList(HttpServletRequest request, HttpServletResponse response, 
+		   @ModelAttribute("EducationSearchVO") EducationSearchVO searchVO, 
+		   @ModelAttribute("EducationVO") EducationVO educationVO, 
+		   @ModelAttribute("StudentVO") StudentVO studentVO,
+		   UserVO userSession){
+		
+		String tabId = searchVO.getTabId();
+		System.out.println("tabId : " + tabId);
+		
+		if("".equals(tabId) ||"null".equals(tabId) || tabId == null ) {
+			searchVO.setSearchbeltCode("01");
+		}else {
+			searchVO.setSearchbeltCode(tabId);
+		}
+		
+		try {
+			String[] colIdArr = null;
+			String[] colNameArr = null;
+			
+			if("04".equals(tabId)) {
+				colIdArr = new String[]{"IDX", "STD_NAME", "STD_USERID", "MNG_TIT", "STD_DEPART_NM", "STD_JOBX_NM", "STD_POS_NM", "STD_CERT_DATE", "STD_CERT_NM", "STD_TEST_DATE", "STD_TEST_NM"};
+				colNameArr = new String[]{"NO", "성명", "사번", "1차 교육 / 2차 통계 / 3차 과제Test", "조직", "직위", "직책", "인증일", "인증여부", "자질평가일", "합격여부"};
+			}else {
+				colIdArr = new String[]{"IDX", "STD_NAME", "STD_USERID", "MNG_TIT", "STD_DEPART_NM", "STD_JOBX_NM", "STD_POS_NM", "STD_CERT_DATE", "STD_CERT_NM"};
+				colNameArr = new String[]{"NO", "성명", "사번", "1차 교육 / 2차 통계 / 3차 과제Test", "조직", "직위", "직책", "인증일", "인증여부"};
+			}
+			
+			String fileName = "인증관리_" + getCurrentDate() + getCurrentTime() + ".xlsx";
+			List<HashMap<String,Object>> selectMngListExcel = educationService.selectMngListExcel(searchVO);
+			
+			ExcelFunction.excelWriter(request, response, selectMngListExcel, fileName, colIdArr, colNameArr);
 		}catch(Exception e) {
 			e.printStackTrace();
 		}

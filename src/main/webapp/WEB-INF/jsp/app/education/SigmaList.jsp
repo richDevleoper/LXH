@@ -20,7 +20,9 @@
 	    <div class="tab-btn">
 		    <!-- [D] 현재 활성화된 메뉴에 on클래스 추가해주세요. -->
             <c:forEach var="allCodes" items="${allCodes}" varStatus="status">
-            	<button type="button" id="${allCodes.codeId}">${allCodes.codeNm}</button>
+            	<c:if test="${allCodes.codeId ne '02'}">
+					<button type="button" id="${allCodes.codeId}">${allCodes.codeNm}</button>
+            	</c:if>
             </c:forEach>
 	    </div>
 	    
@@ -60,12 +62,14 @@
                             <form:input type="text" path="searchCertToDt" cssClass="datepicker"/>
                             <i class="ico calendar"></i>
                         </div>
-                       
-                       
                     </div>
                 </div>
+                
                 <div class="form-inline form-input col s2">
-                    <div class="pd-l10 col s8">
+                	<div class="form-inline form-input col s8">
+	                   <label>조회대상</label>
+	                </div>
+                    <div class="pd-l10 col s4">
                          <form:select path="searchEduYear">
                             <option value="">전체</option>
                             <option value="">인증대상자</option>
@@ -133,8 +137,15 @@
 							<tbody>
 								<c:choose>
 								    <c:when test="${fn:length(selectMngList) == 0}">
-								        <tr>
-                                               <td colspan="9"><span>조회결과가 없습니다.</span></td>
+								           <tr>
+                                             <c:choose>
+                                             	<c:when test="${gb eq '04'}">
+                                             		<td colspan="11"><span>조회결과가 없습니다.</span></td>
+                                             	</c:when>
+                                             	<c:otherwise>
+                                             		<td colspan="9"><span>조회결과가 없습니다.</span></td>
+                                             	</c:otherwise>
+                                             </c:choose>
                                            </tr>
 								    </c:when>
 								    <c:otherwise>
@@ -274,18 +285,25 @@
 				let stdCertDate = $(this).find("input[name=stdCertDate]").val();
 				let stdCertCode = $(this).find("select[name=stdCertCode]").val();
 				
-				console.log(stdCertDate);
-				
 				arrSeq += stdSeq + ",";
-				arrCertDate += stdCertDate + ",";
+				// 미인증 일자 빈값처리
+				if(stdCertCode == "N"){
+					arrCertDate += " ,";
+				}else{
+					arrCertDate += stdCertDate + ",";
+				}
 				arrCertCode += stdCertCode + ",";
 				
 				if(gb == "04"){
 					let stdTestDate = $(this).find("input[name=stdTestDate]").val();
 					let stdTestCode = $(this).find("select[name=stdTestCode]").val();
-					arrTestDate += stdTestDate + ",";
+					// 미합격 일자 빈값처리
+					if(stdTestCode == "N"){
+						arrTestDate += ",";
+					}else{
+						arrTestDate += stdTestDate + ",";
+					}
 					arrTestCode += stdTestCode + ",";
-					
 				}
 				
 				chkNum = chkNum+1;
@@ -305,9 +323,6 @@
 			arrTestDate = arrTestDate.substring(0, arrTestDate.length-1);
 			arrTestCode = arrTestCode.substring(0, arrTestCode.length-1);
 		}
-		
-		console.log(arrTestDate);
-		console.log(arrTestCode);
 
 		if(confirm("저장하시겠습니까?")) {
 			let params = {};

@@ -2,6 +2,7 @@ package kr.freedi.dev.qeducation.service;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -66,8 +67,8 @@ public class StudentService {
 		return (Integer) dao.selectOne("Student.selectLReqCount", studentVO);
 	}
 	
-	public EgovMap selectUserInfo(UserVO userVO) {
-		return dao.selectOne("Student.selectUserInfo", userVO); 
+	public StudentVO selectUserInfo(StudentVO studentVO) {
+		return dao.selectOne("Student.selectUserInfo", studentVO); 
 	}
 	
 	public StudentVO selectStdDetailInfo(StudentVO studentVO) {

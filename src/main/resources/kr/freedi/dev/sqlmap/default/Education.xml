@@ -583,9 +583,9 @@
 					 <if test="eduBeltCode != null and eduBeltCode neq ''.toString()">
 					   AND M.EDU_BELTCODE = #{eduBeltCode}
 					 </if>	
-					 <if test="stdUserId != null and stdUserId neq ''.toString()">
-					   AND D.STD_USERID = #{stdUserId}
-					 </if>	    
+					 <if test="comNo != null and comNo neq ''.toString()">
+					    AND D.COM_NO = #{comNo}
+					 </if>	      
 		  	   ) RS 
 		 WHERE 1=1
 	</select>
@@ -618,42 +618,53 @@
 					 <if test="leaderBeltCode != null and leaderBeltCode neq ''.toString()">
 					   AND A.REP_LEADER_BELT_CODE = #{leaderBeltCode}
 					 </if>	
-					 <if test="repUserId != null and repUserId neq ''.toString()">
-					   AND C.USER_ID = #{repUserId}
-					 </if>	    
+					 <if test="comNo != null and comNo neq ''.toString()">
+					    AND C.COM_NO = #{comNo}
+					 </if>	       
 		  	   ) RS 
 		 WHERE 1=1
 	</select>
 	
 	<select id="selectMyStatistics" parameterType="java.util.HashMap" resultType="java.util.HashMap">
 		SELECT
- 				 SUM(M1) AS M1,
-				 SUM(M2) AS M2,
-				 SUM(M3) AS M3,
-				 SUM(M4) AS M4,
-				 SUM(M5) AS M5,
-				 SUM(M6) AS M6,
-				 SUM(M7) AS M7,
-				 SUM(M8) AS M8
+ 				 NVL(SUM(M1), '0') AS M1,
+				 NVL(SUM(M2), '0') AS M2,
+				 NVL(SUM(M3), '0') AS M3,
+				 NVL(SUM(M4), '0') AS M4,
+				 NVL(SUM(M5), '0') AS M5,
+				 NVL(SUM(M6), '0') AS M6,
+				 NVL(SUM(M7), '0') AS M7,
+				 NVL(SUM(M8), '0') AS M8,
+				 NVL(SUM(M9), '0') AS M9,
+				 NVL(SUM(M10), '0') AS M10,
+				 NVL(SUM(M11), '0') AS M11,
+				 NVL(SUM(M12), '0') AS M12,
+				 NVL(SUM(M13), '0') AS M13,
+				 NVL(SUM(M14), '0') AS M14,
+				 NVL(SUM(M15), '0') AS M15,
+				 NVL(SUM(M16), '0') AS M16
 		  FROM (
-		 		SELECT M1, M2, M3, M4, M5, M6, M7, M8
+		 		SELECT M1, M2, M3, M4, M5, M6, M7, M8,
+		 			   M9, M10, M11, M12, M13, M14, M15, M16
 				 FROM (
 						 SELECT 
 						 	   	M.EDU_BELTCODE AS EDU_BELTCODE,
 						 	   	M.EDU_CLASS_TYPE AS EDU_CLASS_TYPE,
-						 	   	M.EDU_BELTCODE || M.EDU_CLASS_TYPE AS DIVCODE,
+						 	   	M.EDU_BELTCODE || M.EDU_CLASS_TYPE || D.STD_COMPLETE_YN AS DIVCODE,
 						 	   	D.COM_NO AS COM_NO,
 						 	   	D.STD_USERID AS STD_USERID
 						   FROM TB_EDUCATION_MST M
 				LEFT OUTER JOIN TB_STUDENT_DETAIL D ON M.EDU_CODE = D.EDU_CODE 
 						  WHERE D.STD_NAME IS NOT NULL
-						  <if test="stdUserId != null and stdUserId neq ''.toString()">
-						    AND D.STD_USERID = #{stdUserId}
+						    AND D.STD_STATUS = 'Y'
+						  <if test="comNo != null and comNo neq ''.toString()">
+						    AND D.COM_NO = #{comNo}
 						  </if>	    
 					  )
 				 PIVOT (
 						COUNT(COM_NO) FOR DIVCODE IN(
-							'0101' AS M1, '0102' AS M2, '0201' AS M3, '0202' AS M4, '0301' AS M5, '0302' AS M6, '0401' AS M7, '0402' AS M8
+							'0101Y' AS M1, '0101N' AS M2, '0102Y' AS M3, '0102N' AS M4, '0201Y' AS M5, '0201N' AS M6, '0202Y' AS M7, '0202N' AS M8,
+							'0301Y' AS M9, '0301N' AS M10, '0302Y' AS M11, '0302N' AS M12, '0401Y' AS M13, '0401N' AS M14, '0402Y' AS M15, '0402N' AS M16
 					   )
 				 )
 			   )
@@ -700,7 +711,8 @@
 				 LEFT OUTER JOIN tb_code cd_job ON cd_job.code_grp_id='JOBX' AND cd_job.code_id = D.STD_JOBX
 				 LEFT OUTER JOIN tb_code cd_pos ON cd_pos.code_grp_id='POSITION' AND cd_pos.code_id = D.STD_POSITION 
 				 LEFT OUTER JOIN tb_code cd_blt ON cd_blt.code_grp_id='LDRBELT' AND cd_blt.code_id = D.STD_BELT_CODE 
-					 WHERE STD_NAME IS NOT NULL
+					  WHERE D.STD_NAME IS NOT NULL
+					    AND D.STD_COMPLETE_YN = 'Y'
 		  	   ) RS 
 		 WHERE 1=1
 		 <if test="searchbeltCode != null and searchbeltCode neq ''.toString()">
@@ -764,7 +776,8 @@
 							 LEFT OUTER JOIN tb_code cd_job ON cd_job.code_grp_id='JOBX' AND cd_job.code_id = D.STD_JOBX
 							 LEFT OUTER JOIN tb_code cd_pos ON cd_pos.code_grp_id='POSITION' AND cd_pos.code_id = D.STD_POSITION 
 							 LEFT OUTER JOIN tb_code cd_blt ON cd_blt.code_grp_id='LDRBELT' AND cd_blt.code_id = D.STD_BELT_CODE 
-								 WHERE STD_NAME IS NOT NULL
+								  WHERE D.STD_NAME IS NOT NULL
+					    			AND D.STD_COMPLETE_YN = 'Y'
 					  	   ) RS 
 					 WHERE 1=1
 					 <if test="searchbeltCode != null and searchbeltCode neq ''.toString()">
@@ -837,6 +850,7 @@
 							 LEFT OUTER JOIN tb_code cd_pos ON cd_pos.code_grp_id='POSITION' AND cd_pos.code_id = D.STD_POSITION 
 							 LEFT OUTER JOIN tb_code cd_blt ON cd_blt.code_grp_id='LDRBELT' AND cd_blt.code_id = D.STD_BELT_CODE 
 								 WHERE STD_NAME IS NOT NULL
+								   AND D.STD_COMPLETE_YN = 'Y'
 					  	   ) RS 
 					 WHERE 1=1
 					 <if test="searchbeltCode != null and searchbeltCode neq ''.toString()">

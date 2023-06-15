@@ -193,7 +193,7 @@
                                                                                 <li> -->
                                                                         <div style="overflow: auto">
                                                                          <div class="list-wrap">
-                                                                                    <div class="list-table list">
+                                                                                    <div class="list-table list" style="height: 326px;">
                                                                                         <table id="leadertab">
                                                                                             <colgroup>
                                                                                                 <col style="width:20%">
@@ -258,7 +258,7 @@
                                                                                 <li> -->
                                                                         <div style="overflow: auto">
                                                                         			<div class="list-wrap">
-                                                                                        <div class="list-table list">
+                                                                                        <div class="list-table list" style="height: 326px;">
                                                                                             <table id="teamtab">
 	                                                                                            <colgroup>
 	                                                                                                <col style="width:20%">

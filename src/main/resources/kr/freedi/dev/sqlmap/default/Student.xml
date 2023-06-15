@@ -30,7 +30,14 @@
 		<result column="STD_COMPLETE_NN"	 	    property="stdCompleteNm"/>
 		<result column="STD_STATUS_NM"	 	     	property="stdStatusNm"/>
 		
-		
+		<result column="USER_ID"	 	     		property="userId"/>            
+		<result column="USER_NAME"	 	     		property="userName"/>     
+		<result column="COM_DEPART_CODE"     		property="comDepartCode"/>          
+		<result column="COM_JOBX"	 	     		property="comJobx"/>        
+		<result column="COM_POSITION"	 	     	property="comPosition"/>                    
+		<result column="COM_CERT_BELT"	 	     	property="comCertBelt"/>      
+   
+							
 	</resultMap>
 	
 	<sql id="defCond">
@@ -228,10 +235,10 @@
 				<if test="stdStatus != null and stdStatus neq ''.toString()">STD_STATUS = #{stdStatus},</if>       
 				<if test="stdCompleteYn != null and stdCompleteYn neq ''.toString()">STD_COMPLETE_YN = #{stdCompleteYn},</if>   
 				<if test="stdCertCode != null and stdCertCode neq ''.toString()">STD_CERT_CODE = #{stdCertCode},</if>     
-				<if test="stdCertDate != null and stdCertDate neq ''.toString()">STD_CERT_DATE = #{stdCertDate},</if>     
+				<if test="stdCertDate != null">STD_CERT_DATE = #{stdCertDate},</if>     
 				<if test="stdReapplyYn != null and stdReapplyYn neq ''.toString()">STD_REAPPLY_YN = #{stdReapplyYn},</if>    
 				<if test="stdTestCode != null and stdTestCode neq ''.toString()">STD_TEST_CODE = #{stdTestCode},</if>     
-				<if test="stdTestDate != null and stdTestDate neq ''.toString()">STD_TEST_DATE = #{stdTestDate},</if>    
+				<if test="stdTestDate != null">STD_TEST_DATE = #{stdTestDate},</if>    
 				STD_UPDATE_USER = #{stdUpdateUser},
 				STD_UPDATE_DATE = SYSDATE
 		 WHERE 1=1 
@@ -245,32 +252,34 @@
 	
 	<sql id="detCond">
 		<where>
-			<if test="userId != null and userId != ''">
+<!-- 			<if test="userId != null and userId != ''">
 				AND T.user_id = #{userId}
-			</if>
+			</if> -->
 			<if test="comNo != null and comNo != ''">
 				AND T.com_no = #{comNo}
 			</if>
 		</where>
 	</sql>
 	
-	<select id="selectUserInfo" resultType="egovMap">
+	<select id="selectUserInfo" resultMap="StudentMap">
      SELECT *
 	   FROM (
-            SELECT 	  t.com_no
-					, t.user_id            
-					, t.user_name               
-					, t.com_depart_code          
-					, (select dept_name from tb_depart_mst d where dept_code=t.com_depart_code) dept_full_name    
-					, t.com_jobx        
-					, cd_job.code_nm com_jobx_nm                     
-					, t.com_position                    
-					, com_position com_position_nm            
-					, t.com_cert_belt              
-					, cd_blt.code_nm com_cert_belt_nm       
-              FROM tb_user_mst T
-                   LEFT OUTER JOIN tb_code cd_job ON cd_job.code_grp_id='JOBX' AND cd_job.code_id=T.com_jobx
-                   LEFT OUTER JOIN tb_code cd_blt ON cd_blt.code_grp_id='LDRBELT' AND cd_blt.code_id=T.com_cert_belt 
+		            SELECT 	     
+		            		  T.COM_NO AS COM_NO  
+							, T.USER_ID AS USER_ID            
+							, T.USER_NAME AS USER_NAME              
+							, T.COM_DEPART_CODE AS COM_DEPART_CODE         
+							, (select DEPT_NAME from tb_depart_mst d where dept_code=T.COM_DEPART_CODE) AS STD_DEPART_NM  
+							, T.COM_JOBX AS COM_JOBX        
+							, cd_job.code_nm AS STD_JOBX_NM                    
+							, T.COM_POSITION AS COM_POSITION                    
+							, cd_pos.code_nm AS STD_POS_NM           
+							, T.COM_CERT_BELT AS COM_CERT_BELT             
+							, cd_blT.code_nm AS STD_BELT_NM      
+		              FROM tb_user_mst T
+		   LEFT OUTER JOIN tb_code cd_job ON cd_job.code_grp_id='JOBX' AND cd_job.code_id = T.com_jobx
+		   LEFT OUTER JOIN tb_code cd_pos ON cd_pos.code_grp_id='POSITION' AND cd_pos.code_id = T.com_position
+		   LEFT OUTER JOIN tb_code cd_blt ON cd_blT.code_grp_id='LDRBELT' AND cd_blT.code_id = T.com_cert_belt
 		<include refid="detCond"></include>
 		    )
 		ORDER BY COM_JOBX ASC, USER_NAME

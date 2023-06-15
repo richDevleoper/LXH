@@ -1366,7 +1366,7 @@ function onchange_resultType(obj){
 	
 	
 	function onclick_orgSearch(e){
-		debugger;
+		
 		let retObj = $(this).find("input")
 		popupGetOrgCd(retObj);
 	}
@@ -1405,6 +1405,7 @@ function onchange_resultType(obj){
 		if(vMenuType==="TEAM" && repDevCd==="2"){
 			$("#repTypeCode").prop("disabled", true);
 			$(".act-date").prop("disabled", true);  // 실시 일자 Disabled(5월 수정요청)
+			$(".act-date").closest("div").find("i.ico").prop("disabled", true);
 		} else {
 			$("#repTypeCode").prop("disabled", false);
 		}
@@ -1419,7 +1420,20 @@ function onchange_resultType(obj){
 		let cdBusGrpFiltered = cdBusGrp.filter(function(code){
 		    return code.key.startsWith('0'+sectorCode);
 		});
-		setDropDown("repProductClass", cdBusGrpFiltered, true);
+
+		if(sectorCode===""){
+			setDropDown("repProductClass", [], true, "부문을 선택하세요");
+			$("label[for=repProductClass]").parent().find("span").show();
+			$("#repProductClass").addClass("validate[required]");
+		} else if (cdBusGrpFiltered.length===0){
+			setDropDown("repProductClass", [], true, "(해당없음)");
+			$("label[for=repProductClass]").parent().find("span").hide();
+			$("#repProductClass").removeClass("validate[required]");
+		} else {
+			setDropDown("repProductClass", cdBusGrpFiltered, true);
+			$("label[for=repProductClass]").parent().find("span").show();
+			$("#repProductClass").addClass("validate[required]");
+		}
 	}
 	
 	function onchange_ddlRepTypeCode(e){

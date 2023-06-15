@@ -1,12 +1,11 @@
 package kr.freedi.dev.qeducation.controller;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -25,7 +24,6 @@ import kr.freedi.dev.qeducation.domain.EducationSearchVO;
 import kr.freedi.dev.qeducation.domain.EducationVO;
 import kr.freedi.dev.qeducation.domain.MyEducationVO;
 import kr.freedi.dev.qeducation.domain.StudentVO;
-import kr.freedi.dev.qeducation.excel.ExcelFunction;
 import kr.freedi.dev.qeducation.service.EducationService;
 import kr.freedi.dev.qeducation.service.StudentService;
 import kr.freedi.dev.user.domain.UserVO;
@@ -61,8 +59,7 @@ public class MyEducationController {
 		
 		
 		String myUserId = userSession.getUserId();
-		//studentVO.setStdUserId("limjinah");
-		studentVO.setStdUserId(myUserId);
+		studentVO.setComNo(myUserId);
 		Map<String, Object> selectMyStatistics = educationService.selectMyStatistics(studentVO);
 		model.addAttribute("selectMyStatistics", selectMyStatistics);
 		
@@ -86,16 +83,14 @@ public class MyEducationController {
 		/* 1. 교육활동 */
 		educationVO.setEduBeltCode(eduBeltCode); // 벨트코드
 		String myUserId = userSession.getUserId();
-		educationVO.setEduRegUser(myUserId);
-		//educationVO.setStdUserId("limjinah");
+		educationVO.setComNo(myUserId);
 		
 		List<EducationVO> selectMyBeltEduList = educationService.selectMyBeltEduist(educationVO);
 		educationVO.setMyList(selectMyBeltEduList);
 		
 		/* 2. 과제활동 현황 */
 		myEducationVO.setLeaderBeltCode(leaderBeltCode);
-		//myEducationVO.setRepUserId("budwns");
-		myEducationVO.setRepUserId(myUserId);
+		myEducationVO.setComNo(myUserId);
 		
 		List<MyEducationVO> selectMyReportList = educationService.selectMyReportList(myEducationVO);
 		educationVO.setReportList(selectMyReportList);
@@ -103,100 +98,137 @@ public class MyEducationController {
 		return new ObjectMapper().writeValueAsString(educationVO);
 	}
 	
-	@RequestMapping({"/excelmnglist.do"})
-	public @ResponseBody void excelMngList(HttpServletRequest request, HttpServletResponse response, 
-		   @ModelAttribute("EducationSearchVO") EducationSearchVO searchVO, 
-		   @ModelAttribute("EducationVO") EducationVO educationVO, 
+	//교육신청 전 체크
+	@RequestMapping({"/chcekedu.do"})
+	public @ResponseBody String chcekedu(HttpServletRequest request,
 		   @ModelAttribute("StudentVO") StudentVO studentVO,
-		   UserVO userSession){
+		   @RequestParam Map<String, Object> params,
+		   UserVO userSession)throws Exception {
 		
-		String tabId = searchVO.getTabId();
-		System.out.println("tabId : " + tabId);
+		String eduCode   = (String)params.get("eduCode");
+		System.out.println("eduCode : " + eduCode);
+		studentVO.setEduCode(eduCode);
+		studentVO.setStdStatus("Y");
+		// 교육 신청개수
+		int countList = studentService.selectLReqCount(studentVO);
+		System.out.println("countList : " + countList);
 		
-		if("".equals(tabId) ||"null".equals(tabId) || tabId == null ) {
-			searchVO.setSearchbeltCode("01");
+		// 신청여부
+		String myUserId = userSession.getUserId();
+		//String myUserId = "FB2621";
+		
+		if("".equals(myUserId) || myUserId == null){
+			studentVO.setResult("S"); // 결과값
 		}else {
-			searchVO.setSearchbeltCode(tabId);
+			studentVO.setComNo(myUserId);
+			studentVO.setStdStatus("Y");
+			
+			int countList2 = studentService.selectLReqCount(studentVO);
+			System.out.println("countList2 : " + countList2);
+			
+			studentVO.setStdReqCnt(Integer.toString(countList));
+			studentVO.setStdMyCnt(Integer.toString(countList2));
+			studentVO.setResult("Y"); // 결과값
 		}
 		
-		try {
-			String[] colIdArr = null;
-			String[] colNameArr = null;
+		return new ObjectMapper().writeValueAsString(studentVO);
+	}
+	
+	//교육신청
+	@RequestMapping({"/requeststd.do"})
+	public @ResponseBody String requestStd(HttpServletRequest request,
+		   @ModelAttribute("EducationSearchVO") EducationSearchVO searchVO, 
+		   @ModelAttribute("StudentVO") StudentVO studentVO,
+		   @ModelAttribute("userVO") UserVO userVo,
+		   @RequestParam Map<String, Object> params,
+		   UserVO userSession)throws Exception {
+		
+		String eduCode   = (String)params.get("eduCode");
+		String mode   = (String)params.get("mode");
+		
+		// 사용자 마스터 정보조회
+		String myUserId = userSession.getUserId();
+		//String myUserId = "FB2621";
+		
+		if("".equals(myUserId) || myUserId == null) {
+			studentVO.setResult("S"); // 결과값
+		}else {
+			studentVO.setComNo(myUserId);
+			StudentVO resVO = studentService.selectUserInfo(studentVO);
 			
-			if("04".equals(tabId)) {
-				colIdArr = new String[]{"IDX", "STD_NAME", "STD_USERID", "MNG_TIT", "STD_DEPART_NM", "STD_JOBX_NM", "STD_POS_NM", "STD_CERT_DATE", "STD_CERT_NM", "STD_TEST_DATE", "STD_TEST_NM"};
-				colNameArr = new String[]{"NO", "성명", "사번", "1차 교육 / 2차 통계 / 3차 과제Test", "조직", "직위", "직책", "인증일", "인증여부", "자질평가일", "합격여부"};
-			}else {
-				colIdArr = new String[]{"IDX", "STD_NAME", "STD_USERID", "MNG_TIT", "STD_DEPART_NM", "STD_JOBX_NM", "STD_POS_NM", "STD_CERT_DATE", "STD_CERT_NM"};
-				colNameArr = new String[]{"NO", "성명", "사번", "1차 교육 / 2차 통계 / 3차 과제Test", "조직", "직위", "직책", "인증일", "인증여부"};
+			String comNo = (String)resVO.getComNo();					//사번
+			String userId = (String)resVO.getUserId();					//사용자 ID
+			String userName = (String)resVO.getUserName();				//이름
+			String comDepartCode = (String)resVO.getComDepartCode();	//부서코드
+			String comJobx = (String)resVO.getComJobx();				//직위 (공통코드)
+			String comPosition = (String)resVO.getComPosition();		//직책 (공통코드)
+			String comCertBelt = (String)resVO.getComCertBelt();		//CERT 벨트
+			System.out.println("comNo : " + comNo);
+			
+			// 수강생 정보 세팅
+			studentVO.setEduCode(eduCode);
+			studentVO.setComNo(comNo);
+			studentVO.setStdUserId(userId);
+			studentVO.setStdName(userName);
+			studentVO.setStdDepart(comDepartCode);
+			studentVO.setStdJbox(comJobx);
+			studentVO.setStdPosition(comPosition);
+			studentVO.setStdBeltCode(comCertBelt);
+			studentVO.setStdStatus(mode);
+			
+			//신청
+			studentVO.setStdRegUser(myUserId);
+			studentService.insertStdDetail(studentVO);
+			studentVO.setResult("Y"); // 결과값
+		}
+		
+		return new ObjectMapper().writeValueAsString(studentVO);
+	}
+	
+	//교육취소
+	@RequestMapping({"/canclestd.do"})
+	public @ResponseBody String cancleStd(HttpServletRequest request,
+		   @ModelAttribute("EducationSearchVO") EducationSearchVO searchVO, 
+		   @ModelAttribute("StudentVO") StudentVO studentVO,
+		   @ModelAttribute("userVO") UserVO userVo,
+		   @RequestParam Map<String, Object> params,
+		   UserVO userSession)throws Exception {
+		
+		String eduCode   = (String)params.get("eduCode");
+		String mode   = (String)params.get("mode");
+		
+		// 사용자 마스터 정보조회
+		String myUserId = userSession.getUserId();
+		//String myUserId = "FB2621";
+		
+		if("".equals(myUserId) || myUserId == null) {
+			studentVO.setResult("S"); // 결과값
+		}else {
+			// 신청내역 가져오기
+			studentVO.setComNo(myUserId);
+			studentVO.setStdStatus("Y");
+			StudentVO stdVO = studentService.selectStdDetailInfo(studentVO);
+			
+			String stdSeq = "";
+			if (!Objects.isNull(stdVO) ){
+				stdSeq = stdVO.getStdSeq();
 			}
 			
-			String fileName = "교육과정_" + getCurrentDate() + getCurrentTime() + ".xlsx";
-			List<HashMap<String,Object>> selectMngListExcel = educationService.selectMngListExcel(searchVO);
-			
-			ExcelFunction.excelWriter(request, response, selectMngListExcel, fileName, colIdArr, colNameArr);
-		}catch(Exception e) {
-			e.printStackTrace();
+			if(stdSeq.trim().length() == 0) {
+				studentVO.setResult("N"); // 결과값
+			}else {
+				studentVO.setStdSeq(stdSeq);
+				studentVO.setStdStatus("N");
+				studentVO.setStdUpdateUser(myUserId);
+				studentService.updateStdDetail(studentVO);
+				
+				studentVO.setResult("Y"); // 결과값
+				
+			}
 		}
 		
+		return new ObjectMapper().writeValueAsString(studentVO);
 	}
-	
-	/**
-	 * <pre>
-	 * 현재 날짜 얻어오기.
-	 * 형식: YYYYMMDD
-	 * </pre>
-	 * @return 8자리 날짜표기 문자열
-	 */
-	public static String getCurrentDate() {
-
-		// 캘린더 인스턴스 얻어오기
-		java.util.Calendar currentdate = java.util.Calendar.getInstance();
-
-		int currentYear  = currentdate.get(java.util.Calendar.YEAR);         // 년
-		int currentMonth = currentdate.get(java.util.Calendar.MONTH) + 1;    // 월
-		int currentDay   = currentdate.get(java.util.Calendar.DAY_OF_MONTH); // 일
-
-		String getYear   = Integer.toString(currentYear).substring(0,4);
-		String getMonth  = currentMonth < 10 ? "0" + Integer.toString(currentMonth) : Integer.toString(currentMonth);
-		String getDay    = currentDay   < 10 ? "0" + Integer.toString(currentDay)   : Integer.toString(currentDay);
-
-		return getYear+getMonth+getDay;
-
-	}
-	
-	/**
-	 * <pre>
-	 * 현재 시간 얻어오기.
-	 * 형식: HHMMSS
-	 * </pre>
-	 * @return 6자리 시간표기 문자열
-	 */
-	public static String getCurrentTime() {
-
-		// 캘린더 인스턴스 얻어오기
-		java.util.Calendar currentdate = java.util.Calendar.getInstance();
-
-		int currentHour  = currentdate.get(java.util.Calendar.HOUR_OF_DAY);  // 시간
-		int currentMinute= currentdate.get(java.util.Calendar.MINUTE);       // 분
-		int currentSecond= currentdate.get(java.util.Calendar.SECOND);       // 초
-
-		String getHour   = currentHour  < 10 ? "0" + Integer.toString(currentHour)  : Integer.toString(currentHour);
-		String getMinute = currentMinute< 10 ? "0" + Integer.toString(currentMinute): Integer.toString(currentMinute);
-		String getSecond = currentSecond< 10 ? "0" + Integer.toString(currentSecond): Integer.toString(currentSecond);
-
-		return getHour+getMinute+getSecond;
-
-	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	
 	

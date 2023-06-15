@@ -4,10 +4,12 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import egovframework.rte.psl.dataaccess.util.EgovMap;
 import kr.freedi.dev.article.domain.ArticleSearchVO;
@@ -25,6 +28,8 @@ import kr.freedi.dev.code.domain.CodeVO;
 import kr.freedi.dev.code.service.CodeService;
 import kr.freedi.dev.qcircle.domain.CircleVO;
 import kr.freedi.dev.qcircle.service.CircleService;
+import kr.freedi.dev.qeducation.controller.EducationController;
+import kr.freedi.dev.qeducation.excel.ExcelFunction;
 import kr.freedi.dev.qreport.domain.ReportSearchVO;
 import kr.freedi.dev.qreport.domain.ReportTeamVO;
 import kr.freedi.dev.qreport.domain.ReportVO;
@@ -360,6 +365,55 @@ public class TeamController {
 		model.addAttribute("reportList", reportList);
 
 		return "app/report/ReportList";
+	}
+	
+	@RequestMapping({"/reportExcelbuild.do"})
+	public @ResponseBody void excelBuild(HttpServletRequest request, HttpServletResponse response, 
+		@ModelAttribute("reportVO") ReportVO reportVO,
+		@ModelAttribute("reportSearchVO") ReportSearchVO searchVO,
+		   UserVO userSession){
+		
+		EducationController xlsController = new EducationController();
+		
+		try {
+			String[] colIdArr = {"IDX", "REP_NAME", "REP_DIVISION", "REP_TYPE", "REP_STATUS", "REP_START_DATE", "REP_FINISH_DATE", "REP_ACTION_TYPE", "REP_MBB_USE_RATE", "REP_SECTOR"};
+			String[] colNameArr = {"NO", "과제명", "6σ Full Process여부", "과제유형", "진행현황", "시작일", "종료일", "활동분야", "MBB활용율", "활동분야"};
+			
+			String fileName = "분임조과제_" + xlsController.getCurrentDate() + xlsController.getCurrentTime() + ".xlsx";
+			searchVO.setMenuCode(REP_MENU_CODE);
+			List<HashMap<String,Object>> reportList  = reportService.selectFullListExcel(searchVO);
+			//List<ReportVO> reportList = reportService.selectFullList(searchVO);
+			
+			ExcelFunction.excelWriter(request, response, reportList, fileName, colIdArr, colNameArr);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	
+	@RequestMapping({"/reportSummary.do"})
+	public @ResponseBody void excelSummaryBuild(HttpServletRequest request, HttpServletResponse response, 
+		@ModelAttribute("reportVO") ReportVO reportVO,
+		@ModelAttribute("reportSearchVO") ReportSearchVO searchVO,
+		   UserVO userSession){
+		
+		EducationController xlsController = new EducationController();
+		
+		try {
+			String[] colIdArr = {"REPRESULTTYPE","INY_TOTAL","INY_ACT_1","INY_ACT_2","INY_ACT_3","INY_ACT_4","INY_ACT_5","Y_ACT_1","Y_ACT_2","Y_ACT_3","Y_ACT_4","Y_ACT_5"};
+			String[] colNameArr = {"구분","년내Total","(년내)품질개선","(년내)개발","(년내)생산성향상","(년내)원가개선","(년내)기타","(년간)품질개선","(년간)개발","(년간)생산성향상","(년간)원가개선","(년간)기타"};
+			
+			String fileName = "REPORT_분임조과제_" + xlsController.getCurrentDate() + xlsController.getCurrentTime() + ".xlsx";
+			searchVO.setMenuCode(REP_MENU_CODE);
+			List<HashMap<String,Object>> reportList  = reportService.reportSelectExcel(searchVO);
+			//List<EgovMap> reportList = reportService.selectReportList(searchVO);
+			
+			ExcelFunction.excelWriter(request, response, reportList, fileName, colIdArr, colNameArr);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 
 }

@@ -115,6 +115,10 @@
 										<td id="eduCol1"></td>
 									</tr>
 									<tr>
+										<th>교육일정</th>
+										<td id="eduCol7"></td>
+									</tr>
+									<tr>
 										<th>교육방식</th>
 										<td id="eduCol2"></td>
 									</tr>
@@ -133,6 +137,9 @@
 									<tr>
 										<th>첨부파일</th>
 										<td id="eduCol6"></td>
+									</tr>
+									<tr>
+										<th colspan="2" class="align-center">최소 정원(5명) 미달 시 해당 교육이 폐강될 수 있습니다.</th>
 									</tr>
 								</tbody>
 							</table>
@@ -285,8 +292,33 @@ function detailView(eduCode){
 			$("#eduCol3").html(data.eduClassTarget);
 			$("#eduCol4").html(data.eduClassSummary);
 			$("#eduCol5").html(data.eduItem);
+			//$("#eduCol6").html("");
 			
-			$("#eduCol6").html("");
+			let eduYear = data.eduYear;
+			let eduDate = data.eduDate;
+			$("#eduCol7").html(eduDate);
+			
+			const eDate = eduDate.split(',').reverse()[0];
+			console.log(">>>  " + eDate);
+			
+			let anEdate = eDate.split('/');
+			
+			let targetDt = eduYear + "-" + anEdate[0] + "-" + anEdate[1]
+	
+			let obj_date = new Date();
+			let obj_date2 = new Date(targetDt);
+			
+			console.log(">>>  " + obj_date);
+			console.log(">>>  " + obj_date2);
+			
+			if(obj_date2 < obj_date){
+				$("#btnRegEdu").hide();
+				$("#btnCnlEdu").hide();
+			}else{
+				$("#btnRegEdu").show();
+				$("#btnCnlEdu").show();
+			}
+			
 			let fileList = data.fileList;
 			if(data.fileList.length > 0){
 				console.log(fileList);

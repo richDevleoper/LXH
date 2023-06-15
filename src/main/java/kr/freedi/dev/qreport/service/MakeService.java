@@ -366,6 +366,11 @@ public class MakeService {
                 JsonObject node = new JsonObject();
                 node.addProperty("id", id);
                 node.addProperty("text", name);
+                if(id.equals("50000000")) {
+                	JsonObject stateNode = new JsonObject();
+                	stateNode.addProperty("opened", true);
+                	node.add("state", stateNode);
+                }
                 JsonArray children = buildTree(list, id);
                 if (children.size() > 0) {
                     node.add("children", children);

@@ -149,7 +149,7 @@ public class MakeController {
 		model.addAttribute("menuKey", searchVO.getMenuKey());
 		searchVO.setSearchUserid(userSession.getUserId());
 		
-		if(makeVO.getCirCode()==null) {
+		if(makeVO.getCirCode()==null || makeVO.getCirCode().isEmpty()) {
 			makeVO.setCirRegUser(userSession.getUserId());
 			makeService.insert(makeVO);	
 		} else {
