@@ -76,7 +76,7 @@ protected Log log = LogFactory.getLog(this.getClass());
 		
 		// 사용자 마스터 정보조회
 		String myUserId = userSession.getUserId();
-		pUserVo.setComNo(myUserId);
+		pUserVo.setComNo(myUserId);		 // 사번으로 조회하도록 변경, getUserId 결과값이 사번임. (swpark)
 		//userVo.setUserId("limjinah");
 		
 		if(myUserId == null) {
@@ -127,7 +127,7 @@ protected Log log = LogFactory.getLog(this.getClass());
 		
 		// 사용자 마스터 정보조회
 		String myUserId = userSession.getUserId();
-		pUserVo.setComNo(myUserId);
+		pUserVo.setComNo(myUserId);   // 사번으로 조회하도록 변경, getUserId 결과값이 사번임. (swpark)
 		//userVo.setUserId("limjinah");
 		
 		if(myUserId == null) {
