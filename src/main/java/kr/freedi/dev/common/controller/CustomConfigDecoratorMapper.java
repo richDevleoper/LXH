@@ -136,7 +136,11 @@ public class CustomConfigDecoratorMapper extends ConfigDecoratorMapper {
 			//def
 			if(decorator.getName().equals("def") || decorator.getName().equals("defIndex")){
 				UserVO userSession = (UserVO) request.getSession().getAttribute("userSession");
-				String isAdmin = userSession.getIntfUserVO().getIsAdmin();
+				
+				String isAdmin = "";
+				if(userSession!=null) {
+					isAdmin = userSession.getIntfUserVO().getIsAdmin();
+				}
 				
 				request.setAttribute("treeMenuList", menuService.getActTreeList(MENU_TYP_DEF, isAdmin));
 				if(request.getParameter("menuKey") != null && !request.getParameter("menuKey").equals("")){

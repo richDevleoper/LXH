@@ -85,3 +85,8 @@ hd_const/src/main/java/kr/freedi/dev/qreport/domain/ReportVO.java
 hd_const/src/main/resources/kr/freedi/dev/sqlmap/default/Report.xml
 디비 컬럼을 기준으로 작성
 
+
+
+5. 메뉴권한 관련
+1) 사용자의 Admin 지정 - TB_MNGR_USER 테이블에 사번으로 지정된 계정이  있으면 관리자로 간주
+2) 메뉴의 관리자메뉴 지정 - TB_MENU에서 특정 메뉴 데이터의 ADM_FLG를 'Y'로 지정한다.

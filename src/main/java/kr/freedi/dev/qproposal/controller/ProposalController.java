@@ -270,7 +270,53 @@ public class ProposalController {
 					attachFileService.uploadAttachFile(afterAttachFiles.get(index), attachFileVO);
 				}			
 			}			
-		}		
+		}
+		
+		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//제안정보 등록
+		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////		
+		if(proposalVO.getPropPropStatCode() != null && !proposalVO.getPropPropStatCode().equals("PRG_1")) // 결제요청
+		{
+			String approvalType = proposalVO.getPropTypeCode().equals("PPS_TYP_1")? "6" : "7"; // 6 - 실시제안, 7 - 쪽지제안
+			String refBusType = proposalVO.getPropTypeCode().equals("PPS_TYP_1")? "4" : "3"; // 4 - 실시제안, 3 - 쪽지제안
+			ApproveVO approveVO = new ApproveVO();
+			approveVO.setAprovalType(approvalType);
+			approveVO.setRefBusType(refBusType);
+			
+			approveVO.setRefBusCode(String.valueOf(proposalVO.getPropSeq())); // 제안코드
+			approveVO.setAprovalSubject(proposalVO.getPropName()); // 제안명
+			approveVO.setUserId(proposalVO.getPropUser()); // 상신자
+			
+			ApproveDetailVO approveDetailVO = new ApproveDetailVO();
+			approveDetailVO.setComNo(proposalVO.getPropApprovalUser()); // 결재자 사번
+			approveDetailVO.setComDepartCode(proposalVO.getPropApprovalGroupCode()); // 결재자 부서코드
+			approveDetailVO.setComJobx(proposalVO.getPropApprovalDutyCode()); //결재자 직위코드
+			approveDetailVO.setComPosition(proposalVO.getPropApprovalLevelCode()); // 결재자 직책코드
+			approveDetailVO.setAprovalReqComNo(proposalVO.getPropUser()); // 결재상신자 사번
+			
+			List<ApproveDetailVO> approveList = new ArrayList<>();
+			approveList.add(approveDetailVO);
+			approveVO.setDetailList(approveList);
+			
+			approveService.insert(approveVO); // 결재선 등록
+			
+			//PROP_APPROVER_CODE 결재코드
+			//EgovMap param = new EgovMap();
+			//param.put("approvalType", approvalType);
+			//param.put("refBusType", refBusType);
+			//param.put("refBusCode", String.valueOf(proposalVO.getPropSeq()));
+			//
+			//String approverCode = proposalService.selectApproverCode(param);
+			//
+			//proposalVO.setPropApproverCode(approverCode);
+			
+			proposalVO.setPropApproverCode(proposalVO.getPropApprovalUser()); // 결재자 사번으로 저장 - 임시
+			
+			// 제안심사에서 결재처리 프로세스 보완 필요
+			// 1.상신자가 제안 의뢰
+			// 2.결재자가 확인 후 결재 또는 반려 - 결재 및 반려 처리시 TB_PROPOSAL_DETAIL에 어떻게 어떤 상태를 변경해줄것인지
+		}
+		
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		//제안정보 등록
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////		
