@@ -245,6 +245,9 @@
 		 <if test="stdSeq != null and stdSeq neq ''.toString()">
 			AND STD_SEQ = #{stdSeq}
 		 </if>
+		 <if test="eduCode != null and eduCode neq ''.toString()">
+			AND EDU_CODE = #{eduCode}
+		 </if>
 		 <if test="stdUserId != null and stdUserId neq ''.toString()">
 			AND STD_USERID = #{stdUserId}
 		 </if>

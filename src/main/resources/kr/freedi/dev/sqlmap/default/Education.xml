@@ -42,6 +42,7 @@
 		<result column="EDU_CLASS_DIVISION_NAME"	 property="eduClassDivisionName"/>
 		<result column="EDU_BELTCODE_NAME"	 	     property="eduBeltCodeName"/>
 		
+		<result column="STD_SEQ"                     property="stdSeq"/>   
 		<result column="COM_NO"                    	 property="comNo"/>     
 		<result column="STD_USERID"	 	     	 	 property="stdUserId"/>
 		<result column="STD_NAME"                    property="stdName"/>  
@@ -63,6 +64,11 @@
 		<result column="STD_BELT_NM"            	 property="stdBeltNm"/> 
 		<result column="STD_COMPLETE_NN"	 	     property="stdCompleteNm"/>
 		<result column="STD_STATUS_NM"	 	     	 property="stdStatusNm"/>
+
+		<result column="STD_REG_USER"               property="stdRegUser"/> 
+		<result column="STD_REG_DATE"               property="stdRegDate"/> 
+		<result column="STD_UPDATE_USER"            property="stdUpdateUser"/> 
+		<result column="STD_UPDATE_DATE"            property="stdUpdateDate"/> 
 		
 		<result column="EDU_CODE01"	 	 			 property="eduCode01"/>
 		<result column="EDU_NAME01"	 	 			 property="eduName01"/>
@@ -568,6 +574,7 @@
 					 	   	M.EDU_DATE,
 					 	   	M.EDU_BELTCODE,
 					 	   	M.EDU_CLASS_TYPE,
+					 	   	D.STD_SEQ,
 					 	   	D.STD_COMPLETE_YN,
 							CASE WHEN M.EDU_CLASS_TYPE = '01' THEN
 								CASE WHEN D.STD_COMPLETE_YN = 'Y' THEN '이수' ELSE '미이수' END
@@ -575,7 +582,10 @@
 								CASE WHEN D.STD_COMPLETE_YN = 'Y' THEN '합격' ELSE '불합격' END
 							END AS STD_COMPLETE_NN,
 					 	   	D.STD_STATUS,
-					 	   	CASE WHEN D.STD_STATUS = 'Y' THEN '신청완료' ELSE '신청취소' END AS STD_STATUS_NM	
+					 	   	CASE WHEN D.STD_STATUS = 'Y' THEN '신청완료' ELSE '신청취소' END AS STD_STATUS_NM,
+					 	   	D.STD_REAPPLY_YN,
+					 	   	TO_CHAR(D.STD_REG_DATE, 'YYYY-MM-DD') AS STD_REG_DATE,
+					 	   	TO_CHAR(D.STD_UPDATE_DATE, 'YYYY-MM-DD') AS STD_UPDATE_DATE	
 					  FROM TB_EDUCATION_MST M
 				 LEFT JOIN TB_STUDENT_DETAIL D 
 					    ON M.EDU_CODE = D.EDU_CODE 

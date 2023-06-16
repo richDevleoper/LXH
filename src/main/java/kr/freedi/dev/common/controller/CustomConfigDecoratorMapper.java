@@ -138,7 +138,7 @@ public class CustomConfigDecoratorMapper extends ConfigDecoratorMapper {
 				UserVO userSession = (UserVO) request.getSession().getAttribute("userSession");
 				
 				String isAdmin = "";
-				if(userSession!=null) {
+				if(userSession!=null && userSession.getIntfUserVO()!=null) {
 					isAdmin = userSession.getIntfUserVO().getIsAdmin();
 				}
 				

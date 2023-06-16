@@ -98,6 +98,27 @@ public class MyEducationController {
 		return new ObjectMapper().writeValueAsString(educationVO);
 	}
 	
+	@RequestMapping({"/myedulist.do"})
+	public String MyEduList(HttpServletRequest request, ModelMap model,
+		@ModelAttribute("EducationSearchVO") EducationSearchVO searchVO, 
+		@ModelAttribute("EducationVO") EducationVO educationVO, 
+		@ModelAttribute("StudentVO") StudentVO studentVO,
+		UserVO userSession)throws Exception {
+		
+		model.addAttribute("menuKey", searchVO.getMenuKey());
+		CodeVO codeVO = new CodeVO(); 
+		String[] arrCodeGrpIds = {"ED_TY2"};
+		codeVO.setCodeGrpIdList(arrCodeGrpIds);
+		codeVO.setActFlg("Y"); 
+		List<EgovMap> allCodes = codeService.selectFullList(codeVO);		//item.codeGrpId, codeId, codeNm
+		model.addAttribute("allCodes", allCodes);
+		
+		String myUserId = userSession.getUserId();
+		studentVO.setComNo(myUserId);
+		
+		return "app/education/MyEduList";
+	}
+	
 	//교육신청 전 체크
 	@RequestMapping({"/chcekedu.do"})
 	public @ResponseBody String chcekedu(HttpServletRequest request,
@@ -217,14 +238,52 @@ public class MyEducationController {
 			if(stdSeq.trim().length() == 0) {
 				studentVO.setResult("N"); // 결과값
 			}else {
+				studentVO.setEduCode(eduCode);
 				studentVO.setStdSeq(stdSeq);
 				studentVO.setStdStatus("N");
+				studentVO.setStdReapplyYn(mode);
 				studentVO.setStdUpdateUser(myUserId);
 				studentService.updateStdDetail(studentVO);
 				
 				studentVO.setResult("Y"); // 결과값
 				
 			}
+		}
+		
+		return new ObjectMapper().writeValueAsString(studentVO);
+	}
+	
+	//교육 재신청
+	@RequestMapping({"/reofferstd.do"})
+	public @ResponseBody String reofferStd(HttpServletRequest request,
+		   @ModelAttribute("EducationSearchVO") EducationSearchVO searchVO, 
+		   @ModelAttribute("StudentVO") StudentVO studentVO,
+		   @ModelAttribute("userVO") UserVO userVo,
+		   @RequestParam Map<String, Object> params,
+		   UserVO userSession)throws Exception {
+		
+		String eduCode   = (String)params.get("eduCode");
+		String stdSeq   = (String)params.get("stdSeq");
+		String mode   = (String)params.get("mode");
+		
+		// 사용자 마스터 정보조회
+		String myUserId = userSession.getUserId();
+		//String myUserId = "FB2621";
+		
+		if("".equals(myUserId) || myUserId == null) {
+			studentVO.setResult("S"); // 결과값
+		}else {
+			// 수강생 정보 세팅
+			studentVO.setEduCode(eduCode);
+			studentVO.setStdSeq(stdSeq);
+			studentVO.setComNo(myUserId);
+			studentVO.setStdStatus(mode);
+			studentVO.setStdReapplyYn(mode);
+			
+			//신청
+			studentVO.setStdUpdateUser(myUserId);
+			studentService.updateStdDetail(studentVO);
+			studentVO.setResult("Y"); // 결과값
 		}
 		
 		return new ObjectMapper().writeValueAsString(studentVO);
