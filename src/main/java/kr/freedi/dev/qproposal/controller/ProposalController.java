@@ -192,15 +192,12 @@ public class ProposalController {
 			List<AttachFileVO> beforeAttachFileList = attachFileService.selectFullList(fileVO); // 개선 전
 			fileVO.setFileId("proposal_after_" + proposalVO.getPropSeq());
 			List<AttachFileVO> afterAttachFileList = attachFileService.selectFullList(fileVO); // 개선 후
-//			fileVO.setFileId("proposal_attach_" + proposalVO.getPropSeq());
-//			List<AttachFileVO> attachFileList = attachFileService.selectFullList(fileVO); //첨부 파일
 			
 			resultItem.setBeforeAttachFileList(beforeAttachFileList);
 			resultItem.setAfterAttachFileList(afterAttachFileList);
-//			resultItem.setAttachFileList(attachFileList);
 			
 			//결재자 정보 조회
-			if(!resultItem.getPropPropStatCode().equals("PRG_1")) {
+			if(/*resultItem.getPropPropStatCode() != null && !resultItem.getPropPropStatCode().equals("PRG_1")*/ resultItem.getPropApproverCode() != null && !resultItem.getPropApproverCode().equals("")) {
 				kr.freedi.dev.qpopup.domain.UserVO userVO = new kr.freedi.dev.qpopup.domain.UserVO();
 				userVO.setComNo(resultItem.getPropApproverCode());				
 				List<EgovMap> userInfo = proposalService.selectApproverUserInfo(userVO);
@@ -208,7 +205,7 @@ public class ProposalController {
 				if(userInfo != null && userInfo.size() > 0) {
 					for(int index = 0; index < userInfo.size(); index++) {
 						EgovMap item = userInfo.get(index);
-						resultItem.setPropApprovalUser(String.valueOf(item.get("compNo")));
+						resultItem.setPropApprovalUser(String.valueOf(item.get("comNo")));
 						resultItem.setPropApprovalName(String.valueOf(item.get("userName")));
 						resultItem.setPropApprovalLevelCode(String.valueOf(item.get("comJobx")));
 						resultItem.setPropApprovalLevel(String.valueOf(item.get("comJobxNm")));
@@ -298,25 +295,15 @@ public class ProposalController {
 			approveList.add(approveDetailVO);
 			approveVO.setDetailList(approveList);
 			
-			approveService.insert(approveVO); // 결재선 등록
-			
-			//PROP_APPROVER_CODE 결재코드
-			//EgovMap param = new EgovMap();
-			//param.put("approvalType", approvalType);
-			//param.put("refBusType", refBusType);
-			//param.put("refBusCode", String.valueOf(proposalVO.getPropSeq()));
-			//
-			//String approverCode = proposalService.selectApproverCode(param);
-			//
-			//proposalVO.setPropApproverCode(approverCode);
-			
-			proposalVO.setPropApproverCode(proposalVO.getPropApprovalUser()); // 결재자 사번으로 저장 - 임시
+			approveService.insert(approveVO); // 결재선 등록			
+			proposalVO.setPropApproverCode(proposalVO.getPropApprovalUser()); // 결재자 사번으로 저장 - 의뢰시
 			
 			// 제안심사에서 결재처리 프로세스 보완 필요
 			// 1.상신자가 제안 의뢰
 			// 2.결재자가 확인 후 결재 또는 반려 - 결재 및 반려 처리시 TB_PROPOSAL_DETAIL에 어떻게 어떤 상태를 변경해줄것인지
-		}
-		
+		}else {
+			proposalVO.setPropApproverCode(proposalVO.getPropApprovalUser()); // 결재자 사번으로 저장 - 임시
+		}		
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		//제안정보 등록
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////		
@@ -393,23 +380,14 @@ public class ProposalController {
 			approveList.add(approveDetailVO);
 			approveVO.setDetailList(approveList);
 			
-			approveService.insert(approveVO); // 결재선 등록
-			
-			//PROP_APPROVER_CODE 결재코드
-//			EgovMap param = new EgovMap();
-//			param.put("approvalType", approvalType);
-//			param.put("refBusType", refBusType);
-//			param.put("refBusCode", String.valueOf(proposalVO.getPropSeq()));
-//			
-//			String approverCode = proposalService.selectApproverCode(param);
-//			
-//			proposalVO.setPropApproverCode(approverCode);
-			
-			proposalVO.setPropApproverCode(proposalVO.getPropApprovalUser()); // 결재자 사번으로 저장 - 임시
+			approveService.insert(approveVO); // 결재선 등록			
+			proposalVO.setPropApproverCode(proposalVO.getPropApprovalUser()); // 결재자 사번으로 저장 - 의뢰시
 			
 			// 제안심사에서 결재처리 프로세스 보완 필요
 			// 1.상신자가 제안 의뢰
 			// 2.결재자가 확인 후 결재 또는 반려 - 결재 및 반려 처리시 TB_PROPOSAL_DETAIL에 어떻게 어떤 상태를 변경해줄것인지
+		}else {
+			proposalVO.setPropApproverCode(proposalVO.getPropApprovalUser()); // 결재자 사번으로 저장 - 임시
 		}
 		int result = proposalService.updateProposalInfo(proposalVO);
 		if(result > 0) {
@@ -476,31 +454,6 @@ public class ProposalController {
 		total += Integer.parseInt(summary.get("prg5").toString());
 		total += Integer.parseInt(summary.get("prg6").toString());
 		
-//		List<EgovMap> classCount = proposalService.selectProposalClassByCount(searchVO);
-//		
-//		summary.put("s", "0"); // S급
-//		summary.put("a", "0"); // A급
-//		summary.put("b", "0"); // B급
-//		summary.put("c", "0"); // C급
-//		summary.put("d", "0"); // D급
-//		summary.put("na", "0"); // 불채택
-//		
-//		if(classCount != null && classCount.size() > 0) {
-//			for(int index = 0; index < classCount.size(); index++) {
-//				EgovMap item = classCount.get(index);
-//				if(item.get("propEvalLvCode") != null){
-//					summary.put(item.get("propEvalLvCode"), item.get("total"));
-//				}
-//				
-//			}
-//		}
-//		total += Integer.parseInt(summary.get("s").toString());
-//		total += Integer.parseInt(summary.get("a").toString());
-//		total += Integer.parseInt(summary.get("b").toString());
-//		total += Integer.parseInt(summary.get("c").toString());
-//		total += Integer.parseInt(summary.get("d").toString());
-//		total += Integer.parseInt(summary.get("na").toString());
-		
 		summary.put("tt", total);
 		searchVO.setTotalRecordCount(total);
 		
@@ -540,7 +493,7 @@ public class ProposalController {
 			searchVO.setSearchPropSeq(proposalVO.getPropSeq());
 			resultItem = proposalService.selectProposalDetailInfo(searchVO);
 			//결재자 정보 조회
-			if(resultItem.getPropPropStatCode() != null && !resultItem.getPropPropStatCode().equals("PRG_1")) {
+			if(/*resultItem.getPropPropStatCode() != null && !resultItem.getPropPropStatCode().equals("PRG_1")*/ resultItem.getPropApproverCode() != null && !resultItem.getPropApproverCode().equals("")) {
 				kr.freedi.dev.qpopup.domain.UserVO userVO = new kr.freedi.dev.qpopup.domain.UserVO();
 				userVO.setComNo(resultItem.getPropApproverCode());				
 				List<EgovMap> userInfo = proposalService.selectApproverUserInfo(userVO);
@@ -548,7 +501,7 @@ public class ProposalController {
 				if(userInfo != null && userInfo.size() > 0) {
 					for(int index = 0; index < userInfo.size(); index++) {
 						EgovMap item = userInfo.get(index);
-						resultItem.setPropApprovalUser(String.valueOf(item.get("compNo")));
+						resultItem.setPropApprovalUser(String.valueOf(item.get("comNo")));
 						resultItem.setPropApprovalName(String.valueOf(item.get("userName")));
 						resultItem.setPropApprovalLevelCode(String.valueOf(item.get("comJobx")));
 						resultItem.setPropApprovalLevel(String.valueOf(item.get("comJobxNm")));
