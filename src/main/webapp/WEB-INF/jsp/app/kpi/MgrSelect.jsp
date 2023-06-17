@@ -490,6 +490,7 @@
 				data: params,
 				dataType : 'json',
 				success:function(data){
+					debugger;
 					console.log(data);
 					let vhtml = [];	
 					let cntNum = 0;

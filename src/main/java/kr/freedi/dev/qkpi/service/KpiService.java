@@ -40,7 +40,7 @@ public class KpiService {
 		
 		List<EgovMap> data = dao.selectList("KPI.selectMgrPlan", vo);
 		
-		return this.buildTree(data, null);
+		return this.buildTree(data, "50000000");
 	}
 
 	
@@ -96,8 +96,6 @@ public class KpiService {
                 resultArray.add(node);
             }
         }
-        
-        
         
         return resultArray;
     }

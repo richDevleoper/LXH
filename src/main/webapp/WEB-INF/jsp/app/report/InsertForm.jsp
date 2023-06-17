@@ -395,48 +395,33 @@
 																<col style="width: 80px">
 																<col>
 																<col style="width: 70px">
+																<%-- <col style="width: 70px">
 																<col style="width: 70px">
-																<col style="width: 70px">
-																<col style="width: 70px">
+																<col style="width: 70px"> --%>
 															</colgroup>
 															<tbody>
 																<tr>
 																	<th colspan="4">Finish 요약</th>
-																	<th colspan="3">활동결과(실적)</th>
+																	<!-- <th colspan="3">활동결과(실적)</th> -->
 																</tr>
 																<tr>
-																	<td rowspan="2" colspan="4">
+																	<td colspan="4">
 																		<div class="input-text">
-																			<form:textarea
-																				path="repDetailList[0].repFinishSummary"
-																				style="height: 65px;" />
+																			<form:textarea path="repDetailList[0].repFinishSummary" style="height: 65px;" />
 																		</div>
 																	</td>
-																	<td>CTQ/CTP</td>
+																	<!-- <td>CTQ/CTP</td>
 																	<td>KPI</td>
-																	<td>예상성과</td>
+																	<td>예상성과</td> -->
 																</tr>
+																<%-- <tr>
+																	<td><div class="col s2 input-text pd3"><form:input type="text" path="repDetailList[0].repCtqCtp" /> </div></td>
+																	<td><div class="col s2 input-text pd3" style="width: 100%"> <form:input type="text" path="repDetailList[0].repKpi"/></div></td>
+																	<td><div class="col s2 input-text pd-r10" style="width: 100%"><form:input type="text" path="repDetailList[0].repExpectationResult" /></div></td>
+																</tr> --%>
 																<tr>
-																	<td><div class="col s2 input-text pd3">
-																			<form:input type="text"
-																				path="repDetailList[0].repCtqCtp" />
-																		</div></td>
-																	<td><div class="col s2 input-text pd3"
-																			style="width: 100%">
-																			<form:input type="text"
-																				path="repDetailList[0].repKpi" />
-																		</div></td>
-																	<td><div class="col s2 input-text pd-r10"
-																			style="width: 100%">
-																			<form:input type="text"
-																				path="repDetailList[0].repExpectationResult" />
-																		</div></td>
-																</tr>
-																<tr>
-																	<th colspan="2" class="pd-r10 align-right">첨부파일<br>
-																		(Up to 10)
-																	</th>
-																	<td colspan="5" style="text-align: left;">
+																	<th colspan="2" class="pd-r10 align-right">첨부파일<br>(Up to 10)</th>
+																	<td colspan="2" style="text-align: left;">
 																		<div class="col s12 input-text file">
 																			<attachfile:fileuploader
 																				objectId="fileUpload_report_sub_07" ctx=""
@@ -448,7 +433,7 @@
 																	</td>
 																</tr>
 																<tr>
-																	<td colspan="6" class="pd0 border0">
+																	<td colspan="4" class="pd0 border0">
 																		<div class="toggle-box">
 																			<div class="list-table list">
 																				<table>

@@ -2,6 +2,8 @@ package kr.freedi.dev.qkpi.controller;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -9,6 +11,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -19,6 +22,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.gson.JsonArray;
 
@@ -26,6 +30,8 @@ import egovframework.rte.psl.dataaccess.util.EgovMap;
 import kr.freedi.dev.article.domain.ArticleSearchVO;
 import kr.freedi.dev.article.domain.ArticleVO;
 import kr.freedi.dev.code.service.CodeService;
+import kr.freedi.dev.qeducation.controller.EducationController;
+import kr.freedi.dev.qeducation.excel.ExcelFunction;
 import kr.freedi.dev.qkpi.domain.KpiManageVO;
 import kr.freedi.dev.qkpi.domain.KpiSearchVO;
 import kr.freedi.dev.qkpi.domain.KpiVO;
@@ -35,6 +41,7 @@ import kr.freedi.dev.qpopup.service.QPopupService;
 import kr.freedi.dev.qreport.domain.MakeSearchVO;
 import kr.freedi.dev.qreport.domain.MakeVO;
 import kr.freedi.dev.qreport.domain.ReportSearchVO;
+import kr.freedi.dev.qreport.domain.ReportVO;
 import kr.freedi.dev.qreport.service.MakeService;
 import kr.freedi.dev.qreport.service.ReportService;
 import kr.freedi.dev.user.domain.UserVO;
@@ -91,15 +98,25 @@ public class KpiController {
 		String pKudIdx = makeVO.getKudIdx();
 		if(pKudIdx==null)
 			searchVO.setKudIdx("6SIG");
-
+		
+		// 현재 년도 설정
+		if(searchVO.getSearchYear()==null) {
+			LocalDate now = LocalDate.now();
+	        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy");
+			searchVO.setSearchYear(now.format(formatter));
+	
+		}
+        
 		Integer totalCount = makeService.selectKpiListCount(searchVO);
 		searchVO.setTotalRecordCount(totalCount);
+		model.addAttribute("totalCount", totalCount);
 		
 		List<KpiManageVO> list = makeService.selectKpiFullList(searchVO);
 		model.addAttribute("mgrList", list);	
 	
 		return "app/kpi/MgrList";
 	}
+	
 	
 	// 대상선정
 	@RequestMapping({"/MgrSelect.do"})
@@ -161,7 +178,7 @@ public class KpiController {
 		makeService.saveKpi(makeVO);
 		
 		//return "app/make/MakeList";
-		return "redirect:/sub.do?menuKey=46";
+		return "redirect:/kpi/MgrList.do?menuKey=46&kudIdx="+makeVO.getKudIdx();
 		
 	}
 	
@@ -225,6 +242,29 @@ public class KpiController {
 		model.addAttribute("menuKey", searchVO.getMenuKey());
 		
 		return "app/kpi/MbbRateView";
+	}
+	
+	@RequestMapping({"/excelBuild.do"})
+	public @ResponseBody void excelBuild(HttpServletRequest request, HttpServletResponse response, 
+			@ModelAttribute("makeVO") MakeVO makeVO,
+			@ModelAttribute("searchVO") KpiSearchVO searchVO,
+			UserVO userSession){
+		
+		EducationController xlsController = new EducationController();
+		
+		try {
+			String[] colIdArr = {"IDX", "COM_NO", "KUD_USER_NAME", "KUD_PLACE", "KUD_PART", "KUD_TEAM_NAME", "KUD_BELONG_NAME", "", "KUD_JOBX", "KUD_POSITION", "KUD_CERT_BELT"};
+			String[] colNameArr = {"NO", "사번", "이름", "근무지명", "부문", "팀명", "소속명", "직무명", "직위", "직책","인증현황"};
+			
+			String fileName = "KPI관리대상_" + xlsController.getCurrentDate() + xlsController.getCurrentTime() + ".xlsx";
+			List<HashMap<String,Object>> reportList  = makeService.selectKpiFullListExcel(searchVO); 
+			//List<ReportVO> reportList = reportService.selectFullList(searchVO);
+			
+			ExcelFunction.excelWriter(request, response, reportList, fileName, colIdArr, colNameArr);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 	
 }

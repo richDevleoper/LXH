@@ -29,6 +29,44 @@
 	
 	<sql id="defCond">
 		/*searchYear, searchDepart, searchBelt, searchIdx, , searchText, orderByTyp*/
+		<!-- <where>
+			<trim prefixOverrides="AND|OR"> -->
+				
+				<if test="searchYear != null and searchYear != ''">
+					AND T.KUD_YEAR = #{searchYear}
+				</if>
+				<if test="searchDepart != null and searchDepart != ''">
+					AND T.COM_DEPART_CODE = #{searchDepart}
+				</if>				
+				<if test="searchText != null and searchText != ''">
+					<!-- <trim prefixOverrides="AND"> -->
+						<choose>
+							<when test="searchIdx == 1"><!-- 사번 -->
+								AND COM_NO = #{searchText}
+							</when>
+							<when test="searchIdx == 2"><!-- 이름 -->
+								AND KUD_USER_NAME = #{searchText}
+							</when>
+							<when test="searchIdx == 3"><!-- 부문 -->
+								AND KUD_DEPART = #{searchText}
+							</when>
+							<when test="searchIdx == 4"><!-- 소속 -->
+								AND KUD_DEPART = #{searchText}
+							</when>
+							<when test="searchIdx == 5"><!-- 팀명 -->
+							    AND KUD_DEPART = #{searchText}
+							</when>
+							<when test="searchIdx == 6"><!-- 직무명 --> 
+								AND KUD_DEPART = #{searchText}
+							</when>
+							<otherwise>
+								AND COM_NO || '|' || KUD_USER_NAME || '|' || KUD_USER_NAME like '%'|| #{searchText} ||'%' 
+							</otherwise>
+						</choose>
+					<!-- </trim> -->
+				</if>
+			<!--</trim>
+		 </where> -->
 	</sql>
 	
 	<select id="selectCirclListCount" resultType="int">
@@ -54,11 +92,11 @@
 				    tb_kpi_user_detail T
 				WHERE
 				    kud_idx = #{kudIdx}
-				/*ORDER BY std_seq DESC*/
 				<include refid="defCond"></include>
 	</sql>
 	
-	<select id="selectFullList" resultMap="KpiMap">
+	
+	<sql id="selectFullListBasic">
 		WITH CIRCLE_MASTER AS (
             SELECT ROW_NUMBER() OVER( ORDER BY TO_NUMBER(T.STD_SEQ) ASC ) IDX
             , ROW_NUMBER() OVER( ORDER BY TO_NUMBER(T.STD_SEQ) DESC ) ROWIDX
@@ -69,7 +107,17 @@
 		)
 		SELECT *
 		FROM CIRCLE_MASTER T
+		
+	</sql>
+	
+	<select id="selectFullList" resultMap="KpiMap">
+		<include refid="selectFullListBasic"></include>
 		WHERE T.ROWIDX BETWEEN (#{currentPageNo}*#{recordCountPerPage}+1-#{recordCountPerPage}) AND (#{currentPageNo}*#{recordCountPerPage})
+		ORDER BY T.IDX DESC
+	</select>
+	
+	<select id="selectFullListExcel" resultType="java.util.HashMap">
+		<include refid="selectFullListBasic"></include>
 		ORDER BY T.IDX DESC
 	</select>
 	
@@ -142,10 +190,10 @@
 		    , #{cirDeptCode}
 		    , get_code_nm('JOBX', #{comJobxCode})
 		    , get_code_nm('POSITION', #{comPositionCode})
-		    , null
+		    , get_team_nm(get_depart_nm(#{cirDeptCode}))
 		    , #{cirMemName}
-		    , null
-		    , null
+		    , (select dept_lv3_name from tb_depart_mst where dept_code=#{cirDeptCode})
+		    , (select dept_lv2_name from tb_depart_mst where dept_code=#{cirDeptCode})
 		    , (select com_work_place from tb_user_mst where com_no=#{ComNo})
 		    , null
 		    , (select com_join_date from tb_user_mst where com_no=#{ComNo})
@@ -164,10 +212,10 @@
 			    , COM_DEPART_CODE = #{cirDeptCode}
 			    , KUD_JOBX =  get_code_nm('JOBX', #{comJobxCode})
 			    , KUD_POSITION =  get_code_nm('POSITION', #{comPositionCode})
-			    , KUD_TEAM_NAME =  null
+			    , KUD_TEAM_NAME =  get_team_nm(get_depart_nm(#{cirDeptCode}))
 			    , KUD_USER_NAME =  #{cirMemName}
-			    , KUD_BELONG_NAME =  null
-			    , KUD_PART =  null
+			    , KUD_BELONG_NAME =  (select dept_lv3_name from tb_depart_mst where dept_code=#{cirDeptCode})
+			    , KUD_PART =  (select dept_lv2_name from tb_depart_mst where dept_code=#{cirDeptCode})
 			    , KUD_PLACE =  (select com_work_place from tb_user_mst where com_no=#{ComNo})
 			    , KUD_USER_IDENTITY =  null
 			    , KUD_JOIN_DATE =  (select com_join_date from tb_user_mst where com_no=#{ComNo})

@@ -39,42 +39,51 @@
                                     <div class="tab-group underline-type">
                                         <div class="list-wrap">
                                         <div class="list-search">
-                                        <form:form commandName="searchVO" id="defaultForm" name="defaultForm"  action="MgrList.do" onsubmit="return false" method="get" modelAttribute="searchVO">
-                                        ${searchVO.superHiddenTag}
-                                        <form:hidden path="kudIdx"/>
+                                        <form:form commandName="searchVO" id="defaultForm" name="defaultForm"  action="MgrList.do" method="get" modelAttribute="searchVO">
+	                                        ${searchVO.superHiddenTag}
+	                                        <form:hidden path="kudIdx"/>
+                                        
                                             <div class="search-form">
                                                 <div class="form-inline form-input">
                                                     <label>연도</label>
-                                                    <select name="searchYear">
-                                                        <option value="">2023년</option>
-                                                    </select>
+                                                    <jsp:useBean id="now" class="java.util.Date" />
+                                                    <fmt:formatDate value="${now}" pattern="yyyy" var="yearStart"/>
+                                                    <form:select path="searchYear" class="limit">
+													<c:forEach begin="0" end="3" var="result" step="1">
+														<option value="<c:out value="${yearStart - result}" />" <c:if test="${(yearStart - result) == searchVO.searchYear}"> selected="selected"</c:if>><c:out value="${yearStart - result}" /></option>
+													</c:forEach>
+													</form:select>
                                                 </div>
                                                 <div class="form-inline form-select">
                                                     <label>조직</label>                                            
                                                     <form:input type="hidden" path="searchDepart"/>
-                                                    <form:input type="text" path="searchDepartName" disabled="true" />
+                                                    <form:input type="text" path="searchDepartName" readonly="true" />
                                                     <button type="button" class="btn-org btn-search-dept">검색</button>
                                                 </div>
                                                 <div class="form-inline form-select">
                                                     <label>인증현황</label>
-                                                    <select name="searchBelt">
-                                                        <option value="">전체</option>
-                                                    </select>
+                                                    <form:select path="searchBelt">
+                                                        <form:option value="">전체</form:option>
+														<form:option value="D000">GB</form:option>
+														<form:option value="D001">BB</form:option>
+														<form:option value="D002">MBB</form:option>
+														<form:option value="D003">MGB</form:option>
+                                                    </form:select>
                                                 </div>
                                                 <div class="form-inline form-select">
                                                     <label>구분</label>
-                                                    <select name="searchIdx">
-                                                        <option value="">전체</option>
-                                                        <option value="">사번</option>
-                                                        <option value="">이름</option>
-                                                        <option value="">부문</option>
-                                                        <option value="">소속명</option>
-                                                        <option value="">팀명</option>
-                                                        <option value="">직무명</option>
-                                                    </select>                                                    
+                                                    <form:select path="searchIdx">
+                                                        <form:option value="">전체</form:option>
+                                                        <form:option value="1">사번</form:option>
+                                                        <form:option value="2">이름</form:option>
+                                                        <form:option value="3">부문</form:option>
+                                                        <form:option value="4">소속명</form:option>
+                                                        <form:option value="5">팀명</form:option>
+                                                        <form:option value="6">직무명</form:option>
+                                                    </form:select>                                                    
                                                 </div>
                                                 <div class="form-inline form-select">
-                                                    <input type="text" name="searchText">
+                                                    <form:input type="text" path="searchText" />
                                                 </div>
                                                 <button type="button" class="btn-submit" onclick="onclick_search()">조회</button>
                                             </div>
@@ -82,13 +91,22 @@
                                         </div>
 
                                         <div class="list-header">
-                                        <p class="title">2023년 6σ 인재 관리 대상</p>
+                                        <p class="title">
+                                        <c:choose>
+											<c:when test="${makeVO.kudIdx eq 'MBB'}">
+												${searchVO.searchYear}년 팀장 MBB 관리 대상
+											</c:when>
+											<c:otherwise>
+												${searchVO.searchYear}년 6σ 인재 관리 대상
+											</c:otherwise>
+										</c:choose>   
+                                        </p>
                                         <span class="bar"></span>
-                                        <p class="total">총 305</p>
-                                        <select name="limit" class="limit">
-                                            <option value="10">10개</option>
-                                            <option value="50">50개</option>
-                                            <option value="100">100개</option>
+                                        <p class="total">총  ${totalCount}명</p>
+                                        <select name="limit" class="limit" onchange="onchange_recordCountPerPage(this.value)">
+                                            <option value="10" <c:if test="${searchVO.recordCountPerPage eq '10' }">selected="selected"</c:if>>10개</option>
+		                                    <option value="50" <c:if test="${searchVO.recordCountPerPage eq '50' }">selected="selected"</c:if>>50개</option>
+		                                    <option value="100" <c:if test="${searchVO.recordCountPerPage eq '100' }">selected="selected"</c:if>>100개</option>
                                         </select>
                                         </div>
                                         <div class="list-content">
@@ -115,8 +133,8 @@
                                                             <th class="bg-gray font-weight-bold">이름</th>
                                                             <th class="bg-gray font-weight-bold">근무지명</th>
                                                             <th class="bg-gray font-weight-bold">부문</th>
-                                                            <th class="bg-gray font-weight-bold">소속명</th>
                                                             <th class="bg-gray font-weight-bold">팀명</th>
+                                                            <th class="bg-gray font-weight-bold">소속명</th>                                                            
                                                             <th class="bg-gray font-weight-bold">직무명</th>
                                                             <th class="bg-gray font-weight-bold">직위</th>
                                                             <th class="bg-gray font-weight-bold">직책</th>
@@ -136,8 +154,8 @@
                                                             <td>${item.kudUserName}</td>
                                                             <td>${item.kudPlace}</td>
                                                             <td>${item.kudPart}</td>
-                                                            <td>${item.kudBelongName}</td>
                                                             <td>${item.kudTeamName}</td>
+                                                            <td>${item.kudBelongName}</td>
                                                             <td></td>
                                                             <td>${item.kudJobx}</td>
                                                             <td>${item.kudPosition}</td>
@@ -152,10 +170,10 @@
                                         	
                                             <ui:pagination paginationInfo="${searchVO}" type="defDefault" jsFunction="cfnPageLink" />
                                             <div class="list-btns">
-                                                <button type="button" class="btn bg-gray" onclick="location.href='./MgrSelect.do?menuKey=${menuKey}';">                                        
+                                                <button type="button" class="btn bg-gray" onclick="onclick_mgrSelectLink()">                                        
                                                     <span>대상선정</span>
                                                 </button>     
-                                                <button type="button" class="btn-excel">
+                                                <button type="button" class="btn-excel" onclick="onclick_excelDownload()">
                                                     <img src="/assets/images/icon_excel.png" alt="">
                                                     <span>다운로드</span>
                                                 </button>                               
@@ -267,6 +285,11 @@
 		popDept.open();
 	}
 	
+	function onchange_recordCountPerPage(vCount){
+		$("#recordCountPerPage").val(vCount);
+		onclick_search();// 검색 '조회'버튼 클릭
+	}
+	
 	// 조직 조회 콜백부
 	function callback_popDept(objId, data){
 		
@@ -286,6 +309,21 @@
 		$("#defaultForm").attr("action", "MgrList.do");
 		$("#defaultForm")[0].submit();
 	}
+	
+	function onclick_excelDownload(){
+		$("#defaultForm").attr("action", "excelBuild.do");
+		$("#defaultForm")[0].submit();
+	}
+	
+	function onclick_mgrSelectLink(){
+		if('${makeVO.kudIdx}'==='MBB'){
+			location.href='./MgrSelect.do?menuKey=${menuKey}&kudIdx=MBB';
+		} else {
+			location.href='./MgrSelect.do?menuKey=${menuKey}&kudIdx=6SIG';
+		}
+			
+	}
+	
 </script>
 
 

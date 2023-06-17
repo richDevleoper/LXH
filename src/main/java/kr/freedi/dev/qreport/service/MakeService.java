@@ -265,6 +265,7 @@ public class MakeService {
 				makeVO.setComPositionCode(anLeader5[j].trim());
 				makeVO.setBeltCode(anLeader6[j].trim());
 				makeVO.setCirDeptName(anLeader7[j].trim());
+				
 				//makeVO.setCirMemRole("LEADER");
 				
 				
@@ -389,6 +390,11 @@ public class MakeService {
 	public List<KpiManageVO> selectKpiFullList(KpiSearchVO searchVO) {
 		
 		return dao.selectList("KPI.selectFullList", searchVO);
+	}
+	
+	public List<HashMap<String,Object>> selectKpiFullListExcel(KpiSearchVO searchVO) {
+		
+		return dao.selectList("KPI.selectFullListExcel", searchVO);
 	}
 	
 	public int selectKpiListCount(KpiSearchVO searchVO) {
