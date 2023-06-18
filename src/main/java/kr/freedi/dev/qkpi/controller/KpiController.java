@@ -29,6 +29,7 @@ import com.google.gson.JsonArray;
 import egovframework.rte.psl.dataaccess.util.EgovMap;
 import kr.freedi.dev.article.domain.ArticleSearchVO;
 import kr.freedi.dev.article.domain.ArticleVO;
+import kr.freedi.dev.code.domain.CodeVO;
 import kr.freedi.dev.code.service.CodeService;
 import kr.freedi.dev.qeducation.controller.EducationController;
 import kr.freedi.dev.qeducation.excel.ExcelFunction;
@@ -184,11 +185,27 @@ public class KpiController {
 	
 	@RequestMapping({"/status6SIG.do"})
 	public String handler_statusList6SIG(HttpServletRequest request, ModelMap model,
-			@ModelAttribute("kpiSearchVO") KpiSearchVO searchVO, 
+			@ModelAttribute("searchVO") KpiSearchVO searchVO, 
 			UserVO userSession)throws Exception {
 		
 		model.addAttribute("menuKey", searchVO.getMenuKey());
 		model.addAttribute("kudIdx", "6SIG");
+		model.addAttribute("action", "status6SIG.do");
+		
+		
+		if(searchVO.getSearchYear()==null) {
+			LocalDate now = LocalDate.now();
+	        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy");
+			searchVO.setSearchYear(now.format(formatter));
+			
+			formatter = DateTimeFormatter.ofPattern("M");
+			searchVO.setSearchMonth(now.format(formatter));
+		}
+		
+		CodeVO codeVO = new CodeVO(); 
+		codeVO.setCodeGrpId("WPLACE");
+		codeVO.setActFlg("Y"); 
+		model.addAttribute("code_wplace", codeService.selectFullList(codeVO));
 		
 		JsonArray resultArray = kpiService.getPlanData(searchVO);
 		model.addAttribute("tableData", resultArray);
@@ -199,11 +216,26 @@ public class KpiController {
 	
 	@RequestMapping({"/statusMBB.do"})
 	public String handler_statusListMBB(HttpServletRequest request, ModelMap model,
-			@ModelAttribute("kpiSearchVO") KpiSearchVO searchVO, 
+			@ModelAttribute("searchVO") KpiSearchVO searchVO, 
 			UserVO userSession)throws Exception {
 		
 		model.addAttribute("menuKey", searchVO.getMenuKey());
 		model.addAttribute("kudIdx", "MBB");
+		model.addAttribute("action", "statusMBB.do");
+		
+		if(searchVO.getSearchYear()==null) {
+			LocalDate now = LocalDate.now();
+	        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy");
+			searchVO.setSearchYear(now.format(formatter));
+			
+			formatter = DateTimeFormatter.ofPattern("M");
+			searchVO.setSearchMonth(now.format(formatter));
+		}
+		
+		CodeVO codeVO = new CodeVO(); 
+		codeVO.setCodeGrpId("WPLACE");
+		codeVO.setActFlg("Y"); 
+		model.addAttribute("code_wplace", codeService.selectFullList(codeVO));
 		
 		JsonArray resultArray = kpiService.getPlanData(searchVO);
 		model.addAttribute("tableData", resultArray);

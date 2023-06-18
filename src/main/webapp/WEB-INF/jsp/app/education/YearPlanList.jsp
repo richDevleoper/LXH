@@ -90,7 +90,7 @@
            <form:hidden path="eduFixed" id="eduFixed"/>
            <form:hidden path="mode" />
          </form:form>     
-                 
+        <form:hidden path="comCertBelt" id="comCertBelt" value="${comCertBelt}"/>         
 		<div class="tab-btn">
 			<!-- [D] 현재 활성화된 메뉴에 on클래스 추가해주세요. -->
 			<button type="button" class="on" id="titTab">1차 교육 (1/20~26)</button>
@@ -149,8 +149,8 @@
 			</div>
 		</div>
 		<div class="btn-group">
-			<button type="button" class="btn bg-gray" id="btnRegEdu">신청</button>
-			<button type="button" class="btn bg-white" id="btnCnlEdu">취소</button>
+			<button type="button" class="btn bg-gray" id="btnRegEdu" style="display: none;">신청</button>
+			<button type="button" class="btn bg-white" id="btnCnlEdu" style="display: none;">취소</button>
 		</div>
 		 
 	</div>
@@ -299,17 +299,11 @@ function detailView(eduCode){
 			$("#eduCol7").html(eduDate);
 			
 			const eDate = eduDate.split(',').reverse()[0];
-			console.log(">>>  " + eDate);
-			
 			let anEdate = eDate.split('/');
-			
 			let targetDt = eduYear + "-" + anEdate[0] + "-" + anEdate[1]
 	
 			let obj_date = new Date();
 			let obj_date2 = new Date(targetDt);
-			
-			console.log(">>>  " + obj_date);
-			console.log(">>>  " + obj_date2);
 			
 			if(obj_date2 < obj_date){
 				$("#btnRegEdu").hide();
@@ -351,9 +345,7 @@ $.fn.mergeClassRowspan = function (colIdx) {
                // if ($(this).attr('class') == $(that).attr('class')) {
                     rowspan = $(that).attr("rowspan") || 1;
                     rowspan = Number(rowspan) + 1;
-
                     $(that).attr("rowspan", rowspan);
-
                     $(this).hide();
 
                 } else {

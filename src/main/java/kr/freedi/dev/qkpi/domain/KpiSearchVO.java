@@ -21,10 +21,16 @@ public class KpiSearchVO extends CommonVO {
 	private String searchYear;	// 연도
 	
 	@ParamField
+	private String searchMonth;
+	
+	@ParamField
 	private String searchDepart;		// 조직
 	
 	@ParamField
 	private String searchDepartName;		// 조직
+	
+	@ParamField
+	private String searchWorkPlace;		// 사업장
 	
 	@ParamField
 	private String searchBelt;	// 인증현황(MBB / BB / ,,,)
@@ -43,6 +49,16 @@ public class KpiSearchVO extends CommonVO {
 
 	public String getSearchYear() {
 		return searchYear;
+	}
+
+
+	public String getSearchMonth() {
+		return searchMonth;
+	}
+
+
+	public void setSearchMonth(String searchMonth) {
+		this.searchMonth = searchMonth;
 	}
 
 
@@ -116,11 +132,22 @@ public class KpiSearchVO extends CommonVO {
 	}
 
 
+	public String getSearchWorkPlace() {
+		return searchWorkPlace;
+	}
+
+
+	public void setSearchWorkPlace(String searchWorkPlace) {
+		this.searchWorkPlace = searchWorkPlace;
+	}
+
+
 	@Override
 	public String toString() {
-		return "KpiSearchVO [kudIdx=" + kudIdx + ", searchYear=" + searchYear + ", searchDepart=" + searchDepart
-				+ ", searchDepartName=" + searchDepartName + ", searchBelt=" + searchBelt + ", searchIdx=" + searchIdx
-				+ ", searchText=" + searchText + ", orderByTyp=" + orderByTyp + "]";
+		return "KpiSearchVO [kudIdx=" + kudIdx + ", searchYear=" + searchYear + ", searchMonth=" + searchMonth
+				+ ", searchDepart=" + searchDepart + ", searchDepartName=" + searchDepartName + ", searchWorkPlace="
+				+ searchWorkPlace + ", searchBelt=" + searchBelt + ", searchIdx=" + searchIdx + ", searchText="
+				+ searchText + ", orderByTyp=" + orderByTyp + "]";
 	}
 	
 }

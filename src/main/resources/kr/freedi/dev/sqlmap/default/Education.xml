@@ -624,7 +624,7 @@
 				 LEFT JOIN TB_CODE D ON A.REP_TYPE_CODE = D.CODE_ID AND D.CODE_GRP_ID IN ('RP_TY1', 'RP_TY2', 'RP_TY3')
 				 LEFT JOIN TB_CODE E ON A.REP_STATUS_CODE = E.CODE_ID AND E.CODE_GRP_ID = 'REP_STAT'
 				 LEFT JOIN TB_CODE F ON B.REP_TEAM_MEM_ROLE = F.CODE_ID AND F.CODE_GRP_ID = 'REP_ROLE'
-					 WHERE 1=1
+					 WHERE A.REP_SIX_IMPLEMENT_DATE IS NOT NULL
 					 <if test="leaderBeltCode != null and leaderBeltCode neq ''.toString()">
 					   AND A.REP_LEADER_BELT_CODE = #{leaderBeltCode}
 					 </if>	
@@ -694,6 +694,19 @@
 					 	   	M.EDU_REG_DATE,
 					 	   	D.STD_SEQ,
 					 	   	D.COM_NO,
+					 	   	(
+					 	   		SELECT NVL(COUNT(*),0) AS CNT 
+								  FROM TB_EDUCATION_MST TE
+								   LEFT OUTER JOIN TB_STUDENT_DETAIL TS ON TE.EDU_CODE = TS.EDU_CODE 
+									WHERE TE.EDU_NUMBER = '1' AND TE.EDU_CLASS_DIVISION IN ('02','04','05') AND TS.STD_COMPLETE_YN = 'Y'
+					 	   	) AS GBCNT,
+					 	   	(
+						 	   	SELECT COUNT(*) 
+								  FROM TB_EDUCATION_MST TE
+								   LEFT OUTER JOIN TB_STUDENT_DETAIL TS ON TE.EDU_CODE = TS.EDU_CODE 
+									WHERE TE.EDU_CLASS_DIVISION = '05' AND TS.STD_COMPLETE_YN = 'Y'
+					 	   	) AS BBCNT,
+					 	   	(SELECT NVL(COUNT(*),0) AS CNT FROM TB_STUDENT_DETAIL TB WHERE TB.COM_NO=D.COM_NO AND TB.STD_TEST_CODE='Y') AS MBBCNT,
 					 	   	D.STD_NAME,
 							D.STD_USERID,
 							D.STD_DEPART,
@@ -727,6 +740,19 @@
 		 WHERE 1=1
 		 <if test="searchbeltCode != null and searchbeltCode neq ''.toString()">
 			AND RS.EDU_BELTCODE = #{searchbeltCode}
+			<choose>
+		        <when test="searchbeltCode != null and searchbeltCode eq '01'.toString()">
+		        	AND RS.GBCNT <![CDATA[>]]> 0
+		        </when>
+		        <when test="searchbeltCode != null and searchbeltCode eq '03'.toString()">
+		        	AND RS.BBCNT <![CDATA[>]]> 0
+		        </when>
+		        <when test="searchbeltCode != null and searchbeltCode eq '04'.toString()">
+		        	AND RS.MBBCNT <![CDATA[>]]> 0
+		        </when>
+		        <otherwise>
+		        </otherwise>
+		    </choose>
 		 </if>  
 		 <if test="searchStdName != null and searchStdName neq ''.toString()">
 			AND RS.STD_NAME like '%' || #{searchStdName} || '%'
@@ -759,6 +785,19 @@
 								 	   	M.EDU_REG_DATE,
 								 	   	D.STD_SEQ,
 								 	   	D.COM_NO,
+								 	   	(
+								 	   		SELECT NVL(COUNT(*),0) AS CNT 
+											  FROM TB_EDUCATION_MST TE
+											   LEFT OUTER JOIN TB_STUDENT_DETAIL TS ON TE.EDU_CODE = TS.EDU_CODE 
+												WHERE TE.EDU_NUMBER = '1' AND TE.EDU_CLASS_DIVISION IN ('02','04','05') AND TS.STD_COMPLETE_YN = 'Y'
+								 	   	) AS GBCNT,
+								 	   	(
+									 	   	SELECT COUNT(*) 
+											  FROM TB_EDUCATION_MST TE
+											   LEFT OUTER JOIN TB_STUDENT_DETAIL TS ON TE.EDU_CODE = TS.EDU_CODE 
+												WHERE TE.EDU_CLASS_DIVISION = '05' AND TS.STD_COMPLETE_YN = 'Y'
+								 	   	) AS BBCNT,
+								 	   	(SELECT NVL(COUNT(*),0) AS CNT FROM TB_STUDENT_DETAIL TB WHERE TB.COM_NO=D.COM_NO AND TB.STD_TEST_CODE='Y') AS MBBCNT,
 								 	   	D.STD_NAME,
 										D.STD_USERID,
 										D.STD_DEPART,
@@ -792,6 +831,19 @@
 					 WHERE 1=1
 					 <if test="searchbeltCode != null and searchbeltCode neq ''.toString()">
 						AND RS.EDU_BELTCODE = #{searchbeltCode}
+						<choose>
+					        <when test="searchbeltCode != null and searchbeltCode eq '01'.toString()">
+					        	AND RS.GBCNT <![CDATA[>]]> 0
+					        </when>
+					        <when test="searchbeltCode != null and searchbeltCode eq '03'.toString()">
+					        	AND RS.BBCNT <![CDATA[>]]> 0
+					        </when>
+					        <when test="searchbeltCode != null and searchbeltCode eq '04'.toString()">
+					        	AND RS.MBBCNT <![CDATA[>]]> 0
+					        </when>
+					        <otherwise>
+					        </otherwise>
+					    </choose>
 					 </if>  
 					 <if test="searchStdName != null and searchStdName neq ''.toString()">
 						AND RS.STD_NAME like '%' || #{searchStdName} || '%'

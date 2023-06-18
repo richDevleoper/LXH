@@ -106,6 +106,7 @@
 								<col style="width:80px">
 								<col style="width:90px">
 								<col>
+								<col>
 								<col style="width:80px">
 								<col style="width:70px">
 								<col style="width:70px">
@@ -120,9 +121,10 @@
 							<thead>
 								<tr>
 									<th class="bg-gray font-weight-bold"><input type="checkbox" name="ch_list" id="ch_all" /><label for="ch_all"></label></th>
-									<th class="bg-gray font-weight-bold">성명${gb}</th>
+									<th class="bg-gray font-weight-bold">성명</th>
 									<th class="bg-gray font-weight-bold">사번</th>
-									<th class="bg-gray font-weight-bold">1차 교육 / 2차 통계 / 3차 과제Test</th>
+									<th class="bg-gray font-weight-bold">교육</th>
+									<th class="bg-gray font-weight-bold">Test</th>
 									<th class="bg-gray font-weight-bold">조직</th>
 									<th class="bg-gray font-weight-bold">직위</th>
 									<th class="bg-gray font-weight-bold">직책</th>
@@ -140,10 +142,10 @@
 								           <tr>
                                              <c:choose>
                                              	<c:when test="${gb eq '04'}">
-                                             		<td colspan="11"><span>조회결과가 없습니다.</span></td>
+                                             		<td colspan="12"><span>조회결과가 없습니다.</span></td>
                                              	</c:when>
                                              	<c:otherwise>
-                                             		<td colspan="9"><span>조회결과가 없습니다.</span></td>
+                                             		<td colspan="10"><span>조회결과가 없습니다.</span></td>
                                              	</c:otherwise>
                                              </c:choose>
                                            </tr>
@@ -154,7 +156,16 @@
                                                 <td><input type="checkbox" name="ch_list" id="ch_${selectMngList.idx}" /><label for="ch_${selectMngList.idx}"></td>
                                                 <td>${selectMngList.stdName}</td>
 												<td>${selectMngList.comNo}</td>
-												<td class="align-left pd-l10">${selectMngList.mngTit}</td>
+												<td class="align-left pd-l10">
+												<c:if test="${selectMngList.eduClassType eq '01'}">
+													${selectMngList.mngTit}
+												</c:if>
+												</td>
+												<td class="align-left pd-l10">
+												<c:if test="${selectMngList.eduClassType eq '02'}">
+													${selectMngList.mngTit}
+												</c:if>
+												</td>
 												<td>${selectMngList.stdDepartNm}</td>
 												<td>${selectMngList.stdJobxNm}</td>
 												<td>${selectMngList.stdPosNm}</td>

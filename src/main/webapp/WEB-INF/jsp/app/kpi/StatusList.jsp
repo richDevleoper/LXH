@@ -74,30 +74,45 @@
 
 	<div class="list-wrap">
 		<div class="list-search">
-			<form>
+			<form:form commandName="searchVO" id="defaultForm" name="defaultForm"  action="${action}" method="get" modelAttribute="searchVO">
+				${searchVO.superHiddenTag}
 				<div class="search-form">
 					<div class="form-inline form-input">
-						<label>조회연도</label> <select name="">
-							<option value="">2023년</option>
-						</select>
+						<label>조회연도</label> 
+						<jsp:useBean id="now" class="java.util.Date" />
+			            <fmt:formatDate value="${now}" pattern="yyyy" var="yearStart"/>
+			            <form:select path="searchYear" class="limit">
+						<c:forEach begin="0" end="3" var="result" step="1">
+							<option value="<c:out value="${yearStart - result}" />" <c:if test="${(yearStart - result) == searchVO.searchYear}"> selected="selected"</c:if>><c:out value="${yearStart - result}" /></option>
+						</c:forEach>
+						</form:select>
 					</div>
 					<div class="form-inline form-input">
-						<label>조회월</label> <select name="">
-							<option value="">2023년</option>
-						</select>
+						<label>조회월 </label>
+						<form:select path="searchMonth" class="limit">
+						<c:forEach begin="1" end="12" var="result" step="1">
+							<form:option value="${result}">${result}월</form:option>
+						</c:forEach>
+						</form:select>
 					</div>
 					<div class="form-inline form-input">
-						<label>조직</label> <input type="text" name="">
-						<button type="button" class="btn-org">검색</button>
+						<label>조직</label>
+						<form:input type="hidden" path="searchDepart"/>
+                        <form:input type="text" path="searchDepartName" readonly="true" />
+                        <button type="button" class="btn-org btn-search-dept">검색</button>
 					</div>
 					<div class="form-inline form-input">
-						<label>사업장</label> <select name="" style="width: 120px">
-							<option value="">전체</option>
-						</select>
+						<label>사업장</label>
+						<form:select path="searchWorkPlace" style="width: 120px">
+							<form:option value="">전체</form:option>
+						<c:forEach var="item" items="${code_wplace}" varStatus="status">
+			                 <form:option value="${item.codeId}">${item.codeNm}</form:option>
+                        </c:forEach>  
+						</form:select>
 					</div>
-					<button type="button" class="btn-submit">조회</button>
+					<button type="button" class="btn-submit" onclick="onclick_search()">조회</button>
 				</div>
-			</form>
+			</form:form>
 		</div>
 		<!-- tabulator-->
 		<div class="list-wrap">
@@ -108,7 +123,7 @@
 		<!-- //tabulator-->
 		<div class="list-footer">
 			<div class="list-btns">
-				<button type="button" class="btn-excel" onclick="getDownloadXls()">
+				<button type="button" class="btn-excel" onclick="onclick_excelDownload()">
 					<img src="/assets/images/icon_excel.png" alt=""> <span>다운로드</span>
 				</button>
 			</div>
@@ -415,6 +430,8 @@
 				}, ],
 			});
 		}
+		
+		
 
 		function onclickCell(e, cell) {
 			location.href = "statusView.do?idx="
@@ -425,11 +442,47 @@
 					.getData().id);
 		}
 
-		function getDownloadXls() {
+		$(document).ready(init);
+		function init(){
+			setEvent();
+		}
+		
+		function setEvent(){
+			
+			// 부서검색
+			$(".btn-search-dept").off("click").on("click", function(){
+				callPopup_searchDepartment(this);
+			});
+		}
+		
+		function onclick_search(){
+			$("#defaultForm").attr("action", "statusMBB.do");
+			$("#defaultForm")[0].submit();
+		}
+		
+		function onclick_excelDownload(){
 			table.download("xlsx", "6σ인재현황.xlsx", {
 				sheetName : "6σ인재현황"
 			});
 		}
+		
+		// 조직 조회 호출부
+		function callPopup_searchDepartment(obj){
+
+			popDept.init();
+			// footer.jsp 내 영역 호출
+			popDept.returnObjId = "searchDepart";
+			popDept.returnFunc = callback_popDept;
+			popDept.open();
+		}
+		
+		// 조직 조회 콜백부
+		function callback_popDept(objId, data){
+			
+			$("#"+objId).val(data.deptCode);
+			$("#searchDepartName").val(data.deptName);
+		}
+		
 	</script>
 <style>
 .font-small {

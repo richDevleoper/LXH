@@ -23,7 +23,7 @@
                                 <div class="search-form row">
                                     <div class="form-inline form-input col s4">
                                         <div class="col s4 align-right">
-                                            <label>교육과정명</label>
+                                            <label>과정명</label>
                                         </div>
                                         <div class="pd-l10 col s8">
                                              <form:input type="text" path="searchEduName" />
@@ -31,7 +31,7 @@
                                     </div>
                                     <div class="form-inline form-input col s4 ">
                                         <div class="col s4 align-right">
-                                            <label>교육연도</label>
+                                            <label>년도</label>
                                         </div>
                                         <div class="pd-l10 col s8">
                                             <form:select path="searchEduYear">
@@ -56,7 +56,7 @@
                                 <div class="search-form row">
                                     <div class="form-inline form-input col s4">
                                         <div class="col s4 align-right">
-                                            <label>교육유형</label>
+                                            <label>유형</label>
                                         </div>
                                         <div class="pd-l10 col s8">
                                             <form:select path="searchEduType">
@@ -76,7 +76,7 @@
                                     </div>
                                     <div class="form-inline form-input col s4">
                                         <div class="col s4 align-right">
-                                            <label>교육차수</label>
+                                            <label>차수</label>
                                         </div>
                                         <div class="pd-l10 col s8">
                                             <form:select path="searchEduNumber">
@@ -91,7 +91,7 @@
                                 <div class="search-form row">
                                     <div class="form-inline form-input col s8">
                                         <div class="col s2 align-right">
-                                            <label>교육기간</label>
+                                            <label>기간</label>
                                         </div>
                                         <div class="pd-l10 col s8">
                                             <div class="col s5 input-date">
@@ -113,7 +113,7 @@
                             </div>
 
                             <div class="list-header">
-                                <p class="title">교육과정</p>
+                                <p class="title">과정</p>
                                 <span class="bar"></span>
                                 <p class="total">전체 ${totalCount}</p>
                                 <select name="limit" class="limit"  onchange="onchange_recordCountPerPage(this.value)">
@@ -147,13 +147,13 @@
                                         <thead>
                                             <tr>
                                                 <th class="bg-gray font-weight-bold">No</th>
-                                                <th class="bg-gray font-weight-bold">교육연도</th>
+                                                <th class="bg-gray font-weight-bold">년도</th>
                                                 <th class="bg-gray font-weight-bold">벨트</th>
                                                 <th class="bg-gray font-weight-bold">교육유형</th>
                                                 <th class="bg-gray font-weight-bold">상세유형</th>
-                                                <th class="bg-gray font-weight-bold">교육차수</th>
-                                                <th class="bg-gray font-weight-bold">교육과정명</th>
-                                                <th class="bg-gray font-weight-bold">교육일정</th>
+                                                <th class="bg-gray font-weight-bold">차수</th>
+                                                <th class="bg-gray font-weight-bold">과정명</th>
+                                                <th class="bg-gray font-weight-bold">일정</th>
                                                 <th class="bg-gray font-weight-bold">정원</th>
                                             </tr>                                            
                                         </thead>
