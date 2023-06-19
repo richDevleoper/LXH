@@ -333,8 +333,18 @@
                         </div>                        
                         
                         <div class="list-footer">
-                            <div class="list-btns">               
-                                <a href="/proposal/judge/list.do?menuKey=50" class="btn">목록</a>
+                            <div class="list-btns">      
+                            	<c:choose>
+                            		<c:when test="${listSource eq 'C'}">
+                            			<a href="/proposal/eval/classlist.do?menuKey=52" class="btn">목록</a>
+                            		</c:when>
+                            		<c:when test="${listSource eq 'C'}">
+                            			<a href="/proposal/eval/classlist.do?menuKey=53" class="btn">목록</a>
+                            		</c:when>                            		
+                            		<c:otherwise>
+                            			<a href="/proposal/judge/list.do?menuKey=50" class="btn">목록</a>
+                            		</c:otherwise>
+                            	</c:choose>                                
                             </div>
                         </div>
 </form:form> 

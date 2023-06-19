@@ -249,9 +249,9 @@
 	
 	function onclick_poposalInfo(propSeq, propTypeCode){
 		if(propTypeCode == 'PPS_TYP_1'){
-			location.href="/proposal/judge/detail.do?menuKey=50&propSeq="+propSeq;
+			location.href="/proposal/judge/detail.do?menuKey=50&propSeq="+propSeq+"&listSource=J";
 		}else{
-			location.href="/proposal/judge/memodetail.do?menuKey=50&propSeq="+propSeq;
+			location.href="/proposal/judge/memodetail.do?menuKey=50&propSeq="+propSeq+"&listSource=J";
 		}		
 	}
 </script>

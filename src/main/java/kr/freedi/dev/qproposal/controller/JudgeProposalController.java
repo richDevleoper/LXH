@@ -156,6 +156,7 @@ public class JudgeProposalController {
 			}
 		}
 		
+		model.addAttribute("listSource", searchVO.getListSource());
 		model.addAttribute("propSeq", resultItem.getPropSeq());
 		model.addAttribute("crud", "R");
 		model.addAttribute("PROP_INFO", resultItem);
@@ -195,6 +196,7 @@ public class JudgeProposalController {
 			}
 		}
 		
+		model.addAttribute("listSource", searchVO.getListSource());
 		model.addAttribute("propSeq", resultItem.getPropSeq());
 		model.addAttribute("crud", "R");
 		model.addAttribute("PROP_INFO", resultItem);

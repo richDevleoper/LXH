@@ -397,7 +397,7 @@
 	<div class="modal-content">
 	    <div class="list-wrap">
 	        <div class="list-search">
-	             <form>
+	             <!-- <form> -->
 	                 <div class="search-form">
 <!-- 	                     <div class="form-inline form-select">
 	                         <label>구분</label>
@@ -412,12 +412,12 @@
                                     </c:forEach>
 	                         </select>                                            
 	                     </div>
-	                      <div class="form-inline form-select">
+	                      <div class="form-inline form-input">
 	                         <input type="text" name="input-memo-proposal-name" id="input-memo-proposal-name">
 	                     </div>                                     
 	                     <button type="button" class="btn-submit" onclick="popRelMemo.callData(1)">조회</button>
 	                 </div>
-	             </form>
+	             <!-- </form> -->
 	        </div>
 	    </div>
 	    <div class="list-wrap">
@@ -510,10 +510,16 @@
 	            		init: function(){
             				$(".tr-empty").show();
             				$(".tr-data").remove();
-            				$("#txtSearchName").val("");
+            				$("#input-memo-proposal-name").val("");
             				
             				this.returnObjId = null;
-            				this.returnFunc = null;	            			
+            				this.returnFunc = null;	            
+            				
+            				$("#input-memo-proposal-name").off("keyup").on("keyup", function(e){
+            					if(e.keyCode==13){
+            						popEmp.callData();
+            					}	
+            				});
 	            		},
 	            		callData: function(page){
 	            			popRelMemo.curPage = page;

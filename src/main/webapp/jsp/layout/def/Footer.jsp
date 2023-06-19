@@ -454,10 +454,16 @@
 	            		init: function(){
             				$(".tr-empty").show();
             				$(".tr-data").remove();
-            				$("#txtSearchName").val("");
+            				$("#input-memo-proposal-name").val("");
             				
             				this.returnObjId = null;
-            				this.returnFunc = null;	            			
+            				this.returnFunc = null;	       
+            				
+            				$("#input-memo-proposal-name").off("keyup").on("keyup", function(e){
+            					if(e.keyCode==13){
+            						popEmp.callData();
+            					}	
+            				});
 	            		},
 	            		callData: function(page){
 	            			popRelMemo.curPage = page;
