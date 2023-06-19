@@ -194,12 +194,14 @@
 				data : tableDataNested,
 				dataTree : true,
 				dataTreeStartExpanded : true,
+				
 				columnHeaderVertAlign : "middle", //align header contents to bottom of cell
 				columns : [ {
 					title : "대상구분",
 					field : "name",
 					headerSort : false,
-					width : 160
+					width : 300,
+					frozen: true
 				}, {//create column group
 					title : "‘22년(직전년도)",
 					field : "name2",

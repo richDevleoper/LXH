@@ -366,7 +366,7 @@
                                                                             </thead>
                                                                             
                                                                             <tbody>
-                                                                                <tr>
+                                                                                <tr id="trPlanDate">
                                                                                     <td>계획</td>
                                                                                     
                                                                                     <td class="pd3" colspan="2">
@@ -1241,6 +1241,7 @@ function onchange_resultType(obj){
 
 		if(vMenuType==="TEAM" && repDevCd==="2"){
 			$("#repTypeCode").prop("disabled", true);
+			$("#trPlanDate").remove();
 		} else {
 			$("#repTypeCode").prop("disabled", false);
 		}

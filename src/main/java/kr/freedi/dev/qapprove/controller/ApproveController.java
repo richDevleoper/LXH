@@ -111,6 +111,10 @@ public class ApproveController {
 		
 		model.addAttribute("menuKey", searchVO.getMenuKey());
 		
+		// 조회조건 설정
+		searchVO.setSearchUserId(userSession.getUserId());
+
+		// 건수 조회
 		List<EgovMap> countList = service.selectListCount(searchVO);
 		
 		int totalCount = 0;
@@ -123,7 +127,7 @@ public class ApproveController {
 			}
 		}
 		
-		//페이징 기본설정8
+		//페이징 기본설정
 		searchVO.setTotalRecordCount(totalCount);
 		
 		model.addAttribute("approveList", service.selectList(searchVO));
@@ -304,6 +308,7 @@ public class ApproveController {
 			UserVO userSession)throws Exception {
 		
 		model.addAttribute("menuKey", searchVO.getMenuKey());
+		
 		
 
 		List<EgovMap> countList = service.selectMyRequestListCount(searchVO);

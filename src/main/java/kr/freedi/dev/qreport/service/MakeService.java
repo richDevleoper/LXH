@@ -351,7 +351,7 @@ public class MakeService {
 	
 	public JsonArray convertTreeJson(List<DepartVO> list) {
         
-        return buildTree(list, null);
+        return buildTree(list, "50000000");
 	}
 	
 	public JsonArray buildTree(List<DepartVO> list, String parentId) {

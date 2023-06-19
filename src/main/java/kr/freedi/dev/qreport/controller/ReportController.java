@@ -292,7 +292,9 @@ public class ReportController {
 		CodeVO codeVO = new CodeVO(); 
 		codeVO.setCodeGrpId("6SIG_YN");
 		codeVO.setActFlg("Y"); 
-		model.addAttribute("searchRepName", codeService.selectFullList(codeVO));
+		List<EgovMap> code6SigYn = codeService.selectFullList(codeVO);
+		model.addAttribute("searchRepName", code6SigYn);	
+		model.addAttribute("divisionCode", code6SigYn);
 
 		codeVO = new CodeVO(); 
 		String[] arrCodeGrpIds = {"6SIG_YN", "RP_TY1", "RP_TY2", "RP_TY3", "SECTOR", "ACTTYPE", "LDRBELT", "MBBUSERT", "RESULTTY", "REP_ROLE", "WPLACE", "REP_STAT"};

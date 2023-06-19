@@ -310,7 +310,7 @@
 															</thead>
 
 															<tbody>
-																<tr>
+																<tr id="trPlanDate">
 																	<td>계획</td>
 
 																	<td class="pd3" colspan="2">
@@ -668,7 +668,7 @@
 
 									<th><label
 										<c:if test="${item.repTeamMemRole eq '3' || item.repTeamMemRole eq '5'}">class="color primary"</c:if>>
-											<c:if test="${item.repTeamMemRole ne '4'}">
+											<c:if test="${item.repTeamMemRole ne '4' && item.repTeamMemRole ne '2'}">
 												<span class="asterisk">*</span>
 											</c:if> ${item.repTeamMemRoleNm}
 									</label> <script>
@@ -697,7 +697,7 @@
 											<div class="col s12 input-text search">
 
 												<c:choose>
-													<c:when test="${item.repTeamMemRole ne '4'}">
+													<c:when test="${item.repTeamMemRole ne '4' && item.repTeamMemRole ne '2'}">
 														<form:input type="text"
 															path='repTeamMemberList[${status.index}].deptName'
 															readonly="true" title="(팀구성)필수인원을 지정해하세요."
@@ -1389,8 +1389,9 @@ function onchange_resultType(obj){
 		
 		if(vMenuType==="TEAM" && repDevCd==="2"){
 			$("#repTypeCode").prop("disabled", true);
-			$(".act-date").prop("disabled", true);  // 실시 일자 Disabled(5월 수정요청)
-			$(".act-date").closest("div").find("i.ico").prop("disabled", true);
+			//$(".act-date").prop("disabled", true);  // 실시 일자 Disabled(5월 수정요청)
+			//$(".act-date").closest("div").find("i.ico").prop("disabled", true);
+			$("#trPlanDate").remove();
 		} else {
 			$("#repTypeCode").prop("disabled", false);
 		}

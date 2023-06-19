@@ -41,11 +41,15 @@
 				AND U.USER_NAME  like '%'|| #{searchReqEmpNm} ||'%' 
 			</if>
 			
+			<if test="searchUserId != null and searchUserId != ''">
+				AND EXISTS (select 1 from tb_approval_detail where aproval_code=T.aproval_code and com_no=#{searchUserId}) 
+			</if>
 			
-			
+			<if test="searchReqComNo != null and searchReqComNo != ''">
+				AND T.user_id=#{searchReqComNo}
+			</if>
 			
 			<if test="searchFromDt != null and searchFromDt != ''">
-				
 				AND T.drafting_date <![CDATA[>=]]> to_date(#{searchFromDt}, 'YYYY-MM-DD')
 			</if>
 			<if test="searchToDt != null and searchToDt != ''">

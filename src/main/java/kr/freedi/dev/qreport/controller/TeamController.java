@@ -284,10 +284,16 @@ public class TeamController {
 		searchVO.setMenuCode(REP_MENU_CODE); // 과제 or 분임조과제 구분
 
 		// 페이지 초기값 세팅을 위한 코드값 바인딩
-		CodeVO codeVO = new CodeVO();
+		CodeVO codeVO = new CodeVO(); 
 		codeVO.setCodeGrpId("6SIG_YN");
-		codeVO.setActFlg("Y");
-		model.addAttribute("searchRepName", codeService.selectFullList(codeVO));
+		codeVO.setActFlg("Y"); 
+		List<EgovMap> code6SigYn = codeService.selectFullList(codeVO);
+		if(REP_MENU_CODE.equals("TEAM") 
+				&& code6SigYn.size()==3 
+				&& code6SigYn.get(2).get("codeNm").toString().startsWith("10+"))
+			code6SigYn.remove(2); // 분임조 과제에서는 10+ 선택 못하도록 코드 삭제
+		model.addAttribute("searchDivision", code6SigYn);
+		
 
 		codeVO = new CodeVO();
 		String[] arrCodeGrpIds = { "6SIG_YN", "RP_TY1", "RP_TY2", "RP_TY3", "SECTOR", "ACTTYPE", "LDRBELT", "MBBUSERT",

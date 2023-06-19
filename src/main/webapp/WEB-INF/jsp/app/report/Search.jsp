@@ -36,7 +36,7 @@
                                         <div class="pd-l10 col s7">
                                             <form:select path="searchDivision">
                                                 <option value="">전체</option>
-                                                <c:forEach var="item" items="${searchRepName}">
+                                                <c:forEach var="item" items="${searchDivision}">
 													<option value="${item.codeId}" <c:if test="${item.codeId eq reportSearchVO.searchDivision }">selected="selected"</c:if>>${item.codeNm}</option>
 												</c:forEach>
                                             </form:select>
@@ -379,6 +379,8 @@ ${item.repDivision} ${item.cnt}건
 	
 </script>
 <script type="text/javascript">
+
+	const vMenuType = "${repMenuCode}";
 	$(document).ready(init);
 	
 	function init(){
@@ -419,7 +421,15 @@ ${item.repDivision} ${item.cnt}건
 			arrRepType = [];
 			break;
 		}
-		setDropDown(targetObjId, arrRepType, true, '전체');
+		
+		
+		if(vMenuType==="TEAM" && repDevCd==="2"){
+			setDropDown(targetObjId, [], true, '(해당없음)');
+		} else {
+			setDropDown(targetObjId, arrRepType, true, '전체');
+		}
+		
+		
 	}
 	
 	function initCode(){
@@ -428,7 +438,11 @@ ${item.repDivision} ${item.cnt}건
 		cdActionType = codes.filter(function(code){ return code.index==="ACTTYPE"; });
 		cdMbbUseRate = codes.filter(function(code){ return code.index==="MBBUSERT"; });
 		cdRepResultType = codes.filter(function(code){ return code.index==="RESULTTY";});
-		cdRepType1 = codes.filter(function(code){ return code.index==="RP_TY1";});
+		if(vMenuType==="REPORT"){
+			cdRepType1 = codes.filter(function(code){ return code.index==="RP_TY1";});
+		} else {
+			cdRepType1 = codes.filter(function(code){ return code.index==="RP_TY1" && code.value==="DMAIC";});  // 분임조에서는 DMAIC만 적용(화면설계서)	
+		}
 		cdRepType2 = codes.filter(function(code){ return code.index==="RP_TY2";});
 		cdRepType3 = codes.filter(function(code){ return code.index==="RP_TY3";});
 		cdWPlace = codes.filter(function(code){ return code.index==="WPLACE";});

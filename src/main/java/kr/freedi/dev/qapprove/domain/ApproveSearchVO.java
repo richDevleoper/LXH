@@ -31,10 +31,13 @@ public class ApproveSearchVO extends CommonVO {
 	private String aprovalCode;
 	
 	@ParamField
-	private String searchReqEmpNm;  // 결재의뢰자
+	private String searchReqEmpNm;  // 결재의뢰자명
 	
 	@ParamField
-	private String searchUserId;
+	private String searchReqComNo;  // 결재의뢰자 사번	
+
+	@ParamField
+	private String searchUserId;  // login user ID
 	
 	@ParamField
 	private String searchFromDt; // 조회기간(시작)
@@ -133,13 +136,21 @@ public class ApproveSearchVO extends CommonVO {
 		this.searchReqEmpNm = searchReqEmpNm;
 	}
 
+	public String getSearchReqComNo() {
+		return searchReqComNo;
+	}
+
+	public void setSearchReqComNo(String searchReqComNo) {
+		this.searchReqComNo = searchReqComNo;
+	}
+	
 	@Override
 	public String toString() {
 		return "ApproveSearchVO [searchName=" + searchName + ", searchDivision=" + searchDivision + ", searchType="
 				+ searchType + ", searchStatus=" + searchStatus + ", orderByTyp=" + orderByTyp + ", aprovalCode="
-				+ aprovalCode + ", searchReqEmpNm=" + searchReqEmpNm + ", searchUserId=" + searchUserId
-				+ ", searchFromDt=" + searchFromDt + ", searchToDt=" + searchToDt + ", searchGubun=" + searchGubun
-				+ "]";
+				+ aprovalCode + ", searchReqEmpNm=" + searchReqEmpNm + ", searchReqComNo=" + searchReqComNo
+				+ ", searchUserId=" + searchUserId + ", searchFromDt=" + searchFromDt + ", searchToDt=" + searchToDt
+				+ ", searchGubun=" + searchGubun + "]";
 	}
 
 }
