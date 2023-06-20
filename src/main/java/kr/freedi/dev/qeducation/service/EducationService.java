@@ -100,7 +100,7 @@ public class EducationService {
 		//조회
 		if(eduCode != null) {
 			eduVo =this.select(educationVO);
-			educationVO.setMode("U");
+			eduVo.setMode("U");
 			model.addAttribute("educationVO", eduVo);
 			model.addAttribute("action", "/education/updateEduInfo.do");
 		//신규	

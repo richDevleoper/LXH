@@ -19,7 +19,110 @@
                         <div class="list-wrap">
                             <div class="list-content">
                                 <div class="list-table list even">
-                                    <table class="centered">
+                                	<table class="centered">
+                                        <caption></caption>
+                                        <colgroup>
+                                            <col style="width:50px">
+                                            <col>
+                                            <col>
+                                            <col>
+                                            <col>
+                                            <col>
+                                            <col>
+                                            <col>
+                                            <col>
+                                            <col>
+                                            <col>
+                                            <col>
+                                            <col>
+                                            <col>
+                                            <col>
+                                            <col>
+                                            <col>
+                                            <col>
+                                            <col>
+                                            <col>
+                                        </colgroup>
+                                        <thead>
+                                            <tr>
+                                                <th class="bg-gray">Belt</th>
+                                                <th class="bg-gray" colspan="3">GB</th>
+                                                <th class="bg-gray" colspan="5">MGB</th>
+                                                <th class="bg-gray" colspan="5">BB</th>
+                                                <th class="bg-gray" colspan="6">MBB</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>항목</td>
+                                                <td>교육<br>이수</td>
+                                                <td>필기test</td>
+                                                <td>인증</td>
+                                                <td>교육<br>이수</td>
+                                                <td>필기<br>test</td>
+                                                <td>과제<br>수행</td>
+                                                <td>과제Test</td>
+                                                <td>인증</td>
+                                                <td>교육<br>이수</td>
+                                                <td>Paper<br>Test</td>
+                                                <td>과제<br>수행</td>
+                                                <td>과제<br>Test</td>
+                                                <td>인증</td>
+                                                <td>교육<br>이수</td>
+                                                <td>통계<br>Test</td>
+                                                <td>과제<br>수행</td>
+                                                <td>과제<br>Test</td>
+                                                <td>자질<br>평가</td>
+                                                <td>인증</td>
+                                            </tr>
+                                            <tr>
+                                                <td>현황</td>
+                                                <td>이수<br>완료</td>
+                                                <td>합격</td>
+                                                <td>인증<br>완료</td>
+                                                <td>비대상</td>
+                                                <td>비대상</td>
+                                                <td>비대상</td>
+                                                <td>비대상</td>
+                                                <td>비대상</td>
+                                                <td>이수<br>완료</td>
+                                                <td>합격</td>
+                                                <td>수행<br>완료</td>
+                                                <td>합격</td>
+                                                <td>완료</td>
+                                                <td>신청<br>완료</td>
+                                                <td>미신청</td>
+                                                <td>2건<br>필요</td>
+                                                <td>-</td>
+                                                <td>-</td>
+                                                <td>-</td>
+                                            </tr>
+                                            <tr>
+                                                <td>처리일</td>
+                                                <td>20.01.101</td>
+                                                <td>20.02.30</td>
+                                                <td>20.01.01</td>
+                                                <td>비대상</td>
+                                                <td>비대상</td>
+                                                <td>비대상</td>
+                                                <td>비대상</td>
+                                                <td>비대상</td>
+                                                <td>20.01.01</td>
+                                                <td>20.02.30</td>
+                                                <td>20.01.01</td>
+                                                <td>20.02.30</td>
+                                                <td>20.02.30</td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    
+                                    <%-- <table class="centered">
                                         <caption></caption>
                                        
                                         <thead>
@@ -82,7 +185,7 @@
                                             </tr>
                                             
                                         </tbody>
-                                    </table>
+                                    </table> --%>
                                 </div>
                             </div>
                         </div>

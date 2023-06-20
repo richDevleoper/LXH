@@ -299,6 +299,14 @@ $(document).ready(function(){
 			}			
 		}
 	}); 
+	
+	$("#eduBeltCode").on("change", function(){
+		selectBeltCode();
+	}); 
+	
+	$("#eduClassType").on("change", function(){
+		selectBeltCode();
+	});
  	
 	$("#defaultForm").validationEngine('attach', {
 		unbindEngine:false,
@@ -321,6 +329,62 @@ $(document).ready(function(){
 	});
 });
 
+function selectBeltCode(){
+	let eduBeltCode = $("#eduBeltCode").val();
+	let eduClassType = $("#eduClassType").val();
+	
+	console.log(eduBeltCode + " / " + eduClassType);
+	var vHtml = [];
+	// GB
+	if(eduBeltCode == "01"){
+		if(eduClassType == "01"){
+			vHtml.push("<option value=''>전체</option>");
+			vHtml.push("<option value='01'>온라인 동영상 교육</option>");
+			vHtml.push("<option value='02'>온라인 실시간 교육</option>");
+		}else if(eduClassType == "02"){
+			vHtml.push("<option value=''>전체</option>");
+			vHtml.push("<option value='07'>통계Test</option>");
+		}
+	// MGB
+	}else if(eduBeltCode == "02"){
+		if(eduClassType == "01"){
+			vHtml.push("<option value=''>전체</option>");
+			vHtml.push("<option value='01'>온라인 동영상 교육</option>");
+			vHtml.push("<option value='02'>온라인 실시간 교육</option>");
+		}else if(eduClassType == "02"){
+			vHtml.push("<option value=''>전체</option>");
+			vHtml.push("<option value='07'>통계Test</option>");
+			vHtml.push("<option value='08'>과제Test</option>");
+		}
+	// BB
+	}else if(eduBeltCode == "03"){
+		if(eduClassType == "01"){
+			vHtml.push("<option value=''>전체</option>");
+			vHtml.push("<option value='01'>온라인 동영상 교육</option>");
+			vHtml.push("<option value='02'>온라인 실시간 교육</option>");
+		}else if(eduClassType == "02"){
+			vHtml.push("<option value=''>전체</option>");
+			vHtml.push("<option value='07'>통계Test</option>");
+			vHtml.push("<option value='08'>과제Test</option>");
+		}
+	// MBB	
+	}else if(eduBeltCode == "04"){
+		if(eduClassType == "01"){
+			vHtml.push("<option value=''>전체</option>");
+			vHtml.push("<option value='01'>온라인 동영상 교육</option>");
+			vHtml.push("<option value='02'>온라인 실시간 교육</option>");
+			vHtml.push("<option value='03'>6σ Process 과정</option>");
+			vHtml.push("<option value='04'>통계적 사고 과정</option>");
+			vHtml.push("<option value='05'>고급 통계 과정</option>");
+			vHtml.push("<option value='06'>Summary</option>");
+		}else if(eduClassType == "02"){
+			vHtml.push("<option value=''>전체</option>");
+			vHtml.push("<option value='09'>자질Test</option>");
+		}
+	}
+	$("#eduClassDivision").html(vHtml.join(''));
+}
+
 function initCode(){
 	let codes = [
 		<c:forEach var="item" items="${allCodes}">{index:"${item.codeGrpId}",key:"${item.codeId}",value:"${item.codeNm}"},
@@ -337,25 +401,68 @@ function initCode(){
 	setDropDown("eduClassType", cdEduType1, true, "전체");				//교육유형
 	$("#eduClassType").val("${educationVO.eduClassType}")
 	
-	setDropDown("eduClassDivision", cdEduType3, true, "전체");			//상세유형
-	$("#eduClassDivision").val("${educationVO.eduClassDivision}");
+	//setDropDown("eduClassDivision", cdEduType3, true, "전체");			//상세유형
+	//$("#eduClassDivision").val("${educationVO.eduClassDivision}");
 	
 	let mode = $("#mode").val();
-	/* 
+
 	if(mode=="U"){
-		$("#eduFileCode").val("${educationVO.eduFileCode}");
-		//$("#eduName").val("${educationVO.eduName}");
-		$("#eduDate").val("${educationVO.eduDate}");
-		$("#eduDate").val("${educationVO.eduDate}");
-		$("#eduDate2").val("${educationVO.eduDate}");
-		$("#eduFixed").val("${educationVO.eduFixed}");
+		let eduBeltCode = $("#eduBeltCode").val();
+		let eduClassType = $("#eduClassType").val();
+		console.log(eduBeltCode + " / " + eduClassType);
 		
-		$("#eduClassIntro").html("${educationVO.eduClassIntro}");
-		$("#eduClassTarget").val("${educationVO.eduClassTarget}");
-		$("#eduClassSummary").val("${educationVO.eduClassSummary}");
-		$("#eduItem").val("${educationVO.eduItem}");
+		var vHtml = [];
+		// GB
+		if(eduBeltCode == "01"){
+			if(eduClassType == "01"){
+				vHtml.push("<option value=''>전체</option>");
+				vHtml.push("<option value='01'>온라인 동영상 교육</option>");
+				vHtml.push("<option value='02'>온라인 실시간 교육</option>");
+			}else if(eduClassType == "02"){
+				vHtml.push("<option value=''>전체</option>");
+				vHtml.push("<option value='07'>통계Test</option>");
+			}
+		// MGB
+		}else if(eduBeltCode == "02"){
+			if(eduClassType == "01"){
+				vHtml.push("<option value=''>전체</option>");
+				vHtml.push("<option value='01'>온라인 동영상 교육</option>");
+				vHtml.push("<option value='02'>온라인 실시간 교육</option>");
+			}else if(eduClassType == "02"){
+				vHtml.push("<option value=''>전체</option>");
+				vHtml.push("<option value='07'>통계Test</option>");
+				vHtml.push("<option value='08'>과제Test</option>");
+			}
+		// BB
+		}else if(eduBeltCode == "03"){
+			if(eduClassType == "01"){
+				vHtml.push("<option value=''>전체</option>");
+				vHtml.push("<option value='01'>온라인 동영상 교육</option>");
+				vHtml.push("<option value='02'>온라인 실시간 교육</option>");
+			}else if(eduClassType == "02"){
+				vHtml.push("<option value=''>전체</option>");
+				vHtml.push("<option value='07'>통계Test</option>");
+				vHtml.push("<option value='08'>과제Test</option>");
+			}
+		// MBB	
+		}else if(eduBeltCode == "04"){
+			if(eduClassType == "01"){
+				vHtml.push("<option value=''>전체</option>");
+				vHtml.push("<option value='01'>온라인 동영상 교육</option>");
+				vHtml.push("<option value='02'>온라인 실시간 교육</option>");
+				vHtml.push("<option value='03'>6σ Process 과정</option>");
+				vHtml.push("<option value='04'>통계적 사고 과정</option>");
+				vHtml.push("<option value='05'>고급 통계 과정</option>");
+				vHtml.push("<option value='06'>Summary</option>");
+			}else if(eduClassType == "02"){
+				vHtml.push("<option value=''>전체</option>");
+				vHtml.push("<option value='09'>자질Test</option>");
+			}
+		}
+		$("#eduClassDivision").html(vHtml.join(''));
+		$("#eduClassDivision").val("${educationVO.eduClassDivision}");
 	}
-	 */
+	 
 }
 
 

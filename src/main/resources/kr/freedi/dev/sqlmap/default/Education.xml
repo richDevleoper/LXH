@@ -199,11 +199,74 @@
 				SELECT 
 					 	T.EDU_CODE,
 					 	T.EDU_NAME,
+					 	T.EDU_BELTCODE,
+						(SELECT CODE_NM FROM TB_CODE WHERE 1=1 AND CODE_GRP_ID='ED_TY2' AND CODE_ID = T.EDU_BELTCODE) AS EDU_BELTCODE_NAME,
 						T.EDU_CLASS,
 						T.EDU_CLASS_TYPE,
 						(SELECT CODE_NM FROM TB_CODE WHERE 1=1 AND CODE_GRP_ID='ED_TY1' AND CODE_ID = T.EDU_CLASS_TYPE) AS EDU_CLASS_TYPE_NAME,
 						T.EDU_CLASS_DIVISION,
-						(SELECT CODE_NM FROM TB_CODE WHERE 1=1 AND CODE_GRP_ID='ED_TY3' AND CODE_ID = T.EDU_CLASS_DIVISION) AS EDU_CLASS_DIVISION_NAME,
+						<!-- (SELECT CODE_NM FROM TB_CODE WHERE 1=1 AND CODE_GRP_ID='ED_TY3' AND CODE_ID = T.EDU_CLASS_DIVISION) AS EDU_CLASS_DIVISION_NAME, -->
+						CASE WHEN T.EDU_BELTCODE = '01' THEN
+								CASE WHEN T.EDU_CLASS_TYPE = '01' THEN
+										CASE WHEN T.EDU_CLASS_DIVISION = '01' THEN
+												'온라인 동영상 교육'
+											 WHEN T.EDU_CLASS_DIVISION = '02' THEN
+										    	'온라인 실시간 교육' 
+										ELSE 'err' END
+									 WHEN T.EDU_CLASS_TYPE = '02' THEN
+									 	CASE WHEN T.EDU_CLASS_DIVISION = '07' THEN
+											'통계Test'
+										ELSE 'err' END
+								ELSE 'err' END
+						     WHEN T.EDU_BELTCODE = '02' THEN
+						 		CASE WHEN T.EDU_CLASS_TYPE = '01' THEN
+										CASE WHEN T.EDU_CLASS_DIVISION = '01' THEN
+												'온라인 동영상 교육'
+											 WHEN T.EDU_CLASS_DIVISION = '02' THEN
+										    	'온라인 실시간 교육' 
+										ELSE 'err' END
+									 WHEN T.EDU_CLASS_TYPE = '02' THEN
+									 	CASE WHEN T.EDU_CLASS_DIVISION = '07' THEN
+											'통계Test'
+									 	     WHEN T.EDU_CLASS_DIVISION = '08' THEN
+											'과제Test'
+										ELSE 'err' END
+								ELSE 'err' END
+						     WHEN T.EDU_BELTCODE = '03' THEN
+						     	CASE WHEN T.EDU_CLASS_TYPE = '01' THEN
+										CASE WHEN T.EDU_CLASS_DIVISION = '01' THEN
+												'온라인 동영상 교육'
+											 WHEN T.EDU_CLASS_DIVISION = '02' THEN
+										    	'온라인 실시간 교육' 
+										ELSE 'err' END
+									 WHEN T.EDU_CLASS_TYPE = '02' THEN
+									 	CASE WHEN T.EDU_CLASS_DIVISION = '07' THEN
+											'통계Test'
+									 	     WHEN T.EDU_CLASS_DIVISION = '08' THEN
+											'과제Test'
+										ELSE 'err' END
+								ELSE 'err' END
+						     WHEN T.EDU_BELTCODE = '04' THEN
+						     	CASE WHEN T.EDU_CLASS_TYPE = '01' THEN
+										CASE WHEN T.EDU_CLASS_DIVISION = '01' THEN
+												'온라인 동영상 교육'
+											 WHEN T.EDU_CLASS_DIVISION = '02' THEN
+										    	'온라인 실시간 교육' 
+											 WHEN T.EDU_CLASS_DIVISION = '03' THEN
+										    	'6σ Process 과정' 
+											 WHEN T.EDU_CLASS_DIVISION = '04' THEN
+										    	'통계적 사고 과정' 
+											 WHEN T.EDU_CLASS_DIVISION = '05' THEN
+										    	'고급 통계 과정' 
+											 WHEN T.EDU_CLASS_DIVISION = '06' THEN
+										    	'Summary' 
+										ELSE 'err' END
+									 WHEN T.EDU_CLASS_TYPE = '02' THEN
+									 	CASE WHEN T.EDU_CLASS_DIVISION = '09' THEN
+											'자질Test'
+										ELSE 'err' END
+								ELSE 'err' END
+						 ELSE 'err' END AS EDU_CLASS_DIVISION_NAME,
 						T.EDU_CLASS_TARGET,
 						T.EDU_CLASS_INTRO,
 						T.EDU_CLASS_SUMMARY,
@@ -219,8 +282,7 @@
 						T.EDU_COMPLETE_TIME,
 						T.EDU_USE_YN,
 						T.EDU_YEAR,
-						T.EDU_BELTCODE,
-						(SELECT CODE_NM FROM TB_CODE WHERE 1=1 AND CODE_GRP_ID='ED_TY2' AND CODE_ID = T.EDU_BELTCODE) AS EDU_BELTCODE_NAME,
+						
 						T.EDU_NUMBER,
 						T.EDU_DATE,
 						T.EDU_FIXED,
@@ -442,8 +504,69 @@
 									 	EDU_CLASS_TYPE,
 										EDU_CLASS_DIVISION,
 										(SELECT CODE_NM FROM TB_CODE WHERE 1=1 AND CODE_GRP_ID='ED_TY1' AND CODE_ID=EDU_CLASS_TYPE) AS EDU_CLASS_TYPE_NAME,
-										(SELECT CODE_NM FROM TB_CODE WHERE 1=1 AND CODE_GRP_ID='ED_TY3' AND CODE_ID=EDU_CLASS_DIVISION) AS EDU_CLASS_DIVISION_NAME,
-									 	(SELECT CODE_NM FROM TB_CODE WHERE 1=1 AND CODE_GRP_ID='ED_TY2' AND CODE_ID=EDU_BELTCODE) AS EDU_BELTCODE_NAME,
+										<!-- (SELECT CODE_NM FROM TB_CODE WHERE 1=1 AND CODE_GRP_ID='ED_TY3' AND CODE_ID=EDU_CLASS_DIVISION) AS EDU_CLASS_DIVISION_NAME, -->
+									 	(SELECT CODE_NM FROM TB_CODE WHERE 1=1 AND CODE_GRP_ID='ED_TY2' AND CODE_ID=EDU_BELTCODE) AS EDU_BELTCODE_NAME, 
+									 	CASE WHEN EDU_BELTCODE = '01' THEN
+											CASE WHEN EDU_CLASS_TYPE = '01' THEN
+													CASE WHEN EDU_CLASS_DIVISION = '01' THEN
+															'온라인 동영상 교육'
+														 WHEN EDU_CLASS_DIVISION = '02' THEN
+													    	'온라인 실시간 교육' 
+													ELSE 'err' END
+												 WHEN EDU_CLASS_TYPE = '02' THEN
+												 	CASE WHEN EDU_CLASS_DIVISION = '07' THEN
+														'통계Test'
+													ELSE 'err' END
+											ELSE 'err' END
+							     		WHEN EDU_BELTCODE = '02' THEN
+									 		CASE WHEN EDU_CLASS_TYPE = '01' THEN
+													CASE WHEN EDU_CLASS_DIVISION = '01' THEN
+															'온라인 동영상 교육'
+														 WHEN EDU_CLASS_DIVISION = '02' THEN
+													    	'온라인 실시간 교육' 
+													ELSE 'err' END
+												 WHEN EDU_CLASS_TYPE = '02' THEN
+												 	CASE WHEN EDU_CLASS_DIVISION = '07' THEN
+														'통계Test'
+												 	     WHEN EDU_CLASS_DIVISION = '08' THEN
+														'과제Test'
+													ELSE 'err' END
+											ELSE 'err' END
+							     		WHEN EDU_BELTCODE = '03' THEN
+									     	CASE WHEN EDU_CLASS_TYPE = '01' THEN
+													CASE WHEN EDU_CLASS_DIVISION = '01' THEN
+															'온라인 동영상 교육'
+														 WHEN EDU_CLASS_DIVISION = '02' THEN
+													    	'온라인 실시간 교육' 
+													ELSE 'err' END
+												 WHEN EDU_CLASS_TYPE = '02' THEN
+												 	CASE WHEN EDU_CLASS_DIVISION = '07' THEN
+														'통계Test'
+												 	     WHEN EDU_CLASS_DIVISION = '08' THEN
+														'과제Test'
+													ELSE 'err' END
+											ELSE 'err' END
+							     		WHEN EDU_BELTCODE = '04' THEN
+									     	CASE WHEN EDU_CLASS_TYPE = '01' THEN
+													CASE WHEN EDU_CLASS_DIVISION = '01' THEN
+															'온라인 동영상 교육'
+														 WHEN EDU_CLASS_DIVISION = '02' THEN
+													    	'온라인 실시간 교육' 
+														 WHEN EDU_CLASS_DIVISION = '03' THEN
+													    	'6σ Process 과정' 
+														 WHEN EDU_CLASS_DIVISION = '04' THEN
+													    	'통계적 사고 과정' 
+														 WHEN EDU_CLASS_DIVISION = '05' THEN
+													    	'고급 통계 과정' 
+														 WHEN EDU_CLASS_DIVISION = '06' THEN
+													    	'Summary' 
+													ELSE 'err' END
+												 WHEN EDU_CLASS_TYPE = '02' THEN
+												 	CASE WHEN EDU_CLASS_DIVISION = '09' THEN
+														'자질Test'
+													ELSE 'err' END
+											ELSE 'err' END
+							 			ELSE 'err' END AS EDU_CLASS_DIVISION_NAME,
 									 	TO_CHAR(EDU_QUARTER) AS EDU_QUARTER	
 								  FROM TB_EDUCATION_MST	
 								 WHERE 1=1

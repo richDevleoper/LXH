@@ -94,6 +94,8 @@ public class EducationVO {
 	private List<EducationVO> myList;
 	private List<MyEducationVO> reportList;
 	
+	private String comCertBelt;
+	
 	public String getEduCode() {
 		return eduCode;
 	}
@@ -562,6 +564,12 @@ public class EducationVO {
 	}
 	public void setReportList(List<MyEducationVO> reportList) {
 		this.reportList = reportList;
+	}
+	public String getComCertBelt() {
+		return comCertBelt;
+	}
+	public void setComCertBelt(String comCertBelt) {
+		this.comCertBelt = comCertBelt;
 	}
 
 
