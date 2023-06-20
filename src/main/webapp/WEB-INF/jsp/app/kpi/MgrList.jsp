@@ -121,9 +121,9 @@
                                                         <col>
                                                         <col style="width:120px">
                                                         <col>
-                                                        <col>
+                                                        <col style="width:80px">
                                                         <col style="width:50px">
-                                                        <col style="width:50px">
+                                                        <col style="width:70px">
                                                         <col style="width:50px">
                                                     </colgroup>
                                                     <thead>
@@ -156,7 +156,7 @@
                                                             <td>${item.kudPart}</td>
                                                             <td>${item.kudTeamName}</td>
                                                             <td>${item.kudBelongName}</td>
-                                                            <td></td>
+                                                            <td>${item.kudJimu}</td>
                                                             <td>${item.kudJobx}</td>
                                                             <td>${item.kudPosition}</td>
                                                             <td>${item.kudCertBelt}</td>

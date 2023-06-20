@@ -207,6 +207,7 @@ public class KpiController {
 		codeVO.setActFlg("Y"); 
 		model.addAttribute("code_wplace", codeService.selectFullList(codeVO));
 		
+		searchVO.setKudIdx("6SIG");
 		JsonArray resultArray = kpiService.getPlanData(searchVO);
 		model.addAttribute("tableData", resultArray);
 		
@@ -237,6 +238,7 @@ public class KpiController {
 		codeVO.setActFlg("Y"); 
 		model.addAttribute("code_wplace", codeService.selectFullList(codeVO));
 		
+		searchVO.setKudIdx("MBB");
 		JsonArray resultArray = kpiService.getPlanData(searchVO);
 		model.addAttribute("tableData", resultArray);
 		

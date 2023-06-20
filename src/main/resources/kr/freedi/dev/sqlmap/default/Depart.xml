@@ -48,33 +48,32 @@
 	<select id="selectTreeList" resultMap="deptMap">
 
 		SELECT
-		LEVEL AS level1
-		, DEPT_CODE
-		, DEPT_NAME
-		, DEPT_UPER_CODE
-		, DEPT_SORT_ORDER
-		, DEPT_LEVEL
-		, DEPT_STATE_CODE
-		, COM_CODE
-		, DEPT_LV1_CODE
-		, DEPT_LV2_CODE
-		, DEPT_LV3_CODE
-		, DEPT_LV4_CODE
-		, DEPT_LV1_NAME
-		, DEPT_LV2_NAME
-		, DEPT_LV3_NAME
-		, DEPT_LV4_NAME
-		, UPDATE_DATE
-		, REG_DATE
+			LEVEL AS level1
+			, DEPT_CODE
+			, DEPT_NAME
+			, DEPT_UPER_CODE
+			, DEPT_SORT_ORDER
+			, DEPT_LEVEL
+			, DEPT_STATE_CODE
+			, COM_CODE
+			, DEPT_LV1_CODE
+			, DEPT_LV2_CODE
+			, DEPT_LV3_CODE
+			, DEPT_LV4_CODE
+			, DEPT_LV1_NAME
+			, DEPT_LV2_NAME
+			, DEPT_LV3_NAME
+			, DEPT_LV4_NAME
+			, UPDATE_DATE
+			, REG_DATE
 		FROM
-		tb_depart_mst T
+			tb_depart_mst T
 		WHERE
-		T.dept_state_code <![CDATA[<>]]>
-		'D'
+			T.dept_state_code <![CDATA[<>]]> 'D'
 		START WITH
-		dept_code = '50000000'
+			dept_code = '50000000'
 		CONNECT BY PRIOR
-		dept_code = dept_uper_code
+			dept_code = dept_uper_code
 
 
 	</select>

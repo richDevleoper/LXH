@@ -12,6 +12,7 @@
 		<result column="COM_DEPART_CODE" property="comDepartCode" />
 		<result column="KUD_JOBX" property="kudJobx" />
 		<result column="KUD_POSITION" property="kudPosition" />
+		<result column="KUD_JIMU" property="kudJimu" />
 		<result column="KUD_TEAM_NAME" property="kudTeamName" />
 		<result column="KUD_USER_NAME" property="kudUserName" />
 		<result column="KUD_BELONG_NAME" property="kudBelongName" />
@@ -87,6 +88,7 @@
 				    kud_team_name,
 				    kud_jobx,
 				    kud_position,  
+				    kud_jimu,
 				    get_code_nm('LDRBELT', kud_cert_belt) kud_cert_belt
 				FROM
 				    tb_kpi_user_detail T
@@ -266,6 +268,21 @@
 	
 	<select id="selectMgrPlan" resultType="egovMap">
  
+	  WITH V_DEPART_MST AS (
+        select 
+        		DEPT_CODE, DEPT_NAME, DEPT_UPER_CODE, DEPT_STATE_CODE
+         from 
+         		tb_depart_mst
+         where 
+			DEPT_STATE_CODE <![CDATA[<>]]> 'D'
+    START WITH
+           	dept_code in (select com_depart_code from tb_kpi_user_detail 
+               	           where kud_idx=#{kudIdx}
+                   	       group by com_depart_code)
+nt	CONNECT BY PRIOR
+			dept_uper_code = dept_code
+	  )
+ 
       SELECT 
 		   DEPT_CODE,DEPT_NAME,DEPT_UPER_CODE
 		   ,GB_CNT_1,KUD_GB_CNT_1,NVL(KUD_GB_CNT_1 / DECODE(GB_CNT_1,0,NULL,GB_CNT_1),0) * 100 AS GB_RAT_1
@@ -336,11 +353,11 @@
 		    ) AS KUD_BBU_CNT_3
 		    
 		   FROM 
-		    TB_DEPART_MST DM,
+		    V_DEPART_MST DM,
 		    TB_KPI_MASTER KM
 		   WHERE  
 		    DM.DEPT_CODE = KM.DEPT_CODE(+)
-		    AND DM.DEPT_STATE_CODE <![CDATA[<>]]> 'D'
+		    
 		) 
 		
 	</select>

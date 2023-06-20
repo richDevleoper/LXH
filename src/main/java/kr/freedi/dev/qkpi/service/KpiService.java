@@ -42,9 +42,6 @@ public class KpiService {
 		
 		return this.buildTree(data, "50000000");
 	}
-
-	
-	
 	
 	public JsonArray buildTree(List<EgovMap> list, String parentId) {
         JsonArray resultArray = new JsonArray();

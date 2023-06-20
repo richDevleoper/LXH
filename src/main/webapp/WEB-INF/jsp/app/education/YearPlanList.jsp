@@ -89,8 +89,9 @@
            <form:hidden path="eduCode" id="eduCode"/>
            <form:hidden path="eduFixed" id="eduFixed"/>
            <form:hidden path="mode" />
+           <%-- <form:hidden path="comCertBelt" id="comCertBelt" value="${comCertBelt}"/>    --%>  
          </form:form>     
-        <form:hidden path="comCertBelt" id="comCertBelt" value="${comCertBelt}"/>         
+            
 		<div class="tab-btn">
 			<!-- [D] 현재 활성화된 메뉴에 on클래스 추가해주세요. -->
 			<button type="button" class="on" id="titTab">1차 교육 (1/20~26)</button>

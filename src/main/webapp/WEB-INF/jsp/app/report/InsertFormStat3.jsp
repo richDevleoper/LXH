@@ -237,31 +237,28 @@
                                                                                     <td colspan="6" class="pd0 border0">
                                                                                         <div class="toggle-box" id="toggleBox_${status.count}">
                                                                                         <c:choose> 
-                                                                                        	<c:when test="${item.repStatus eq '0'}">
-                                                                                        	<script> 
-                                                                                        	// 아직 진행되지 않은 step의 토글 방지
-	                                                                                        $(document).ready(function(){
-                                                                                        		let objNm = "#toggleBox_${status.count}";
-                                                                                            	$(objNm).find("input, textarea").prop("disabled", true); // 완료된 항목 disable 시키기
-                                                                                            	//$("#fileUploadWrap_${status.count}").remove()
-                                                                                        	});
-	                                                                                        </script>
+                                                                                        	<c:when test="${status.index < reportVO.repStatusCode }">
+	                                                                                        	<script> 
+	                                                                                        	// 아직 진행되지 않은 step의 토글 방지
+		                                                                                        $(document).ready(function(){
+	                                                                                        		let objNm = "#toggleBox_${status.count}";
+	                                                                                            	$(objNm).find("input, textarea").prop("disabled", true); // 완료된 항목 disable 시키기
+	                                                                                        	});
+	                                                                                        	</script>
                                                                                         	</c:when>
-                                                                                        	<c:when test="${item.repStatus eq '1'}">
-                                                                                        	<script> 
-                                                                                        	// 아직 진행되지 않은 step의 토글 방지
-	                                                                                        $("#toggleBox_${status.count}").show(); 
-                                                                                        	/* $("#hidCurrStep").val("${item.repStepCode}"); */
-	                                                                                        </script>
+                                                                                        	<c:when test="${status.index eq reportVO.repStatusCode }">
+	                                                                                        	<script> 
+		                                                                                        	// 아직 진행되지 않은 step의 토글 방지
+			                                                                                        $("#toggleBox_${status.count}").show(); 
+		                                                                                        </script>
                                                                                         	</c:when>
-                                                                                        	<c:when test="${item.repStatus eq '2'}">
-                                                                                        	<script> 
-                                                                                        	$(document).ready(function(){
-                                                                                        		let objNm = "#toggleBox_${status.count}";
-                                                                                            	$(objNm).find("input, textarea").prop("disabled", true); // 완료된 항목 disable 시키기
-                                                                                            	//$("#fileUploadWrap_${status.count} .fileupload-buttons").remove()
-                                                                                        	});
-	                                                                                        </script>
+                                                                                        	<c:when test="${status.index > reportVO.repStatusCode }">
+	                                                                                        	<script> 
+	                                                                                        	$(document).ready(function(){
+	                                                                                        		let objNm = "#toggleBox_${status.count}";
+	                                                                                            	$(objNm).find("input, textarea").prop("disabled", true); // 완료된 항목 disable 시키기
+	                                                                                        	});
+		                                                                                        </script>
                                                                                         	</c:when>
                                                                                         </c:choose>
                                                                                         	

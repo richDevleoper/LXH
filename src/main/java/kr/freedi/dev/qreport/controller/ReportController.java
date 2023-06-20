@@ -288,12 +288,14 @@ public class ReportController {
 		
 		searchVO.setMenuCode(REP_MENU_CODE);  // 과제 or 분임조과제 구분
 		
+		
+		
 		// 페이지 초기값 세팅을 위한 코드값 바인딩
 		CodeVO codeVO = new CodeVO(); 
 		codeVO.setCodeGrpId("6SIG_YN");
 		codeVO.setActFlg("Y"); 
 		List<EgovMap> code6SigYn = codeService.selectFullList(codeVO);
-		model.addAttribute("searchRepName", code6SigYn);	
+		model.addAttribute("searchDivision", code6SigYn);	
 		model.addAttribute("divisionCode", code6SigYn);
 
 		codeVO = new CodeVO(); 

@@ -29,6 +29,7 @@ public class KpiManageVO {
 	private String kudIdx;
 	private String kudCertBelt;
 	private String comDepartCode;
+	private String kudJimu;
 
 	public String getStdSeq() {
 		return stdSeq;
@@ -214,6 +215,14 @@ public class KpiManageVO {
 
 	public void setComDepartCode(String comDepartCode) {
 		this.comDepartCode = comDepartCode;
+	}
+
+	public String getKudJimu() {
+		return kudJimu;
+	}
+
+	public void setKudJimu(String kudJimu) {
+		this.kudJimu = kudJimu;
 	}
 
 	@Override
