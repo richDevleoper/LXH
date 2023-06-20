@@ -45,8 +45,8 @@ dwr 사용을 지양하기 위해 주석처리함, 필요시 해당 jsp에 추�
     <link rel="stylesheet" href="/assets/css/jqury-ui.css">
     <link rel="stylesheet" href="/assets/css/reset.css">
     <link rel="stylesheet" href="/assets/css/tree.css">
-    <link rel="stylesheet" href="/assets/css/common.css?v=230307">
-    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="/assets/css/common.css?v=230620">
+    <link rel="stylesheet" href="/assets/css/style.css?v=230620">
     
     <link type="text/css" rel="stylesheet" media="screen" href="<c:out value='/def/jquery/validation-engine-2.6.2/css/validationEngine.jquery.css' />" />
     

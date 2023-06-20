@@ -21,31 +21,35 @@
 		<div class="list-search">
 			<form:form commandName="MakeSearchVO" id="defaultForm" method="get"
 				action="makelist.do">
-                            ${MakeSearchVO.superHiddenTag}
-                                    <div class="search-form">
-					<div class="form-inline form-select">
-						<label>구분</label> <select name="searchDiv" id="searchDiv">
-							<option value="">전체</option>
-							<option value="comNo">사번</option>
-							<option value="userName">이름</option>
-							<option value="bumun">부문</option>
-							<option value="deptName">소속명</option>
-							<option value="teamName">팀명</option>
-							<option value="jobName">직무명</option>
-						</select>
-					</div>
-					<div class="form-inline form-select">
-						<form:input type="text" path="searchText" />
-					</div>
+                    ${MakeSearchVO.superHiddenTag}
+                <div class="search-form">
 					<div class="form-inline form-select">
 						<label>사업장</label>
 						<form:select path="searchPlaceCode" title="사업장을 선택하세요."
 							cssClass="validate[required]">
 						</form:select>
+					</div>                
+					<div class="form-inline form-select">
+						<label>구분</label> 
+						<form:select path="searchDiv">
+							<form:option value="">전체</form:option>
+							<form:option value="comNo">사번</form:option>
+							<form:option value="userName">이름</form:option>
+							<form:option value="bumun">부문</form:option>
+							<form:option value="deptName">소속명</form:option>
+							<form:option value="teamName">팀명</form:option>
+							<form:option value="jobName">직무명</form:option>
+						</form:select>
 					</div>
 					<div class="form-inline form-select">
-						<label>조직</label> <input type="text" name="">
-						<button type="button" class="btn-org">검색</button>
+						<form:input type="text" path="searchText" />
+					</div>
+
+					<div class="form-inline form-select">
+						<label>조직</label>
+						<form:input type="hidden" path="searchDepart"/>
+                        <form:input type="text" path="searchDepartName" readonly="true" />
+                        <button type="button" class="btn-org btn-search-dept">검색</button>
 					</div>
 					<button type="button" class="btn-submit" onclick="onclick_search()">조회</button>
 				</div>
@@ -76,8 +80,8 @@
 						<col>
 						<col>
 						<col style="width: 120px">
-						<col style="width: 100px">
-						<col style="width: 100px">
+						<col style="width: 120px">
+						<col style="width: 80px">
 						<col style="width: 100px">
 					</colgroup>
 					<thead>
@@ -104,7 +108,7 @@
 										</ul>
 									</div>
 								</td>
-								<td></td>
+								<td>${item.comJimu}</td>
 								<td>${item.cirLeaderdeptName}</td>
 								<td>${item.comWorkPlace}</td>
 								<td>${item.cirLName }</td>
@@ -123,17 +127,6 @@
 		<div class="list-footer">
 			<ui:pagination paginationInfo="${MakeSearchVO}" type="defDefault"
 				jsFunction="cfnPageLink" />
-			<!-- <div class="pagination">
-                                    <a href="" class="first">처음</a>
-                                    <a href="" class="prev">이전</a>
-                                    <a href="" class="cur num">1</a>
-                                    <a href="" class="num">2</a>
-                                    <a href="" class="num">3</a>
-                                    <a href="" class="num">4</a>
-                                    <a href="" class="num">5</a>
-                                    <a href="" class="next">다음</a>
-                                    <a href="" class="last">끝</a>
-                                </div> -->
 			<div class="list-btns">
 				<button type="button" class="btn bg-gray" id="btnRegMake">
 					<span>분임조등록</span>
@@ -145,103 +138,7 @@
 
 	<!-- 조직도 -->
 	<div class="modal-dimmed"></div>
-	<div class="org-modal">
-		<div class="modal-header">
-			<h4>조직조회</h4>
-			<button type="button" class="btn-close">닫기</button>
-		</div>
-		<div class="modal-content">
-			<div class="list-wrap">
-				<div class="list-search">
-					<form id="org-form" onsubmit="org_search();return false;">
-						<div class="search-form">
-							<div class="form-inline form-input">
-								<label>조직명</label> <input type="text" name="">
-							</div>
-							<button type="submit" class="btn-submit">조회</button>
-						</div>
-					</form>
-				</div>
-			</div>
-			<div class="tree-header">
-				<div>
-					<input type="checkbox" id="orgSelAll"> <label
-						for="orgSelAll"></label>
-				</div>
-				<div>6σ 인재육성대상 조직명</div>
-			</div>
-			<div id="org-tree">
-				<ul>
-					<li>창호 사업부
-						<ul>
-							<li>창호.생산담당
-								<ul>
-									<li>· 창호.프로파일생산팀</li>
-									<li>· 창호.기술팀</li>
-									<li>· 창호.공정혁신팀</li>
-									<li>· 창호.완성창공정기술팀</li>
-								</ul>
-							</li>
-							<li>유리</li>
-							<li>연구소 근무</li>
-							<li>창호.시스템창사업담당</li>
-							<li>창호.중문팀</li>
-							<li>바닥재 사업담당</li>
-						</ul>
-					</li>
-					<li>단열재 사업담당
-						<ul>
-							<li>창호.프로파일생산팀</li>
-						</ul>
-					</li>
-					<li>벽지 사업담당
-						<ul>
-							<li>창호.프로파일생산팀</li>
-						</ul>
-					</li>
-					<li>표면소재 사업담당
-						<ul>
-							<li>창호.프로파일생산팀</li>
-						</ul>
-					</li>
-					<li>산업용필름 사업담당
-						<ul>
-							<li>창호.프로파일생산팀</li>
-						</ul>
-					</li>
-					<li>자동차소재부품 사업부
-						<ul>
-							<li>창호.프로파일생산팀</li>
-						</ul>
-					</li>
-					<li>인테리어 사업부
-						<ul>
-							<li>창호.프로파일생산팀</li>
-						</ul>
-					</li>
-					<li>연구소
-						<ul>
-							<li>창호.프로파일생산팀</li>
-						</ul>
-					</li>
-					<li>품질 담당
-						<ul>
-							<li>창호.프로파일생산팀</li>
-						</ul>
-					</li>
-					<li>생산/기술/R&D/품질 外
-						<ul>
-							<li>창호.프로파일생산팀</li>
-						</ul>
-					</li>
-				</ul>
-			</div>
-			<div class="btns">
-				<button type="button" class="btn-submit">확인</button>
-				<button type="button" class="btn-cancel">취소</button>
-			</div>
-		</div>
-	</div>
+	
 
 	<script type="text/javascript">
 $(document).ready(function(){
@@ -261,6 +158,28 @@ function init(){
 	    	onclick_search();
 	    }
 	});
+	
+	// 부서검색
+	$(".btn-search-dept").off("click").on("click", function(){
+		callPopup_searchDepartment(this);
+	});
+	
+	// 조직 조회 호출부
+	function callPopup_searchDepartment(obj){
+
+		popDept.init();
+		// footer.jsp 내 영역 호출
+		popDept.returnObjId = "searchDepart";
+		popDept.returnFunc = callback_popDept;
+		popDept.open();
+	}
+	
+	// 조직 조회 콜백부
+	function callback_popDept(objId, data){
+		
+		$("#"+objId).val(data.deptCode);
+		$("#searchDepartName").val(data.deptName);
+	}
 }
 
 function initCode(){

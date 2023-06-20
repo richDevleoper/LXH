@@ -279,7 +279,7 @@
            	dept_code in (select com_depart_code from tb_kpi_user_detail 
                	           where kud_idx=#{kudIdx}
                    	       group by com_depart_code)
-nt	CONNECT BY PRIOR
+	CONNECT BY PRIOR
 			dept_uper_code = dept_code
 	  )
  

@@ -17,7 +17,7 @@
 		<result column="CIR_NAME"                    	property="cirName"/>  
 		<result column="CIR_LEADER_NAME"                property="cirLName"/>  
 		<result column="CIR_LEADER_DEPTNAME"            property="cirLeaderdeptName"/>  
-		   
+		    
 		<result column="CIR_REG_USER"                   property="cirRegUser"/>     
 		<result column="CIR_REG_DATE"                   property="cirRegDate"/>     
 		<result column="CIR_UPDATE_USER"                property="cirUpdateUser"/>     
@@ -30,6 +30,7 @@
 		<result column="DEPT_NAME"                    	property="comJobxCode"/>      
 		<result column="COM_JOBX_CODE"                  property="comPositionCode"/>      
 		<result column="COM_POSITION_CODE"              property="beltCode"/>      
+		<result column="COM_JIMU"              			property="comJimu"/>
 		<result column="BELT_CODE"                    	property="cirMemName"/>      
 		<result column="CIR_MEM_NAME"                   property="cirMemRole"/>      
 		<result column="CIR_MEM_EDU_CODE"               property="cirMemEduCode"/>      
@@ -73,8 +74,8 @@
 		<if test="searchPlaceCode != null and searchPlaceCode != ''">
 			AND U.COM_WORK_PLACE = #{searchPlaceCode}
 		</if>
-		<if test="searchName != null and searchName != ''">
-			AND T.DEPT_CODE = #{searchName}
+		<if test="searchDepart != null and searchDepart != ''">
+			AND T.DEPT_CODE = #{searchDepart}
 		</if>
 	</sql>
 	
@@ -98,6 +99,7 @@
 						GET_USER_NM(CIR_WORK_MEM_NO) CIR_WORK_MEM_NAME,
 						CIR_TEAM_LEADER_NO,
 						GET_USER_NM(CIR_TEAM_LEADER_NO) CIR_TEAM_LEADER_NAME, -- 분임조 팀장
+						dept_lv2_name as comJimu,
 						CIR_RECORD_CONT,
 						CIR_MEM_CNT,
 						CIR_MEM_STATUS,
@@ -108,7 +110,9 @@
 					 	CIR_REG_DATE
 				FROM TB_CIRCLE_MST T
                      , tb_USER_mst U
-				WHERE T.CIR_TEAM_LEADER_NO=U.COM_NO
+                     , tb_depart_mst d
+				WHERE T.CIR_TEAM_LEADER_NO=U.COM_NO	 
+                  and d.dept_code=t.dept_code
 				<include refid="defCond"></include>
 	</sql>
 	

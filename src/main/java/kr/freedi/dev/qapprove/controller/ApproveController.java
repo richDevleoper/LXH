@@ -242,7 +242,6 @@ public class ApproveController {
 				reportService.updateStatus(reportVO);	
 			} else if (approveVO.getAprovalType().equals("3")) {
 				// 6시그마
-				
 				reportService.update6SigmaStepNext(reportVO);
 			}
 			

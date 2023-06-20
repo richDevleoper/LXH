@@ -59,6 +59,7 @@ public class MakeVO {
 	private String comJobxCode;
 	private String comPositionCode;
 	private String beltCode;
+	private String comJimu;
 	private String cirMemName;
 	private String cirMemEduCode;
 	private String cirMemRole;
@@ -448,6 +449,12 @@ public class MakeVO {
 	public void setTeam9(String team9) {
 		this.team9 = team9;
 	}
+	public String getComJimu() {
+		return comJimu;
+	}
+	public void setComJimu(String comJimu) {
+		this.comJimu = comJimu;
+	}
 	@Override
 	public String toString() {
 		return "MakeVO [cirCode=" + cirCode + ", cirRegNum=" + cirRegNum + ", cirName=" + cirName + ", deptCode="
@@ -464,10 +471,10 @@ public class MakeVO {
 				+ ", team5=" + team5 + ", team6=" + team6 + ", team7=" + team7 + ", team8=" + team8 + ", team9=" + team9
 				+ ", removeMemberIds=" + removeMemberIds + ", cirMemCode=" + cirMemCode + ", ComNo=" + ComNo
 				+ ", cirDeptCode=" + cirDeptCode + ", cirDeptName=" + cirDeptName + ", comJobxCode=" + comJobxCode
-				+ ", comPositionCode=" + comPositionCode + ", beltCode=" + beltCode + ", cirMemName=" + cirMemName
-				+ ", cirMemEduCode=" + cirMemEduCode + ", cirMemRole=" + cirMemRole + ", cirLName=" + cirLName
-				+ ", cirLeaderdeptName=" + cirLeaderdeptName + ", idx=" + idx + ", kudIdx=" + kudIdx
-				+ ", kudChkTypeCode=" + kudChkTypeCode + ", kudYear=" + kudYear + ", kudPlace=" + kudPlace
+				+ ", comPositionCode=" + comPositionCode + ", beltCode=" + beltCode + ", comJimu=" + comJimu
+				+ ", cirMemName=" + cirMemName + ", cirMemEduCode=" + cirMemEduCode + ", cirMemRole=" + cirMemRole
+				+ ", cirLName=" + cirLName + ", cirLeaderdeptName=" + cirLeaderdeptName + ", idx=" + idx + ", kudIdx="
+				+ kudIdx + ", kudChkTypeCode=" + kudChkTypeCode + ", kudYear=" + kudYear + ", kudPlace=" + kudPlace
 				+ ", kudJoinDate=" + kudJoinDate + ", kudJobxName=" + kudJobxName + ", kudPositionName="
 				+ kudPositionName + "]";
 	}
