@@ -233,13 +233,13 @@ public class ApproveController {
 			if("1,2".indexOf(approveVO.getAprovalType())>-1) {
 				// (rep_code, rep_status_code)
 				if(approveVO.getAprovalState().equals("4")) {	//승인
-					// OK : 6시그마 ; 3(진행중), 일반 ; 6(완료)
-					reportVO.setRepStatusCode("3");
+					// OK : 6시그마 ; 3(진행중), 일반 ; 6(완료)  code_grp_id='REP_STAT'
+					reportVO.setRepStatusCode("3");	// 선정완료
 				} else if(approveVO.getAprovalState().equals("3")) { // Drop
-					// DROP : 5
-					reportVO.setRepStatusCode("5");
+					// DROP : 6
+					reportVO.setRepStatusCode("6"); // Drop
 				}
-				reportService.updateStatus(reportVO);	
+				reportService.updateStatus(reportVO);
 			} else if (approveVO.getAprovalType().equals("3")) {
 				// 6시그마
 				reportService.update6SigmaStepNext(reportVO);

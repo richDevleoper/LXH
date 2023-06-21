@@ -15,7 +15,7 @@
 	<meta name="keywords" content="" />
 	<meta name="description" content="" />
 	<style>
-	li a.active { font-weight: 700; color: #a72b2a; }
+	li a.active { font-weight: 700; color: #a72b2a !important; }
 	</style>
 </head>
 <body>

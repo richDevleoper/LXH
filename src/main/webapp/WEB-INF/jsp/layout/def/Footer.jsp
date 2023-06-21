@@ -628,12 +628,12 @@
                        <col style="width:100px">                                            
                    </colgroup>
                    <thead>
-                   	<tr>
+                   	   <tr class="tr-appr-eval">
                            <th class="bg-gray font-weight-bold" rowspan="2">번호</th>
                            <th class="bg-gray font-weight-bold" colspan="6">평가내용</th>
                            <th class="bg-gray font-weight-bold" rowspan="2">배점</th>                                                                                                                                                                                    
                        </tr>
-                       <tr>                                                
+                       <tr class="tr-appr-eval">                                                
                            <th class="bg-gray font-weight-bold">구분</th>
                            <th class="bg-gray font-weight-bold">5</th>
                            <th class="bg-gray font-weight-bold">4</th>
@@ -643,7 +643,7 @@
                        </tr>                                            
                    </thead>
                    <tbody>
-                       <tr>
+                       <tr class="tr-appr-eval">
                            <td>1</td>                                                
                            <td>개선금액 효과</td>
                            <td>년 5천만원이산(4천 이상 45점)</td>
@@ -662,7 +662,7 @@
                            	</select> 
      					</td>                                                                                                                                                
                        </tr>
-                       <tr>
+                       <tr class="tr-appr-eval">
                        	<td>2</td>
                            <td>[비금액 효과]</td>                                                
                            <td>개선효과가 획기적임</td>
@@ -671,7 +671,7 @@
                            <td>개선효과가 단순함</td>
                            <td>개선효과가 미흡함</td>                                                                                                                                                                                                
                        </tr>
-                       <tr>
+                       <tr class="tr-appr-eval">
                        	<td>3</td>
                            <td>[환경/안전효과]</td>                                                
                            <td>매우 치명적임</td>
@@ -680,7 +680,7 @@
                            <td>조금 치명적임</td>
                            <td>치명적이지 않음</td>                                                                                                                                                                                                
                        </tr>
-                       <tr>
+                       <tr class="tr-appr-eval">
                        	<td>4</td>
                            <td>창의성</td>                                                
                            <td>독창적이고 착안점이 우수함</td>
@@ -699,7 +699,7 @@
                            	</select> 
      					</td>                                                                                                                                                                                               
                        </tr>
-                       <tr>
+                       <tr class="tr-appr-eval">
                        	<td>5</td>
                            <td>파급성</td>                                                
                            <td>전사적 적용가능</td>
@@ -718,7 +718,7 @@
                            	</select> 
      					</td>                                                                                                                                                                                               
                        </tr>
-                       <tr>
+                       <tr class="tr-appr-eval">
                        	<td>6</td>
                            <td>지속성</td>                                                
                            <td>영구적</td>
@@ -737,7 +737,7 @@
                            	</select> 
      					</td>                                                                                                                                                                                               
                        </tr>
-                       <tr>
+                       <tr class="tr-appr-eval">
                        	<td>7</td>
                            <td>노력도</td>                                                
                            <td>탁월한 노력이 엿보임</td>
@@ -756,7 +756,7 @@
                            	</select> 
      					</td>                                                                                                                                                                                               
                        </tr>
-                       <tr>
+                       <tr class="tr-appr-eval">
                        
                        	<th class="font-weight-bold" colspan="7">배점합계</th>
                            <td>
@@ -796,6 +796,7 @@ let popApprove = {
 		returnFunc : null,
 		searchObjId : "popAppr_comment",
 		modalPopId : "comPopup_apprInfoRegi",
+		isProposeAppr : true,	// 제안 결재시 
 		//dataAppendId : "tbodyDeptSearch",
 		//radioObjClass : "radio-selected",
 		open : function(){
@@ -825,7 +826,12 @@ let popApprove = {
 			this.returnObjId = null;
 			this.returnFunc = null;
 		},
-    	onSubmit: function(){
+		setGenAppr: function(){
+			$(".tr-appr-eval").remove();
+			this.isProposeAppr = false;
+			$("#popAppr_comment").css("height", "150px");
+		},
+		onSubmit: function(){
     		
     		let boolFlag = true;
     		
@@ -835,7 +841,7 @@ let popApprove = {
 				}
 			});
     		
-    		if(!boolFlag){
+    		if(!boolFlag && isProposeAppr){
     			alert("배점을 입력해주세요.");
     			boolFlag = false;
 				return false;

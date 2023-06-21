@@ -57,6 +57,7 @@
 							</div>
                         </div>
 </c:if>
+
                         <p class="content_title">1. 과제정보/수행</p>
                         <div class="list-wrap">
                             <div class="list-content">
@@ -87,7 +88,7 @@
                                                 <td>${reportVO.repProductClassName}</td>
                                             </tr>
 <c:choose>  
-	<c:when test="${repMenuCode eq 'REPORT'}">                                            
+	<c:when test="${reportVO.repMenuCode eq 'REPORT'}">                                            
                                             <tr>
                                                 <th><label for="text4" class="color primary">과제리더벨트</label></th>
                                                 <td>${reportVO.repLeaderBelt}</td>
@@ -350,7 +351,7 @@
                                                                             </thead>
                                                                             
                                                                             <tbody>
-                                                                                <tr>
+                                                                                <%-- <tr>
                                                                                     <td>계획</td>
                                                                                     
                                                                                     <td class="pd3" colspan="2">
@@ -368,7 +369,7 @@
                                                                                         </div>
                                                                                     </td>
    
-                                                                                </tr>
+                                                                                </tr> --%>
                                                                                 <tr>
                                                                                     <td>실시</td>
                                                                                     <td class="pd3" colspan="2">
@@ -419,33 +420,33 @@
                                                                                 <col style="width:80px">
                                                                                 <col>                                                                                
                                                                                 <col style="width:70px">
+                                                                                <%-- <col style="width:70px">
                                                                                 <col style="width:70px">
-                                                                                <col style="width:70px">
-                                                                                <col style="width:70px">
+                                                                                <col style="width:70px"> --%>
                                                                             </colgroup>
                                                                             <tbody>
                                                                                 <tr>
                                                                                     <th colspan="4">Finish 요약</th>                                                                                    
-                                                                                    <th colspan="3">활동결과(실적)</th>
+                                                                                    <!-- <th colspan="3">활동결과(실적)</th> -->
                                                                                 </tr>
                                                                                 <tr>
-                                                                                    <td rowspan="2" colspan="4">
+                                                                                    <td colspan="4">
                                                                                         <div class="input-text align-left">
                                                                                             ${item.repFinishSummary}
                                                                                         </div>
                                                                                     </td>                                                                                    
-                                                                                    <td>CTQ/CTP</td>
+                                                                                    <!-- <td>CTQ/CTP</td>
                                                                                     <td>KPI</td>
-                                                                                    <td>예상성과</td>                                                                                        
+                                                                                    <td>예상성과</td> -->                                                                                        
                                                                                 </tr>
-                                                                                <tr>              
+                                                                                <%-- <tr>              
                                                                                     <td><div class="col s2 input-text pd3">${item.repCtqCtp}</div></td>
                                                                                     <td><div class="col s2 input-text pd3" style="width:100%">${item.repKpi}</div></td>
                                                                                     <td><div class="col s2 input-text pd-r10" style="width:100%">${item.repExpectationResult}</div></td>                                 
-                                                                                </tr>
+                                                                                </tr> --%>
                                                                                 <tr>
                                                                                     <th colspan="2" class="pd-r10 align-right"> 첨부파일 </th>
-                                                                                    <td colspan="5" style="text-align: left;">
+                                                                                    <td colspan="2" style="text-align: left;">
                                                                                     	<div class="col s12 input-text file">
 	                                                                                    	
 								                                                            <!-- [kr.freedi.dev.attachfile.domain.AttachFileVO@790a7e68[fileId=reportDetail_7_167,fileSeq=1,fileGrp=reportDetail
@@ -515,10 +516,10 @@
                                         <colgroup>
                                             <col style="width:180px">
                                             <col style="">
-											<col style="width:70px">
-                                            <col style="width:70px">
-											<col style="width:70px">
-                                            <col style="width:70px">
+											<col style="width:100px">
+                                            <col style="width:100px">
+											<col style="width:100px">
+                                            <col style="width:100px">
                                         </colgroup>
                                         <thead>
                                             <tr>
@@ -667,8 +668,10 @@
 <c:if test="${ empty repMenuCode }"><%-- 해당 값은 "과제/분임조과제" 에서만 나옴. --%>						
                         <div class="list-footer">
                             <div class="list-btns">
+							<c:if test="${approveVO.aprovalState ne '3' && approveVO.aprovalState ne '4'}">
 								<button type="button" class="btn bg-gray" onclick="onclick_procApprove('4')">승인</button>
-                                <button type="button" class="btn bg-gray" onclick="onclick_procApprove('3');">반려</button>        
+                                <button type="button" class="btn bg-gray" onclick="onclick_procApprove('3');">반려</button>
+                            </c:if>        
                                 <a href="/apprv/list.do?menuKey=${menuKey}" class="btn">목록</a>
                             </div>
                         </div>
@@ -725,7 +728,7 @@ function onclick_procApprove(gubn){
 	if(gubn==='4'){ // 승인
 		popup = popApprove; 
 		popup.init();
-		
+		popup.setGenAppr();  // 제안 점수표 삭제하기
 		popup.returnFunc = callback_popApprove;
 		popup.returnObjId = null; //$(obj).closest("td").find("input").attr("id");
 	} else { // 반려

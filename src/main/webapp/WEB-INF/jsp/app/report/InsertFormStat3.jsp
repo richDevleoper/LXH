@@ -235,32 +235,33 @@
                                                                             <tbody>
                                                                                 <tr>
                                                                                     <td colspan="6" class="pd0 border0">
+                                                                                    
                                                                                         <div class="toggle-box" id="toggleBox_${status.count}">
-                                                                                        <c:choose> 
-                                                                                        	<c:when test="${status.index < reportVO.repStatusCode }">
-	                                                                                        	<script> 
-	                                                                                        	// 아직 진행되지 않은 step의 토글 방지
-		                                                                                        $(document).ready(function(){
-	                                                                                        		let objNm = "#toggleBox_${status.count}";
-	                                                                                            	$(objNm).find("input, textarea").prop("disabled", true); // 완료된 항목 disable 시키기
-	                                                                                        	});
-	                                                                                        	</script>
-                                                                                        	</c:when>
-                                                                                        	<c:when test="${status.index eq reportVO.repStatusCode }">
-	                                                                                        	<script> 
+	                                                                                        <c:choose> 
+	                                                                                        	<c:when test="${item.repStatus eq '0' }">
+		                                                                                        	<script> 
 		                                                                                        	// 아직 진행되지 않은 step의 토글 방지
-			                                                                                        $("#toggleBox_${status.count}").show(); 
-		                                                                                        </script>
-                                                                                        	</c:when>
-                                                                                        	<c:when test="${status.index > reportVO.repStatusCode }">
-	                                                                                        	<script> 
-	                                                                                        	$(document).ready(function(){
-	                                                                                        		let objNm = "#toggleBox_${status.count}";
-	                                                                                            	$(objNm).find("input, textarea").prop("disabled", true); // 완료된 항목 disable 시키기
-	                                                                                        	});
-		                                                                                        </script>
-                                                                                        	</c:when>
-                                                                                        </c:choose>
+			                                                                                        $(document).ready(function(){
+		                                                                                        		let objNm = "#toggleBox_${status.count}";
+		                                                                                            	$(objNm).find("input, textarea").prop("disabled", true); // 완료된 항목 disable 시키기
+		                                                                                        	});
+		                                                                                        	</script>
+	                                                                                        	</c:when>
+	                                                                                        	<c:when test="${item.repStatus eq '1' }">
+		                                                                                        	<script> 
+			                                                                                        	// 아직 진행되지 않은 step의 토글 방지
+				                                                                                        $("#toggleBox_${status.count}").show(); 
+			                                                                                        </script>
+	                                                                                        	</c:when>
+	                                                                                        	<c:when test="${item.repStatus eq '2' }">
+		                                                                                        	<script> 
+		                                                                                        	$(document).ready(function(){
+		                                                                                        		let objNm = "#toggleBox_${status.count}";
+		                                                                                            	$(objNm).find("input, textarea").prop("disabled", true); // 완료된 항목 disable 시키기
+		                                                                                        	});
+			                                                                                        </script>
+	                                                                                        	</c:when>
+	                                                                                        </c:choose>
                                                                                         	
                                                                                         
                                                                                             <div class="list-table list">
@@ -1055,7 +1056,6 @@ function onchange_resultType(obj){
 	
 	function setControl(){
 		
-		debugger;
 		setDropDown("repSectorCode", cdListSector, true);//부문코드
 		$("#repSectorCode").val("${reportVO.repSectorCode}")
 		onchange_ddlRepSectorCode();
@@ -1298,7 +1298,7 @@ function onchange_resultType(obj){
 			break;
 		}
 
-		if(vMenuType==="TEAM" && repDevCd==="2"){
+		if(repDevCd==="2" || repDevCd==="3"){
 			$("#repTypeCode").prop("disabled", true);
 			$("#trPlanDate").remove();
 		} else {

@@ -119,7 +119,7 @@
                              , (case when rep_devision_code='1' then max(REP_PLAN_START_DATE) else max(REP_PLAN_END_DATE) end) as end_date
                         from tb_report_detail 
                        group by rep_code, rep_devision_code) d
-            WHERE t.rep_code=d.rep_code
+            WHERE t.rep_code=d.rep_code(+)
             <include refid="defCond"></include>
         )
         SELECT

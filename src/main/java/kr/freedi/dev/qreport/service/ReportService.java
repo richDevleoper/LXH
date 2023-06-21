@@ -119,7 +119,7 @@ public class ReportService {
 			vo.setRepDivisionCode(reportVO.getRepDivisionCode());
 			vo.setRepRegUser(reportVO.getRepRegUser());
 			
-			if(vo.getRepStepCode().equals("1,7")) { // 입력화면에서 6시그마 여부에 따라 입력화면이 달라지기때문에 값이 두개가 공존함. 이에 가공 필요.
+			if("1,7".indexOf(vo.getRepStepCode())>-1) { // 입력화면에서 6시그마 여부에 따라 입력화면이 달라지기때문에 값이 두개가 공존함. 이에 가공 필요.
 				if(reportVO.getRepDivisionCode().equals("1"))
 					vo.setRepStepCode("1"); //6시그마면 첫번째 필드 
 				else 
@@ -151,7 +151,7 @@ public class ReportService {
 			vo.setRepApprovalMemCode(apprMemCode);
 			vo.setRepApprovalMemRole(apprMemRoleCode);
 			
-			if(vo.getRepPlanStartDate()!=null)
+			if(vo.getRepPlanStartDate()!=null || vo.getRepActStartDate()!=null)
 				reportDetailService.insert(vo);
 		}
 		
@@ -534,7 +534,10 @@ public class ReportService {
 			for (int i = 1; i <= 5; i++) {
 				ReportTeamVO emptyRepTeamVO = new ReportTeamVO();
 				emptyRepTeamVO.setRepTeamMemRole(Integer.toString(i));			// 각 행별 역할부여(과제리더, 팀멤버, ~~)
-				emptyRepTeamVO.setRepTeamMemRoleNm(repRoleCodes.get(Integer.toString(i)));  // 역할명칭 코드값 가져오기
+				String strTeamMemRoleNm = repRoleCodes.get(Integer.toString(i));
+				if(reportVO.getRepMenuCode().equals("TEAM") && i==2)
+					strTeamMemRoleNm = "분임조원";
+				emptyRepTeamVO.setRepTeamMemRoleNm(strTeamMemRoleNm);  // 역할명칭 코드값 가져오기
 				reportTeamList.add(emptyRepTeamVO);
 			}
 			retVO.setRepTeamMemberList(reportTeamList);
@@ -560,7 +563,7 @@ public class ReportService {
 		
 		if(vo.getRepStatusCode().equals("3")) {  // 승인일 경우
 			if(!savedVO.getRepDivisionCode().equals("1")) {  
-				vo.setRepStatusCode("6"); // 일반/10+과제는 완료로 바꿔준다.
+				vo.setRepStatusCode("7"); // 일반/10+과제는 완료로 바꿔준다.
 			}
 		} // 반려는 코드 변경 없이 그대로 반영한다.
 		
@@ -579,7 +582,7 @@ public class ReportService {
 		String currStepCode = savedVO.getRepCurrStepCode();
 		
 		//1. 6sigma 과제 확인, 진행중 여부 확인
-		if(savedVO.getRepDivisionCode().equals("1") && "3,4".indexOf(statusCode)>-1) {
+		if(savedVO.getRepDivisionCode().equals("1") && "2-1,3,4".indexOf(statusCode)>-1) {
 			
 			Integer currStepNum = Integer.parseInt(currStepCode);
 			

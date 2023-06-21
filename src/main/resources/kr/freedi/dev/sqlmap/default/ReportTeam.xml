@@ -34,10 +34,10 @@
 		<where>
 			<trim prefixOverrides="AND|OR">
 				<if test="repTeamCode != null and repTeamCode != ''">
-					AND REP_TEAM_CODE = #{repCode}
+					AND M.REP_TEAM_CODE = #{repCode}
 			  	</if>
 			  	<if test="repCode != null and repCode != ''">
-					AND REP_CODE = #{repCode}
+					AND M.REP_CODE = #{repCode}
 			  	</if>
 			  	<if test="cirCode != null and cirCode  != ''">
 					AND CIR_CODE = #{cirCode}
@@ -66,12 +66,13 @@
 			, REP_TEAM_UPDATE_DATE
 			, REP_TEAM_MEM_STATUS
 			
-			, CD_ROLE.CODE_NM AS REP_TEAM_MEM_ROLE_NM
+			, (case when R.REP_MENU_CODE='TEAM' and M.REP_TEAM_MEM_ROLE='2' then '분임조원' else CD_ROLE.CODE_NM end) AS REP_TEAM_MEM_ROLE_NM
             , CD_JOB.CODE_NM AS COM_JOBX_NM
             , CD_POS.CODE_NM AS COM_POSITION_NM
             , '' as REP_TEAM_MEM_EDU_NM
             , CD_BT.CODE_NM as BELT_NM
 		FROM TB_REPORT_TEAM M
+		     LEFT OUTER JOIN  TB_REPORT_MST R ON R.rep_code=m.rep_code
 			 LEFT OUTER JOIN  TB_USER_MST U ON U.COM_NO=M.COM_NO
 		     LEFT OUTER JOIN  TB_CODE CD_ROLE ON CD_ROLE.CODE_ID=M.REP_TEAM_MEM_ROLE AND CD_ROLE.CODE_GRP_ID='REP_ROLE'
              LEFT OUTER JOIN  TB_CODE CD_JOB ON CD_JOB.CODE_ID=M.COM_JOBX_CODE AND CD_JOB.CODE_GRP_ID='JOBX'

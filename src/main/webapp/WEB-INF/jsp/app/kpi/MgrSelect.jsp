@@ -18,6 +18,9 @@
 <title>${fn:split(boardVO.boardNm,'>')[fn:length(fn:split(boardVO.boardNm,'>'))-1]}</title>
 <meta name="keywords" content="" />
 <meta name="description" content="" />
+	<style>
+	li a.active { font-weight: 700; color: #a72b2a !important; }
+	</style>
 </head>
 <body>
 
@@ -272,6 +275,8 @@
 	        /* var selectedNodeText = data.node.text;
 	        console.log('Selected Node ID:', selectedNodeId);
 	        console.log('Selected Node Text:', selectedNodeText); */
+	        $(".jstree-anchor").removeClass("active")
+	        $("#"+data.node.a_attr.id).addClass("active")
 	        getEmpSearch(selectedNodeId);
 	      });
 		

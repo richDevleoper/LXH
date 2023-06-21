@@ -1239,7 +1239,7 @@ function onchange_resultType(obj){
 			break;
 		}
 
-		if(vMenuType==="TEAM" && repDevCd==="2"){
+		if(repDevCd==="2" || repDevCd==="3"){
 			$("#repTypeCode").prop("disabled", true);
 			$("#trPlanDate").remove();
 		} else {

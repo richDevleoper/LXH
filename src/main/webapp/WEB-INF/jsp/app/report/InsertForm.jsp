@@ -670,7 +670,8 @@
 										<c:if test="${item.repTeamMemRole eq '3' || item.repTeamMemRole eq '5'}">class="color primary"</c:if>>
 											<c:if test="${item.repTeamMemRole ne '4' && item.repTeamMemRole ne '2'}">
 												<span class="asterisk">*</span>
-											</c:if> ${item.repTeamMemRoleNm}
+											</c:if> 
+											${item.repTeamMemRoleNm}
 									</label> <script>
                                                 	memMaxSeq = Math.max(memMaxSeq, "${status.index}");
                                                 	</script> <form:input
@@ -1387,7 +1388,7 @@ function onchange_resultType(obj){
 			break;
 		}
 		
-		if(vMenuType==="TEAM" && repDevCd==="2"){
+		if(repDevCd==="2" || repDevCd==="3"){
 			$("#repTypeCode").prop("disabled", true);
 			//$(".act-date").prop("disabled", true);  // 실시 일자 Disabled(5월 수정요청)
 			//$(".act-date").closest("div").find("i.ico").prop("disabled", true);
