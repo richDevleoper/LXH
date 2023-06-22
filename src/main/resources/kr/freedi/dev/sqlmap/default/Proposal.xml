@@ -214,6 +214,7 @@
 			PROP_CIRCLE_CODE 		= #{propCircleCode, jdbcType=VARCHAR},
 			PROP_APPROVER_CODE 		= #{propApproverCode, jdbcType=VARCHAR},
 			PROP_PROP_STAT_CODE 	= #{propPropStatCode, jdbcType=VARCHAR},
+			PROP_EVAL_LV_CODE 		= #{propEvalLvCode, jdbcType=VARCHAR},
 			PROP_EVAL_SCORE 		= #{propEvalScore, jdbcType=VARCHAR},
 			PROP_EFFECT_SCORE 		= #{propEffectScore, jdbcType=VARCHAR},
 			PROP_SUBSIDY 			= #{propSubsidy, jdbcType=VARCHAR},

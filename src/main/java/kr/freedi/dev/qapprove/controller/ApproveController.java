@@ -193,6 +193,27 @@ public class ApproveController {
 			proposalVO.setAfterAttachFileList(afterAttachFileList);
 			proposalVO.setAttachFileList(attachFileList);
 
+			if(proposalVO.getPropApproverCode() != null && !proposalVO.getPropApproverCode().equals("")) {
+				kr.freedi.dev.qpopup.domain.UserVO userVO = new kr.freedi.dev.qpopup.domain.UserVO();
+				userVO.setComNo(proposalVO.getPropApproverCode());				
+				List<EgovMap> userInfo = proposalService.selectApproverUserInfo(userVO);
+				
+				if(userInfo != null && userInfo.size() > 0) {
+					for(int index = 0; index < userInfo.size(); index++) {
+						EgovMap item = userInfo.get(index);
+						proposalVO.setPropApprovalUser(String.valueOf(item.get("comNo")));
+						proposalVO.setPropApprovalName(String.valueOf(item.get("userName")));
+						proposalVO.setPropApprovalLevelCode(String.valueOf(item.get("comJobx")));
+						proposalVO.setPropApprovalLevel(String.valueOf(item.get("comJobxNm")));
+						proposalVO.setPropApprovalDutyCode(String.valueOf(item.get("comPosition")));
+						proposalVO.setPropApprovalDuty(String.valueOf(item.get("comPositionNm")));
+						proposalVO.setPropApprovalBeltCode(String.valueOf(item.get("comCertBelt")));
+						proposalVO.setPropApprovalBelt(String.valueOf(item.get("comCertBeltNm")));
+						proposalVO.setPropApprovalGroup(String.valueOf(item.get("deptFullName")));
+						proposalVO.setPropApprovalGroupCode(String.valueOf(item.get("compDepartCode")));
+					}
+				}
+			}
 			
 			
 			model.addAttribute("proposalVO", proposalVO);
@@ -248,13 +269,15 @@ public class ApproveController {
 		}else {
 			// 제안 결재 승인시
 			// 제안마스터의 PROP_PROP_STAT_CODE 값을 3으로 바꿔주기
-			
-			
 			ProposalSearchVO searchProposalVO = new ProposalSearchVO();
 			searchProposalVO.setSearchPropSeq(Integer.valueOf(approveVO.getRefBusCode()));
 			ProposalVO proposalVO = proposalService.selectProposalDetailInfo(searchProposalVO);
-			
-			proposalVO.setPropPropStatCode("PRG_3");
+			if(approveVO.getAprovalState().equals("3")) {
+				proposalVO.setPropPropStatCode("PRG_6");
+				proposalVO.setPropEvalLvCode("NA");
+			}else {
+				proposalVO.setPropPropStatCode("PRG_3");
+			}			
 			proposalVO.setPropRegUser(userSession.getUserId());
 			proposalService.updateProposalInfo(proposalVO);
 			

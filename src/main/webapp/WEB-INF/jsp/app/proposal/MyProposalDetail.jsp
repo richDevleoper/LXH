@@ -162,7 +162,7 @@
                                                             </form:select>
                                                         </div> --%>
                                                         <div class="col s12 input-text">
-                                                            <form:input type="text" id="input-yeareffect-remark" name="input-yeareffect-remark" value="0" style="background-color: #FFF;" path="propYearEffect"/>
+                                                            <form:input type="text" id="input-yeareffect-remark" name="input-yeareffect-remark" value="" style="background-color: #FFF;" path="propYearEffect"/>
                                                         </div>
                                                     </div>
                                                 </td>

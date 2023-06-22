@@ -139,6 +139,9 @@
                                             				<c:when test="${item.propPropStatCode ne 'PRG_5' && item.propPropStatCode ne 'PRG_6' }">
                                             					${item.propPropStatCodeName }
                                             				</c:when>
+                                            				<c:when test="${item.propPropStatCode eq 'PRG_6' and item.propEvalLvCode eq 'NA'}">
+                                            					${item.propEvalLvCodeName }
+                                            				</c:when>
                                             				<c:otherwise>
                                             					${item.propEvalLvCodeName }
                                             				</c:otherwise>

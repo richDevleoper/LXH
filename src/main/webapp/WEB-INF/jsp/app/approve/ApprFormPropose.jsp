@@ -85,7 +85,7 @@
                                                 <th>조직명</th>
                                                 <td colspan="4">${proposalVO.propGroupName}</td>
                                                 <th>분임조</th>
-                                                <td colspan="4">${proposalVO.propCircleCode}</td>
+                                                <td colspan="4">${proposalVO.propCircleName}</td>
                                             </tr>
                                             <tr>
                                                 <th>제안유형</th>
@@ -97,7 +97,7 @@
                                                 <th>실행 완료일</th>
                                                 <td colspan="4">${proposalVO.propPracticeCompDate}</td>
                                                 <th>년간 효과 금액</th>
-                                                <td colspan="4">${proposalVO.propYearEffect}</td>
+                                                <td colspan="4"><fmt:formatNumber var="propYearEffect" value="${proposalVO.propYearEffect}" type="currency" currencySymbol="₩"/>${propYearEffect }</td>
                                             </tr>
 											<tr><th colspan="10" class="align-center">제안내용</th></tr>
                                             <tr>
@@ -154,7 +154,10 @@
                                                                                 <div class="themb-box">
                                                                                 <ul>
 			<c:forEach var="item_sub" items="${proposalVO.beforeAttachFileList}" varStatus="status">
-																					<li><a href="/attachfile/downloadFile.do?fileId=${item_sub.fileId}&fileSeq=${item_sub.fileSeq}" title="다운받기">${item_sub.fileNm}</a><a href="/attachfile/downloadFile.do?fileId=${item_sub.fileId}&fileSeq=${item_sub.fileSeq}" title="다운받기" class="btn color gray mg-l15">다운받기</a></li>
+																					<li>
+																						<img src="/attachfile/downloadFile.do?fileId=${item_sub.fileId }&fileSeq=${item_sub.fileSeq}" onclick="popupImageView(this);" style="cursor: pointer;">
+																						<a href="/attachfile/downloadFile.do?fileId=${item_sub.fileId}&fileSeq=${item_sub.fileSeq}" title="다운받기">${item_sub.fileNm}</a><a href="/attachfile/downloadFile.do?fileId=${item_sub.fileId}&fileSeq=${item_sub.fileSeq}" title="다운받기" class="btn color gray mg-l15">다운받기</a>
+																					</li>
 			</c:forEach>
 			                                                                    </ul>
                                                                                 
@@ -168,7 +171,10 @@
                                                                                 <div class="themb-box">
                                                                                 <ul>
 			<c:forEach var="item_sub" items="${proposalVO.afterAttachFileList}" varStatus="status">
-																					<li><a href="/attachfile/downloadFile.do?fileId=${item_sub.fileId}&fileSeq=${item_sub.fileSeq}" title="다운받기">${item_sub.fileNm}</a><a href="/attachfile/downloadFile.do?fileId=${item_sub.fileId}&fileSeq=${item_sub.fileSeq}" title="다운받기" class="btn color gray mg-l15">다운받기</a></li>
+																					<li>
+																						<img src="/attachfile/downloadFile.do?fileId=${item_sub.fileId }&fileSeq=${item_sub.fileSeq}" onclick="popupImageView(this);" style="cursor: pointer;">
+																						<a href="/attachfile/downloadFile.do?fileId=${item_sub.fileId}&fileSeq=${item_sub.fileSeq}" title="다운받기">${item_sub.fileNm}</a><a href="/attachfile/downloadFile.do?fileId=${item_sub.fileId}&fileSeq=${item_sub.fileSeq}" title="다운받기" class="btn color gray mg-l15">다운받기</a>
+																					</li>
 			</c:forEach>
                                                                                 </ul>			
                                                                                  <!--    <figure>
@@ -213,11 +219,11 @@
 												<th class="align-center">Belt</th>
 											</tr>
 											<tr>
-												<td colspan="5">소속정보</td>
-												<td class="align-center">홍길동</td>
-												<td class="align-center">책임</td>
-												<td class="align-center">팀장</td>
-												<td class="align-center">MBB</td>
+												<td colspan="5">${proposalVO.propApprovalGroup }</td>
+												<td class="align-center">${proposalVO.propApprovalName}</td>
+												<td class="align-center">${proposalVO.propApprovalLevel}</td>
+												<td class="align-center">${proposalVO.propApprovalDuty}</td>
+												<td class="align-center">${proposalVO.propApprovalBelt}</td>
 											</tr>
                                         </tbody>
                                     </table>
@@ -240,9 +246,12 @@
 												<td>
 													<div class="file-link">
 														<ul>
-			<c:forEach var="item_sub" items="${proposalVO.attachFileList}" varStatus="status">
-																												<li><a href="/attachfile/downloadFile.do?fileId=${item_sub.fileId}&fileSeq=${item_sub.fileSeq}" title="다운받기">${item_sub.fileNm}</a><a href="/attachfile/downloadFile.do?fileId=${item_sub.fileId}&fileSeq=${item_sub.fileSeq}" title="다운받기" class="btn color gray mg-l15">다운받기</a></li>
-			</c:forEach>  															
+															<c:forEach var="item_sub" items="${proposalVO.attachFileList}" varStatus="status">
+															<li>
+																<a href="/attachfile/downloadFile.do?fileId=${item_sub.fileId}&fileSeq=${item_sub.fileSeq}" title="다운받기">${item_sub.fileNm}</a>
+																<a href="/attachfile/downloadFile.do?fileId=${item_sub.fileId}&fileSeq=${item_sub.fileSeq}" title="다운받기" class="btn color gray mg-l15">다운받기</a>
+															</li>
+															</c:forEach>  															
 														</ul>
 													</div>
 												</td>
@@ -377,6 +386,10 @@ function callback_popApprove(obj, data){
 	$(".detail-comment").val(data.txtComment);	
 	
 	$("#defaultForm")[0].submit();
+}
+
+function popupImageView(el){
+	popBiggerImage.open($(el).attr('src'));
 }
 </script>
     
