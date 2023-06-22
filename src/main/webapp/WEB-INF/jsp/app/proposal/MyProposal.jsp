@@ -147,12 +147,12 @@
                                             		<td>${item.propDate }</td>
                                             		<td>${item.propPracticeCompDate }</td>
                                             		<c:choose>
-                                            			<c:when test="${item.propYearEffect != null }">
+                                            			<c:when test="${item.propYearEffectCodeName != null and item.propYearEffectCodeName ne ''.toString() }">
                                             				<fmt:formatNumber var="propYearEffect" value="${item.propYearEffect}" type="currency" currencySymbol="₩"/>
                                             				<td>${item.propYearEffectCodeName} <br> ( ${propYearEffect } )</td>
                                             			</c:when>
                                             			<c:otherwise>
-                                            				<td>${item.propYearEffectCodeName }</td>
+                                            				<td><fmt:formatNumber var="propYearEffect" value="${item.propYearEffect}" type="currency" currencySymbol="₩"/>${propYearEffect }</td>
                                             			</c:otherwise>
                                             		</c:choose>                                            		
                                             	</tr>

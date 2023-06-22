@@ -143,11 +143,11 @@
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <th><label for="select-yeareffect-code"><span class="asterisk">*</span>년간 효과금액</label></th>
+                                                <th><label for="input-yeareffect-remark" style="letter-spacing: -.9px;"><span class="asterisk">*</span>년간 효과금액 (영업이익)[원]</label></th>
                                                 <td>
                                                     <div class="row">
-                                                        <div class="col s6 select-group">
-                                                            <form:select name="" id="select-yeareffect-code" title="년간 효과금액 선택" path="propYearEffectCode">
+<%--                                                         <div class="col s6 select-group">
+                                                            <form:select name="" id="select-yeareffect-code" title="년간 효과금액 (영업이익)[원]" path="propYearEffectCode">
                                                                 <option value="">선택</option>
                                                                 <c:forEach var="item" items="${YEAR_EFFECT_LIST }">
                                                                 	<c:choose>
@@ -160,9 +160,9 @@
                                                                 	</c:choose>
                                                                 </c:forEach>
                                                             </form:select>
-                                                        </div>
-                                                        <div class="col s6 input-text pd-l10">
-                                                            <form:input type="text" id="input-yeareffect-remark" name="input-yeareffect-remark" value="" style="background-color: #FFF;" path="propYearEffect"/>
+                                                        </div> --%>
+                                                        <div class="col s12 input-text">
+                                                            <form:input type="text" id="input-yeareffect-remark" name="input-yeareffect-remark" value="0" style="background-color: #FFF;" path="propYearEffect"/>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -313,59 +313,7 @@
                                                     </div>
                                                 </td>
                                             </tr>
-                                            <tr>
-                                                <th><span class="asterisk">*</span>결재자 지정</th>
-                                                <td colspan="3" class="pd0">
-                                                    <div class="list-wrap" style="margin:-1px">
-                                                        <div class="list-content">
-                                                            <div class="list-table list">
-                                                                <table class="centered">
-                                                                    <caption></caption>
-                                                                    <colgroup>
-                                                                        <col>
-                                                                        <col style="width:90px">
-                                                                        <col style="width:90px">
-                                                                        <col style="width:90px">
-                                                                        <col style="width:90px">
-                                                                    </colgroup>
-                                                                    <thead>
-                                                                        <tr>
-                                                                            <th>소속</th>
-                                                                            <th>이름</th>
-                                                                            <th>직위</th>
-                                                                            <th>직책</th>
-                                                                            <th>Belt</th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                        <tr>
-	                                                                        <td class="pd3">
-	                                                                            <div class="row">
-	                                                                                <div class="col s12 input-text search">
-	                                                                                	<form:input type="hidden" id="input-approval-code" name="input-approval-code" path="propApproverCode"/>
-	                                                                                	<form:input type="hidden" id="input-approval-name" name="input-approval-name" path="propApprovalName"/>
-	                                                                                	<form:input type="hidden" id="input-approval-user" name="input-approval-user" path="propApprovalUser"/>
-	                                                                                    <form:input type="hidden" id="input-approval-level" name="input-approval-level" path="propApprovalLevelCode"/>
-	                                                                                    <form:input type="hidden" id="input-approval-duty" name="input-approval-duty" path="propApprovalDutyCode"/>
-	                                                                                    <form:input type="hidden" id="input-approval-belt" name="input-approval-belt" path="propApprovalBeltCode"/>
-	                                                                                    <form:input type="hidden" id="input-approval-group-code" name="input-approval-group-code" path="propApprovalGroupCode"/>
-	                                                                                    <form:input type="text" id="input-approval-group" name="input-approval-group" value="" readonly="readonly" style="background-color: #FFF;" path="propApprovalGroup"/>
-	                                                                                    <button type="button" class="btn-approval-member-search-modal">검색</button>
-	                                                                                </div>
-	                                                                            </div>
-	                                                                        </td>
-	                                                                        <td id="text-approval-name">${PROP_INFO.propApprovalName }</td>
-	                                                                        <td id="text-approval-level">${PROP_INFO.propApprovalLevel }</td>
-	                                                                        <td id="text-approval-duty">${PROP_INFO.propApprovalDuty }</td>
-	                                                                        <td id="text-approval-belt">${PROP_INFO.propApprovalBelt }</td>
-                                                                        </tr>
-                                                                    </tbody>
-                                                                </table>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
+                                            
                                         </tbody>
                                     </table>
                                 </div>
@@ -415,6 +363,75 @@
                                 </div>
                             </div>
                         </div>
+                        <p class="content_title">3. 결재자 지정</p>
+                        <div class="list-wrap">
+                        	<div class="list-content">
+                        		<div class="list-table list">
+			                        <table class="centered">
+			                            <caption></caption>
+			                            <colgroup>
+			                                <col style="width:180px">
+			                                <col>
+			                            </colgroup>
+			                            <tbody>                        
+			                            	<tr>
+			                            		<th><span class="asterisk">*</span>결재자 지정</th>
+			                            		<td colspan="3" class="pd0">
+			                            			<div class="list-wrap" style="margin:-1px">
+			                            				<div class="list-content">
+			                            					<div class="list-table list">
+			                            						<table class="centered">
+			                            							<caption></caption>
+			                            							<colgroup>
+			                            								<col>
+			                                                            <col style="width:90px">
+			                                                            <col style="width:90px">
+			                                                            <col style="width:90px">
+			                                                            <col style="width:90px">
+			                                                        </colgroup>
+			                                                        <thead>
+			                                                        	<tr>
+			                                                        		<th>소속</th>
+			                                                        		<th>이름</th>
+			                                                        		<th>직위</th>
+			                                                        		<th>직책</th>
+			                                                        		<th>Belt</th>
+			                                                        	</tr>
+			                                                        </thead>
+			                                                        <tbody>
+			                                                        	<tr>
+			                                                        		<td class="pd3">
+			                                                        			<div class="row">
+			                                                        				<div class="col s12 input-text search">
+			                                                        					<form:input type="hidden" id="input-approval-code" name="input-approval-code" path="propApproverCode"/>
+			                                                                        	<form:input type="hidden" id="input-approval-name" name="input-approval-name" path="propApprovalName"/>
+			                                                                        	<form:input type="hidden" id="input-approval-user" name="input-approval-user" path="propApprovalUser"/>
+			                                                                            <form:input type="hidden" id="input-approval-level" name="input-approval-level" path="propApprovalLevelCode"/>
+			                                                                            <form:input type="hidden" id="input-approval-duty" name="input-approval-duty" path="propApprovalDutyCode"/>
+			                                                                            <form:input type="hidden" id="input-approval-belt" name="input-approval-belt" path="propApprovalBeltCode"/>
+			                                                                            <form:input type="hidden" id="input-approval-group-code" name="input-approval-group-code" path="propApprovalGroupCode"/>
+			                                                                            <form:input type="text" id="input-approval-group" name="input-approval-group" value="" readonly="readonly" style="background-color: #FFF;" path="propApprovalGroup"/>
+			                                                                            <button type="button" class="btn-approval-member-search-modal">검색</button>
+				                                                                    </div>
+				                                                                 </div>
+				                                                           </td>
+			                                                               <td id="text-approval-name">${PROP_INFO.propApprovalName }</td>
+			                                                               <td id="text-approval-level">${PROP_INFO.propApprovalLevel }</td>
+			                                                               <td id="text-approval-duty">${PROP_INFO.propApprovalDuty }</td>
+			                                                               <td id="text-approval-belt">${PROP_INFO.propApprovalBelt }</td>
+			                                                            </tr>
+			                                                        </tbody>
+			                                                    </table>
+			                                                </div>
+			                                          	</div>
+			                                        </div>
+			                                    </td>
+			                                </tr>
+			                            </tbody>
+			                        </table>
+			                    </div>
+			                </div>
+			            </div>
                         <div class="list-footer">
                             <div class="list-btns">
                                 <button type="button" class="btn light-gray" id="btn-temp-save">저장</button>
@@ -446,9 +463,9 @@
  			$('.btn-psmg-search-modal').attr('disabled', true);
  		}
   		
-  		if($('#select-yeareffect-code').val() == '7'){
+/*   		if($('#select-yeareffect-code').val() == '7'){
   			$('#input-yeareffect-remark').attr('readonly', true);
-  		}
+  		} */
  		
 		//제안자 조회
 		$('.btn-proposal-member-search-modal').off('click').on('click', function(){
@@ -530,7 +547,7 @@
 			$('#afterFileUploadWrap').append(html);			
 		});
 		
-		$('#select-yeareffect-code').change(function(){
+/* 		$('#select-yeareffect-code').change(function(){
 			if($(this).val() == '7'){
 				$('#input-yeareffect-remark').val('0');
 				$('#input-yeareffect-remark').attr('readonly', true);
@@ -538,7 +555,7 @@
 				$('#input-yeareffect-remark').val('');
 				$('#input-yeareffect-remark').attr('readonly', false);
 			}
-		});
+		}); */
 	});
 	
 	function selectImageFile(el){
@@ -816,10 +833,10 @@
 			return false;
 		}
 		
-		if($('#select-yeareffect-code').val() == ''){
+/* 		if($('#select-yeareffect-code').val() == ''){
 			alert('년간 효과금액을 선택해 주세요.'); $('#select-yeareffect-code').focus();
 			return false;
-		}
+		} */
 		
 		if($('#input-yeareffect-remark').val().trim() == ''){
 			alert('년간 효과금액을 입력해 주세요.'); $('#input-yeareffect-remark').focus();
