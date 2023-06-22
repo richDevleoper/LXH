@@ -34,7 +34,7 @@
 					<form:input type="hidden" path="detailList[0].score4" cssClass="detail-score4"/>
 					<form:input type="hidden" path="detailList[0].score5" cssClass="detail-score5"/>
 					<form:input type="hidden" path="detailList[0].score6" cssClass="detail-score6"/>
-					<form:input type="hidden" path="detailList[0].score7" cssClass="detail-score8"/>
+					<form:input type="hidden" path="detailList[0].score7" cssClass="detail-score7"/>
 					<form:input type="hidden" path="detailList[0].scoreTotal" cssClass="detail-total"/>
 										
                     <section id="page-content">

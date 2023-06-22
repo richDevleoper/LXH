@@ -619,154 +619,167 @@
 				<table class="even">
                    <colgroup>                                            
                        <col style="width:50px">
-                       <col>
+                       <col style="width:150px">
+                       <col style="width:150px">
+                       <col style="width:150px">
                        <col style="width:100px">
-                       <col style="width:100px">
-                       <col style="width:100px">
-                       <col style="width:100px">
-                       <col style="width:100px">
-                       <col style="width:100px">                                            
+                       <col style="width:100px">                                           
                    </colgroup>
                    <thead>
                    	   <tr class="tr-appr-eval">
-                           <th class="bg-gray font-weight-bold" rowspan="2">번호</th>
-                           <th class="bg-gray font-weight-bold" colspan="6">평가내용</th>
-                           <th class="bg-gray font-weight-bold" rowspan="2">배점</th>                                                                                                                                                                                    
+                           <th class="bg-gray font-weight-bold">항목</th>
+                           <th class="bg-gray font-weight-bold" colspan="3">평가등급기준</th>
+                           <th class="bg-gray font-weight-bold">기준점수</th>
+                           <th class="bg-gray font-weight-bold">가중치</th>                                                                                                                                                                                    
                        </tr>
-                       <tr class="tr-appr-eval">                                                
-                           <th class="bg-gray font-weight-bold">구분</th>
-                           <th class="bg-gray font-weight-bold">5</th>
-                           <th class="bg-gray font-weight-bold">4</th>
-                           <th class="bg-gray font-weight-bold">3</th>
-                           <th class="bg-gray font-weight-bold">2</th>
-                           <th class="bg-gray font-weight-bold">1</th>                                                                                               
-                       </tr>                                            
+<!--                        <tr class="tr-appr-eval">
+                       	   <th class="font-weight-bold"></th>
+                           <th class="font-weight-bold">개선 효과금액</th>
+                           <th class="font-weight-bold">비금액 효과</th>
+                           <th class="font-weight-bold">환경/안전효과</th>
+                           <th class="font-weight-bold" colspan="2"></th>                                                                                         
+                       </tr> -->                                            
                    </thead>
                    <tbody>
                        <tr class="tr-appr-eval">
-                           <td>1</td>                                                
-                           <td>개선금액 효과</td>
-                           <td>년 5천만원이산(4천 이상 45점)</td>
-                           <td>년 3천만원이상(2천 이상 36점)</td>
-                           <td>년 1천만원이상(8백 이상 25점)</td>
-                           <td>년 6백만원이상(4백 이상 15점)</td>
-                           <td>년 2백만원이상(2백 미만 56점)</td>
-                           <td rowspan=3" class="col s12 select-group">
-                           	<select id="apprItem1" class="appr-item">
-				              <option value="">선택</option>		
-				              <option value="5">5</option>
-				              <option value="4">4</option>
-				              <option value="3">3</option>
-				              <option value="2">2</option>
-				              <option value="1">1</option>				                             
-                           	</select> 
-     					</td>                                                                                                                                                
+                       	<td rowspan="2">효과</td>
+                       	<td>개선 효과금액</td>
+                       	<td>비금액 효과</td>
+                       	<td>환경/안전효과</td>
+                       	<td colspan="2">-</td>
                        </tr>
                        <tr class="tr-appr-eval">
-                       	<td>2</td>
-                           <td>[비금액 효과]</td>                                                
-                           <td>개선효과가 획기적임</td>
-                           <td>개선효과가 상당함</td>
-                           <td>개선효과가 양호함</td>
-                           <td>개선효과가 단순함</td>
-                           <td>개선효과가 미흡함</td>                                                                                                                                                                                                
+                       	<td style="text-align: left;">
+                       		- 효과금액 1억원 이상<br>
+                       		- 효과금액 5천만원 이상<br>
+                       		- 효과금액 3천만원 이상<br>
+                       		- 효과금액 1천만원 이상<br>
+                       		- 효과금액 5백만원 이상
+                       	</td>
+                       	<td style="text-align: left;">
+                       		- 개선효과가 획기적임<br>
+                       		- 개선효과가 상당함<br>
+                       		- 개선효과가 양호함<br>
+                       		- 개선효과가 단순함<br>
+                       		- 개선효과가 미흡함                       	
+                       	</td>
+                       	<td style="text-align: left;">
+                       		- 매우 치명적임<br>
+                       		- 상당히 치명적임<br>
+                       		- 치명적임<br>
+                       		- 조금 치명적임<br>
+                       		- 치명적이지 않음                            		
+                       	</td>
+                       	<td>
+                       		50<br>
+                       		40<br>
+                       		30<br>
+                       		20<br>
+                       		10                       	
+                       	</td>
+                       	<td>
+                           	<div class="col s12 input-text">
+                           		<input type="text" id="evalScore1" class="align-right eval-score" oninput="popApprove.inputScore(this);">
+                            </div>                       	
+                       	</td>
                        </tr>
                        <tr class="tr-appr-eval">
-                       	<td>3</td>
-                           <td>[환경/안전효과]</td>                                                
-                           <td>매우 치명적임</td>
-                           <td>상당히 치명적임</td>
-                           <td>치명적임</td>
-                           <td>조금 치명적임</td>
-                           <td>치명적이지 않음</td>                                                                                                                                                                                                
+                       	<td>창의성</td>
+                       	<td colspan="3" style="text-align: left;">
+                       		- 독창적이고 착안점이 우수함<br>
+                       		- 매우 독창적임<br>
+                       		- 모방적이나 착안점이 우수함<br>
+                       		- 모방적이나 약간의 노력이 있음<br>
+                       		- 단순 모방임                       	
+                       	</td>
+                       	<td>
+                       	    20<br>
+                       		16<br>
+                       		12<br>
+                       		8<br>
+                       		4  
+                       	</td>
+                       	<td>
+                           	<div class="col s12 input-text">
+                           		<input type="text" id="evalScore2" class="align-right eval-score" oninput="popApprove.inputScore(this);">
+                            </div>                       	
+                       	</td>
                        </tr>
                        <tr class="tr-appr-eval">
-                       	<td>4</td>
-                           <td>창의성</td>                                                
-                           <td>독창적이고 착안점이 우수함</td>
-                           <td>매우 독창적임</td>
-                           <td>모방적이나 착안점이 우수함</td>
-                           <td>모방적이나 약간의 노력이 있음</td>
-                           <td>단순 모방임</td>    
-                           <td class="col s12 select-group">
-                           	<select id="apprItem4" class="appr-item">
-				              <option value="">선택</option>	
-				              <option value="5">5</option>
-				              <option value="4">4</option>
-				              <option value="3">3</option>
-				              <option value="2">2</option>
-				              <option value="1">1</option>					                             
-                           	</select> 
-     					</td>                                                                                                                                                                                               
-                       </tr>
+                       	<td>파급성</td>
+                       	<td colspan="3" style="text-align: left;">
+                       		- 전사적 적용가능<br>
+                       		- 공장내 적용가능<br>
+                       		- 팀내(전 라인) 적용가능<br>
+                       		- 라인 일부 적용 가능<br>
+                       		- 개인차원의 효과                       	
+                       	</td>
+                       	<td>
+                       	    10<br>
+                       		8<br>
+                       		6<br>
+                       		4<br>
+                       		2  
+                       	</td>
+                       	<td>
+                           	<div class="col s12 input-text">
+                           		<input type="text" id="evalScore3" class="align-right eval-score" oninput="popApprove.inputScore(this);">
+                            </div>                       	
+                       	</td>
+                       </tr> 
                        <tr class="tr-appr-eval">
-                       	<td>5</td>
-                           <td>파급성</td>                                                
-                           <td>전사적 적용가능</td>
-                           <td>공장 내 적용가능</td>
-                           <td>팀내(전 라인)적용 가능</td>
-                           <td>라인 일부 가능</td>
-                           <td>개인차원의 효과</td>    
-                           <td class="col s12 select-group">
-                           	<select id="apprItem5" class="appr-item">
-				              <option value="">선택</option>	
-				              <option value="5">5</option>
-				              <option value="4">4</option>
-				              <option value="3">3</option>
-				              <option value="2">2</option>
-				              <option value="1">1</option>					                             
-                           	</select> 
-     					</td>                                                                                                                                                                                               
-                       </tr>
+                       	<td>지속성</td>
+                       	<td colspan="3" style="text-align: left;">
+                       		- 영구적으로 유지<br>
+                       		- 반영구적 유지(10년이상)<br>
+                       		- 장기적 유지(5년 이상)<br>
+                       		- 단기적 유지(1년 이상)<br>
+                       		- 일시적(1년 미만)                       	
+                       	</td>
+                       	<td>
+                       	    10<br>
+                       		8<br>
+                       		6<br>
+                       		4<br>
+                       		2  
+                       	</td>
+                       	<td>
+                           	<div class="col s12 input-text">
+                           		<input type="text" id="evalScore4" class="align-right eval-score" oninput="popApprove.inputScore(this);">
+                            </div>                       	
+                       	</td>
+                       </tr>      
                        <tr class="tr-appr-eval">
-                       	<td>6</td>
-                           <td>지속성</td>                                                
-                           <td>영구적</td>
-                           <td>반영구적(10년이상)</td>
-                           <td>장기간(5년이상)</td>
-                           <td>단기적(1년이상)</td>
-                           <td>일시적(1년미만)</td>    
-                           <td class="col s12 select-group">
-                           	<select id="apprItem6" class="appr-item">
-				              <option value="">선택</option>		
-				              <option value="5">5</option>
-				              <option value="4">4</option>
-				              <option value="3">3</option>
-				              <option value="2">2</option>
-				              <option value="1">1</option>				                             
-                           	</select> 
-     					</td>                                                                                                                                                                                               
-                       </tr>
+                       	<td>노력도</td>
+                       	<td colspan="3" style="text-align: left;">
+                       		- 탁월한 노력이 엿보임<br>
+                       		- 상당한 노력이 엿보임<br>
+                       		- 어느정도의 노력이 엿보임<br>
+                       		- 거의노력이 엿보이지 않음<br>                      	
+                       	</td>
+                       	<td>
+                       	    10<br>
+                       		8<br>
+                       		6<br>
+                       		4<br>
+                       		2  
+                       	</td>
+                       	<td>
+                           	<div class="col s12 input-text">
+                           		<input type="text" id="evalScore5" class="align-right eval-score" oninput="popApprove.inputScore(this);">
+                            </div>                       	
+                       	</td>
+                       </tr>                                                              
                        <tr class="tr-appr-eval">
-                       	<td>7</td>
-                           <td>노력도</td>                                                
-                           <td>탁월한 노력이 엿보임</td>
-                           <td>상당한 노력이 엿보임</td>
-                           <td>-</td>
-                           <td>어느 정도의 노력이 엿보임</td>
-                           <td>거의 노력이 엿보이지 않음</td>    
-                           <td class="col s12 select-group">
-                           	<select id="apprItem7" class="appr-item">
-				              <option value="">선택</option>						                             
-				              <option value="5">5</option>
-				              <option value="4">4</option>
-				              <option value="3">3</option>
-				              <option value="2">2</option>
-				              <option value="1">1</option>
-                           	</select> 
-     					</td>                                                                                                                                                                                               
-                       </tr>
-                       <tr class="tr-appr-eval">
-                       
-                       	<th class="font-weight-bold" colspan="7">배점합계</th>
+                       	<th class="font-weight-bold" colspan="5">배점합계</th>
                            <td>
                            	<div class="col s12 input-text">
-                           		<input type="text" id="apprItemSum" class="align-right" readonly="readonly">
+                           		<input type="text" id="evalScoreTotal" class="align-right" readonly="readonly">
                                </div>
                           	</td>                                                                                                                                                                                                                                               
                        </tr>
                        <tr>
-                       	<td colspan="8">
+                       	<td colspan="6">
                                <div class="row">
                                    <div class="col s12 input-text">
                                        <textarea name="POP_APPR_COMMENT" id="popAppr_comment" rows="4"></textarea>
@@ -826,36 +839,104 @@ let popApprove = {
 			this.returnObjId = null;
 			this.returnFunc = null;
 		},
+		inputScore: function(el){
+			if($(el).val().trim() != '' && /^[0-9]+$/.test($(el).val().trim()) == false){
+				$(el).val($(el).val().trim().replace(/[^0-9]/g, ''));
+				return false;
+			}
+			if($(el).attr('id') == 'evalScore1'){
+				if(parseInt($(el).val()) > 50){
+					$(el).val('');
+					alert('기준점수를 초과 입력 하였습니다');
+				}
+			}
+			if($(el).attr('id') == 'evalScore2'){
+				if(parseInt($(el).val()) > 20){
+					$(el).val('');
+					alert('기준점수를 초과 입력 하였습니다');
+				}
+			}
+			if($(el).attr('id') == 'evalScore3'){
+				if(parseInt($(el).val()) > 10){
+					$(el).val('');
+					alert('기준점수를 초과 입력 하였습니다');
+				}
+			}
+			if($(el).attr('id') == 'evalScore4'){
+				if(parseInt($(el).val()) > 10){
+					$(el).val('');
+					alert('기준점수를 초과 입력 하였습니다');
+				}
+			}
+			if($(el).attr('id') == 'evalScore5'){
+				if(parseInt($(el).val()) > 10){
+					$(el).val('');
+					alert('기준점수를 초과 입력 하였습니다');
+				}
+			}
+			popApprove.calcTotalScore();
+			
+		},
+		calcTotalScore: function(){
+			var total = 0;
+			if($('#evalScore1').val() != '') {
+				total += parseInt($('#evalScore1').val());
+			}
+			if($('#evalScore2').val() != '') {
+				total += parseInt($('#evalScore2').val());
+			}
+			if($('#evalScore3').val() != '') {
+				total += parseInt($('#evalScore3').val());
+			}
+			if($('#evalScore4').val() != '') {
+				total += parseInt($('#evalScore4').val());
+			}
+			if($('#evalScore5').val() != '') {
+				total += parseInt($('#evalScore5').val());
+			}
+			$('#evalScoreTotal').val(total);
+		},
 		setGenAppr: function(){
 			$(".tr-appr-eval").remove();
 			this.isProposeAppr = false;
 			$("#popAppr_comment").css("height", "150px");
 		},
-		onSubmit: function(){
-    		
-    		let boolFlag = true;
-    		
-    		$(".appr-item").each(function(i,o){
-				if($(o).val()===""){
-					boolFlag = false;
-				}
-			});
-    		
-    		if(!boolFlag && isProposeAppr){
-    			alert("배점을 입력해주세요.");
-    			boolFlag = false;
+		onSubmit: function(){    		
+			if($('#evalScore1').val() == '') {
+				alert('배점을 입력해 주세요');
+				$('#evalScore1').focus();
 				return false;
-    		}
+			}
+			if($('#evalScore2').val() == '') {
+				alert('배점을 입력해 주세요');
+				$('#evalScore2').focus();
+				return false;
+			}
+			if($('#evalScore3').val() == '') {
+				alert('배점을 입력해 주세요');
+				$('#evalScore3').focus();
+				return false;
+			}
+			if($('#evalScore4').val() == '') {
+				alert('배점을 입력해 주세요');
+				$('#evalScore4').focus();
+				return false;
+			}
+			if($('#evalScore5').val() == '') {
+				alert('배점을 입력해 주세요');
+				$('#evalScore5').focus();
+				return false;
+			}
     		
     		let letData = {
-    				txtComment:$("#"+popApprove.searchObjId).val(),
-    				score1:$("#apprItem1").val(),
-    				score4:$("#apprItem4").val(),
-    				score5:$("#apprItem5").val(),
-    				score6:$("#apprItem6").val(),
-    				score7:$("#apprItem7").val(),
-    				scoreTotal:$("#apprItemSum").val()
-    				};
+   				txtComment:$("#"+popApprove.searchObjId).val(),
+   				score1:$("#evalScore1").val(),
+   				score4:$("#evalScore2").val(),
+   				score5:$("#evalScore3").val(),
+   				score6:$("#evalScore4").val(),
+   				score7:$("#evalScore5").val(),
+   				scoreTotal:$("#evalScoreTotal").val()
+    		};
     		
     		if(this.returnFunc){
     			this.returnFunc(popDept.returnObjId, letData); //리턴함수 호출, 초기화 전 객체명 넘기기

@@ -843,7 +843,7 @@
 			return false;
 		}
 		
-		if($('#input-yeareffect-remark').val().trim() != '' && /[0-9]/g.test($('#input-yeareffect-remark').val().trim()) == false){
+		if($('#input-yeareffect-remark').val().trim() != '' && /^[0-9]+$/.test($('#input-yeareffect-remark').val().trim()) == false){
 			alert('년간 효과금액 숫자만 입력해 주세요.'); $('#input-yeareffect-remark').focus();
 			return false;			
 		}

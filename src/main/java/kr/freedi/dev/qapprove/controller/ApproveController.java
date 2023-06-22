@@ -41,6 +41,7 @@ import kr.freedi.dev.code.domain.CodeVO;
 import kr.freedi.dev.code.service.CodeService;
 import kr.freedi.dev.common.util.EncriptUtil;
 import kr.freedi.dev.common.util.MapUtil;
+import kr.freedi.dev.qapprove.domain.ApproveDetailVO;
 import kr.freedi.dev.qapprove.domain.ApproveSearchVO;
 import kr.freedi.dev.qapprove.domain.ApproveVO;
 import kr.freedi.dev.qapprove.service.ApproveService;
@@ -276,7 +277,18 @@ public class ApproveController {
 				proposalVO.setPropPropStatCode("PRG_6");
 				proposalVO.setPropEvalLvCode("NA");
 			}else {
-				proposalVO.setPropPropStatCode("PRG_3");
+				if(approveVO.getDetailList().size() > 0 && approveVO.getDetailList().get(0) != null) {
+					ApproveDetailVO detailItem = approveVO.getDetailList().get(0);
+					//1차 평가 후 70점 이상인경우 2차 평가 결재 승인으로 넘어감 (제안 진행 단계 변하지 않음)
+					if(Integer.parseInt(detailItem.getScoreTotal()) < 70 ) {
+						proposalVO.setPropEvalLvCode("D");
+						proposalVO.setPropEvalScore(detailItem.getScoreTotal());
+						proposalVO.setPropPropStatCode("PRG_5"); // 70점 미만으로 등급평가 마감 (비용지급 처리 전)
+					}else if(Integer.parseInt(detailItem.getScoreTotal()) >= 70) {
+						//70점 이상으로 2차 평가 진행
+						proposalVO.setPropPropStatCode("PRG_3");
+					}
+				}				
 			}			
 			proposalVO.setPropRegUser(userSession.getUserId());
 			proposalService.updateProposalInfo(proposalVO);

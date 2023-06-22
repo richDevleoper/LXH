@@ -296,7 +296,7 @@
 							alert('마감시 지급비용이 입력되어야 합니다.');
 							return false;
 						}
-						if(/[0-9]/g.test(subsidy) == false){
+						if(/^[0-9]+$/.test(subsidy) == false){
 							alert('지급금액은 숫자만 입력가능합니다.');
 							return false;							
 						}
