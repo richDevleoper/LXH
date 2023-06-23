@@ -1,6 +1,7 @@
 package kr.freedi.dev.qapprove.service;
 
 
+import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -20,6 +21,7 @@ import kr.freedi.dev.qreport.domain.ReportResultVO;
 import kr.freedi.dev.qreport.domain.ReportSearchVO;
 import kr.freedi.dev.qreport.domain.ReportTeamVO;
 import kr.freedi.dev.qreport.domain.ReportVO;
+import kr.freedi.dev.user.domain.UserVO;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -113,14 +115,36 @@ public class ApproveService {
 		dao.delete("ApprovalDetail.delete", keyVO);
 	}
 	
-	public void updateStatus(ApproveVO vo) {
+	public Boolean updateStatus(ApproveVO inputVO, UserVO userSession) {
 		
-		dao.update("ApprovalDetail.updateStatus", vo.getDetailList().get(0));
+		List<ApproveDetailVO> detail = inputVO.getDetailList();
+		Iterator<ApproveDetailVO> itrDetail = detail.iterator();
+		ApproveDetailVO apprMember = null;
+		while(itrDetail.hasNext()) {
+			ApproveDetailVO tmpDetail = itrDetail.next();
+			if(tmpDetail.getAprovalCode()!=null) {
+				if(tmpDetail.getComNo().equals(userSession.getUserId())) {
+					dao.update("ApprovalDetail.updateStatus", tmpDetail);	
+				}
+			}
+		}
 		
-		// TODO 전원 결재여부 체크하고 마스터도 업데이트할 것
+		ApproveVO dbVO = this.select(inputVO);
 		
-		// Drop인 경우 마스터도 Drop 처리		
-		dao.update("Approval.updateStatus", vo);
-	}
+		// check 하고 다 결재 되었으면 결재마스터 상태 업데이트
+		Boolean apprComplete = true;
+		List<ApproveDetailVO> approvalList = dbVO.getDetailList();
+		for(int i=0; i<approvalList.size(); i++) {
+			ApproveDetailVO tmpItem = approvalList.get(i);
+			if(tmpItem.getAprovalStatCode().equals("2")) {
+				apprComplete = false;
+			}
+		}
 		
+		if(apprComplete) {
+			dao.update("Approval.updateStatus", inputVO);
+		}
+		
+		return apprComplete;
+	}	
 }

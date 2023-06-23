@@ -29,18 +29,8 @@
 					<form:input type="hidden" path="aprovalState"/>
 					<form:input type="hidden" path="refBusType"/>
 					<form:input type="hidden" path="refBusCode"/>
-					<form:input type="hidden" path="detailList[0].aprovalCode"/>
-					<form:input type="hidden" path="detailList[0].aprovalSeq"/>
-					<form:input type="hidden" path="detailList[0].comNo"/>
-					<form:input type="hidden" path="detailList[0].aprovalStatCode" cssClass="aproval-state-code"/>
-					<form:input type="hidden" path="detailList[0].aprovalComment" cssClass="detail-comment"/>
-					<form:input type="hidden" path="detailList[0].score1" cssClass="detail-score1"/>
-					<form:input type="hidden" path="detailList[0].score4" cssClass="detail-score4"/>
-					<form:input type="hidden" path="detailList[0].score5" cssClass="detail-score5"/>
-					<form:input type="hidden" path="detailList[0].score6" cssClass="detail-score6"/>
-					<form:input type="hidden" path="detailList[0].score7" cssClass="detail-score8"/>
-					<form:input type="hidden" path="detailList[0].scoreTotal" cssClass="detail-total"/>
-										
+					
+									
                     <section id="page-content">
                         <!-- breadcrumb -->
 <c:if test="${ empty repMenuCode }"><%-- 해당 값은 "과제/분임조과제" 에서만 나옴. --%>
@@ -207,7 +197,7 @@
                                                                             <thead>
                                                                                 <tr>
                                                                                     <th>구분</th>
-                                                                                    <th>Define</th>
+                                                                                    <th><label id="lbl6sigmaStepNm_${status.count}"></label></th>
                                                                                     <th colspan="4">활동요약</th>
                                                                                 </tr>
                                                                             </thead>
@@ -261,12 +251,12 @@
                                                                                                     <caption>일정계획 및 수행 테이블</caption>
                                                                                                     <colgroup>
                                                                                                         <col style="width:60px">
-                                                                                                        <col style="width:80px">
+                                                                                                        <col style="width:100px">
                                                                                                         <col>
-                                                                                                        <col style="width:60px">
-                                                                                                        <col style="width:60px">
-                                                                                                        <col style="width:60px">
-                                                                                                        <col style="width:60px">
+                                                                                                        <col style="width:80px">
+                                                                                                        <col style="width:80px">
+                                                                                                        <col style="width:80px">
+                                                                                                        <col style="width:80px">
                                                                                                     </colgroup>
                                                                                                     <tbody>
                                                                                                         <tr>
@@ -497,6 +487,20 @@
 																keyCont += '#'+arr[i];
 															}
 															$("#divKeyword").html(keyCont);
+															
+															let arrTypeCodeNm;
+															if("${reportVO.repDivisionCode}"==="1"){
+																if("${reportVO.repTypeCode}"==="11"){
+																	// DMAIC : Define, Measure, Analyze, Improve, Control, Finish
+																	arrTypeCodeNm = ["Define", "Measure", "Analyze", "Improve", "Control", "Finish"];
+																} else {
+																	// DMEDI : Define, Measure, Explore, Develop, Implement, Finish
+																	arrTypeCodeNm = ["Define", "Measure", "Explore", "Develop", "Implement", "Finish"];
+																}
+																for ( var i in arrTypeCodeNm) {
+																	$("#lbl6sigmaStepNm_"+(Number(i)+1)).text(arrTypeCodeNm[i]);
+																}
+															}
 														}
 													</script>
 													<div id="divKeyword"></div>
@@ -700,10 +704,28 @@
 										<tbody>
 										<c:forEach var="item" items="${approveVO.detailList}" varStatus="status">
 										<tr>
-												<td>${item.aprovalStat}</td>
-												<td>${item.userName}</td>
+												<td class="align-center">${item.aprovalStat}</td>
+												<td class="align-center">${item.userName}</td>
 												<td class="align-left">${item.aprovalType}</td>
-												<td class="align-left">${item.aprovalComment}</td>
+												<td class="align-left">
+													${item.aprovalComment} 
+													<c:if test="${item.comNo eq userSession.intfUserVO.comNo}">
+														<form:input type="hidden" path="detailList[${status.index}].aprovalCode"/>
+														<form:input type="hidden" path="detailList[${status.index}].aprovalSeq"/>
+														<form:input type="hidden" path="detailList[${status.index}].comNo"/>
+														<form:input type="hidden" path="detailList[${status.index}].aprovalStatCode" cssClass="aproval-state-code"/>
+														<form:input type="hidden" path="detailList[${status.index}].aprovalComment" cssClass="detail-comment"/>
+														<form:input type="hidden" path="detailList[${status.index}].score1" cssClass="detail-score1"/>
+														<form:input type="hidden" path="detailList[${status.index}].score4" cssClass="detail-score4"/>
+														<form:input type="hidden" path="detailList[${status.index}].score5" cssClass="detail-score5"/>
+														<form:input type="hidden" path="detailList[${status.index}].score6" cssClass="detail-score6"/>
+														<form:input type="hidden" path="detailList[${status.index}].score7" cssClass="detail-score8"/>
+														<form:input type="hidden" path="detailList[${status.index}].scoreTotal" cssClass="detail-total"/>
+														<c:if test="${item.aprovalStatCode eq '4'}">
+															<script>$(".list-btns button, .header-btns button").remove();</script>
+														</c:if>
+													</c:if>
+												</td>
 											</tr>
 										</c:forEach>
 										</tbody>
@@ -713,6 +735,8 @@
 						</div>
 </c:if>						
                     </section>
+                    
+                    
                     </form:form>
                 </div>
             </div>

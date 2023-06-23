@@ -231,9 +231,10 @@ public class ReportController {
 		String userId = userSession.getUserId();
 		String repCurrStep = reportVO.getRepCurrStepCode();
 		
+		ReportVO originReportVO = reportService.selectReportDefaultInfo(reportVO);
+		
 		if(reportVO.getMode().equals("CANCEL")) {
 
-			System.out.println(reportVO);
 			// 마지막 단계 결재상신건 취소하기			
 			reportService.cancelApprove(reportVO);
 			
@@ -246,7 +247,6 @@ public class ReportController {
 			// 2. 과제마스터 변경사항 체크하기  ---------------------------------
 			List<ReportTeamVO> approveMemberList = new ArrayList<>();
 			
-			Boolean isChangedRepMaster = false;
 			ReportTeamVO memChamp = null;	// 챔피언
 			ReportTeamVO memLeader = null; // 지도사원
 			for (ReportTeamVO memberVO : reportVO.getRepTeamMemberList()) {
@@ -256,13 +256,23 @@ public class ReportController {
 					memLeader = memberVO;	// 지도사원(3)
 				}
 			}
-			// 과제마스터의 변경사항이 있거나 Define, Finish 결재인 경우 챔피언 결재선 추가
-			if(isChangedRepMaster || "1,6".indexOf(repCurrStep)>-1) {
+			// Finish 결재인 경우 챔피언 결재선 추가
+			if(repCurrStep.equals("6")) {
 				approveMemberList.add(memChamp);
 			}
 			// 그 외 중간 진행사항은 지도사원 결재선 추가
-			if("2,3,4,5".indexOf(repCurrStep)>-1) {
+			if("1,2,3,4,5".indexOf(repCurrStep)>-1) {
 				approveMemberList.add(memLeader);
+				
+				Boolean isChanged = reportService.checkChangeBaseInfo(originReportVO, reportVO);
+				if(isChanged) {
+					// 과제 마스터 변경사항 발생시 결재선에 챔피언 등록
+					approveMemberList.add(memChamp);
+					
+					reportVO.setRepUpdateUser(userSession.getUserId());
+					reportService.updateReportMaster(reportVO);
+					
+				}
 			}
 			
 			// 3. 결재올리기  ---------------------------------

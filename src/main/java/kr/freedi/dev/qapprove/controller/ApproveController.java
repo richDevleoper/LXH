@@ -194,27 +194,6 @@ public class ApproveController {
 			proposalVO.setAfterAttachFileList(afterAttachFileList);
 			proposalVO.setAttachFileList(attachFileList);
 
-			if(proposalVO.getPropApproverCode() != null && !proposalVO.getPropApproverCode().equals("")) {
-				kr.freedi.dev.qpopup.domain.UserVO userVO = new kr.freedi.dev.qpopup.domain.UserVO();
-				userVO.setComNo(proposalVO.getPropApproverCode());				
-				List<EgovMap> userInfo = proposalService.selectApproverUserInfo(userVO);
-				
-				if(userInfo != null && userInfo.size() > 0) {
-					for(int index = 0; index < userInfo.size(); index++) {
-						EgovMap item = userInfo.get(index);
-						proposalVO.setPropApprovalUser(String.valueOf(item.get("comNo")));
-						proposalVO.setPropApprovalName(String.valueOf(item.get("userName")));
-						proposalVO.setPropApprovalLevelCode(String.valueOf(item.get("comJobx")));
-						proposalVO.setPropApprovalLevel(String.valueOf(item.get("comJobxNm")));
-						proposalVO.setPropApprovalDutyCode(String.valueOf(item.get("comPosition")));
-						proposalVO.setPropApprovalDuty(String.valueOf(item.get("comPositionNm")));
-						proposalVO.setPropApprovalBeltCode(String.valueOf(item.get("comCertBelt")));
-						proposalVO.setPropApprovalBelt(String.valueOf(item.get("comCertBeltNm")));
-						proposalVO.setPropApprovalGroup(String.valueOf(item.get("deptFullName")));
-						proposalVO.setPropApprovalGroupCode(String.valueOf(item.get("compDepartCode")));
-					}
-				}
-			}
 			
 			
 			model.addAttribute("proposalVO", proposalVO);
@@ -236,82 +215,69 @@ public class ApproveController {
 		//ApproveVO savedVO = service.select(approveVO);
 		//approveVO.setDetailList(savedVO.getDetailList());  //form에 없는 detailList 조회
 		
-		// 결재 갱신
-		service.updateStatus(approveVO);
+		ApproveVO dbApproveVO = service.select(approveVO);
 		
+		// 결재자별 상태 저장(approvalDetail) 아직 결재하지 않은 결재자가 있는지 체크 (있으면 업무상태 변경하지 않음)
+		Boolean apprComplete = service.updateStatus(approveVO, userSession);
 		
-		/**************
-		 * 업무 상태 변경
-		 **************/
-		// 과제/분임조 
-		if("1,2".indexOf(approveVO.getRefBusType())>-1) {
-			
-			// 상태 업데이트를위한 reportvo 파라메터 셋팅
-			ReportVO reportVO = new ReportVO();
-			reportVO.setRepCode(Integer.parseInt(approveVO.getRefBusCode()));
-			reportVO.setRepUpdateUser(userSession.getUserId());
-			
-			// 과제등록(과제/분임조)
-			if("1,2".indexOf(approveVO.getAprovalType())>-1) {
-				// (rep_code, rep_status_code)
-				if(approveVO.getAprovalState().equals("4")) {	//승인
-					// OK : 6시그마 ; 3(진행중), 일반 ; 6(완료)  code_grp_id='REP_STAT'
-					reportVO.setRepStatusCode("3");	// 선정완료
-				} else if(approveVO.getAprovalState().equals("3")) { // Drop
-					// DROP : 6
-					reportVO.setRepStatusCode("6"); // Drop
-				}
-				reportService.updateStatus(reportVO);
-			} else if (approveVO.getAprovalType().equals("3")) {
-				// 6시그마
-				reportService.update6SigmaStepNext(reportVO);
-			}
-			
-		}else {
-			// 제안 결재 승인시
-			// 제안마스터의 PROP_PROP_STAT_CODE 값을 3으로 바꿔주기
-			ProposalSearchVO searchProposalVO = new ProposalSearchVO();
-			searchProposalVO.setSearchPropSeq(Integer.valueOf(approveVO.getRefBusCode()));
-			ProposalVO proposalVO = proposalService.selectProposalDetailInfo(searchProposalVO);
-			if(approveVO.getAprovalState().equals("3")) {
-				proposalVO.setPropPropStatCode("PRG_6");
-				proposalVO.setPropEvalLvCode("NA");
-			}else {
-				if(approveVO.getDetailList().size() > 0 && approveVO.getDetailList().get(0) != null) {
-					ApproveDetailVO detailItem = approveVO.getDetailList().get(0);
-					//1차 평가 후 70점 이상인경우 2차 평가 결재 승인으로 넘어감 (제안 진행 단계 변하지 않음)
-					if(Integer.parseInt(detailItem.getScoreTotal()) < 70 ) {
-						proposalVO.setPropEvalLvCode("D");
-						proposalVO.setPropEvalScore(detailItem.getScoreTotal());
-						proposalVO.setPropPropStatCode("PRG_5"); // 70점 미만으로 등급평가 마감 (비용지급 처리 전)
-					}else if(Integer.parseInt(detailItem.getScoreTotal()) >= 70) {
-						//70점 이상으로 2차 평가 진행
-						proposalVO.setPropPropStatCode("PRG_3");
-					}
-				}				
-			}			
-			proposalVO.setPropRegUser(userSession.getUserId());
-			proposalService.updateProposalInfo(proposalVO);
-			
-//
-//			// 첨부파일 로딩
-//			AttachFileVO fileVO = new AttachFileVO();
-//			fileVO.setFileId("proposal_before_" + proposalVO.getPropSeq());
-//			List<AttachFileVO> beforeAttachFileList = attachFileService.selectFullList(fileVO); // 개선 전
-//			fileVO.setFileId("proposal_after_" + proposalVO.getPropSeq());
-//			List<AttachFileVO> afterAttachFileList = attachFileService.selectFullList(fileVO); // 개선 후
-//			fileVO.setFileId("proposal_attach_" + proposalVO.getPropSeq());
-//			List<AttachFileVO> attachFileList = attachFileService.selectFullList(fileVO); //첨부 파일
-//			
-//			proposalVO.setBeforeAttachFileList(beforeAttachFileList);
-//			proposalVO.setAfterAttachFileList(afterAttachFileList);
-//			proposalVO.setAttachFileList(attachFileList);
+		if(apprComplete) {  // 모든 결재자가 결재가 완료되었으면
+		
 
-			
-			
-//			model.addAttribute("proposalVO", proposalVO);		
-			
+			/**************
+			 * 업무 상태 변경
+			 **************/
+			// 과제/분임조 
+			if("1,2".indexOf(approveVO.getRefBusType())>-1) {
+				
+				// 상태 업데이트를위한 reportvo 파라메터 셋팅
+				ReportVO reportVO = new ReportVO();
+				reportVO.setRepCode(Integer.parseInt(approveVO.getRefBusCode()));
+				reportVO.setRepUpdateUser(userSession.getUserId());
+				
+				if("1,2".indexOf(approveVO.getAprovalType())>-1) {    // 과제등록(과제/분임조)
+					// (rep_code, rep_status_code)
+					if(approveVO.getAprovalState().equals("4")) {	//승인
+						// OK : 6시그마 ; 3(진행중), 일반 ; 6(완료)  code_grp_id='REP_STAT'
+						reportVO.setRepStatusCode("3");	// 선정완료
+					} else if(approveVO.getAprovalState().equals("3")) { // Drop
+						// DROP : 6
+						reportVO.setRepStatusCode("6"); // Drop
+					}
+					reportService.updateStatus(reportVO);
+				} else if (approveVO.getAprovalType().equals("3")) {  // 6시그마 단계별 승인
+					reportService.update6SigmaStepNext(reportVO);
+				}
+				
+			} else {
+				// 제안 결재 승인시
+				// 제안마스터의 PROP_PROP_STAT_CODE 값을 3으로 바꿔주기
+				ProposalSearchVO searchProposalVO = new ProposalSearchVO();
+				searchProposalVO.setSearchPropSeq(Integer.valueOf(approveVO.getRefBusCode()));
+				ProposalVO proposalVO = proposalService.selectProposalDetailInfo(searchProposalVO);
+				if(approveVO.getAprovalState().equals("3")) {
+					proposalVO.setPropPropStatCode("PRG_6");
+					proposalVO.setPropEvalLvCode("NA");
+				}else {
+					
+					if(approveVO.getDetailList().size() > 0 && approveVO.getDetailList().get(0) != null) {
+						ApproveDetailVO detailItem = approveVO.getDetailList().get(0);
+						//1차 평가 후 70점 이상인경우 2차 평가 결재 승인으로 넘어감 (제안 진행 단계 변하지 않음)
+						if(Integer.parseInt(detailItem.getScoreTotal()) < 70 ) {
+							proposalVO.setPropEvalLvCode("D");
+							proposalVO.setPropEvalScore(detailItem.getScoreTotal());
+							proposalVO.setPropPropStatCode("PRG_5"); // 70점 미만으로 등급평가 마감 (비용지급 처리 전)
+						}else if(Integer.parseInt(detailItem.getScoreTotal()) >= 70) {
+							//70점 이상으로 2차 평가 진행
+							proposalVO.setPropPropStatCode("PRG_3");
+						}
+					}				
+				}			
+				proposalVO.setPropRegUser(userSession.getUserId());
+				proposalService.updateProposalInfo(proposalVO);
+					
+			}
 		}
+		
 		return "redirect:/sub.do?menuKey=73";
 	}
 	

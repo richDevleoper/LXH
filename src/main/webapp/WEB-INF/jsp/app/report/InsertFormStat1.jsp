@@ -929,11 +929,11 @@ function onchange_resultType(obj){
                         <div class="list-footer">
                             <div class="list-btns">
 							<c:choose>
-					<c:when test="${reportVO.repStatusCode eq '2'}">
-						<!-- 선정중 -->
-						<button type="button" class="btn bg-gray" id="btnCancelApproval">결재취소</button>
-					</c:when>
-					<c:when test="${reportVO.repStatusCode eq '3' || reportVO.repStatusCode eq '4'}"> <!-- 진행중 -->
+								<c:when test="${reportVO.repStatusCode eq '2'}">
+									<!-- 선정중 -->
+									<button type="button" class="btn bg-gray" id="btnCancelApproval">결재취소</button>
+								</c:when>
+								<c:when test="${reportVO.repStatusCode eq '3' || reportVO.repStatusCode eq '4'|| reportVO.repStatusCode eq '5'}"> <!-- 진행중 -->
 									<button type="button" class="btn bg-gray" id="btnReqApproval">결재의뢰</button>
 									<button type="button" class="btn bg-gray" id="btnReqDrop">Drop신청</button>
 								</c:when>

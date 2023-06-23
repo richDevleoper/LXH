@@ -178,8 +178,8 @@
 				, REP_APPROVAL_MEM_CODE = #{repApprovalMemCode}
 				, REP_APPROVAL_MEM_ROLE = #{repApprovalMemRole}
 				, REP_STATUS = #{repStatus}
-				, REP_UPDATE_USER = SYSDATE
-				, REP_UPDATE_DATE = #{repUpdateDate}
+				, REP_UPDATE_USER = #{repUpdateUser}
+				, REP_UPDATE_DATE = SYSDATE
 		WHERE REP_SEQ = #{repSeq}
 	</update>
 	

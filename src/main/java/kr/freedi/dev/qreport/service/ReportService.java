@@ -129,7 +129,6 @@ public class ReportService {
 			String apprMemCode = "";
 			String apprMemRoleCode = "";
 			switch (vo.getRepStepCode()) {
-			case "1": // 6시그마 첫 step
 			case "7": // 일반과제
 				vo.setRepStatus("1");
 				apprMemCode = teamMember5.getComNo(); 
@@ -142,7 +141,7 @@ public class ReportService {
 				apprMemRoleCode = teamMember5.getRepTeamMemRole();
 				break;
 			default:
-				// 2,3,4,5 : 지도사원
+				// 1,2,3,4,5 : 지도사원
 				vo.setRepStatus("0");
 				apprMemCode = teamMember3.getComNo(); 
 				apprMemRoleCode = teamMember3.getRepTeamMemRole();
@@ -277,6 +276,20 @@ public class ReportService {
 		} 
 	}
 	
+	public void updateReportMaster(ReportVO reportVO) throws Exception {
+
+		// report_detail 저장
+		// report_team 저장
+		// report_result 저장
+		// report_indicator 저장
+		
+		// 각 항목 키가 있으면 저장, 없으면 update
+		// 서비스에 해당 기능 만들어서 vo 던지기.
+		
+		
+		dao.update("Report.update", reportVO);
+	}
+	
 	
 	public void cancelApprove(ReportVO reportVO) throws Exception {
 		String repStatusCode = reportVO.getRepStatusCode();
@@ -409,6 +422,34 @@ public class ReportService {
 		return resultVO;
 	}
 	
+	// 과제 기본정보만 조회
+	public ReportVO selectReportDefaultInfo(ReportVO reportVO) {
+		
+		return (ReportVO)dao.selectOne("Report.select", reportVO);
+	}
+	
+	public Boolean checkChangeBaseInfo(ReportVO originVO, ReportVO newVO) {
+		
+		/***
+		 * 과제 기본정보 변경시 true, 변경사항 없으면 false
+		 * ****/
+		
+		if(		
+			originVO.getRepName().equals(newVO.getRepName())
+			&& originVO.getRepDivisionCode().equals(newVO.getRepDivisionCode())
+			&& originVO.getRepTypeCode().equals(newVO.getRepTypeCode())
+			&& originVO.getRepSectorCode().equals(newVO.getRepSectorCode())
+			&& originVO.getRepProductClass().equals(newVO.getRepProductClass())
+			&& originVO.getRepLeaderBeltCode().equals(newVO.getRepLeaderBeltCode())
+			&& originVO.getRepActionTypeCode().equals(newVO.getRepActionTypeCode())
+			&& originVO.getRepMbbUseRateCode().equals(newVO.getRepMbbUseRateCode())
+			&& originVO.getRepUseRefDate().equals(newVO.getRepUseRefDate())
+			&& originVO.getRepKeyword().equals(newVO.getRepKeyword())   ) {
+			return false;
+		} else {
+			return true;
+		}
+	}
 	
 	
 	// converting
@@ -582,7 +623,7 @@ public class ReportService {
 		String currStepCode = savedVO.getRepCurrStepCode();
 		
 		//1. 6sigma 과제 확인, 진행중 여부 확인
-		if(savedVO.getRepDivisionCode().equals("1") && "2-1,3,4".indexOf(statusCode)>-1) {
+		if(savedVO.getRepDivisionCode().equals("1") && "3,4,5".indexOf(statusCode)>-1) {
 			
 			Integer currStepNum = Integer.parseInt(currStepCode);
 			
@@ -591,6 +632,20 @@ public class ReportService {
 			detailVO.setRepStatus("2"); // 승인한 단계 완료 처리
 			detailVO.setRepUpdateUser(reportVO.getRepUpdateUser());
 			reportDetailService.update(detailVO);
+			
+			// 과제상태 변경
+			if(detailVO.getRepPlanStartDate()!=null
+					&& detailVO.getRepActStartDate()!=null
+					&& detailVO.getRepPlanStartDate().before(detailVO.getRepActStartDate())
+					&& detailVO.getRepPlanStartDate().equals(detailVO.getRepActStartDate())
+					) {
+				// 계획된 날짜에 승인시 
+				savedVO.setRepStatusCode("4"); // 진행중(On)	
+			} else {
+				// 계획보다 늦어질 경우 
+				savedVO.setRepStatusCode("5"); // 진행중(Off)	
+			}
+			this.update(savedVO);
 			
 			if(currStepNum==6) {
 				// 승인은 repStatusCode 6으로, Drop은  5로 처리
@@ -601,9 +656,9 @@ public class ReportService {
 				ReportDetailVO detailNextVO = new ReportDetailVO();
 				detailNextVO.setRepCode(reportVO.getRepCode());
 				detailNextVO.setRepStatus("1");
-				detailNextVO.setRepUpdateUser(reportVO.getRepUpdateUser());
+  				detailNextVO.setRepUpdateUser(reportVO.getRepUpdateUser());
 				detailNextVO.setRepStepCode(Integer.toString(currStepNum+1));
-				reportDetailService.updateStepStatus(detailNextVO	);
+				reportDetailService.updateStepStatus(detailNextVO);
 			}
 		}
 	}
