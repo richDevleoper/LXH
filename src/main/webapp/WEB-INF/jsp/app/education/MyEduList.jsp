@@ -155,7 +155,6 @@ function init(){
 
 function selectMyEdu(tabId){
 	let eduBeltCode = tabId;
-	console.log(tabId);
 	let params = {};
 	params.eduBeltCode = eduBeltCode;	
 	
@@ -166,9 +165,6 @@ function selectMyEdu(tabId){
 		dataType : 'json',
 		success:function(data){
 			let myList = data.myList;
-			
-			console.log(myList.length);
-			console.log(myList);
 
 			var vHtml = [];
 			if(myList.length>0){

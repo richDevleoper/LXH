@@ -48,7 +48,7 @@
                                           <td>
                                           	<%-- ${educationVO.eduClassDivisionName } --%>
                                           	<c:choose>
-											    <c:when test="${educationVO.eduBeltCode eq '01'}">
+											    <c:when test="${educationVO.eduBeltCode eq 'D000'}">
 											      <c:if test="${educationVO.eduClassType eq '01'}">
 	                                              	  	<c:if test="${educationVO.eduClassDivision eq '01'}">
 		                                               		온라인 동영상 교육
@@ -56,14 +56,14 @@
 		                                               	<c:if test="${educationVO.eduClassDivision eq '02'}">
 		                                               		온라인 실시간 교육
 		                                               	</c:if>
-		                                              	  </c:if>
-		                                              	  <c:if test="${educationVO.eduClassType eq '02' }">
-		                                              		<c:if test="${educationVO.eduClassDivision eq '07'}">
+		                                          </c:if>
+		                                          <c:if test="${educationVO.eduClassType eq '02' }">
+		                                              	<c:if test="${educationVO.eduClassDivision eq '07'}">
 		                                               		통계Test
 		                                               	</c:if>
-	                                              	  </c:if>
+	                                              </c:if>
 											    </c:when>
-											    <c:when test="${educationVO.eduBeltCode eq '02'}">
+											    <c:when test="${educationVO.eduBeltCode eq 'D001'}">
 											      <c:if test="${educationVO.eduClassType eq '01'}">
 	                                              	  	<c:if test="${educationVO.eduClassDivision eq '01'}">
 		                                               		온라인 동영상 교육
@@ -71,27 +71,9 @@
 		                                               	<c:if test="${educationVO.eduClassDivision eq '02'}">
 		                                               		온라인 실시간 교육
 		                                               	</c:if>
-		                                              	  </c:if>
-		                                              	  <c:if test="${educationVO.eduClassType eq '02' }">
-		                                              		<c:if test="${educationVO.eduClassDivision eq '07'}">
-		                                               		통계Test
-		                                               	</c:if>
-		                                               	<c:if test="${educationVO.eduClassDivision eq '08'}">
-		                                               		과제Test
-		                                               	</c:if>
-	                                              	  </c:if>
-											    </c:when>
-											    <c:when test="${educationVO.eduBeltCode eq '03'}">
-											      <c:if test="${educationVO.eduClassType eq '01'}">
-	                                              	  	<c:if test="${educationVO.eduClassDivision eq '01'}">
-		                                               		온라인 동영상 교육
-		                                               	</c:if>
-		                                               	<c:if test="${educationVO.eduClassDivision eq '02'}">
-		                                               		온라인 실시간 교육
-		                                               	</c:if>
-		                                              	  </c:if>
-		                                              	  <c:if test="${educationVO.eduClassType eq '02' }">
-		                                              		<c:if test="${educationVO.eduClassDivision eq '07'}">
+                                              	  </c:if>
+                                              	  <c:if test="${educationVO.eduClassType eq '02' }">
+		                                              	<c:if test="${educationVO.eduClassDivision eq '07'}">
 		                                               		통계Test
 		                                               	</c:if>
 		                                               	<c:if test="${educationVO.eduClassDivision eq '08'}">
@@ -99,8 +81,8 @@
 		                                               	</c:if>
 	                                              	  </c:if>
 											    </c:when>
-											    <c:when test="${educationVO.eduBeltCode eq '04'}">
-											      <c:if test="${educationVO.eduClassType eq '01'}">
+											    <c:when test="${educationVO.eduBeltCode eq 'D002'}">
+											      	  <c:if test="${educationVO.eduClassType eq '01'}">
 	                                              	  	<c:if test="${educationVO.eduClassDivision eq '01'}">
 		                                               		온라인 동영상 교육
 		                                               	</c:if>
@@ -119,11 +101,29 @@
 		                                               	<c:if test="${educationVO.eduClassDivision eq '06'}">
 		                                               		Summary
 		                                               	</c:if>
-		                                              	  </c:if>
-		                                              	  <c:if test="${educationVO.eduClassType eq '02' }">
+		                                              </c:if>
+		                                              <c:if test="${educationVO.eduClassType eq '02' }">
 		                                               	<c:if test="${educationVO.eduClassDivision eq '09'}">
 		                                               		자질Test
 		                                               	</c:if>
+	                                              	  </c:if>	
+											    </c:when>
+											    <c:when test="${educationVO.eduBeltCode eq 'D003'}">
+	                                              	  <c:if test="${educationVO.eduClassType eq '01'}">
+	                                              	  	<c:if test="${educationVO.eduClassDivision eq '01'}">
+		                                               		온라인 동영상 교육
+		                                               	</c:if>
+		                                               	<c:if test="${educationVO.eduClassDivision eq '02'}">
+		                                               		온라인 실시간 교육
+		                                               	</c:if>
+		                                              </c:if>
+		                                              <c:if test="${educationVO.eduClassType eq '02' }">
+	                                              		<c:if test="${educationVO.eduClassDivision eq '07'}">
+	                                               			통계Test
+		                                                </c:if>
+		                                                <c:if test="${educationVO.eduClassDivision eq '08'}">
+		                                               		과제Test
+		                                                </c:if>
 	                                              	  </c:if>
 											    </c:when>
 											    <c:otherwise>

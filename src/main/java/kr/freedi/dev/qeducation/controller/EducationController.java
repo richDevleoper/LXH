@@ -249,7 +249,7 @@ public class EducationController {
 		System.out.println("tabId : " + tabId);
 		
 		if("".equals(tabId) ||"null".equals(tabId) || tabId == null ) {
-			searchVO.setSearchbeltCode("01");
+			searchVO.setSearchbeltCode("D000");
 		}else {
 			searchVO.setSearchbeltCode(tabId);
 		}
@@ -394,7 +394,7 @@ public class EducationController {
 		System.out.println("tabId : " + tabId);
 		
 		if("".equals(tabId) ||"null".equals(tabId) || tabId == null ) {
-			searchVO.setSearchbeltCode("01");
+			searchVO.setSearchbeltCode("D000");
 		}else {
 			searchVO.setSearchbeltCode(tabId);
 		}
@@ -403,7 +403,7 @@ public class EducationController {
 			String[] colIdArr = null;
 			String[] colNameArr = null;
 			
-			if("04".equals(tabId)) {
+			if("D002".equals(tabId)) {
 				colIdArr = new String[]{"IDX", "STD_NAME", "STD_USERID", "MNG_TIT", "STD_DEPART_NM", "STD_JOBX_NM", "STD_POS_NM", "STD_CERT_DATE", "STD_CERT_NM", "STD_TEST_DATE", "STD_TEST_NM"};
 				colNameArr = new String[]{"NO", "성명", "사번", "1차 교육 / 2차 통계 / 3차 과제Test", "조직", "직위", "직책", "인증일", "인증여부", "자질평가일", "합격여부"};
 			}else {

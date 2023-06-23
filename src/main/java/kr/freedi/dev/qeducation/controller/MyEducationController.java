@@ -75,10 +75,6 @@ public class MyEducationController {
 		   UserVO userSession)throws Exception {
 		
 		String eduBeltCode = (String)params.get("eduBeltCode");
-		System.out.println("eduBeltCode : " + eduBeltCode);
-		
-		String leaderBeltCode = (String)params.get("leaderBeltCode");
-		System.out.println("leaderBeltCode : " + leaderBeltCode);
 		
 		/* 1. 교육활동 */
 		educationVO.setEduBeltCode(eduBeltCode); // 벨트코드
@@ -89,7 +85,7 @@ public class MyEducationController {
 		educationVO.setMyList(selectMyBeltEduList);
 		
 		/* 2. 과제활동 현황 */
-		myEducationVO.setLeaderBeltCode(leaderBeltCode);
+		myEducationVO.setLeaderBeltCode(eduBeltCode);
 		myEducationVO.setComNo(myUserId);
 		
 		List<MyEducationVO> selectMyReportList = educationService.selectMyReportList(myEducationVO);
@@ -127,17 +123,13 @@ public class MyEducationController {
 		   UserVO userSession)throws Exception {
 		
 		String eduCode   = (String)params.get("eduCode");
-		System.out.println("eduCode : " + eduCode);
 		studentVO.setEduCode(eduCode);
 		studentVO.setStdStatus("Y");
 		// 교육 신청개수
 		int countList = studentService.selectLReqCount(studentVO);
-		System.out.println("countList : " + countList);
 		
 		// 신청여부
 		String myUserId = userSession.getUserId();
-		//String myUserId = "FB2621";
-		
 		if("".equals(myUserId) || myUserId == null){
 			studentVO.setResult("S"); // 결과값
 		}else {
@@ -145,8 +137,6 @@ public class MyEducationController {
 			studentVO.setStdStatus("Y");
 			
 			int countList2 = studentService.selectLReqCount(studentVO);
-			System.out.println("countList2 : " + countList2);
-			
 			studentVO.setStdReqCnt(Integer.toString(countList));
 			studentVO.setStdMyCnt(Integer.toString(countList2));
 			studentVO.setResult("Y"); // 결과값
@@ -184,7 +174,6 @@ public class MyEducationController {
 			String comJobx = (String)resVO.getComJobx();				//직위 (공통코드)
 			String comPosition = (String)resVO.getComPosition();		//직책 (공통코드)
 			String comCertBelt = (String)resVO.getComCertBelt();		//CERT 벨트
-			System.out.println("comNo : " + comNo);
 			
 			// 수강생 정보 세팅
 			studentVO.setEduCode(eduCode);

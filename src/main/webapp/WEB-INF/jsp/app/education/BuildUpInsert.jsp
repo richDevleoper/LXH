@@ -336,7 +336,7 @@ function selectBeltCode(){
 	console.log(eduBeltCode + " / " + eduClassType);
 	var vHtml = [];
 	// GB
-	if(eduBeltCode == "01"){
+	if(eduBeltCode == "D000"){
 		if(eduClassType == "01"){
 			vHtml.push("<option value=''>전체</option>");
 			vHtml.push("<option value='01'>온라인 동영상 교육</option>");
@@ -344,20 +344,9 @@ function selectBeltCode(){
 		}else if(eduClassType == "02"){
 			vHtml.push("<option value=''>전체</option>");
 			vHtml.push("<option value='07'>통계Test</option>");
-		}
-	// MGB
-	}else if(eduBeltCode == "02"){
-		if(eduClassType == "01"){
-			vHtml.push("<option value=''>전체</option>");
-			vHtml.push("<option value='01'>온라인 동영상 교육</option>");
-			vHtml.push("<option value='02'>온라인 실시간 교육</option>");
-		}else if(eduClassType == "02"){
-			vHtml.push("<option value=''>전체</option>");
-			vHtml.push("<option value='07'>통계Test</option>");
-			vHtml.push("<option value='08'>과제Test</option>");
 		}
 	// BB
-	}else if(eduBeltCode == "03"){
+	}else if(eduBeltCode == "D001"){
 		if(eduClassType == "01"){
 			vHtml.push("<option value=''>전체</option>");
 			vHtml.push("<option value='01'>온라인 동영상 교육</option>");
@@ -368,7 +357,7 @@ function selectBeltCode(){
 			vHtml.push("<option value='08'>과제Test</option>");
 		}
 	// MBB	
-	}else if(eduBeltCode == "04"){
+	}else if(eduBeltCode == "D002"){
 		if(eduClassType == "01"){
 			vHtml.push("<option value=''>전체</option>");
 			vHtml.push("<option value='01'>온라인 동영상 교육</option>");
@@ -380,6 +369,17 @@ function selectBeltCode(){
 		}else if(eduClassType == "02"){
 			vHtml.push("<option value=''>전체</option>");
 			vHtml.push("<option value='09'>자질Test</option>");
+		}
+	// MGB
+	}else if(eduBeltCode == "D003"){
+		if(eduClassType == "01"){
+			vHtml.push("<option value=''>전체</option>");
+			vHtml.push("<option value='01'>온라인 동영상 교육</option>");
+			vHtml.push("<option value='02'>온라인 실시간 교육</option>");
+		}else if(eduClassType == "02"){
+			vHtml.push("<option value=''>전체</option>");
+			vHtml.push("<option value='07'>통계Test</option>");
+			vHtml.push("<option value='08'>과제Test</option>");
 		}
 	}
 	$("#eduClassDivision").html(vHtml.join(''));
@@ -413,7 +413,7 @@ function initCode(){
 		
 		var vHtml = [];
 		// GB
-		if(eduBeltCode == "01"){
+		if(eduBeltCode == "D000"){
 			if(eduClassType == "01"){
 				vHtml.push("<option value=''>전체</option>");
 				vHtml.push("<option value='01'>온라인 동영상 교육</option>");
@@ -421,20 +421,9 @@ function initCode(){
 			}else if(eduClassType == "02"){
 				vHtml.push("<option value=''>전체</option>");
 				vHtml.push("<option value='07'>통계Test</option>");
-			}
-		// MGB
-		}else if(eduBeltCode == "02"){
-			if(eduClassType == "01"){
-				vHtml.push("<option value=''>전체</option>");
-				vHtml.push("<option value='01'>온라인 동영상 교육</option>");
-				vHtml.push("<option value='02'>온라인 실시간 교육</option>");
-			}else if(eduClassType == "02"){
-				vHtml.push("<option value=''>전체</option>");
-				vHtml.push("<option value='07'>통계Test</option>");
-				vHtml.push("<option value='08'>과제Test</option>");
 			}
 		// BB
-		}else if(eduBeltCode == "03"){
+		}else if(eduBeltCode == "D001"){
 			if(eduClassType == "01"){
 				vHtml.push("<option value=''>전체</option>");
 				vHtml.push("<option value='01'>온라인 동영상 교육</option>");
@@ -445,7 +434,7 @@ function initCode(){
 				vHtml.push("<option value='08'>과제Test</option>");
 			}
 		// MBB	
-		}else if(eduBeltCode == "04"){
+		}else if(eduBeltCode == "D002"){
 			if(eduClassType == "01"){
 				vHtml.push("<option value=''>전체</option>");
 				vHtml.push("<option value='01'>온라인 동영상 교육</option>");
@@ -457,6 +446,17 @@ function initCode(){
 			}else if(eduClassType == "02"){
 				vHtml.push("<option value=''>전체</option>");
 				vHtml.push("<option value='09'>자질Test</option>");
+			}
+		// MGB
+		}else if(eduBeltCode == "D003"){
+			if(eduClassType == "01"){
+				vHtml.push("<option value=''>전체</option>");
+				vHtml.push("<option value='01'>온라인 동영상 교육</option>");
+				vHtml.push("<option value='02'>온라인 실시간 교육</option>");
+			}else if(eduClassType == "02"){
+				vHtml.push("<option value=''>전체</option>");
+				vHtml.push("<option value='07'>통계Test</option>");
+				vHtml.push("<option value='08'>과제Test</option>");
 			}
 		}
 		$("#eduClassDivision").html(vHtml.join(''));

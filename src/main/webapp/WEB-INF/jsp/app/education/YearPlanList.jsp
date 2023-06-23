@@ -272,7 +272,6 @@ function cnacleSave(){
 }
 
 function detailView(eduCode){
-	console.log(eduCode);	
 	let params = {};
 	params.eduCode = eduCode;	
 	

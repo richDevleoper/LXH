@@ -49,6 +49,46 @@ protected Log log = LogFactory.getLog(this.getClass());
 		model.addAttribute("menuKey", searchVO.getMenuKey());
 		searchVO.setSearchUserid(userSession.getUserId());
 		
+		
+		/* 
+		 * 
+		 * 
+			String comCertBelt = userSession.getComCertBelt();
+			System.out.println("comCertBelt : " + comCertBelt);
+			model.addAttribute("comCertBelt", comCertBelt);
+		
+			벨트코드 신청 조건
+			
+			무인증
+			GB -  D000 
+				교육 : 온라인동영상교육, 온라인실시간교육
+				TEST : 통계TEST (온라인 동영상/실시간 교육 이수 시 가능)
+					   과제TEST (온라인 동영상/실시간 교육 이수 + 과제신청 이력이 있을 시 가능)
+ 
+			BB -  D001
+				교육 : 온라인동영상교육, 온라인실시간교육
+				TEST : 통계TEST
+					   과제TEST (과제 1건 이상 완료 또는 진행중 상태)
+ 
+			MBB - D002
+				교육 : 온라인동영상교육
+					   온라인실시간교육
+					   6σ Process 과정
+					   통계적 사고 과정
+					   고급 통계 과정
+					   Summary
+				TEST : 통계TEST
+					   과제TEST (과제 1건 이상 완료 또는 진행중 상태)
+					   통계구사능력 Test
+ 
+			MGB - D003
+				교육 : 
+				TEST :  
+ 
+		 */
+		
+		
+		
 		List<EducationVO> selectYearPlanList = studentService.selectYearPlanList(searchVO);
 		model.addAttribute("selectYearPlanList", selectYearPlanList);
 		model.addAttribute("action", "/education/requeststd.do");
@@ -62,7 +102,6 @@ protected Log log = LogFactory.getLog(this.getClass());
 		   @RequestParam Map<String, Object> params)throws Exception {
 		
 		String eduCode   = (String)params.get("eduCode");
-		System.out.println("eduCode : " + eduCode);
 		educationVO.setEduCode(eduCode);
 		
 		EducationVO resVO = studentService.selectYearPlanInfo(educationVO);

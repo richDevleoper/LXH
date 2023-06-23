@@ -20,7 +20,7 @@
 	    <div class="tab-btn">
 		    <!-- [D] 현재 활성화된 메뉴에 on클래스 추가해주세요. -->
             <c:forEach var="allCodes" items="${allCodes}" varStatus="status">
-            	<c:if test="${allCodes.codeId ne '02'}">
+            	<c:if test="${allCodes.codeId ne 'D003'}">
 					<button type="button" id="${allCodes.codeId}">${allCodes.codeNm}</button>
             	</c:if>
             </c:forEach>
@@ -130,7 +130,7 @@
 									<th class="bg-gray font-weight-bold">직책</th>
 									<th class="bg-gray font-weight-bold">인증일</th>
 									<th class="bg-gray font-weight-bold">인증여부</th>
-									<c:if test="${gb eq '04'}">
+									<c:if test="${gb eq 'D002'}">
 										<th class="bg-gray font-weight-bold">자질평가일</th>
 										<th class="bg-gray font-weight-bold">합격여부</th>
 									</c:if>
@@ -141,7 +141,7 @@
 								    <c:when test="${fn:length(selectMngList) == 0}">
 								           <tr>
                                              <c:choose>
-                                             	<c:when test="${gb eq '04'}">
+                                             	<c:when test="${gb eq 'D002'}">
                                              		<td colspan="12"><span>조회결과가 없습니다.</span></td>
                                              	</c:when>
                                              	<c:otherwise>
@@ -181,11 +181,11 @@
 														<option value="">선택</option>
 														<option value="Y" <c:if test ="${selectMngList.stdCertCode eq 'Y'}">selected="selected"</c:if>>인증</option>
 														<option value="N" <c:if test ="${selectMngList.stdCertCode eq 'N'}">selected="selected"</c:if>>미인증</option>
-													</select>
+													</select>${gb}
 												</div>
 												</td>
 												
-												<c:if test="${gb eq '04'}">
+												<c:if test="${gb eq 'D002'}">
 													<td><div class="row">
 													<div class="col input-text input-date">
 													<input type="text" class="datepick" name="stdTestDate" id="stdTestDate_${selectMngList.idx}" value="${selectMngList.stdTestDate}" /> 

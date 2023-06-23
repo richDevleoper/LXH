@@ -303,9 +303,6 @@
 	
 	function selectMyEdu(tabId){
 		let eduBeltCode = tabId;
-		console.log(tabId);
-		
-		let leaderBeltCode = "";
 		/* 
 			과제 활동 - 리더벨트코드
 			GB - D000
@@ -313,26 +310,8 @@
 			MBB - D002
 			MGB - D003
 		 */
-		 switch (tabId) {
-		    case "01" :
-		    	leaderBeltCode = "D000";
-		    	break;
-		    case "02" :
-		    	leaderBeltCode = "D003";
-		    	break;
-		    case "03" :
-		    	leaderBeltCode = "D001";
-		    	break;
-		    case "04" :
-		    	leaderBeltCode = "D002";
-		    	break;
-		    default :
-		} 
-		
 		let params = {};
 		params.eduBeltCode = eduBeltCode;	
-		params.leaderBeltCode = leaderBeltCode;
-		
 		$.ajax({
 			url:'/education/searchmyedu.do',
 			type: 'POST',
@@ -342,9 +321,6 @@
 				let myList = data.myList;
 				let reportList = data.reportList;
 				
-				console.log(myList.length);
-				console.log(reportList);
-
 				var vHtml = [];
 				var vHtml2 = [];
 				var rHtml = [];

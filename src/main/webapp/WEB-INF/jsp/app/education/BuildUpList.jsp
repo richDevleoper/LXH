@@ -173,7 +173,7 @@
 			                                                <td>${educationResult.eduClassTypeName}</td>
 			                                                <td>
 			                                                	<c:choose>
-																    <c:when test="${educationResult.eduBeltCode eq '01'}">
+																    <c:when test="${educationResult.eduBeltCode eq 'D000'}">
 																      <c:if test="${educationResult.eduClassType eq '01'}">
 				                                                	  	<c:if test="${educationResult.eduClassDivision eq '01'}">
 					                                                		온라인 동영상 교육
@@ -188,25 +188,7 @@
 					                                                	</c:if>
 				                                                	  </c:if>
 																    </c:when>
-																    <c:when test="${educationResult.eduBeltCode eq '02'}">
-																      <c:if test="${educationResult.eduClassType eq '01'}">
-				                                                	  	<c:if test="${educationResult.eduClassDivision eq '01'}">
-					                                                		온라인 동영상 교육
-					                                                	</c:if>
-					                                                	<c:if test="${educationResult.eduClassDivision eq '02'}">
-					                                                		온라인 실시간 교육
-					                                                	</c:if>
-				                                                	  </c:if>
-				                                                	  <c:if test="${educationResult.eduClassType eq '02' }">
-				                                                		<c:if test="${educationResult.eduClassDivision eq '07'}">
-					                                                		통계Test
-					                                                	</c:if>
-					                                                	<c:if test="${educationResult.eduClassDivision eq '08'}">
-					                                                		과제Test
-					                                                	</c:if>
-				                                                	  </c:if>
-																    </c:when>
-																    <c:when test="${educationResult.eduBeltCode eq '03'}">
+																    <c:when test="${educationResult.eduBeltCode eq 'D001'}">
 																      <c:if test="${educationResult.eduClassType eq '01'}">
 				                                                	  	<c:if test="${educationResult.eduClassDivision eq '01'}">
 					                                                		온라인 동영상 교육
@@ -224,7 +206,7 @@
 					                                                	</c:if>
 				                                                	  </c:if>
 																    </c:when>
-																    <c:when test="${educationResult.eduBeltCode eq '04'}">
+																    <c:when test="${educationResult.eduBeltCode eq 'D002'}">
 																      <c:if test="${educationResult.eduClassType eq '01'}">
 				                                                	  	<c:if test="${educationResult.eduClassDivision eq '01'}">
 					                                                		온라인 동영상 교육
@@ -248,6 +230,24 @@
 				                                                	  <c:if test="${educationResult.eduClassType eq '02' }">
 					                                                	<c:if test="${educationResult.eduClassDivision eq '09'}">
 					                                                		자질Test
+					                                                	</c:if>
+				                                                	  </c:if>
+																    </c:when>
+																    <c:when test="${educationResult.eduBeltCode eq 'D003'}">
+																      <c:if test="${educationResult.eduClassType eq '01'}">
+				                                                	  	<c:if test="${educationResult.eduClassDivision eq '01'}">
+					                                                		온라인 동영상 교육
+					                                                	</c:if>
+					                                                	<c:if test="${educationResult.eduClassDivision eq '02'}">
+					                                                		온라인 실시간 교육
+					                                                	</c:if>
+				                                                	  </c:if>
+				                                                	  <c:if test="${educationResult.eduClassType eq '02' }">
+				                                                		<c:if test="${educationResult.eduClassDivision eq '07'}">
+					                                                		통계Test
+					                                                	</c:if>
+					                                                	<c:if test="${educationResult.eduClassDivision eq '08'}">
+					                                                		과제Test
 					                                                	</c:if>
 				                                                	  </c:if>
 																    </c:when>
@@ -349,7 +349,7 @@
 		
 		var vHtml = [];
 		// GB
-		if(eduBeltCode == "01"){
+		if(eduBeltCode == "D000"){
 			if(eduClassType == "01"){
 				vHtml.push("<option value=''>전체</option>");
 				vHtml.push("<option value='01'>온라인 동영상 교육</option>");
@@ -357,20 +357,9 @@
 			}else if(eduClassType == "02"){
 				vHtml.push("<option value=''>전체</option>");
 				vHtml.push("<option value='07'>통계Test</option>");
-			}
-		// MGB
-		}else if(eduBeltCode == "02"){
-			if(eduClassType == "01"){
-				vHtml.push("<option value=''>전체</option>");
-				vHtml.push("<option value='01'>온라인 동영상 교육</option>");
-				vHtml.push("<option value='02'>온라인 실시간 교육</option>");
-			}else if(eduClassType == "02"){
-				vHtml.push("<option value=''>전체</option>");
-				vHtml.push("<option value='07'>통계Test</option>");
-				vHtml.push("<option value='08'>과제Test</option>");
 			}
 		// BB
-		}else if(eduBeltCode == "03"){
+		}else if(eduBeltCode == "D001"){
 			if(eduClassType == "01"){
 				vHtml.push("<option value=''>전체</option>");
 				vHtml.push("<option value='01'>온라인 동영상 교육</option>");
@@ -381,7 +370,7 @@
 				vHtml.push("<option value='08'>과제Test</option>");
 			}
 		// MBB	
-		}else if(eduBeltCode == "04"){
+		}else if(eduBeltCode == "D002"){
 			if(eduClassType == "01"){
 				vHtml.push("<option value=''>전체</option>");
 				vHtml.push("<option value='01'>온라인 동영상 교육</option>");
@@ -393,6 +382,17 @@
 			}else if(eduClassType == "02"){
 				vHtml.push("<option value=''>전체</option>");
 				vHtml.push("<option value='09'>자질Test</option>");
+			}
+		// MGB
+		}else if(eduBeltCode == "D003"){
+			if(eduClassType == "01"){
+				vHtml.push("<option value=''>전체</option>");
+				vHtml.push("<option value='01'>온라인 동영상 교육</option>");
+				vHtml.push("<option value='02'>온라인 실시간 교육</option>");
+			}else if(eduClassType == "02"){
+				vHtml.push("<option value=''>전체</option>");
+				vHtml.push("<option value='07'>통계Test</option>");
+				vHtml.push("<option value='08'>과제Test</option>");
 			}
 		}
 		$("#searchEduDivision").html(vHtml.join(''));
