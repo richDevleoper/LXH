@@ -995,9 +995,6 @@ function onchange_resultType(obj){
 	
 	function setControl(){
 		
-		/*
-		${reportVO}
-		*/
 		setDropDown("repSectorCode", cdListSector, true);//부문코드
 		$("#repSectorCode").val("${reportVO.repSectorCode}")
 		onchange_ddlRepSectorCode();
@@ -1010,7 +1007,10 @@ function onchange_resultType(obj){
 		$("#repActionTypeCode").val("${reportVO.repActionTypeCode}")
 		
 		setDropDown("repMbbUseRateCode", cdMbbUseRate, false);//MBB활용율
-		$("#repMbbUseRateCode").val("${reportVO.repMbbUseRateCode}")
+		const vRepMbbUseRate = "${reportVO.repMbbUseRateCode}";
+		if(vRepMbbUseRate){
+			$("#repMbbUseRateCode").val(vRepMbbUseRate)	;
+		}
 		
 		//setDropDown(".ddl-rep-result-type", cdRepResultType, true);//성과항목
 		const currYear = new Date().getFullYear();
@@ -1112,10 +1112,7 @@ function onchange_resultType(obj){
 				$("#defaultForm")[0].submit();	
 			};
 		});
-		
-
-	 	
-	 	// 검색 이벤트
+  	 	// 검색 이벤트
 		$(".btn-search-emp").off("click").on("click", function(){
 			callPopup_searchEmployee(this);
 		});
@@ -1201,7 +1198,7 @@ function onchange_resultType(obj){
 	
 	
 	function onclick_orgSearch(e){
-		debugger;
+		
 		let retObj = $(this).find("input")
 		popupGetOrgCd(retObj);
 	}
@@ -1362,7 +1359,7 @@ function onchange_resultType(obj){
 		return true;
 	}
 	
-	// 팝업 호출 함수
+	// 팝업 호출 함수(팀원 검색)
 	function callPopup_searchEmployee(obj){
 
 		popEmp.init();
@@ -1384,7 +1381,6 @@ function onchange_resultType(obj){
 		$(obj).val(data.deptFullName);
 		$(objIdComNo).val(data.comNo);
 		
-
 		$(objTr).find(".td-user-nm").text(data.userName);
 		$(objTr).find(".td-com-jobx").text(data.comJobxNm);
 		$(objTr).find(".td-com-pos").text(data.comPositionNm);
@@ -1403,27 +1399,5 @@ function onchange_resultType(obj){
 	
 </script>
 
-	<script type="text/javascript">
-//var contentsEditors = [];
-//$(function() {
-
-	
-//});
-
-/*
- //저장
-function insert(){
-	$("#defaultForm").submit();
-	return false;
-}
-//목록
-function list(){
-	$("#defaultForm").validationEngine('detach');
-	$("#defaultForm input[type='text']").attr('disabled', true);
-	$("#defaultForm").attr('method', 'post');
-	$("#defaultForm").attr('action', 'list.do');
-	$("#defaultForm").submit();
-}*/
-</script>
 </body>
 </html>

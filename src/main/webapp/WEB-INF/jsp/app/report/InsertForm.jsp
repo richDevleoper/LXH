@@ -1,54 +1,38 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
-<%@ taglib prefix="string" uri="/WEB-INF/tld/string-taglib.tld"%>
-<%@ taglib prefix="attachfile"
-	uri="http://www.freedi.kr/attachfile-taglib"%>
+<%@ taglib prefix="string" uri="/WEB-INF/tld/string-taglib.tld" %>
+<%@ taglib prefix="attachfile" uri="http://www.freedi.kr/attachfile-taglib"%>
 
 <!DOCTYPE html PUBLIC "-/W3C/DTD XHTML 1.0 Transitional/EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html lang="ko">
 <head>
-<title>${fn:split(boardVO.boardNm,'>')[fn:length(fn:split(boardVO.boardNm,'>'))-1]}</title>
-<meta name="keywords" content="" />
-<meta name="description" content="" />
-
-<link type="text/css" rel="stylesheet"
-	href="<c:url value='/def/attachfile/css/jquery.fileupload.css'/>" />
-<link type="text/css" rel="stylesheet"
-	href="<c:url value='/def/attachfile/css/jquery.fileupload-ui.css'/>" />
-<script type="text/javascript"
-	src="<c:url value='/def/attachfile/js/jquery.fileupload-tmpl.js'/>"></script>
-<script type="text/javascript"
-	src="<c:url value='/def/attachfile/js/jquery.iframe-transport.js'/>"></script>
-<script type="text/javascript"
-	src="<c:url value='/def/attachfile/js/jquery.fileupload.js'/>"></script>
-<script type="text/javascript"
-	src="<c:url value='/def/attachfile/js/jquery.fileupload-process.js'/>"></script>
-<script type="text/javascript"
-	src="<c:url value='/def/attachfile/js/jquery.fileupload-validate.js'/>"></script>
-<script type="text/javascript"
-	src="<c:url value='/def/attachfile/js/jquery.fileupload-ui.js'/>"></script>
-<script type="text/javascript"
-	src="<c:url value='/def/attachfile/js/jquery.fileupload-jquery-ui.js'/>"></script>
-<script type="text/javascript"
-	src="<c:url value='/def/attachfile/js/attachfile-fileuploader.js'/>"></script>
-
-<style>
-.td-user-nm, .td-com-jobx, .td-com-pos, .td-belt-nm {
-	text-align: center !important;
-}
-</style>
+	<title>${fn:split(boardVO.boardNm,'>')[fn:length(fn:split(boardVO.boardNm,'>'))-1]}</title>
+	<meta name="keywords" content="" />
+	<meta name="description" content="" />
+	
+	<link type="text/css" rel="stylesheet" href="<c:url value='/def/attachfile/css/jquery.fileupload.css'/>" />
+	<link type="text/css" rel="stylesheet" href="<c:url value='/def/attachfile/css/jquery.fileupload-ui.css'/>" />
+	<script type="text/javascript" src="<c:url value='/def/attachfile/js/jquery.fileupload-tmpl.js'/>"></script>
+	<script type="text/javascript" src="<c:url value='/def/attachfile/js/jquery.iframe-transport.js'/>"></script>
+	<script type="text/javascript" src="<c:url value='/def/attachfile/js/jquery.fileupload.js'/>"></script>
+	<script type="text/javascript" src="<c:url value='/def/attachfile/js/jquery.fileupload-process.js'/>"></script>
+	<script type="text/javascript" src="<c:url value='/def/attachfile/js/jquery.fileupload-validate.js'/>"></script>
+	<script type="text/javascript" src="<c:url value='/def/attachfile/js/jquery.fileupload-ui.js'/>"></script>
+	<script type="text/javascript" src="<c:url value='/def/attachfile/js/jquery.fileupload-jquery-ui.js'/>"></script>
+	<script type="text/javascript" src="<c:url value='/def/attachfile/js/attachfile-fileuploader.js'/>"></script>
+	
+	<style>
+		.td-user-nm, .td-com-jobx, .td-com-pos, .td-belt-nm  { text-align: center !important;}
+	</style>
 
 </head>
 <body>
-	<form:form commandName="frmReport" id="defaultForm" name="defaultForm"
-		action="${action}" onsubmit="return false" method="post"
-		modelAttribute="reportVO">
+	<form:form commandName="frmReport" id="defaultForm" name="defaultForm" action="${action}" onsubmit="return false" method="post" modelAttribute="reportVO">
 		<form:hidden path="repStatusCode" />
 		<form:hidden path="repCode" />
 		<form:hidden path="repMenuCode" />
@@ -57,10 +41,7 @@
 		<!-- breadcrumb -->
 		<div class="breadcrumb">
 			<ul>
-				<li>과제등록 | <span style="color: #9a3530b3;">일반과제<c:if
-							test="${reportVO.repMenuCode eq 'REPORT'}"> 및 10+No Policy 활동과제</c:if>는
-						활동결과까지 함께 등록합니다.
-				</span></li>
+				<li>과제등록 | <span style="color: #9a3530b3;">일반과제<c:if test="${reportVO.repMenuCode eq 'REPORT'}"> 및 10+No Policy 활동과제</c:if>는 활동결과까지 함께 등록합니다.</span></li>
 			</ul>
 		</div>
 		<p class="content_title">1. 과제정보</p>
@@ -70,15 +51,14 @@
 					<table>
 						<caption></caption>
 						<colgroup>
-							<col style="width: 180px">
+							<col style="width:180px">
 							<col>
-							<col style="width: 180px">
+							<col style="width:180px">
 							<col>
 						</colgroup>
 						<tbody>
 							<tr>
-								<th><form:label path="repName">
-										<span class="asterisk">*</span>과제명</form:label></th>
+								<th><form:label path="repName"><span class="asterisk">*</span>과제명</form:label></th>
 								<td colspan="3">
 									<div class="row">
 										<div class="col s12 input-text">
@@ -89,8 +69,7 @@
 								</td>
 							</tr>
 							<tr>
-								<th><form:label path="repDivisionCode">
-										<span class="asterisk">*</span>6σ Full Process여부</form:label> <i
+								<th><form:label path="repDivisionCode"><span class="asterisk">*</span>6σ Full Process여부</form:label> <i
 									class="ico tip" onclick="popAdvice.open('6sigma-yn')"><em>tip.</em></i></th>
 								<td>
 									<div class="row">
@@ -106,38 +85,32 @@
 										</div>
 									</div>
 								</td>
-								<th><form:label path="repTypeCode">
-										<span class="asterisk">*</span>과제유형</form:label></th>
+								<th><form:label path="repTypeCode"><span class="asterisk">*</span>과제유형</form:label></th>
 								<td>
 									<div class="row">
 										<div class="col s12 select-group"
 											<c:if test="${reportVO.mode eq 'UPDATE' }">style="pointer-events: none;"</c:if>>
-											<form:select path="repTypeCode" title="과제유형을 선택하세요."
-												cssClass="validate[required]"></form:select>
+											<form:select path="repTypeCode" title="과제유형을 선택하세요." cssClass="validate[required]"></form:select>
 										</div>
 									</div>
 								</td>
 							</tr>
 							<tr>
-								<th><form:label path="repSectorCode">
-										<span class="asterisk">*</span>부문</form:label></th>
+								<th><form:label path="repSectorCode"><span class="asterisk">*</span>부문</form:label></th>
 								<td>
 									<div class="row">
 										<div class="col s12 select-group">
-											<form:select path="repSectorCode" title="부문을 선택하세요."
-												cssClass="validate[required]">
+											<form:select path="repSectorCode" title="부문을 선택하세요." cssClass="validate[required]">
 											</form:select>
 										</div>
 									</div>
 								</td>
-								<th><form:label path="repProductClass">
-										<span class="asterisk">*</span>제품군</form:label></th>
+								<th><form:label path="repProductClass"><span class="asterisk">*</span>제품군</form:label></th>
 								<td>
 									<div class="row">
 										<div class="col s12 select-group">
 											<%-- <form:input type="text" path="repProductClass" title="제품군을 입력해주세요." cssClass="validate[required]" /> --%>
-											<form:select path="repProductClass" title="제품군을 선택하세요."
-												cssClass="validate[required]">
+											<form:select path="repProductClass" title="제품군을 선택하세요." cssClass="validate[required]">
 											</form:select>
 										</div>
 									</div>
@@ -146,27 +119,23 @@
 							<c:choose>
 								<c:when test="${repMenuCode eq 'REPORT'}">
 									<tr>
-										<th><form:label path="repLeaderBeltCode">
-												<span class="asterisk">*</span>과제리더벨트</form:label> <i class="ico tip"
-											onclick="popAdvice.open('rep-reader')"></i> <%-- <c:out value="${reportVO.repDivisionCode}"/> --%>
+										<th>
+											<form:label path="repLeaderBeltCode">
+												<span class="asterisk">*</span>과제리더벨트
+											</form:label> <i class="ico tip" onclick="popAdvice.open('rep-reader')"></i>
 										</th>
 										<td>
 											<div class="row">
 												<div class="col s12 select-group">
-													<form:select path="repLeaderBeltCode"
-														title="과제리더벨트를 선택하세요." cssClass="validate[required]">
-													</form:select>
+													<form:select path="repLeaderBeltCode" title="과제리더벨트를 선택하세요." cssClass="validate[required]"></form:select>
 												</div>
 											</div>
 										</td>
-										<th><form:label path="repActionTypeCode">
-												<span class="asterisk">*</span>활동분야</form:label></th>
+										<th><form:label path="repActionTypeCode"><span class="asterisk">*</span>활동분야</form:label></th>
 										<td>
 											<div class="row">
 												<div class="col s12 select-group">
-													<form:select path="repActionTypeCode" title="활동분야를 선택하세요."
-														cssClass="validate[required]">
-													</form:select>
+													<form:select path="repActionTypeCode" title="활동분야를 선택하세요." cssClass="validate[required]"></form:select>
 												</div>
 											</div>
 										</td>
@@ -177,21 +146,17 @@
 										<td>
 											<div class="row">
 												<div class="col s12 select-group">
-													<form:select path="repMbbUseRateCode"
-														title="MBB활용율을 선택하세요." cssClass="validate[required]">
-													</form:select>
+													<form:select path="repMbbUseRateCode" title="MBB활용율을 선택하세요." cssClass="validate[required]"></form:select>
 												</div>
 											</div>
 										</td>
 										<th>활용율 반영년도</th>
-										<td><span id="lblUseRefDt">-</span>년 <form:input
-												type="hidden" path="repUseRefDate" /></td>
+										<td><span id="lblUseRefDt">-</span>년 <form:input type="hidden" path="repUseRefDate" /></td>
 									</tr>
 								</c:when>
 								<c:otherwise>
 									<tr>
-										<th><form:label path="repLeaderBeltCode">
-												<span class="asterisk">* </span>Leader</form:label></th>
+										<th><form:label path="repLeaderBeltCode"><span class="asterisk">* </span>Leader</form:label></th>
 										<td>
 											<div class="row">
 												<div class="col s12 input-text search">
@@ -202,23 +167,18 @@
 												</div>
 											</div>
 										</td>
-										<th><form:label path="repActionTypeCode">
-												<span class="asterisk">*</span>활동분야</form:label></th>
+										<th><form:label path="repActionTypeCode"><span class="asterisk">*</span>활동분야</form:label></th>
 										<td>
 											<div class="row">
 												<div class="col s12 select-group">
-													<form:select path="repActionTypeCode" title="활동분야를 선택하세요."
-														cssClass="validate[required]">
-													</form:select>
+													<form:select path="repActionTypeCode" title="활동분야를 선택하세요." cssClass="validate[required]"></form:select>
 												</div>
 											</div>
 										</td>
 									</tr>
 									<tr>
 										<th style="height: 20px;">분임조</th>
-										<td>${circleVO.deptName} <input type="hidden"
-											name="repCirCode">
-										</td>
+										<td>${circleVO.deptName} <input type="hidden" name="repCirCode"></td>
 										<th>분임조장</th>
 										<td>${circleVO.cirLeaderName}</td>
 									</tr>
@@ -1176,8 +1136,9 @@ function onchange_resultType(obj){
 		onchange_ddlRepDevisionCode();	// 과제유형
 		$("#repTypeCode").val("${reportVO.repTypeCode}");
 		
+		
 		//setDropDown("repProductClass", [], true);
-		$("#repProductClass").val("${reportVO.repProductClass}");
+		
 		
 		if($("#mode").val()==="UPDATE"){
 			//$("#repDivisionCode option").prop("disabled", true); // 바꿀 수 없도록 설정
@@ -1387,16 +1348,14 @@ function onchange_resultType(obj){
 		default:
 			break;
 		}
-		
+
 		if(repDevCd==="2" || repDevCd==="3"){
 			$("#repTypeCode").prop("disabled", true);
-			//$(".act-date").prop("disabled", true);  // 실시 일자 Disabled(5월 수정요청)
-			//$(".act-date").closest("div").find("i.ico").prop("disabled", true);
 			$("#trPlanDate").remove();
 		} else {
 			$("#repTypeCode").prop("disabled", false);
 		}
-		
+
 		changeTitle();
 		setDropDown(targetObjId, arrRepType, true);
 	}
@@ -1531,18 +1490,6 @@ function onchange_resultType(obj){
 		popEmp.open();
 	}
 	
-	// 팝업 호출 함
-	function callPopup_searchLeader(obj){
-
-		popEmp.init();
-		
-		// footer.jsp 내 영역 호출
-		popEmp.returnObjId = $(obj).closest("td").find("input").attr("id");
-		popEmp.returnFunc = callback_popLeader;
-		
-		popEmp.open();
-	}
-	
 	// 팝업에서 돌아올 때 함수
 	function callback_popEmp(objId, data){
 		
@@ -1568,7 +1515,19 @@ function onchange_resultType(obj){
 		
 		$(objTr).find(".report-code").val('${reportVO.repCode}');
 	}
-	
+
+	// 팝업 호출 함
+	function callPopup_searchLeader(obj){
+
+		popEmp.init();
+		
+		// footer.jsp 내 영역 호출
+		popEmp.returnObjId = $(obj).closest("td").find("input").attr("id");
+		popEmp.returnFunc = callback_popLeader;
+		
+		popEmp.open();
+	}
+		
 	// 팝업에서 돌아올 때 함수
 	function callback_popLeader(objId, data){
 		
