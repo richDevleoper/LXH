@@ -13,7 +13,7 @@
 <head>
 	<title>${fn:split(boardVO.boardNm,'>')[fn:length(fn:split(boardVO.boardNm,'>'))-1]}</title>
 	<meta name="keywords" content="" />
-	<meta name="description" content="" />
+	<meta name="description" content="insertForm.jsp" />
 	
 	<link type="text/css" rel="stylesheet" href="<c:url value='/def/attachfile/css/jquery.fileupload.css'/>" />
 	<link type="text/css" rel="stylesheet" href="<c:url value='/def/attachfile/css/jquery.fileupload-ui.css'/>" />
@@ -62,8 +62,7 @@
 								<td colspan="3">
 									<div class="row">
 										<div class="col s12 input-text">
-											<form:input type="text" id="txtRepName" path="repName"
-												value="" title="과제명을 입력해주세요." cssClass="validate[required]" />
+											<form:input type="text" id="txtRepName" path="repName" value="" title="과제명을 입력해주세요." cssClass="validate[required]" />
 										</div>
 									</div>
 								</td>
@@ -227,7 +226,7 @@
 																	<form:input type="text"
 																		path="repDetailList[${status.index}].repPlanStartDate"
 																		title="일정계획을 입력하세요."
-																		cssClass="datepicker validate[required]" />
+																		cssClass="datepicker validate[required] date-6sigma" />
 																	<i class="ico calendar"></i>
 																</div>
 															</div>
@@ -537,34 +536,27 @@
 										<div class="col s8">
 											<div class="col s2 input-text pd-r10" style="width: 20%">
 												<form:input type="hidden" path="repKeyword" />
-												<input type="text" id="txtRepKeyword_1" name="REP_KEYWORD"
-													class="obj-rep-keyword validate[required]" value=""
-													title="키워드를 입력하세요." onkeyup="onkeypress_repKeyword(this)"
-													cssClass="">
+												<input type="text" id="txtRepKeyword_1" name="REP_KEYWORD" class="obj-rep-keyword validate[required]" value=""
+													title="키워드를 입력하세요." onkeyup="onkeypress_repKeyword(this)" cssClass="">
 											</div>
 											<div class="col s2 input-text pd-r10" style="width: 20%">
-												<input type="text" id="txtRepKeyword_2" name="REP_KEYWORD"
-													class="obj-rep-keyword" value="" title="키워드를 입력하세요."
+												<input type="text" id="txtRepKeyword_2" name="REP_KEYWORD" class="obj-rep-keyword" value="" title="키워드를 입력하세요."
 													onkeyup="onkeypress_repKeyword(this)">
 											</div>
 											<div class="col s2 input-text pd-r10" style="width: 20%">
-												<input type="text" id="txtRepKeyword_3" name="REP_KEYWORD"
-													class="obj-rep-keyword" value="" title="키워드를 입력하세요."
+												<input type="text" id="txtRepKeyword_3" name="REP_KEYWORD" class="obj-rep-keyword" value="" title="키워드를 입력하세요."
 													onkeyup="onkeypress_repKeyword(this)">
 											</div>
 											<div class="col s2 input-text pd-r10" style="width: 20%">
-												<input type="text" id="txtRepKeyword_4" name="REP_KEYWORD"
-													class="obj-rep-keyword" value="" title="키워드를 입력하세요."
+												<input type="text" id="txtRepKeyword_4" name="REP_KEYWORD" class="obj-rep-keyword" value="" title="키워드를 입력하세요."
 													onkeyup="onkeypress_repKeyword(this)">
 											</div>
 											<div class="col s2 input-text pd-r10" style="width: 20%">
-												<input type="text" id="txtRepKeyword_5" name="REP_KEYWORD"
-													class="obj-rep-keyword" value="" title="키워드를 입력하세요."
+												<input type="text" id="txtRepKeyword_5" name="REP_KEYWORD" class="obj-rep-keyword" value="" title="키워드를 입력하세요."
 													onkeyup="onkeypress_repKeyword(this)">
 											</div>
 										</div>
-										<span class="col s4 text-bul" style="letter-spacing: -1px">
-											과제 검색 시 키워드를 생성합니다.(띄어쓰기 없이 입력) </span>
+										<span class="col s4 text-bul" style="letter-spacing: -1px">과제 검색 시 키워드를 생성합니다.(띄어쓰기 없이 입력) </span>
 									</div>
 								</td>
 							</tr>
@@ -592,11 +584,11 @@
 						<caption></caption>
 						<colgroup>
 							<col style="width: 180px">
+							<col style="width: 200px">
 							<col>
-							<col style="width: 70px">
-							<col style="width: 65px">
-							<col style="width: 80px">
-							<col style="width: 65px">
+                            <col style="width: 80px">
+                            <col style="width: 80px">
+                            <col style="width: 80px">
 							<col style="width: 70px">
 						</colgroup>
 						<thead>
@@ -613,82 +605,63 @@
 						<!-- # To-Do -->
 						<tbody>
 
-							<script>
+<script>
 	let memMaxSeq = -1;
 	let resMaxSeq = -1;
 	let indMaxSeq = -1;
 </script>
-							<c:forEach var="item" items="${reportVO.repTeamMemberList}"
-								varStatus="status">
+							<c:forEach var="item" items="${reportVO.repTeamMemberList}" varStatus="status">
 
-								<tr class="tr-team-role-${item.repTeamMemRole}"
-									idSeq="repTeamMemberList${status.index}"
-									nameSeq="repTeamMemberList[${status.index}]">
-
-
-									<th><label
-										<c:if test="${item.repTeamMemRole eq '3' || item.repTeamMemRole eq '5'}">class="color primary"</c:if>>
-											<c:if test="${item.repTeamMemRole ne '4' && item.repTeamMemRole ne '2'}">
-												<span class="asterisk">*</span>
-											</c:if> 
-											${item.repTeamMemRoleNm}
-									</label> <script>
-                                                	memMaxSeq = Math.max(memMaxSeq, "${status.index}");
-                                                	</script> <form:input
-											type="hidden" cssClass="report-code"
-											path="repTeamMemberList[${status.index}].repCode" /> <form:input
-											type="hidden" cssClass="team-code"
-											path="repTeamMemberList[${status.index}].repTeamCode" /> <form:input
-											type="hidden" cssClass="team-dept-cd"
-											path="repTeamMemberList[${status.index}].deptCode" /> <form:input
-											type="hidden" cssClass="team-role-cd"
-											path="repTeamMemberList[${status.index}].repTeamMemRole" /> <form:input
-											type="hidden" cssClass="team-com-no"
-											path="repTeamMemberList[${status.index}].comNo" /> <form:input
-											type="hidden" cssClass="team-mem-nm"
-											path="repTeamMemberList[${status.index}].repTeamMemName" /> <form:input
-											type="hidden" cssClass="team-jobx-cd"
-											path="repTeamMemberList[${status.index}].comJobxCode" /> <form:input
-											type="hidden" cssClass="team-position-cd"
-											path="repTeamMemberList[${status.index}].comPositionCode" />
-										<form:input type="hidden" cssClass="team-belt-cd"
-											path="repTeamMemberList[${status.index}].beltCode" /></th>
-									<td class="pd3">
+								<tr class="tr-team-role-${item.repTeamMemRole}" idSeq="repTeamMemberList${status.index}" nameSeq="repTeamMemberList[${status.index}]">
+									<th>
+									    <label <c:if test="${item.repTeamMemRole eq '3' || item.repTeamMemRole eq '5'}">class="color primary"</c:if> >
+										<c:if test="${item.repTeamMemRole ne '4' && item.repTeamMemRole ne '2'}">
+										    <span class="asterisk">*</span>
+										</c:if> 
+										${item.repTeamMemRoleNm}
+										</label> 
+										<script>
+	                                        memMaxSeq = Math.max(memMaxSeq, "${status.index}");
+	                                    </script> 
+	                                    <form:input type="hidden" cssClass="report-code" path="repTeamMemberList[${status.index}].repCode" />
+	                                    <form:input type="hidden" cssClass="team-code" path="repTeamMemberList[${status.index}].repTeamCode" />
+	                                    <form:input type="hidden" cssClass="team-dept-cd" path="repTeamMemberList[${status.index}].deptCode" />
+	                                    <form:input type="hidden" cssClass="team-role-cd" path="repTeamMemberList[${status.index}].repTeamMemRole" />
+										<form:input type="hidden" cssClass="team-com-no" path="repTeamMemberList[${status.index}].comNo" /> 
+										<%-- <form:input type="hidden" cssClass="team-mem-nm" path="repTeamMemberList[${status.index}].repTeamMemName" /> --%>
+										<form:input type="hidden" cssClass="team-jobx-cd" path="repTeamMemberList[${status.index}].comJobxCode" /> 
+										<form:input type="hidden" cssClass="team-position-cd" path="repTeamMemberList[${status.index}].comPositionCode" />
+										<form:input type="hidden" cssClass="team-belt-cd" path="repTeamMemberList[${status.index}].beltCode" />
+									</th>
+									<td class="td-dept-nm">${item.deptName}</td>
+									<td class="pd3"><%-- ${item.repTeamMemName} --%>
 										<div class="row">
 											<div class="col s12 input-text search">
-
 												<c:choose>
 													<c:when test="${item.repTeamMemRole ne '4' && item.repTeamMemRole ne '2'}">
-														<form:input type="text"
-															path='repTeamMemberList[${status.index}].deptName'
-															readonly="true" title="(팀구성)필수인원을 지정해하세요."
-															cssClass="validate[required]" />
+														<form:input type="text" path='repTeamMemberList[${status.index}].repTeamMemName' readonly="true" title="(팀구성)필수인원을 지정해하세요." cssClass="validate[required]" />
 													</c:when>
 													<c:otherwise>
-														<form:input type="text"
-															path='repTeamMemberList[${status.index}].deptName'
-															readonly="true" />
+														<form:input type="text" path='repTeamMemberList[${status.index}].repTeamMemName' readonly="true" />
 													</c:otherwise>
 												</c:choose>
-
-
 												<button type="button" class="btn-search-emp">검색</button>
 											</div>
 										</div>
 									</td>
-									<td class="td-user-nm">${item.repTeamMemName}</td>
 									<td class="td-com-jobx">${item.comJobxNm}</td>
 									<td class="td-com-pos">${item.comPositionNm}</td>
 									<td class="td-belt-nm">${item.beltNm}</td>
-									<td class="pd3"><c:if test="${item.repTeamMemRole eq '2'}">
+									<td class="pd3">
+									    <c:if test="${item.repTeamMemRole eq '2'}">
 											<div class="btn-group">
-												<button type="button"
-													class="btn light-gray btn-team-member-add">추가</button>
+												<button type="button" class="btn light-gray btn-team-member-add">추가</button>
 											</div>
-										</c:if></td>
+										</c:if>
+									</td>
 								</tr>
 							</c:forEach>
-							<script type="text/javascript">
+<script type="text/javascript">
 
 	$(".btn-team-member-add").each(function(i, o){ 
 	    if(i>0){
@@ -724,7 +697,7 @@
 			<div class="list-content">
 				<div class="list-table list">
 
-					<script>
+<script>
 function onchange_resultType(obj){
 	if(obj.value==="7"){
 		$(obj).closest("tr").find(".txt-result-value").val("").prop("disabled", true);	
@@ -736,19 +709,19 @@ function onchange_resultType(obj){
 					<table class="centered">
 						<caption></caption>
 						<colgroup>
-							<col>
-							<col>
-							<col>
-							<col>
-							<col>
-							<col>
-							<col>
+							<col style="width:90px">
+							<col style="width:120px">
+							<col style="width:90px">
+							<col style="width:100px">
+							<col style="width:90px">
+							<col style="width:100px">
+							<col style="width:100px">
 							<col>
 							<col style="width: 70px">
 						</colgroup>
 						<thead>
 							<tr>
-								<th colspan="9">예상성과(억원)</th>
+								<th colspan="9">예상성과(백만원)</th>
 								<!-- TB_REPORT_RESULT -->
 							</tr>
 						</thead>
@@ -757,59 +730,47 @@ function onchange_resultType(obj){
 								varStatus="status">
 								<tr idSeq="repResultList${status.index}"
 									nameSeq="repResultList[${status.index}]">
-									<th class="pd0 pd-r23"><form:label
-											path="repResultList[${status.index}].repResultTypeCode">
-											<span class="asterisk only-first">*</span>성과항목</form:label></th>
+									<th class="pd0 align-center">
+									    <form:label path="repResultList[${status.index}].repResultTypeCode">
+										<span class="asterisk only-first">*</span>성과항목</form:label>
+								    </th>
 									<td class="pd3">
 										<div class="row">
 											<div class="col s12 select-group">
 												<script>
-			                                               		resMaxSeq = Math.max(resMaxSeq, "${status.index}");
-			                                               	</script>
-												<form:input type="hidden" cssClass="result-code"
-													path="repResultList[${status.index}].repResultCode" />
-												<form:input type="hidden" cssClass="result-report-code"
-													path="repResultList[${status.index}].repCode" />
-
+			                                   		resMaxSeq = Math.max(resMaxSeq, "${status.index}");
+			                                    </script>
+												<form:input type="hidden" cssClass="result-code" path="repResultList[${status.index}].repResultCode" />
+												<form:input type="hidden" cssClass="result-report-code" path="repResultList[${status.index}].repCode" />
 												<c:choose>
 													<c:when test="${status.first}">
-														<form:select
-															path="repResultList[${status.index}].repResultTypeCode"
-															title="성과항목을 선택하세요"
-															cssClass="only-first validate[required]"
+														<form:select path="repResultList[${status.index}].repResultTypeCode" title="성과항목을 선택하세요" cssClass="only-first validate[required]"
 															onchange="onchange_resultType(this)">
 															<c:forEach var="option" items="${codeResultTy}">
-																<form:option value="${option.codeId}"
-																	label="${option.codeNm}" />
+																<form:option value="${option.codeId}" label="${option.codeNm}" />
 															</c:forEach>
 														</form:select>
 													</c:when>
 													<c:otherwise>
-														<form:select
-															path="repResultList[${status.index}].repResultTypeCode"
-															title="성과항목을 선택하세요" onchange="onchange_resultType(this)">
+														<form:select path="repResultList[${status.index}].repResultTypeCode" title="성과항목을 선택하세요" onchange="onchange_resultType(this)">
 															<c:forEach var="option" items="${codeResultTy}">
-																<form:option value="${option.codeId}"
-																	label="${option.codeNm}" />
+																<form:option value="${option.codeId}" label="${option.codeNm}" />
 															</c:forEach>
 														</form:select>
 													</c:otherwise>
 												</c:choose>
-
 											</div>
 										</div>
 									</td>
-									<th class="pd0 pd-r23"><label for="txtRepResultWithinYear">년내(당해년)</label></th>
+									<th class="pd0 align-center"><label for="txtRepResultWithinYear">년내(당해년)</label></th>
 									<td class="pd3">
 										<div class="row">
 											<div class="col s12 input-text">
-												<form:input type="number"
-													path="repResultList[${status.index}].repResultWithinYear"
-													title="년내 입력" cssClass="txt-result-value input-text" />
+												<form:input type="number" path="repResultList[${status.index}].repResultWithinYear" title="년내 입력" cssClass="txt-result-value input-text" />
 											</div>
 										</div>
 									</td>
-									<th class="pd0 pd-r23"><label for="txtRepResultYear">년간(12개월)</label></th>
+									<th class="pd0 align-center"><label for="txtRepResultYear">년간(12개월)</label></th>
 									<td class="pd3">
 										<div class="row">
 											<div class="col s12 input-text">
@@ -819,15 +780,15 @@ function onchange_resultType(obj){
 											</div>
 										</div>
 									</td>
-									<th class="pd0 pd-r10"><label for="txtRepResultCalLogic">산출
-											Logic</label> <c:if test="${status.first}">
+									<th class="pd0 align-center"><label for="txtRepResultCalLogic">산출 Logic</label> 
+									    <c:if test="${status.first}">
 											<i class="ico tip" onclick="popAdvice.open('cal-logic');"><em>tip.</em></i>
-										</c:if></th>
+										</c:if>
+									</th>
 									<td class="pd3">
 										<div class="row">
 											<div class="col s12 input-text">
-												<form:input type="text"
-													path="repResultList[${status.index}].repResultCalLogic"
+												<form:input type="text" path="repResultList[${status.index}].repResultCalLogic"
 													title="산출 Logic" cssClass="txt-result-value input-text" />
 											</div>
 										</div>
@@ -836,12 +797,10 @@ function onchange_resultType(obj){
 										<div class="btn-group">
 											<c:choose>
 												<c:when test="${status.first}">
-													<button type="button"
-														class="btn light-gray btn-team-result-add">추가</button>
+													<button type="button" class="btn light-gray btn-team-result-add">추가</button>
 												</c:when>
 												<c:otherwise>
-													<button type="button"
-														class="btn light-gray btn-team-result-remove">삭제</button>
+													<button type="button" class="btn light-gray btn-team-result-remove">삭제</button>
 												</c:otherwise>
 											</c:choose>
 										</div>
@@ -1081,7 +1040,7 @@ function onchange_resultType(obj){
 	let vMenuType = "${reportVO.repMenuCode}";
 	
 </script>
-	<script type="text/javascript">
+<script type="text/javascript">
 	$(document).ready(init);
 	
 	function init(){
@@ -1256,6 +1215,34 @@ function onchange_resultType(obj){
 			}
 		});
 		
+		// 6시그마 날짜 순차 체크
+		$(".date-6sigma").off("change").on("change", function(e){
+
+		    checkDateOrder("date-6sigma", this);
+		});
+		
+		// 일반과제, 10+과제 날짜 순차 체크
+		$(".act-date").off("change").on("change", function(e){
+
+		    checkDateOrder("act-date", this);
+		});
+		
+	}
+	
+	// 순서대로 가면서 현재 입력된 날짜보다 큰 날짜가 있는지 체크
+	function checkDateOrder(className, currObj){
+		
+	    $("."+className).each(function(i,o){
+	    
+	        let currObjDt = $(currObj).val();
+	        let tmpObjDt = $(o).val();
+	        //console.log("현재ID : ", $(currObj).attr("id"));
+	        if(currObjDt<tmpObjDt){
+	            alert("이전 단계 이전의 날짜를 선택할 수 없습니다.");
+	            $(currObj).val("");
+	            return false;
+	        }
+	    });
 	}
 	
 	function addRow(mode, obj){
@@ -1359,7 +1346,7 @@ function onchange_resultType(obj){
 		changeTitle();
 		setDropDown(targetObjId, arrRepType, true);
 	}
-	
+
 	function onchange_ddlRepSectorCode(e){
 		// 부문 선택시 해당하는 제품군만 리스트에 보여준다.
 		let sectorCode = $("#repSectorCode").val();		//부문
@@ -1493,14 +1480,27 @@ function onchange_resultType(obj){
 	// 팝업에서 돌아올 때 함수
 	function callback_popEmp(objId, data){
 		
+		let comNoExists = false;
+		$(".team-com-no").each(function(i, o){
+		    if($(o).attr("id").indexOf(objId.substring(0, objId.indexOf(".")))===-1){
+		    	if($(o).val()===data.comNo){
+		    		comNoExists = true;
+		    	}
+		    }
+		});
+		
+		if(comNoExists){
+			alert("이미 지정된 사원입니다.");
+			return false;
+		}
+		
 		//data = {"comNo":"00208995","userId":"parksoomin","userName":"박수민","deptFullName":"울산설비팀(전기PM／변전실)","comJobx":"사원","comPosition":"생산파트장","comCertBelt":null}
 		let obj = document.getElementById(objId);
 		let objTr = $(obj).closest("tr");
-		let objIdComNo = objId.replace("deptName", "comNo");
-		$(obj).val(data.deptFullName);
-		$(objIdComNo).val(data.comNo);
+		$(obj).val(data.userName);
 		
-		$(objTr).find(".td-user-nm").text(data.userName);
+		//$(objTr).find(".td-user-nm").text(data.userName);
+		$(objTr).find(".td-dept-nm").text(data.deptFullName);
 		$(objTr).find(".td-com-jobx").text(data.comJobxNm);
 		$(objTr).find(".td-com-pos").text(data.comPositionNm);
 		$(objTr).find(".td-belt-nm").text(data.comCertBeltNm);

@@ -1,11 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
-<%@ taglib prefix="string" uri="/WEB-INF/tld/string-taglib.tld" %>
+<%@ taglib prefix="string" uri="/WEB-INF/tld/string-taglib.tld"%>
 <%@ taglib prefix="attachfile" uri="http://www.freedi.kr/attachfile-taglib"%>
 
 <!DOCTYPE html PUBLIC "-/W3C/DTD XHTML 1.0 Transitional/EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -13,8 +13,8 @@
 <head>
 	<title>${fn:split(boardVO.boardNm,'>')[fn:length(fn:split(boardVO.boardNm,'>'))-1]}</title>
 	<meta name="keywords" content="" />
-	<meta name="description" content="" />
-	
+	<meta name="description" content="insertFormStat1.jsp" />
+
 	<link type="text/css" rel="stylesheet" href="<c:url value='/def/attachfile/css/jquery.fileupload.css'/>" />
 	<link type="text/css" rel="stylesheet" href="<c:url value='/def/attachfile/css/jquery.fileupload-ui.css'/>" />
 	<script type="text/javascript" src="<c:url value='/def/attachfile/js/jquery.fileupload-tmpl.js'/>"></script>
@@ -25,511 +25,561 @@
 	<script type="text/javascript" src="<c:url value='/def/attachfile/js/jquery.fileupload-ui.js'/>"></script>
 	<script type="text/javascript" src="<c:url value='/def/attachfile/js/jquery.fileupload-jquery-ui.js'/>"></script>
 	<script type="text/javascript" src="<c:url value='/def/attachfile/js/attachfile-fileuploader.js'/>"></script>
-	
+
 	<style>
 		.td-user-nm, .td-com-jobx, .td-com-pos, .td-belt-nm  { text-align: center !important;}
 	</style>
 
 </head>
 <body>
-<form:form commandName="frmReport" id="defaultForm" name="defaultForm"  action="${action}" onsubmit="return false" method="post" modelAttribute="reportVO">
-<form:hidden path="repStatusCode" />
-<form:hidden path="repCode" />
-<form:hidden path="repMenuCode" />
-<form:hidden path="repCurrStepCode" />
-<form:hidden path="mode" />
-                        <!-- breadcrumb -->
-                        <div class="breadcrumb">
-                            <ul>
-                                <li>과제등록 | <span style="color: #9a3530b3;">일반과제<c:if test="${reportVO.repMenuCode}"> 및 10+No Policy 활동과제</c:if>는 활동결과까지 함께 등록합니다.</span></li>
-                            </ul>
-                        </div>
-                        <p class="content_title">1. 과제정보</p>
-                        <div class="list-wrap">
-                            <div class="list-content">
-                                <div class="list-table list">
-                                    <table>
-                                        <caption></caption>
-                                        <colgroup>
-                                            <col style="width:180px">
-                                            <col>
-                                            <col style="width:180px">
-                                            <col>
-                                        </colgroup>
-                                        <tbody>
-                                            <tr>
-                                                <th><form:label path="repName"><span class="asterisk">*</span>과제명</form:label></th>
-                                                <td colspan="3">
-                                                    <div class="row">
-                                                        <div class="col s12 input-text">
-                                                            <form:input type="text" id="txtRepName" path="repName" value="" title="과제명을 입력해주세요." cssClass="validate[required]"/>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th><form:label path="repDivisionCode"><span class="asterisk">*</span>6σ Full Process여부</form:label> <i class="ico tip" onclick="popAdvice.open('6sigma-yn')"><em>tip.</em></i></th>
-                                                <td>
-                                                    <div class="row">
-                                                        <div class="col s12 select-group">
-                                                        <c:choose>  
-															<c:when test="${reportVO.mode eq 'UPDATE' }">
-																<form:input type="hidden" path="repDivisionCode"/> 
-																<select id="ddlRepDivisionCode" title="6σ Full Process여부 선택" disabled="disabled">
-																	<c:forEach var="item" items="${divisionCode}">
-																		<option value="${item.codeId}" <c:if test="${item.codeId eq reportVO.repDivisionCode }">selected="selected"</c:if>>${item.codeNm}</option>
-																	</c:forEach>
-	                                                            </select>
-															</c:when>
-															<c:otherwise>
-																<form:select path="repDivisionCode" title="6σ Full Process여부 선택" cssClass="validate[required]" disabled="true">
-																	<c:forEach var="item" items="${divisionCode}">
-																		<option value="${item.codeId}" <c:if test="${item.codeId eq reportVO.repDivisionCode }">selected="selected"</c:if>>${item.codeNm}</option>
-																	</c:forEach>
-	                                                            </form:select>
-															</c:otherwise>
-														</c:choose>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <th><form:label path="repTypeCode"><span class="asterisk">*</span>과제유형</form:label></th>
-                                                <td>
-                                                    <div class="row">
-                                                        <div class="col s12 select-group" <c:if test="${reportVO.mode eq 'UPDATE' }">style="pointer-events: none;"</c:if>>
-                                                        <c:choose>  
-															<c:when test="${reportVO.mode eq 'UPDATE' }">
-																<form:input type="hidden" path="repTypeCode"/> 
-																<select id="ddlRepTypeCode" title="6σ Full Process여부 선택" disabled="disabled"></select>
-															</c:when>
-															<c:otherwise>
-																<form:select path="repTypeCode" title="과제유형을 선택하세요." cssClass="validate[required]"></form:select>
-															</c:otherwise>
-														</c:choose>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th><form:label path="repSectorCode"><span class="asterisk">*</span>부문</form:label></th>
-                                                <td>
-                                                    <div class="row">
-                                                        <div class="col s12 select-group">
-                                                            <form:select path="repSectorCode" title="부문을 선택하세요." cssClass="validate[required]">
-                                                            </form:select>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <th><form:label path="repProductClass"><span class="asterisk">*</span>제품군</form:label></th>
-                                                <td>
-                                                    <div class="row">
-                                                        <div class="col s12 select-group">
-                                                            <%-- <form:input type="text" path="repProductClass" title="제품군을 입력해주세요." cssClass="validate[required]" /> --%>
-                                                            <form:select path="repProductClass" title="제품군을 선택하세요." cssClass="validate[required]">
-                                                            </form:select>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-<c:choose>  
-	<c:when test="${repMenuCode eq 'REPORT'}">
-                                            <tr>
-                                                <th><form:label path="repLeaderBeltCode"><span class="asterisk">*</span>과제리더벨트</form:label> <i class="ico tip" onclick="popAdvice.open('rep-reader')"></i>
-                                                <%-- <c:out value="${reportVO.repDivisionCode}"/> --%>
-                                                </th>
-                                                <td>
-                                                    <div class="row">
-                                                        <div class="col s12 select-group">
-                                                            <form:select path="repLeaderBeltCode" title="과제리더벨트를 선택하세요." cssClass="validate[required]">
-                                                            </form:select>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <th><form:label path="repActionTypeCode"><span class="asterisk">*</span>활동분야</form:label></th>
-                                                <td>
-                                                    <div class="row">
-                                                        <div class="col s12 select-group">
-                                                            <form:select path="repActionTypeCode" title="활동분야를 선택하세요." cssClass="validate[required]">
-                                                            </form:select>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th><form:label path="repMbbUseRateCode"><span class="asterisk">*</span>MBB활용율</form:label></th>
-                                                <td>
-                                                    <div class="row">
-                                                        <div class="col s12 select-group">
-                                                            <form:select path="repMbbUseRateCode" title="MBB활용율을 선택하세요." cssClass="validate[required]">
-                                                            </form:select>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <th>활용율 반영년도</th>
-                                                <td><span id="lblUseRefDt">-</span>년 <form:input type="hidden" path="repUseRefDate" /></td>
-                                            </tr>
-	</c:when>
-	<c:otherwise>
-                                            <tr>
-                                                <th><form:label path="repLeaderBeltCode"><span class="asterisk">* </span>Leader</form:label>
-                                                </th>
-                                                <td colspan="3">
-                                                    <div class="row">
-                                                        <div class="col s4 input-text search">
-                                                            <form:input type="hidden" path="repLeaderCode"/>
-                                                            <form:input type="text" path="repLeaderName" readonly="true"/>
-                                                            <button type="button" class="btn-search-leader">검색</button>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                
-                                            </tr>
-                                            <tr>
-                                                <th style="height: 20px;">분임조</th>
-                                                <td>
-                                                   	${circleVO.deptName}
-                                                   	<input type="hidden" name="repCirCode">
-                                                </td>
-                                                <th>분임조장</th>
-                                                <td>
-                                                 	${circleVO.cirLeaderName}
-                                                </td>
-                                            </tr>		
-	</c:otherwise>
-</c:choose>
+	<form:form commandName="frmReport" id="defaultForm" name="defaultForm" action="${action}" onsubmit="return false" method="post" modelAttribute="reportVO">
+		<form:hidden path="repStatusCode" />
+		<form:hidden path="repCode" />
+		<form:hidden path="repMenuCode" />
+		<form:hidden path="repCurrStepCode" />
+		<form:hidden path="mode" />
+		<!-- breadcrumb -->
+		<div class="breadcrumb">
+			<ul>
+				<li>과제등록 | <span style="color: #9a3530b3;">일반과제<c:if test="${reportVO.repMenuCode eq 'REPORT'}"> 및 10+No Policy 활동과제</c:if>는 활동결과까지 함께 등록합니다.</span></li>
+			</ul>
+		</div>
+		<p class="content_title">1. 과제정보</p>
+		<div class="list-wrap">
+			<div class="list-content">
+				<div class="list-table list">
+					<table>
+						<caption></caption>
+						<colgroup>
+							<col style="width: 180px">
+							<col>
+							<col style="width: 180px">
+							<col>
+						</colgroup>
+						<tbody>
+							<tr>
+								<th><form:label path="repName">
+										<span class="asterisk">*</span>과제명</form:label></th>
+								<td colspan="3">
+									<div class="row">
+										<div class="col s12 input-text">
+											<form:input type="text" id="txtRepName" path="repName" value="" title="과제명을 입력해주세요." cssClass="validate[required]" />
+										</div>
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<th><form:label path="repDivisionCode">
+										<span class="asterisk">*</span>6σ Full Process여부</form:label> <i
+									class="ico tip" onclick="popAdvice.open('6sigma-yn')"><em>tip.</em></i></th>
+								<td>
+									<div class="row">
+										<div class="col s12 select-group">
+											<c:choose>
+												<c:when test="${reportVO.mode eq 'UPDATE' }">
+													<form:input type="hidden" path="repDivisionCode" />
+													<select id="ddlRepDivisionCode"
+														title="6σ Full Process여부 선택" disabled="disabled">
+														<c:forEach var="item" items="${divisionCode}">
+															<option value="${item.codeId}"
+																<c:if test="${item.codeId eq reportVO.repDivisionCode }">selected="selected"</c:if>>${item.codeNm}</option>
+														</c:forEach>
+													</select>
+												</c:when>
+												<c:otherwise>
+													<form:select path="repDivisionCode"
+														title="6σ Full Process여부 선택" cssClass="validate[required]"
+														disabled="true">
+														<c:forEach var="item" items="${divisionCode}">
+															<option value="${item.codeId}"
+																<c:if test="${item.codeId eq reportVO.repDivisionCode }">selected="selected"</c:if>>${item.codeNm}</option>
+														</c:forEach>
+													</form:select>
+												</c:otherwise>
+											</c:choose>
+										</div>
+									</div>
+								</td>
+								<th><form:label path="repTypeCode">
+										<span class="asterisk">*</span>과제유형</form:label></th>
+								<td>
+									<div class="row">
+										<div class="col s12 select-group"
+											<c:if test="${reportVO.mode eq 'UPDATE' }">style="pointer-events: none;"</c:if>>
+											<c:choose>
+												<c:when test="${reportVO.mode eq 'UPDATE' }">
+													<form:input type="hidden" path="repTypeCode" />
+													<select id="ddlRepTypeCode" title="6σ Full Process여부 선택"
+														disabled="disabled"></select>
+												</c:when>
+												<c:otherwise>
+													<form:select path="repTypeCode" title="과제유형을 선택하세요."
+														cssClass="validate[required]"></form:select>
+												</c:otherwise>
+											</c:choose>
+										</div>
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<th><form:label path="repSectorCode">
+										<span class="asterisk">*</span>부문</form:label></th>
+								<td>
+									<div class="row">
+										<div class="col s12 select-group">
+											<form:select path="repSectorCode" title="부문을 선택하세요."
+												cssClass="validate[required]">
+											</form:select>
+										</div>
+									</div>
+								</td>
+								<th><form:label path="repProductClass">
+										<span class="asterisk">*</span>제품군</form:label></th>
+								<td>
+									<div class="row">
+										<div class="col s12 select-group">
+											<%-- <form:input type="text" path="repProductClass" title="제품군을 입력해주세요." cssClass="validate[required]" /> --%>
+											<form:select path="repProductClass" title="제품군을 선택하세요."
+												cssClass="validate[required]">
+											</form:select>
+										</div>
+									</div>
+								</td>
+							</tr>
+							<c:choose>
+								<c:when test="${repMenuCode eq 'REPORT'}">
+									<tr>
+										<th><form:label path="repLeaderBeltCode">
+												<span class="asterisk">*</span>과제리더벨트</form:label> <i class="ico tip"
+											onclick="popAdvice.open('rep-reader')"></i> <%-- <c:out value="${reportVO.repDivisionCode}"/> --%>
+										</th>
+										<td>
+											<div class="row">
+												<div class="col s12 select-group">
+													<form:select path="repLeaderBeltCode"
+														title="과제리더벨트를 선택하세요." cssClass="validate[required]">
+													</form:select>
+												</div>
+											</div>
+										</td>
+										<th><form:label path="repActionTypeCode">
+												<span class="asterisk">*</span>활동분야</form:label></th>
+										<td>
+											<div class="row">
+												<div class="col s12 select-group">
+													<form:select path="repActionTypeCode" title="활동분야를 선택하세요."
+														cssClass="validate[required]">
+													</form:select>
+												</div>
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<th><form:label path="repMbbUseRateCode">
+												<span class="asterisk">*</span>MBB활용율</form:label></th>
+										<td>
+											<div class="row">
+												<div class="col s12 select-group">
+													<form:select path="repMbbUseRateCode"
+														title="MBB활용율을 선택하세요." cssClass="validate[required]">
+													</form:select>
+												</div>
+											</div>
+										</td>
+										<th>활용율 반영년도</th>
+										<td><span id="lblUseRefDt">-</span>년 <form:input
+												type="hidden" path="repUseRefDate" /></td>
+									</tr>
+								</c:when>
+								<c:otherwise>
+									<tr>
+										<th><form:label path="repLeaderBeltCode">
+												<span class="asterisk">* </span>Leader</form:label></th>
+										<td colspan="3">
+											<div class="row">
+												<div class="col s4 input-text search">
+													<form:input type="hidden" path="repLeaderCode" />
+													<form:input type="text" path="repLeaderName"
+														readonly="true" />
+													<button type="button" class="btn-search-leader">검색</button>
+												</div>
+											</div>
+										</td>
 
-                                            <tr id="trRepDate1" class="tr-rep-date">
-                                                <th><span class="asterisk">*</span>일정계획<br>(완료예정일)</th>
-                                                <td colspan="3">
+									</tr>
+									<tr>
+										<th style="height: 20px;">분임조</th>
+										<td>${circleVO.deptName}<input type="hidden"
+											name="repCirCode">
+										</td>
+										<th>분임조장</th>
+										<td>${circleVO.cirLeaderName}</td>
+									</tr>
+								</c:otherwise>
+							</c:choose>
 
-<c:choose>  
-	<c:when test="${reportVO.repDivisionCode eq '1'}">
-	
-                                                   <div class="list-wrap toggle">
-                                                        <!-- [D] 상태에따라 열기/닫기 텍스트 구분해주세요. -->
-                                                        <span class="blind">열기/닫기</span>
-                                                        <ul>
-                                                        	
-		<c:forEach var="item" items="${reportVO.repDetailList}" varStatus="status">
+							<tr id="trRepDate1" class="tr-rep-date">
+								<th><span class="asterisk">*</span>일정계획<br>(완료예정일)</th>
+								<td colspan="3"><c:choose>
+										<c:when test="${reportVO.repDivisionCode eq '1'}">
 
+											<div class="list-wrap toggle">
+												<!-- [D] 상태에따라 열기/닫기 텍스트 구분해주세요. -->
+												<span class="blind">열기/닫기</span>
+												<ul>
 
-                                                            <!-- [D] 열린상태일 경우 active 클래스를 추가해주세요. -->
-                                                            <li> <!-- class="active" -->
-                                                                <div class="list-content">
-                                                                    <div class="list-table list">
-                                                                        <table>
-                                                                            <caption>일정계획 및 수행 테이블</caption>
-                                                                            <colgroup>
-                                                                                <col style="width:60px">
-                                                                                <col style="width:145px">
-                                                                                <col>
-                                                                                <col style="width:80px">
-                                                                                <col style="width:80px">
-                                                                                <col style="width:80px">
-                                                                            </colgroup>
-                                                                            <thead>
-                                                                                <tr>
-                                                                                    <th>구분</th>
-                                                                                    <th>Define</th>
-                                                                                    <th colspan="4">활동요약</th>
-                                                                                </tr>
-                                                                            </thead>
-                                                                            <tbody>
-                                                                                <tr>
-                                                                                    <td colspan="6" class="pd0 border0">
-                                                                                        <div class="toggle-box" <c:if test="${item.repStatus eq '1'}">style="display: block;"</c:if>>
-                                                                                            <div class="list-table list">
-                                                                                                <table>
-                                                                                                    <caption>일정계획 및 수행 테이블</caption>
-                                                                                                    <colgroup>
-                                                                                                        <col style="width:60px">
-                                                                                                        <col style="width:145px">
-                                                                                                        <col>
-                                                                                                        <col style="width:80px">
-                                                                                                        <col style="width:80px">
-                                                                                                        <col style="width:80px">
-                                                                                                    </colgroup>
-                                                                                                    <tbody>
-                                                                                                        <tr>
-                                                                                                            <td>계획</td>
-                                                                                                            <td class="pd3">
-                                                                                                                <div class="row">
-                                                                                                                    <div class="col s12 input-text input-date">
-	<form:input type="hidden" path="repDetailList[${status.index}].repStepCode"/>
-	<form:input type="hidden" path="repDetailList[${status.index}].repStatus"/>                                                                                                                    
-	<form:input type="text" path="repDetailList[${status.index}].repPlanStartDate" cssClass="datepicker validate[required]" />
-                                                                                                                        <i class="ico calendar"></i>
-                                                                                                                    </div>
-                                                                                                                </div>
-                                                                                                            </td>
-                                                                                                            <td rowspan="2" colspan="4">
-                                                                                                                <div class="input-text">
-	<form:textarea path="repDetailList[${status.index}].repFinishSummary"></form:textarea>
-                                                                                                                </div>
-                                                                                                            </td>
-                                                                                                        </tr>
-                                                                                                        <tr>
-                                                                                                            <td>실시</td>
-                                                                                                            <td class="pd3">
-                                                                                                                <div class="row">
-                                                                                                                    <div class="col s12 input-text input-date">
-	<form:input type="text" path="repDetailList[${status.index}].repActStartDate" cssClass="datepicker validate[required]"/>
-                                                                                                                        <i class="ico calendar"></i>
-                                                                                                                    </div>
-                                                                                                                </div>
-                                                                                                            </td>
-                                                                                                        </tr>
-                                                                                                    </tbody>
-                                                                                                </table>
-                                                                                            </div>
-                                                                                            <div class="list-table list">
-                                                                                                <table>
-                                                                                                    <caption>일정계획 및 수행 테이블</caption>
-                                                                                                    <colgroup>
-                                                                                                        <col style="width:60px">
-                                                                                                        <col style="width:80px">
-                                                                                                        <col>
-                                                                                                        <col style="width:60px">
-                                                                                                        <col style="width:60px">
-                                                                                                        <col style="width:60px">
-                                                                                                        <col style="width:60px">
-                                                                                                    </colgroup>
-                                                                                                    <tbody>
-                                                                                                        <tr>
-                                                                                                            <th rowspan="2">승인자</th>
-                                                                                                            <th>참여형태</th>
-                                                                                                            <th>소속</th>
-                                                                                                            <th>이름</th>
-                                                                                                            <th>직위</th>
-                                                                                                            <th>직책</th>
-                                                                                                            <th>Belt</th>
-                                                                                                        </tr>
-                                                                                                        <tr>
-                                                                                                            <td>챔피언</td>
-                                                                                                            <td class="align-left">자동차소재부품 사업부 &gt; 경량화사업담당 &gt; 자동차소재부품.투명과학플라스틱연구PJT</td>
-                                                                                                            <td>홍길동</td>
-                                                                                                            <td>책임</td>
-                                                                                                            <td>팀장</td>
-                                                                                                            <td>BB</td>
-                                                                                                        </tr>
-                                                                                                        <tr>
-                                                                                                            <th colspan="2" class="pd-r10 align-right">
-                                                                                                                첨부파일<br>
-                                                                                                                (Up to 10)
-                                                                                                            </th>
-                                                                                                            <td colspan="5">
-                                                                                                                <div class="file-drop-box">
-                                                                                                                    <!-- [D] -->
-                                                                                                                </div>
-                                                                                                            </td>
-                                                                                                        </tr>
-                                                                                                        
-                                                                                                    </tbody>
-                                                                                                </table>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </td>
-                                                                                </tr>
-                                                                            </tbody>
-                                                                        </table>
-                                                                    </div>
-                                                                </div>
-                                                            </li>
-		</c:forEach>
-                                                        </ul>
-                                                    </div>		
-	</c:when>
-	<c:otherwise>
-	<!-- 일반과제, 10+ reportVO.repDivisionCode eq '2' or '3' -->
-													<div class="list-wrap toggle">
-                                                        <!-- [D] 상태에따라 열기/닫기 텍스트 구분해주세요. -->
-                                                        <span class="blind">열기/닫기</span>
-                                                        <ul>
-                                                            <li><!-- [D] 열린상태일 경우 active 클래스를 추가해주세요. -->
-                                                                <div class="list-content">
-                                                                    <div class="list-table list">
-                                                                    	<input type="hidden" name="repDetailList[0].repStepCode" value="7"/>
-                                                                    	<table>
-                                                                            <caption>일정계획 및 수행 테이블</caption>
-                                                                            <colgroup>
-                                                                                <col style="width:60px">
-                                                                                <col style="width:80px">
-                                                                                <col>
-                                                                                <col style="width:80px">
-                                                                                <col style="width:60px">
-                                                                            </colgroup>
-                                                                            <thead>
-                                                                                <tr>
-                                                                                    <th>구분</th>
-                                                                                    <th colspan="2">착수(예정)일</th>
-                                                                                    <th colspan="3">완료(예정)일</th>
-                                                                                </tr>
-                                                                            </thead>
-                                                                            
-                                                                            <tbody>
-                                                                                <tr id="trPlanDate">
-                                                                                    <td>계획</td>
-                                                                                    
-                                                                                    <td class="pd3" colspan="2">
-                                                                                        <div class="row">
-                                                                                            <div class="col s12 input-text input-date" style="float:none;width:120px;margin:0 auto !important">
-	<form:input type="text" path="repDetailList[0].repPlanStartDate" cssClass="datepicker validate[required]" />
-                                                                                                <i class="ico calendar"></i>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </td>
-                                                                                    <td class="pd3" colspan="3">
-                                                                                        <div class="row">
-                                                                                            <div class="col s12 input-text input-date" style="float:none;width:120px;margin:0 auto !important">
-	<form:input type="text" path="repDetailList[0].repPlanEndDate" cssClass="datepicker validate[required]"/>
-                                                                                                <i class="ico calendar"></i>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </td>
-   
-                                                                                </tr>
-                                                                                <tr>
-                                                                                    <td>실시</td>
-                                                                                    <td class="pd3" colspan="2">
-                                                                                        <div class="row">
-                                                                                            <div class="col s12 input-text input-date" style="float:none;width:120px;margin:0 auto !important">
-	<form:input type="text" path="repDetailList[0].repActStartDate" cssClass="datepicker validate[required]"/>
-                                                                                                <i class="ico calendar"></i>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </td>
-                                                                                    <td class="pd3" colspan="3">
-                                                                                        <div class="row">
-                                                                                            <div class="col s12 input-text input-date" style="float:none;width:120px;margin:0 auto !important">
-	<form:input type="text" path="repDetailList[0].repActEndDate"  cssClass="datepicker validate[required]"/>
-                                                                                                <i class="ico calendar"></i>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </td>
-                                                                                </tr>
-                                                                                <tr>
-                                                                                    <th rowspan="2">활동계획</th>
-                                                                                    <th>추진배경</th>                                                                                    
-                                                                                    <td td colspan="4">
-                                                                                    <div class="input-text">
-                                                                                        <form:textarea path="repDetailList[0].repPropelBg" />
-                                                                                    </div>
-                                                                                    </td>
-                                                                                </tr>
-                                                                                <tr>                                                                                    
-                                                                                    <th>주요활동</th>                                                                                    
-                                                                                    <td colspan="4"><div class="input-text">
-                                                                                        <form:textarea path="repDetailList[0].repActivity" />
-                                                                                    </div>
-                                                                                    </td>
-                                                                                </tr>
-                                                                            </tbody>
-                                                                 
-                                                                        </table>
-                                                                    </div>
-                                                                </div>
-                                                            </li>
-                                                            <li>
-                                                                <div class="list-content">
-                                                                    <div class="list-table list">
-                                                                        <table>
-                                                                            <caption>일정계획 및 수행 테이블</caption>
-                                                                            <colgroup>
-                                                                                <col style="width:60px">
-                                                                                <col style="width:80px">
-                                                                                <col>                                                                                
-                                                                                <col style="width:70px">
-                                                                                <%-- <col style="width:70px">
+													<c:forEach var="item" items="${reportVO.repDetailList}" varStatus="status">
+														<!-- [D] 열린상태일 경우 active 클래스를 추가해주세요. -->
+														<li>
+															<!-- class="active" -->
+															<div class="list-content">
+																<div class="list-table list">
+																	<table>
+																		<caption>일정계획 및 수행 테이블</caption>
+																		<colgroup>
+																			<col style="width: 60px">
+																			<col style="width: 145px">
+																			<col>
+																			<col style="width: 80px">
+																			<col style="width: 80px">
+																			<col style="width: 80px">
+																		</colgroup>
+																		<thead>
+																			<tr>
+																				<th>구분</th>
+																				<th>Define</th>
+																				<th colspan="4">활동요약</th>
+																			</tr>
+																		</thead>
+																		<tbody>
+																			<tr>
+																				<td colspan="6" class="pd0 border0">
+																					<div class="toggle-box"
+																						<c:if test="${item.repStatus eq '1'}">style="display: block;"</c:if>>
+																						<div class="list-table list">
+																							<table>
+																								<caption>일정계획 및 수행 테이블</caption>
+																								<colgroup>
+																									<col style="width: 60px">
+																									<col style="width: 145px">
+																									<col>
+																									<col style="width: 80px">
+																									<col style="width: 80px">
+																									<col style="width: 80px">
+																								</colgroup>
+																								<tbody>
+																									<tr>
+																										<td>계획</td>
+																										<td class="pd3">
+																											<div class="row">
+																												<div class="col s12 input-text input-date">
+																													<form:input type="hidden"
+																														path="repDetailList[${status.index}].repStepCode" />
+																													<form:input type="hidden"
+																														path="repDetailList[${status.index}].repStatus" />
+																													<form:input type="text"
+																														path="repDetailList[${status.index}].repPlanStartDate"
+																														cssClass="datepicker validate[required]" />
+																													<i class="ico calendar"></i>
+																												</div>
+																											</div>
+																										</td>
+																										<td rowspan="2" colspan="4">
+																											<div class="input-text">
+																												<form:textarea
+																													path="repDetailList[${status.index}].repFinishSummary"></form:textarea>
+																											</div>
+																										</td>
+																									</tr>
+																									<tr>
+																										<td>실시</td>
+																										<td class="pd3">
+																											<div class="row">
+																												<div class="col s12 input-text input-date">
+																													<form:input type="text"
+																														path="repDetailList[${status.index}].repActStartDate"
+																														cssClass="datepicker validate[required]" />
+																													<i class="ico calendar"></i>
+																												</div>
+																											</div>
+																										</td>
+																									</tr>
+																								</tbody>
+																							</table>
+																						</div>
+																						<div class="list-table list">
+																							<table>
+																								<caption>일정계획 및 수행 테이블</caption>
+																								<colgroup>
+																									<col style="width: 60px">
+																									<col style="width: 80px">
+																									<col>
+																									<col style="width: 60px">
+																									<col style="width: 60px">
+																									<col style="width: 60px">
+																									<col style="width: 60px">
+																								</colgroup>
+																								<tbody>
+																									<tr>
+																										<th rowspan="2">승인자</th>
+																										<th>참여형태</th>
+																										<th>소속</th>
+																										<th>이름</th>
+																										<th>직위</th>
+																										<th>직책</th>
+																										<th>Belt</th>
+																									</tr>
+																									<tr>
+																										<td>챔피언</td>
+																										<td class="align-left">자동차소재부품 사업부 &gt;
+																											경량화사업담당 &gt; 자동차소재부품.투명과학플라스틱연구PJT</td>
+																										<td>홍길동</td>
+																										<td>책임</td>
+																										<td>팀장</td>
+																										<td>BB</td>
+																									</tr>
+																									<tr>
+																										<th colspan="2" class="pd-r10 align-right">
+																											첨부파일<br> (Up to 10)
+																										</th>
+																										<td colspan="5">
+																											<div class="file-drop-box">
+																												<!-- [D] -->
+																											</div>
+																										</td>
+																									</tr>
+
+																								</tbody>
+																							</table>
+																						</div>
+																					</div>
+																				</td>
+																			</tr>
+																		</tbody>
+																	</table>
+																</div>
+															</div>
+														</li>
+													</c:forEach>
+												</ul>
+											</div>
+										</c:when>
+										<c:otherwise>
+											<!-- 일반과제, 10+ reportVO.repDivisionCode eq '2' or '3' -->
+											<div class="list-wrap toggle">
+												<!-- [D] 상태에따라 열기/닫기 텍스트 구분해주세요. -->
+												<span class="blind">열기/닫기</span>
+												<ul>
+													<li>
+														<!-- [D] 열린상태일 경우 active 클래스를 추가해주세요. -->
+														<div class="list-content">
+															<div class="list-table list">
+																<input type="hidden" name="repDetailList[0].repStepCode"
+																	value="7" />
+																<table>
+																	<caption>일정계획 및 수행 테이블</caption>
+																	<colgroup>
+																		<col style="width: 60px">
+																		<col style="width: 80px">
+																		<col>
+																		<col style="width: 80px">
+																		<col style="width: 60px">
+																	</colgroup>
+																	<thead>
+																		<tr>
+																			<th>구분</th>
+																			<th colspan="2">착수(예정)일</th>
+																			<th colspan="3">완료(예정)일</th>
+																		</tr>
+																	</thead>
+
+																	<tbody>
+																		<tr id="trPlanDate">
+																			<td>계획</td>
+
+																			<td class="pd3" colspan="2">
+																				<div class="row">
+																					<div class="col s12 input-text input-date"
+																						style="float: none; width: 120px; margin: 0 auto !important">
+																						<form:input type="text"
+																							path="repDetailList[0].repPlanStartDate"
+																							cssClass="datepicker validate[required]" />
+																						<i class="ico calendar"></i>
+																					</div>
+																				</div>
+																			</td>
+																			<td class="pd3" colspan="3">
+																				<div class="row">
+																					<div class="col s12 input-text input-date"
+																						style="float: none; width: 120px; margin: 0 auto !important">
+																						<form:input type="text"
+																							path="repDetailList[0].repPlanEndDate"
+																							cssClass="datepicker validate[required]" />
+																						<i class="ico calendar"></i>
+																					</div>
+																				</div>
+																			</td>
+
+																		</tr>
+																		<tr>
+																			<td>실시</td>
+																			<td class="pd3" colspan="2">
+																				<div class="row">
+																					<div class="col s12 input-text input-date"
+																						style="float: none; width: 120px; margin: 0 auto !important">
+																						<form:input type="text"
+																							path="repDetailList[0].repActStartDate"
+																							cssClass="datepicker validate[required]" />
+																						<i class="ico calendar"></i>
+																					</div>
+																				</div>
+																			</td>
+																			<td class="pd3" colspan="3">
+																				<div class="row">
+																					<div class="col s12 input-text input-date"
+																						style="float: none; width: 120px; margin: 0 auto !important">
+																						<form:input type="text"
+																							path="repDetailList[0].repActEndDate"
+																							cssClass="datepicker validate[required]" />
+																						<i class="ico calendar"></i>
+																					</div>
+																				</div>
+																			</td>
+																		</tr>
+																		<tr>
+																			<th rowspan="2">활동계획</th>
+																			<th>추진배경</th>
+																			<td td colspan="4">
+																				<div class="input-text">
+																					<form:textarea path="repDetailList[0].repPropelBg" />
+																				</div>
+																			</td>
+																		</tr>
+																		<tr>
+																			<th>주요활동</th>
+																			<td colspan="4"><div class="input-text">
+																					<form:textarea path="repDetailList[0].repActivity" />
+																				</div></td>
+																		</tr>
+																	</tbody>
+
+																</table>
+															</div>
+														</div>
+													</li>
+													<li>
+														<div class="list-content">
+															<div class="list-table list">
+																<table>
+																	<caption>일정계획 및 수행 테이블</caption>
+																	<colgroup>
+																		<col style="width: 60px">
+																		<col style="width: 80px">
+																		<col>
+																		<col style="width: 70px">
+																		<%-- <col style="width:70px">
                                                                                 <col style="width:70px">
                                                                                 <col style="width:70px"> --%>
-                                                                            </colgroup>
-                                                                            <tbody>
-                                                                                <tr>
-                                                                                    <th colspan="4">Finish 요약</th>                                                                                    
-                                                                                    <!-- <th colspan="3">활동결과(실적)</th> -->
-                                                                                </tr>
-                                                                                <tr>
-                                                                                    <td colspan="4">
-                                                                                        <div class="input-text">
-                                                                                            <form:textarea path="repDetailList[0].repFinishSummary" style="height: 65px;"/>
-                                                                                        </div>
-                                                                                    </td>                                                                                    
-                                                                                    <!-- <td>CTQ/CTP</td>
+																	</colgroup>
+																	<tbody>
+																		<tr>
+																			<th colspan="4">Finish 요약</th>
+																			<!-- <th colspan="3">활동결과(실적)</th> -->
+																		</tr>
+																		<tr>
+																			<td colspan="4">
+																				<div class="input-text">
+																					<form:textarea
+																						path="repDetailList[0].repFinishSummary"
+																						style="height: 65px;" />
+																				</div>
+																			</td>
+																			<!-- <td>CTQ/CTP</td>
                                                                                     <td>KPI</td>
-                                                                                    <td>예상성과</td> -->                                                                                        
-                                                                                </tr>
-                                                                                <%-- <tr>              
+                                                                                    <td>예상성과</td> -->
+																		</tr>
+																		<%-- <tr>              
                                                                                     <td><div class="col s2 input-text pd3">	<form:input type="text" path="repDetailList[0].repCtqCtp" /></div></td>
                                                                                     <td><div class="col s2 input-text pd3" style="width:100%"><form:input type="text" path="repDetailList[0].repKpi" /></div></td>
                                                                                     <td><div class="col s2 input-text pd-r10" style="width:100%"><form:input type="text" path="repDetailList[0].repExpectationResult" /></div></td>                                 
                                                                                 </tr> --%>
-                                                                                <tr>
-                                                                                    <th colspan="2" class="pd-r10 align-right"> 첨부파일<br> (Up to 10) </th>
-                                                                                    <td colspan="2" style="text-align: left;">
-                                                                                    	<div class="col s12 input-text file">
-								                                                            <attachfile:fileuploader
-																							objectId="fileUpload_report_sub_07" ctx=""
-																							wrapperId="fileUploadWrap_7"
-																							fileId="reportDetail_7_${reportVO.repCode}"
-																							fileGrp="reportDetail" autoUpload="false"
-																							maxFileSize="${15*1000000}" maxNumberOfFiles="10"/>
-								                                                        </div>                                                                                    
-                                                                                    </td>
-                                                                                </tr>
-                                                                            </tbody>
-                                                                        </table>
-                                                                    </div>
-                                                                </div>
-                                                            </li>
-                                                            <!---->
-                                                            <!---->
-                                                        </ul>
-                                                    </div>	
-	</c:otherwise>
-</c:choose>                                                
-                                                
+																		<tr>
+																			<th colspan="2" class="pd-r10 align-right">첨부파일<br>
+																				(Up to 10)
+																			</th>
+																			<td colspan="2" style="text-align: left;">
+																				<div class="col s12 input-text file">
+																					<attachfile:fileuploader
+																						objectId="fileUpload_report_sub_07" ctx=""
+																						wrapperId="fileUploadWrap_7"
+																						fileId="reportDetail_7_${reportVO.repCode}"
+																						fileGrp="reportDetail" autoUpload="false"
+																						maxFileSize="${15*1000000}" maxNumberOfFiles="10" />
+																				</div>
+																			</td>
+																		</tr>
+																	</tbody>
+																</table>
+															</div>
+														</div>
+													</li>
+													<!---->
+													<!---->
+												</ul>
+											</div>
+										</c:otherwise>
+									</c:choose></td>
+							</tr>
+							<tr>
+								<th><label path="select6"><span class="asterisk">*</span>키워드</label>
+									<i class="ico tip" onclick="popAdvice.open('keyword')"><em>tip.</em></i></th>
+								<td colspan="3">
+									<div class="row">
+										<div class="col s8">
+											<div class="col s2 input-text pd-r10" style="width: 20%">
+												<form:input type="hidden" path="repKeyword" />
+												<input type="text" id="txtRepKeyword_1" name="REP_KEYWORD"
+													class="obj-rep-keyword validate[required]" value=""
+													title="키워드를 입력하세요." onkeyup="onkeypress_repKeyword(this)"
+													cssClass="">
+											</div>
+											<div class="col s2 input-text pd-r10" style="width: 20%">
+												<input type="text" id="txtRepKeyword_2" name="REP_KEYWORD"
+													class="obj-rep-keyword" value="" title="키워드를 입력하세요."
+													onkeyup="onkeypress_repKeyword(this)">
+											</div>
+											<div class="col s2 input-text pd-r10" style="width: 20%">
+												<input type="text" id="txtRepKeyword_3" name="REP_KEYWORD"
+													class="obj-rep-keyword" value="" title="키워드를 입력하세요."
+													onkeyup="onkeypress_repKeyword(this)">
+											</div>
+											<div class="col s2 input-text pd-r10" style="width: 20%">
+												<input type="text" id="txtRepKeyword_4" name="REP_KEYWORD"
+													class="obj-rep-keyword" value="" title="키워드를 입력하세요."
+													onkeyup="onkeypress_repKeyword(this)">
+											</div>
+											<div class="col s2 input-text pd-r10" style="width: 20%">
+												<input type="text" id="txtRepKeyword_5" name="REP_KEYWORD"
+													class="obj-rep-keyword" value="" title="키워드를 입력하세요."
+													onkeyup="onkeypress_repKeyword(this)">
+											</div>
+										</div>
+										<span class="col s4 text-bul" style="letter-spacing: -1px">
+											과제 검색 시 키워드를 생성합니다.(띄어쓰기 없이 입력) </span>
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+		<p class="content_title">2. 팀구성 및 승인자</p>
 
- 
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th><label path="select6"><span class="asterisk">*</span>키워드</label> <i class="ico tip" onclick="popAdvice.open('keyword')"><em>tip.</em></i></th>
-                                                <td colspan="3">
-                                                    <div class="row">
-                                                        <div class="col s8">
-                                                            <div class="col s2 input-text pd-r10" style="width:20%">
-                                                            	<form:input type="hidden" path="repKeyword"/>
-                                                                <input type="text" id="txtRepKeyword_1" name="REP_KEYWORD" class="obj-rep-keyword validate[required]" value="" title="키워드를 입력하세요." onkeyup="onkeypress_repKeyword(this)" cssClass="">
-                                                            </div>
-                                                            <div class="col s2 input-text pd-r10" style="width:20%">
-                                                                <input type="text" id="txtRepKeyword_2" name="REP_KEYWORD" class="obj-rep-keyword" value="" title="키워드를 입력하세요." onkeyup="onkeypress_repKeyword(this)">
-                                                            </div>
-                                                            <div class="col s2 input-text pd-r10" style="width:20%">
-                                                                <input type="text" id="txtRepKeyword_3" name="REP_KEYWORD" class="obj-rep-keyword" value="" title="키워드를 입력하세요." onkeyup="onkeypress_repKeyword(this)">
-                                                            </div>
-                                                            <div class="col s2 input-text pd-r10" style="width:20%">
-                                                                <input type="text" id="txtRepKeyword_4" name="REP_KEYWORD" class="obj-rep-keyword" value="" title="키워드를 입력하세요." onkeyup="onkeypress_repKeyword(this)">
-                                                            </div>
-                                                            <div class="col s2 input-text pd-r10" style="width:20%">
-                                                                <input type="text" id="txtRepKeyword_5" name="REP_KEYWORD" class="obj-rep-keyword" value="" title="키워드를 입력하세요." onkeyup="onkeypress_repKeyword(this)">
-                                                            </div>
-                                                        </div>
-                                                        <span class="col s4 text-bul" style="letter-spacing:-1px">
-                                                            과제 검색 시 키워드를 생성합니다.(띄어쓰기 없이 입력)
-                                                        </span>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                        <p class="content_title">2. 팀구성 및 승인자</p>
-                        
-                        <div class="list-wrap">
-                            <div class="list-content">
-                                <div class="list-table list">
-                                <!-- 
+		<div class="list-wrap">
+			<div class="list-content">
+				<div class="list-table list">
+					<!-- 
 									REP_ROLE	1	과제리더
 									REP_ROLE	2	팀멤버
 									REP_ROLE	3	과제지도/사원
@@ -539,90 +589,102 @@
 									REP_ROLE	7	분임조사무국
 									REP_ROLE	8	분임조팀장                                
                                  -->
-                                    <table class="centered">
-                                        <caption></caption>
-                                        <colgroup>
-                                            <col style="width:180px">
-                                            <col>
-                                            <col style="width:70px">
-                                            <col style="width:65px">
-                                            <col style="width:80px">
-                                            <col style="width:65px">
-                                            <col style="width:70px">
-                                        </colgroup>
-                                        <thead>
-                                            <tr>
-                                                <th class="align-right pd-r23">참여형태</th>
-                                                <th>소속</th>
-                                                <th>이름</th>
-                                                <th>직위</th>
-                                                <th>직책</th>
-                                                <th>Belt</th>
-                                                <th>추가/삭제</th>
-                                            </tr>
-                                        </thead>
-                                       <!-- # To-Do -->
-                                        <tbody>
-        
-<script>
+					<table class="centered">
+						<caption></caption>
+						<colgroup>
+							<col style="width: 180px">
+							<col style="width: 200px">
+							<col>
+							<col style="width: 80px">
+							<col style="width: 80px">
+							<col style="width: 80px">
+							<col style="width: 70px">
+						</colgroup>
+						<thead>
+							<tr>
+								<th class="align-right pd-r23">참여형태</th>
+								<th>소속</th>
+								<th>이름</th>
+								<th>직위</th>
+								<th>직책</th>
+								<th>Belt</th>
+								<th>추가/삭제</th>
+							</tr>
+						</thead>
+						<!-- # To-Do -->
+						<tbody>
+
+							<script>
 	let memMaxSeq = -1;
 	let resMaxSeq = -1;
 	let indMaxSeq = -1;
 </script>
-<c:forEach var="item" items="${reportVO.repTeamMemberList}" varStatus="status">
-		
-											<tr class="tr-team-role-${item.repTeamMemRole}" idSeq="repTeamMemberList${status.index}" nameSeq="repTeamMemberList[${status.index}]">
-											
-											
-                                                <th><label <c:if test="${item.repTeamMemRole eq '3' || item.repTeamMemRole eq '5'}">class="color primary"</c:if>>
-                                                <c:if test="${item.repTeamMemRole ne '4'}"><span class="asterisk">*</span></c:if>
-                                                ${item.repTeamMemRoleNm}</label>
-                                                	<script>
-                                                	memMaxSeq = Math.max(memMaxSeq, "${status.index}");
-                                                	</script>
-                                                	<form:input type="hidden" cssClass="report-code" path="repTeamMemberList[${status.index}].repCode"/>
-                                                	<form:input type="hidden" cssClass="team-code" path="repTeamMemberList[${status.index}].repTeamCode"/>
-                                                	<form:input type="hidden" cssClass="team-dept-cd" path="repTeamMemberList[${status.index}].deptCode"/> 
-                                                    <form:input type="hidden" cssClass="team-role-cd" path="repTeamMemberList[${status.index}].repTeamMemRole"/>
-                                                    <form:input type="hidden" cssClass="team-com-no" path="repTeamMemberList[${status.index}].comNo"/>
-                                                    <form:input type="hidden" cssClass="team-mem-nm" path="repTeamMemberList[${status.index}].repTeamMemName"/>
-                                                    <form:input type="hidden" cssClass="team-jobx-cd" path="repTeamMemberList[${status.index}].comJobxCode"/>
-                                                    <form:input type="hidden" cssClass="team-position-cd" path="repTeamMemberList[${status.index}].comPositionCode"/>
-                                                    <form:input type="hidden" cssClass="team-belt-cd" path="repTeamMemberList[${status.index}].beltCode"/>
-                                                    
-                                                </th>
-                                                <td class="pd3">
-                                                    <div class="row">
-                                                        <div class="col s12 input-text search">
-                                                        
-                                                    <c:choose>  
-														<c:when test="${item.repTeamMemRole ne '4'}">
-															<form:input type="text" path='repTeamMemberList[${status.index}].deptName' readonly="true" title="(팀구성)필수인원을 지정해하세요." cssClass="validate[required]" />
-														</c:when>
-														<c:otherwise>
-															<form:input type="text" path='repTeamMemberList[${status.index}].deptName' readonly="true" />
-														</c:otherwise>
-													</c:choose>
-													
-                                                            
-                                                            <button type="button" class="btn-search-emp">검색</button>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td class="td-user-nm">${item.repTeamMemName}</td>
-                                                <td class="td-com-jobx">${item.comJobxNm}</td>
-                                                <td class="td-com-pos">${item.comPositionNm}</td>
-                                                <td class="td-belt-nm">${item.beltNm}</td>
-                                                <td class="pd3">
-                                                  <c:if test="${item.repTeamMemRole eq '2'}">
-                                                	<div class="btn-group">
-                                                        <button type="button" class="btn light-gray btn-team-member-add">추가</button>
-                                                    </div>
-                                                  </c:if>
-                                                </td>
-                                            </tr>                                            
-</c:forEach>
-<script type="text/javascript">
+							<c:forEach var="item" items="${reportVO.repTeamMemberList}"
+								varStatus="status">
+
+								<tr class="tr-team-role-${item.repTeamMemRole}"
+									idSeq="repTeamMemberList${status.index}"
+									nameSeq="repTeamMemberList[${status.index}]">
+									<th><label
+										<c:if test="${item.repTeamMemRole eq '3' || item.repTeamMemRole eq '5'}">class="color primary"</c:if>>
+											<c:if
+												test="${item.repTeamMemRole ne '4' && item.repTeamMemRole ne '2'}">
+												<span class="asterisk">*</span>
+											</c:if> ${item.repTeamMemRoleNm}
+									</label> <script>
+	                                        memMaxSeq = Math.max(memMaxSeq, "${status.index}");
+	                                    </script> <form:input type="hidden"
+											cssClass="report-code"
+											path="repTeamMemberList[${status.index}].repCode" /> <form:input
+											type="hidden" cssClass="team-code"
+											path="repTeamMemberList[${status.index}].repTeamCode" /> <form:input
+											type="hidden" cssClass="team-dept-cd"
+											path="repTeamMemberList[${status.index}].deptCode" /> <form:input
+											type="hidden" cssClass="team-role-cd"
+											path="repTeamMemberList[${status.index}].repTeamMemRole" />
+										<form:input type="hidden" cssClass="team-com-no"
+											path="repTeamMemberList[${status.index}].comNo" /> <%-- <form:input type="hidden" cssClass="team-mem-nm" path="repTeamMemberList[${status.index}].repTeamMemName" /> --%>
+										<form:input type="hidden" cssClass="team-jobx-cd"
+											path="repTeamMemberList[${status.index}].comJobxCode" /> <form:input
+											type="hidden" cssClass="team-position-cd"
+											path="repTeamMemberList[${status.index}].comPositionCode" />
+										<form:input type="hidden" cssClass="team-belt-cd"
+											path="repTeamMemberList[${status.index}].beltCode" /></th>
+									<td class="td-dept-nm">${item.deptName}</td>
+									<td class="pd3">
+										<%-- ${item.repTeamMemName} --%>
+										<div class="row">
+											<div class="col s12 input-text search">
+												<c:choose>
+													<c:when
+														test="${item.repTeamMemRole ne '4' && item.repTeamMemRole ne '2'}">
+														<form:input type="text"
+															path='repTeamMemberList[${status.index}].repTeamMemName'
+															readonly="true" title="(팀구성)필수인원을 지정해하세요."
+															cssClass="validate[required]" />
+													</c:when>
+													<c:otherwise>
+														<form:input type="text"
+															path='repTeamMemberList[${status.index}].repTeamMemName'
+															readonly="true" />
+													</c:otherwise>
+												</c:choose>
+												<button type="button" class="btn-search-emp">검색</button>
+											</div>
+										</div>
+									</td>
+									<td class="td-com-jobx">${item.comJobxNm}</td>
+									<td class="td-com-pos">${item.comPositionNm}</td>
+									<td class="td-belt-nm">${item.beltNm}</td>
+									<td class="pd3"><c:if test="${item.repTeamMemRole eq '2'}">
+											<div class="btn-group">
+												<button type="button"
+													class="btn light-gray btn-team-member-add">추가</button>
+											</div>
+										</c:if></td>
+								</tr>
+							</c:forEach>
+							<script type="text/javascript">
 
 	$(".btn-team-member-add").each(function(i, o){ 
 	    if(i>0){
@@ -646,19 +708,19 @@
 	setRepTeamEvent()
 					
 </script>
-		
 
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                        <p class="content_title">3. 성과 및 주요지표</p>
-                        <div class="list-wrap">
-                            <div class="list-content">
-                                <div class="list-table list">
-                                
-<script>
+
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+		<p class="content_title">3. 성과 및 주요지표</p>
+		<div class="list-wrap">
+			<div class="list-content">
+				<div class="list-table list">
+
+					<script>
 function onchange_resultType(obj){
 	if(obj.value==="7"){
 		$(obj).closest("tr").find(".txt-result-value").prop("disabled", true);	
@@ -666,289 +728,335 @@ function onchange_resultType(obj){
 		$(obj).closest("tr").find(".txt-result-value").prop("disabled", false);
 	}
 }
-</script>                                
-                                    <table class="centered">
-                                        <caption></caption>
-                                        <colgroup>
-                                            <col>
-                                            <col>
-                                            <col>
-                                            <col>
-                                            <col>
-                                            <col>
-                                            <col>
-                                            <col>
-                                            <col style="width:70px">
-                                        </colgroup>
-                                        <thead>
-                                            <tr>
-                                                <th colspan="9">예상성과(억원)</th>	<!-- TB_REPORT_RESULT -->
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-<c:forEach var="item" items="${reportVO.repResultList}" varStatus="status">
-                                            <tr idSeq="repResultList${status.index}" nameSeq="repResultList[${status.index}]">
-                                                <th class="pd0 pd-r23"><form:label path="repResultList[${status.index}].repResultTypeCode"><span class="asterisk only-first">*</span>성과항목</form:label></th>
-                                                <td class="pd3">
-                                                    <div class="row">
-                                                        <div class="col s12 select-group">
-			                                               	<script>
+</script>
+					<table class="centered">
+						<caption></caption>
+						<colgroup>
+							<col style="width:90px">
+							<col style="width:120px">
+							<col style="width:90px">
+							<col style="width:100px">
+							<col style="width:90px">
+							<col style="width:100px">
+							<col style="width:100px">
+							<col>
+							<col style="width: 70px">
+						</colgroup>
+						<thead>
+							<tr>
+								<th colspan="9">예상성과(백만원)</th>
+								<!-- TB_REPORT_RESULT -->
+							</tr>
+						</thead>
+						<tbody>
+							<c:forEach var="item" items="${reportVO.repResultList}"
+								varStatus="status">
+								<tr idSeq="repResultList${status.index}"
+									nameSeq="repResultList[${status.index}]">
+									<th class="pd0 align-center"><form:label
+											path="repResultList[${status.index}].repResultTypeCode">
+											<span class="asterisk only-first">*</span>성과항목</form:label></th>
+									<td class="pd3">
+										<div class="row">
+											<div class="col s12 select-group">
+												<script>
 			                                               		resMaxSeq = Math.max(resMaxSeq, "${status.index}");
-			                                               	</script>                                                        
-                                                        	<form:input type="hidden" cssClass="result-code" path="repResultList[${status.index}].repResultCode"/>
-                                                        	<form:input type="hidden" cssClass="result-report-code" path="repResultList[${status.index}].repCode"/>
-                                                        
-                                                        <c:choose>  
-															<c:when test="${status.first}">
-																<form:select path="repResultList[${status.index}].repResultTypeCode" title="성과항목을 선택하세요" cssClass="only-first validate[required]" onchange="onchange_resultType(this)">
-	                                                            <c:forEach var="option" items="${codeResultTy}" >
-		                                                            <form:option value="${option.codeId}" label="${option.codeNm}" />
-		                                                        </c:forEach>    
-	                                                            </form:select>
-															</c:when>
-															<c:otherwise>
-																<form:select path="repResultList[${status.index}].repResultTypeCode" title="성과항목을 선택하세요" onchange="onchange_resultType(this)">
-	                                                            <c:forEach var="option" items="${codeResultTy}" >
-		                                                            <form:option value="${option.codeId}" label="${option.codeNm}" />
-		                                                        </c:forEach>    
-	                                                            </form:select>
-															</c:otherwise>
-														</c:choose>
-                                                            
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <th class="pd0 pd-r23"><label for="txtRepResultWithinYear">년내(당해년)</label></th>
-                                                <td class="pd3">
-                                                    <div class="row">
-                                                        <div class="col s12 input-text">
-                                                            <form:input type="number" path="repResultList[${status.index}].repResultWithinYear" title="년내 입력" cssClass="txt-result-value input-text" />
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <th class="pd0 pd-r23"><label for="txtRepResultYear">년간(12개월)</label></th>
-                                                <td class="pd3">
-                                                    <div class="row">
-                                                        <div class="col s12 input-text">
-                                                            <form:input type="number" path="repResultList[${status.index}].repResultYear" title="년간 입력" cssClass="txt-result-value input-text" />
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <th class="pd0 pd-r10"><label for="txtRepResultCalLogic">산출 Logic</label> <c:if test="${status.first}"><i class="ico tip" onclick="popAdvice.open('cal-logic');"><em>tip.</em></i></c:if></th>
-                                                <td class="pd3">
-                                                    <div class="row">
-                                                        <div class="col s12 input-text">
-                                                        	<form:input type="text" path="repResultList[${status.index}].repResultCalLogic" title="산출 Logic" cssClass="txt-result-value input-text" />
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td class="pd3">
-                                                    <div class="btn-group">
-                                                    <c:choose>  
-														<c:when test="${status.first}">
-															<button type="button" class="btn light-gray btn-team-result-add">추가</button>
-														</c:when>
-														<c:otherwise>
-															<button type="button" class="btn light-gray btn-team-result-remove">삭제</button>
-														</c:otherwise>
-													</c:choose>
-                                                    </div>
-                                                </td>
-                                            </tr>
-</c:forEach>                                
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="list-wrap mg-t20">
-                            <div class="list-content">
-                                <div class="list-table list">
-                                    <table class="centered">
-                                        <caption></caption>
-                                        <colgroup>
-                                            <col>
-                                            <col>
-                                            <col>
-                                            <col>
-                                            <col>
-                                            <col>
-                                            <col>
-                                            <col>
-                                            <col style="width:70px">
-                                        </colgroup>
-                                        <thead>
-                                            <tr>
-                                                <th colspan="4">Project Y (CTQ / CTP)</th>
-                                                <th colspan="4">KPI</th>
-                                                <th rowspan="2">추가/삭제</th>
-                                            </tr>
-                                            <tr>
-                                                <th>항목</th>
-                                                <th>단위</th>
-                                                <th>개선전</th>
-                                                <th>개선목표</th>
-                                                <th>항목</th>
-                                                <th>단위</th>
-                                                <th>개선전</th>
-                                                <th>개선목표</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-<c:forEach var="item" items="${reportVO.repIndicatorList}" varStatus="status">                                        
-                                            <tr idSeq="repIndicatorList${status.index}" nameSeq="repIndicatorList[${status.index}]">
-                                                <td class="pd3">
-                                                    <div class="row">
-                                                        <div class="col s12 input-text">
-                                                        	<script>
+			                                               	</script>
+												<form:input type="hidden" cssClass="result-code"
+													path="repResultList[${status.index}].repResultCode" />
+												<form:input type="hidden" cssClass="result-report-code"
+													path="repResultList[${status.index}].repCode" />
+
+												<c:choose>
+													<c:when test="${status.first}">
+														<form:select
+															path="repResultList[${status.index}].repResultTypeCode"
+															title="성과항목을 선택하세요"
+															cssClass="only-first validate[required]"
+															onchange="onchange_resultType(this)">
+															<c:forEach var="option" items="${codeResultTy}">
+																<form:option value="${option.codeId}"
+																	label="${option.codeNm}" />
+															</c:forEach>
+														</form:select>
+													</c:when>
+													<c:otherwise>
+														<form:select
+															path="repResultList[${status.index}].repResultTypeCode"
+															title="성과항목을 선택하세요" onchange="onchange_resultType(this)">
+															<c:forEach var="option" items="${codeResultTy}">
+																<form:option value="${option.codeId}"
+																	label="${option.codeNm}" />
+															</c:forEach>
+														</form:select>
+													</c:otherwise>
+												</c:choose>
+
+											</div>
+										</div>
+									</td>
+									<th class="pd0 align-center"><label for="txtRepResultWithinYear">년내(당해년)</label></th>
+									<td class="pd3">
+										<div class="row">
+											<div class="col s12 input-text">
+												<form:input type="number"
+													path="repResultList[${status.index}].repResultWithinYear"
+													title="년내 입력" cssClass="txt-result-value input-text" />
+											</div>
+										</div>
+									</td>
+									<th class="pd0 align-center"><label for="txtRepResultYear">년간(12개월)</label></th>
+									<td class="pd3">
+										<div class="row">
+											<div class="col s12 input-text">
+												<form:input type="number"
+													path="repResultList[${status.index}].repResultYear"
+													title="년간 입력" cssClass="txt-result-value input-text" />
+											</div>
+										</div>
+									</td>
+									<th class="pd0 align-center"><label for="txtRepResultCalLogic">산출
+											Logic</label> <c:if test="${status.first}">
+											<i class="ico tip" onclick="popAdvice.open('cal-logic');"><em>tip.</em></i>
+										</c:if></th>
+									<td class="pd3">
+										<div class="row">
+											<div class="col s12 input-text">
+												<form:input type="text"
+													path="repResultList[${status.index}].repResultCalLogic"
+													title="산출 Logic" cssClass="txt-result-value input-text" />
+											</div>
+										</div>
+									</td>
+									<td class="pd3">
+										<div class="btn-group">
+											<c:choose>
+												<c:when test="${status.first}">
+													<button type="button"
+														class="btn light-gray btn-team-result-add">추가</button>
+												</c:when>
+												<c:otherwise>
+													<button type="button"
+														class="btn light-gray btn-team-result-remove">삭제</button>
+												</c:otherwise>
+											</c:choose>
+										</div>
+									</td>
+								</tr>
+							</c:forEach>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+		<div class="list-wrap mg-t20">
+			<div class="list-content">
+				<div class="list-table list">
+					<table class="centered">
+						<caption></caption>
+						<colgroup>
+							<col>
+							<col>
+							<col>
+							<col>
+							<col>
+							<col>
+							<col>
+							<col>
+							<col style="width: 70px">
+						</colgroup>
+						<thead>
+							<tr>
+								<th colspan="4">Project Y (CTQ / CTP)</th>
+								<th colspan="4">KPI</th>
+								<th rowspan="2">추가/삭제</th>
+							</tr>
+							<tr>
+								<th>항목</th>
+								<th>단위</th>
+								<th>개선전</th>
+								<th>개선목표</th>
+								<th>항목</th>
+								<th>단위</th>
+								<th>개선전</th>
+								<th>개선목표</th>
+							</tr>
+						</thead>
+						<tbody>
+							<c:forEach var="item" items="${reportVO.repIndicatorList}"
+								varStatus="status">
+								<tr idSeq="repIndicatorList${status.index}"
+									nameSeq="repIndicatorList[${status.index}]">
+									<td class="pd3">
+										<div class="row">
+											<div class="col s12 input-text">
+												<script>
                                                         	indMaxSeq = Math.max(indMaxSeq, "0");
-			                                               	</script>     
-	                                                        <form:input type="hidden" path="repIndicatorList[${status.index}].repIndiCode" />
-	                                                        <form:input type="hidden" path="repIndicatorList[${status.index}].repCode" />
-                                                            <form:input type="text" path="repIndicatorList[${status.index}].repIndiPyItem" title="항목 입력"/>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td class="pd3">
-                                                    <div class="row">
-                                                        <div class="col s12 input-text">
-                                                        	<form:input type="text" path="repIndicatorList[${status.index}].repIndiPyUnit" title="단위 입력"/>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td class="pd3">
-                                                    <div class="row">
-                                                        <div class="col s12 input-text">
-                                                        	<form:input type="text" path="repIndicatorList[${status.index}].repIndiPyBefore" title="개선전 입력"/>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td class="pd3">
-                                                    <div class="row">
-                                                        <div class="col s12 input-text">
-	                                                        <form:input type="text" path="repIndicatorList[${status.index}].repIndiPyGoal" title="개선목표 입력"/>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td class="pd3">
-                                                    <div class="row">
-                                                        <div class="col s12 input-text">
-	                                                        <form:input type="text" path="repIndicatorList[${status.index}].repIndiKpiItem" title="KPI 항목 입력"/>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td class="pd3">
-                                                    <div class="row">
-                                                        <div class="col s12 input-text">
-	                                                        <form:input type="text" path="repIndicatorList[${status.index}].repIndiKpiUnit" title="KPI 단위 입력"/>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td class="pd3">
-                                                    <div class="row">
-                                                        <div class="col s12 input-text">
-                                                        	<form:input type="text" path="repIndicatorList[${status.index}].repIndiKpiBefore" title="KPI 개선전 입력"/>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td class="pd3">
-                                                    <div class="row">
-                                                        <div class="col s12 input-text">
-                                                        	<form:input type="text" path="repIndicatorList[${status.index}].repIndiKpiGoal" title="KPI 개선목표 입력"/>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td class="pd3">
-                                                    <div class="btn-group">
-                                                    <c:choose>  
-														<c:when test="${status.first}">
-															<button type="button" class="btn light-gray btn-team-indi-add">추가</button>
-														</c:when>
-														<c:otherwise>
-															<button type="button" class="btn light-gray btn-team-indi-remove">삭제</button>
-														</c:otherwise>
-													</c:choose>
-                                                    </div>
-                                                    <c:if test="${status.last}">
-                                                    <script>
+			                                               	</script>
+												<form:input type="hidden"
+													path="repIndicatorList[${status.index}].repIndiCode" />
+												<form:input type="hidden"
+													path="repIndicatorList[${status.index}].repCode" />
+												<form:input type="text"
+													path="repIndicatorList[${status.index}].repIndiPyItem"
+													title="항목 입력" />
+											</div>
+										</div>
+									</td>
+									<td class="pd3">
+										<div class="row">
+											<div class="col s12 input-text">
+												<form:input type="text"
+													path="repIndicatorList[${status.index}].repIndiPyUnit"
+													title="단위 입력" />
+											</div>
+										</div>
+									</td>
+									<td class="pd3">
+										<div class="row">
+											<div class="col s12 input-text">
+												<form:input type="text"
+													path="repIndicatorList[${status.index}].repIndiPyBefore"
+													title="개선전 입력" />
+											</div>
+										</div>
+									</td>
+									<td class="pd3">
+										<div class="row">
+											<div class="col s12 input-text">
+												<form:input type="text"
+													path="repIndicatorList[${status.index}].repIndiPyGoal"
+													title="개선목표 입력" />
+											</div>
+										</div>
+									</td>
+									<td class="pd3">
+										<div class="row">
+											<div class="col s12 input-text">
+												<form:input type="text"
+													path="repIndicatorList[${status.index}].repIndiKpiItem"
+													title="KPI 항목 입력" />
+											</div>
+										</div>
+									</td>
+									<td class="pd3">
+										<div class="row">
+											<div class="col s12 input-text">
+												<form:input type="text"
+													path="repIndicatorList[${status.index}].repIndiKpiUnit"
+													title="KPI 단위 입력" />
+											</div>
+										</div>
+									</td>
+									<td class="pd3">
+										<div class="row">
+											<div class="col s12 input-text">
+												<form:input type="text"
+													path="repIndicatorList[${status.index}].repIndiKpiBefore"
+													title="KPI 개선전 입력" />
+											</div>
+										</div>
+									</td>
+									<td class="pd3">
+										<div class="row">
+											<div class="col s12 input-text">
+												<form:input type="text"
+													path="repIndicatorList[${status.index}].repIndiKpiGoal"
+													title="KPI 개선목표 입력" />
+											</div>
+										</div>
+									</td>
+									<td class="pd3">
+										<div class="btn-group">
+											<c:choose>
+												<c:when test="${status.first}">
+													<button type="button"
+														class="btn light-gray btn-team-indi-add">추가</button>
+												</c:when>
+												<c:otherwise>
+													<button type="button"
+														class="btn light-gray btn-team-indi-remove">삭제</button>
+												</c:otherwise>
+											</c:choose>
+										</div> <c:if test="${status.last}">
+											<script>
                                                     	
                                                     </script>
-                                                    </c:if>
-                                                </td>
-                                            </tr>
-</c:forEach>                                            
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                        <p class="content_title">4. 과제등록서 등록</p>
-                        <div class="list-wrap">
-                            <div class="list-content">
-                                <div class="list-table list">
-                                    <table class="centered">
-                                        <caption></caption>
-                                        <colgroup>
-                                            <col style="width:180px">
-                                            <col>
-                                        </colgroup>
-                                        <tbody>
-                                            <tr>
-                                                <th>첨부파일 (신규/수정)</th>
-                                                <td>
-                                                    <div class="row">
-                                                        <div class="col s12 input-text file">
-                                                            <attachfile:fileuploader
-															objectId="fileUploadObj_01"
-															ctx=""
-															wrapperId="fileUploadWrap"
-															fileId="report_${reportVO.repCode}"
-															fileGrp="report"
-															autoUpload="false"
-															maxFileSize="${15*1000000}"
-															maxNumberOfFiles="10"/>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr style="display:none;">
-                                                <th>첨부파일 (조회)</th>
-                                                <td>
-                                                    <div class="file-link">
-                                                        <ul>
-                                                            <li><a href="#" title="다운받기">UI표준정의서.pptx</a><a href="#" title="다운받기" class="btn color gray mg-l15">다운받기</a></li>
-                                                        </ul>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="list-footer">
-                            <div class="list-btns">
-							<c:choose>
-								<c:when test="${reportVO.repStatusCode eq '2'}">
-									<!-- 선정중 -->
-									<button type="button" class="btn bg-gray" id="btnCancelApproval">결재취소</button>
-								</c:when>
-								<c:when test="${reportVO.repStatusCode eq '3' || reportVO.repStatusCode eq '4'|| reportVO.repStatusCode eq '5'}"> <!-- 진행중 -->
-									<button type="button" class="btn bg-gray" id="btnReqApproval">결재의뢰</button>
-									<button type="button" class="btn bg-gray" id="btnReqDrop">Drop신청</button>
-								</c:when>
-								<c:otherwise>
-	                            	<button type="button" class="btn light-gray" id="btnSave">임시저장</button>
-							  		<button type="button" class="btn bg-gray" id="btnReqApproval">결재의뢰</button>   
-								</c:otherwise>
-							</c:choose>                            
-                                	<a href="./list.do?menuKey=${menuKey}" class="btn">목록</a>
-                            </div>
-                        </div>
+										</c:if>
+									</td>
+								</tr>
+							</c:forEach>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+		<p class="content_title">4. 과제등록서 등록</p>
+		<div class="list-wrap">
+			<div class="list-content">
+				<div class="list-table list">
+					<table class="centered">
+						<caption></caption>
+						<colgroup>
+							<col style="width: 180px">
+							<col>
+						</colgroup>
+						<tbody>
+							<tr>
+								<th>첨부파일 (신규/수정)</th>
+								<td>
+									<div class="row">
+										<div class="col s12 input-text file">
+											<attachfile:fileuploader objectId="fileUploadObj_01" ctx=""
+												wrapperId="fileUploadWrap"
+												fileId="report_${reportVO.repCode}" fileGrp="report"
+												autoUpload="false" maxFileSize="${15*1000000}"
+												maxNumberOfFiles="10" />
+										</div>
+									</div>
+								</td>
+							</tr>
+							<tr style="display: none;">
+								<th>첨부파일 (조회)</th>
+								<td>
+									<div class="file-link">
+										<ul>
+											<li><a href="#" title="다운받기">UI표준정의서.pptx</a><a href="#"
+												title="다운받기" class="btn color gray mg-l15">다운받기</a></li>
+										</ul>
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+		<div class="list-footer">
+			<div class="list-btns">
+				<c:choose>
+					<c:when test="${reportVO.repStatusCode eq '2'}">
+						<!-- 선정중 -->
+						<button type="button" class="btn bg-gray" id="btnCancelApproval">결재취소</button>
+					</c:when>
+					<c:when
+						test="${reportVO.repStatusCode eq '3' || reportVO.repStatusCode eq '4'|| reportVO.repStatusCode eq '5'}">
+						<!-- 진행중 -->
+						<button type="button" class="btn bg-gray" id="btnReqApproval">결재의뢰</button>
+						<button type="button" class="btn bg-gray" id="btnReqDrop">Drop신청</button>
+					</c:when>
+					<c:otherwise>
+						<button type="button" class="btn light-gray" id="btnSave">임시저장</button>
+						<button type="button" class="btn bg-gray" id="btnReqApproval">결재의뢰</button>
+					</c:otherwise>
+				</c:choose>
+				<a href="./list.do?menuKey=${menuKey}" class="btn">목록</a>
+			</div>
+		</div>
 
-</form:form>                    
+	</form:form>
 
-<script type="text/javascript">
+	<script type="text/javascript">
 	
 	
 	let cdListSector = []; //[{key:1,value:'창호'},{key:2,value:'바닥재'},{key:3,value:'단열재'},{key:4,value:'벽지'},{key:5,value:'표면소재'},{key:6,value:'산업용필름'},{key:7,value:'자동차소재부품'},{key:8,value:'인테리어'},{key:9,value:'연구소'},{key:10,value:'품질'},{key:11,value:'생산기술(제조혁신)'},{key:12,value:'환경안전'},{key:13,value:'기타'}];
@@ -969,7 +1077,7 @@ function onchange_resultType(obj){
 	let vMenuType = "${reportVO.repMenuCode}";
 	
 </script>
-<script type="text/javascript">
+	<script type="text/javascript">
 	$(document).ready(init);
 	
 	function init(){
@@ -987,7 +1095,12 @@ function onchange_resultType(obj){
 		cdActionType = codes.filter(function(code){ return code.index==="ACTTYPE"; });
 		cdMbbUseRate = codes.filter(function(code){ return code.index==="MBBUSERT"; });
 		cdRepResultType = codes.filter(function(code){ return code.index==="RESULTTY";});
-		cdRepType1 = codes.filter(function(code){ return code.index==="RP_TY1";});
+		if(vMenuType==="REPORT"){
+			cdRepType1 = codes.filter(function(code){ return code.index==="RP_TY1";});
+		} else {
+			cdRepType1 = codes.filter(function(code){ return code.index==="RP_TY1" && code.value==="DMAIC";});  // 분임조에서는 DMAIC만 적용(화면설계서)	
+		}
+		
 		cdRepType2 = codes.filter(function(code){ return code.index==="RP_TY2";});
 		cdRepType3 = codes.filter(function(code){ return code.index==="RP_TY3";});
 		cdBusGrp = codes.filter(function(code){ return code.index==="BUSGRP"})
@@ -1139,8 +1252,7 @@ function onchange_resultType(obj){
 					return false;
 				}
 			}
-		});
-		
+		});	
 	}
 	
 	function addRow(mode, obj){
@@ -1374,14 +1486,27 @@ function onchange_resultType(obj){
 	// 팝업에서 돌아올 때 함수
 	function callback_popEmp(objId, data){
 		
+		let comNoExists = false;
+		$(".team-com-no").each(function(i, o){
+		    if($(o).attr("id").indexOf(objId.substring(0, objId.indexOf(".")))===-1){
+		    	if($(o).val()===data.comNo){
+		    		comNoExists = true;
+		    	}
+		    }
+		});
+		
+		if(comNoExists){
+			alert("이미 지정된 사원입니다.");
+			return false;
+		}
+		
 		//data = {"comNo":"00208995","userId":"parksoomin","userName":"박수민","deptFullName":"울산설비팀(전기PM／변전실)","comJobx":"사원","comPosition":"생산파트장","comCertBelt":null}
 		let obj = document.getElementById(objId);
 		let objTr = $(obj).closest("tr");
-		let objIdComNo = objId.replace("deptName", "comNo");
-		$(obj).val(data.deptFullName);
-		$(objIdComNo).val(data.comNo);
+		$(obj).val(data.userName);
 		
-		$(objTr).find(".td-user-nm").text(data.userName);
+		//$(objTr).find(".td-user-nm").text(data.userName);
+		$(objTr).find(".td-dept-nm").text(data.deptFullName);
 		$(objTr).find(".td-com-jobx").text(data.comJobxNm);
 		$(objTr).find(".td-com-pos").text(data.comPositionNm);
 		$(objTr).find(".td-belt-nm").text(data.comCertBeltNm);

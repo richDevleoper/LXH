@@ -1144,6 +1144,16 @@ let popReject = {
                 </div>
             </div>
 </div>
+<style>
+ 
+    
+    .w100p { width: 100%;}
+
+	.table-border tr td {
+	    line-height: 1.3em !important;
+	}
+
+</style>
 <script>
 	let popAdvice = {
 		message : {
@@ -1153,7 +1163,7 @@ let popReject = {
 				"  ㄱ. 10+ No Policy : 10+ No Policy 에 해당하는 과제 등록시 선택  <br>\r\n",
 			"rep-reader":"등록하려는 과제가 벨트 인증용(과제Test)으로 사용되는 경우는 BB후보 또는 MBB후보를 선택",
 			"keyword":"과제 내용에 부합하는 키워드를 등록하면, 과제 검색에 큰 도움이 됨",
-			"cal-logic":"산출 Logic 온라인 도움말 영역 (내용 수령 후 확인)"
+			"cal-logic":getCalLogicHtml()
 		},
 		open : function(msgId){
 			$(".advide-content").html(this.message[msgId]);
@@ -1163,6 +1173,162 @@ let popReject = {
 			$(".modal-dimmed, #adviceModal").hide();
 	 		
 		},
+	}
+	
+	function getCalLogicHtml(){
+		return '<h4 style="font-weight:700;">◆ 산출 Logic - 공통 적용사항</h4> '+
+		'<h5>- 개선 활동에 따른 명백한 효과금액만 직접적인 효과로 인정, 따라서 환경적요인(환율,유가,원재료 단가변동 등)의 효과는 제외함.</h5> '+
+		'<h5>- 동일한 개선내용에 대해 중복으로 성과금액을 산출할 수 없음.</h5> '+
+		'<div class="list-table list" style="width: 700px;">'+
+		'<table class="table-border w100p">'+
+		'    <caption></caption>'+
+		'    <colgroup>'+
+		'        <col style="width: 65px">'+
+		'        <col style="width: 65px">'+
+		'        <col style="width: 120px">'+
+		'        <col>'+
+		'        <col style="width: 160px">'+
+		'    </colgroup>    '+
+		'    <thead>'+
+		'      <tr>'+
+		'        <th colspan="2">구분</th>'+
+		'        <th>세부항목</th>'+
+		'        <th>산출Logic</th>'+
+		'        <th>비고</th>'+
+		'      </tr>'+
+		'    </thead>'+
+		'    <tbody>'+
+		'      <tr>'+
+		'        <td colspan="2">외부실패비용</td>'+
+		'        <td>외부실패비용</td>'+
+		'        <td> = (개선전 평균 외부실패비용 - 개선후 외부실패비용)</td>'+
+		'        <td></td>'+
+		'      </tr>'+
+		'      <tr>'+
+		'        <td colspan="2">상품원가</td>'+
+		'        <td>Total 상품  매입단가</td>'+
+		'        <td> = (개선전 평균 단가 - 개선후 단가) × 매입량</td>'+
+		'        <td>환율, 원재료 단가 변동 검증 필요</td>'+
+		'      </tr>      '+
+		'      <tr>'+
+		'        <td rowspan="14">변동비</td>'+
+		'        <td rowspan="6">원재료</td>'+
+		'        <td>원재료 사용량 개선</td>'+
+		'        <td> = (단위당 개선전 평균 투입량 - 단위당 개선후 투입량) × 생산량 × 사용단가</td>'+
+		'        <td></td>'+
+		'      </tr>'+
+		'      <tr>'+
+		'        <td>대체 원재료 투입</td>'+
+		'        <td> = (개선전 평균 단가 - 대체후 단가) × 대체후 사용량</td>'+
+		'        <td>대체 원재료 사용 후 양품율 하락추이 검증 필요</td>'+
+		'      </tr>'+
+		'      <tr>'+
+		'        <td>Loss 개선(재활용X)</td>'+
+		'        <td> = (개선전  Loss율 - 개선후 Loss율) × 원재료비율 X 생산액</td>'+
+		'        <td>설비투자時 해당기간 감가상각비 고려</td>'+
+		'      </tr>'+
+		'      <tr>'+
+		'        <td>Loss 개선(재활용○)</td>'+
+		'        <td> = (개선전  Loss율 - 개선후 Loss율) × 총 생산수량 x Scrap 처리비용</td>'+
+		'        <td></td>'+
+		'      </tr>'+
+		'      <tr>'+
+		'        <td>구매단가인하</td>'+
+		'        <td> = (개선전 평균 단가 - 개선후 단가) ×사용량</td>'+
+		'        <td>환율, 원재료 단가 변동 검증 필요</td>'+
+		'      </tr>'+
+		'      <tr>'+
+		'        <td>Scrap 사용량 <br>증대</td>'+
+		'        <td> = (원재료 단가 - Scrap 단가) × Scrap 사용 증가량</td>'+
+		'        <td>'+
+		'            1) Scrap 발생량 보다 사용량이 적을 경우 or <br>'+
+		'            2) Scrap의 외부 구입이 가능할 경우 적용함'+
+		'        </td>'+
+		'      </tr>'+
+		'      <tr>'+
+		'        <td rowspan="3">소모품비</td>'+
+		'        <td>사용수량 절감</td>'+
+		'        <td> = (개선전 평균 - 개선후) 소모품 원단위 × 생산량 </td>'+
+		'        <td></td>'+
+		'      </tr>'+
+		'      <tr>'+
+		'        <td>재질 변경</td>'+
+		'        <td> = (개선전 평균 단가 - 대체후 단가) × 대체후 사용량</td>'+
+		'        <td></td>'+
+		'      </tr>'+
+		'      <tr>'+
+		'        <td>Pallet 회수</td>'+
+		'        <td> = (개선전 평균 - 개선후) Pallet회수율 * 총Pallet수량 * 개당Pallet (제작비-회수비)</td>'+
+		'        <td></td>'+
+		'      </tr>'+
+		'      <tr>'+
+		'        <td>운반비</td>'+
+		'        <td>운반 단가인하</td>'+
+		'        <td>최저임금 / 유가 인상 등 외부요인 보정 필요</td>'+
+		'        <td></td>'+
+		'      </tr>'+
+		'      <tr>'+
+		'        <td>전력<br>/연료비</td>'+
+		'        <td>원단위 절감</td>'+
+		'        <td> = (개선전 평균 - 개선후) 에너지 원단위 × 생산량 × 에너지단가 </td>'+
+		'        <td rowspan="3">'+
+		'            - 설비투자時 해당기간 감가상각비 고려<br>'+
+		'            - 최저임금 인상 / Util단가 인상 등 외부요인 보정 필요'+
+		'        </td>'+
+		'      </tr>'+
+		'      <tr>'+
+		'        <td rowspan="3">외주<br>가공비</td>'+
+		'        <td>생산액 기준 지급時</td>'+
+		'        <td> =  (개선전 평균 외주단가 - 개선후 외주단가) × 외주 생산량</td>'+
+		'      </tr>'+
+		'      <tr>'+
+		'        <td>시간 기준 지급時</td>'+
+		'        <td> = (개선전 평균 인시당 외주비 - 개선후 인시당 외주비) × 총 작업 시간</td>'+
+		'      </tr>'+
+		'      <tr>'+
+		'        <td>In-House<br>/Outsourcing</td>'+
+		'        <td> = (자체생산원가 - OEM 생산단가) X 생산수량 - InHouse당시 부담한 공통비</td>'+
+		'        <td>Outsourcing으로 인해 감소되지 않는 공통비 고려<br>'+
+		'            (다른 In-House 부문 분담)</td>'+
+		'      </tr>'+
+		'      <tr>'+
+		'        <td rowspan="6">고정비</td>'+
+		'        <td rowspan="3">노무비</td>'+
+		'        <td>내부 인원절감(퇴직,전배)</td>'+
+		'        <td> = 절감인원 × 개선전 평균 인당 노무비</td>'+
+		'        <td></td>'+
+		'      </tr>'+
+		'      <tr>'+
+		'        <td>외주 인원 대체</td>'+
+		'        <td> = (개선전 평균 노무비 - 외주 인건비) x 인원수</td>'+
+		'        <td></td>'+
+		'      </tr>'+
+		'      <tr>'+
+		'        <td>공수관리</td>'+
+		'        <td> = (개선후 인시당 생산액 - 개선전  인시당 생산액) × 인시 X 임금비율</td>'+
+		'        <td></td>'+
+		'      </tr>'+
+		'      <tr>'+
+		'        <td rowspan="2">수선비</td>'+
+		'        <td>외주공사<br>→PM실 활용</td>'+
+		'        <td> = 외주공사료 - (임율 × 초과근무시간 × 투여인원 + 공사재료비)</td>'+
+		'        <td></td>'+
+		'      </tr>'+
+		'      <tr>'+
+		'        <td>외주 공사비 Down</td>'+
+		'        <td> = 개선전 외주공사비 - 개선후 외주공사비</td>'+
+		'        <td>동일 외주공사인 경우 적용 가능</td>'+
+		'      </tr>'+
+		'      <tr>'+
+		'        <td>생산성</td>'+
+		'        <td>생산 속도 향상</td>'+
+		'        <td>① Capa 여유시: (개선전 평균 - 개선후) 단위당 생산시간 X 생산량 × 시간당 Utility비용<br>'+
+		'            ② Capa 부족시: (개선전 평균 - 개선후) 단위당 생산시간 X 생산량 × (임율 + 시간당 Utility비용)</td>'+
+		'        <td>설비투자時 해당기간 감가상각비 고려</td>'+
+		'      </tr>      '+
+		'    </tbody>'+
+		'</table>'+
+		'</div>';
 	}
 </script>
 
