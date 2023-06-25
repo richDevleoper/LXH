@@ -28,6 +28,7 @@ public class ApproveDetailVO {
 	private String aprovalStat;
 	private String aprovalType;
 	private String userName; // 사원명
+	private String comJobNm; //직책명
 	public String getAprovalCode() {
 		return aprovalCode;
 	}
@@ -160,6 +161,13 @@ public class ApproveDetailVO {
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
+	
+	public String getComJobNm() {
+		return comJobNm;
+	}
+	public void setComJobNm(String comJobNm) {
+		this.comJobNm = comJobNm;
+	}
 	@Override
 	public String toString() {
 		return "ApproveDetailVO [aprovalCode=" + aprovalCode + ", aprovalSeq=" + aprovalSeq + ", comNo=" + comNo
@@ -169,6 +177,6 @@ public class ApproveDetailVO {
 				+ aprovalMailSendDate + ", aprovalMailSendYn=" + aprovalMailSendYn + ", aprovalComment="
 				+ aprovalComment + ", score1=" + score1 + ", score4=" + score4 + ", score5=" + score5 + ", score6="
 				+ score6 + ", score7=" + score7 + ", scoreTotal=" + scoreTotal + ", aprovalStat=" + aprovalStat
-				+ ", aprovalType=" + aprovalType + ", userName=" + userName + "]";
+				+ ", aprovalType=" + aprovalType + ", userName=" + userName + ", comJobNm=" + comJobNm +"]";
 	}
 }

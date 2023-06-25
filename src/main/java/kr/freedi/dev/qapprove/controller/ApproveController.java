@@ -266,9 +266,24 @@ public class ApproveController {
 							proposalVO.setPropEvalLvCode("D");
 							proposalVO.setPropEvalScore(detailItem.getScoreTotal());
 							proposalVO.setPropPropStatCode("PRG_5"); // 70점 미만으로 등급평가 마감 (비용지급 처리 전)
-						}else if(Integer.parseInt(detailItem.getScoreTotal()) >= 70) {
+						}else if(Integer.parseInt(detailItem.getScoreTotal()) >= 70 && Integer.parseInt(detailItem.getScoreTotal()) < 80) {
 							//70점 이상으로 2차 평가 진행
-							proposalVO.setPropPropStatCode("PRG_3");
+							proposalVO.setPropEvalLvCode("C");
+							proposalVO.setPropEvalScore(detailItem.getScoreTotal());
+							proposalVO.setPropPropStatCode("PRG_4");
+						}else if(Integer.parseInt(detailItem.getScoreTotal()) >= 80 && Integer.parseInt(detailItem.getScoreTotal()) < 90) {
+							//70점 이상으로 2차 평가 진행
+							proposalVO.setPropEvalLvCode("B");
+							proposalVO.setPropEvalScore(detailItem.getScoreTotal());
+							proposalVO.setPropPropStatCode("PRG_4");							
+						}else if(Integer.parseInt(detailItem.getScoreTotal()) >= 90 && Integer.parseInt(detailItem.getScoreTotal()) < 95) {
+							proposalVO.setPropEvalLvCode("A");
+							proposalVO.setPropEvalScore(detailItem.getScoreTotal());
+							proposalVO.setPropPropStatCode("PRG_4");							
+						}else if(Integer.parseInt(detailItem.getScoreTotal()) >= 95) {
+							proposalVO.setPropEvalLvCode("S");
+							proposalVO.setPropEvalScore(detailItem.getScoreTotal());
+							proposalVO.setPropPropStatCode("PRG_4");								
 						}
 					}				
 				}			

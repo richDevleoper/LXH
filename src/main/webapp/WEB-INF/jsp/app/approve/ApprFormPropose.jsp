@@ -301,15 +301,43 @@
 										</thead>
 										<tbody>
 										<c:forEach var="item" items="${approveVO.detailList}" varStatus="status">
-											<tr>
-												<td>${item.aprovalStat}(2023.06.30)</td>
-												<td>${item.userName}</td>
-												<td>x실장</td>
-												<td>${item.aprovalType}</td>
-												<td>x70점(C)</td>
-												<td colspan="5"><div class="comment-btn"><div>${item.aprovalComment}</div><button type="button" class="btn bg-gray">결재의뢰</button></div></td>
-												
-											</tr>
+											<c:if test="${item.aprovalStat != null && item.aprovalStat ne ''.toString()}">
+												<tr>
+													<td>${item.aprovalStat}(2023.06.30)</td>
+													<td>${item.userName}</td>
+													<td>${item.comJobNm }</td>
+													<td>${item.aprovalType}</td>
+													<td>${item.scoreTotal }점 (
+														<c:choose>
+															<c:when test="${item.scoreTotal >= 60 && item.scoreTotal < 70 }">
+																D급
+															</c:when>
+															<c:when test="${item.scoreTotal >= 70 && item.scoreTotal < 80 }">
+																C급
+															</c:when>			
+															<c:when test="${item.scoreTotal >= 80 && item.scoreTotal < 90 }">
+																B급
+															</c:when>	
+															<c:when test="${item.scoreTotal >= 90 && item.scoreTotal < 95 }">
+																A급
+															</c:when>			
+															<c:when test="${item.scoreTotal >= 95 && item.scoreTotal <= 100 }">
+																S급
+															</c:when>		
+															<c:otherwise>
+																불채택
+															</c:otherwise>																																																			
+														</c:choose>
+													)</td>
+													<td colspan="5">
+														<div class="comment-btn"><div>${item.aprovalComment}</div>
+														<c:if test="${status.last }">
+															<button type="button" class="btn bg-gray btn-req-approval">결재의뢰</button>
+														</c:if>
+														</div>														
+													</td>
+												</tr>											
+											</c:if>
 										</c:forEach>
 											<tr>
 												<th rowspan="2"><span class="asterisk">*</span>결재자 지정</th>
@@ -323,15 +351,22 @@
 												<td colspan="5" class="pd3">
                                                     <div class="row">
                                                         <div class="col s12 input-text search">
-                                                            <input type="text" id="text3" name="" value="">
-                                                            <button type="button">검색</button>
+                                        					<input type="hidden" id="input-approval-code" name="input-approval-code"/>
+                                                        	<input type="hidden" id="input-approval-name" name="input-approval-name"/>
+                                                        	<input type="hidden" id="input-approval-user" name="input-approval-user"/>
+                                                            <input type="hidden" id="input-approval-level" name="input-approval-level"/>
+                                                            <input type="hidden" id="input-approval-duty" name="input-approval-duty"/>
+                                                            <input type="hidden" id="input-approval-belt" name="input-approval-belt"/>
+                                                            <input type="hidden" id="input-approval-group-code" name="input-approval-group-code"/>
+                                                            <input type="text" id="input-approval-group" name="input-approval-group" value="" readonly="readonly" style="background-color: #FFF;"/>
+                                                            <button type="button" class="btn-approval-member-search-modal">검색</button>
                                                         </div>
                                                     </div>
                                                 </td>
-												<td>홍길동</td>
-												<td>책임</td>
-												<td>팀장</td>
-												<td>MBB</td>
+												<td id="text-approval-name"></td>
+												<td id="text-approval-level"></td>
+												<td id="text-approval-duty"></td>
+												<td id="text-approval-belt"></td>
 											</tr>
 										</tbody>
 									</table>									
@@ -344,6 +379,84 @@
 						
 
 <script type="text/javascript">
+
+$(document).ready(function(){
+	//결재자 조회
+	$('.btn-approval-member-search-modal').off('click').on('click', function(){
+		popEmp.init();
+		
+		popEmp.returnObjId = $('#input-proposal-memo');
+		popEmp.returnFunc = setApprovalMemberInfo;
+		
+		popEmp.open();			
+	});
+	
+	$('.btn-req-approval').off('click').on('click', function(){
+		if($('#input-approval-name').val() == null || $('#input-approval-name').val() == ''){
+			alert('결재자를 선택해 주세요.');
+			return false;
+		}
+		
+		if($('#input-approval-user').val() == null || $('#input-approval-user').val() == ''){
+			alert('결재자를 선택해 주세요.');
+			return false;
+		}
+		
+		if($('#input-approval-level').val() == null || $('#input-approval-level').val() == ''){
+			alert('결재자를 선택해 주세요.');
+			return false;
+		}
+		
+		if($('#input-approval-duty').val() == null || $('#input-approval-duty').val() == ''){
+			alert('결재자를 선택해 주세요.');
+			return false;
+		}
+		
+		if($('#input-approval-group-code').val() == null || $('#input-approval-group-code').val() == ''){
+			alert('결재자를 선택해 주세요.');
+			return false;
+		}
+		
+		if($('#input-approval-group').val() == null || $('#input-approval-group').val() == ''){
+			alert('결재자를 선택해 주세요.');
+			return false;
+		}
+	});
+});
+
+function setApprovalMemberInfo(el, d){
+	if(d.comPosition == null || d.comPosition == ''){
+		alert('결재권한이 없는 사용자 입니다.\n다시 선택해 주세요.');
+		$('#text-approval-name').html('');
+		$('#text-approval-level').html('');
+		$('#text-approval-duty').html('');
+		$('#text-approval-belt').html('');
+		
+		$('#input-approval-code').val('');
+		$('#input-approval-name').val('');
+		$('#input-approval-user').val('');
+		$('#input-approval-level').val('');
+		$('#input-approval-duty').val('');
+		$('#input-approval-belt').val('');
+		$('#input-approval-group-code').val('');
+		$('#input-approval-group').val('');
+		return false;
+	}
+	
+	$('#text-approval-name').html(d.userName);
+	$('#text-approval-level').html(d.comPositionNm);
+	$('#text-approval-duty').html(d.comJobxNm);
+	$('#text-approval-belt').html(d.comCertBeltNm);
+	
+	$('#input-approval-code').val(d.comNo);
+	$('#input-approval-name').val(d.userName);
+	$('#input-approval-user').val(d.comNo);
+	$('#input-approval-level').val(d.comPosition);
+	$('#input-approval-duty').val(d.comJobx);
+	$('#input-approval-belt').val(d.comCertBelt);
+	$('#input-approval-group-code').val(d.comDepartCode);
+	$('#input-approval-group').val(d.deptFullName);
+}
 
 
 function onclick_procApprove(gubn){

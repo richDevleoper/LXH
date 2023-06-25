@@ -27,6 +27,7 @@
 		<result property="userName" column="USER_NAME" />
 		<result property="aprovalStat" column="APROVAL_STAT" />
 		<result property="aprovalType" column="APROVAL_TYPE" />
+		<result property="comJobNm" column="COM_JOBX_NM" />
 	</resultMap>
 
 		<sql id="defCond">
@@ -122,11 +123,15 @@
 			, T.APROVAL_MAIL_SEND_YN
             , U.USER_NAME
             , T.APROVAL_COMMENT
+            , T.SCORE_TOTAL
+            , cd_job.code_nm com_jobx_nm
 		FROM TB_APPROVAL_DETAIL T
-		     , tb_user_mst U
+		     , tb_user_mst U, tb_code cd_job
 		     , tb_approval_mst m  
 		WHERE T.COM_NO = U.COM_NO
 		  AND T.APROVAL_CODE = m.APROVAL_CODE
+		  AND cd_job.code_grp_id(+) ='JOBX' 
+		  AND cd_job.code_id(+) = T.com_jobx
 		  <if test="aprovalCode != null and aprovalCode != ''">
 				AND T.APROVAL_CODE = #{aprovalCode}
 		  </if>
