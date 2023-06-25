@@ -111,8 +111,8 @@ public class ApproveService {
 		ApproveVO keyVO = new ApproveVO();
 		keyVO.setAprovalCode(vo.getAprovalCode());
 		
-		dao.delete("Approval.delete", keyVO);
-		dao.delete("ApprovalDetail.delete", keyVO);
+		dao.delete("ApprovalDetail.delete", keyVO);  	// 결재선 지우기
+		dao.delete("Approval.delete", keyVO);			// 결재마스터 지우기
 	}
 	
 	public Boolean updateStatus(ApproveVO inputVO, UserVO userSession) {

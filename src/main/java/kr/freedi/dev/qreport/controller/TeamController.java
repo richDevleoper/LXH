@@ -227,43 +227,67 @@ public class TeamController {
 		String userId = userSession.getUserId();
 		String repCurrStep = reportVO.getRepCurrStepCode();
 
+		// 챔피언, 지도사원 저장
+		List<ReportTeamVO> approveMemberList = new ArrayList<>();
+		
+		ReportTeamVO memChamp = null;	// 챔피언
+		ReportTeamVO memLeader = null; // 지도사원
+		for (ReportTeamVO memberVO : reportVO.getRepTeamMemberList()) {
+			if(memberVO.getRepTeamMemRole().equals("5")) { // Define, Finish
+				memChamp = memberVO;	// 챔피언(5)
+			} else if(memberVO.getRepTeamMemRole().equals("3")) {  //그 외
+				memLeader = memberVO;	// 지도사원(3)
+			}
+		}
+		
 		if (reportVO.getMode().equals("CANCEL")) {
 
 			System.out.println(reportVO);
 			// 마지막 단계 결재상신건 취소하기
 			reportService.cancelApprove(reportVO);
 
+		} else if(reportVO.getMode().equals("DROP")) { // Drop신청
+
+			// 마지막 단계 결재상신건 취소하기			
+			approveMemberList.add(memChamp);  
+			reportVO.setRepUpdateUser(userId);
+			// 과제 진행 중 Drop하기			
+			reportService.dropApprove(reportVO, approveMemberList);
+			
 		} else {
+			
 			// 1. 단계저장 - 6시그마 ---------------------------------
 			if (reportVO.getRepDivisionCode().equals("1")) {
 				reportService.updateStep6Sigma(reportVO);
 			}
 
-			// 2. 과제마스터 변경사항 체크하기 ---------------------------------
-			List<ReportTeamVO> approveMemberList = new ArrayList<>();
-
-			Boolean isChangedRepMaster = false;
-			ReportTeamVO memChamp = null; // 챔피언
-			ReportTeamVO memLeader = null; // 지도사원
-			for (ReportTeamVO memberVO : reportVO.getRepTeamMemberList()) {
-				if (memberVO.getRepTeamMemRole().equals("5")) { // Define, Finish
-					memChamp = memberVO; // 챔피언(5)
-				} else if (memberVO.getRepTeamMemRole().equals("3")) { // 그 외
-					memLeader = memberVO; // 지도사원(3)
-				}
-			}
-			// 과제마스터의 변경사항이 있거나 Define, Finish 결재인 경우 챔피언 결재선 추가
-			if (isChangedRepMaster || "1,6".indexOf(repCurrStep) > -1) {
+			// 2. 과제마스터 변경사항 체크하기  ---------------------------------
+			ReportVO originReportVO = reportService.selectReportDefaultInfo(reportVO);
+			
+			// Finish 결재인 경우 챔피언 결재선 추가
+			if(repCurrStep.equals("6")) { 
 				approveMemberList.add(memChamp);
 			}
 			// 그 외 중간 진행사항은 지도사원 결재선 추가
-			if ("2,3,4,5".indexOf(repCurrStep) > -1) {
+			if ("1,2,3,4,5".indexOf(repCurrStep) > -1) {
 				approveMemberList.add(memLeader);
+				
+				// 과제 마스터 변경사항 발생시 결재선에 챔피언 등록
+				Boolean isChanged = reportService.checkChangeBaseInfo(originReportVO, reportVO); // 변경사항 체크
+				if(isChanged) {
+					
+					approveMemberList.add(memChamp);
+					
+					reportVO.setRepUpdateUser(userSession.getUserId());
+					reportService.updateReportMaster(reportVO);
+					
+				}
 			}
 
 			// 3. 결재올리기 ---------------------------------
 			reportVO.setRepUpdateUser(userId);
-			reportService.regApproveType3(reportVO, approveMemberList);
+			//reportService.regApproveType3(reportVO, approveMemberList);
+			reportService.regApproveReport(reportVO, approveMemberList, "3");
 
 			// TODO 4. 이메일 전송 ---------------------------------
 

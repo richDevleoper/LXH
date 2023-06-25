@@ -203,11 +203,19 @@ public class ReportService {
 		
 		approveService.insert(newApprVO);
 	}
-	
+
+	// 6시그마 결재요청
 	public void regApproveType3(ReportVO reportVO, List<ReportTeamVO> approveMemberList) throws Exception {
 	
+		this.regApproveReport(reportVO, approveMemberList, "3"); // 결재 종류 (1-과제신청, 2-드랍신청, 3-6시그마프로세스, 6-실시제안, 7-쪽지제안) (code_grp_id='APR_TYPE')
+	}
+	
+	// 과제 결재요청
+	public void regApproveReport(ReportVO reportVO, List<ReportTeamVO> approveMemberList, String aprovalType) throws Exception {
+		
 		ApproveVO newApprVO = new ApproveVO();
-		newApprVO.setAprovalType("3"); 		// 결재 종류 (1-과제신청, 2-드랍신청, 3-6시그마프로세스, 6-실시제안, 7-쪽지제안) (code_grp_id='APR_TYPE')
+		newApprVO.setAprovalType(aprovalType); 		// 결재 종류 (1-과제신청, 2-드랍신청, 3-6시그마프로세스, 6-실시제안, 7-쪽지제안) (code_grp_id='APR_TYPE')
+		
 		if(reportVO.getRepMenuCode().equals("REPORT")) {
 			newApprVO.setRefBusType("1"); 	// 업무 종류(1-과제)	
 		} else {
@@ -218,7 +226,7 @@ public class ReportService {
 		newApprVO.setAprovalSubject(reportVO.getRepName());				// 결재문서명
 		newApprVO.setUserId(reportVO.getRepUpdateUser());					// 상신자
 		
-		
+		// 결재선 추가
 		List<ApproveDetailVO> newList = new ArrayList<>();
 		for (ReportTeamVO approveMember : approveMemberList) {
 			ApproveDetailVO newDetail = new ApproveDetailVO();
@@ -234,7 +242,7 @@ public class ReportService {
 		newApprVO.setDetailList(newList);	
 		
 		approveService.insert(newApprVO);
-	}
+	}	
 	
 	public void update(ReportVO reportVO) throws Exception {
 
@@ -292,6 +300,7 @@ public class ReportService {
 	
 	
 	public void cancelApprove(ReportVO reportVO) throws Exception {
+		
 		String repStatusCode = reportVO.getRepStatusCode();
 		
 		if(reportVO.getRepCode()!=null) {
@@ -307,15 +316,38 @@ public class ReportService {
 				approveService.cancelApprove(vo);					// 해당 결재건 지우기	
 			} else if (repStatusCode.equals("3")) { // 과제등록시 '진행중'인 상태에서 단계별 결재를 취소하면
 				
-				
-				
 				ApproveVO vo = new ApproveVO();  // 수정대상 검색조건 설정
-				vo.setAprovalType("3");								// 과제선정 (과제-분임조과제 공통)
+				vo.setAprovalType("3");								// 6시그마 결재건
 				vo.setRefBusCode(reportVO.getRepCode().toString());	// 과제코드
 				vo.setRefBusSubCode(reportVO.getRepCurrStepCode());	// 현재 진행중이던 단계
 				approveService.cancelApprove(vo);					// 해당 결재건 지우기
 				
+			} else if (repStatusCode.equals("9")) { // 과제등록시 '9(Drop결재중)'인 상태에서 단계별 결재를 취소하면
+				
+				ApproveVO vo = new ApproveVO();  // 수정대상 검색조건 설정
+				vo.setAprovalType("2");								// 과제선정 (과제-분임조과제 공통)
+				vo.setRefBusCode(reportVO.getRepCode().toString());	// 과제코드
+				approveService.cancelApprove(vo);					// 해당 결재건 지우기
 			}	
+		}
+	}
+	
+	public void dropApprove(ReportVO reportVO, List<ReportTeamVO> approveMemberList) throws Exception {
+		
+		//String repStatusCode = reportVO.getRepStatusCode();
+		
+		if(reportVO.getRepCode()!=null) {
+			// drop 신청시
+			// reportVO.repStatusCode ==> 9 (Drop결재중) 변경
+			reportVO = this.select(reportVO);	// 값이 바뀐 상태에서 결재취소 하는 경우에 대비 디비에서 불러오기
+			reportVO.setRepStatusCode("9");		// 임시저장 상태로 변경
+			this.update(reportVO);				// 상태 변경 저장
+			
+			// 결재상신(DROP)
+			this.regApproveReport(reportVO, approveMemberList, "2"); // 결재 종류 (1-과제신청, 2-드랍신청, 3-6시그마프로세스, 6-실시제안, 7-쪽지제안) (code_grp_id='APR_TYPE')
+			// tb_approval_mst.aproval_type=2
+			// 결재선 --> 챔피언, 과제리더
+			// 해당 결재 완료시 report.repStatusCode=6으로 변경
 		}
 	}
 	

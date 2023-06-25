@@ -1035,7 +1035,7 @@ function onchange_resultType(obj){
 		<div class="list-footer">
 			<div class="list-btns">
 				<c:choose>
-					<c:when test="${reportVO.repStatusCode eq '2'}">
+					<c:when test="${reportVO.repStatusCode eq '2' || reportVO.repStatusCode eq '9'}">	<!-- 선정중 -->
 						<!-- 선정중 -->
 						<button type="button" class="btn bg-gray" id="btnCancelApproval">결재취소</button>
 					</c:when>

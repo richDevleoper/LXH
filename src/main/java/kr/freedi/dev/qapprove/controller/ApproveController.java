@@ -239,13 +239,24 @@ public class ApproveController {
 					if(approveVO.getAprovalState().equals("4")) {	//승인
 						// OK : 6시그마 ; 3(진행중), 일반 ; 6(완료)  code_grp_id='REP_STAT'
 						reportVO.setRepStatusCode("3");	// 선정완료
-					} else if(approveVO.getAprovalState().equals("3")) { // Drop
+					} else if(approveVO.getAprovalState().equals("3")) { // 반려
 						// DROP : 6
 						reportVO.setRepStatusCode("6"); // Drop
 					}
 					reportService.updateStatus(reportVO);
 				} else if (approveVO.getAprovalType().equals("3")) {  // 6시그마 단계별 승인
+				
 					reportService.update6SigmaStepNext(reportVO);
+				} else if(approveVO.getAprovalType().equals("2")) {  // Drop결재건 승인시
+					
+					if(approveVO.getAprovalState().equals("4")) {	//승인
+						// OK : 6시그마 ; 3(진행중), 일반 ; 6(완료)  code_grp_id='REP_STAT'
+						reportVO.setRepStatusCode("6");	// 과제상태 Drop 저장
+					} else if(approveVO.getAprovalState().equals("3")) { // 반려
+						// DROP : 6
+						reportVO.setRepStatusCode("4"); // 과제상태 진행중(On) 으로 
+					}
+					reportService.updateStatus(reportVO);
 				}
 				
 			} else {
