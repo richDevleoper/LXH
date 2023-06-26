@@ -20,7 +20,7 @@
              <div id="page-container">
                 <div class="inner">
 					<form:form commandName="frmApprove" id="defaultForm" name="defaultForm" action="${action}" onsubmit="return false" method="post" modelAttribute="approveVO">  
-					<form:input type="hidden" path="aprovalCode"/>
+					<form:input type="hidden" path="aprovalCode" id="aprovalCode"/>
 					<form:input type="hidden" path="aprovalType"/>
 					<form:input type="hidden" path="aprovalState"/>
 					<form:input type="hidden" path="refBusType"/>
@@ -45,10 +45,15 @@
                                 <li>실시 제안정보</li>
                             </ul>
 							<div class="header-btns">
-							<c:if test="${approveVO.aprovalState ne '3' && approveVO.aprovalState ne '4'}">							
-								<button type="button" class="btn bg-gray" onclick="onclick_procApprove('4')">승인</button>
-                                <button type="button" class="btn bg-gray" onclick="onclick_procApprove('3');">반려</button>
-                            </c:if>        
+                            <c:choose>
+                            	<c:when test="${approveVO.aprovalState ne '3' && approveVO.aprovalState ne '4'}">
+									<button type="button" class="btn bg-gray" onclick="onclick_procApprove('4');">승인</button>
+	                                <button type="button" class="btn bg-gray" onclick="onclick_procApprove('3');">반려</button>                            	
+                            	</c:when>
+                            	<c:when test="${approveVO.aprovalState eq '4' }">
+                            		<button type="button" class="btn bg-gray" onclick="onclick_procApprove('4');">재등록</button>
+                            	</c:when>
+                            </c:choose>        
                                 <a href="/sub.do?menuKey=${menuKey}" class="btn">목록</a>
 							</div>
                         </div>
@@ -263,10 +268,15 @@
 						</div>						
                         <div class="list-footer">
                             <div class="list-btns">
-                            <c:if test="${approveVO.aprovalState ne '3' && approveVO.aprovalState ne '4'}">
-								<button type="button" class="btn bg-gray" onclick="onclick_procApprove('4');">승인</button>
-                                <button type="button" class="btn bg-gray" onclick="onclick_procApprove('3');">반려</button>
-                            </c:if>
+                            <c:choose>
+                            	<c:when test="${approveVO.aprovalState ne '3' && approveVO.aprovalState ne '4'}">
+									<button type="button" class="btn bg-gray" onclick="onclick_procApprove('4');">승인</button>
+	                                <button type="button" class="btn bg-gray" onclick="onclick_procApprove('3');">반려</button>                            	
+                            	</c:when>
+                            	<c:when test="${approveVO.aprovalState eq '4' }">
+                            		<button type="button" class="btn bg-gray" onclick="onclick_procApprove('4');">재등록</button>
+                            	</c:when>
+                            </c:choose>
                                 <a href="/sub.do?menuKey=${menuKey}" class="btn">목록</a>
                             </div>
                         </div>
@@ -301,7 +311,7 @@
 										</thead>
 										<tbody>
 										<c:forEach var="item" items="${approveVO.detailList}" varStatus="status">
-											<c:if test="${item.aprovalStat != null && item.aprovalStat ne ''.toString()}">
+											<c:if test="${item.aprovalStatCode != null && item.aprovalStatCode ne ''.toString()}">
 												<tr>
 													<td>${item.aprovalStat}(2023.06.30)</td>
 													<td>${item.userName}</td>
@@ -331,7 +341,8 @@
 													)</td>
 													<td colspan="5">
 														<div class="comment-btn"><div>${item.aprovalComment}</div>
-														<c:if test="${status.last }">
+														<c:if test="${status.last and item.aprovalStatCode eq '4'}">
+															<input type="hidden" value="${item.comNo}">
 															<button type="button" class="btn bg-gray btn-req-approval">결재의뢰</button>
 														</c:if>
 														</div>														
@@ -421,6 +432,19 @@ $(document).ready(function(){
 			alert('결재자를 선택해 주세요.');
 			return false;
 		}
+		
+		$.post('/apprv/approveProposalReq.do', { 
+			propUser: $($(this).prev()).val(),
+			propApprovalUser: $('#input-approval-user').val(),
+			propApprovalGroupCode: $('#input-approval-group-code').val(),
+			propApprovalDutyCode: $('#input-approval-duty').val(),
+			propApprovalLevelCode: $('#input-approval-level').val(),
+			aprovalCode: $('#aprovalCode').val()
+		}, function(response){
+			if(response != null && response.result == 'SUCCESS'){
+				location.href="/apprv/list.do?menuKey=73";
+			}
+		}, 'json');
 	});
 });
 

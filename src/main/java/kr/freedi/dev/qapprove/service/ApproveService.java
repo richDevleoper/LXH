@@ -147,4 +147,15 @@ public class ApproveService {
 		
 		return apprComplete;
 	}	
+	
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// 임시 제안 2차, 3차 결재시
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////
+	public void insertDetailItem(ApproveDetailVO detailVO) throws Exception {
+		dao.insert("ApprovalDetail.insert", detailVO);
+	}
+	
+	public void updateApprovalState(ApproveVO approveVO) throws Exception {
+		dao.insert("Approval.updateStatus", approveVO);
+	}
 }

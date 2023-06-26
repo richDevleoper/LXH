@@ -471,5 +471,34 @@ public class ApproveController {
 			return "redirect:list.do";
 		} 
 	}
+	
+	
+	/**
+	 * 제안 결재 (2차, 3차)
+	 * */
+	@RequestMapping({"/approveProposalReq.do"})
+	public @ResponseBody String approveProposalReq(HttpServletRequest request,
+			@RequestParam Map<String, Object> reqMap, UserVO userSession) throws Exception{
+		ApproveDetailVO approveDetailVo = new ApproveDetailVO();
+		approveDetailVo.setComNo(String.valueOf(reqMap.get("propApprovalUser")));
+		approveDetailVo.setComDepartCode(String.valueOf(reqMap.get("propApprovalGroupCode")));
+		approveDetailVo.setComJobx(String.valueOf(reqMap.get("propApprovalDutyCode")));
+		approveDetailVo.setComPosition(String.valueOf(reqMap.get("propApprovalLevelCode")));
+		approveDetailVo.setAprovalReqComNo(String.valueOf(reqMap.get("propUser")));
+		approveDetailVo.setAprovalCode(String.valueOf(reqMap.get("aprovalCode")));
+		
+		service.insertDetailItem(approveDetailVo);
+		
+		ApproveVO approveVo = new ApproveVO();
+		approveVo.setAprovalCode(String.valueOf(reqMap.get("aprovalCode")));
+		service.updateApprovalState(approveVo);
+		
+		ObjectMapper mapper = new ObjectMapper();
+		EgovMap resultItem = new EgovMap();
+		resultItem.put("RESULT", "SUCCESS");
+		String json = mapper.writeValueAsString(resultItem);
+		return json;
+	}
+
 }
 
