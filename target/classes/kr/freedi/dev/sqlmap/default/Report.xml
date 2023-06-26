@@ -489,5 +489,16 @@
 	     
 	</sql>
 	
+	<delete id="delete">
+		DELETE FROM TB_REPORT_MST
+		<where>
+			<trim prefixOverrides="AND|OR">
+				<if test="repCode != null and repCode != ''">
+					AND T.REP_CODE = #{repCode}
+				</if>
+			</trim>
+		</where>
+	</delete>
+	
 </mapper>
 

@@ -339,9 +339,9 @@ public class ReportService {
 		if(reportVO.getRepCode()!=null) {
 			// drop 신청시
 			// reportVO.repStatusCode ==> 9 (Drop결재중) 변경
-			reportVO = this.select(reportVO);	// 값이 바뀐 상태에서 결재취소 하는 경우에 대비 디비에서 불러오기
-			reportVO.setRepStatusCode("9");		// 임시저장 상태로 변경
-			this.update(reportVO);				// 상태 변경 저장
+			ReportVO savedReportVO = this.select(reportVO);	// 값이 바뀐 상태에서 결재취소 하는 경우에 대비 디비에서 불러오기
+			savedReportVO.setRepStatusCode("9");		// 임시저장 상태로 변경
+			this.update(savedReportVO);				// 상태 변경 저장
 			
 			// 결재상신(DROP)
 			this.regApproveReport(reportVO, approveMemberList, "2"); // 결재 종류 (1-과제신청, 2-드랍신청, 3-6시그마프로세스, 6-실시제안, 7-쪽지제안) (code_grp_id='APR_TYPE')
@@ -458,6 +458,33 @@ public class ReportService {
 	public ReportVO selectReportDefaultInfo(ReportVO reportVO) {
 		
 		return (ReportVO)dao.selectOne("Report.select", reportVO);
+	}
+	
+	public void delete(ReportVO reportVO) {
+		
+		// 과제 일정 제거
+		ReportDetailVO reportDetailVO = new ReportDetailVO();
+		reportDetailVO.setRepCode(reportVO.getRepCode());
+		reportDetailService.delete(reportDetailVO);
+		
+		// 과제 팀원 제거
+		ReportTeamVO reportTeamVO = new ReportTeamVO();
+		reportTeamVO.setRepCode(reportVO.getRepCode());
+		reportTeamService.delete(reportTeamVO);
+		
+		ReportResultVO reportResultVO = new ReportResultVO();
+		reportResultVO.setRepCode(reportVO.getRepCode());
+		reportResultService.delete(reportResultVO);
+		
+		ReportIndicatorVO reportIndicatorVO = new ReportIndicatorVO();
+		reportIndicatorVO.setRepCode(reportVO.getRepCode());
+		reportIndicatorService.delete(reportIndicatorVO);
+		
+		
+		// 과제 첨부파일 제거
+		attachFileService.deleteAttachFile(ATTACH_PREFIX + "_" + reportVO.getRepCode());
+		
+		dao.delete("Report.delete", reportVO);  	// 결재선 지우기
 	}
 	
 	public Boolean checkChangeBaseInfo(ReportVO originVO, ReportVO newVO) {

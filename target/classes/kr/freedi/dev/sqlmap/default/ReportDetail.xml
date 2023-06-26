@@ -214,5 +214,14 @@
 		
 	</select>
 	
+	<delete id="delete">
+		DELETE FROM TB_REPORT_DETAIL
+		<where>
+			<trim prefixOverrides="AND|OR">
+				<include refid="defCond"></include>
+			</trim>
+		</where>
+	</delete>
+	
 </mapper>
 

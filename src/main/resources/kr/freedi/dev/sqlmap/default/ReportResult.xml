@@ -120,5 +120,10 @@
 		WHERE T.REP_RESULT_CODE = #{repResultCode}
 	</select>
 	
+	<delete id="delete">
+		DELETE FROM TB_REPORT_RESULT
+		<include refid="defCond"></include>
+	</delete>
+	
 </mapper>
 

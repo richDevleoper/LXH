@@ -981,6 +981,12 @@ function onchange_resultType(obj){
 									<button type="button" class="btn bg-gray" id="btnReqApproval">결재의뢰</button>
 									<button type="button" class="btn bg-gray" id="btnReqDrop">Drop신청</button>
 								</c:when>
+								<c:when test="${reportVO.repStatusCode eq '6'}"> <!-- Drop -->
+								
+								</c:when>
+								<c:when test="${reportVO.repStatusCode eq '8'}"> <!-- 반려 -->
+									<button type="button" class="btn bg-gray" id="btnReqApproval">결재 재요청</button>
+								</c:when>
 								<c:otherwise>
 	                            	<button type="button" class="btn light-gray" id="btnSave">임시저장</button>
 							  		<button type="button" class="btn bg-gray" id="btnReqApproval">결재의뢰</button>   

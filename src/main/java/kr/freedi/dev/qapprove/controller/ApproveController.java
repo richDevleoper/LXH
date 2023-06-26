@@ -224,7 +224,17 @@ public class ApproveController {
 		
 
 			/**************
-			 * 업무 상태 변경
+			 * 업무 상태 변경 
+			 * code_grp_id='REP_STAT'; (reportVO.repStatusCode)
+				1	임시저장
+				2	선정중
+				3	선정완료
+				4	진행중(On)
+				5	진행중(Off)
+				6	Drop
+				7	완료
+				8	반려
+				9	DROP결재중
 			 **************/
 			// 과제/분임조 
 			if("1,2".indexOf(approveVO.getRefBusType())>-1) {
@@ -234,14 +244,14 @@ public class ApproveController {
 				reportVO.setRepCode(Integer.parseInt(approveVO.getRefBusCode()));
 				reportVO.setRepUpdateUser(userSession.getUserId());
 				
-				if("1,2".indexOf(approveVO.getAprovalType())>-1) {    // 과제등록(과제/분임조)
+				if("1".indexOf(approveVO.getAprovalType())>-1) {    // 과제등록(과제/분임조)
 					// (rep_code, rep_status_code)
 					if(approveVO.getAprovalState().equals("4")) {	//승인
 						// OK : 6시그마 ; 3(진행중), 일반 ; 6(완료)  code_grp_id='REP_STAT'
 						reportVO.setRepStatusCode("3");	// 선정완료
 					} else if(approveVO.getAprovalState().equals("3")) { // 반려
-						// DROP : 6
-						reportVO.setRepStatusCode("6"); // Drop
+						// 반려 상태로 변경
+						reportVO.setRepStatusCode("8");
 					}
 					reportService.updateStatus(reportVO);
 				} else if (approveVO.getAprovalType().equals("3")) {  // 6시그마 단계별 승인

@@ -140,5 +140,10 @@
 		WHERE T.REP_INDI_CODE = #{repIndiCode}
 	</select>
 	
+	<delete id="delete">
+		DELETE FROM TB_REPORT_INDICATORS
+		<include refid="defCond"></include>
+	</delete>
+	
 </mapper>
 

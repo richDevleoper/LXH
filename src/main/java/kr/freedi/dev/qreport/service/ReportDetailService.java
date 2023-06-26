@@ -93,4 +93,17 @@ public class ReportDetailService {
 		return returnVO;
 	}
 	
+	public int delete(ReportDetailVO reportDetailVO) {
+		
+		List<ReportDetailVO> savedVO = dao.selectList("ReportDetail.selectFullList", reportDetailVO);
+		
+		// 첨부파일 먼저 지우기
+		for (ReportDetailVO vo : savedVO) {	
+			attachFileService.deleteAttachFile(ATTACH_PREFIX + "_" + vo.getRepStepCode() + "_" + vo.getRepCode());
+		}
+		
+		// 일정데이터 지우기
+		return dao.delete("ReportDetail.delete", reportDetailVO);  	// 결재선 지우기
+	}
+	
 }

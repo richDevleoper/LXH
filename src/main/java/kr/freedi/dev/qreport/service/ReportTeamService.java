@@ -8,6 +8,7 @@ import javax.annotation.Resource;
 import kr.freedi.dev.article.service.ArticleCommentService;
 import kr.freedi.dev.common.dao.DefaultDAO;
 import kr.freedi.dev.qpopup.domain.UserVO;
+import kr.freedi.dev.qreport.domain.ReportDetailVO;
 import kr.freedi.dev.qreport.domain.ReportTeamVO;
 import kr.freedi.dev.qreport.domain.ReportVO;
 
@@ -72,6 +73,12 @@ public class ReportTeamService {
 	public ReportTeamVO selectCircleInfo(ReportTeamVO teamVO) throws Exception {
 	
 		return null;
+	}
+	
+	public void delete(ReportTeamVO reportTeamVO) {
+		
+		// 팀원정보 삭제
+		dao.delete("ReportTeam.delete", reportTeamVO);  	// 결재선 지우기
 	}
 	
 }

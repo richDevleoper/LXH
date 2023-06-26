@@ -57,7 +57,7 @@
                                         </colgroup>
                                         <tbody>
                                             <tr>
-                                                <th><label for="text1"><span class="asterisk">*</span>교육과정명</label></th>
+                                                <th><label for="text1"><span class="asterisk">*</span>과정명</label></th>
                                                 <td colspan="3">
                                                     <div class="row">
                                                         <div class="col s12 input-text">
@@ -67,7 +67,7 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <th><label for="text2"><span class="asterisk">*</span>교육연도</label></th>
+                                                <th><label for="text2"><span class="asterisk">*</span>연도</label></th>
                                                 <td>
                                                     <div class="row">
                                                         <div class="col s12 select-group">
@@ -80,7 +80,7 @@
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <th><label for="text3"><span class="asterisk">*</span>벨트</label></th>
+                                                <th><label for="text3"><span class="asterisk">*</span>인증벨트</label></th>
                                                 <td>
                                                     <div class="row">
                                                         <div class="col s12 select-group">
@@ -92,7 +92,7 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <th><span class="asterisk">*</span>교육유형</th>
+                                                <th><span class="asterisk">*</span>유형</th>
                                                 <td>
                                                     <div class="row">
                                                         <div class="col s12 select-group">
@@ -114,7 +114,7 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <th><label for="select1"><span class="asterisk">*</span>교육차수</label></th>
+                                                <th><label for="select1"><span class="asterisk">*</span>차수</label></th>
                                                 <td>
                                                     <div class="row">
                                                         <div class="col s12 select-group">
@@ -127,7 +127,7 @@
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <th><label for="text4"><span class="asterisk">*</span>교육일정</label></th>
+                                                <th><label for="text4"><span class="asterisk">*</span>일정</label></th>
                                                 <td>
                                                   
                                                     <div class="row">
@@ -142,7 +142,7 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <th><label for="text1"><span class="asterisk">*</span>교육정원</label></th>
+                                                <th><label for="text1"><span class="asterisk">*</span>정원</label></th>
                                                 <td colspan="3">
                                                     <div class="row">
                                                         <div class="col s037 input-text">                                                            

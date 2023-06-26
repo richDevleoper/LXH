@@ -20,7 +20,7 @@ import egovframework.rte.psl.dataaccess.util.EgovMap;
  * @file 	: ReportTeamService.java
  * @date	: 2023. 4. 6.
  * @author	: swpark
- * @comment : 과제 멤버 Service 
+ * @comment : 
  * @history	: 
  */
 @Service("reportIndicatorService")
@@ -56,5 +56,9 @@ public class ReportIndicatorService {
 		
 		return dao.selectList("ReportIndicator.selectFullList", reportIndicatorVO);
 	}
-	
+
+	public void delete(ReportIndicatorVO reportIndicatorVO) {
+		
+		dao.delete("ReportIndicator.delete", reportIndicatorVO); 
+	}
 }

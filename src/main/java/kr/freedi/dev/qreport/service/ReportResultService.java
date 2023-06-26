@@ -6,6 +6,7 @@ import javax.annotation.Resource;
 
 import kr.freedi.dev.common.dao.DefaultDAO;
 import kr.freedi.dev.qreport.domain.ReportResultVO;
+import kr.freedi.dev.qreport.domain.ReportTeamVO;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -53,6 +54,12 @@ public class ReportResultService {
 	public List<ReportResultVO> selectFullList(ReportResultVO vo) {
 		
 		return dao.selectList("ReportResult.selectFullList", vo);
+	}
+	
+	public void delete(ReportResultVO vo) {
+		
+		// 과제성과
+		dao.delete("ReportResult.delete", vo);  	// 결재선 지우기
 	}
 	
 }

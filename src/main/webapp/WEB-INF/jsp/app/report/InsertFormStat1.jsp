@@ -1045,6 +1045,13 @@ function onchange_resultType(obj){
 						<button type="button" class="btn bg-gray" id="btnReqApproval">결재의뢰</button>
 						<button type="button" class="btn bg-gray" id="btnReqDrop">Drop신청</button>
 					</c:when>
+					<c:when test="${reportVO.repStatusCode eq '6'}"> <!-- Drop -->
+					
+					</c:when>
+					<c:when test="${reportVO.repStatusCode eq '8'}"> <!-- 반려 -->
+						<button type="button" class="btn bg-gray" id="btnReqApproval">결재 재요청</button>
+						<button type="button" class="btn bg-gray" id="btnDelete">삭제</button>
+					</c:when>
 					<c:otherwise>
 						<button type="button" class="btn light-gray" id="btnSave">임시저장</button>
 						<button type="button" class="btn bg-gray" id="btnReqApproval">결재의뢰</button>
@@ -1225,6 +1232,15 @@ function onchange_resultType(obj){
 				$("#defaultForm")[0].submit();	
 			};
 		});
+		
+		$("#btnDelete").off("click").on("click", function(){
+			if(confirm("삭제하시겠습니까?")){
+				//$("#repStatusCode").val("2"); // 상태 임시저장 으로 저장
+				$("#mode").val("DELETE");
+				$("#defaultForm")[0].submit();	
+			};
+		});
+		
   	 	// 검색 이벤트
 		$(".btn-search-emp").off("click").on("click", function(){
 			callPopup_searchEmployee(this);

@@ -145,7 +145,7 @@ public class ReportController {
 		ReportVO tReportVO = new ReportVO();
 		tReportVO = reportService.select(reportVO);
 		
-		if(("1|2").indexOf(tReportVO.getRepStatusCode())>-1) {
+		if(("1,2,8").indexOf(tReportVO.getRepStatusCode())>-1) {
 			// 임시저장, 선정중일 경우
 			return "redirect:./insertForm.do?menuKey="+searchVO.getMenuKey()+"&repCode="+reportVO.getRepCode();
 		} else {	
@@ -209,6 +209,9 @@ public class ReportController {
 			reportVO.setRepUpdateUser(userId);
 			reportService.update(reportVO);	
 		} else if(reportVO.getMode().equals("CANCEL")) {
+			// 임시저장 건 결재취소 --> 결재데이터 제거 및 임시저장 상태로 변경			
+			reportService.cancelApprove(reportVO);
+		} else if(reportVO.getMode().equals("DELETE")) {
 			// 임시저장 건 결재취소 --> 결재데이터 제거 및 임시저장 상태로 변경			
 			reportService.cancelApprove(reportVO);
 		} else {
