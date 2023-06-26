@@ -94,8 +94,10 @@
                                 <p class="title">나의 결재의뢰함</p>
                                 <span class="bar"></span>
                                 <p class="total">총 ${totalCount}건(승인 : ${count_4}건, 반려 : ${count_3}건, 미결 ${count_2}건)</p>
-                                <select name="limit" class="limit">
-                                    <option value="10">10개</option>
+                                <select name="limit" class="limit" onchange="onchange_recordCountPerPage(this.value)">
+                                    <option value="10" <c:if test="${approveSearchVO.recordCountPerPage eq '10' }">selected="selected"</c:if>>10개</option>
+                                    <option value="50" <c:if test="${approveSearchVO.recordCountPerPage eq '50' }">selected="selected"</c:if>>50개</option>
+                                    <option value="100" <c:if test="${approveSearchVO.recordCountPerPage eq '100' }">selected="selected"</c:if>>100개</option>
                                 </select>
                             </div>
                             <div class="list-content">

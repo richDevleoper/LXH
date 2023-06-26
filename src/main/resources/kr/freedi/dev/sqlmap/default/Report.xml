@@ -490,7 +490,7 @@
 	</sql>
 	
 	<delete id="delete">
-		DELETE FROM TB_REPORT_MST
+		DELETE FROM TB_REPORT_MST T
 		<where>
 			<trim prefixOverrides="AND|OR">
 				<if test="repCode != null and repCode != ''">

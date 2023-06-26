@@ -465,7 +465,7 @@ public class ReportService {
 		// 과제 일정 제거
 		ReportDetailVO reportDetailVO = new ReportDetailVO();
 		reportDetailVO.setRepCode(reportVO.getRepCode());
-		reportDetailService.delete(reportDetailVO);
+		System.out.println(reportDetailService.delete(reportDetailVO));
 		
 		// 과제 팀원 제거
 		ReportTeamVO reportTeamVO = new ReportTeamVO();

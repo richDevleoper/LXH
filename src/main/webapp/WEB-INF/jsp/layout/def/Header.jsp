@@ -34,6 +34,7 @@ hr { display:none; }
                     <div class="header-util">
                     <c:choose>
                     	<c:when test="${not empty userSession.intfUserVO}">
+                    		<!-- kr.freedi.dev.menu.service.MenuService.setHeaderInormation() -->
                         	<p>${userSession.intfUserVO.userName}(${userSession.intfUserVO.comDepartName}) &nbsp;
                         	과제 <a href="/sub.do?menuKey=29" class="lx-red">${countReport}</a>건, 
                         	결재 <a href="/sub.do?menuKey=73" class="lx-red">${countApprove}</a>건, 

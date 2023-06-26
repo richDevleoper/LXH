@@ -672,7 +672,7 @@ public class MenuService implements IMenuService {
 			countReport = (Integer) dao.selectOne("Report.selectFullListTotalCount", reportSearchVO);
 			
 			ApproveSearchVO approveSearchVO = new ApproveSearchVO();
-			approveSearchVO.setSearchUserid(userSession.getUserId());
+			approveSearchVO.setSearchUserId(userSession.getUserId());
 			countApprove = (Integer) dao.selectOne("Approval.selectListTotalCount", approveSearchVO);	
 		}
 		

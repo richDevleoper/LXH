@@ -1055,6 +1055,9 @@ function onchange_resultType(obj){
 					<c:otherwise>
 						<button type="button" class="btn light-gray" id="btnSave">임시저장</button>
 						<button type="button" class="btn bg-gray" id="btnReqApproval">결재의뢰</button>
+						<c:if test="${not empty reportVO.mode}">
+							<button type="button" class="btn bg-gray" id="btnDelete">삭제</button>
+						</c:if>
 					</c:otherwise>
 				</c:choose>
 				<a href="./list.do?menuKey=${menuKey}" class="btn">목록</a>
@@ -1233,6 +1236,7 @@ function onchange_resultType(obj){
 			};
 		});
 		
+		// 삭제버튼
 		$("#btnDelete").off("click").on("click", function(){
 			if(confirm("삭제하시겠습니까?")){
 				//$("#repStatusCode").val("2"); // 상태 임시저장 으로 저장

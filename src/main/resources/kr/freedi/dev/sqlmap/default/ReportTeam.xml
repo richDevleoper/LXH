@@ -52,6 +52,7 @@
 			, M.REP_CODE
 			, M.COM_NO
 			, M.DEPT_CODE
+			, get_depart_nm(M.DEPT_CODE) dept_name
 			, M.CIR_CODE
 			, M.DEPT_NAME
 			, M.COM_JOBX_CODE
@@ -185,7 +186,10 @@
 		SELECT NVL(MAX(TO_NUMBER(REP_TEAM_CODE)), 0) + 1 REP_TEAM_CODE FROM TB_REPORT_TEAM
 	</select>
 	
-
+	<delete id="delete">
+		DELETE FROM TB_REPORT_TEAM M
+		<include refid="defCond"></include>
+	</delete>
 	
 	
 </mapper>

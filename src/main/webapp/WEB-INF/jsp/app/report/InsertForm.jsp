@@ -145,7 +145,8 @@
 										<td>
 											<div class="row">
 												<div class="col s12 select-group">
-													<form:select path="repMbbUseRateCode" title="MBB활용율을 선택하세요." cssClass="validate[required]"></form:select>
+													<select id="ddlRepMbbUseRateCode" title="MBB활용율을 선택하세요." class="validate[required]"></select>
+													<form:hidden path="repMbbUseRateCode"></form:hidden>
 												</div>
 											</div>
 										</td>
@@ -1003,7 +1004,7 @@ function onchange_resultType(obj){
 						<button type="button" class="btn bg-gray" id="btnCancelApproval">결재취소</button>
 					</c:when>
 					<c:when
-						test="${reportVO.repStatusCode eq '3' || reportVO.repStatusCode eq '4'}">
+						test="${reportVO.repStatusCode eq '3' || reportVO.repStatusCode eq '4'|| reportVO.repStatusCode eq '5'}">
 						<!-- 진행중 -->
 						<button type="button" class="btn bg-gray" id="btnReqApproval">결재의뢰</button>
 						<button type="button" class="btn bg-gray" id="btnReqDrop">Drop신청</button>
@@ -1013,10 +1014,14 @@ function onchange_resultType(obj){
 					</c:when>
 					<c:when test="${reportVO.repStatusCode eq '8'}"> <!-- 반려 -->
 						<button type="button" class="btn bg-gray" id="btnReqApproval">결재 재요청</button>
-					</c:when>					
+						<button type="button" class="btn bg-gray" id="btnDelete">삭제</button>
+					</c:when>
 					<c:otherwise>
 						<button type="button" class="btn light-gray" id="btnSave">임시저장</button>
 						<button type="button" class="btn bg-gray" id="btnReqApproval">결재의뢰</button>
+						<c:if test="${not empty reportVO.mode}">
+							<button type="button" class="btn bg-gray" id="btnDelete">삭제</button>
+						</c:if>
 					</c:otherwise>
 				</c:choose>
 				<a href="./list.do?menuKey=${menuKey}" class="btn">목록</a>
@@ -1084,15 +1089,19 @@ function onchange_resultType(obj){
 		
 		setDropDown("repLeaderBeltCode", cdLeaderBelt, true);//리더벨트
 		$("#repLeaderBeltCode").val("${reportVO.repLeaderBeltCode}")
+		//onchange_ddlRepLeaderBeltCode();
 		
 		setDropDown("repActionTypeCode", cdActionType, true);//활동분야
 		$("#repActionTypeCode").val("${reportVO.repActionTypeCode}")
 		
-		setDropDown("repMbbUseRateCode", cdMbbUseRate, false);//MBB활용율
+		setDropDown("ddlRepMbbUseRateCode", cdMbbUseRate, false);//MBB활용율
+		$("#ddlRepMbbUseRateCode").prop("disabled", true);
+		/*
 		const vRepMbbUseRate = "${reportVO.repMbbUseRateCode}";
 		if(vRepMbbUseRate){
 			$("#repMbbUseRateCode").val(vRepMbbUseRate)	;
 		}
+		*/
 		
 		//setDropDown(".ddl-rep-result-type", cdRepResultType, true);//성과항목
 		const currYear = new Date().getFullYear();
@@ -1100,7 +1109,6 @@ function onchange_resultType(obj){
 
 		onchange_ddlRepDevisionCode();	// 과제유형
 		$("#repTypeCode").val("${reportVO.repTypeCode}");
-		
 		
 		//setDropDown("repProductClass", [], true);
 		
@@ -1139,7 +1147,8 @@ function onchange_resultType(obj){
 		// onchange_ddlRepDevisionCode : 과제유형, 일정계획 입력창 변경
 		
 		$("#repSectorCode").off("change").on("change", onchange_ddlRepSectorCode); // 부문 선택
-
+		
+		$("#repLeaderBeltCode").off("change").on("change", onchange_ddlRepLeaderBeltCode); // 과제리더벨트
 		
 		//팀멤버 추가
 		$('.btn-team-member-add').off("click").on('click', function() {
@@ -1192,6 +1201,16 @@ function onchange_resultType(obj){
 			$("#mode").val("CANCEL");
 			$("#defaultForm")[0].submit();
 		});
+		
+		// 삭제버튼
+		$("#btnDelete").off("click").on("click", function(){
+			if(confirm("삭제하시겠습니까?")){
+				//$("#repStatusCode").val("2"); // 상태 임시저장 으로 저장
+				$("#mode").val("DELETE");
+				$("#defaultForm")[0].submit();	
+			};
+		});
+		
   	 	// 검색 이벤트
 		$(".btn-search-emp").off("click").on("click", function(){
 			callPopup_searchEmployee(this);
@@ -1378,6 +1397,16 @@ function onchange_resultType(obj){
 	function onchange_ddlRepTypeCode(e){
 		
 		changeTitle(); // 6sigma 일정계획 타이틀 변경( DMAIC ↔ DMEDI )
+	}
+	
+	function onchange_ddlRepLeaderBeltCode(e){
+
+		// MBB 리더벨트가 MBB일 경우 활용율 '직접수행', 나머지 '해당없음'
+		if($("#repLeaderBeltCode").val()==="D002"){
+			$("#ddlRepMbbUseRateCode, #repMbbUseRateCode").val("2");
+		} else {
+			$("#ddlRepMbbUseRateCode, #repMbbUseRateCode").val("1");
+		}
 	}
 	
 	function changeTitle(){

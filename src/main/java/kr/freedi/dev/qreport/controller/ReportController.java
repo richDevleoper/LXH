@@ -102,7 +102,7 @@ public class ReportController {
 			}
 		}
 		
-		//페이징 기본설정8
+		//페이징 기본설정
 		searchVO.setTotalRecordCount(totalCount);
 		
 		List<ReportVO> reportList = reportService.selectList(searchVO);
@@ -182,7 +182,7 @@ public class ReportController {
 		// 페이지 바인딩
 		ReportVO retVO = reportService.proc_reportFormHandler(req, model, searchVO, reportVO, userSession);
 		model.addAttribute("action", "/report/insert.do");
-				
+		
 		if(retVO.getRepCode() != null 
 				&& retVO.getRepDivisionCode() !=null 
 				&& !retVO.getRepDivisionCode().equals("1")) {  
@@ -212,8 +212,8 @@ public class ReportController {
 			// 임시저장 건 결재취소 --> 결재데이터 제거 및 임시저장 상태로 변경			
 			reportService.cancelApprove(reportVO);
 		} else if(reportVO.getMode().equals("DELETE")) {
-			// 임시저장 건 결재취소 --> 결재데이터 제거 및 임시저장 상태로 변경			
-			reportService.cancelApprove(reportVO);
+			// 임시저장 건 결재취소 --> 결재데이터 제거 및 임시저장 상태로 변경
+			reportService.delete(reportVO);
 		} else {
 			// 신규입력 결재의뢰/임시저장
 			reportVO.setRepRegUser(userId);
