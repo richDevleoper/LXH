@@ -26,6 +26,11 @@ public class ReportSearchVO extends CommonVO {
 	@ParamField
 	private String searchStatus;	// 진행현황 status_code
 	
+	@ParamField
+	private String searchDepart; // 부서
+	
+	private String searchDepartName; // 부서명
+	
 	private String menuCode;		// 과제/10+ or 분임조과제 구분
 	
 	private String searchSectorCode;	// 부문
@@ -43,6 +48,8 @@ public class ReportSearchVO extends CommonVO {
 	private String searchFromDt; // 조회기간(시작)
 	
 	private String searchToDt; // 조회기간(끝)
+	
+	
 	
 	
 	//searchUserid() // 로그인
@@ -163,14 +170,31 @@ public class ReportSearchVO extends CommonVO {
 		this.searchTeamMemberName = searchTeamMemberName;
 	}
 
+	public String getSearchDepart() {
+		return searchDepart;
+	}
+
+	public void setSearchDepart(String searchDepart) {
+		this.searchDepart = searchDepart;
+	}
+
+	public String getSearchDepartName() {
+		return searchDepartName;
+	}
+
+	public void setSearchDepartName(String searchDepartName) {
+		this.searchDepartName = searchDepartName;
+	}
+
 	@Override
 	public String toString() {
 		return "ReportSearchVO [searchRepName=" + searchRepName + ", searchDivision=" + searchDivision + ", searchType="
-				+ searchType + ", searchStatus=" + searchStatus + ", menuCode=" + menuCode + ", searchSectorCode="
+				+ searchType + ", searchStatus=" + searchStatus + ", searchDepart=" + searchDepart
+				+ ", searchDepartName=" + searchDepartName + ", menuCode=" + menuCode + ", searchSectorCode="
 				+ searchSectorCode + ", searchPlaceCode=" + searchPlaceCode + ", searchActionTypeCode="
-				+ searchActionTypeCode + ", searchLeaderBeltCode=" + searchLeaderBeltCode + ", searchTeamMemberType=" + searchTeamMemberType + ", searchTeamMemberName="
-				+ searchTeamMemberName + ", searchFromDt=" + searchFromDt + ", searchToDt=" + searchToDt
-				+ ", orderByTyp=" + orderByTyp + "]";
+				+ searchActionTypeCode + ", searchLeaderBeltCode=" + searchLeaderBeltCode + ", searchTeamMemberType="
+				+ searchTeamMemberType + ", searchTeamMemberName=" + searchTeamMemberName + ", searchFromDt="
+				+ searchFromDt + ", searchToDt=" + searchToDt + ", orderByTyp=" + orderByTyp + "]";
 	}
 	
 }

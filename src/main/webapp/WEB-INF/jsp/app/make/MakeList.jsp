@@ -140,8 +140,8 @@
 	<div class="modal-dimmed"></div>
 	
 
-	<script type="text/javascript">
-$(document).ready(function(){
+<script type="text/javascript">
+$(documentsa).ready(function(){
 	init();
 	initCode();
 	
@@ -163,23 +163,23 @@ function init(){
 	$(".btn-search-dept").off("click").on("click", function(){
 		callPopup_searchDepartment(this);
 	});
-	
-	// 조직 조회 호출부
-	function callPopup_searchDepartment(obj){
+}
 
-		popDept.init();
-		// footer.jsp 내 영역 호출
-		popDept.returnObjId = "searchDepart";
-		popDept.returnFunc = callback_popDept;
-		popDept.open();
-	}
+// 조직 조회 호출부
+function callPopup_searchDepartment(obj){
+
+	popDept.init();
+	// footer.jsp 내 영역 호출
+	popDept.returnObjId = "searchDepart";
+	popDept.returnFunc = callback_popDept;
+	popDept.open();
+}
+
+// 조직 조회 콜백부
+function callback_popDept(objId, data){
 	
-	// 조직 조회 콜백부
-	function callback_popDept(objId, data){
-		
-		$("#"+objId).val(data.deptCode);
-		$("#searchDepartName").val(data.deptName);
-	}
+	$("#"+objId).val(data.deptCode);
+	$("#searchDepartName").val(data.deptName);
 }
 
 function initCode(){

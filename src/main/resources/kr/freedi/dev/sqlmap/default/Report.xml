@@ -70,7 +70,11 @@
 				AND T.REP_MENU_CODE = #{menuCode}
 			</if>
 			<if test="searchUserid != null and searchUserid != ''">
-				AND T.REP_REG_USER = #{searchUserid}
+				AND (T.REP_REG_USER = #{searchUserid} or exists (select 1 from tb_report_team where rep_code=T.REP_CODE and com_no=#{searchUserid}))
+			</if>
+			
+			<if test="searchDepart != null and searchDepart != ''">
+				AND EXISTS (SELECT 1 FROM TB_USER_MST WHERE COM_NO=T.REP_REG_USER AND COM_DEPART_CODE=#{searchDepart})
 			</if>
 			
 			<if test="searchTeamMemberName != null and searchTeamMemberName != ''">

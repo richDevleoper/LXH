@@ -44,8 +44,9 @@
                                             <label>조직</label>
                                         </div>
                                         <div class="pd-l10 form-inline form-input col s8">
-                                            <input type="text" name="">
-                                            <button type="button" class="btn-org">검색</button>
+                                            <form:input type="hidden" path="searchDepart"/>
+					                        <form:input type="text" path="searchDepartName" readonly="true" />
+					                        <button type="button" class="btn-org btn-search-dept">검색</button>
                                         </div>
                                     </div>
                                     <div class="form-inline form-input col s4">
@@ -439,8 +440,30 @@
     			
     			$('#defaultForm').attr("action","reportSummary.do");
     			$('#defaultForm')[0].submit();
-    		});		
+    		});
     		
+    		// 부서검색
+    		$(".btn-search-dept").off("click").on("click", function(){
+    			callPopup_searchDepartment(this);
+    		});
+    		
+    	}
+    	
+    	// 조직 조회 호출부
+    	function callPopup_searchDepartment(obj){
+
+    		popDept.init();
+    		// footer.jsp 내 영역 호출
+    		popDept.returnObjId = "searchDepart";
+    		popDept.returnFunc = callback_popDept;
+    		popDept.open();
+    	}
+    	
+    	// 조직 조회 콜백부
+    	function callback_popDept(objId, data){
+    		
+    		$("#"+objId).val(data.deptCode);
+    		$("#searchDepartName").val(data.deptName);
     	}
     	
     	function onchange_ddlRepDevisionCode(e){

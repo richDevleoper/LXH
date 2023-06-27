@@ -1230,6 +1230,12 @@ function onchange_resultType(obj){
 			},
 			onValidationComplete: function(form, status){
 				if(status == true) {
+					
+					if($("#fileUploadWrap").find(".files tr.template-download").length===0){
+						alert("과제등록서 첨부파일이 등록되지 않았습니다. \n파일 선택 후 '전체첨부' 혹은 '첨부' 버튼을 클릭하시고 진행해주세요.");
+						return false;
+					}
+					
 					if(confirm("저장하시겠습니까?")) {
 						//contentsEditors.getById["content"].exec("UPDATE_CONTENTS_FIELD", []);
 						//$("#defaultForm").submit();
