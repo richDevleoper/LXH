@@ -22,48 +22,43 @@
 		<result property="refBusTypeNm" column="REF_BUS_TYPE_NM" />
 		<result property="refBusCode" column="REF_BUS_CODE" />
 		<result property="refBusSubCode" column="REF_BUS_SUB_CODE" />
-		 
-
 	</resultMap>
 
 	<sql id="defCond">
-			<if test="searchName != null and searchName != ''">
-				AND T.APROVAL_SUBJECT like '%' || #{searchName} || '%'
-			</if>
-			<if test="searchType != null and searchType != ''">
-				AND T.APROVAL_TYPE = #{searchType}
-			</if>
-			<if test="searchStatus != null and searchStatus != ''">
-				AND T.APROVAL_STATE = #{searchStatus}
-			</if>
-			
-			<if test="searchReqEmpNm != null and searchReqEmpNm != ''">
-				AND U.USER_NAME  like '%'|| #{searchReqEmpNm} ||'%' 
-			</if>
-			
-			<if test="searchUserId != null and searchUserId != ''">
-				AND EXISTS (select 1 from tb_approval_detail where aproval_code=T.aproval_code and com_no=#{searchUserId}) 
-			</if>
-			
-			<if test="searchRegUserId != null and searchRegUserId != ''">
-				AND T.USER_ID=#{searchRegUserId}) 
-			</if>
-			
-			
-			<if test="searchReqComNo != null and searchReqComNo != ''">
-				AND T.user_id=#{searchReqComNo}
-			</if>
-			
-			<if test="searchFromDt != null and searchFromDt != ''">
-				AND T.drafting_date <![CDATA[>=]]> to_date(#{searchFromDt}, 'YYYY-MM-DD')
-			</if>
-			<if test="searchToDt != null and searchToDt != ''">
-				AND T.drafting_date <![CDATA[<=]]> to_date(#{searchToDt}, 'YYYY-MM-DD')
-			</if>
-			
-	
+		<if test="searchName != null and searchName != ''">
+			AND T.APROVAL_SUBJECT like '%' || #{searchName} || '%'
+		</if>
+		<if test="searchType != null and searchType != ''">
+			AND T.APROVAL_TYPE = #{searchType}
+		</if>
+		<if test="searchStatus != null and searchStatus != ''">
+			AND T.APROVAL_STATE = #{searchStatus}
+		</if>
+		
+		<if test="searchReqEmpNm != null and searchReqEmpNm != ''">
+			AND U.USER_NAME  like '%'|| #{searchReqEmpNm} ||'%' 
+		</if>
+		
+		<if test="searchUserId != null and searchUserId != ''">
+			AND EXISTS (select 1 from tb_approval_detail where aproval_code=T.aproval_code and com_no=#{searchUserId}) 
+		</if>
+		
+		<if test="searchRegUserId != null and searchRegUserId != ''">
+			AND T.USER_ID=#{searchRegUserId}) 
+		</if>
+		
+		
+		<if test="searchReqComNo != null and searchReqComNo != ''">
+			AND T.user_id=#{searchReqComNo}
+		</if>
+		
+		<if test="searchFromDt != null and searchFromDt != ''">
+			AND T.drafting_date <![CDATA[>=]]> to_date(#{searchFromDt}, 'YYYY-MM-DD')
+		</if>
+		<if test="searchToDt != null and searchToDt != ''">
+			AND T.drafting_date <![CDATA[<=]]> to_date(#{searchToDt}, 'YYYY-MM-DD')
+		</if>
 	</sql>
-
 
 	<sql id="defCond2">
 		<trim prefixOverrides="AND|OR">
@@ -81,7 +76,7 @@
 		</if>
 		</trim>
 	</sql> 
-	
+
 	<sql id="selectListBasic">
 	    WITH v_approval_mst AS (
             SELECT ROW_NUMBER() OVER( ORDER BY TO_NUMBER(aproval_code) ASC ) idx,
@@ -118,13 +113,13 @@
 		WHERE
 		    t.aproval_code=d.aproval_code(+) and d.com_no(+)=#{searchUserId}
 	</sql>
-	
+
 	<select id="selectList" resultMap="approveMap">
 		<include refid="selectListBasic"></include>
 		  and rowidx between (#{currentPageNo}*#{recordCountPerPage}+1-#{recordCountPerPage}) and (#{currentPageNo}*#{recordCountPerPage})
 		  order by idx desc
 	</select>
-	
+
 	<select id="selectListCount" resultType="egovMap">
           SELECT
 			    c.code_id     aproval_state,
@@ -152,7 +147,7 @@
 	
 		
 	 </select>
-	 
+
 	 <select id="selectListTotalCount" resultType="int">
            SELECT COUNT(1) cnt
 			 FROM
@@ -160,8 +155,7 @@
 			        <include refid="selectReqList"></include>
 			      ) a
 	 </select>
-	 
-	 
+
 	 <sql id="selectReqList">
 		WITH v_approval_mst AS (
             SELECT ROW_NUMBER() OVER( ORDER BY TO_NUMBER(aproval_code) ASC ) idx,
@@ -228,15 +222,14 @@
 					</otherwise>
 				 </choose> 
 			</if>
-			 
-	</sql>
-	
+	 </sql>
+
 	 <select id="selectMyRequestList" resultMap="approveMap">
 		<include refid="selectReqList"></include>
 		    and rowidx between (#{currentPageNo}*#{recordCountPerPage}+1-#{recordCountPerPage}) and (#{currentPageNo}*#{recordCountPerPage})
 		  order by idx desc
 	 </select>
-	 
+
 	 <select id="selectMyRequestListCount" resultType="egovMap">
 			SELECT
 			    c.code_id     aproval_state,
@@ -262,13 +255,12 @@
 			ORDER BY
 			    c.code_id desc	 
 		
-	 </select>
-	
-	
+	</select>
+
 	<select id="selectNextFkey" resultType="string">
 		select get_new_aproval_key() from dual
 	</select>
-	
+
 	<insert id="insert">
 		INSERT INTO TB_APPROVAL_MST (
 			APROVAL_CODE
@@ -298,10 +290,9 @@
             , #{refBusSubCode}
 		)
 	</insert>
-	
+
 	<update id="update">
-	
-		<!-- UPDATE TB_REPORT_MST SET 
+	<!-- UPDATE TB_REPORT_MST SET 
 			REP_NAME = #{repName} 
 			, REP_DEVISION_CODE = #{repDivisionCode} 
 			, REP_TYPE_CODE = #{repTypeCode} 

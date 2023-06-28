@@ -76,9 +76,6 @@
 
 	<div id="wrap">
 	<%@ include file="/WEB-INF/jsp/layout/def/Header.jsp" %>
-	<script  type="text/javascript">
-		//console.log('${parentMenu}');
-	</script>
     <div id="wrap">
         <!-- container -->
         <div id="container">
@@ -95,7 +92,7 @@
                         <a href="javascript:void(0);">${currentMenu.menuNm }</a>
                     
                     </div>
-                    <button tpye="button" class="btn-print">
+                    <button tpye="button" class="btn-print" onclick="startPrint('page-content');">
                         <img src="/assets/images/btn_print.png" alt="">
                         <span>인쇄</span>
                     </button>
@@ -163,7 +160,14 @@
                         	<c:forEach var="depth1Menu" items="${childList }">
 								<c:choose>
 									<c:when test="${empty depth1Menu.childList}">
-										<li><a href="/sub.do?menuKey=${depth1Menu.menuKey }"  <c:if test="${depth1Menu.menuKey eq currentMenu.menuKey}"> class="cur" </c:if>>${depth1Menu.menuNm }</a></li>
+										<c:choose>
+											<c:when test="${depth1Menu.menuKey eq '56'}">
+												<li><a href="/sub.do?menuKey=${depth1Menu.menuKey}" target="_blank" <c:if test="${depth1Menu.menuKey eq currentMenu.menuKey}"> class="cur" </c:if>>${depth1Menu.menuNm}</a></li>
+											</c:when>
+											<c:otherwise>
+												<li><a href="/sub.do?menuKey=${depth1Menu.menuKey}" <c:if test="${depth1Menu.menuKey eq currentMenu.menuKey}"> class="cur" </c:if>>${depth1Menu.menuNm}</a></li>
+											</c:otherwise>
+										</c:choose>
 									</c:when>
 									<c:otherwise>
 										<c:choose>

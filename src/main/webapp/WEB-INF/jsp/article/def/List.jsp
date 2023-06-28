@@ -79,7 +79,7 @@ ${articleSearchVO.superHiddenTag}
 		<div class="search-form row">
 			<div class="form-inline form-input col s5">
 	        	<div class="col s2 align-right">
-	                <label>조회기간112</label>
+	                <label>조회기간</label>
 	            </div>                                        
             <div class="pd-l10 col s10">
                 <div class="col s5 input-date">
@@ -128,7 +128,7 @@ ${articleSearchVO.superHiddenTag}
 	</div>
 
 	<div class="list-header">
-		<p class="title">게시글 수<strong><fmt:formatNumber value="${articleSearchVO.totalRecordCount}" /></strong> 건,&nbsp; 페이지 <strong> <span><fmt:formatNumber value="${articleSearchVO.currentPageNo}" /></span> / <fmt:formatNumber value="${articleSearchVO.totalPageCount}" /></strong></p>
+		<p class="title">게시글 <strong><fmt:formatNumber value="${articleSearchVO.totalRecordCount}" /></strong>건,&nbsp; 페이지 <strong> <span><fmt:formatNumber value="${articleSearchVO.currentPageNo}" /></span> / <fmt:formatNumber value="${articleSearchVO.totalPageCount}" /></strong></p>
 	</div>
 	<div class="list-content">
 		<div class="list-table">
