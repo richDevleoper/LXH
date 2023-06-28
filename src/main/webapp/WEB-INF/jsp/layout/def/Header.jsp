@@ -70,7 +70,7 @@ hr { display:none; }
 									
 								</c:when>
 								<c:when test="${topMenu.menuKey eq '45'}">
-									<li><a href="/sub.do?menuKey=${topMenu.menuKey}" target="_blank">${topMenu.menuNm }</a></li>
+									<li><a href="/sub.do?menuKey=57">${topMenu.menuNm }</a></li>
 								</c:when>
 								<c:otherwise>
 									<li><a href="/sub.do?menuKey=${topMenu.menuKey}">${topMenu.menuNm }</a></li>
@@ -83,10 +83,10 @@ hr { display:none; }
                     </div>
                     <div class="search-box">
                         <div class="search-form">
-                            <form method="GET" action="/app/004_02_search.do">
+                            <form method="GET" action="/search/">
                             <input type="hidden" name="menuKey" value="36">
                                 <span>전체</span>
-                                <input type="text" name="" placeholder="검색어를 입력하세요">
+                                <input type="text" name="searchText" placeholder="검색어를 입력하세요">
                                 <button type="submit" class="btn-search">검색</button>
                             </form>
                         </div>
@@ -105,8 +105,11 @@ hr { display:none; }
 									<c:otherwise>
 										 <c:choose>
 											<c:when test="${topMenu.menuKey eq '45'}">
-												<li><a href="/sub.do?menuKey=${topMenu.menuKey}" target="_blank">${topMenu.menuNm }</a> <!-- Big Data -->
+												<li><a href="/sub.do?menuKey=57">${topMenu.menuNm }</a> <!-- Big Data -->
 											</c:when>
+											<c:when test="${topMenu.menuKey eq '56'}">
+												<li><a href="/sub.do?menuKey=${topMenu.menuKey}" target="_blank">${topMenu.menuNm }</a></li>
+											</c:when>											
 											<c:otherwise>
 												<li><a href="/sub.do?menuKey=${topMenu.menuKey}">${topMenu.menuNm }</a>
 											</c:otherwise>

@@ -134,7 +134,7 @@ public class CustomConfigDecoratorMapper extends ConfigDecoratorMapper {
 
 		if(decorator != null){
 			//def
-			if(decorator.getName().equals("def") || decorator.getName().equals("defIndex")){
+			if(decorator.getName().equals("def") || decorator.getName().equals("defIndex") || decorator.getName().equals("defSearch")){
 				UserVO userSession = (UserVO) request.getSession().getAttribute("userSession");
 				
 				String isAdmin = "";

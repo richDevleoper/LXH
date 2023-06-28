@@ -76,36 +76,13 @@
 
 	<div id="wrap">
 	<%@ include file="/WEB-INF/jsp/layout/def/Header.jsp" %>
-	<script  type="text/javascript">
-		//console.log('${parentMenu}');
-	</script>
     <div id="wrap">
         <!-- container -->
         <div id="container">
-            <div id="page-header">
-                <div class="inner">
-                 <c:if test="${not empty parentMenu }">
-                    <div class="page-category">${parentMenu.menuNm }</div>
-                    <div id="path">
-                   
-                        <a href="">홈</a>
-                        <span class="arr">></span>
-                        <a href="">${parentMenu.menuNm }</a>
-                        <span class="arr">></span>
-                        <a href="javascript:void(0);">${currentMenu.menuNm }</a>
-                    
-                    </div>
-                    <button tpye="button" class="btn-print">
-                        <img src="/assets/images/btn_print.png" alt="">
-                        <span>인쇄</span>
-                    </button>
-                    </c:if>
-                </div>
-            </div>
             <div id="page-container">
                 <div class="inner">
                     
-                    <section id="page-content">
+                    <section id="page-content" style="width: 1200px; padding: 0px;">
                     
                     	<decorator:body />
 

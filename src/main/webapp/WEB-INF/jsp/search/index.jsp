@@ -27,14 +27,14 @@
                     <div class="page-category search">통합검색</div>
                     <div class="search-box">
                         <div class="search-form">
-                            <form method="GET">
+                        	<form:form commandName="searchAllVO" id="defaultForm" method="get" action="/search/">
                                 <span>전체</span>
-                                <input type="text" name="" placeholder="검색어를 입력하세요">
+                                <form:input type="text" path="searchText" placeholder="검색어를 입력하세요" />
                                 <button type="submit" class="btn-search">검색</button>
-                            </form>
+                            </form:form>
                         </div>
                     </div>
-                    <button tpye="button" class="btn-print">
+                    <button tpye="button" class="btn-print" onclick="startPrint('page-content');">
                         <img src="/assets/images/btn_print.png" alt="">
                         <span>인쇄</span>
                     </button>
@@ -46,12 +46,10 @@
                         <div class="tab-group">
                             <div class="tab-btn center">
                                 <!-- [D] 현재 활성화된 메뉴에 on클래스 추가해주세요. -->
-                                <button type="button">과제검색</button>
-                                <button type="button">분임조 과제검색</button>
+                                <button type="button" class="on">과제검색</button>
+                                <button type="button">분임조활동검색</button>
                                 <button type="button">제안검색</button>
-                                <button type="button">10+ No Policy</button>
                                 <button type="button">커뮤니티</button>
-                                <button type="button" class="on">상세검색</button>
                             </div>
                             <div class="tab-inr">
                                 <div class="tab-box"></div>
