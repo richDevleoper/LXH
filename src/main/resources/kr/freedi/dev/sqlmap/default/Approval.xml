@@ -172,8 +172,8 @@
             
             <where>
 				<trim prefixOverrides="AND|OR">
-		            <if test="searchUserId != null and searchUserId != ''">
-						AND EXISTS (select 1 from tb_approval_detail where aproval_code=m.aproval_code and com_no=#{searchUserId}) 
+					<if test="searchRegUserId != null and searchRegUserId != ''">
+						AND m.USER_ID=#{searchRegUserId}) 
 					</if>
 		            <if test="searchName != null and searchName != ''">
 						AND m.APROVAL_SUBJECT like '%' || #{searchName} || '%'
@@ -233,8 +233,7 @@
 	
 	 <select id="selectMyRequestList" resultMap="approveMap">
 		<include refid="selectReqList"></include>
-		and rowidx between (#{currentPageNo}*#{recordCountPerPage}+1-#{recordCountPerPage}) and (#{currentPageNo}*#{recordCountPerPage})
-			
+		    and rowidx between (#{currentPageNo}*#{recordCountPerPage}+1-#{recordCountPerPage}) and (#{currentPageNo}*#{recordCountPerPage})
 		  order by idx desc
 	 </select>
 	 
