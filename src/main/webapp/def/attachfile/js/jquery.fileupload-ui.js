@@ -561,7 +561,7 @@
             var button = $(e.currentTarget);
             this._trigger('destroy', e, $.extend({
                 context: button.closest('.template-download'),
-                type: 'DELETE'
+                type: 'POST'
             }, button.data()));
         },
 

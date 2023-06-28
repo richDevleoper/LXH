@@ -127,7 +127,7 @@ public class AttachFileController {
         return new ObjectMapper().writeValueAsString(resultMap);        
     }
     
-    @RequestMapping(value={"/csl/attachfile/delete.do","/attachfile/delete.do","/eng/attachfile/delete.do"}, method = RequestMethod.DELETE)
+    @RequestMapping(value={"/csl/attachfile/delete.do","/attachfile/delete.do","/eng/attachfile/delete.do"}, method = RequestMethod.POST)
     public @ResponseBody 
     String delete(HttpServletRequest request, HttpServletResponse response,
     		@RequestParam Map<String, Object> reqMap) throws Exception {

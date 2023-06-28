@@ -104,7 +104,7 @@
 				</td>
 				<td style="text-align:center;">
 					<button class="start" style="visibility: hidden;">첨부</button>&nbsp;
-					<button class="delete" data-type="DELETE" data-url="#ctx#/attachfile/delete.do?fileId={%= file.fileId %}&fileSeq={%=file.fileSeq%}"{% if (file.deleteWithCredentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>삭제</button>
+					<button class="delete" data-type="POST" data-url="#ctx#/attachfile/delete.do?fileId={%= file.fileId %}&fileSeq={%=file.fileSeq%}"{% if (file.deleteWithCredentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>삭제</button>
 					<!-- <input type="checkbox" name="delete" value="1" class="toggle"> -->
 				</td>
 			</tr>
