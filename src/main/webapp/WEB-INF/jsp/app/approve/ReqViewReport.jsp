@@ -84,7 +84,7 @@
                                                 <th><label for="text4" class="color primary">부문</label></th>
                                                 <td>${reportVO.repSector}</td>
                                                 <th>제품군</th>
-                                                <td>${reportVO.repProductClass}</td>
+                                                <td>${reportVO.repProductClassName}</td>
                                             </tr>
                                             <tr>
                                                 <th><label for="text4" class="color primary">과제리어벨트</label></th>
@@ -130,7 +130,7 @@
                                                                             <thead>
                                                                                 <tr>
                                                                                     <th>구분</th>
-                                                                                    <th>Define</th>
+                                                                                    <th><label id="lbl6sigmaStepNm_${status.count}"></label></th>
                                                                                     <th colspan="4">활동요약</th>
                                                                                 </tr>
                                                                             </thead>
@@ -415,6 +415,20 @@
 																keyCont += '#'+arr[i];
 															}
 															$("#divKeyword").html(keyCont);
+															
+															let arrTypeCodeNm;
+															if("${reportVO.repDivisionCode}"==="1"){
+																if("${reportVO.repTypeCode}"==="11"){
+																	// DMAIC : Define, Measure, Analyze, Improve, Control, Finish
+																	arrTypeCodeNm = ["Define", "Measure", "Analyze", "Improve", "Control", "Finish"];
+																} else {
+																	// DMEDI : Define, Measure, Explore, Develop, Implement, Finish
+																	arrTypeCodeNm = ["Define", "Measure", "Explore", "Develop", "Implement", "Finish"];
+																}
+																for ( var i in arrTypeCodeNm) {
+																	$("#lbl6sigmaStepNm_"+(Number(i)+1)).text(arrTypeCodeNm[i]);
+																}
+															}
 														}
 													</script>
 													<div id="divKeyword"></div>

@@ -696,20 +696,19 @@ public class ReportService {
 			// 과제상태 변경
 			if(detailVO.getRepPlanStartDate()!=null
 					&& detailVO.getRepActStartDate()!=null
-					&& detailVO.getRepPlanStartDate().before(detailVO.getRepActStartDate())
-					&& detailVO.getRepPlanStartDate().equals(detailVO.getRepActStartDate())
+					&& detailVO.getRepActStartDate().after(detailVO.getRepPlanStartDate())
 					) {
-				// 계획된 날짜에 승인시 
-				savedVO.setRepStatusCode("4"); // 진행중(On)	
-			} else {
 				// 계획보다 늦어질 경우 
 				savedVO.setRepStatusCode("5"); // 진행중(Off)	
+			} else {
+				// 계획된 날짜에 승인시 
+				savedVO.setRepStatusCode("4"); // 진행중(On)	
 			}
 			this.update(savedVO);
 			
 			if(currStepNum==6) {
 				// 승인은 repStatusCode 6으로, Drop은  5로 처리
-				savedVO.setRepStatusCode("6"); // 완료
+				savedVO.setRepStatusCode("7"); // 완료
 				dao.update("Report.updateStatus", savedVO);
 			} else {
 				// 그 외 결재면 다음 스텝으로 넘어가

@@ -345,7 +345,7 @@ public class ApproveController {
 		
 		model.addAttribute("menuKey", searchVO.getMenuKey());
 		
-		
+		searchVO.setSearchRegUserId(userSession.getUserId());
 
 		List<EgovMap> countList = service.selectMyRequestListCount(searchVO);
 		
@@ -361,7 +361,7 @@ public class ApproveController {
 
 		//페이징 기본설정
 		searchVO.setTotalRecordCount(totalCount);
-		searchVO.setSearchUserId(userSession.getUserId());
+
 		
 		// 검색조건 DDL 세팅
 		CodeVO codeVO = new CodeVO(); 

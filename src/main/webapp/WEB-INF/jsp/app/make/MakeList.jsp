@@ -141,7 +141,7 @@
 	
 
 <script type="text/javascript">
-$(documentsa).ready(function(){
+$(document).ready(function(){
 	init();
 	initCode();
 	

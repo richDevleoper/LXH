@@ -40,6 +40,9 @@ public class ApproveSearchVO extends CommonVO {
 	private String searchUserId;  // login user ID
 	
 	@ParamField
+	private String searchRegUserId;  // 등록자 ID (내결재함 전용)
+
+	@ParamField
 	private String searchFromDt; // 조회기간(시작)
 	
 	@ParamField
@@ -144,13 +147,20 @@ public class ApproveSearchVO extends CommonVO {
 		this.searchReqComNo = searchReqComNo;
 	}
 	
+	public String getSearchRegUserId() {
+		return searchRegUserId;
+	}
+
+	public void setSearchRegUserId(String searchRegUserId) {
+		this.searchRegUserId = searchRegUserId;
+	}	
 	@Override
 	public String toString() {
 		return "ApproveSearchVO [searchName=" + searchName + ", searchDivision=" + searchDivision + ", searchType="
 				+ searchType + ", searchStatus=" + searchStatus + ", orderByTyp=" + orderByTyp + ", aprovalCode="
 				+ aprovalCode + ", searchReqEmpNm=" + searchReqEmpNm + ", searchReqComNo=" + searchReqComNo
-				+ ", searchUserId=" + searchUserId + ", searchFromDt=" + searchFromDt + ", searchToDt=" + searchToDt
-				+ ", searchGubun=" + searchGubun + "]";
+				+ ", searchUserId=" + searchUserId + ", searchRegUserId=" + searchRegUserId + ", searchFromDt="
+				+ searchFromDt + ", searchToDt=" + searchToDt + ", searchGubun=" + searchGubun + "]";
 	}
 
 }

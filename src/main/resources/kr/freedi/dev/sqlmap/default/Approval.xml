@@ -45,6 +45,11 @@
 				AND EXISTS (select 1 from tb_approval_detail where aproval_code=T.aproval_code and com_no=#{searchUserId}) 
 			</if>
 			
+			<if test="searchRegUserId != null and searchRegUserId != ''">
+				AND T.USER_ID=#{searchRegUserId}) 
+			</if>
+			
+			
 			<if test="searchReqComNo != null and searchReqComNo != ''">
 				AND T.user_id=#{searchReqComNo}
 			</if>
