@@ -97,7 +97,7 @@
 				AND T.REP_SECTOR_CODE = #{searchSectorCode}
 			</if>
 			<if test="searchPlaceCode != null and searchPlaceCode != ''">
-				AND T.REP_PLACE_CODE = #{searchPlaceCode}
+				AND EXISTS (SELECT 1 FROM TB_USER_MST WHERE COM_NO=T.REP_REG_USER AND COM_WORK_PLACE=#{searchPlaceCode})
 			</if>
 			<if test="searchActionTypeCode != null and searchActionTypeCode != ''">
 				AND T.REP_ACTION_TYPE_CODE = #{searchActionTypeCode}

@@ -129,6 +129,7 @@ public class ReportService {
 			String apprMemCode = "";
 			String apprMemRoleCode = "";
 			switch (vo.getRepStepCode()) {
+			case "1": // 6시그마
 			case "7": // 일반과제
 				vo.setRepStatus("1");
 				apprMemCode = teamMember5.getComNo(); 
