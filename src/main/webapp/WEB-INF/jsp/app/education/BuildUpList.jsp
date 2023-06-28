@@ -228,6 +228,12 @@
 					                                                	</c:if>
 				                                                	  </c:if>
 				                                                	  <c:if test="${educationResult.eduClassType eq '02' }">
+					                                                	<c:if test="${educationResult.eduClassDivision eq '07'}">
+					                                                		통계Test
+					                                                	</c:if>
+					                                                	<c:if test="${educationResult.eduClassDivision eq '08'}">
+					                                                		과제Test
+					                                                	</c:if>
 					                                                	<c:if test="${educationResult.eduClassDivision eq '09'}">
 					                                                		자질Test
 					                                                	</c:if>
@@ -262,7 +268,27 @@
 				                                                	${educationResult.eduName} 
 				                                                </a>
 			                                                </td>
-			                                                <td>${educationResult.eduDate}</td>
+			                                                <td>
+			                                                	<c:choose>
+																    <c:when test="${educationResult.eduDateDiv eq '01'}">
+																    	${educationResult.eduDate}
+																    </c:when>
+																    <c:when test="${educationResult.eduDateDiv eq '02'}">
+																    	${educationResult.eduStartDate}
+																    	<c:if test="${educationResult.eduStartDate ne educationResult.eduEndDate}">
+																    		~ ${educationResult.eduEndDate}
+																    	</c:if>
+																    </c:when>
+																    <c:when test="${educationResult.eduDateDiv eq '03'}">
+																    	${educationResult.eduStartDate}
+																    	<c:if test="${educationResult.eduStartDate ne educationResult.eduEndDate}">
+																    		~ ${educationResult.eduEndDate}
+																    	</c:if>
+																    </c:when>
+																    <c:otherwise>
+																	</c:otherwise>
+																</c:choose>
+			                                                </td>
 			                                                <td>${educationResult.eduFixed}</td>
 			                                            </tr>
 											        </c:forEach>
@@ -278,7 +304,7 @@
                                 <ui:pagination paginationInfo="${EducationSearchVO}" type="defDefault" jsFunction="cfnPageLink" />
                                 <div class="list-btns">
                                     <button type="button" class="btn bg-gray" id="btnRegEdu">                                        
-                                        <span>교육등록</span>
+                                        <span>과정등록</span>
                                     </button>
                                     
                                     <button type="button" class="btn-excel" id="btnExcel">
@@ -381,6 +407,8 @@
 				vHtml.push("<option value='06'>Summary</option>");
 			}else if(eduClassType == "02"){
 				vHtml.push("<option value=''>전체</option>");
+				vHtml.push("<option value='07'>통계Test</option>");
+				vHtml.push("<option value='08'>과제Test</option>");
 				vHtml.push("<option value='09'>자질Test</option>");
 			}
 		// MGB

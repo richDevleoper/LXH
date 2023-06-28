@@ -42,6 +42,7 @@
                         <form:hidden path="eduCode" />
                         <form:hidden path="eduFileCode" />
                         <form:hidden path="eduQuater" />
+                        <form:hidden path="eduDate" />
 						<form:hidden path="mode" />
                         
                         <div class="list-wrap  mg-t20">
@@ -57,7 +58,7 @@
                                         </colgroup>
                                         <tbody>
                                             <tr>
-                                                <th><label for="text1"><span class="asterisk">*</span>과정명</label></th>
+                                                <th><label for="text1"><span class="asterisk">*</span>교육과정명</label></th>
                                                 <td colspan="3">
                                                     <div class="row">
                                                         <div class="col s12 input-text">
@@ -67,7 +68,7 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <th><label for="text2"><span class="asterisk">*</span>연도</label></th>
+                                                <th><label for="text2"><span class="asterisk">*</span>교육연도</label></th>
                                                 <td>
                                                     <div class="row">
                                                         <div class="col s12 select-group">
@@ -80,7 +81,7 @@
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <th><label for="text3"><span class="asterisk">*</span>인증벨트</label></th>
+                                                <th><label for="text3"><span class="asterisk">*</span>벨트</label></th>
                                                 <td>
                                                     <div class="row">
                                                         <div class="col s12 select-group">
@@ -92,7 +93,7 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <th><span class="asterisk">*</span>유형</th>
+                                                <th><span class="asterisk">*</span>교육유형</th>
                                                 <td>
                                                     <div class="row">
                                                         <div class="col s12 select-group">
@@ -114,7 +115,7 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <th><label for="select1"><span class="asterisk">*</span>차수</label></th>
+                                                <th><label for="select1"><span class="asterisk">*</span>교육차수</label></th>
                                                 <td>
                                                     <div class="row">
                                                         <div class="col s12 select-group">
@@ -127,28 +128,57 @@
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <th><label for="text4"><span class="asterisk">*</span>일정</label></th>
+                                                <th><label for="text4"><span class="asterisk">*</span>교육정원</label></th>
                                                 <td>
-                                                  
                                                     <div class="row">
-                                                        <div class="col s12 input-text input-date">
-                                                        	<form:input type="text" id="eduDate" name="eduDate" value="" path="eduDate" style="background-color: #FFF; cursor: inherit;" readonly="readonly"/>    
-                                                            <form:hidden path="eduDate2" id="eduDate2"/>
-                                                            <i class="ico calendar" style="background-size: 28px 29px; background-position: center; width: 28px; height: 29px;"></i>
-                                                        	
+                                                        <div class="col s12 input-text">                                                            
+                                                            <form:input type="text" id="eduFixed" path="eduFixed" value="" title="교육정원을 입력해주세요." cssClass="validate[required]" />
                                                         </div>
                                                     </div>
                                                     
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <th><label for="text1"><span class="asterisk">*</span>정원</label></th>
+                                                <th><label for="text1"><span class="asterisk">*</span>교육일정</label></th>
                                                 <td colspan="3">
                                                     <div class="row">
-                                                        <div class="col s037 input-text">                                                            
-                                                            <form:input type="text" id="eduFixed" path="eduFixed" value="" title="교육정원을 입력해주세요." cssClass="validate[required]"/>
+                                                    	<div class="col s2 select-group">
+                                                    		<form:select path="eduDateDiv">
+				                                                <option value="">전체</option>
+				                                    			<option value="01" <c:if test="${'01' eq educationVO.eduDateDiv }">selected</c:if> >단일</option>
+				                                    			<option value="02" <c:if test="${'02' eq educationVO.eduDateDiv }">selected</c:if> >격일</option>
+				                                    			<option value="03" <c:if test="${'03' eq educationVO.eduDateDiv }">selected</c:if> >범위</option>
+				                                            </form:select>
+                                                    	</div>
+                                                        
+                                                        <div id="d1" class="col s3 input-text input-date" style="padding-left: 5px; display:none;">
+                                                            <%-- <form:input type="text" path="eDate01" cssClass="datepicker"/>  --%>
+                                                            <form:input type="text" id="eDate01" name="eDate01" value="" path="eDate01" style="background-color: #FFF; cursor: inherit;" readonly="readonly"/>
+				                                            <i class="ico calendar"></i>
                                                         </div>
+                                                        
+                                                        
+                                                        <div id="d2" class="col s5 input-text input-date" style="padding-left: 5px; display:none;">
+                                                        	<form:input type="text" id="eDate02" name="eDate02" value="" path="eDate02" style="background-color: #FFF; cursor: inherit;" readonly="readonly"/>    
+                                                            <form:hidden path="eduDate2" id="eduDate2"/>
+                                                            <i class="ico calendar" style="background-size: 28px 29px; background-position: center; width: 28px; height: 29px;"></i>
+                                                        </div>
+                                                        
+                                                        <div id="d3" class="col s10 input-text input-date" style="padding-left: 5px; display:none;">
+				                                            <div class="col s5 input-date">
+				                                                <%-- <form:input type="text" path="eduFromDt" cssClass="datepicker"/> --%> 
+				                                                <form:input type="text" id="eduFromDt" name="eduFromDt" value="" path="eduFromDt" style="background-color: #FFF; cursor: inherit;" readonly="readonly"/>
+				                                                <i class="ico calendar"></i>
+				                                            </div>
+				                                            <span class="col s1 text-bul align-center">~</span>
+				                                            <div class="col s5 input-date">
+				                                                <%-- <form:input type="text" path="eduToDt" cssClass="datepicker"/> --%>
+				                                                <form:input type="text" id="eduToDt" name="eduToDt" value="" path="eduToDt" style="background-color: #FFF; cursor: inherit;" readonly="readonly"/>
+				                                                <i class="ico calendar"></i>
+				                                            </div>
+				                                        </div>
                                                     </div>
+                                                    
                                                 </td>
                                             </tr>
                                             
@@ -258,19 +288,35 @@
 $(document).ready(function(){
 	initCode();
 	
-	$("#eduDate").off("keyup").on("keyup", function(e){
+	$("#eDate02").off("keyup").on("keyup", function(e){
 		$("#eduDate2").val("");
-		let eduDate = $("#eduDate").val();
+		let eduDate = $("#eDate02").val();
 		$("#eduDate2").val(eduDate);
 	});
-	 
-	$("#eduDate").datepicker({
+	
+	$("#eduFixed").off("keyup").on("keyup", function(e){
+		$(this).val($(this).val().replace(/[^0-9]/g, ""));
+	});
+	
+	$("#eDate01").datepicker({
         dateFormat:"yy/mm/dd",
         dayNamesMin:["일","월","화","수","목","금","토"],
         monthNames:["1월","2월","3월","4월","5월","6월","7월","8월","9월","10월","11월","12월"],
         onSelect:function(d){
-            //alert(d+" 선택되었습니다");
-            
+            var arr=d.split("/");
+            var year=arr[0];
+            var month=arr[1];
+            var day=arr[2];
+            let target = month + "/" + day;
+            $("#eDate01").val(target);
+        }
+    });
+	 
+	$("#eDate02").datepicker({
+        dateFormat:"yy/mm/dd",
+        dayNamesMin:["일","월","화","수","목","금","토"],
+        monthNames:["1월","2월","3월","4월","5월","6월","7월","8월","9월","10월","11월","12월"],
+        onSelect:function(d){
             var arr=d.split("/");
             var year=arr[0];
             var month=arr[1];
@@ -288,7 +334,35 @@ $(document).ready(function(){
             }
             
             $("#eduDate2").val(setDate);
-            $("#eduDate").val( $("#eduDate2").val());
+            $("#eDate02").val( $("#eduDate2").val());
+        }
+    });
+	
+	$("#eduFromDt").datepicker({
+        dateFormat:"yy/mm/dd",
+        dayNamesMin:["일","월","화","수","목","금","토"],
+        monthNames:["1월","2월","3월","4월","5월","6월","7월","8월","9월","10월","11월","12월"],
+        onSelect:function(d){
+            var arr=d.split("/");
+            var year=arr[0];
+            var month=arr[1];
+            var day=arr[2];
+            let target = month + "/" + day;
+            $("#eduFromDt").val(target);
+        }
+    });
+	
+	$("#eduToDt").datepicker({
+        dateFormat:"yy/mm/dd",
+        dayNamesMin:["일","월","화","수","목","금","토"],
+        monthNames:["1월","2월","3월","4월","5월","6월","7월","8월","9월","10월","11월","12월"],
+        onSelect:function(d){
+            var arr=d.split("/");
+            var year=arr[0];
+            var month=arr[1];
+            var day=arr[2];
+            let target = month + "/" + day;
+            $("#eduToDt").val(target);
         }
     });
 	
@@ -299,6 +373,24 @@ $(document).ready(function(){
 			}			
 		}
 	}); 
+	
+	$("#eduDateDiv").on("change", function(){
+		let val = $(this).val();
+		console.log(val);
+		if(val == "01"){
+			$("#d1").show();
+			$("#d2").hide();
+			$("#d3").hide();
+		}else if(val == "02"){
+			$("#d1").hide();
+			$("#d2").show();
+			$("#d3").hide();
+		}else if(val == "03"){
+			$("#d1").hide();
+			$("#d2").hide();
+			$("#d3").show();
+		}
+	});
 	
 	$("#eduBeltCode").on("change", function(){
 		selectBeltCode();
@@ -333,7 +425,6 @@ function selectBeltCode(){
 	let eduBeltCode = $("#eduBeltCode").val();
 	let eduClassType = $("#eduClassType").val();
 	
-	console.log(eduBeltCode + " / " + eduClassType);
 	var vHtml = [];
 	// GB
 	if(eduBeltCode == "D000"){
@@ -368,6 +459,8 @@ function selectBeltCode(){
 			vHtml.push("<option value='06'>Summary</option>");
 		}else if(eduClassType == "02"){
 			vHtml.push("<option value=''>전체</option>");
+			vHtml.push("<option value='07'>통계Test</option>");
+			vHtml.push("<option value='08'>과제Test</option>");
 			vHtml.push("<option value='09'>자질Test</option>");
 		}
 	// MGB
@@ -409,7 +502,10 @@ function initCode(){
 	if(mode=="U"){
 		let eduBeltCode = $("#eduBeltCode").val();
 		let eduClassType = $("#eduClassType").val();
-		console.log(eduBeltCode + " / " + eduClassType);
+		let eduDateDiv = $("#eduDateDiv").val();
+		let eduDate = $("#eduDate").val();
+		console.log(eduDateDiv + " / " + eduDate);
+		
 		
 		var vHtml = [];
 		// GB
@@ -445,6 +541,8 @@ function initCode(){
 				vHtml.push("<option value='06'>Summary</option>");
 			}else if(eduClassType == "02"){
 				vHtml.push("<option value=''>전체</option>");
+				vHtml.push("<option value='07'>통계Test</option>");
+				vHtml.push("<option value='08'>과제Test</option>");
 				vHtml.push("<option value='09'>자질Test</option>");
 			}
 		// MGB
@@ -461,6 +559,40 @@ function initCode(){
 		}
 		$("#eduClassDivision").html(vHtml.join(''));
 		$("#eduClassDivision").val("${educationVO.eduClassDivision}");
+		
+		const arrDate = eduDate.split(',');
+		let sDate = arrDate[0];
+		let eDate = arrDate.reverse()[0];
+		console.log(sDate);
+		console.log(eDate);
+		
+		if(eduDateDiv == "01"){
+			$("#d1").show();
+			$("#d2").hide();
+			$("#d3").hide();
+			
+			$('#eDate01').val(eduDate);
+		}else if(eduDateDiv == "02"){
+			$("#d1").hide();
+			$("#d2").show();
+			$("#d3").hide();
+			$('#eDate02').val(eduDate);
+		}else if(eduDateDiv == "03"){
+			$("#d1").hide();
+			$("#d2").hide();
+			$("#d3").show();
+			$('#eduFromDt').val(sDate);
+			$('#eduToDt').val(eDate);
+		}
+		
+		
+		
+		
+		
+		
+		
+		
+		
 	}
 	 
 }
@@ -492,10 +624,6 @@ function checkValidation(){
 		alert('교육차수를 선택해 주세요.'); $('#eduClassDivision').focus();
 		return false;
 	}
-	if($('#eduDate').val().trim() == ''){
-		alert('교육일정을 입력해 주세요.'); $('#eduDate').focus();
-		return false;
-	}
 	if($('#eduFixed').val().trim() == ''){
 		alert('교육정원을 입력해 주세요.'); $('#eduDate').focus();
 		return false;
@@ -516,14 +644,59 @@ function checkValidation(){
 		alert('준비사항을 입력해 주세요.'); $('#eduItem').focus();
 		return false;
 	}
- 	
-	//분기계산
-	let eduDate = $('#eduDate').val();
-	setQuater(eduDate);
+ 	 
+	if($('#eduDateDiv').val().trim() == ''){
+		alert('교육일정을 선택해 주세요.'); $('#eduDateDiv').focus();
+		return false;
+	}else{
+		let eduDateDiv = $('#eduDateDiv').val();
+		if(eduDateDiv == "01"){
+			if($('#eDate01').val().trim() == ''){
+				alert('교육일정을 입력해 주세요.'); $('#eDate01').focus();
+				return false;
+			}
+		}else if(eduDateDiv == "02"){
+			if($('#eDate02').val().trim() == ''){
+				alert('교육일정을 입력해 주세요.'); $('#eDate02').focus();
+				return false;
+			}
+		}else if(eduDateDiv == "03"){
+			if($('#eduFromDt').val().trim() == ''){
+				alert('교육일정을 입력해 주세요.'); $('#eduFromDt').focus();
+				return false;
+			}
+			if($('#eduToDt').val().trim() == ''){
+				alert('교육일정을 입력해 주세요.'); $('#eduToDt').focus();
+				return false;
+			}
+		}
+	}
+ 	 
+	setDate();
 	
 	return true;
 }
 
+function setDate(){
+	let eduDateDiv = $('#eduDateDiv').val();
+	let tDate = "";
+	
+	if(eduDateDiv == "01"){
+		tDate = $('#eDate01').val();
+		setQuater($('#eDate01').val());
+	}else if(eduDateDiv == "02"){
+		tDate = $('#eDate02').val();
+		setQuater($('#eDate02').val());
+	}else if(eduDateDiv == "03"){
+		let eduFromDt = $('#eduFromDt').val();
+		let eduToDt = $('#eduToDt').val();
+		tDate = eduFromDt + "," + eduToDt;
+		setQuater($('#eduFromDt').val());
+	}
+	$("#eduDate").val(tDate);
+}
+
+//분기계산
 function setQuater(eduDate){
 	// 교육일정의 첫째날짜 기준으로 분기계산
 	const arrDate = eduDate.split(',');
@@ -538,8 +711,6 @@ function setQuater(eduDate){
 	console.log(quater);
 	$("#eduQuater").val(quater);
 }
-
-
 
 
 

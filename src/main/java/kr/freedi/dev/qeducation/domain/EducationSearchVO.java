@@ -137,7 +137,7 @@ public class EducationSearchVO extends CommonVO {
 	public void setTabId(String tabId) {
 		this.tabId = tabId;
 	}
-	
+
 	
 	
 }

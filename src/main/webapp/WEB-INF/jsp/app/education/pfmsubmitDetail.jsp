@@ -32,17 +32,17 @@
                            </colgroup>
                                   <tbody>
                                       <tr>
-                                          <th><label for="text1">과정명</label></th>
+                                          <th><label for="text1">교육과정명</label></th>
                                           <td colspan="3">${educationVO.eduName }</td>
                                       </tr>
                                       <tr>
-                                          <th><label for="text2">년도</label></th>
+                                          <th><label for="text2">교육연도</label></th>
                                           <td>${educationVO.eduYear }</td>
-                                          <th><label for="text3">인증벨트</label></th>
+                                          <th><label for="text3">벨트</label></th>
                                           <td>${educationVO.eduBeltCodeName }</td>
                                       </tr>
 									  <tr>
-                                          <th><label for="text4">유형</label></th>
+                                          <th><label for="text4">교육유형</label></th>
                                           <td>${educationVO.eduClassTypeName }</td>
                                           <th><label for="text5">상세유형</label></th>
                                           <td>
@@ -103,6 +103,12 @@
 		                                               	</c:if>
 		                                              </c:if>
 		                                              <c:if test="${educationVO.eduClassType eq '02' }">
+		                                                <c:if test="${educationVO.eduClassDivision eq '07'}">
+	                                               			통계Test
+		                                                </c:if>
+		                                                <c:if test="${educationVO.eduClassDivision eq '08'}">
+		                                               		과제Test
+		                                                </c:if>
 		                                               	<c:if test="${educationVO.eduClassDivision eq '09'}">
 		                                               		자질Test
 		                                               	</c:if>
@@ -132,13 +138,13 @@
                                           </td>
                                       </tr>
 										<tr>
-                                          <th><label for="text6">차수</label></th>
+                                          <th><label for="text6">교육차수</label></th>
                                           <td>${educationVO.eduNumber }차</td>
-                                          <th><label for="text7">일정</label></th>
-                                          <td>${educationVO.eduDate}</td>
+                                          <th><label for="text7">교육일정</label></th>
+                                          <td>${educationVO.eduDate }</td>
                                       </tr>
 										<tr>
-                                          <th><label for="text8">정원/신청</label></th>
+                                          <th><label for="text8">교육정원/신청</label></th>
                                           <td colspan="3">${educationVO.eduFixed }/${educationVO.tsdCnt }</td>
                                       </tr>
 										<tr>

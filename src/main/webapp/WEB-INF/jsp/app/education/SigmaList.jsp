@@ -181,7 +181,7 @@
 														<option value="">선택</option>
 														<option value="Y" <c:if test ="${selectMngList.stdCertCode eq 'Y'}">selected="selected"</c:if>>인증</option>
 														<option value="N" <c:if test ="${selectMngList.stdCertCode eq 'N'}">selected="selected"</c:if>>미인증</option>
-													</select>${gb}
+													</select>
 												</div>
 												</td>
 												

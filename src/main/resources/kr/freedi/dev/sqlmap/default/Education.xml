@@ -42,6 +42,10 @@
 		<result column="EDU_CLASS_DIVISION_NAME"	 property="eduClassDivisionName"/>
 		<result column="EDU_BELTCODE_NAME"	 	     property="eduBeltCodeName"/>
 		
+		<result column="EDU_DATE_DIV"	 	     	 property="eduDateDiv"/>
+		<result column="EDU_START_DATE"	 	     	 property="eduStartDate"/>
+		<result column="EDU_END_DATE"	 	     	 property="eduEndDate"/>
+		
 		<result column="STD_SEQ"                     property="stdSeq"/>   
 		<result column="COM_NO"                    	 property="comNo"/>     
 		<result column="STD_USERID"	 	     	 	 property="stdUserId"/>
@@ -164,7 +168,10 @@
 						T.EDU_BELTCODE,
 						(SELECT CODE_NM FROM TB_CODE WHERE 1=1 AND CODE_GRP_ID='ED_TY2' AND CODE_ID = T.EDU_BELTCODE) AS EDU_BELTCODE_NAME,
 						T.EDU_NUMBER,
+						T.EDU_DATE_DIV,
 						T.EDU_DATE,
+						REGEXP_SUBSTR(T.EDU_DATE, '[^,]+', 1, 1) AS EDU_START_DATE,
+						REGEXP_SUBSTR(T.EDU_DATE,'[^,]*.$') AS EDU_END_DATE,
 						T.EDU_FIXED,
 						(SELECT COUNT(*) FROM TB_STUDENT_DETAIL TS WHERE 1=1 AND TS.EDU_CODE = T.EDU_CODE AND TS.STD_STATUS = 'Y') AS TSD_CNT,
 						T.EDU_ITEM,
@@ -248,8 +255,12 @@
 										    	'Summary' 
 										ELSE 'err' END
 									 WHEN T.EDU_CLASS_TYPE = '02' THEN
-									 	CASE WHEN T.EDU_CLASS_DIVISION = '09' THEN
-											'자질Test'
+									 	CASE WHEN T.EDU_CLASS_DIVISION = '07' THEN
+												'통계Test'
+									 		 WHEN T.EDU_CLASS_DIVISION = '08' THEN
+												'과제Test'
+											 WHEN T.EDU_CLASS_DIVISION = '09' THEN
+												'자질Test'
 										ELSE 'err' END
 								ELSE 'err' END
 						     WHEN T.EDU_BELTCODE = 'D003' THEN
@@ -261,9 +272,9 @@
 										ELSE 'err' END
 									 WHEN T.EDU_CLASS_TYPE = '02' THEN
 									 	CASE WHEN T.EDU_CLASS_DIVISION = '07' THEN
-											'통계Test'
-									 	     WHEN T.EDU_CLASS_DIVISION = '08' THEN
-											'과제Test'
+												'통계Test'
+									 		 WHEN T.EDU_CLASS_DIVISION = '08' THEN
+												'과제Test'
 										ELSE 'err' END
 								ELSE 'err' END
 						 ELSE 'err' END AS EDU_CLASS_DIVISION_NAME,
@@ -282,7 +293,6 @@
 						T.EDU_COMPLETE_TIME,
 						T.EDU_USE_YN,
 						T.EDU_YEAR,
-						
 						T.EDU_NUMBER,
 						T.EDU_DATE,
 						T.EDU_FIXED,
@@ -323,7 +333,6 @@
 				RS.EDU_CLASS_TARGET,
 				RS.EDU_CLASS_INTRO,
 				<!-- REPLACE (RS.EDU_CLASS_INTRO, chr(13)||chr(10), '<![CDATA[<br>]]>' ) AS EDU_CLASS_INTRO, -->
-				
 				RS.EDU_CLASS_SUMMARY,
 				RS.EDU_COST,
 				RS.EDU_INSURANCE_YN,
@@ -341,6 +350,7 @@
 				RS.EDU_BELTCODE_NAME,
 				RS.EDU_NUMBER,
 				RS.EDU_DATE,
+				RS.EDU_DATE_DIV,
 				RS.EDU_FIXED,
 				RS.EDU_ITEM,
 				RS.EDU_FILE_CODE,
@@ -397,6 +407,7 @@
 			EDU_BELTCODE,
 			EDU_NUMBER,
 			EDU_DATE,
+			EDU_DATE_DIV,
 			EDU_FIXED,
 			EDU_ITEM,
 			EDU_FILE_CODE,
@@ -427,6 +438,7 @@
 		   ,#{eduBeltCode} 
 		   ,#{eduNumber} 
 		   ,#{eduDate} 
+		   ,#{eduDateDiv}
 		   ,#{eduFixed} 
 		   ,#{eduItem}
 		   ,#{eduFileCode}
@@ -458,6 +470,7 @@
 				EDU_BELTCODE = #{eduBeltCode},
 				EDU_NUMBER = #{eduNumber},
 				EDU_DATE = #{eduDate},
+				EDU_DATE_DIV = #{eduDateDiv},
 				EDU_FIXED = #{eduFixed},
 				EDU_ITEM = #{eduItem},
 				EDU_QUARTER = #{eduQuater},
@@ -548,8 +561,12 @@
 													    	'Summary' 
 													ELSE 'err' END
 												 WHEN EDU_CLASS_TYPE = '02' THEN
-												 	CASE WHEN EDU_CLASS_DIVISION = '09' THEN
-														'자질Test'
+												 	CASE WHEN EDU_CLASS_DIVISION = '07' THEN
+															'통계Test'
+												 		 WHEN EDU_CLASS_DIVISION = '08' THEN
+															'과제Test'
+														 WHEN EDU_CLASS_DIVISION = '09' THEN
+															'자질Test'
 													ELSE 'err' END
 											ELSE 'err' END
 							     		WHEN EDU_BELTCODE = 'D003' THEN
@@ -655,6 +672,7 @@
 				RS.EDU_BELTCODE_NAME,
 				RS.EDU_NUMBER,
 				RS.EDU_DATE,
+				RS.EDU_DATE_DIV,
 				RS.EDU_FIXED,
 				REPLACE (RS.EDU_ITEM, chr(13)||chr(10), '<![CDATA[<br/>]]>' ) AS EDU_ITEM,
 				RS.EDU_FILE_CODE,
@@ -695,6 +713,7 @@
 					 	   	M.EDU_YEAR,
 					 	   	M.EDU_NUMBER,
 					 	   	M.EDU_DATE,
+					 	   	M.EDU_DATE_DIV,
 					 	   	M.EDU_BELTCODE,
 					 	   	M.EDU_CLASS_TYPE,
 					 	   	D.STD_SEQ,
@@ -812,6 +831,7 @@
 					 	   	M.EDU_YEAR,
 					 	   	M.EDU_NUMBER,
 					 	   	M.EDU_DATE,
+					 	   	M.EDU_DATE_DIV,
 					 	   	M.EDU_BELTCODE,
 					 	   	M.EDU_CLASS_TYPE,
 					 	   	M.EDU_REG_DATE,
@@ -903,6 +923,7 @@
 								 	   	M.EDU_YEAR,
 								 	   	M.EDU_NUMBER,
 								 	   	M.EDU_DATE,
+								 	   	M.EDU_DATE_DIV,
 								 	   	M.EDU_BELTCODE,
 								 	   	M.EDU_CLASS_TYPE,
 								 	   	M.EDU_REG_DATE,
@@ -1000,6 +1021,7 @@
 								 	   	M.EDU_YEAR,
 								 	   	M.EDU_NUMBER,
 								 	   	M.EDU_DATE,
+								 	   	M.EDU_DATE_DIV,
 								 	   	M.EDU_BELTCODE,
 								 	   	M.EDU_CLASS_TYPE,
 								 	   	M.EDU_REG_DATE,

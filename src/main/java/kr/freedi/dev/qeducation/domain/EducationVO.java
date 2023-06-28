@@ -47,6 +47,7 @@ public class EducationVO {
 	private String eduClassDivisionName;  
 	private String eduBeltCodeName;  
 	private String tsdCnt;
+	private String eduDateDiv;
 	
 	private String eduCode01;
 	private String eduName01;
@@ -95,6 +96,13 @@ public class EducationVO {
 	private List<MyEducationVO> reportList;
 	
 	private String comCertBelt;
+	
+	private String eDate01;
+	private String eDate02;
+	private String eduFromDt;
+	private String eduToDt;
+	private String eduStartDate;
+	private String eduEndDate;
 	
 	public String getEduCode() {
 		return eduCode;
@@ -324,6 +332,13 @@ public class EducationVO {
 	}
 	public void setTsdCnt(String tsdCnt) {
 		this.tsdCnt = tsdCnt;
+	}
+	
+	public String getEduDateDiv() {
+		return eduDateDiv;
+	}
+	public void setEduDateDiv(String eduDateDiv) {
+		this.eduDateDiv = eduDateDiv;
 	}
 	
 	public String getEduCode01() {
@@ -571,8 +586,46 @@ public class EducationVO {
 	public void setComCertBelt(String comCertBelt) {
 		this.comCertBelt = comCertBelt;
 	}
-
-
+	public String geteDate01() {
+		return eDate01;
+	}
+	public void seteDate01(String eDate01) {
+		this.eDate01 = eDate01;
+	}
+	public String geteDate02() {
+		return eDate02;
+	}
+	public void seteDate02(String eDate02) {
+		this.eDate02 = eDate02;
+	}
+	public String getEduFromDt() {
+		return eduFromDt;
+	}
+	public void setEduFromDt(String eduFromDt) {
+		this.eduFromDt = eduFromDt;
+	}
+	public String getEduToDt() {
+		return eduToDt;
+	}
+	public void setEduToDt(String eduToDt) {
+		this.eduToDt = eduToDt;
+	}
+	
+	public String getEduStartDate() {
+		return eduStartDate;
+	}
+	public void setEduStartDate(String eduStartDate) {
+		this.eduStartDate = eduStartDate;
+	}
+	public String getEduEndDate() {
+		return eduEndDate;
+	}
+	public void setEduEndDate(String eduEndDate) {
+		this.eduEndDate = eduEndDate;
+	}
+	
+	
+	
 	
 	
 	
