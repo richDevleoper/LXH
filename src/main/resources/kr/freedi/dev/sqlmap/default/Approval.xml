@@ -133,7 +133,7 @@
 			            COUNT(1) cnt
 			        FROM
 			            (
-			            <include refid="selectReqList"></include>
+			            <include refid="selectListBasic"></include>
 			            ) a
 			        GROUP BY
 			            a.aproval_state
@@ -152,7 +152,7 @@
            SELECT COUNT(1) cnt
 			 FROM
 			      (
-			        <include refid="selectReqList"></include>
+			        <include refid="selectListBasic"></include>
 			      ) a
 	 </select>
 
@@ -167,7 +167,7 @@
             <where>
 				<trim prefixOverrides="AND|OR">
 					<if test="searchRegUserId != null and searchRegUserId != ''">
-						AND m.USER_ID=#{searchRegUserId}) 
+						AND m.USER_ID=#{searchRegUserId} 
 					</if>
 		            <if test="searchName != null and searchName != ''">
 						AND m.APROVAL_SUBJECT like '%' || #{searchName} || '%'

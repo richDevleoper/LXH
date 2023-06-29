@@ -27,6 +27,7 @@ import kr.freedi.dev.article.domain.ArticleSearchVO;
 import kr.freedi.dev.article.service.ArticleService;
 import kr.freedi.dev.code.domain.CodeVO;
 import kr.freedi.dev.code.service.CodeService;
+import kr.freedi.dev.common.util.SendMailUtil;
 import kr.freedi.dev.qapprove.domain.ApproveVO;
 import kr.freedi.dev.qeducation.controller.EducationController;
 import kr.freedi.dev.qeducation.domain.EducationSearchVO;
@@ -38,6 +39,7 @@ import kr.freedi.dev.qreport.domain.ReportTeamVO;
 import kr.freedi.dev.qreport.domain.ReportVO;
 import kr.freedi.dev.qreport.service.ReportService;
 import kr.freedi.dev.user.domain.UserVO;
+import laf.core.exception.LSysException;
 
 /**
  * @project : dev_default
@@ -449,6 +451,22 @@ public class ReportController {
 			
 			ExcelFunction.excelWriter(request, response, reportList, fileName, colIdArr, colNameArr);
 		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	@RequestMapping({"/sendMail.do"})
+	public @ResponseBody void sendMailTest(HttpServletRequest request, HttpServletResponse response, 
+		@ModelAttribute("reportVO") ReportVO reportVO,
+		@ModelAttribute("reportSearchVO") ReportSearchVO searchVO,
+		   UserVO userSession){
+		
+		try {
+			//SendToMail(String sender, String string, String[] ccAddr, String[] bccAddr, String title , String orgTitle ,String content , String mailGb )
+			SendMailUtil.SendToMail("designgun@hausyspartner.com", "designgun@hausyspartner.com", null, null, "메일발송_테스트", "메일발송_테스트_orgTitle", "내용영역 <a href='http://naver.com/' target='_blank'>test link</a>", null);
+		} catch (LSysException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

@@ -146,6 +146,7 @@ public class MakeController {
 		@ModelAttribute("MakeVO") MakeVO makeVO, 
 		UserVO userSession)throws Exception {
 		
+		
 		model.addAttribute("menuKey", searchVO.getMenuKey());
 		searchVO.setSearchUserid(userSession.getUserId());
 		
@@ -157,7 +158,9 @@ public class MakeController {
 			makeService.update(makeVO);
 		}
 		
-		
+		//MakeVO paramVO = new MakeVO();
+		//paramVO.setCirMemCode(removeMemberIds[j]);
+		//dao.delete("Make.deleteCircleDtl", paramVO);
 		
 		//return "app/make/MakeList";
 		return "redirect:/sub.do?menuKey=70";

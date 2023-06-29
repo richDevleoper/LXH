@@ -140,8 +140,12 @@ public class MakeService {
 				
 				
 				if(anLeader8[j].trim().length()>0) {
-					dao.update("Make.updateCircleDtl", makeVO);	
+					dao.update("Make.updateCircleDtl", makeVO);						
 				} else {
+					
+					MakeVO deleteParam = new MakeVO();
+					deleteParam.setComNo(anLeader1[j].trim());
+					dao.delete("Make.deleteCircleDtl", deleteParam);
 					dao.insert("Make.insertCircleDtl", makeVO);
 				}
 				
@@ -189,6 +193,9 @@ public class MakeService {
 				if(anTeam8[j].trim().length()>0) {
 					dao.update("Make.updateCircleDtl", makeVO);	
 				} else {
+					MakeVO deleteParam = new MakeVO();
+					deleteParam.setComNo(anTeam1[j].trim());
+					dao.delete("Make.deleteCircleDtl", deleteParam);
 					dao.insert("Make.insertCircleDtl", makeVO);
 				}				
 				totCnt++;

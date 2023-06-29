@@ -46,7 +46,19 @@
 	</select>
 
 	<select id="selectTreeList" resultMap="deptMap">
-
+		with view_depart as (
+		        select 
+		        		DEPT_CODE
+		         from 
+		         		tb_depart_mst
+		         where 
+					DEPT_STATE_CODE <![CDATA[<>]]> 'D'
+		    START WITH
+		           	dept_code in (select com_depart_code from tb_kpi_user_detail 
+		                   	       group by com_depart_code)
+			CONNECT BY PRIOR
+					dept_uper_code = dept_code
+		)
 		SELECT
 			LEVEL AS level1
 			, DEPT_CODE
@@ -70,12 +82,11 @@
 			tb_depart_mst T
 		WHERE
 			T.dept_state_code <![CDATA[<>]]> 'D'
+			and exists (select 1 from view_depart where DEPT_CODE=T.DEPT_CODE) 
 		START WITH
-			dept_code = '50000000'
+			dept_code in '50000000'
 		CONNECT BY PRIOR
 			dept_code = dept_uper_code
-
-
 	</select>
 
 	<select id="selectList" resultType="egovMap">

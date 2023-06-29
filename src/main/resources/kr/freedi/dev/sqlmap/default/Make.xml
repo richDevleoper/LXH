@@ -289,17 +289,32 @@
 					, t.com_position                    
 					, GET_CODE_NM('POSITION', com_position) com_position_nm            
 					, t.com_cert_belt              
-					, cd_blt.code_nm com_cert_belt_nm       
+					, cd_blt.code_nm com_cert_belt_nm
+					, (select count(1) from tb_circle_detail where com_no=T.COM_NO) as circle_join_yn       
               FROM tb_user_mst T
                    LEFT OUTER JOIN tb_code cd_job ON cd_job.code_grp_id='JOBX' AND cd_job.code_id=T.com_jobx
                    LEFT OUTER JOIN tb_code cd_blt ON cd_blt.code_grp_id='LDRBELT' AND cd_blt.code_id=T.com_cert_belt 
 		<include refid="detCond"></include>
 		    )
-		ORDER BY COM_JOBX ASC, USER_NAME
+		ORDER BY COM_POSITION, COM_JOBX ASC, USER_NAME
 	</select>
 	
+	<sql id="detCondCircleDetail">
+		<where>
+			<trim prefixOverrides="AND|OR">
+				<if test="cirMemCode != null and cirMemCode != ''">
+					AND CIR_MEM_CODE = #{cirMemCode}
+				</if>
+				<if test="comNo != null and comNo != ''">
+					AND COM_NO = #{ComNo}
+				</if>
+			</trim>
+		</where>
+	</sql>
+	
 	<delete id="deleteCircleDtl">
-		DELETE FROM TB_CIRCLE_DETAIL WHERE CIR_MEM_CODE = #{cirMemCode}
+		DELETE FROM TB_CIRCLE_DETAIL 
+		<include refid="detCondCircleDetail"></include>
 	</delete>
 	
 </mapper>

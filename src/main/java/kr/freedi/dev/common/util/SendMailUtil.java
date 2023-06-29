@@ -60,19 +60,19 @@ public class SendMailUtil {
     * 메일을 보낸다.
      *
      * @param sender 보내는 사람 이메일주
-     * @param reciver 받는 사람 이메일주
+     * @param string 받는 사람 이메일주
      * @param ccAddr 참조자
      * @param bccAddr 참조자
      * @param title 제목
      * @param content 내용
      * @throws LSysException
      */
-    public static int SendToMail(String sender, String[] reciver, String[] ccAddr, String[] bccAddr,
+    public static int SendToMail(String sender, String string, String[] ccAddr, String[] bccAddr,
                                   String title , String orgTitle ,String content , String mailGb ) throws LSysException  {
         try {
 
             LMail mail = new LMail();
-            mail.setToMailAddress   (reciver );
+            mail.setToMailAddress   (string );
             mail.setFromMailAddress (sender  );
             mail.setCcMailAddress   (ccAddr  );
             mail.setBccMailAddress  (bccAddr );
@@ -109,16 +109,15 @@ public class SendMailUtil {
 //            mail.printCurrentConfigInfo();
             mail.send();
             try {
-                LLog.info.println(sender.toString() + " 님이 " + reciver[0] + " 님에게 메일을 전송하였습니다.( '"+ orgTitle +"' )");
+                LLog.info.println(sender.toString() + " 님이 " + string + " 님에게 메일을 전송하였습니다.( '"+ orgTitle +"' )");
             } catch (Exception e) {
             }
 
         } catch ( Exception e) {
+        	e.printStackTrace();
             return 0;
         }
         return 1;
     }
-
-
 
 }

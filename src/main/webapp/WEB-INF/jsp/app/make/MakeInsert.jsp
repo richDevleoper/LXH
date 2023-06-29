@@ -410,7 +410,26 @@ $(document).ready(function(){
 			return false;
 		}
 		
+		let flagCircleJoinYn = false;
+		let strCircleJoinUserName = "";
+		$("#emptab tr").each(function(i, o){
+
+			// 체크된 항목 중 분임조에 소속된 사람이 있는지 체크
+		    if($(this).find("input:checkbox[name='chkNo']").is(":checked") && Number($(o).attr("circleJoinYn"))>0){
+		    	flagCircleJoinYn = true;
+		    	if(strCircleJoinUserName.length>0){
+		    		strCircleJoinUserName += ", ";
+		    	}
+		    	strCircleJoinUserName += $(this).attr("username");
+		    }
+		});
 		
+		if(flagCircleJoinYn){
+			if(!confirm("이미 분임조에 소속된 직원을 선택하셨습니다.\n계속 진행하실 경우 기존 소속된 분임조에서 본 분임조로 이동하게 됩니다.\n계속하시겠습니까?\n(다른 분임조에 소속된 인원 : "+strCircleJoinUserName+")\n※ 대상선정 버튼을 누르면 반영됩니다.")){
+				return false;	
+			}
+		}
+
 		$("#emptab").children("tbody:first").children("tr[comNo]").each(function(i){
 			var comNo = $(this).attr("comNo");
 			var userName   = $(this).attr("userName");
@@ -423,6 +442,7 @@ $(document).ready(function(){
 			var comCertBelt   = $(this).attr("comCertBelt");
 			var comCertBeltNm   = $(this).attr("comCertBeltNm");
 			var cirMemCode = $(this).attr("cirMemCode");
+			var circleJoinYn = $(this).attr("circleJoinYn");
 			
 			let res = true;
 			
@@ -436,8 +456,6 @@ $(document).ready(function(){
 			
 			if(res){
 				if($(this).find("input:checkbox[name='chkNo']").is(":checked")){
-					//console.log(comNo);
-					//console.log(comDepartCode);
 					
 					vhtml.push("<tr comNo='"+comNo+"' userName='"+userName+"' comDepartCode='"+comDepartCode+"' deptFullName='"+deptFullName+"' comJobx='"+comJobx+"' comPosition='"+comPosition+"' comPositionNm='"+strChk(comPositionNm)+"' comCertBelt='"+comCertBelt+"' comCertBeltNm='"+comCertBeltNm+"' cirMemCode=''>");
 	        		vhtml.push("<td class='text-align-center'>"); 
@@ -446,15 +464,12 @@ $(document).ready(function(){
 	        		vhtml.push("<label for='chkleader_"+i+"'></label>");
 	        		vhtml.push("</div>");
 	        		vhtml.push("</td>");
-	        		 
 					vhtml.push("<td class='text-align-center'><span>" + strChk(userName) + "</span></td>");
 					vhtml.push("<td class='text-align-center'><span>" + strChk(comJobxNm) + "</span></td>");
 					vhtml.push("<td class='text-align-center'><span>" + strChk(comPositionNm)+ "</span></td>");
-					//vhtml.push("<td><span>" + strChk(comCertBeltNm) + "</span></td>");
 					vhtml.push("</tr>");
 				}
 			}
-			
 		});
 		$("#leadertab").find("tbody").append(vhtml.join(''));
 		
@@ -486,6 +501,27 @@ $(document).ready(function(){
 	});
 	
 	$("#AppTeam").on("click", function(){
+		
+		let flagCircleJoinYn = false;
+		let strCircleJoinUserName = "";
+		$("#emptab tr").each(function(i, o){
+
+			// 체크된 항목 중 분임조에 소속된 사람이 있는지 체크
+		    if($(this).find("input:checkbox[name='chkNo']").is(":checked") && Number($(o).attr("circleJoinYn"))>0){
+		    	flagCircleJoinYn = true;
+		    	if(strCircleJoinUserName.length>0){
+		    		strCircleJoinUserName += ", ";
+		    	}
+		    	strCircleJoinUserName += $(this).attr("username");
+		    }
+		});
+		
+		if(flagCircleJoinYn){
+			if(!confirm("이미 분임조에 소속된 직원을 선택하셨습니다.\n계속 진행하실 경우 기존 소속된 분임조에서 본 분임조로 이동하게 됩니다.\n계속하시겠습니까?\n(다른 분임조에 소속된 인원 : "+strCircleJoinUserName+")\n※ 대상선정 버튼을 누르면 반영됩니다.")){
+				return false;	
+			}
+		}
+		
 		let vhtml = [];	
 		$("#emptab").children("tbody:first").children("tr[comNo]").each(function(i){
 			var comNo = $(this).attr("comNo");
@@ -793,7 +829,7 @@ function getEmpSearch(par){
 				for ( var i in data) {
 					let item = data[i];
 				
-            		vhtml.push("<tr comNo='"+strChk(item.comNo)+"' userName='"+strChk(item.userName)+"' comDepartCode='"+strChk(item.comDepartCode)+"' deptFullName='"+strChk(item.deptFullName)+"' comJobx='"+strChk(item.comJobx)+"' comJobxNm='"+item.comJobxNm+"' comPosition='"+strChk(item.comPosition)+"' comPositionNm='"+strChk(item.comPositionNm)+"' comCertBelt='"+strChk(item.comCertBelt)+"' comCertBeltNm='"+strChk(item.comCertBeltNm)+"' >");
+            		vhtml.push("<tr comNo='"+strChk(item.comNo)+"' userName='"+strChk(item.userName)+"' comDepartCode='"+strChk(item.comDepartCode)+"' deptFullName='"+strChk(item.deptFullName)+"' comJobx='"+strChk(item.comJobx)+"' comJobxNm='"+item.comJobxNm+"' comPosition='"+strChk(item.comPosition)+"' comPositionNm='"+strChk(item.comPositionNm)+"' comCertBelt='"+strChk(item.comCertBelt)+"' comCertBeltNm='"+strChk(item.comCertBeltNm)+"' circleJoinYn='"+item.circleJoinYn+"' >");
             		vhtml.push("<td class='text-align-center'>"); 
             		vhtml.push("<div>");
             		vhtml.push("<input type='checkbox' id='chkNo_"+i+"' name='chkNo'>");
