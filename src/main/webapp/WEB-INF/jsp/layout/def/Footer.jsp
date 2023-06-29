@@ -70,6 +70,7 @@
 	            <button type="button" class="btn-cancel" onclick="popDept.close()">취소</button>
 	        </div>
        </div>
+   </div>
 </div>
 	            <script>
 	            
@@ -169,6 +170,181 @@
 	            </script>
 
 
+<div class="org-modal" id="comPopup_deptSearchMulti">
+    <div class="modal-header">
+        <h4>조직조회</h4>
+        <button type="button" class="btn-close">닫기</button>
+    </div>
+    <div class="modal-content">
+        <div class="list-wrap">
+            <div class="list-search">
+                <!-- <form id="org-form" onsubmit="org_search();return false;"> -->
+                    <div class="search-form">
+                        <div class="form-inline form-input">
+                            <label>조직명</label>
+                            <input type="text" name="dept_name2" id="txtSearchMDeptName">
+                        </div>
+                        <button type="submit" class="btn-submit" id="btnSearchMDept">조회</button>
+                    </div>
+                <!-- </form> -->
+            </div>
+        </div>
+        <div class="tree-header">
+            <div>
+                <input type="checkbox" id="orgSelAll">
+                <label for="orgSelAll"></label>
+            </div>
+            <div>
+                6σ 인재육성대상 조직명
+            </div>
+        </div>
+        <div id="objDeptTree" class="jstree jstree-1 jstree-default jstree-checkbox-selection" role="tree" aria-multiselectable="true" tabindex="0" aria-activedescendant="j1_1" aria-busy="false">
+        <ul class="jstree-container-ul jstree-children" role="group">
+        </ul></div>
+        <div class="btns">
+            <button type="button" class="btn-submit" onclick="return popMDept.callData()">확인</button>
+            <button type="button" class="btn-cancel">취소</button>
+        </div>
+    </div>
+</div>
+
+	            <script>
+	            
+	            	
+	            
+	            	let popMDept = {
+	            			returnObjId : null,  //팝업에서 선택한 사람을 리턴할 객체
+	            			returnFunc : null,
+	            			searchObjId : "txtSearchMDeptName",
+	            			modalPopId : "comPopup_deptSearchMulti",
+	            			//dataAppendId : "tbodyDeptSearch",
+	            			//radioObjClass : "radio-selected",
+	            			open : function(){
+	            				$(".modal-dimmed").show();
+	            				$("#"+this.modalPopId).show();
+	            			},
+	            			close: function(flag){
+	            				$(".modal-dimmed").hide();
+	            		 		$("#"+this.modalPopId).hide();
+	            		 		
+	    	            		if(!flag && this.returnFunc){
+	    	            			this.returnFunc(popDept.returnObjId, null); //리턴함수 호출, 초기화 전 객체명 넘기기
+	    	            		}	    	            		
+	            		 		this.init();
+	            			},
+	            			init : function(){
+	            				
+	            				if(!objDeptTreeData){
+	            					alert("데이터가 로딩되지 않았습니다.");
+	            					return;
+	            				}
+	            				
+	            			    $('#objDeptTree').jstree({
+	            			    	"core": {
+	            			    	      "data": objDeptTreeData
+	            			    	    },
+		            		        "plugins" : ['checkbox','search'],
+		            		        "search" : {
+		            		            "show_only_matches" : true,
+	            		            	"show_only_matches_children" : true,
+            		        		},
+		            		    })
+		            		    .on("check_node.jstree uncheck_node.jstree", function (e, data) {
+		            		    	debugger;
+		            		        if (e.type == "uncheck_node") {
+		            		            $("#orgSelAll").prop( "checked", false );                
+		            		        }
+			            		        else if (e.type == "check_node") {					
+		            		            if ($(this).jstree().get_json('#', {flat:true}).length === $(this).jstree().get_checked(true).length)
+		            		                $("#orgSelAll").prop( "checked", true ); 					
+		            		        }
+		            		    });
+	            			    
+	            			    $("#btnSearchMDept").off("click").on("click", function(){
+	            			        var text = $('#txtSearchMDeptName').val();
+	            			        $('#objDeptTree').jstree(true).search(text);
+	            			    });
+	            			    
+	            			    
+	            				$(".tr-empty").show();
+	            				$(".tr-data").remove();
+	            				$("#"+popDept.searchObjId).val("");
+	            				$("#"+popDept.searchObjId).off("keyup").on("keyup", function(e){
+	            					if(e.keyCode==13){
+	            						popDept.callData();
+	            					}	
+	            				});
+	            				
+	            				this.returnObjId = null;
+	            				this.returnFunc = null;
+	            			},
+	            			callData : function(){
+	            				
+	            				if($("#"+this.searchObjId).val().trim().length<1){
+	            					return false;
+	            				}
+	            				debugger;
+	            				$(".jstree-node").each(function(i, o){
+
+	            				    if($(this).attr("aria-selected")==="true"){
+	            				        console.log($(this).attr("id"), $(this).text());
+	            				    }
+	            				})
+	            				
+	            				var searchText = $("#"+this.searchObjId).val();
+	            				var posting = $.post( "/qpopup/getDeptSearch.do", { deptName: searchText }, this.setData, "json" );
+	            				
+	            				return false; // submit 방지용
+	            			},
+	            			setData : function(data){
+	            				
+	            				const selectObjId = "org_search_selected";//select 객체명
+	            				//{"userId":"parksoomin","userName":"박수민"
+	            				//,"deptFullName":"울산설비팀(전기PM／변전실)"
+	            				//,"comJobx":"FE0","comPosition":"생산파트장","comCertBelt":null}
+	            				$(".tr-empty").hide();
+	            				$(".tr-data").remove();
+	            				if(data.length===0){
+	            					// 데이터가 없습니다. 
+	            					
+	            					let htm = "<tr class='tr-data'> \n"+
+		                                "<td colspan='2' style='text-align: center; height: 30px;'>조회된 사원이 없습니다.</td> \n"+ 
+		                            "</tr>";
+		    	            		$("#"+this.dataAppendId).append(htm);
+	            				}
+	            				for ( var i in data) {
+	            					let item = data[i];
+	            					let htm = "<tr class='tr-data' onclick='popDept.onclickTr(this)' data='"+JSON.stringify(item)+"' > \n"+
+		                                "<td><input type='radio' name='"+ selectObjId +"' class='"+ popDept.radioObjClass +"' value='"+item.deptCode+"'/></td> \n"+
+		                                "<td>"+strChk(item.deptName)+"</td> \n"+ 
+		                            "</tr>";
+		    	            		$("#"+popDept.dataAppendId).append(htm);
+								}
+	            				
+	    	            		$("input[name="+ selectObjId +"]:eq(0)").prop("checked", true);
+	    	            	}, 
+	    	            	
+	    	            	onclickTr : function(obj){
+	    	            		$(obj).find("."+this.radioObjClass).prop("checked", true);
+	    	            	},
+	    	            	onSubmit: function(){
+	    	            		
+	    	            		let checkedItem = $("."+ popDept.radioObjClass +":checked").closest("tr");
+	    	            		let retData = checkedItem.attr("data");
+	    	            		retData = JSON.parse(retData);
+	    	            		
+	    	            		if(this.returnFunc){
+	    	            			this.returnFunc(popDept.returnObjId, retData); //리턴함수 호출, 초기화 전 객체명 넘기기
+	    	            			this.close(true);	// 팝업 Close, 각 파라메터 초기화
+	    	            		} else {
+	    	            			alert("반환 함수가 정의되지 않았습니다.");
+	    	            		}
+	    	            	}
+	            			
+	            	};
+
+	            </script>
+
 <!-- 13 직책조회 -->
 <div class="org-modal" id="comPopup_posSearch">
             <div class="modal-header">
@@ -206,6 +382,8 @@
             </div>
         </div>
 </div>
+
+
 
 
 <style>

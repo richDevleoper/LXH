@@ -452,11 +452,17 @@
     	// 조직 조회 호출부
     	function callPopup_searchDepartment(obj){
 
-    		popDept.init();
-    		// footer.jsp 내 영역 호출
+    		popMDept.init();
     		popDept.returnObjId = "searchDepart";
     		popDept.returnFunc = callback_popDept;
-    		popDept.open();
+    		popMDept.open();
+    		
+    		
+    		//popDept.init();
+    		// footer.jsp 내 영역 호출
+    		//popDept.returnObjId = "searchDepart";
+    		//popDept.returnFunc = callback_popDept;
+    		//popDept.open();
     	}
     	
     	// 조직 조회 콜백부
@@ -494,7 +500,11 @@
     		$("#defaultForm")[0].submit();
     	}
     	
+    	
+    	let objDeptTreeData = ${deptFullList};
         </script>
+        
+        
 
 </body>
 </html>

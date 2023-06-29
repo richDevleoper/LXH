@@ -64,6 +64,11 @@ public class QPopupService {
 		return dao.selectList("Depart.selectTreeList"); 
 	}
 	
+	public List<EgovMap> selectTreeJson() {
+		
+		return dao.selectList("Depart.selectTreeJson"); 
+	}
+	
 	public List<EgovMap> selectMgrPlan(KpiSearchVO vo) {
 		
 		return dao.selectList("KPI.selectMgrPlan", vo); 

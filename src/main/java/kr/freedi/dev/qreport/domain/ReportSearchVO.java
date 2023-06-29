@@ -1,5 +1,9 @@
 package kr.freedi.dev.qreport.domain;
 
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
 import kr.freedi.dev.common.annotation.ParamField;
 import kr.freedi.dev.common.domain.CommonVO;
 
@@ -31,6 +35,7 @@ public class ReportSearchVO extends CommonVO {
 	
 	private String searchDepartName; // 부서명
 	
+	
 	private String menuCode;		// 과제/10+ or 분임조과제 구분
 	
 	private String searchSectorCode;	// 부문
@@ -48,9 +53,6 @@ public class ReportSearchVO extends CommonVO {
 	private String searchFromDt; // 조회기간(시작)
 	
 	private String searchToDt; // 조회기간(끝)
-	
-	
-	
 	
 	//searchUserid() // 로그인
 	
@@ -173,7 +175,7 @@ public class ReportSearchVO extends CommonVO {
 	public String getSearchDepart() {
 		return searchDepart;
 	}
-
+	
 	public void setSearchDepart(String searchDepart) {
 		this.searchDepart = searchDepart;
 	}
@@ -186,15 +188,18 @@ public class ReportSearchVO extends CommonVO {
 		this.searchDepartName = searchDepartName;
 	}
 
+
+
+
 	@Override
 	public String toString() {
 		return "ReportSearchVO [searchRepName=" + searchRepName + ", searchDivision=" + searchDivision + ", searchType="
 				+ searchType + ", searchStatus=" + searchStatus + ", searchDepart=" + searchDepart
-				+ ", searchDepartName=" + searchDepartName + ", menuCode=" + menuCode + ", searchSectorCode="
-				+ searchSectorCode + ", searchPlaceCode=" + searchPlaceCode + ", searchActionTypeCode="
-				+ searchActionTypeCode + ", searchLeaderBeltCode=" + searchLeaderBeltCode + ", searchTeamMemberType="
-				+ searchTeamMemberType + ", searchTeamMemberName=" + searchTeamMemberName + ", searchFromDt="
-				+ searchFromDt + ", searchToDt=" + searchToDt + ", orderByTyp=" + orderByTyp + "]";
+				+ ", searchDepartName=" + searchDepartName + ", searchDepartList=" + ", menuCode="
+				+ menuCode + ", searchSectorCode=" + searchSectorCode + ", searchPlaceCode=" + searchPlaceCode
+				+ ", searchActionTypeCode=" + searchActionTypeCode + ", searchLeaderBeltCode=" + searchLeaderBeltCode
+				+ ", searchTeamMemberType=" + searchTeamMemberType + ", searchTeamMemberName=" + searchTeamMemberName
+				+ ", searchFromDt=" + searchFromDt + ", searchToDt=" + searchToDt + ", orderByTyp=" + orderByTyp + "]";
 	}
 	
 }

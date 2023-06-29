@@ -45,8 +45,9 @@
 		<include refid="defCond"></include>
 	</select>
 
-	<select id="selectTreeList" resultMap="deptMap">
-		with view_depart as (
+
+	<sql id="sqlSelectTreeList">
+	with view_depart as (
 		        select 
 		        		DEPT_CODE
 		         from 
@@ -87,6 +88,14 @@
 			dept_code in '50000000'
 		CONNECT BY PRIOR
 			dept_code = dept_uper_code
+	</sql>
+
+	<select id="selectTreeList" resultMap="deptMap">
+		<include refid="sqlSelectTreeList"></include>
+	</select>
+	
+	<select id="selectTreeJson" resultType="egovMap">
+		<include refid="sqlSelectTreeList"></include>
 	</select>
 
 	<select id="selectList" resultType="egovMap">

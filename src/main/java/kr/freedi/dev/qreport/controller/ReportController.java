@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.gson.JsonArray;
+
 import egovframework.rte.psl.dataaccess.util.EgovMap;
 import kr.freedi.dev.article.domain.ArticleSearchVO;
 import kr.freedi.dev.article.service.ArticleService;
@@ -34,9 +36,12 @@ import kr.freedi.dev.qeducation.domain.EducationSearchVO;
 import kr.freedi.dev.qeducation.domain.EducationVO;
 import kr.freedi.dev.qeducation.domain.StudentVO;
 import kr.freedi.dev.qeducation.excel.ExcelFunction;
+import kr.freedi.dev.qpopup.domain.DepartVO;
+import kr.freedi.dev.qpopup.service.QPopupService;
 import kr.freedi.dev.qreport.domain.ReportSearchVO;
 import kr.freedi.dev.qreport.domain.ReportTeamVO;
 import kr.freedi.dev.qreport.domain.ReportVO;
+import kr.freedi.dev.qreport.service.MakeService;
 import kr.freedi.dev.qreport.service.ReportService;
 import kr.freedi.dev.user.domain.UserVO;
 import laf.core.exception.LSysException;
@@ -61,6 +66,12 @@ public class ReportController {
 	
 	@Resource(name = "reportService")
 	private ReportService reportService;
+	
+	@Resource(name = "makeService")
+	private MakeService makeService;
+	
+	@Resource(name = "qPopupService")
+	private QPopupService qPopupService;
 	
 	@Resource(name = "codeService")
 	private CodeService codeService;
@@ -401,6 +412,14 @@ public class ReportController {
 		
 		searchVO.setMenuCode(REP_MENU_CODE);
 		
+		
+		List<DepartVO> dbList = qPopupService.selectTreeList();
+		JsonArray deptList = makeService.convertTreeJson(dbList);
+		
+		model.addAttribute("deptFullList", deptList);
+				
+		//searchVO.setSearchDepart("58153604,IE");
+		
 		List<EgovMap> reportList = reportService.selectReportList(searchVO);
 		model.addAttribute("reportList", reportList);
 		
@@ -428,9 +447,7 @@ public class ReportController {
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
-		
 	}
-	
 	
 	@RequestMapping({"/reportSummary.do"})
 	public @ResponseBody void excelSummaryBuild(HttpServletRequest request, HttpServletResponse response, 

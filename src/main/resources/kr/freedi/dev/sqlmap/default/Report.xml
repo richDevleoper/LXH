@@ -74,9 +74,12 @@
 			</if>
 			
 			<if test="searchDepart != null and searchDepart != ''">
-				AND EXISTS (SELECT 1 FROM TB_USER_MST WHERE COM_NO=T.REP_REG_USER AND COM_DEPART_CODE=#{searchDepart})
+				AND EXISTS (SELECT 1 FROM TB_USER_MST 
+		             WHERE COM_NO=T.REP_REG_USER 
+		               AND INSTR(#{searchDepart}, COM_DEPART_CODE) <![CDATA[>]]> 0
+				    )
 			</if>
-			
+
 			<if test="searchTeamMemberName != null and searchTeamMemberName != ''">
 				AND EXISTS (SELECT 1 
 				              FROM TB_REPORT_TEAM 

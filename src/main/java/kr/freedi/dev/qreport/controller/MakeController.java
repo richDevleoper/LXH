@@ -158,11 +158,7 @@ public class MakeController {
 			makeService.update(makeVO);
 		}
 		
-		//MakeVO paramVO = new MakeVO();
-		//paramVO.setCirMemCode(removeMemberIds[j]);
-		//dao.delete("Make.deleteCircleDtl", paramVO);
-		
-		//return "app/make/MakeList";
+
 		return "redirect:/sub.do?menuKey=70";
 		
 	}		
