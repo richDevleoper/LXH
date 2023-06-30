@@ -191,8 +191,8 @@
         </div>
         <div class="tree-header">
             <div>
-                <input type="checkbox" id="orgSelAll">
-                <label for="orgSelAll"></label>
+                <input type="checkbox" id="orgSelAllDept">
+                <label for="orgSelAllDept"></label>
             </div>
             <div>
                 6σ 인재육성대상 조직명
@@ -202,7 +202,7 @@
         <ul class="jstree-container-ul jstree-children" role="group">
         </ul></div>
         <div class="btns">
-            <button type="button" class="btn-submit" onclick="return popMDept.callData()">확인</button>
+            <button type="button" class="btn-submit" onclick="return popMDept.onSubmit()">확인</button>
             <button type="button" class="btn-cancel">취소</button>
         </div>
     </div>
@@ -230,7 +230,7 @@
 	    	            		if(!flag && this.returnFunc){
 	    	            			this.returnFunc(popDept.returnObjId, null); //리턴함수 호출, 초기화 전 객체명 넘기기
 	    	            		}	    	            		
-	            		 		this.init();
+	            		 		//this.init();
 	            			},
 	            			init : function(){
 	            				
@@ -239,62 +239,30 @@
 	            					return;
 	            				}
 	            				
-	            			    $('#objDeptTree').jstree({
-	            			    	"core": {
-	            			    	      "data": objDeptTreeData
-	            			    	    },
-		            		        "plugins" : ['checkbox','search'],
-		            		        "search" : {
-		            		            "show_only_matches" : true,
-	            		            	"show_only_matches_children" : true,
-            		        		},
-		            		    })
-		            		    .on("check_node.jstree uncheck_node.jstree", function (e, data) {
-		            		    	debugger;
-		            		        if (e.type == "uncheck_node") {
-		            		            $("#orgSelAll").prop( "checked", false );                
-		            		        }
-			            		        else if (e.type == "check_node") {					
-		            		            if ($(this).jstree().get_json('#', {flat:true}).length === $(this).jstree().get_checked(true).length)
-		            		                $("#orgSelAll").prop( "checked", true ); 					
-		            		        }
-		            		    });
+	            			    $("#btnSearchMDept").off("click").on("click", searchTreeList);
 	            			    
-	            			    $("#btnSearchMDept").off("click").on("click", function(){
+	            			    function searchTreeList(){
 	            			        var text = $('#txtSearchMDeptName').val();
 	            			        $('#objDeptTree').jstree(true).search(text);
+	            			    }
+	            			    
+	            			    $("#objDeptTree").jstree().uncheck_all(true);
+	            			    $('#orgSelAllDept').change(function() {          
+	            			        ($('#orgSelAllDept').is(":checked"))?$("#objDeptTree").jstree().check_all(true):$("#objDeptTree").jstree().uncheck_all(true);
 	            			    });
 	            			    
 	            			    
 	            				$(".tr-empty").show();
 	            				$(".tr-data").remove();
-	            				$("#"+popDept.searchObjId).val("");
-	            				$("#"+popDept.searchObjId).off("keyup").on("keyup", function(e){
+	            				$("#"+popMDept.searchObjId).val("");
+	            				$("#"+popMDept.searchObjId).off("keyup").on("keyup", function(e){
 	            					if(e.keyCode==13){
-	            						popDept.callData();
+	            						searchTreeList();
 	            					}	
 	            				});
 	            				
 	            				this.returnObjId = null;
 	            				this.returnFunc = null;
-	            			},
-	            			callData : function(){
-	            				
-	            				if($("#"+this.searchObjId).val().trim().length<1){
-	            					return false;
-	            				}
-	            				debugger;
-	            				$(".jstree-node").each(function(i, o){
-
-	            				    if($(this).attr("aria-selected")==="true"){
-	            				        console.log($(this).attr("id"), $(this).text());
-	            				    }
-	            				})
-	            				
-	            				var searchText = $("#"+this.searchObjId).val();
-	            				var posting = $.post( "/qpopup/getDeptSearch.do", { deptName: searchText }, this.setData, "json" );
-	            				
-	            				return false; // submit 방지용
 	            			},
 	            			setData : function(data){
 	            				
@@ -322,19 +290,24 @@
 								}
 	            				
 	    	            		$("input[name="+ selectObjId +"]:eq(0)").prop("checked", true);
-	    	            	}, 
-	    	            	
-	    	            	onclickTr : function(obj){
-	    	            		$(obj).find("."+this.radioObjClass).prop("checked", true);
 	    	            	},
 	    	            	onSubmit: function(){
 	    	            		
-	    	            		let checkedItem = $("."+ popDept.radioObjClass +":checked").closest("tr");
-	    	            		let retData = checkedItem.attr("data");
-	    	            		retData = JSON.parse(retData);
+	    	            		let retData = {
+	    	            				deptCodes: "",
+	    	            				deptNames: "",
+	    	            		};
+	    	            		let checkedArr = $("#objDeptTree").jstree("get_selected",true);
+	    	            		for(i in checkedArr){
+	    	            		    let currObj = checkedArr[i];
+	    	            		    let comma = (i==0) ? "" : ",";
+	    	            		    
+	    	            		    retData.deptCodes += comma+currObj.id;
+	    	            		    retData.deptNames += comma+currObj.text;
+	    	            		}
 	    	            		
 	    	            		if(this.returnFunc){
-	    	            			this.returnFunc(popDept.returnObjId, retData); //리턴함수 호출, 초기화 전 객체명 넘기기
+	    	            			this.returnFunc(popMDept.returnObjId, retData); //리턴함수 호출, 초기화 전 객체명 넘기기
 	    	            			this.close(true);	// 팝업 Close, 각 파라메터 초기화
 	    	            		} else {
 	    	            			alert("반환 함수가 정의되지 않았습니다.");

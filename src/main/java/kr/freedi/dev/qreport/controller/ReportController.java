@@ -415,7 +415,6 @@ public class ReportController {
 		
 		List<DepartVO> dbList = qPopupService.selectTreeList();
 		JsonArray deptList = makeService.convertTreeJson(dbList);
-		
 		model.addAttribute("deptFullList", deptList);
 				
 		//searchVO.setSearchDepart("58153604,IE");

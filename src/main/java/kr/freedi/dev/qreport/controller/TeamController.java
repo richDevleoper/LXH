@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.gson.JsonArray;
+
 import egovframework.rte.psl.dataaccess.util.EgovMap;
 import kr.freedi.dev.article.domain.ArticleSearchVO;
 import kr.freedi.dev.code.domain.CodeVO;
@@ -30,9 +32,12 @@ import kr.freedi.dev.qcircle.domain.CircleVO;
 import kr.freedi.dev.qcircle.service.CircleService;
 import kr.freedi.dev.qeducation.controller.EducationController;
 import kr.freedi.dev.qeducation.excel.ExcelFunction;
+import kr.freedi.dev.qpopup.domain.DepartVO;
+import kr.freedi.dev.qpopup.service.QPopupService;
 import kr.freedi.dev.qreport.domain.ReportSearchVO;
 import kr.freedi.dev.qreport.domain.ReportTeamVO;
 import kr.freedi.dev.qreport.domain.ReportVO;
+import kr.freedi.dev.qreport.service.MakeService;
 import kr.freedi.dev.qreport.service.ReportService;
 import kr.freedi.dev.user.domain.UserVO;
 
@@ -56,7 +61,13 @@ public class TeamController {
 
 	@Resource(name = "reportService")
 	private ReportService reportService;
-
+	
+	@Resource(name = "makeService")
+	private MakeService makeService;
+	
+	@Resource(name = "qPopupService")
+	private QPopupService qPopupService;
+	
 	@Resource(name = "codeService")
 	private CodeService codeService;
 
@@ -382,8 +393,7 @@ public class TeamController {
 		model.addAttribute("searchVO", searchVO);
 
 		CodeVO codeVO = new CodeVO();
-		String[] arrCodeGrpIds = { "6SIG_YN", "RP_TY1", "RP_TY2", "RP_TY3", "SECTOR", "ACTTYPE", "LDRBELT", "MBBUSERT",
-				"RESULTTY", "REP_ROLE", "WPLACE", "REP_STAT" };
+		String[] arrCodeGrpIds = { "6SIG_YN", "RP_TY1", "RP_TY2", "RP_TY3", "SECTOR", "ACTTYPE", "LDRBELT", "MBBUSERT", "RESULTTY", "REP_ROLE", "WPLACE", "REP_STAT" };
 		codeVO.setCodeGrpIdList(arrCodeGrpIds);
 		codeVO.setActFlg("Y");
 		List<EgovMap> allCodes = codeService.selectFullList(codeVO); // item.codeGrpId, codeId, codeNm
@@ -391,6 +401,10 @@ public class TeamController {
 
 		searchVO.setMenuCode(REP_MENU_CODE);
 
+		List<DepartVO> dbList = qPopupService.selectTreeList();
+		JsonArray deptList = makeService.convertTreeJson(dbList);
+		model.addAttribute("deptFullList", deptList);
+		
 		List<EgovMap> reportList = reportService.selectReportList(searchVO);
 		model.addAttribute("reportList", reportList);
 

@@ -382,6 +382,8 @@
     		
     		// 컨트롤 세팅
     		setControl();
+    		
+    		initFooterDeptPopup()
     	}
     	
     	function initCode(){
@@ -449,27 +451,44 @@
     		
     	}
     	
+    	function initFooterDeptPopup(){
+    		$('#objDeptTree').jstree({
+		    	"core": {
+		    	      "data": objDeptTreeData	// controller에서 데이터 바인딩.
+		    	    },
+		        "plugins" : ['checkbox','search'],
+		        "search" : {
+		            "show_only_matches" : true,
+	            	"show_only_matches_children" : true,
+        		},
+		    })
+		    .on("check_node.jstree uncheck_node.jstree", function (e, data) {
+
+		        if (e.type == "uncheck_node") {
+		        	debugger;
+		            $("#orgSelAllDept").prop( "checked", false );                
+		        }
+    		    else if (e.type == "check_node") {
+    		    	debugger;
+		            if ($(this).jstree().get_json('#', {flat:true}).length === $(this).jstree().get_checked(true).length)
+		                $("#orgSelAllDept").prop( "checked", true ); 					
+		        }
+		    });
+    	}
+    	
     	// 조직 조회 호출부
     	function callPopup_searchDepartment(obj){
 
     		popMDept.init();
-    		popDept.returnObjId = "searchDepart";
-    		popDept.returnFunc = callback_popDept;
+    		popMDept.returnObjId = "searchDepart";
+    		popMDept.returnFunc = callback_popMDept;
     		popMDept.open();
-    		
-    		
-    		//popDept.init();
-    		// footer.jsp 내 영역 호출
-    		//popDept.returnObjId = "searchDepart";
-    		//popDept.returnFunc = callback_popDept;
-    		//popDept.open();
     	}
     	
     	// 조직 조회 콜백부
-    	function callback_popDept(objId, data){
-    		
-    		$("#"+objId).val(data.deptCode);
-    		$("#searchDepartName").val(data.deptName);
+    	function callback_popMDept(objId, data){
+    		$("#"+objId).val(data.deptCodes);
+    		$("#searchDepartName").val(data.deptNames);
     	}
     	
     	function onchange_ddlRepDevisionCode(e){
