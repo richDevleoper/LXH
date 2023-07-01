@@ -166,7 +166,7 @@ public class ReportController {
 			return "redirect:./insertFormStat3.do?menuKey="+searchVO.getMenuKey()+"&repCode="+reportVO.getRepCode();
 		}
 	}
-	
+
 	// 과제(등록화면) - 상태 '선정중' 이상
 	@RequestMapping({"/insertFormStat3.do"})
 	public String handler_insertFormStat3(HttpServletRequest req, ModelMap model,
@@ -180,8 +180,7 @@ public class ReportController {
 				
 		return "app/report/InsertFormStat3";
 	}  
-	
-	
+
 	// 과제(등록화면) - 상태 '임시저장'
 	@RequestMapping({"/insertForm.do"})
 	public String handler_insertForm(HttpServletRequest req, ModelMap model,
@@ -205,8 +204,7 @@ public class ReportController {
 			return "app/report/InsertForm";
 		}
 	}  
-	
-	
+
 	// 과제 등록(Submit)
 	@RequestMapping({"/insert.do"})
 	public String insert(HttpServletRequest req, ModelMap model,
@@ -260,7 +258,6 @@ public class ReportController {
 			}
 		}
 		
-		
 		if(reportVO.getMode().equals("CANCEL")) {  // 결재취소
 
 			// 마지막 단계 결재상신건 취소하기			
@@ -269,10 +266,9 @@ public class ReportController {
 		} else if(reportVO.getMode().equals("DROP")) { // Drop신청
 
 			// 결재자 정보 추가
-			//approveMemberList.add(memLeader);
 			approveMemberList.add(memChamp);  
 			reportVO.setRepUpdateUser(userId);
-			// 과제 진행 중 Drop하기			
+			// 과제 진행 중 Drop하기
 			reportService.dropApprove(reportVO, approveMemberList);
 			
 		} else {
@@ -300,7 +296,6 @@ public class ReportController {
 					
 					reportVO.setRepUpdateUser(userSession.getUserId());
 					reportService.updateReportMaster(reportVO);
-					
 				}
 			}
 			

@@ -228,8 +228,12 @@ public class ReportDetailVO {
 				+ repPropelBg + ", repActivity=" + repActivity + ", repFinishSummary=" + repFinishSummary
 				+ ", repCtqCtp=" + repCtqCtp + ", repKpi=" + repKpi + ", repExpectationResult=" + repExpectationResult
 				+ ", repApprovalMemCode=" + repApprovalMemCode + ", repApprovalMemRole=" + repApprovalMemRole
-				+ ", repStatus=" + repStatus + ", repRegUser=" + repRegUser + ", repRegDate=" + repRegDate
-				+ ", repUpdateUser=" + repUpdateUser + ", repUpdateDate=" + repUpdateDate + "]";
+				+ ", repApprovalMemRoleName=" + repApprovalMemRoleName + ", repApprovalMemName=" + repApprovalMemName
+				+ ", repApprovalMemDeptName=" + repApprovalMemDeptName + ", repApprovalMemComJobx="
+				+ repApprovalMemComJobx + ", repApprovalMemComPosition=" + repApprovalMemComPosition
+				+ ", repApprovalMemComCertBelt=" + repApprovalMemComCertBelt + ", repStatus=" + repStatus
+				+ ", repRegUser=" + repRegUser + ", repRegDate=" + repRegDate + ", repUpdateUser=" + repUpdateUser
+				+ ", repUpdateDate=" + repUpdateDate + ", repDetailFileList=" + repDetailFileList + "]";
 	}
 	
 	

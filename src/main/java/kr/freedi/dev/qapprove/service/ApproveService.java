@@ -118,31 +118,37 @@ public class ApproveService {
 	public Boolean updateStatus(ApproveVO inputVO, UserVO userSession) {
 		
 		List<ApproveDetailVO> detail = inputVO.getDetailList();
-		Iterator<ApproveDetailVO> itrDetail = detail.iterator();
-		ApproveDetailVO apprMember = null;
-		while(itrDetail.hasNext()) {
-			ApproveDetailVO tmpDetail = itrDetail.next();
-			if(tmpDetail.getAprovalCode()!=null) {
-				if(tmpDetail.getComNo().equals(userSession.getUserId())) {
-					dao.update("ApprovalDetail.updateStatus", tmpDetail);	
-				}
-			}
-		}
-		
-		ApproveVO dbVO = this.select(inputVO);
 		
 		// check 하고 다 결재 되었으면 결재마스터 상태 업데이트
 		Boolean apprComplete = true;
-		List<ApproveDetailVO> approvalList = dbVO.getDetailList();
-		for(int i=0; i<approvalList.size(); i++) {
-			ApproveDetailVO tmpItem = approvalList.get(i);
-			if(tmpItem.getAprovalStatCode().equals("2")) {
-				apprComplete = false;
-			}
-		}
 		
-		if(apprComplete) {
-			dao.update("Approval.updateStatus", inputVO);
+		
+		if(detail!=null) {
+			Iterator<ApproveDetailVO> itrDetail = detail.iterator();
+			ApproveDetailVO apprMember = null;
+			while(itrDetail.hasNext()) {
+				ApproveDetailVO tmpDetail = itrDetail.next();
+				if(tmpDetail.getAprovalCode()!=null) {
+					if(tmpDetail.getComNo().equals(userSession.getUserId())) {
+						dao.update("ApprovalDetail.updateStatus", tmpDetail);	
+					}
+				}
+			}
+			
+			ApproveVO dbVO = this.select(inputVO);
+			
+
+			List<ApproveDetailVO> approvalList = dbVO.getDetailList();
+			for(int i=0; i<approvalList.size(); i++) {
+				ApproveDetailVO tmpItem = approvalList.get(i);
+				if(tmpItem.getAprovalStatCode().equals("2")) {
+					apprComplete = false;
+				}
+			}
+			
+			if(apprComplete) {
+				dao.update("Approval.updateStatus", inputVO);
+			}
 		}
 		
 		return apprComplete;

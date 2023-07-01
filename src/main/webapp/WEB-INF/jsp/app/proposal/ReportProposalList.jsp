@@ -361,15 +361,54 @@
 			onclick_search();
 		});
 		
+		//부서검색 팝업 트리 초기화
+		initFooterDeptPopup();
+		
 		$('.btn-proposal-group-search-modal').off('click').on('click', function(){
+			/*
 			popDept.init();
 			
 			popDept.returnObjId = $('#input-proposal-group');
 			popDept.returnFunc = setProposalGroupInfo;
 			
-			popDept.open();			
+			popDept.open();
+			*/
+			
+			popMDept.init();
+    		popMDept.returnObjId = "input-proposal-group";
+    		popMDept.returnFunc = setProposalGroupInfo;
+    		popMDept.open();
 		});
 	});
+	
+	// 부서검색 팝업 트리 데이터
+	let objDeptTreeData = ${deptFullList};
+	
+	//부서검색 팝업 트리 초기화
+	function initFooterDeptPopup(){
+		$('#objDeptTree').jstree({
+	    	"core": {
+	    	      "data": objDeptTreeData	// controller에서 데이터 바인딩.
+	    	    },
+	        "plugins" : ['checkbox','search'],
+	        "search" : {
+	            "show_only_matches" : true,
+            	"show_only_matches_children" : true,
+    		},
+	    })
+	    .on("check_node.jstree uncheck_node.jstree", function (e, data) {
+
+	        if (e.type == "uncheck_node") {
+	        	debugger;
+	            $("#orgSelAllDept").prop( "checked", false );                
+	        }
+		    else if (e.type == "check_node") {
+		    	debugger;
+	            if ($(this).jstree().get_json('#', {flat:true}).length === $(this).jstree().get_checked(true).length)
+	                $("#orgSelAllDept").prop( "checked", true ); 					
+	        }
+	    });
+	}
 	
 	function setProposalMemberInfo(el, d){
 		if(d != null){
@@ -398,10 +437,12 @@
 		}
 	}
 	
+	// 부서 팝업 콜백
 	function setProposalGroupInfo(el, d){
+		
 		if(d != null){
-			$('#input-proposal-group').val(d.deptName);
-			$('#input-proposal-group-code').val(d.comCode);			
+			$('#input-proposal-group').val(d.deptNames);
+			$('#input-proposal-group-code').val(d.deptCodes);			
 		}else{
 			$('#input-proposal-group').val('');
 			$('#input-proposal-group-code').val('');	

@@ -240,6 +240,7 @@
 	            				}
 	            				
 	            			    $("#btnSearchMDept").off("click").on("click", searchTreeList);
+	            			    $('#objDeptTree').jstree(true).search("");
 	            			    
 	            			    function searchTreeList(){
 	            			        var text = $('#txtSearchMDeptName').val();
@@ -254,12 +255,15 @@
 	            			    
 	            				$(".tr-empty").show();
 	            				$(".tr-data").remove();
-	            				$("#"+popMDept.searchObjId).val("");
+	            				
 	            				$("#"+popMDept.searchObjId).off("keyup").on("keyup", function(e){
 	            					if(e.keyCode==13){
 	            						searchTreeList();
 	            					}	
 	            				});
+	            				setTimeout(function(){
+	            					$("#"+popMDept.searchObjId).val("").focus();
+	            			    }, 1);
 	            				
 	            				this.returnObjId = null;
 	            				this.returnFunc = null;

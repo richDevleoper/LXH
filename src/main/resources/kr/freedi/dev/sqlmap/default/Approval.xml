@@ -111,7 +111,7 @@
 		FROM
 		    v_approval_mst T, tb_approval_detail d
 		WHERE
-		    t.aproval_code=d.aproval_code(+) and d.com_no(+)=#{searchUserId}
+		    t.aproval_code=d.aproval_code and d.com_no=#{searchUserId} 
 	</sql>
 
 	<select id="selectList" resultMap="approveMap">

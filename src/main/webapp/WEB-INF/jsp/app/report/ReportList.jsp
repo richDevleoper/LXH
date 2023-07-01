@@ -412,7 +412,6 @@
     	
     	function setControl(){
     		
-    		
     		setDropDown("searchPlaceCode", cdWPlace, true, "전체");//사업장
     		$("#searchPlaceCode").val("${searchVO.searchPlaceCode}");
     		

@@ -238,7 +238,7 @@
                                                                                     
                                                                                         <div class="toggle-box" id="toggleBox_${status.count}">
 	                                                                                        <c:choose> 
-	                                                                                        	<c:when test="${item.repStatus eq '0' }">
+	                                                                                        	<c:when test="${item.repStatus eq '0'}">
 		                                                                                        	<script> 
 		                                                                                        	// 아직 진행되지 않은 step의 토글 방지
 			                                                                                        $(document).ready(function(){
@@ -258,6 +258,9 @@
 		                                                                                        	$(document).ready(function(){
 		                                                                                        		let objNm = "#toggleBox_${status.count}";
 		                                                                                            	$(objNm).find("input, textarea").prop("disabled", true); // 완료된 항목 disable 시키기
+		                                                                                            	<c:if test="${reportVO.repStatusCode eq '6' || reportVO.repStatusCode eq '7'}">
+		                                                                                            	$("#toggleBox_${status.count}").show();
+		                                                                                            	</c:if>
 		                                                                                        	});
 			                                                                                        </script>
 	                                                                                        	</c:when>
@@ -339,26 +342,45 @@
                                                                                                             <td>${item.repApprovalMemComPosition}</td>
                                                                                                             <td>${item.repApprovalMemComCertBelt}</td>
                                                                                                         </tr>
-                                                                                                        <tr>
-                                                                                                            <th colspan="2" class="pd-r10 align-right">
-                                                                                                            	첨부파일<br>(Up to 10)
-                                                                                                            </th>
-                                                                                                            <td colspan="5">
-                                                                                                                <div class="file-drop-box">
-                                                                                                                   <div class="col s12 input-text file">
-															                                                            <attachfile:fileuploader
-																														objectId="fileUpload_report_sub_${status.count}"
-																														ctx=""
-																														wrapperId="fileUploadWrap_${status.count}"
-																														fileId="reportDetail_${status.count}_${reportVO.repCode}"
-																														fileGrp="reportDetail"
-																														autoUpload="false"
-																														maxFileSize="${15*1000000}"
-																														maxNumberOfFiles="10"/>
-															                                                        </div>
-                                                                                                                </div>
-                                                                                                            </td>
-                                                                                                        </tr>
+                                                                                                     <c:choose>
+                                                                                                     	<c:when test="${reportVO.repStatusCode eq '6' || reportVO.repStatusCode eq '7'}">
+	                                                                                                        <tr  style="height: 50px;">
+	                                                                                                            <th colspan="2" class="pd-r10 align-right">
+	                                                                                                            	첨부파일
+	                                                                                                            </th>
+	                                                                                                            <td colspan="5">
+	                                                                                                                <div class="file-drop-box align-left">
+	                                                                                                                   <c:forEach var="item_sub" items="${item.repDetailFileList}" varStatus="status">
+	                                                                                                                   	<a href="/attachfile/downloadFile.do?fileId=${item_sub.fileId}&fileSeq=${item_sub.fileSeq}">${item_sub.fileNm}</a><br>
+	                                                                                                                   </c:forEach>
+	                                                                                                                </div>
+	                                                                                                            </td>
+	                                                                                                        </tr>                                                                                                     	
+                                                                                                     	</c:when>
+                                                                                                     	<c:otherwise>
+	                                                                                                        <tr>
+	                                                                                                            <th colspan="2" class="pd-r10 align-right">
+	                                                                                                            	첨부파일<br>(Up to 10)
+	                                                                                                            </th>
+	                                                                                                            <td colspan="5">
+	                                                                                                                <div class="file-drop-box">
+	                                                                                                                   <div class="col s12 input-text file">
+																                                                            <attachfile:fileuploader
+																															objectId="fileUpload_report_sub_${status.count}"
+																															ctx=""
+																															wrapperId="fileUploadWrap_${status.count}"
+																															fileId="reportDetail_${status.count}_${reportVO.repCode}"
+																															fileGrp="reportDetail"
+																															autoUpload="false"
+																															maxFileSize="${15*1000000}"
+																															maxNumberOfFiles="10"/>
+																                                                        </div>
+	                                                                                                                </div>
+	                                                                                                            </td>
+	                                                                                                        </tr>                                                                                                     	
+                                                                                                     	</c:otherwise>
+                                                                                                     </c:choose>
+
                                                                                                         
                                                                                                     </tbody>
                                                                                                 </table>
@@ -984,7 +1006,7 @@ function onchange_resultType(obj){
 										<button type="button" class="btn bg-gray" id="btnReqApproval">결재의뢰</button>
 										<button type="button" class="btn bg-gray" id="btnReqDrop">Drop신청</button>
 									</c:when>
-									<c:when test="${reportVO.repStatusCode eq '6'}"> <!-- Drop -->
+									<c:when test="${reportVO.repStatusCode eq '6' || reportVO.repStatusCode eq '7'}"> <!-- Drop -->
 									
 									</c:when>
 									<c:when test="${reportVO.repStatusCode eq '8'}"> <!-- 반려 -->
@@ -1232,6 +1254,16 @@ function onchange_resultType(obj){
 			},
 			onValidationComplete: function(form, status){
 				if(status == true) {
+					
+					if($("#fileUploadWrap").find(".files tr.template-download").length===0){
+						alert("과제등록서 첨부파일이 등록되지 않았습니다. \n파일 선택 후 '전체첨부' 혹은 '첨부' 버튼을 클릭하시고 진행해주세요.");
+						return false;
+					}
+					
+					if(checkLdrBelt(true)){
+						return false;
+					}
+					
 					if(confirm("저장하시겠습니까?")) {
 						//contentsEditors.getById["content"].exec("UPDATE_CONTENTS_FIELD", []);
 						//$("#defaultForm").submit();
@@ -1518,6 +1550,61 @@ function onchange_resultType(obj){
 		$(objTr).find(".team-mem-nm").val(data.userName);
 		
 		$(objTr).find(".report-code").val('${reportVO.repCode}');
+	}
+	
+	function checkLdrBelt(boolMsgOut){
+		
+		/*
+		팀 멤버 리더벨트 값을 기준으로 과제 리더벨트의 지정이 가능한 값인지 확인하고, 아닐 경우 
+		D000    GB					D001    BB
+		D001-1  BB후보				D002    MBB
+		D002-1  MBB후보				D003    MGB				7       No Belt
+		
+		(팀원) 리더벨트 / (과제) 리더벨트 
+	    (벨트 없으면)  / No Belt
+		GB         / GB, BB후보
+		BB         / BB, MBB후보
+		MBB        / MBB
+		*/
+
+		let repLdrBelt = $("#repLeaderBeltCode").val();
+		let teamLdrBelt = $(".tr-team-role-1").find("input.team-belt-cd").val()
+		let teamLdrName = $(".tr-team-role-1").find("input[type=text]").val()
+
+		let flagBeltMatching = false;
+		let retMst = "";
+		switch(teamLdrBelt) { // 팀멤버 리더벨트 기준으로
+		  case '': // 리더벨트 없으면
+		    if(repLdrBelt!="7"){ // 과제벨트 No Belt(7)
+		        flagBeltMatching = true;
+		        retMsg = "과제리더("+ teamLdrName +")의 벨트코드가 없으므로 과제정보의 과제리더벨트는 'No Belt'로 지정해주세요.";
+		    }
+		    break;
+		  case 'D000': // 멤버 리더벨트 GB
+		    if(repLdrBelt!="D000" && repLdrBelt!="D001-1"){ // 과제 리더벨트 GB or BB후보
+		        flagBeltMatching = true;
+		        retMsg = "과제리더("+ teamLdrName +")의 벨트코드가 'GB'이므로 과제정보의 과제리더벨트는 'GB' 혹은 'BB후보'로 지정해주세요.";
+		    }
+		    break;
+		  case 'D001': // 멤버 리더벨트 B
+		    if(repLdrBelt!="D001" && repLdrBelt!="D002-1"){ // 과제 리더벨트 BB or MBB후보
+		        flagBeltMatching = true;
+		        retMsg = "과제리더("+ teamLdrName +")의 벨트코드가 'BB'이므로 과제정보의 과제리더벨트는 'BB' 혹은 'MBB후보'로 지정해주세요.";
+		    }
+		    break;
+		  case 'D002': // MBB
+		    if(repLdrBelt!="D002"){ // 과제 리더벨트 GB or BB후보
+		        flagBeltMatching = true;
+		        retMsg = "과제리더("+ teamLdrName +")의 벨트코드가 'MBB'이므로 과제정보의 과제리더벨트는 'MBB'로 지정해주세요.";
+		    }
+		    break;
+		}
+		
+		if(flagBeltMatching && boolMsgOut){
+			alert(retMsg);
+		}
+		
+		return flagBeltMatching;
 	}
 	
 </script>

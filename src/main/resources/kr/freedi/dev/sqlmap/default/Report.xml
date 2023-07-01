@@ -389,7 +389,7 @@
 			, T.REP_LEADER_CODE
 			, (select user_name from tb_user_mst where com_no=T.REP_LEADER_CODE) REP_LEADER_NAME
 			, T.REP_FILE_YN
-			, (select max(rep_step_code) from tb_report_detail where rep_code=T.REP_CODE and rep_status>0) REP_CURR_STEP_CODE
+			, nvl((select max(rep_step_code) from tb_report_detail where rep_code=T.REP_CODE and rep_status>0), 1) REP_CURR_STEP_CODE
 			, (select aproval_state from (select * from tb_approval_mst where ref_bus_code=#{repCode} order by aproval_code desc) a where rownum=1) CURR_APR_STATE
 		FROM TB_REPORT_MST T,
             tb_code    c_ty

@@ -56,6 +56,7 @@ import kr.freedi.dev.qreport.domain.ReportResultVO;
 import kr.freedi.dev.qreport.domain.ReportSearchVO;
 import kr.freedi.dev.qreport.domain.ReportTeamVO;
 import kr.freedi.dev.qreport.domain.ReportVO;
+import kr.freedi.dev.qreport.service.ReportDetailService;
 import kr.freedi.dev.qreport.service.ReportService;
 import kr.freedi.dev.user.domain.UserVO;
 
@@ -80,6 +81,9 @@ public class ApproveController {
 	
 	@Resource(name = "reportService")
 	private ReportService reportService;
+	
+	@Resource(name = "reportDetailService")
+	private ReportDetailService reportDetailService;
 	
 	@Resource(name = "proposalService")
 	private ProposalService proposalService;
@@ -249,6 +253,13 @@ public class ApproveController {
 					if(approveVO.getAprovalState().equals("4")) {	//승인
 						// OK : 6시그마 ; 3(진행중), 일반 ; 6(완료)  code_grp_id='REP_STAT'
 						reportVO.setRepStatusCode("3");	// 선정완료
+						ReportDetailVO detailVO = new ReportDetailVO();
+						detailVO.setRepCode(reportVO.getRepCode());
+						detailVO.setRepStepCode("1");
+						detailVO.setRepStatus("1");
+						detailVO.setRepUpdateUser(userSession.getUserId());
+						reportDetailService.updateStepStatus(detailVO);
+						
 					} else if(approveVO.getAprovalState().equals("3")) { // 반려
 						// 반려 상태로 변경
 						reportVO.setRepStatusCode("8");

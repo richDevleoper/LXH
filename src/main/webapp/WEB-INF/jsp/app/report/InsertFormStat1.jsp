@@ -753,45 +753,42 @@ function onchange_resultType(obj){
 								varStatus="status">
 								<tr idSeq="repResultList${status.index}"
 									nameSeq="repResultList[${status.index}]">
-									<th class="pd0 align-center"><form:label
-											path="repResultList[${status.index}].repResultTypeCode">
-											<span class="asterisk only-first">*</span>성과항목</form:label></th>
+									<th class="pd0 align-center">
+										<form:label path="repResultList[${status.index}].repResultTypeCode"><span class="asterisk only-first">*</span>성과항목</form:label>
+									</th>
 									<td class="pd3">
 										<div class="row">
 											<div class="col s12 select-group">
 												<script>
-			                                               		resMaxSeq = Math.max(resMaxSeq, "${status.index}");
-			                                               	</script>
-												<form:input type="hidden" cssClass="result-code"
-													path="repResultList[${status.index}].repResultCode" />
-												<form:input type="hidden" cssClass="result-report-code"
-													path="repResultList[${status.index}].repCode" />
-
+                                               		resMaxSeq = Math.max(resMaxSeq, "${status.index}");
+                                               	</script>
+												<form:input type="hidden" cssClass="result-code" path="repResultList[${status.index}].repResultCode" />
+												<form:input type="hidden" cssClass="result-report-code" path="repResultList[${status.index}].repCode" />
 												<c:choose>
-													<c:when test="${status.first}">
-														<form:select
-															path="repResultList[${status.index}].repResultTypeCode"
-															title="성과항목을 선택하세요"
-															cssClass="only-first validate[required]"
-															onchange="onchange_resultType(this)">
-															<c:forEach var="option" items="${codeResultTy}">
-																<form:option value="${option.codeId}"
-																	label="${option.codeNm}" />
-															</c:forEach>
+													<c:when test="${reportVO.repMenuCode eq 'TEAM'}">
+														<form:select path="repResultList[${status.index}].repResultTypeCode" title="성과항목을 선택하세요" cssClass="only-first validate[required]" onchange="onchange_resultType(this)">
+															<form:option value="8" label="영업이익" />
 														</form:select>
 													</c:when>
 													<c:otherwise>
-														<form:select
-															path="repResultList[${status.index}].repResultTypeCode"
-															title="성과항목을 선택하세요" onchange="onchange_resultType(this)">
-															<c:forEach var="option" items="${codeResultTy}">
-																<form:option value="${option.codeId}"
-																	label="${option.codeNm}" />
-															</c:forEach>
-														</form:select>
+														<c:choose>
+															<c:when test="${status.first}">
+																<form:select path="repResultList[${status.index}].repResultTypeCode" title="성과항목을 선택하세요" cssClass="only-first validate[required]" onchange="onchange_resultType(this)">
+																	<c:forEach var="option" items="${codeResultTy}">
+																		<form:option value="${option.codeId}" label="${option.codeNm}" />
+																	</c:forEach>
+																</form:select>
+															</c:when>
+															<c:otherwise>
+																<form:select path="repResultList[${status.index}].repResultTypeCode" title="성과항목을 선택하세요" onchange="onchange_resultType(this)">
+																	<c:forEach var="option" items="${codeResultTy}">
+																		<form:option value="${option.codeId}" label="${option.codeNm}" />
+																	</c:forEach>
+																</form:select>
+															</c:otherwise>
+														</c:choose>
 													</c:otherwise>
 												</c:choose>
-
 											</div>
 										</div>
 									</td>
@@ -1264,6 +1261,9 @@ function onchange_resultType(obj){
 			},
 			onValidationComplete: function(form, status){
 				if(status == true) {
+					if(checkLdrBelt(true)){
+						return true;
+					}
 					if(confirm("저장하시겠습니까?")) {
 						//contentsEditors.getById["content"].exec("UPDATE_CONTENTS_FIELD", []);
 						//$("#defaultForm").submit();
@@ -1368,7 +1368,7 @@ function onchange_resultType(obj){
 			break;
 		}
 
-		if(repDevCd==="2" || repDevCd==="3"){
+		if(vMenuType==="TEAM" && (repDevCd==="2" || repDevCd==="3")){
 			$("#repTypeCode").prop("disabled", true);
 			$("#trPlanDate").remove();
 		} else {
@@ -1540,6 +1540,64 @@ function onchange_resultType(obj){
 		$(objTr).find(".team-mem-nm").val(data.userName);
 		
 		$(objTr).find(".report-code").val('${reportVO.repCode}');
+	}
+	
+function checkLdrBelt(boolMsgOut){
+	
+	// 이상없음, return false
+	// 이상발생, return trueS
+		
+		/*
+		팀 멤버 리더벨트 값을 기준으로 과제 리더벨트의 지정이 가능한 값인지 확인하고, 아닐 경우 
+		D000    GB					D001    BB
+		D001-1  BB후보				D002    MBB
+		D002-1  MBB후보				D003    MGB				7       No Belt
+		
+		(팀원) 리더벨트 / (과제) 리더벨트 
+	    (벨트 없으면)  / No Belt
+		GB         / GB, BB후보
+		BB         / BB, MBB후보
+		MBB        / MBB
+		*/
+
+		let repLdrBelt = $("#repLeaderBeltCode").val();
+		let teamLdrBelt = $(".tr-team-role-1").find("input.team-belt-cd").val()
+		let teamLdrName = $(".tr-team-role-1").find("input[type=text]").val()
+
+		let flagBeltMatching = false;
+		let retMst = "";
+		switch(teamLdrBelt) { // 팀멤버 리더벨트 기준으로
+		  case '': // 리더벨트 없으면
+		    if(repLdrBelt!="7"){ // 과제벨트 No Belt(7)
+		        flagBeltMatching = true;
+		        retMsg = "과제리더("+ teamLdrName +")의 벨트코드가 없으므로 과제정보의 과제리더벨트는 'No Belt'로 지정해주세요.";
+		    }
+		    break;
+		  case 'D000': // 멤버 리더벨트 GB
+		    if(repLdrBelt!="D000" && repLdrBelt!="D001-1"){ // 과제 리더벨트 GB or BB후보
+		        flagBeltMatching = true;
+		        retMsg = "과제리더("+ teamLdrName +")의 벨트코드가 'GB'이므로 과제정보의 과제리더벨트는 'GB' 혹은 'BB후보'로 지정해주세요.";
+		    }
+		    break;
+		  case 'D001': // 멤버 리더벨트 BB
+		    if(repLdrBelt!="D001" && repLdrBelt!="D002-1"){ // 과제 리더벨트 BB or MBB후보
+		        flagBeltMatching = true;
+		        retMsg = "과제리더("+ teamLdrName +")의 벨트코드가 'BB'이므로 과제정보의 과제리더벨트는 'BB' 혹은 'MBB후보'로 지정해주세요.";
+		    }
+		    break;
+		  case 'D002': // MBB
+		    if(repLdrBelt!="D002"){ // 과제 리더벨트 GB or BB후보
+		        flagBeltMatching = true;
+		        retMsg = "과제리더("+ teamLdrName +")의 벨트코드가 'MBB'이므로 과제정보의 과제리더벨트는 'MBB'로 지정해주세요.";
+		    }
+		    break;
+		}
+		
+		if(flagBeltMatching && boolMsgOut){
+			alert(retMsg);
+		}
+		
+		return flagBeltMatching;
 	}
 	
 </script>

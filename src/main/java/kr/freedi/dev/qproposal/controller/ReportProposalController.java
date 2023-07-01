@@ -19,12 +19,17 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.google.gson.JsonArray;
+
 import egovframework.rte.psl.dataaccess.util.EgovMap;
 import kr.freedi.dev.code.domain.CodeVO;
 import kr.freedi.dev.code.service.CodeService;
+import kr.freedi.dev.qpopup.domain.DepartVO;
+import kr.freedi.dev.qpopup.service.QPopupService;
 import kr.freedi.dev.qproposal.domain.ProposalVO;
 import kr.freedi.dev.qproposal.domain.ReportProposalSearchVO;
 import kr.freedi.dev.qproposal.service.ReportProposalService;
+import kr.freedi.dev.qreport.service.MakeService;
 import kr.freedi.dev.user.domain.UserVO;
 
 
@@ -41,6 +46,12 @@ public class ReportProposalController {
 	
 	@Resource(name = "reportProposalService")
 	private ReportProposalService reportProposalService;
+	
+	@Resource(name = "makeService")
+	private MakeService makeService;
+	
+	@Resource(name = "qPopupService")
+	private QPopupService qPopupService;
 	
 	@InitBinder
 	public void customizeBinding(WebDataBinder binder) {
@@ -225,6 +236,12 @@ public class ReportProposalController {
 		model.addAttribute("PROP_CATEGORY_CODE", searchVO.getSearchPropCategoryCode());
 		model.addAttribute("PROP_CLASS_CODE", searchVO.getSearchPropClassCode());
 		model.addAttribute("PROP_NAME", searchVO.getSearchPropName());
+		
+		
+		List<DepartVO> dbList = qPopupService.selectTreeList();
+		JsonArray deptList = makeService.convertTreeJson(dbList);
+		model.addAttribute("deptFullList", deptList);
+		
 		return "app/proposal/ReportProposalList";
 	}
 }
