@@ -341,8 +341,8 @@
 		
 		$('#input-approval-name').val(d.userName);
 		$('#input-approval-user').val(d.comNo);
-		$('#input-approval-level').val(d.comPosition);
-		$('#input-approval-duty').val(d.comJobx);
+		$('#input-approval-level').val(d.comJobx);
+		$('#input-approval-duty').val(d.comPosition);
 		$('#input-approval-belt').val(d.comCertBelt);
 		$('#input-approval-group-code').val(d.comDepartCode);
 		$('#input-approval-group').val(d.deptFullName);

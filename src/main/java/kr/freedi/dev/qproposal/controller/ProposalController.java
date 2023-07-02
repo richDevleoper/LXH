@@ -214,7 +214,7 @@ public class ProposalController {
 						resultItem.setPropApprovalBeltCode(String.valueOf(item.get("comCertBelt")));
 						resultItem.setPropApprovalBelt(String.valueOf(item.get("comCertBeltNm")));
 						resultItem.setPropApprovalGroup(String.valueOf(item.get("deptFullName")));
-						resultItem.setPropApprovalGroupCode(String.valueOf(item.get("compDepartCode")));
+						resultItem.setPropApprovalGroupCode(String.valueOf(item.get("comDepartCode")));
 					}
 				}
 			}
@@ -287,8 +287,8 @@ public class ProposalController {
 			ApproveDetailVO approveDetailVO = new ApproveDetailVO();
 			approveDetailVO.setComNo(proposalVO.getPropApprovalUser()); // 결재자 사번
 			approveDetailVO.setComDepartCode(proposalVO.getPropApprovalGroupCode()); // 결재자 부서코드
-			approveDetailVO.setComJobx(proposalVO.getPropApprovalDutyCode()); //결재자 직위코드
-			approveDetailVO.setComPosition(proposalVO.getPropApprovalLevelCode()); // 결재자 직책코드
+			approveDetailVO.setComJobx(proposalVO.getPropApprovalLevelCode()); //결재자 직위코드
+			approveDetailVO.setComPosition(proposalVO.getPropApprovalDutyCode()); // 결재자 직책코드
 			approveDetailVO.setAprovalReqComNo(proposalVO.getPropUser()); // 결재상신자 사번
 			
 			List<ApproveDetailVO> approveList = new ArrayList<>();
@@ -372,8 +372,8 @@ public class ProposalController {
 			ApproveDetailVO approveDetailVO = new ApproveDetailVO();
 			approveDetailVO.setComNo(proposalVO.getPropApprovalUser()); // 결재자 사번
 			approveDetailVO.setComDepartCode(proposalVO.getPropApprovalGroupCode()); // 결재자 부서코드
-			approveDetailVO.setComJobx(proposalVO.getPropApprovalDutyCode()); //결재자 직위코드
-			approveDetailVO.setComPosition(proposalVO.getPropApprovalLevelCode()); // 결재자 직책코드
+			approveDetailVO.setComJobx(proposalVO.getPropApprovalLevelCode()); //결재자 직위코드
+			approveDetailVO.setComPosition(proposalVO.getPropApprovalDutyCode()); // 결재자 직책코드
 			approveDetailVO.setAprovalReqComNo(proposalVO.getPropUser()); // 결재상신자 사번
 			
 			List<ApproveDetailVO> approveList = new ArrayList<>();
@@ -503,14 +503,14 @@ public class ProposalController {
 						EgovMap item = userInfo.get(index);
 						resultItem.setPropApprovalUser(String.valueOf(item.get("comNo")));
 						resultItem.setPropApprovalName(String.valueOf(item.get("userName")));
-						resultItem.setPropApprovalLevelCode(String.valueOf(item.get("comJobx")));
-						resultItem.setPropApprovalLevel(String.valueOf(item.get("comJobxNm")));
-						resultItem.setPropApprovalDutyCode(String.valueOf(item.get("comPosition")));
-						resultItem.setPropApprovalDuty(String.valueOf(item.get("comPositionNm")));
+						resultItem.setPropApprovalLevelCode(String.valueOf(item.get("comPosition")));
+						resultItem.setPropApprovalLevel(String.valueOf(item.get("comPositionNm")));
+						resultItem.setPropApprovalDutyCode(String.valueOf(item.get("comJobx")));
+						resultItem.setPropApprovalDuty(String.valueOf(item.get("comJobxNm")));
 						resultItem.setPropApprovalBeltCode(String.valueOf(item.get("comCertBelt")));
 						resultItem.setPropApprovalBelt(String.valueOf(item.get("comCertBeltNm")));
 						resultItem.setPropApprovalGroup(String.valueOf(item.get("deptFullName")));
-						resultItem.setPropApprovalGroupCode(String.valueOf(item.get("compDepartCode")));
+						resultItem.setPropApprovalGroupCode(String.valueOf(item.get("comDepartCode")));
 					}
 				}
 			}

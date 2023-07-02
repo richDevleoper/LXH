@@ -197,6 +197,26 @@ public class ApproveController {
 			proposalVO.setBeforeAttachFileList(beforeAttachFileList);
 			proposalVO.setAfterAttachFileList(afterAttachFileList);
 			proposalVO.setAttachFileList(attachFileList);
+			
+			kr.freedi.dev.qpopup.domain.UserVO userVO = new kr.freedi.dev.qpopup.domain.UserVO();
+			userVO.setComNo(proposalVO.getPropApproverCode());				
+			List<EgovMap> userInfo = proposalService.selectApproverUserInfo(userVO);
+			
+			if(userInfo != null && userInfo.size() > 0) {
+				for(int index = 0; index < userInfo.size(); index++) {
+					EgovMap item = userInfo.get(index);
+					proposalVO.setPropApprovalUser(String.valueOf(item.get("comNo")));
+					proposalVO.setPropApprovalName(String.valueOf(item.get("userName")));
+					proposalVO.setPropApprovalLevelCode(String.valueOf(item.get("comPosition")));
+					proposalVO.setPropApprovalLevel(String.valueOf(item.get("comPositionNm")));
+					proposalVO.setPropApprovalDutyCode(String.valueOf(item.get("comJobx")));
+					proposalVO.setPropApprovalDuty(String.valueOf(item.get("comJobxNm")));
+					proposalVO.setPropApprovalBeltCode(String.valueOf(item.get("comCertBelt")));
+					proposalVO.setPropApprovalBelt(String.valueOf(item.get("comCertBeltNm")));
+					proposalVO.setPropApprovalGroup(String.valueOf(item.get("deptFullName")));
+					proposalVO.setPropApprovalGroupCode(String.valueOf(item.get("comDepartCode")));
+				}
+			}
 
 			
 			
@@ -286,42 +306,44 @@ public class ApproveController {
 				ProposalSearchVO searchProposalVO = new ProposalSearchVO();
 				searchProposalVO.setSearchPropSeq(Integer.valueOf(approveVO.getRefBusCode()));
 				ProposalVO proposalVO = proposalService.selectProposalDetailInfo(searchProposalVO);
-				if(approveVO.getAprovalState().equals("3")) {
-					proposalVO.setPropPropStatCode("PRG_6");
-					proposalVO.setPropEvalLvCode("NA");
+				if(proposalVO.getPropTypeCode().equals("PPS_TYP_1")) {
+					if(approveVO.getAprovalState().equals("3")) {
+						proposalVO.setPropPropStatCode("PRG_6");
+						proposalVO.setPropEvalLvCode("NA");
+					}else {
+						if(approveVO.getDetailList().size() > 0 && approveVO.getDetailList().get(0) != null) {
+							ApproveDetailVO detailItem = approveVO.getDetailList().get(0);
+							//1차 평가 후 70점 이상인경우 2차 평가 결재 승인으로 넘어감 (제안 진행 단계 변하지 않음)
+							if(Integer.parseInt(detailItem.getScoreTotal()) < 70 ) {
+								proposalVO.setPropEvalLvCode("D");
+								proposalVO.setPropEvalScore(detailItem.getScoreTotal());
+								proposalVO.setPropPropStatCode("PRG_5"); // 70점 미만으로 등급평가 마감 (비용지급 처리 전)
+							}else if(Integer.parseInt(detailItem.getScoreTotal()) >= 70 && Integer.parseInt(detailItem.getScoreTotal()) < 80) {
+								//70점 이상으로 2차 평가 진행
+								proposalVO.setPropEvalLvCode("C");
+								proposalVO.setPropEvalScore(detailItem.getScoreTotal());
+								proposalVO.setPropPropStatCode("PRG_4");
+							}else if(Integer.parseInt(detailItem.getScoreTotal()) >= 80 && Integer.parseInt(detailItem.getScoreTotal()) < 90) {
+								//70점 이상으로 2차 평가 진행
+								proposalVO.setPropEvalLvCode("B");
+								proposalVO.setPropEvalScore(detailItem.getScoreTotal());
+								proposalVO.setPropPropStatCode("PRG_4");							
+							}else if(Integer.parseInt(detailItem.getScoreTotal()) >= 90 && Integer.parseInt(detailItem.getScoreTotal()) < 95) {
+								proposalVO.setPropEvalLvCode("A");
+								proposalVO.setPropEvalScore(detailItem.getScoreTotal());
+								proposalVO.setPropPropStatCode("PRG_4");							
+							}else if(Integer.parseInt(detailItem.getScoreTotal()) >= 95) {
+								proposalVO.setPropEvalLvCode("S");
+								proposalVO.setPropEvalScore(detailItem.getScoreTotal());
+								proposalVO.setPropPropStatCode("PRG_4");								
+							}
+						}				
+					}			
+					proposalVO.setPropRegUser(userSession.getUserId());						
 				}else {
-					
-					if(approveVO.getDetailList().size() > 0 && approveVO.getDetailList().get(0) != null) {
-						ApproveDetailVO detailItem = approveVO.getDetailList().get(0);
-						//1차 평가 후 70점 이상인경우 2차 평가 결재 승인으로 넘어감 (제안 진행 단계 변하지 않음)
-						if(Integer.parseInt(detailItem.getScoreTotal()) < 70 ) {
-							proposalVO.setPropEvalLvCode("D");
-							proposalVO.setPropEvalScore(detailItem.getScoreTotal());
-							proposalVO.setPropPropStatCode("PRG_5"); // 70점 미만으로 등급평가 마감 (비용지급 처리 전)
-						}else if(Integer.parseInt(detailItem.getScoreTotal()) >= 70 && Integer.parseInt(detailItem.getScoreTotal()) < 80) {
-							//70점 이상으로 2차 평가 진행
-							proposalVO.setPropEvalLvCode("C");
-							proposalVO.setPropEvalScore(detailItem.getScoreTotal());
-							proposalVO.setPropPropStatCode("PRG_4");
-						}else if(Integer.parseInt(detailItem.getScoreTotal()) >= 80 && Integer.parseInt(detailItem.getScoreTotal()) < 90) {
-							//70점 이상으로 2차 평가 진행
-							proposalVO.setPropEvalLvCode("B");
-							proposalVO.setPropEvalScore(detailItem.getScoreTotal());
-							proposalVO.setPropPropStatCode("PRG_4");							
-						}else if(Integer.parseInt(detailItem.getScoreTotal()) >= 90 && Integer.parseInt(detailItem.getScoreTotal()) < 95) {
-							proposalVO.setPropEvalLvCode("A");
-							proposalVO.setPropEvalScore(detailItem.getScoreTotal());
-							proposalVO.setPropPropStatCode("PRG_4");							
-						}else if(Integer.parseInt(detailItem.getScoreTotal()) >= 95) {
-							proposalVO.setPropEvalLvCode("S");
-							proposalVO.setPropEvalScore(detailItem.getScoreTotal());
-							proposalVO.setPropPropStatCode("PRG_4");								
-						}
-					}				
-				}			
-				proposalVO.setPropRegUser(userSession.getUserId());
+					proposalVO.setPropPropStatCode("PRG_6");		
+				}
 				proposalService.updateProposalInfo(proposalVO);
-					
 			}
 		}
 		

@@ -141,7 +141,7 @@ public class ApproveService {
 			List<ApproveDetailVO> approvalList = dbVO.getDetailList();
 			for(int i=0; i<approvalList.size(); i++) {
 				ApproveDetailVO tmpItem = approvalList.get(i);
-				if(tmpItem.getAprovalStatCode().equals("2")) {
+				if(tmpItem.getAprovalStatCode() != null && tmpItem.getAprovalStatCode().equals("2")) {
 					apprComplete = false;
 				}
 			}

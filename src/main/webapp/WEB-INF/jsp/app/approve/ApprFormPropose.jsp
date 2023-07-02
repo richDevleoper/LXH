@@ -81,10 +81,20 @@
                                                 <td colspan="9">${proposalVO.propName}</td>
                                             </tr>
                                             <tr>
-                                                <th>제안자</th>
-                                                <td colspan="4">${proposalVO.propUserName}</td>
-                                                <th>관련 쪽지 제안</th>
-                                                <td colspan="4">${proposalVO.propRelMemoCodeName}</td>
+                                            	<c:choose>
+                                            		<c:when test="${proposalVO.propTypeCode eq 'PPS_TYP_1'.toString() }">
+                                            			<th>제안자</th>
+                                            			<td colspan="4">${proposalVO.propUserName}</td>
+		                                                <th>관련 쪽지 제안</th>
+		                                                <td colspan="4">${proposalVO.propRelMemoCodeName}</td>                                            			
+                                            		</c:when>
+                                            		<c:otherwise>
+                                            			<th>제안자</th>
+                                            			<td colspan="4">${proposalVO.propUserName}</td>
+		                                                <th></th>
+		                                                <td colspan="4"></td>                                                  		
+                                            		</c:otherwise>
+                                            	</c:choose>
                                             </tr>
                                             <tr>
                                                 <th>조직명</th>
@@ -98,12 +108,14 @@
                                                 <th>제안일</th>
                                                 <td colspan="4">${proposalVO.propDate}</td>
                                             </tr>
+                                            <c:if test="${proposalVO.propTypeCode eq 'PPS_TYP_1'.toString() }">
                                             <tr>
                                                 <th>실행 완료일</th>
                                                 <td colspan="4">${proposalVO.propPracticeCompDate}</td>
                                                 <th>년간 효과 금액</th>
                                                 <td colspan="4"><fmt:formatNumber var="propYearEffect" value="${proposalVO.propYearEffect}" type="currency" currencySymbol="₩"/>${propYearEffect }</td>
                                             </tr>
+                                            </c:if>
 											<tr><th colspan="10" class="align-center">제안내용</th></tr>
                                             <tr>
                                                 <th><label for="text6">현상 및 문제점</label></th>
@@ -135,86 +147,88 @@
                                                     </div>
                                                 </td>
                                             </tr>
+                                            <c:if test="${proposalVO.propTypeCode eq 'PPS_TYP_1'.toString() }">
 											<tr>
-                                                <th>활동결과</th>
-                                                <td colspan="9" class="pd0">
-                                                    <div class="list-wrap" style="margin:-1px">
-                                                        <div class="list-content">
-                                                            <div class="list-table list">
-                                                                <table class="centered">
-                                                                    <caption></caption>
-                                                                    <colgroup>
-                                                                        <col style="width:50%">
-                                                                        <col>
-                                                                    </colgroup>
-                                                                    <thead>
-                                                                        <tr>
-                                                                            <th>개선 전</th>
-                                                                            <th>개선 후</th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                        <tr>
-                                                                            <td>
-                                                                                <div class="themb-box">
-                                                                                <ul>
-			<c:forEach var="item_sub" items="${proposalVO.beforeAttachFileList}" varStatus="status">
-																					<li>
-																						<img src="/attachfile/downloadFile.do?fileId=${item_sub.fileId }&fileSeq=${item_sub.fileSeq}" onclick="popupImageView(this);" style="cursor: pointer;">
-																						<a href="/attachfile/downloadFile.do?fileId=${item_sub.fileId}&fileSeq=${item_sub.fileSeq}" title="다운받기">${item_sub.fileNm}</a><a href="/attachfile/downloadFile.do?fileId=${item_sub.fileId}&fileSeq=${item_sub.fileSeq}" title="다운받기" class="btn color gray mg-l15">다운받기</a>
-																					</li>
-			</c:forEach>
-			                                                                    </ul>
-                                                                                
-                                                                                    <!-- <figure>
-                                                                                        <img src="../assets/images/@sample.jpg" alt="" class="btn-org">
-                                                                                    </figure>
-                                                                                    <button type="button" class="themb_del"><i class="ico file_del"><em>파일삭제</em></i></button> -->
-                                                                                </div>
-                                                                            </td>
-                                                                            <td>
-                                                                                <div class="themb-box">
-                                                                                <ul>
-			<c:forEach var="item_sub" items="${proposalVO.afterAttachFileList}" varStatus="status">
-																					<li>
-																						<img src="/attachfile/downloadFile.do?fileId=${item_sub.fileId }&fileSeq=${item_sub.fileSeq}" onclick="popupImageView(this);" style="cursor: pointer;">
-																						<a href="/attachfile/downloadFile.do?fileId=${item_sub.fileId}&fileSeq=${item_sub.fileSeq}" title="다운받기">${item_sub.fileNm}</a><a href="/attachfile/downloadFile.do?fileId=${item_sub.fileId}&fileSeq=${item_sub.fileSeq}" title="다운받기" class="btn color gray mg-l15">다운받기</a>
-																					</li>
-			</c:forEach>
-                                                                                </ul>			
-                                                                                 <!--    <figure>
-                                                                                        <img src="../assets/images/@sample.jpg" alt="" class="btn-org">
-                                                                                    </figure>
-                                                                                    <button type="button" class="themb_del"><i class="ico file_del"><em>파일삭제</em></i></button> -->
-                                                                                </div>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <!-- <tr>
-                                                                            <td>
-                                                                                <div class="themb-box">
-                                                                                    <figure>
-                                                                                        <img src="../assets/images/@sample.jpg" alt="" class="btn-org">
-                                                                                    </figure>
-                                                                                    <button type="button" class="themb_del"><i class="ico file_del"><em>파일삭제</em></i></button>
-                                                                                </div>
-                                                                            </td>
-                                                                            <td>
-                                                                                <div class="themb-box">
-                                                                                    <figure>
-                                                                                        <img src="../assets/images/@sample.jpg" alt="" class="btn-org">
-                                                                                    </figure>
-                                                                                    <button type="button" class="themb_del"><i class="ico file_del"><em>파일삭제</em></i></button>
-                                                                                </div>
-                                                                            </td>
-                                                                        </tr> -->                                                                       
-                                                                        
-                                                                    </tbody>
-                                                                </table>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
+											                                                <th>활동결과</th>
+											                                                <td colspan="9" class="pd0">
+											                                                    <div class="list-wrap" style="margin:-1px">
+											                                                        <div class="list-content">
+											                                                            <div class="list-table list">
+											                                                                <table class="centered">
+											                                                                    <caption></caption>
+											                                                                    <colgroup>
+											                                                                        <col style="width:50%">
+											                                                                        <col>
+											                                                                    </colgroup>
+											                                                                    <thead>
+											                                                                        <tr>
+											                                                                            <th>개선 전</th>
+											                                                                            <th>개선 후</th>
+											                                                                        </tr>
+											                                                                    </thead>
+											                                                                    <tbody>
+											                                                                        <tr>
+											                                                                            <td>
+											                                                                                <div class="themb-box">
+											                                                                                <ul>
+														<c:forEach var="item_sub" items="${proposalVO.beforeAttachFileList}" varStatus="status">
+																																<li>
+																																	<img src="/attachfile/downloadFile.do?fileId=${item_sub.fileId }&fileSeq=${item_sub.fileSeq}" onclick="popupImageView(this);" style="cursor: pointer;">
+																																	<a href="/attachfile/downloadFile.do?fileId=${item_sub.fileId}&fileSeq=${item_sub.fileSeq}" title="다운받기">${item_sub.fileNm}</a><a href="/attachfile/downloadFile.do?fileId=${item_sub.fileId}&fileSeq=${item_sub.fileSeq}" title="다운받기" class="btn color gray mg-l15">다운받기</a>
+																																</li>
+														</c:forEach>
+														                                                                    </ul>
+											                                                                                
+											                                                                                    <!-- <figure>
+											                                                                                        <img src="../assets/images/@sample.jpg" alt="" class="btn-org">
+											                                                                                    </figure>
+											                                                                                    <button type="button" class="themb_del"><i class="ico file_del"><em>파일삭제</em></i></button> -->
+											                                                                                </div>
+											                                                                            </td>
+											                                                                            <td>
+											                                                                                <div class="themb-box">
+											                                                                                <ul>
+														<c:forEach var="item_sub" items="${proposalVO.afterAttachFileList}" varStatus="status">
+																																<li>
+																																	<img src="/attachfile/downloadFile.do?fileId=${item_sub.fileId }&fileSeq=${item_sub.fileSeq}" onclick="popupImageView(this);" style="cursor: pointer;">
+																																	<a href="/attachfile/downloadFile.do?fileId=${item_sub.fileId}&fileSeq=${item_sub.fileSeq}" title="다운받기">${item_sub.fileNm}</a><a href="/attachfile/downloadFile.do?fileId=${item_sub.fileId}&fileSeq=${item_sub.fileSeq}" title="다운받기" class="btn color gray mg-l15">다운받기</a>
+																																</li>
+														</c:forEach>
+											                                                                                </ul>			
+											                                                                                 <!--    <figure>
+											                                                                                        <img src="../assets/images/@sample.jpg" alt="" class="btn-org">
+											                                                                                    </figure>
+											                                                                                    <button type="button" class="themb_del"><i class="ico file_del"><em>파일삭제</em></i></button> -->
+											                                                                                </div>
+											                                                                            </td>
+											                                                                        </tr>
+											                                                                        <!-- <tr>
+											                                                                            <td>
+											                                                                                <div class="themb-box">
+											                                                                                    <figure>
+											                                                                                        <img src="../assets/images/@sample.jpg" alt="" class="btn-org">
+											                                                                                    </figure>
+											                                                                                    <button type="button" class="themb_del"><i class="ico file_del"><em>파일삭제</em></i></button>
+											                                                                                </div>
+											                                                                            </td>
+											                                                                            <td>
+											                                                                                <div class="themb-box">
+											                                                                                    <figure>
+											                                                                                        <img src="../assets/images/@sample.jpg" alt="" class="btn-org">
+											                                                                                    </figure>
+											                                                                                    <button type="button" class="themb_del"><i class="ico file_del"><em>파일삭제</em></i></button>
+											                                                                                </div>
+											                                                                            </td>
+											                                                                        </tr> -->                                                                       
+											                                                                        
+											                                                                    </tbody>
+											                                                                </table>
+											                                                            </div>
+											                                                        </div>
+											                                                    </div>
+											                                                </td>
+											                                            </tr>                                            
+                                            </c:if>
 											<tr>
 												<th rowspan="2">결재자</th>
 												<th colspan="5" class="align-center">소속</th>
@@ -341,15 +355,18 @@
 													)</td>
 													<td colspan="5">
 														<div class="comment-btn"><div>${item.aprovalComment}</div>
-														<c:if test="${status.last and item.aprovalStatCode eq '4'}">
-															<input type="hidden" value="${item.comNo}">
-															<button type="button" class="btn bg-gray btn-req-approval">결재의뢰</button>
+														<c:if test="${proposalVO.propTypeCode eq 'PPS_TYP_1'.toString() }">
+															<c:if test="${status.last and item.aprovalStatCode eq '4'}">
+																<input type="hidden" value="${item.comNo}">
+																<button type="button" class="btn bg-gray btn-req-approval">결재의뢰</button>
+															</c:if>
 														</c:if>
 														</div>														
 													</td>
 												</tr>											
 											</c:if>
 										</c:forEach>
+										<c:if test="${proposalVO.propTypeCode eq 'PPS_TYP_1'.toString() }">
 											<tr>
 												<th rowspan="2"><span class="asterisk">*</span>결재자 지정</th>
 												<th colspan="5" class="align-center">소속</th>
@@ -379,6 +396,7 @@
 												<td id="text-approval-duty"></td>
 												<td id="text-approval-belt"></td>
 											</tr>
+										</c:if>
 										</tbody>
 									</table>									
 								</div>
