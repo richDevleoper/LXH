@@ -17,7 +17,9 @@
 <script type="text/javascript" src="/assets/js/xlsx.full.min.js"></script>
 
 <script type="text/javascript">
+	
 	$(function() {
+		
 		if ($("#defaultForm").validationEngine) {
 			$("#defaultForm").validationEngine('attach', {
 				unbindEngine : false,
@@ -80,10 +82,11 @@
 					<div class="form-inline form-input">
 						<label>조회연도</label> 
 						<jsp:useBean id="now" class="java.util.Date" />
-			            <fmt:formatDate value="${now}" pattern="yyyy" var="yearStart"/>
+						<c:set var="yearStart" value="2023"/>
+			            <fmt:formatDate value="${now}" pattern="yyyy" var="yearNow"/>
 			            <form:select path="searchYear" class="limit">
-						<c:forEach begin="0" end="3" var="result" step="1">
-							<option value="<c:out value="${yearStart - result}" />" <c:if test="${(yearStart - result) == searchVO.searchYear}"> selected="selected"</c:if>><c:out value="${yearStart - result}" /></option>
+						<c:forEach begin="${yearStart}" end="${yearNow}" var="result" step="1">
+							<option value="<c:out value="${result}" />" <c:if test="${(result) == searchVO.searchYear}"> selected="selected"</c:if>><c:out value="${result}" /></option>
 						</c:forEach>
 						</form:select>
 					</div>
@@ -185,7 +188,8 @@
 			</div>
 		</div>
 	</div>
-	</div>
+
+	<fmt:formatDate value="${now}" pattern="yy년 M월 d일" var="yearNowString"/>
 	<script>
 		var tableDataNested = ${tableData};
 
@@ -203,7 +207,7 @@
 					width : 300,
 					frozen: true
 				}, {//create column group
-					title : "‘22년(직전년도)",
+					title : "‘${fn:substring(searchVO.searchYear-1,2,4)}년(직전년도)",
 					field : "name2",
 					columns : [ {
 						title : "GB",
@@ -278,7 +282,7 @@
 						}, ],
 					} ],
 				}, {//create column group
-					title : "‘23년 육성 계획",
+					title : "‘${fn:substring(searchVO.searchYear,2,4)}년 육성 계획",
 					field : "name3",
 					columns : [ {
 						title : "GB",
@@ -351,7 +355,7 @@
 						}, ],
 					} ],
 				}, {//create column group
-					title : "<span class='color primary'>‘23년 6월 1일 기준</span>",
+					title : "<span class='color primary'>‘${yearNowString} 기준</span>",
 					field : "name4",
 					columns : [ {
 						title : "GB",
@@ -455,6 +459,9 @@
 			$(".btn-search-dept").off("click").on("click", function(){
 				callPopup_searchDepartment(this);
 			});
+			
+			//부서검색 팝업 트리 초기화
+			initFooterDeptPopup();
 		}
 		
 		function onclick_search(){
@@ -471,18 +478,46 @@
 		// 조직 조회 호출부
 		function callPopup_searchDepartment(obj){
 
-			popDept.init();
+			popMDept.init();
 			// footer.jsp 내 영역 호출
-			popDept.returnObjId = "searchDepart";
-			popDept.returnFunc = callback_popDept;
-			popDept.open();
+			popMDept.returnObjId = "searchDepart";
+			popMDept.returnFunc = callback_popDept;
+			popMDept.open();
 		}
 		
 		// 조직 조회 콜백부
 		function callback_popDept(objId, data){
-			
-			$("#"+objId).val(data.deptCode);
-			$("#searchDepartName").val(data.deptName);
+			$("#"+objId).val(data.deptCodes);
+			$("#searchDepartName").val(data.deptNames);
+		}
+		
+		// 부서검색 팝업 트리 데이터
+		let objDeptTreeData = ${deptFullList};
+		
+		//부서검색 팝업 트리 초기화
+		function initFooterDeptPopup(){
+			$('#objDeptTree').jstree({
+		    	"core": {
+		    	      "data": objDeptTreeData	// controller에서 데이터 바인딩.
+		    	    },
+		        "plugins" : ['checkbox','search'],
+		        "search" : {
+		            "show_only_matches" : true,
+	            	"show_only_matches_children" : true,
+	    		},
+		    })
+		    .on("check_node.jstree uncheck_node.jstree", function (e, data) {
+
+		        if (e.type == "uncheck_node") {
+		        	debugger;
+		            $("#orgSelAllDept").prop( "checked", false );                
+		        }
+			    else if (e.type == "check_node") {
+			    	debugger;
+		            if ($(this).jstree().get_json('#', {flat:true}).length === $(this).jstree().get_checked(true).length)
+		                $("#orgSelAllDept").prop( "checked", true ); 					
+		        }
+		    });
 		}
 		
 	</script>

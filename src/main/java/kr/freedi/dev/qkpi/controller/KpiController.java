@@ -7,7 +7,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -15,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -22,6 +26,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.gson.JsonArray;
@@ -130,7 +135,7 @@ public class KpiController {
 		
 		searchVO.setSearchUserid(userSession.getUserId());
 		
-		List<DepartVO> dbList = qPopupService.selectTreeList();
+		List<DepartVO> dbList = qPopupService.selectListMap();
 		JsonArray deptList = makeService.convertTreeJson(dbList);
 		
 		model.addAttribute("deptList", deptList);
@@ -152,13 +157,32 @@ public class KpiController {
 	
 	@RequestMapping({"/MgrPlan.do"})
 	public String handler_mgrPlan(HttpServletRequest request, ModelMap model,
-			@ModelAttribute("kpiSearchVO") KpiSearchVO searchVO, 
+			@ModelAttribute("searchVO") KpiSearchVO searchVO, 
 			UserVO userSession)throws Exception {
 		
 		model.addAttribute("menuKey", searchVO.getMenuKey());
+		if(searchVO.getKudIdx()==null)
+			searchVO.setKudIdx("6SIG");
 		
+		LocalDate now = LocalDate.now();
+		DateTimeFormatter formatter;
+		// 검색조건 년도값 초기화
+		if(searchVO.getSearchYear()==null) {
+			formatter = DateTimeFormatter.ofPattern("yyyy");
+			searchVO.setSearchYear(now.format(formatter));
+		}
 		
-		JsonArray resultArray = kpiService.getPlanData(searchVO);
+		if(searchVO.getSearchMonth()==null) {
+			formatter = DateTimeFormatter.ofPattern("M");
+			searchVO.setSearchMonth(now.format(formatter));
+		}
+		
+		JsonArray resultArray;
+		if(searchVO.getKudIdx().equals("6SIG")){
+			resultArray = kpiService.getPlanData(searchVO);
+		} else {	//MBB
+			resultArray = kpiService.getPlanDataTMbb(searchVO);
+		}		
 		model.addAttribute("tableData", resultArray);
 		
 		return "app/kpi/MgrPlan";
@@ -192,12 +216,15 @@ public class KpiController {
 		model.addAttribute("kudIdx", "6SIG");
 		model.addAttribute("action", "status6SIG.do");
 		
-		
+		LocalDate now = LocalDate.now();
+		DateTimeFormatter formatter;
+		// 검색조건 년도값 초기화
 		if(searchVO.getSearchYear()==null) {
-			LocalDate now = LocalDate.now();
-	        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy");
+			formatter = DateTimeFormatter.ofPattern("yyyy");
 			searchVO.setSearchYear(now.format(formatter));
-			
+		}
+		
+		if(searchVO.getSearchMonth()==null) {
 			formatter = DateTimeFormatter.ofPattern("M");
 			searchVO.setSearchMonth(now.format(formatter));
 		}
@@ -212,6 +239,10 @@ public class KpiController {
 		model.addAttribute("tableData", resultArray);
 		
 		
+		List<DepartVO> dbList = qPopupService.selectTreeList();
+		JsonArray deptList = makeService.convertTreeJson(dbList);
+		model.addAttribute("deptFullList", deptList);
+		
 		return "app/kpi/StatusList";
 	}
 	
@@ -224,11 +255,15 @@ public class KpiController {
 		model.addAttribute("kudIdx", "MBB");
 		model.addAttribute("action", "statusMBB.do");
 		
+		LocalDate now = LocalDate.now();
+		DateTimeFormatter formatter;
+		// 검색조건 년도값 초기화
 		if(searchVO.getSearchYear()==null) {
-			LocalDate now = LocalDate.now();
-	        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy");
+			formatter = DateTimeFormatter.ofPattern("yyyy");
 			searchVO.setSearchYear(now.format(formatter));
-			
+		}
+		
+		if(searchVO.getSearchMonth()==null) {
 			formatter = DateTimeFormatter.ofPattern("M");
 			searchVO.setSearchMonth(now.format(formatter));
 		}
@@ -241,6 +276,10 @@ public class KpiController {
 		searchVO.setKudIdx("MBB");
 		JsonArray resultArray = kpiService.getPlanData(searchVO);
 		model.addAttribute("tableData", resultArray);
+		
+		List<DepartVO> dbList = qPopupService.selectTreeList();
+		JsonArray deptList = makeService.convertTreeJson(dbList);
+		model.addAttribute("deptFullList", deptList);
 		
 		return "app/kpi/StatusList";
 	}
@@ -261,10 +300,35 @@ public class KpiController {
 	
 	@RequestMapping({"/MbbRateList.do"})
 	public String handler_mbbRateList(HttpServletRequest request, ModelMap model,
-			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
+			@ModelAttribute("searchVO") KpiSearchVO searchVO, 
 			UserVO userSession)throws Exception {
 		
 		model.addAttribute("menuKey", searchVO.getMenuKey());
+		model.addAttribute("action", "MbbRateList.do");
+		
+		LocalDate now = LocalDate.now();
+		DateTimeFormatter formatter;
+		// 검색조건 년도값 초기화
+		if(searchVO.getSearchYear()==null) {
+			formatter = DateTimeFormatter.ofPattern("yyyy");
+			searchVO.setSearchYear(now.format(formatter));
+		}
+		
+		if(searchVO.getSearchMonth()==null) {
+			formatter = DateTimeFormatter.ofPattern("M");
+			searchVO.setSearchMonth(now.format(formatter));
+		}
+		
+		
+		CodeVO codeVO = new CodeVO(); 
+		codeVO.setCodeGrpId("WPLACE");
+		codeVO.setActFlg("Y"); 
+		model.addAttribute("code_wplace", codeService.selectFullList(codeVO));
+		
+		
+		List<DepartVO> dbList = qPopupService.selectTreeList();
+		JsonArray deptList = makeService.convertTreeJson(dbList);
+		model.addAttribute("deptFullList", deptList);
 		
 		return "app/kpi/MbbRateList";
 	}
@@ -298,7 +362,51 @@ public class KpiController {
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	@RequestMapping({"/procPlanSave.do"})
+	public @ResponseBody String searchemp(HttpServletRequest request,
+		   @ModelAttribute("userVO") UserVO userVo,
+		   @RequestParam Map<String, Object> params)throws Exception {
 		
+		String kmYear = (String)params.get("km_year");
+		
+		Iterator<String> itr = params.keySet().iterator();
+		//System.out.println(params);
+		while(itr.hasNext()) {
+			String key = itr.next();
+			if(key.indexOf("__")==-1) {
+				continue;
+			}
+			String val = (String)params.get(key);
+			String[] arrVal = key.split("__");
+			String colIdx = arrVal[0];
+			String deptCode = arrVal[1];
+			
+			//System.out.println(colIdx + " | " + deptCode + " | " + val);
+			KpiVO kpiVO = new KpiVO();
+			kpiVO.setDeptCode(deptCode);
+			if(colIdx.indexOf("GB")>-1) {
+				kpiVO.setKmGbUserCnt(val);
+			} else if(colIdx.indexOf("BB이상")>-1) {
+				kpiVO.setKmBbuUserCnt(val);				
+			} else if(colIdx.indexOf("MBB_MGR")>-1) {
+				kpiVO.setKmMbbManageCnt(val);
+			} else if(colIdx.indexOf("MBB")>-1) {
+				kpiVO.setKmMbbUserCnt(val);
+			} else { // BB
+				kpiVO.setKmBbUserCnt(val);
+			}
+			kpiVO.setKmYear(kmYear);
+			int retCnt = kpiService.updateMaster(kpiVO);
+			if(retCnt==0) {
+				kpiService.insertMaster(kpiVO); 
+			}
+			//System.out.println("###########" + retCnt);
+		}
+		HashMap<String, String> result = new HashMap<>();
+		result.put("result", "OK");
+		return new ObjectMapper().writeValueAsString(result);
 	}
 	
 }

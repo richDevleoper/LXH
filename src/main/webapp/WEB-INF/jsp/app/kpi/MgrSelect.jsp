@@ -495,16 +495,17 @@
 				data: params,
 				dataType : 'json',
 				success:function(data){
-					debugger;
-					console.log(data);
+					
 					let vhtml = [];	
 					let cntNum = 0;
 					$("#emptab").find("tbody").html("");
 					
 					if(data.length===0){
+					
 						// 데이터가 없습니다. 
 		                vhtml.push("<tr><td colspan='4' style='text-align: center; height: 30px;'>조회된 사원이 없습니다.</td></tr>");
-					}else{
+					
+					} else {
 						
 						for ( var i in data) {
 							let item = data[i];
@@ -525,13 +526,10 @@
 							
 							cntNum = cntNum+1;
 						}
-						
 					}
 					console.log(cntNum);
 					$("#emptab").find("tbody").append(vhtml.join(''));
 					$("#empTit").text("총 "+cntNum+"명");
-					
-
 				}
 			});
 			

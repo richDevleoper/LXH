@@ -47,10 +47,11 @@
                                                 <div class="form-inline form-input">
                                                     <label>연도</label>
                                                     <jsp:useBean id="now" class="java.util.Date" />
-                                                    <fmt:formatDate value="${now}" pattern="yyyy" var="yearStart"/>
-                                                    <form:select path="searchYear" class="limit">
-													<c:forEach begin="0" end="3" var="result" step="1">
-														<option value="<c:out value="${yearStart - result}" />" <c:if test="${(yearStart - result) == searchVO.searchYear}"> selected="selected"</c:if>><c:out value="${yearStart - result}" /></option>
+													<c:set var="yearStart" value="2023"/>
+										            <fmt:formatDate value="${now}" pattern="yyyy" var="yearNow"/>
+										            <form:select path="searchYear" class="limit">
+													<c:forEach begin="${yearStart}" end="${yearNow}" var="result" step="1">
+														<option value="<c:out value="${result}" />" <c:if test="${(result) == searchVO.searchYear}"> selected="selected"</c:if>><c:out value="${result}" /></option>
 													</c:forEach>
 													</form:select>
                                                 </div>
@@ -143,7 +144,7 @@
                                                     </thead>
                                                     <tbody>
                                                     <c:forEach var="item" items="${mgrList}" varStatus="status">
-                            			                 <tr id="tr_${item.comNo}" >                                                            
+                            			                 <tr id="tr_${item.comNo}" param='${item}'>
                                                             <td>${item.idx}</td>
                                                             <td>
                                                                 <div class="link-group center">
@@ -212,44 +213,44 @@
                                 <tbody>
                                     <tr>
                                         <th>사번</th>
-                                        <td>사번1</td>
+                                        <td><span id="comNo"></span></td>
                                         <th>이름</th>
-                                        <td>이름1</td>                                        
+                                        <td><span id="kudUserName"></span></td>                                        
                                     </tr>
                                 
                                     <tr>
                                         <th>근무지명</th>
-                                        <td>근무지명1</td>
+                                        <td><span id="kudPlace"></span></td>
                                         <th>부문</th>
-                                        <td>부문1</td>                                        
+                                        <td><span id="kudPart"></span></td>                                        
                                     </tr>
                                     <tr>
                                         <th>소속명</th>
-                                        <td>소속명1</td>
+                                        <td><span id="kudBelongName"></span></td>
                                         <th>팀명</th>
-                                        <td>팀명1</td>                                        
+                                        <td><span id="kudTeamName"></span></td>                                        
                                     </tr>
                                     <tr>
                                         <th>직위</th>
-                                        <td>직위1</td>
+                                        <td><span id="kudJobx"></span></td>
                                         <th>직책</th>
-                                        <td>직책1</td>                                        
+                                        <td><span id="kudPosition"></span></td>                                        
                                     </tr>
                                     <tr>
                                         <th>신분유형</th>
-                                        <td>신분유형1</td>
+                                        <td><span id="kudUserIdentity"></span></td>
                                         <th>입사일</th>
-                                        <td>입사일1</td>                                        
+                                        <td><span id="kudJoinDate"></span></td>                                        
                                     </tr>
                                     <tr>
                                         <th>직무명</th>
-                                        <td>직무명1</td>
+                                        <td><span id="kudJimu"></span></td>
                                         <th>최종학력</th>
-                                        <td>최종학력1</td>                                        
+                                        <td><span id="kudLastDegree"></span></td>                                        
                                     </tr>
                                     <tr>
-                                        <th>인증형황</th>
-                                        <td colspan="3">GB(2020.02.10) MGB(비대상), BB(2021.02.10)</td>                                        
+                                        <th>인증현황</th>
+                                        <td colspan="3"><span id="kudCertBelt"></span><!-- GB(2020.02.10) MGB(비대상), BB(2021.02.10) --></td>                                        
                                     </tr>                                    
                                 </tbody>
                             </table>
@@ -273,6 +274,9 @@
 		$(".btn-search-dept").off("click").on("click", function(){
 			callPopup_searchDepartment(this);
 		});
+		
+		// common.js 이벤트 비활성
+		$(".tab-group > .tab-btn > button").off("click");
 	}
 	
 	// 조직 조회 호출부
@@ -299,6 +303,20 @@
 
 	function onclick_userid(comNo){
 		$(".modal-custom, .userinfo").show();
+		item = JSON.parse($("#tr_"+comNo).attr("param"));
+		$("#comNo").text(item.comNo);
+		$("#kudUserName").text(item.kudUserName);
+		$("#kudPlace").text(item.kudPlace);
+		$("#kudPart").text(item.kudPart);
+		$("#kudBelongName").text(item.kudBelongName);
+		$("#kudTeamName").text(item.kudTeamName);
+		$("#kudJobx").text(item.kudJobx);
+		$("#kudPosition").text(item.kudPosition);
+		$("#kudUserIdentity").text(item.kudUserIdentity);
+		$("#kudJoinDate").text(item.kudJoinDate);
+		$("#kudJimu").text(item.kudJimu);
+		$("#kudLastDegree").text(item.kudLastDegree);
+		$("#kudCertBelt").text(item.kudCertBelt);
 	}
 	
 	function onclick_tab(idx){

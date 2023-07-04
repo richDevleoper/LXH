@@ -15,21 +15,43 @@
 	<meta name="description" content="" />
 </head>
 <body>
-  
+
+<c:choose>
+	<c:when test="${searchVO.kudIdx eq 'MBB'}">
+		<c:set var="cssOn1" value=""></c:set>
+		<c:set var="cssOn2" value="on"></c:set>
+	</c:when>
+	<c:otherwise>
+		<c:set var="cssOn1" value="on"></c:set>
+		<c:set var="cssOn2" value=""></c:set>
+	</c:otherwise>
+</c:choose>
+
                         <div class="tab-group">
                             <div class="tab-btn">
-                                <button type="button" class="on">6σ인재 육성계획</button>
-                                <button type="button">MBB 활용율 계획</button>
+                                <button type="button" class="${cssOn1}" onclick="onclick_tab('6SIG')">6σ인재 육성계획</button>
+                                <button type="button" class="${cssOn2}" onclick="onclick_tab('MBB')">MBB 활용율 계획</button>
                             </div>
                             <div class="tab-inr">
-                                <div class="tab-box on">
+                                <div class="tab-box ${cssOn1}">
                                     <div class="list-wrap">
+			<form:form commandName="searchVO" id="defaultForm" name="defaultForm"  action="${action}" method="get" modelAttribute="searchVO">
+				${searchVO.superHiddenTag}
+				<form:hidden path="kudIdx"/>
+				<input type="hidden" name="update_fields" id="updateFields">                                    
                                         <div class="list-header mg-t20">
+			                                        
                                             <p class="title">대상연도 선택</p>
-                                            <select name="limit" class="limit">
-                                                <option value="10">2023년</option>
-                                            </select>
+                                            <jsp:useBean id="now" class="java.util.Date" />
+											<c:set var="yearStart" value="2023"/>
+								            <fmt:formatDate value="${now}" pattern="yyyy" var="yearNow"/>
+								            <form:select path="searchYear" class="limit">
+											<c:forEach begin="${yearStart}" end="${yearNow}" var="result" step="1">
+												<option value="<c:out value="${result}" />" <c:if test="${(result) == searchVO.searchYear}"> selected="selected"</c:if>><c:out value="${result}" /></option>
+											</c:forEach>
+											</form:select>                                         
                                         </div>
+			</form:form>                                           
                                         <!-- tabulator-->
                                         <div class="list-wrap">
                                             <div class="list-content">
@@ -39,7 +61,7 @@
                                         <!-- //tabulator-->
                                         <div class="list-footer">
                                             <div class="list-btns center">
-                                                <button type="button" class="btn bg-gray">계획저장</button>
+                                                <button type="button" class="btn bg-gray" id="btnSave">계획저장</button>
                                                 <button type="button" class="btn-excel">
                                                     <img src="/assets/images/icon_excel.png" alt="">
                                                     <span>다운로드</span>
@@ -48,7 +70,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="tab-box">
+                                <div class="tab-box ${cssOn2}">
                                     <div class="list-wrap">
                                         <div class="list-header mg-t20">
                                             <p class="title">대상연도 선택</p>
@@ -56,13 +78,13 @@
                                                 <option value="10">2023년</option>
                                             </select>
                                         </div>
-                                        <!-- tabulator-->
+                                        
                                         <div class="list-wrap">
                                             <div class="list-content">
                                                 <div id="example-table2" class="list-table list tabulator point-type"></div>
                                             </div>
                                         </div>
-                                        <!-- //tabulator-->
+                                        
                                         <div class="list-footer">
                                             <div class="list-btns center">
                                                 <button type="button" class="btn bg-gray">계획저장</button>
@@ -76,64 +98,8 @@
                                 </div>
                             </div>
                         </div>
-                   
-        <!-- 조직도 -->
-        <div class="modal-dimmed"></div>
-        <div class="org-modal">
-            <div class="modal-header">
-                <h4>직책조회</h4>
-                <button type="button" class="btn-close">닫기</button>
-            </div>
-            <div class="modal-content">
-                <div class="list-wrap">
-                    <div class="list-search">
-                        <form id="org-form" onsubmit="org_search();return false;">
-                            <div class="search-form">
-                                <div class="form-inline form-input">
-                                    <label>직책명</label>
-                                    <input type="text" name="">
-                                </div>
-                                <button type="submit" class="btn-submit">조회</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-                <div class="tree-header">
-                    <div>
-                        <input type="checkbox" id="orgSelAll">
-                        <label for="orgSelAll"></label>
-                    </div>
-                    <div>
-                        직책선택
-                    </div>
-                </div>
-                <div id="org-tree">
-                    <ul>
-                        <li>사업부장</li>
-                        <li>담당</li>
-                        <li>팀장</li>
-                        <li>책임</li>
-                        <li>선임</li>
-                        <li>사원1</li>
-                        <li>사원2</li>
-                        <li>사원3</li>
-                        <li>사원4</li>
-                        <li>사원5</li>
-                        <li>사원6</li>
-                        <li>사원7</li>
-                        <li>사원8</li>
-                        <li>사원9</li>
-                        <li>사원10</li>
-                        <li>사원11</li>
-                    </ul>
-                </div>
-                <div class="btns">
-                    <button type="button" class="btn-submit">확인</button>
-                    <button type="button" class="btn-cancel">취소</button>
-                </div>
-            </div>
-        </div>
-    </div>
+
+    <fmt:formatDate value="${now}" pattern="yy년 M월 d일" var="yearNowString"/>
     <script>
         //custom input
 		var customInput = function(cell, onRendered, success, cancel){
@@ -188,212 +154,266 @@
 
 			return inputDiv;
 		};
+
         
         var tableDataNested = ${tableData};
-		var table = new Tabulator("#example-table", {
-			data:tableDataNested,
-			dataTree:true,
-			dataTreeStartExpanded:true,
-            columnHeaderVertAlign:"middle", //align header contents to bottom of cell
-			columns:[
-                {title:"대상구분", field:"name",headerSort:false, width:160},
-                {//create column group
-                    title:"‘22년(직전년도)",field:"name2",
-                    columns:[
-                        {
-                            title:"GB",field:"GB1",
-                            columns:[
-                                {title:"인원", field:"GB1_1",headerSort:false, width:40},
-                                {title:"율(%)", field:"GB1_2",headerSort:false, width:40},
-                            ],
-                        },
-                        {
-                            title:"BB",field:"BB1",
-                            columns:[
-                                {title:"인원", field:"BB1_1",headerSort:false, width:40},
-                                {title:"율(%)", field:"BB1_2",headerSort:false, width:40},
-                            ],
-                            
-                        },
-                        {
-                            title:"MBB",field:"MBB1",
-                            columns:[
-                                {title:"인원", field:"MBB1_1",headerSort:false, width:40},
-                                {title:"율(%)", field:"MBB1_2",headerSort:false, width:40},
-                            ],
-                        },
-                        {
-                            title:"BB이상",field:"BB이상1",
-                            columns:[
-                                {title:"인원", field:"BB이상1_1",headerSort:false, width:40},
-                                {title:"율(%)", field:"BB이상1_2",headerSort:false, width:40},
-                            ],
-                        }
-                    ],
-                },
-                {//create column group
-                    title:"‘23년 육성 계획",field:"name3",
-                    columns:[
-                        {
-                            title:"GB",field:"GB2",
-                            columns:[
-                                {title:"인원", field:"GB2_1",headerSort:false, width:40,formatter:(cell) => {
-                                        const value = cell.getValue();
-                                        return '<input type="text" id="" name="" value="">';
-                                    },
-                                },
-                                {title:"율(%)", field:"GB2_2",headerSort:false, width:40},
-                            ],
-                        },
-                        {
-                            title:"BB",field:"BB2",
-                            columns:[
-                                {title:"인원", field:"BB2_1",headerSort:false, width:40,formatter:(cell) => {
-                                        const value = cell.getValue();
-                                        return '<input type="text" id="" name="" value="">';
-                                    },
-                                },
-                                {title:"율(%)", field:"BB2_2",headerSort:false, width:40},
-                            ],
-                            
-                        },
-                        {
-                            title:"MBB",field:"MBB2",
-                            columns:[
-                                {title:"인원", field:"MBB2_1",headerSort:false, width:40,formatter:(cell) => {
-                                        const value = cell.getValue();
-                                        return '<input type="text" id="" name="" value="">';
-                                    },
-                                },
-                                {title:"율(%)", field:"MBB2_2",headerSort:false, width:40},
-                            ],
-                        },
-                        {
-                            title:"BB이상",field:"BB이상2",
-                            columns:[
-                                {title:"인원", field:"BB이상2_1",headerSort:false, width:40,formatter:(cell) => {
-                                        const value = cell.getValue();
-                                        return '<input type="text" id="" name="" value="">';
-                                    },
-                                },
-                                {title:"율(%)", field:"BB이상2_2",headerSort:false, width:40},
-                            ],
-                        }
-                    ],
-                },
-                {//create column group
-                    title:"<span class='color primary'>‘23년 6월 1일 기준</span>",field:"name4",
-                    columns:[
-                        {
-                            title:"GB",field:"GB3",
-                            columns:[
-                                {title:"인원", field:"GB3_1",headerSort:false, width:40},
-                                {title:"율(%)", field:"GB3_2",headerSort:false, width:40},
-                            ],
-                        },
-                        {
-                            title:"BB",field:"BB3",
-                            columns:[
-                                {title:"인원", field:"BB3_1",headerSort:false, width:40},
-                                {title:"율(%)", field:"BB3_2",headerSort:false, width:40},
-                            ],
-                            
-                        },
-                        {
-                            title:"MBB",field:"MBB3",
-                            columns:[
-                                {title:"인원", field:"MBB3_1",headerSort:false, width:40},
-                                {title:"율(%)", field:"MBB3_2",headerSort:false, width:40},
-                            ],
-                        },
-                        {
-                            title:"BB이상",field:"BB이상3",
-                            columns:[
-                                {title:"인원", field:"BB이상3_1",headerSort:false, width:40},
-                                {title:"율(%)", field:"BB이상3_2",headerSort:false, width:40},
-                            ],
-                        }
-                    ],
-                },
-                {title:"대상인원", field:"name5",headerSort:false, width:60},
-            ],
-		});
-        
-		var tableDataNested2 = [
-            {name:"생산/기술/R&D/품질",name2:"47",data3_1:"26",data3_2:"15",data4_1:"11",data4_2:"-",data4_3:"26",data4_4:"-",data4_5:"26",data4_6:"-",data5_1:"26",data5_2:"55",data6_1:"26",data6_2:"+55"},
-			{name:"창호 사업부",name2:"47",data3_1:"26",data3_2:"15",data4_1:"11",data4_2:"-",data4_3:"26",data4_4:"-",data4_5:"26",data4_6:"-",data5_1:"26",data5_2:"55",data6_1:"26",data6_2:"+55",
-                _children:[
-                    {name:"창호 사업부",name2:"47",data3_1:"26",data3_2:"15",data4_1:"11",data4_2:"-",data4_3:"26",data4_4:"-",data4_5:"26",data4_6:"-",data5_1:"26",data5_2:"55",data6_1:"26",data6_2:"+55",
-                    _children:[
-                        {name:"창호 사업부",name2:"47",data3_1:"26",data3_2:"15",data4_1:"11",data4_2:"-",data4_3:"26",data4_4:"-",data4_5:"26",data4_6:"-",data5_1:"26",data5_2:"55",data6_1:"26",data6_2:"+55"}
-                    ]}
-                ]
-            },
-            {name:"창호.생산담당",name2:"47",data3_1:"26",data3_2:"15",data4_1:"11",data4_2:"-",data4_3:"26",data4_4:"-",data4_5:"26",data4_6:"-",data5_1:"26",data5_2:"55",data6_1:"26",data6_2:"+55",
-                _children:[
-                    {name:"창호.프로파일생산팀",name2:"47",data3_1:"26",data3_2:"15",data4_1:"11",data4_2:"-",data4_3:"26",data4_4:"-",data4_5:"26",data4_6:"-",data5_1:"26",data5_2:"55",data6_1:"26",data6_2:"+55"},
-                    {name:"창호.기술팀",name2:"47",data3_1:"26",data3_2:"15",data4_1:"11",data4_2:"-",data4_3:"26",data4_4:"-",data4_5:"26",data4_6:"-",data5_1:"26",data5_2:"55",data6_1:"26",data6_2:"+55"},
-                    {name:"창호.공정혁신팀",name2:"47",data3_1:"26",data3_2:"15",data4_1:"11",data4_2:"-",data4_3:"26",data4_4:"-",data4_5:"26",data4_6:"-",data5_1:"26",data5_2:"55",data6_1:"26",data6_2:"+55"},
-                    {name:"창호.완성창공정기술팀",name2:"47",data3_1:"26",data3_2:"15",data4_1:"11",data4_2:"-",data4_3:"26",data4_4:"-",data4_5:"26",data4_6:"-",data5_1:"26",data5_2:"55",data6_1:"26",data6_2:"+55"},
-                ]
-            },
-            {name:"창호 사업부",name2:"47",data3_1:"26",data3_2:"15",data4_1:"11",data4_2:"-",data4_3:"26",data4_4:"-",data4_5:"26",data4_6:"-",data5_1:"26",data5_2:"55",data6_1:"26",data6_2:"+55",
-                _children:[
-                    {name:"창호 사업부",name2:"47",data3_1:"26",data3_2:"15",data4_1:"11",data4_2:"-",data4_3:"26",data4_4:"-",data4_5:"26",data4_6:"-",data5_1:"26",data5_2:"55",data6_1:"26",data6_2:"+55",
-                    _children:[
-                        {name:"창호 사업부",name2:"47",data3_1:"26",data3_2:"15",data4_1:"11",data4_2:"-",data4_3:"26",data4_4:"-",data4_5:"26",data4_6:"-",data5_1:"26",data5_2:"55",data6_1:"26",data6_2:"+55"}
-                    ]}
-                ]
-            },
-            {name:"생산/기술/R&D/품질 外",name2:"47",data3_1:"26",data3_2:"15",data4_1:"11",data4_2:"-",data4_3:"26",data4_4:"-",data4_5:"26",data4_6:"-",data5_1:"26",data5_2:"55",data6_1:"26",data6_2:"+55"},
-		];
+        var kudIdx = "${searchVO.kudIdx}";
+		
+      
+		
+		$(document).ready(init);
+		function init(){
+			
+			setTable();
+			setTable2();
+			setEvent();
+		}
+		
+		function setTable(){
+			
+			var table = new Tabulator("#example-table", {
+				data:tableDataNested,
+				dataTree:true,
+				dataTreeStartExpanded:true,
+	            columnHeaderVertAlign:"middle", //align header contents to bottom of cell
+				columns:[
+	                {title:"대상구분", field:"name",headerSort:false, width:160},
+	                {//create column group
+	                    title:"‘${fn:substring(searchVO.searchYear-1,2,4)}년(직전년도)",field:"name2",
+	                    columns:[
+	                        {
+	                            title:"GB",field:"GB1",
+	                            columns:[
+	                                {title:"인원", field:"GB1_1",headerSort:false, width:40},
+	                                {title:"율(%)", field:"GB1_2",headerSort:false, width:40},
+	                            ],
+	                        },
+	                        {
+	                            title:"BB",field:"BB1",
+	                            columns:[
+	                                {title:"인원", field:"BB1_1",headerSort:false, width:40},
+	                                {title:"율(%)", field:"BB1_2",headerSort:false, width:40},
+	                            ],
+	                            
+	                        },
+	                        {
+	                            title:"MBB",field:"MBB1",
+	                            columns:[
+	                                {title:"인원", field:"MBB1_1",headerSort:false, width:40},
+	                                {title:"율(%)", field:"MBB1_2",headerSort:false, width:40},
+	                            ],
+	                        },
+	                        {
+	                            title:"BB이상",field:"BB이상1",
+	                            columns:[
+	                                {title:"인원", field:"BB이상1_1",headerSort:false, width:40},
+	                                {title:"율(%)", field:"BB이상1_2",headerSort:false, width:40},
+	                            ],
+	                        }
+	                    ],
+	                },
+	                {//create column group
+	                    title:"‘${fn:substring(searchVO.searchYear,2,4)}년 육성 계획",field:"name3",
+	                    columns:[
+	                        {
+	                            title:"GB",field:"GB2",
+	                            columns:[
+	                                {title:"인원", field:"GB2_1",headerSort:false, width:40,formatter: gridCellFormatter},
+	                                {title:"율(%)", field:"GB2_2",headerSort:false, width:40},
+	                            ],
+	                        },
+	                        {
+	                            title:"BB",field:"BB2",
+	                            columns:[
+	                                {title:"인원", field:"BB2_1",headerSort:false, width:40,formatter: gridCellFormatter},
+	                                {title:"율(%)", field:"BB2_2",headerSort:false, width:40},
+	                            ],
+	                            
+	                        },
+	                        {
+	                            title:"MBB",field:"MBB2",
+	                            columns:[
+	                                {title:"인원", field:"MBB2_1",headerSort:false, width:40,formatter: gridCellFormatter},
+	                                {title:"율(%)", field:"MBB2_2",headerSort:false, width:40},
+	                            ],
+	                        },
+	                        {
+	                            title:"BB이상",field:"BB이상2",
+	                            columns:[
+	                                {title:"인원", field:"BB이상2_1",headerSort:false, width:40,formatter: gridCellFormatter},
+	                                {title:"율(%)", field:"BB이상2_2",headerSort:false, width:40},
+	                            ],
+	                        }
+	                    ],
+	                },
+	                {//create column group
+	                    title:"<span class='color primary'>‘${yearNowString} 기준</span>",field:"name4",
+	                    columns:[
+	                        {
+	                            title:"GB",field:"GB3",
+	                            columns:[
+	                                {title:"인원", field:"GB3_1",headerSort:false, width:40},
+	                                {title:"율(%)", field:"GB3_2",headerSort:false, width:40},
+	                            ],
+	                        },
+	                        {
+	                            title:"BB",field:"BB3",
+	                            columns:[
+	                                {title:"인원", field:"BB3_1",headerSort:false, width:40},
+	                                {title:"율(%)", field:"BB3_2",headerSort:false, width:40},
+	                            ],
+	                            
+	                        },
+	                        {
+	                            title:"MBB",field:"MBB3",
+	                            columns:[
+	                                {title:"인원", field:"MBB3_1",headerSort:false, width:40},
+	                                {title:"율(%)", field:"MBB3_2",headerSort:false, width:40},
+	                            ],
+	                        },
+	                        {
+	                            title:"BB이상",field:"BB이상3",
+	                            columns:[
+	                                {title:"인원", field:"BB이상3_1",headerSort:false, width:40},
+	                                {title:"율(%)", field:"BB이상3_2",headerSort:false, width:40},
+	                            ],
+	                        }
+	                    ],
+	                },
+	                {title:"대상인원", field:"name5",headerSort:false, width:60},
+	            ],
+			});
+		}
+		
+		function setTable2(){
+			/* var tableDataNested2 = [
+	            {DEPT_NAME:"생산/기술/R&D/품질",MBB_23:"47",MBB_CNT:"26",MBB_RATE:"15",ST_DIRECT:"11",ST_DIRECT_RMK:"-",ST_SUPORT:"26",ST_SUPORT_RMK:"-",ST_TMBB:"26",ST_TMBB_RMK:"-",ACT_CNT:"26",ACT_RATE:"55",YPLAN_CNT:"26",YPLAN_RATE:"+55"},
+				{DEPT_NAME:"창호 사업부",MBB_23:"47",MBB_CNT:"26",MBB_RATE:"15",ST_DIRECT:"11",ST_DIRECT_RMK:"-",ST_SUPORT:"26",ST_SUPORT_RMK:"-",ST_TMBB:"26",ST_TMBB_RMK:"-",ACT_CNT:"26",ACT_RATE:"55",YPLAN_CNT:"26",YPLAN_RATE:"+55",
+	                _children:[
+	                    {DEPT_NAME:"창호 사업부",MBB_23:"47",MBB_CNT:"26",MBB_RATE:"15",ST_DIRECT:"11",ST_DIRECT_RMK:"-",ST_SUPORT:"26",ST_SUPORT_RMK:"-",ST_TMBB:"26",ST_TMBB_RMK:"-",ACT_CNT:"26",ACT_RATE:"55",YPLAN_CNT:"26",YPLAN_RATE:"+55",
+	                    _children:[
+	                        {DEPT_NAME:"창호 사업부",MBB_23:"47",MBB_CNT:"26",MBB_RATE:"15",ST_DIRECT:"11",ST_DIRECT_RMK:"-",ST_SUPORT:"26",ST_SUPORT_RMK:"-",ST_TMBB:"26",ST_TMBB_RMK:"-",ACT_CNT:"26",ACT_RATE:"55",YPLAN_CNT:"26",YPLAN_RATE:"+55"}
+	                    ]}
+	                ]
+	            },
+	            {DEPT_NAME:"창호.생산담당",MBB_23:"47",MBB_CNT:"26",MBB_RATE:"15",ST_DIRECT:"11",ST_DIRECT_RMK:"-",ST_SUPORT:"26",ST_SUPORT_RMK:"-",ST_TMBB:"26",ST_TMBB_RMK:"-",ACT_CNT:"26",ACT_RATE:"55",YPLAN_CNT:"26",YPLAN_RATE:"+55",
+	                _children:[
+	                    {DEPT_NAME:"창호.프로파일생산팀",MBB_23:"47",MBB_CNT:"26",MBB_RATE:"15",ST_DIRECT:"11",ST_DIRECT_RMK:"-",ST_SUPORT:"26",ST_SUPORT_RMK:"-",ST_TMBB:"26",ST_TMBB_RMK:"-",ACT_CNT:"26",ACT_RATE:"55",YPLAN_CNT:"26",YPLAN_RATE:"+55"},
+	                    {DEPT_NAME:"창호.기술팀",MBB_23:"47",MBB_CNT:"26",MBB_RATE:"15",ST_DIRECT:"11",ST_DIRECT_RMK:"-",ST_SUPORT:"26",ST_SUPORT_RMK:"-",ST_TMBB:"26",ST_TMBB_RMK:"-",ACT_CNT:"26",ACT_RATE:"55",YPLAN_CNT:"26",YPLAN_RATE:"+55"},
+	                    {DEPT_NAME:"창호.공정혁신팀",MBB_23:"47",MBB_CNT:"26",MBB_RATE:"15",ST_DIRECT:"11",ST_DIRECT_RMK:"-",ST_SUPORT:"26",ST_SUPORT_RMK:"-",ST_TMBB:"26",ST_TMBB_RMK:"-",ACT_CNT:"26",ACT_RATE:"55",YPLAN_CNT:"26",YPLAN_RATE:"+55"},
+	                    {DEPT_NAME:"창호.완성창공정기술팀",MBB_23:"47",MBB_CNT:"26",MBB_RATE:"15",ST_DIRECT:"11",ST_DIRECT_RMK:"-",ST_SUPORT:"26",ST_SUPORT_RMK:"-",ST_TMBB:"26",ST_TMBB_RMK:"-",ACT_CNT:"26",ACT_RATE:"55",YPLAN_CNT:"26",YPLAN_RATE:"+55"},
+	                ]
+	            },
+	            {DEPT_NAME:"창호 사업부",MBB_23:"47",MBB_CNT:"26",MBB_RATE:"15",ST_DIRECT:"11",ST_DIRECT_RMK:"-",ST_SUPORT:"26",ST_SUPORT_RMK:"-",ST_TMBB:"26",ST_TMBB_RMK:"-",ACT_CNT:"26",ACT_RATE:"55",YPLAN_CNT:"26",YPLAN_RATE:"+55",
+	                _children:[
+	                    {DEPT_NAME:"창호 사업부",MBB_23:"47",MBB_CNT:"26",MBB_RATE:"15",ST_DIRECT:"11",ST_DIRECT_RMK:"-",ST_SUPORT:"26",ST_SUPORT_RMK:"-",ST_TMBB:"26",ST_TMBB_RMK:"-",ACT_CNT:"26",ACT_RATE:"55",YPLAN_CNT:"26",YPLAN_RATE:"+55",
+	                    _children:[
+	                        {DEPT_NAME:"창호 사업부",MBB_23:"47",MBB_CNT:"26",MBB_RATE:"15",ST_DIRECT:"11",ST_DIRECT_RMK:"-",ST_SUPORT:"26",ST_SUPORT_RMK:"-",ST_TMBB:"26",ST_TMBB_RMK:"-",ACT_CNT:"26",ACT_RATE:"55",YPLAN_CNT:"26",YPLAN_RATE:"+55"}
+	                    ]}
+	                ]
+	            },
+	            {DEPT_NAME:"생산/기술/R&D/품질 外",MBB_23:"47",MBB_CNT:"26",MBB_RATE:"15",ST_DIRECT:"11",ST_DIRECT_RMK:"-",ST_SUPORT:"26",ST_SUPORT_RMK:"-",ST_TMBB:"26",ST_TMBB_RMK:"-",ACT_CNT:"26",ACT_RATE:"55",YPLAN_CNT:"26",YPLAN_RATE:"+55"},
+			]; */
 
-		var table2 = new Tabulator("#example-table2", {
-			data:tableDataNested2,
-			dataTree:true,
-			dataTreeStartExpanded:true,
-            columnHeaderVertAlign:"middle", //align header contents to bottom of cell
-			columns:[
-                {title:"대상구분", field:"name",headerSort:false, width:160},
-                {title:"‘23MBB 인원", field:"name2",headerSort:false},
-                {//create column group
-                    title:"‘23년 육성",field:"name3",
-                    columns:[
-                        {title:"인원", field:"data3_1",headerSort:false, width:40,formatter:(cell) => {
-                                const value = cell.getValue();
-                                return '<input type="text" id="" name="" value="">';
-                            },
-                        },
-                        {title:"율(%)", field:"data3_2",headerSort:false, width:40},
-                    ],
-                },
-                {//create column group
-                    title:"활동 현황",field:"name4",
-                    columns:[
-                        {title:"직접 수행",field:"data4_1",headerSort:false, width:80},
-                        {title:"비고(직접수행)",field:"data4_2",headerSort:false, width:100},
-                        {title:"지원MBB",field:"data4_3",headerSort:false, width:80},
-                        {title:"비고(지원MBB활동)",field:"data4_4",headerSort:false, width:130},
-                        {title:"팀장MBB",field:"data4_5",headerSort:false, width:80},
-                        {title:"비고(팀장MBB활동)",field:"data4_6",headerSort:false, width:130}
-                    ],
-                },
-                {//create column group
-                    title:"활동인원(계)",field:"name5",
-                    columns:[
-                    {title:"인원(명)", field:"data5_1",headerSort:false, width:60},
-                        {title:"활용율(%)", field:"data5_2",headerSort:false, width:80},
-                    ],
-                },
-                {//create column group
-                    title:"계획대비(연간)",field:"name6",
-                    columns:[
-                    {title:"인원(명)", field:"data6_1",headerSort:false, width:60},
-                        {title:"활용율(%)", field:"data6_2",headerSort:false, width:80},
-                    ],
-                }
-            ],
-		});
+			var table2 = new Tabulator("#example-table2", {
+				data: tableDataNested,
+				dataTree:true,
+				dataTreeStartExpanded:true,
+	            columnHeaderVertAlign:"middle", //align header contents to bottom of cell
+	            columnHeaderStyles: {
+	              fontSize: "smaller"
+	            },
+				columns:[
+	                {title:"대상구분", field:"DEPT_NAME",headerSort:false, width:160},
+	                {title:"‘${fn:substring(searchVO.searchYear,2,4)}MBB 인원", field:"MBB_23",headerSort:false},
+	                {//create column group
+	                    title:"‘${fn:substring(searchVO.searchYear,2,4)}년 육성",field:"name3",
+	                    columns:[
+	                        {title:"인원", field:"MBB_CNT",headerSort:false, width:40,formatter: gridCellFormatter},
+	                        {title:"율(%)", field:"MBB_RATE",headerSort:false, width:40},
+	                    ],
+	                },
+	                {//create column group
+	                    title:"활동 현황",field:"name4",
+	                    columns:[
+	                        {title:"직접 수행",field:"ST_DIRECT",headerSort:false, width:80},
+	                        {title:"비고(직접수행)",field:"ST_DIRECT_RMK",headerSort:false, width:100},
+	                        {title:"지원MBB",field:"ST_SUPORT",headerSort:false, width:80},
+	                        {title:"비고(지원MBB활동)",field:"ST_SUPORT_RMK",headerSort:false, width:130},
+	                        {title:"팀장MBB",field:"ST_TMBB",headerSort:false, width:80},
+	                        {title:"비고(팀장MBB활동)",field:"ST_TMBB_RMK",headerSort:false, width:130}
+	                    ],
+	                },
+	                {//create column group
+	                    title:"활동인원(계)",field:"name5",
+	                    columns:[
+	                    {title:"인원(명)", field:"ACT_CNT",headerSort:false, width:60},
+	                        {title:"활용율(%)", field:"ACT_RATE",headerSort:false, width:80},
+	                    ],
+	                },
+	                {//create column group
+	                    title:"계획대비(연간)",field:"name6",
+	                    columns:[
+	                    {title:"인원(명)", field:"YPLAN_CNT",headerSort:false, width:60},
+	                        {title:"활용율(%)", field:"YPLAN_RATE",headerSort:false, width:80},
+	                    ],
+	                }
+	            ],
+			});
+		}
+		
+		function gridCellFormatter(cell){
+        	
+        	let fieldCol = cell.getColumn().getDefinition().field;
+        	let rowId = cell.getRow().getData().id
+            const value = cell.getValue();
+            return '<input type="text" id="'+ fieldCol +'__'+rowId+'" name="'+ fieldCol +'__'+rowId+'" value="'+value+'" class="align-right" onchange="onchange_gridInput(\''+ fieldCol +'__'+rowId+'\');">';
+        }
+
+		function onchange_gridInput(objId){
+			dataStg = $("#"+objId);
+			dataStg.addClass("grid-text-box");
+		}
+			
+		function setEvent(){
+			
+			// common.js 이벤트 비활성
+			$(".tab-group > .tab-btn > button").off("click");
+			
+			$("#btnSave").off("click").on("click", onclick_btnSave)
+			
+		}
+		
+		function onclick_tab(idx){
+			location.replace("/kpi/MgrPlan.do?menuKey=${menuKey}&kudIdx="+idx)
+		}
+		
+		function onclick_btnSave(e){
+			
+			let arrTextObj = $("input.grid-text-box");
+			if(arrTextObj.length>0){
+				let arrTextVal = {};
+				for(let i=0; i<arrTextObj.length; i++){
+					let tmp = arrTextObj[i];
+					arrTextVal[tmp.id] = tmp.value;
+				}
+				arrTextVal["km_year"] = $("#searchYear").val();
+				
+				let params = arrTextVal;
+				
+				$.ajax({
+					url:'/kpi/procPlanSave.do',
+					type: 'POST',
+					data: params,
+					dataType : 'json',
+					success:function(data){
+						console.log("return", data);
+					}
+				});
+			} else {
+				alert("입력/수정된 내용이 없습니다.");
+			}
+		}
 	</script>
 </body>
 </html>

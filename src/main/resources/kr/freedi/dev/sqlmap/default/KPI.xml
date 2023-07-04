@@ -181,7 +181,7 @@
 		    , KUD_CERT_BELT
 		    , KUD_REG_USER
 		    , KUD_REG_DATE
-		    
+		    , KUD_JIMU
 		) values (
 		    #{cirMemCode} 
 		    , #{ComNo}
@@ -196,13 +196,14 @@
 		    , #{cirMemName}
 		    , (select dept_lv3_name from tb_depart_mst where dept_code=#{cirDeptCode})
 		    , (select dept_lv2_name from tb_depart_mst where dept_code=#{cirDeptCode})
-		    , (select com_work_place from tb_user_mst where com_no=#{ComNo})
+		    , (select get_code_nm('WPLACE', com_work_place) from tb_user_mst where com_no=#{ComNo})
 		    , null
 		    , (select com_join_date from tb_user_mst where com_no=#{ComNo})
 		    , null
 		    , #{beltCode}
 		    , #{cirRegUser}
 		    , sysdate
+		    , (select get_code_nm('JIMU', com_jimu) from tb_user_mst where com_no=#{ComNo})
 		)
 	</insert>    
 	
@@ -275,14 +276,24 @@
          		tb_depart_mst
          where 
 			DEPT_STATE_CODE <![CDATA[<>]]> 'D'
+				<if test="searchDepart != null and searchDepart != ''">
+					AND INSTR(#{searchDepart}, DEPT_CODE) <![CDATA[>]]> 0
+				</if>
     START WITH
            	dept_code in (select com_depart_code from tb_kpi_user_detail 
                	           where kud_idx=#{kudIdx}
                    	       group by com_depart_code)
 	CONNECT BY PRIOR
 			dept_uper_code = dept_code
+	group by 
+			DEPT_CODE, DEPT_NAME, DEPT_UPER_CODE, DEPT_STATE_CODE
 	  )
- 
+ 		,V_DEPART_MST2 as (
+        select level, a.*
+          from v_depart_mst a
+          start with dept_code='50000000'
+          connect by prior dept_code=dept_uper_code
+      )
       SELECT 
 		   DEPT_CODE,DEPT_NAME,DEPT_UPER_CODE
 		   ,GB_CNT_1,KUD_GB_CNT_1,NVL(KUD_GB_CNT_1 / DECODE(GB_CNT_1,0,NULL,GB_CNT_1),0) * 100 AS GB_RAT_1
@@ -327,40 +338,176 @@
 		    ,(
 		       SELECT  COUNT(*) 
 		       FROM    TB_KPI_USER_DETAIL KUD 
-		       WHERE  KUD.COM_DEPART_CODE = DM.DEPT_CODE AND KUD.KUD_YEAR = '2023' AND KUD.KUD_CERT_BELT = 'D000' AND KUD.KUD_IDX = '6SIG'
+		       WHERE  KUD.COM_DEPART_CODE = DM.DEPT_CODE AND KUD.KUD_YEAR = #{searchYear} AND KUD.KUD_CERT_BELT = 'D000' AND KUD.KUD_IDX = '6SIG'
 		              AND KUD_REG_DATE BETWEEN TRUNC (SYSDATE, 'YEAR') AND TO_CHAR(sysdate, 'yyyy-mm-dd hh24:mi:ss')
 		    ) AS KUD_GB_CNT_3
 		    ,(CASE WHEN KM.KM_BB_USER_CNT IS NOT NULL THEN TO_CHAR(KM.KM_BB_USER_CNT) ELSE TO_CHAR(0) END) AS BB_CNT_3
 		    ,(
 		       SELECT   COUNT(*) 
 		       FROM     TB_KPI_USER_DETAIL KUD 
-		       WHERE    KUD.COM_DEPART_CODE = DM.DEPT_CODE AND KUD.KUD_YEAR = '2023' AND KUD.KUD_CERT_BELT = 'D001' AND KUD.KUD_IDX = '6SIG'
+		       WHERE    KUD.COM_DEPART_CODE = DM.DEPT_CODE AND KUD.KUD_YEAR = #{searchYear} AND KUD.KUD_CERT_BELT = 'D001' AND KUD.KUD_IDX = '6SIG'
 		                AND KUD_REG_DATE BETWEEN TRUNC (SYSDATE, 'YEAR') AND TO_CHAR(sysdate, 'yyyy-mm-dd hh24:mi:ss')
 		    ) AS KUD_BB_CNT_3
 		    ,(CASE  WHEN KM.KM_MBB_USER_CNT IS NOT NULL THEN TO_CHAR(KM.KM_MBB_USER_CNT) ELSE TO_CHAR(0) END) AS MBB_CNT_3
 		    ,(
 		       SELECT  COUNT(*) 
 		       FROM    TB_KPI_USER_DETAIL KUD 
-		       WHERE   KUD.COM_DEPART_CODE = DM.DEPT_CODE AND KUD.KUD_YEAR = '2023' AND KUD.KUD_CERT_BELT = 'D002' AND KUD.KUD_IDX = '6SIG'
+		       WHERE   KUD.COM_DEPART_CODE = DM.DEPT_CODE AND KUD.KUD_YEAR = #{searchYear} AND KUD.KUD_CERT_BELT = 'D002' AND KUD.KUD_IDX = '6SIG'
 		               AND KUD_REG_DATE BETWEEN TRUNC (SYSDATE, 'YEAR') AND TO_CHAR(sysdate, 'yyyy-mm-dd hh24:mi:ss')
 		       ) AS KUD_MBB_CNT_3          
 		    ,(CASE WHEN KM.KM_BBU_USER_CNT IS NOT NULL THEN TO_CHAR(KM.KM_BBU_USER_CNT) ELSE TO_CHAR(0) END) AS BBU_CNT_3
 		    ,(
 		       SELECT  COUNT(*) 
 		       FROM    TB_KPI_USER_DETAIL KUD 
-		       WHERE   KUD.COM_DEPART_CODE = DM.DEPT_CODE AND KUD.KUD_YEAR = '2023' AND KUD.KUD_CERT_BELT NOT IN ('D000','D001','D002') AND KUD.KUD_IDX = '6SIG'
+		       WHERE   KUD.COM_DEPART_CODE = DM.DEPT_CODE AND KUD.KUD_YEAR = #{searchYear} AND KUD.KUD_CERT_BELT NOT IN ('D000','D001','D002') AND KUD.KUD_IDX = '6SIG'
 		               AND KUD_REG_DATE BETWEEN TRUNC (SYSDATE, 'YEAR') AND TO_CHAR(sysdate, 'yyyy-mm-dd hh24:mi:ss')
 		    ) AS KUD_BBU_CNT_3
-		    
 		   FROM 
-		    V_DEPART_MST DM,
+		    V_DEPART_MST2 DM,
 		    TB_KPI_MASTER KM
 		   WHERE  
 		    DM.DEPT_CODE = KM.DEPT_CODE(+)
-		    
+
 		) 
 		
 	</select>
+	
+	<select id="selectMgrMBBPlan" resultType="egovMap">
+ 
+	  WITH V_DEPART_MST AS (
+        select 
+        		DEPT_CODE, DEPT_NAME, DEPT_UPER_CODE, DEPT_STATE_CODE
+         from 
+         		tb_depart_mst
+         where 
+			DEPT_STATE_CODE <![CDATA[<>]]> 'D'
+				<if test="searchDepart != null and searchDepart != ''">
+					AND INSTR(#{searchDepart}, DEPT_CODE) <![CDATA[>]]> 0
+				</if>
+    START WITH
+           	dept_code in (select com_depart_code from tb_kpi_user_detail 
+               	           where kud_idx=#{kudIdx}
+                   	       group by com_depart_code)
+	CONNECT BY PRIOR
+			dept_uper_code = dept_code
+	group by 
+			DEPT_CODE, DEPT_NAME, DEPT_UPER_CODE, DEPT_STATE_CODE
+	  )
+ 		,V_DEPART_MST2 as (
+        select level, a.*
+          from v_depart_mst a
+          start with dept_code='50000000'
+          connect by prior dept_code=dept_uper_code
+      )
+      SELECT 
+		   DEPT_CODE,DEPT_NAME,DEPT_UPER_CODE
+		   ,GB_CNT_1,KUD_GB_CNT_1,NVL(KUD_GB_CNT_1 / DECODE(GB_CNT_1,0,NULL,GB_CNT_1),0) * 100 AS GB_RAT_1
+		   ,BB_CNT_1,KUD_BB_CNT_1,NVL(KUD_BB_CNT_1 / DECODE(BB_CNT_1,0,NULL,BB_CNT_1),0) * 100 AS BB_RAT_1
+		   ,MBB_CNT_1,KUD_MBB_CNT_1,NVL(KUD_MBB_CNT_1 / DECODE(MBB_CNT_1,0,NULL,MBB_CNT_1),0) * 100  AS MBB_RAT_1
+		   ,BBU_CNT_1,KUD_BBU_CNT_1,NVL(KUD_BBU_CNT_1 / DECODE(BBU_CNT_1,0,NULL,BBU_CNT_1),0) * 100  AS BBU_RAT_1
+		   
+		   ,GB_CNT_2,KUD_GB_CNT_2,NVL(KUD_GB_CNT_2 / DECODE(GB_CNT_2,0,NULL,GB_CNT_2),0) * 100 AS GB_RAT_2
+		   ,BB_CNT_2,KUD_BB_CNT_2,NVL(KUD_BB_CNT_2 / DECODE(BB_CNT_2,0,NULL,BB_CNT_2),0) * 100 AS BB_RAT_2
+		   ,MBB_CNT_2,KUD_MBB_CNT_2,NVL(KUD_MBB_CNT_2 / DECODE(MBB_CNT_2,0,NULL,MBB_CNT_2),0) * 100  AS MBB_RAT_2
+		   ,BBU_CNT_2,KUD_BBU_CNT_2,NVL(KUD_BBU_CNT_2 / DECODE(BBU_CNT_2,0,NULL,BBU_CNT_2),0) * 100  AS BBU_RAT_2
+		   
+		   ,GB_CNT_3,KUD_GB_CNT_3,NVL(KUD_GB_CNT_3 / DECODE(GB_CNT_3,0,NULL,GB_CNT_3),0) * 100 AS GB_RAT_3
+		   ,BB_CNT_3,KUD_BB_CNT_3,NVL(KUD_BB_CNT_3 / DECODE(BB_CNT_3,0,NULL,BB_CNT_3),0) * 100 AS BB_RAT_3
+		   ,MBB_CNT_3,KUD_MBB_CNT_3,NVL(KUD_MBB_CNT_3 / DECODE(MBB_CNT_3,0,NULL,MBB_CNT_3),0) * 100  AS MBB_RAT_3
+		   ,BBU_CNT_3,KUD_BBU_CNT_3,NVL(KUD_BBU_CNT_3 / DECODE(BBU_CNT_3,0,NULL,BBU_CNT_3),0) * 100  AS BBU_RAT_3
+		FROM
+		   (
+		   SELECT 
+		    DM.DEPT_CODE  
+		    ,DM.DEPT_NAME
+		    ,DM.DEPT_UPER_CODE
+		    ,(CASE  WHEN KM.KM_GB_USER_CNT IS NOT NULL THEN TO_CHAR(KM.KM_GB_USER_CNT) ELSE TO_CHAR(0) END) AS GB_CNT_1
+		    ,(SELECT COUNT(*) FROM TB_KPI_USER_DETAIL KUD WHERE KUD.COM_DEPART_CODE = DM.DEPT_CODE AND KUD.KUD_YEAR = '2022' AND KUD.KUD_CERT_BELT = 'D000') AS KUD_GB_CNT_1
+		    ,(CASE  WHEN KM.KM_BB_USER_CNT IS NOT NULL THEN TO_CHAR(KM.KM_BB_USER_CNT) ELSE TO_CHAR(0) END) AS BB_CNT_1
+		    ,(SELECT COUNT(*) FROM TB_KPI_USER_DETAIL KUD WHERE KUD.COM_DEPART_CODE = DM.DEPT_CODE AND KUD.KUD_YEAR = '2022' AND KUD.KUD_CERT_BELT = 'D001') AS KUD_BB_CNT_1
+		    ,(CASE  WHEN KM.KM_MBB_USER_CNT IS NOT NULL THEN TO_CHAR(KM.KM_MBB_USER_CNT) ELSE TO_CHAR(0) END) AS MBB_CNT_1
+		    ,(SELECT COUNT(*) FROM TB_KPI_USER_DETAIL KUD WHERE KUD.COM_DEPART_CODE = DM.DEPT_CODE AND KUD.KUD_YEAR = '2022' AND KUD.KUD_CERT_BELT = 'D002') AS KUD_MBB_CNT_1
+		    ,(CASE  WHEN KM.KM_BBU_USER_CNT IS NOT NULL THEN TO_CHAR(KM.KM_BBU_USER_CNT) ELSE TO_CHAR(0) END) AS BBU_CNT_1
+		    ,(SELECT COUNT(*) FROM TB_KPI_USER_DETAIL KUD WHERE KUD.COM_DEPART_CODE = DM.DEPT_CODE AND KUD.KUD_YEAR = '2022' AND KUD.KUD_CERT_BELT NOT IN ('D000','D001','D002')) AS KUD_BBU_CNT_1
+		    
+		    ,(CASE  WHEN KM.KM_GB_USER_CNT IS NOT NULL THEN TO_CHAR(KM.KM_GB_USER_CNT) ELSE TO_CHAR(0) END) AS GB_CNT_2
+		    ,(SELECT COUNT(*) FROM TB_KPI_USER_DETAIL KUD WHERE KUD.COM_DEPART_CODE = DM.DEPT_CODE AND KUD.KUD_YEAR = '2023' AND KUD.KUD_CERT_BELT = 'D000') AS KUD_GB_CNT_2
+		    ,(CASE  WHEN KM.KM_BB_USER_CNT IS NOT NULL THEN TO_CHAR(KM.KM_BB_USER_CNT) ELSE TO_CHAR(0) END) AS BB_CNT_2
+		    ,(SELECT COUNT(*) FROM TB_KPI_USER_DETAIL KUD WHERE KUD.COM_DEPART_CODE = DM.DEPT_CODE AND KUD.KUD_YEAR = '2023' AND KUD.KUD_CERT_BELT = 'D001') AS KUD_BB_CNT_2
+		    ,(CASE  WHEN KM.KM_MBB_USER_CNT IS NOT NULL THEN TO_CHAR(KM.KM_MBB_USER_CNT) ELSE TO_CHAR(0) END) AS MBB_CNT_2
+		    ,(SELECT COUNT(*) FROM TB_KPI_USER_DETAIL KUD WHERE KUD.COM_DEPART_CODE = DM.DEPT_CODE AND KUD.KUD_YEAR = '2023' AND KUD.KUD_CERT_BELT = 'D002') AS KUD_MBB_CNT_2
+		    ,(CASE  WHEN KM.KM_BBU_USER_CNT IS NOT NULL THEN TO_CHAR(KM.KM_BBU_USER_CNT) ELSE TO_CHAR(0) END) AS BBU_CNT_2
+		    ,(SELECT COUNT(*) FROM TB_KPI_USER_DETAIL KUD WHERE KUD.COM_DEPART_CODE = DM.DEPT_CODE AND KUD.KUD_YEAR = '2023' AND KUD.KUD_CERT_BELT NOT IN ('D000','D001','D002')) AS KUD_BBU_CNT_2
+		    
+		    ,(CASE  WHEN KM.KM_GB_USER_CNT IS NOT NULL THEN TO_CHAR(KM.KM_GB_USER_CNT) ELSE TO_CHAR(0) END) AS GB_CNT_3
+		    ,(
+		       SELECT  COUNT(*) 
+		       FROM    TB_KPI_USER_DETAIL KUD 
+		       WHERE  KUD.COM_DEPART_CODE = DM.DEPT_CODE AND KUD.KUD_YEAR = #{searchYear} AND KUD.KUD_CERT_BELT = 'D000' AND KUD.KUD_IDX = '6SIG'
+		              AND KUD_REG_DATE BETWEEN TRUNC (SYSDATE, 'YEAR') AND TO_CHAR(sysdate, 'yyyy-mm-dd hh24:mi:ss')
+		    ) AS KUD_GB_CNT_3
+		    ,(CASE WHEN KM.KM_BB_USER_CNT IS NOT NULL THEN TO_CHAR(KM.KM_BB_USER_CNT) ELSE TO_CHAR(0) END) AS BB_CNT_3
+		    ,(
+		       SELECT   COUNT(*) 
+		       FROM     TB_KPI_USER_DETAIL KUD 
+		       WHERE    KUD.COM_DEPART_CODE = DM.DEPT_CODE AND KUD.KUD_YEAR = #{searchYear} AND KUD.KUD_CERT_BELT = 'D001' AND KUD.KUD_IDX = '6SIG'
+		                AND KUD_REG_DATE BETWEEN TRUNC (SYSDATE, 'YEAR') AND TO_CHAR(sysdate, 'yyyy-mm-dd hh24:mi:ss')
+		    ) AS KUD_BB_CNT_3
+		    ,(CASE  WHEN KM.KM_MBB_USER_CNT IS NOT NULL THEN TO_CHAR(KM.KM_MBB_USER_CNT) ELSE TO_CHAR(0) END) AS MBB_CNT_3
+		    ,(
+		       SELECT  COUNT(*) 
+		       FROM    TB_KPI_USER_DETAIL KUD 
+		       WHERE   KUD.COM_DEPART_CODE = DM.DEPT_CODE AND KUD.KUD_YEAR = #{searchYear} AND KUD.KUD_CERT_BELT = 'D002' AND KUD.KUD_IDX = '6SIG'
+		               AND KUD_REG_DATE BETWEEN TRUNC (SYSDATE, 'YEAR') AND TO_CHAR(sysdate, 'yyyy-mm-dd hh24:mi:ss')
+		       ) AS KUD_MBB_CNT_3          
+		    ,(CASE WHEN KM.KM_BBU_USER_CNT IS NOT NULL THEN TO_CHAR(KM.KM_BBU_USER_CNT) ELSE TO_CHAR(0) END) AS BBU_CNT_3
+		    ,(
+		       SELECT  COUNT(*) 
+		       FROM    TB_KPI_USER_DETAIL KUD 
+		       WHERE   KUD.COM_DEPART_CODE = DM.DEPT_CODE AND KUD.KUD_YEAR = #{searchYear} AND KUD.KUD_CERT_BELT NOT IN ('D000','D001','D002') AND KUD.KUD_IDX = '6SIG'
+		               AND KUD_REG_DATE BETWEEN TRUNC (SYSDATE, 'YEAR') AND TO_CHAR(sysdate, 'yyyy-mm-dd hh24:mi:ss')
+		    ) AS KUD_BBU_CNT_3
+		   FROM 
+		    V_DEPART_MST2 DM,
+		    TB_KPI_MASTER KM
+		   WHERE  
+		    DM.DEPT_CODE = KM.DEPT_CODE(+)
+
+		) 
+		
+	</select>
+	
+	<update id="updateKpiMaster">
+	UPDATE TB_KPI_MASTER SET
+	    	update_date=sysdate
+	    <if test="kmGbUserCnt != null and kmGbUserCnt != ''">,KM_GB_USER_CNT=#{kmGbUserCnt}</if>
+	    <if test="kmBbuUserCnt != null and kmBbuUserCnt != ''">,KM_BBU_USER_CNT=#{kmBbuUserCnt}</if>
+	    <if test="kmMbbManageCnt != null and kmMbbManageCnt != ''">,KM_BBU_USER_CNT=#{kmMbbManageCnt}</if>
+	    <if test="kmMbbUserCnt != null and kmMbbUserCnt != ''">,KM_MBB_USER_CNT=#{kmMbbUserCnt}</if>
+	    <if test="kmBbUserCnt != null and kmBbUserCnt != ''">,km_bb_user_cnt=#{kmBbUserCnt}</if>
+	    where dept_code=#{deptCode}
+	    and km_year=#{kmYear}
+	</update>
+	
+	<insert id="insertKpiMaster">
+		insert into TB_KPI_MASTER 
+		(dept_code, km_year, update_date
+		<if test="kmGbUserCnt != null and kmGbUserCnt != ''">,KM_GB_USER_CNT</if>
+	    <if test="kmBbuUserCnt != null and kmBbuUserCnt != ''">,KM_BBU_USER_CNT</if>
+	    <if test="kmMbbManageCnt != null and kmMbbManageCnt != ''">,KM_BBU_USER_CNT</if>
+	    <if test="kmMbbUserCnt != null and kmMbbUserCnt != ''">,KM_MBB_USER_CNT</if>
+	    <if test="kmBbUserCnt != null and kmBbUserCnt != ''">,km_BB_user_cnt</if>
+		)
+		values
+		(#{deptCode}, #{kmYear}, sysdate
+		<if test="kmGbUserCnt != null and kmGbUserCnt != ''">,#{kmGbUserCnt}</if>
+	    <if test="kmBbuUserCnt != null and kmBbuUserCnt != ''">,#{kmBbuUserCnt}</if>
+	    <if test="kmMbbManageCnt != null and kmMbbManageCnt != ''">,#{kmMbbManageCnt}</if>
+	    <if test="kmMbbUserCnt != null and kmMbbUserCnt != ''">,#{mMbbUserCnt}</if>
+	    <if test="kmBbUserCnt != null and kmBbUserCnt != ''">,#{kmBbUserCnt}</if>
+		)
+	</insert>
+		
 	
 	
 </mapper>

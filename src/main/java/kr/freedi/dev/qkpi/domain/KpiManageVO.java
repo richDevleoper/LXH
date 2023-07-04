@@ -227,14 +227,42 @@ public class KpiManageVO {
 
 	@Override
 	public String toString() {
-		return "KpiManageVO [idx=" + idx + ", stdSeq=" + stdSeq + ", comNo=" + comNo + ", kudYear=" + kudYear
+
+		JsonObject tmpObj = new JsonObject();
+		tmpObj.addProperty("idx", idx);
+		tmpObj.addProperty("stdSeq", stdSeq);
+		tmpObj.addProperty("comNo", comNo);
+		tmpObj.addProperty("kudYear", kudYear);
+		tmpObj.addProperty("kudChkTypeCode", kudChkTypeCode);
+		tmpObj.addProperty("kudDepart", kudDepart);
+		tmpObj.addProperty("kudJobx", kudJobx);
+		tmpObj.addProperty("kudPosition", kudPosition);
+		tmpObj.addProperty("kudTeamName", kudTeamName);
+		tmpObj.addProperty("kudUserName", kudUserName);
+		tmpObj.addProperty("kudBelongName", kudBelongName);
+		tmpObj.addProperty("kudPart", kudPart);
+		tmpObj.addProperty("kudPlace", kudPlace);
+		tmpObj.addProperty("kudUserIdentity", kudUserIdentity);
+		tmpObj.addProperty("kudJoinDate", kudJoinDate==null ? null : kudJoinDate.toString());
+		tmpObj.addProperty("kudLastDegree", kudLastDegree);
+		tmpObj.addProperty("kudRegUser", kudRegUser);
+		tmpObj.addProperty("kudRegDate", kudRegDate==null? null: kudRegDate.toString());
+		tmpObj.addProperty("kudUpdateUser", kudUpdateUser);
+		tmpObj.addProperty("kudUpdateDate", kudUpdateDate==null? null: kudUpdateDate.toString());
+		tmpObj.addProperty("kudIdx", kudIdx);
+		tmpObj.addProperty("kudCertBelt", kudCertBelt);
+		tmpObj.addProperty("comDepartCode", comDepartCode);
+		tmpObj.addProperty("kudJimu", kudJimu);
+		
+		return tmpObj.toString();
+		/*return "KpiManageVO [idx=" + idx + ", stdSeq=" + stdSeq + ", comNo=" + comNo + ", kudYear=" + kudYear
 				+ ", kudChkTypeCode=" + kudChkTypeCode + ", kudDepart=" + kudDepart + ", kudJobx=" + kudJobx
 				+ ", kudPosition=" + kudPosition + ", kudTeamName=" + kudTeamName + ", kudUserName=" + kudUserName
 				+ ", kudBelongName=" + kudBelongName + ", kudPart=" + kudPart + ", kudPlace=" + kudPlace
 				+ ", kudUserIdentity=" + kudUserIdentity + ", kudJoinDate=" + kudJoinDate + ", kudLastDegree="
-				+ kudLastDegree + ", kudRegUser=" + kudRegUser + ", kudRegDate=" + kudRegDate + ", kudUpdateUser="
+				+ kudLastDegree + ", kudReUser=" + kudRegUser + ", kudRegDate=" + kudRegDate + ", kudUpdateUser="
 				+ kudUpdateUser + ", kudUpdateDate=" + kudUpdateDate + ", kudIdx=" + kudIdx + ", kudCertBelt="
-				+ kudCertBelt + "]";
+				+ kudCertBelt + "]";*/
 	}
 
 }

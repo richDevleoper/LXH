@@ -98,27 +98,37 @@
 		<include refid="sqlSelectTreeList"></include>
 	</select>
 
-	<select id="selectList" resultType="egovMap">
+
+	<sql id="sqlselectList">
 		SELECT
-		DEPT_CODE
-		, DEPT_NAME
-		, DEPT_UPER_CODE
-		, DEPT_SORT_ORDER
-		, DEPT_LEVEL
-		, DEPT_STATE_CODE
-		, COM_CODE
-		, DEPT_LV1_CODE
-		, DEPT_LV2_CODE
-		, DEPT_LV3_CODE
-		, DEPT_LV4_CODE
-		, DEPT_LV1_NAME
-		, DEPT_LV2_NAME
-		, DEPT_LV3_NAME
-		, DEPT_LV4_NAME
+			DEPT_CODE
+			, DEPT_NAME
+			, DEPT_UPER_CODE
+			, DEPT_SORT_ORDER
+			, DEPT_LEVEL
+			, DEPT_STATE_CODE
+			, COM_CODE
+			, DEPT_LV1_CODE
+			, DEPT_LV2_CODE
+			, DEPT_LV3_CODE
+			, DEPT_LV4_CODE
+			, DEPT_LV1_NAME
+			, DEPT_LV2_NAME
+			, DEPT_LV3_NAME
+			, DEPT_LV4_NAME
 
 		FROM
 		tb_depart_mst T
-		<include refid="defCond"></include>
+		<include refid="defCond"></include>	
+		order by dept_sort_order
+	</sql>
+
+	<select id="selectList" resultType="egovMap">
+		<include refid="sqlselectList"></include>
+	</select>
+	
+	<select id="selectListMap" resultMap="deptMap">
+		<include refid="sqlselectList"></include>
 	</select>
 
 

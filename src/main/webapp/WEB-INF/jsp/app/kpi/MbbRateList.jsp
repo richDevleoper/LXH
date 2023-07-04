@@ -17,37 +17,49 @@
 </head>
 <body>
 
-                        <div class="list-wrap">
-                            <div class="list-search">
-                                <form>
-                                    <div class="search-form">
-                                        <div class="form-inline form-input">
-                                            <label>조회연도</label>
-                                            <select name="">
-                                                <option value="">2023년</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-inline form-input">
-                                            <label>조회월</label>
-                                            <select name="">
-                                                <option value="">2023년</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-inline form-input">
-                                            <label>조직</label>
-                                            <input type="text" name="">
-                                            <button type="button" class="btn-org">검색</button>
-                                        </div>
-                                        <div class="form-inline form-input">
-                                            <label>사업장</label>
-                                            <select name="" style="width:120px">
-                                                <option value="">전체</option>
-                                            </select>
-                                        </div>
-                                        <button type="button" class="btn-submit">조회</button>
-                                    </div>
-                                </form>
-                            </div>
+    <div class="list-wrap">
+        <div class="list-search">
+			<form:form commandName="searchVO" id="defaultForm" name="defaultForm"  action="${action}" method="get" modelAttribute="searchVO">
+				${searchVO.superHiddenTag}
+				<div class="search-form">
+					<div class="form-inline form-input">
+						<label>조회연도</label> 
+						<jsp:useBean id="now" class="java.util.Date" />
+						<c:set var="yearStart" value="2023"/>
+			            <fmt:formatDate value="${now}" pattern="yyyy" var="yearNow"/>
+			            <form:select path="searchYear" class="limit">
+						<c:forEach begin="${yearStart}" end="${yearNow}" var="result" step="1">
+							<option value="<c:out value="${result}" />" <c:if test="${(result) == searchVO.searchYear}"> selected="selected"</c:if>><c:out value="${result}" /></option>
+						</c:forEach>
+						</form:select>
+					</div>
+					<div class="form-inline form-input">
+						<label>조회월 </label>
+						<form:select path="searchMonth" class="limit">
+						<c:forEach begin="1" end="12" var="result" step="1">
+							<form:option value="${result}">${result}월</form:option>
+						</c:forEach>
+						</form:select>
+					</div>
+					<div class="form-inline form-input">
+						<label>조직</label>
+						<form:input type="hidden" path="searchDepart"/>
+                        <form:input type="text" path="searchDepartName" readonly="true" />
+                        <button type="button" class="btn-org btn-search-dept">검색</button>
+					</div>
+					<div class="form-inline form-input">
+						<label>사업장</label>
+						<form:select path="searchWorkPlace" style="width: 120px">
+							<form:option value="">전체</form:option>
+						<c:forEach var="item" items="${code_wplace}" varStatus="status">
+			                 <form:option value="${item.codeId}">${item.codeNm}</form:option>
+                        </c:forEach>  
+						</form:select>
+					</div>
+					<button type="button" class="btn-submit" onclick="onclick_search()">조회</button>
+				</div>
+			</form:form>
+         </div>
                             <!-- tabulator-->
                             <div class="list-wrap">
                                 <div class="list-content">
@@ -65,63 +77,7 @@
                             </div>
                         </div>
                     
-        <!-- 조직도 -->
-        <div class="modal-dimmed"></div>
-        <div class="org-modal">
-            <div class="modal-header">
-                <h4>직책조회</h4>
-                <button type="button" class="btn-close">닫기</button>
-            </div>
-            <div class="modal-content">
-                <div class="list-wrap">
-                    <div class="list-search">
-                        <form id="org-form" onsubmit="org_search();return false;">
-                            <div class="search-form">
-                                <div class="form-inline form-input">
-                                    <label>직책명</label>
-                                    <input type="text" name="">
-                                </div>
-                                <button type="submit" class="btn-submit">조회</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-                <div class="tree-header">
-                    <div>
-                        <input type="checkbox" id="orgSelAll">
-                        <label for="orgSelAll"></label>
-                    </div>
-                    <div>
-                        직책선택
-                    </div>
-                </div>
-                <div id="org-tree">
-                    <ul>
-                        <li>사업부장</li>
-                        <li>담당</li>
-                        <li>팀장</li>
-                        <li>책임</li>
-                        <li>선임</li>
-                        <li>사원1</li>
-                        <li>사원2</li>
-                        <li>사원3</li>
-                        <li>사원4</li>
-                        <li>사원5</li>
-                        <li>사원6</li>
-                        <li>사원7</li>
-                        <li>사원8</li>
-                        <li>사원9</li>
-                        <li>사원10</li>
-                        <li>사원11</li>
-                    </ul>
-                </div>
-                <div class="btns">
-                    <button type="button" class="btn-submit">확인</button>
-                    <button type="button" class="btn-cancel">취소</button>
-                </div>
-            </div>
-        </div>
-    </div>
+      
     <script>
 		var tableDataNested = [
             {id: 101, name:"생산/기술/R&D/품질",name2:"47",data3_1:"26",data3_2:"15",data4_1:"11",data4_2:"-",data4_3:"26",data4_4:"-",data4_5:"26",data4_6:"-",data5_1:"26",data5_2:"55",data6_1:"26",data6_2:"+55"},
@@ -152,53 +108,111 @@
             {id: 110, name:"생산/기술/R&D/품질 外",name2:"47",data3_1:"26",data3_2:"15",data4_1:"11",data4_2:"-",data4_3:"26",data4_4:"-",data4_5:"26",data4_6:"-",data5_1:"26",data5_2:"55",data6_1:"26",data6_2:"+55"},
 		];
 
-		var table = new Tabulator("#example-table", {
-			data:tableDataNested,
-			dataTree:true,
-			dataTreeStartExpanded:true,
-            columnHeaderVertAlign:"middle", //align header contents to bottom of cell
-			columns:[
-                {title:"대상구분", field:"name",headerSort:false, width:160, cssClass: "link-cell", cellClick:onclickCell},
-                {title:"‘23MBB 인원", field:"name2",headerSort:false},
-                {//create column group
-                    title:"‘23년 육성",field:"name3",
-                    columns:[
-                        {title:"인원", field:"data3_1",headerSort:false, width:40},
-                        {title:"율(%)", field:"data3_2",headerSort:false, width:40},
-                    ],
-                },
-                {//create column group
-                    title:"활동 현황",field:"name4",
-                    columns:[
-                        {title:"직접 수행",field:"data4_1",headerSort:false, width:80},
-                        {title:"비고(직접수행)",field:"data4_2",headerSort:false, width:100},
-                        {title:"지원MBB",field:"data4_3",headerSort:false, width:80},
-                        {title:"비고(지원MBB활동)",field:"data4_4",headerSort:false, width:130},
-                        {title:"팀장MBB",field:"data4_5",headerSort:false, width:80},
-                        {title:"비고(팀장MBB활동)",field:"data4_6",headerSort:false, width:130}
-                    ],
-                },
-                {//create column group
-                    title:"활동인원(계)",field:"name5",
-                    columns:[
-                    {title:"인원(명)", field:"data5_1",headerSort:false, width:60},
-                        {title:"활용율(%)", field:"data5_2",headerSort:false, width:80},
-                    ],
-                },
-                {//create column group
-                    title:"계획대비(연간)",field:"name6",
-                    columns:[
-                    {title:"인원(명)", field:"data6_1",headerSort:false, width:60},
-                        {title:"활용율(%)", field:"data6_2",headerSort:false, width:80},
-                    ],
-                }
-            ],
-		});
+		$(document).ready(init);
+		function init(){
+			
+			var table = new Tabulator("#example-table", {
+				data:tableDataNested,
+				dataTree:true,
+				dataTreeStartExpanded:true,
+	            columnHeaderVertAlign:"middle", //align header contents to bottom of cell
+				columns:[
+	                {title:"대상구분", field:"name",headerSort:false, width:160, cssClass: "link-cell", cellClick:onclickCell},
+	                {title:"‘${fn:substring(searchVO.searchYear,2,4)}MBB 인원", field:"name2",headerSort:false},
+	                {//create column group
+	                    title:"‘${fn:substring(searchVO.searchYear,2,4)}년 계획",field:"name3",
+	                    columns:[
+	                        {title:"인원", field:"data3_1",headerSort:false, width:40},
+	                        {title:"율(%)", field:"data3_2",headerSort:false, width:40},
+	                    ],
+	                },
+	                {//create column group
+	                    title:"활동 현황",field:"name4",
+	                    columns:[
+	                        {title:"직접 수행",field:"data4_1",headerSort:false, width:80},
+	                        {title:"비고(직접수행)",field:"data4_2",headerSort:false, width:100},
+	                        {title:"지원MBB",field:"data4_3",headerSort:false, width:80},
+	                        {title:"비고(지원MBB활동)",field:"data4_4",headerSort:false, width:130},
+	                        {title:"팀장MBB",field:"data4_5",headerSort:false, width:80},
+	                        {title:"비고(팀장MBB활동)",field:"data4_6",headerSort:false, width:130}
+	                    ],
+	                },
+	                {//create column group
+	                    title:"활동인원(계)",field:"name5",
+	                    columns:[
+	                    {title:"인원(명)", field:"data5_1",headerSort:false, width:60},
+	                        {title:"활용율(%)", field:"data5_2",headerSort:false, width:80},
+	                    ],
+	                },
+	                {//create column group
+	                    title:"계획대비(연간)",field:"name6",
+	                    columns:[
+	                    {title:"인원(명)", field:"data6_1",headerSort:false, width:60},
+	                        {title:"활용율(%)", field:"data6_2",headerSort:false, width:80},
+	                    ],
+	                }
+	            ],
+			});
+			
+			// 부서검색
+			$(".btn-search-dept").off("click").on("click", function(){
+				callPopup_searchDepartment(this);
+			});
+			
+			//부서검색 팝업 트리 초기화
+			initFooterDeptPopup();
+		}
 		
 		function onclickCell(e, cell){
 			location.href="MbbRateView.do?idx="+cell.getColumn().getDefinition().field+"&seq="+cell.getRow().getData().id+"&menuKey=${menuKey}";
 			//alert( cell.getRow().getData().id);
 			console.log(cell.getColumn().getDefinition().field, cell.getRow().getData().id);
+		}
+		
+		// 조직 조회 호출부
+		function callPopup_searchDepartment(obj){
+
+			popMDept.init();
+			// footer.jsp 내 영역 호출
+			popMDept.returnObjId = "searchDepart";
+			popMDept.returnFunc = callback_popDept;
+			popMDept.open();
+		}
+		
+		// 조직 조회 콜백부
+		function callback_popDept(objId, data){
+			$("#"+objId).val(data.deptCodes);
+			$("#searchDepartName").val(data.deptNames);
+		}
+		
+		
+		// 부서검색 팝업 트리 데이터
+		let objDeptTreeData = ${deptFullList};
+		
+		//부서검색 팝업 트리 초기화
+		function initFooterDeptPopup(){
+			$('#objDeptTree').jstree({
+		    	"core": {
+		    	      "data": objDeptTreeData	// controller에서 데이터 바인딩.
+		    	    },
+		        "plugins" : ['checkbox','search'],
+		        "search" : {
+		            "show_only_matches" : true,
+	            	"show_only_matches_children" : true,
+	    		},
+		    })
+		    .on("check_node.jstree uncheck_node.jstree", function (e, data) {
+
+		        if (e.type == "uncheck_node") {
+		        	debugger;
+		            $("#orgSelAllDept").prop( "checked", false );                
+		        }
+			    else if (e.type == "check_node") {
+			    	debugger;
+		            if ($(this).jstree().get_json('#', {flat:true}).length === $(this).jstree().get_checked(true).length)
+		                $("#orgSelAllDept").prop( "checked", true ); 					
+		        }
+		    });
 		}
 	</script>
 	<style>
