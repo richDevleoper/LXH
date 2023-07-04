@@ -323,20 +323,20 @@ public class ApproveController {
 								//70점 이상으로 2차 평가 진행
 								proposalVO.setPropEvalLvCode("C");
 								proposalVO.setPropEvalScore(detailItem.getScoreTotal());
-								proposalVO.setPropPropStatCode("PRG_4");
+								proposalVO.setPropPropStatCode("PRG_5");
 							}else if(Integer.parseInt(detailItem.getScoreTotal()) >= 80 && Integer.parseInt(detailItem.getScoreTotal()) < 90) {
 								//70점 이상으로 2차 평가 진행
 								proposalVO.setPropEvalLvCode("B");
 								proposalVO.setPropEvalScore(detailItem.getScoreTotal());
-								proposalVO.setPropPropStatCode("PRG_4");							
+								proposalVO.setPropPropStatCode("PRG_5");							
 							}else if(Integer.parseInt(detailItem.getScoreTotal()) >= 90 && Integer.parseInt(detailItem.getScoreTotal()) < 95) {
 								proposalVO.setPropEvalLvCode("A");
 								proposalVO.setPropEvalScore(detailItem.getScoreTotal());
-								proposalVO.setPropPropStatCode("PRG_4");							
+								proposalVO.setPropPropStatCode("PRG_5");							
 							}else if(Integer.parseInt(detailItem.getScoreTotal()) >= 95) {
 								proposalVO.setPropEvalLvCode("S");
 								proposalVO.setPropEvalScore(detailItem.getScoreTotal());
-								proposalVO.setPropPropStatCode("PRG_4");								
+								proposalVO.setPropPropStatCode("PRG_5");								
 							}
 						}				
 					}			
