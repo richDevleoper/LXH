@@ -798,6 +798,37 @@
 			}else{
 				$('#propRelMemoYn').val('Y');
 			}
+			
+			if($('#beforeFileUploadWrap').find('input[type=file]').length > 0){
+				for(var index = 0; index < $('#beforeFileUploadWrap').find('input[type=file]').length; index++){
+					var input = $($('#beforeFileUploadWrap').find('input[type=file]')[index]);
+					if(input.val() == ''){
+						alert('최소 하나이상의 개선전 이미지를 등록해야 합니다');
+						return false;
+					}
+				}
+			}else{
+				if($('#beforeFileUploadWrap').find('img').length == 0){
+					alert('최소 하나이상의 개선전 이미지를 등록해야 합니다');
+					return false;
+				}
+			}
+			
+			if($('#afterFileUploadWrap').find('input[type=file]').length > 0){
+				for(var index = 0; index < $('#afterFileUploadWrap').find('input[type=file]').length; index++){
+					var input = $($('#afterFileUploadWrap').find('input[type=file]')[index]);
+					if(input.val() == ''){
+						alert('최소 하나이상의 개선후 이미지를 등록해야 합니다');
+						return false;
+					}
+				}				
+			}else{
+				if($('#afterFileUploadWrap').find('img').length == 0){
+					alert('최소 하나이상의 개선후이미지를 등록해야 합니다');
+					return false;
+				}
+			}
+			
 			$('#propTypeCode').val('PPS_TYP_1'); // 구분코드
 			$('#propPropStatCode').val('PRG_2'); // 결재의뢰		
 			

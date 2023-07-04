@@ -295,9 +295,12 @@ public class ProposalController {
 			approveList.add(approveDetailVO);
 			approveVO.setDetailList(approveList);
 			
-			approveService.insert(approveVO); // 결재선 등록			
+			approveVO = approveService.insertSelectApprovalInfo(approveVO); // 결재선 등록			
 			proposalVO.setPropApproverCode(proposalVO.getPropApprovalUser()); // 결재자 사번으로 저장 - 의뢰시
 			
+			String actAprovalNo = approveService.selectApprovalActNo(approveVO);
+			approveVO.setActAprovalNo(actAprovalNo);
+			approveService.updateApprovalActNo(approveVO);
 			// 제안심사에서 결재처리 프로세스 보완 필요
 			// 1.상신자가 제안 의뢰
 			// 2.결재자가 확인 후 결재 또는 반려 - 결재 및 반려 처리시 TB_PROPOSAL_DETAIL에 어떻게 어떤 상태를 변경해줄것인지
@@ -380,8 +383,12 @@ public class ProposalController {
 			approveList.add(approveDetailVO);
 			approveVO.setDetailList(approveList);
 			
-			approveService.insert(approveVO); // 결재선 등록			
+			approveVO = approveService.insertSelectApprovalInfo(approveVO); // 결재선 등록			
 			proposalVO.setPropApproverCode(proposalVO.getPropApprovalUser()); // 결재자 사번으로 저장 - 의뢰시
+			
+			String actAprovalNo = approveService.selectApprovalActNo(approveVO);
+			approveVO.setActAprovalNo(actAprovalNo);
+			approveService.updateApprovalActNo(approveVO);
 			
 			// 제안심사에서 결재처리 프로세스 보완 필요
 			// 1.상신자가 제안 의뢰

@@ -351,5 +351,9 @@
 	        APROVAL_CODE = #{aprovalCode}
 	</update>	
 	
+	<update id="updateActNo">
+		UPDATE TB_APPROVAL_MST SET ACT_APROVAL_NO = #{actAprovalNo} WHERE APROVAL_CODE = #{aprovalCode}
+	</update>
+	
 </mapper>
 

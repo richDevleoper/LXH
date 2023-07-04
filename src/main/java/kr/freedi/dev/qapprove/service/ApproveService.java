@@ -164,4 +164,27 @@ public class ApproveService {
 	public void updateApprovalState(ApproveVO approveVO) throws Exception {
 		dao.insert("Approval.updateStatus", approveVO);
 	}
+	
+	public String selectApprovalActNo(ApproveVO approveVO) throws Exception{
+		return dao.selectOne("ApprovalDetail.selectApprovalActNo", approveVO);
+	}
+	
+	public void updateApprovalActNo(ApproveVO approveVO) throws Exception{
+		dao.update("Approval.updateActNo", approveVO);
+	}
+	
+	public ApproveVO insertSelectApprovalInfo(ApproveVO masterVO) throws Exception {
+
+		String aprovalCode = dao.selectOne("Approval.selectNextFkey");
+		masterVO.setAprovalCode(aprovalCode);	
+		masterVO.setAprovalState("2");
+		dao.insert("Approval.insert", masterVO);
+		
+		for (ApproveDetailVO vo : masterVO.getDetailList()) {
+			vo.setAprovalCode(aprovalCode);	//결재코드
+			dao.insert("ApprovalDetail.insert", vo);
+		}
+		
+		return masterVO;
+	}
 }

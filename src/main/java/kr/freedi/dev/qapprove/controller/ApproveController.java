@@ -207,10 +207,10 @@ public class ApproveController {
 					EgovMap item = userInfo.get(index);
 					proposalVO.setPropApprovalUser(String.valueOf(item.get("comNo")));
 					proposalVO.setPropApprovalName(String.valueOf(item.get("userName")));
-					proposalVO.setPropApprovalLevelCode(String.valueOf(item.get("comPosition")));
-					proposalVO.setPropApprovalLevel(String.valueOf(item.get("comPositionNm")));
-					proposalVO.setPropApprovalDutyCode(String.valueOf(item.get("comJobx")));
-					proposalVO.setPropApprovalDuty(String.valueOf(item.get("comJobxNm")));
+					proposalVO.setPropApprovalLevelCode(String.valueOf(item.get("comJobx")));
+					proposalVO.setPropApprovalLevel(String.valueOf(item.get("comJobxNm")));
+					proposalVO.setPropApprovalDutyCode(String.valueOf(item.get("comPosition")));
+					proposalVO.setPropApprovalDuty(String.valueOf(item.get("comPositionNm")));
 					proposalVO.setPropApprovalBeltCode(String.valueOf(item.get("comCertBelt")));
 					proposalVO.setPropApprovalBelt(String.valueOf(item.get("comCertBeltNm")));
 					proposalVO.setPropApprovalGroup(String.valueOf(item.get("deptFullName")));
@@ -222,7 +222,7 @@ public class ApproveController {
 			
 			model.addAttribute("proposalVO", proposalVO);
 			model.addAttribute("approveVO", savedVO);
-			
+			model.addAttribute("sessionCompNo", userSession.getIntfUserVO().getComNo());
 			return "app/approve/ApprFormPropose"; // 과제 페이지
 			//return "redirect:apprv/list.do?menuKey=73"; // 과제 페이지
 		} else {
@@ -311,8 +311,9 @@ public class ApproveController {
 						proposalVO.setPropPropStatCode("PRG_6");
 						proposalVO.setPropEvalLvCode("NA");
 					}else {
-						if(approveVO.getDetailList().size() > 0 && approveVO.getDetailList().get(0) != null) {
-							ApproveDetailVO detailItem = approveVO.getDetailList().get(0);
+						int size = approveVO.getDetailList().size();
+						if(size > 0 && approveVO.getDetailList().get(size-1) != null) {
+							ApproveDetailVO detailItem = approveVO.getDetailList().get(size-1);
 							//1차 평가 후 70점 이상인경우 2차 평가 결재 승인으로 넘어감 (제안 진행 단계 변하지 않음)
 							if(Integer.parseInt(detailItem.getScoreTotal()) < 70 ) {
 								proposalVO.setPropEvalLvCode("D");
@@ -515,16 +516,23 @@ public class ApproveController {
 		ApproveDetailVO approveDetailVo = new ApproveDetailVO();
 		approveDetailVo.setComNo(String.valueOf(reqMap.get("propApprovalUser")));
 		approveDetailVo.setComDepartCode(String.valueOf(reqMap.get("propApprovalGroupCode")));
-		approveDetailVo.setComJobx(String.valueOf(reqMap.get("propApprovalDutyCode")));
-		approveDetailVo.setComPosition(String.valueOf(reqMap.get("propApprovalLevelCode")));
+		approveDetailVo.setComJobx(String.valueOf(reqMap.get("propApprovalLevelCode")));
+		approveDetailVo.setComPosition(String.valueOf(reqMap.get("propApprovalDutyCode")));
 		approveDetailVo.setAprovalReqComNo(String.valueOf(reqMap.get("propUser")));
 		approveDetailVo.setAprovalCode(String.valueOf(reqMap.get("aprovalCode")));
 		
 		service.insertDetailItem(approveDetailVo);
 		
+		/////////////////////////////////////////////////////////////////////////////////////
+		//
+		/////////////////////////////////////////////////////////////////////////////////////
 		ApproveVO approveVo = new ApproveVO();
 		approveVo.setAprovalCode(String.valueOf(reqMap.get("aprovalCode")));
+		approveVo.setAprovalState("2"); // 현재로선 2차승인, 3차승인을 위해 원위치로 돌릴수 밖에 없음
+		String actAprovalNo = service.selectApprovalActNo(approveVo);
+		approveVo.setActAprovalNo(actAprovalNo);
 		service.updateApprovalState(approveVo);
+		service.updateApprovalActNo(approveVo);
 		
 		ObjectMapper mapper = new ObjectMapper();
 		EgovMap resultItem = new EgovMap();

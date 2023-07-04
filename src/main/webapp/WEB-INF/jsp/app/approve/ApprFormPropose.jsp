@@ -25,17 +25,19 @@
 					<form:input type="hidden" path="aprovalState"/>
 					<form:input type="hidden" path="refBusType"/>
 					<form:input type="hidden" path="refBusCode"/>
-					<form:input type="hidden" path="detailList[0].aprovalCode"/>
-					<form:input type="hidden" path="detailList[0].aprovalSeq"/>
-					<form:input type="hidden" path="detailList[0].comNo"/>
-					<form:input type="hidden" path="detailList[0].aprovalStatCode" cssClass="aproval-state-code"/>
-					<form:input type="hidden" path="detailList[0].aprovalComment" cssClass="detail-comment"/>
-					<form:input type="hidden" path="detailList[0].score1" cssClass="detail-score1"/>
-					<form:input type="hidden" path="detailList[0].score4" cssClass="detail-score4"/>
-					<form:input type="hidden" path="detailList[0].score5" cssClass="detail-score5"/>
-					<form:input type="hidden" path="detailList[0].score6" cssClass="detail-score6"/>
-					<form:input type="hidden" path="detailList[0].score7" cssClass="detail-score7"/>
-					<form:input type="hidden" path="detailList[0].scoreTotal" cssClass="detail-total"/>
+					<fmt:parseNumber var="i" type="number" value="${approveVO.actAprovalNo}" />
+					<form:input type="hidden" path="detailList[${i-1 }].aprovalCode"/>
+					<form:input type="hidden" path="detailList[${i-1 }].aprovalSeq"/>
+					<form:input type="hidden" path="detailList[${i-1 }].comNo" id="actApproveComNo"/>
+					<form:input type="hidden" path="detailList[${i-1 }].aprovalStatCode" cssClass="aproval-state-code"/>
+					<form:input type="hidden" path="detailList[${i-1 }].aprovalComment" cssClass="detail-comment"/>
+					<form:input type="hidden" path="detailList[${i-1 }].score1" cssClass="detail-score1"/>
+					<form:input type="hidden" path="detailList[${i-1 }].score4" cssClass="detail-score4"/>
+					<form:input type="hidden" path="detailList[${i-1 }].score5" cssClass="detail-score5"/>
+					<form:input type="hidden" path="detailList[${i-1 }].score6" cssClass="detail-score6"/>
+					<form:input type="hidden" path="detailList[${i-1 }].score7" cssClass="detail-score7"/>
+					<form:input type="hidden" path="detailList[${i-1 }].scoreTotal" cssClass="detail-total"/>
+					<form:input type="hidden" path="detailList[${i-1 }].comPosition" cssClass="detail-com-position"/>
 										
                     <section id="page-content">
 
@@ -45,15 +47,19 @@
                                 <li>실시 제안정보</li>
                             </ul>
 							<div class="header-btns">
-                            <c:choose>
-                            	<c:when test="${approveVO.aprovalState ne '3' && approveVO.aprovalState ne '4'}">
-									<button type="button" class="btn bg-gray" onclick="onclick_procApprove('4');">승인</button>
-	                                <button type="button" class="btn bg-gray" onclick="onclick_procApprove('3');">반려</button>                            	
-                            	</c:when>
-                            	<c:when test="${approveVO.aprovalState eq '4' }">
-                            		<button type="button" class="btn bg-gray" onclick="onclick_procApprove('4');">재등록</button>
-                            	</c:when>
-                            </c:choose>        
+							<c:choose>
+								<c:when test="${sessionCompNo eq approveVO.detailList[i-1].comNo}">
+		                            <c:choose>
+		                            	<c:when test="${approveVO.aprovalState ne '3' && approveVO.aprovalState ne '4'}">
+											<button type="button" class="btn bg-gray" onclick="onclick_procApprove('4');">승인</button>
+			                                <button type="button" class="btn bg-gray" onclick="onclick_procApprove('3');">반려</button>                            	
+		                            	</c:when>
+		                            	<c:when test="${approveVO.aprovalState eq '4' }">
+		                            		<button type="button" class="btn bg-gray" onclick="onclick_procApprove('4');">재등록</button>
+		                            	</c:when>
+		                            </c:choose>								
+								</c:when>
+							</c:choose>        
                                 <a href="/sub.do?menuKey=${menuKey}" class="btn">목록</a>
 							</div>
                         </div>
@@ -282,15 +288,19 @@
 						</div>						
                         <div class="list-footer">
                             <div class="list-btns">
-                            <c:choose>
-                            	<c:when test="${approveVO.aprovalState ne '3' && approveVO.aprovalState ne '4'}">
-									<button type="button" class="btn bg-gray" onclick="onclick_procApprove('4');">승인</button>
-	                                <button type="button" class="btn bg-gray" onclick="onclick_procApprove('3');">반려</button>                            	
-                            	</c:when>
-                            	<c:when test="${approveVO.aprovalState eq '4' }">
-                            		<button type="button" class="btn bg-gray" onclick="onclick_procApprove('4');">재등록</button>
-                            	</c:when>
-                            </c:choose>
+							<c:choose>
+								<c:when test="${sessionCompNo eq approveVO.detailList[i-1].comNo}">
+		                            <c:choose>
+		                            	<c:when test="${approveVO.aprovalState ne '3' && approveVO.aprovalState ne '4'}">
+											<button type="button" class="btn bg-gray" onclick="onclick_procApprove('4');">승인</button>
+			                                <button type="button" class="btn bg-gray" onclick="onclick_procApprove('3');">반려</button>                            	
+		                            	</c:when>
+		                            	<c:when test="${approveVO.aprovalState eq '4' }">
+		                            		<button type="button" class="btn bg-gray" onclick="onclick_procApprove('4');">재등록</button>
+		                            	</c:when>
+		                            </c:choose>								
+								</c:when>
+							</c:choose>
                                 <a href="/sub.do?menuKey=${menuKey}" class="btn">목록</a>
                             </div>
                         </div>
@@ -325,11 +335,12 @@
 										</thead>
 										<tbody>
 										<c:forEach var="item" items="${approveVO.detailList}" varStatus="status">
+											<fmt:parseNumber var="scoreTotal" type="number" value="${item.scoreTotal}" />
 											<c:if test="${item.aprovalStatCode != null && item.aprovalStatCode ne ''.toString()}">
 												<tr>
 													<td>${item.aprovalStat}(2023.06.30)</td>
 													<td>${item.userName}</td>
-													<td>${item.comJobNm }</td>
+													<td>${item.comPositionNm }</td>
 													<td>${item.aprovalType}</td>
 													<td>${item.scoreTotal }점 (
 														<c:choose>
@@ -355,48 +366,93 @@
 													)</td>
 													<td colspan="5">
 														<div class="comment-btn"><div>${item.aprovalComment}</div>
-														<c:if test="${proposalVO.propTypeCode eq 'PPS_TYP_1'.toString() }">
+														<c:if test="${sessionCompNo eq approveVO.detailList[i-1].comNo and proposalVO.propTypeCode eq 'PPS_TYP_1'.toString() }">
 															<c:if test="${status.last and item.aprovalStatCode eq '4'}">
-																<input type="hidden" value="${item.comNo}">
-																<button type="button" class="btn bg-gray btn-req-approval">결재의뢰</button>
+																<c:choose>
+																	<c:when test="${(item.comPosition eq 'FC0' or item.comPosition eq 'GB1') and scoreTotal >= 70}">
+																		<input type="hidden" value="${item.comNo}">
+																		<button type="button" class="btn bg-gray btn-req-approval">결재의뢰</button>																	
+																	</c:when>
+																	<c:when test="${item.comPosition eq 'FG0' and scoreTotal >= 90}">
+																		<input type="hidden" value="${item.comNo}">
+																		<button type="button" class="btn bg-gray btn-req-approval">결재의뢰</button>																	
+																	</c:when>																	
+																</c:choose>
 															</c:if>
 														</c:if>
 														</div>														
 													</td>
-												</tr>											
+												</tr>	
+												<c:if test="${sessionCompNo eq approveVO.detailList[i-1].comNo and proposalVO.propTypeCode eq 'PPS_TYP_1'.toString() }">
+													<c:if test="${status.last and item.aprovalStatCode eq '4'}">
+														<c:choose>
+															<c:when test="${(item.comPosition eq 'FC0' or item.comPosition eq 'GB1') and scoreTotal >= 70}">
+																<tr>
+																	<th rowspan="2"><span class="asterisk">*</span>결재자 지정</th>
+																	<th colspan="5" class="align-center">소속</th>
+																	<th class="align-center">이름</th>
+																	<th class="align-center">직위</th>
+																	<th class="align-center">직책</th>
+																	<th class="align-center">Belt</th>
+																</tr>
+																<tr>
+																	<td colspan="5" class="pd3">
+					                                                    <div class="row">
+					                                                        <div class="col s12 input-text search">
+					                                        					<input type="hidden" id="input-approval-code" name="input-approval-code"/>
+					                                                        	<input type="hidden" id="input-approval-name" name="input-approval-name"/>
+					                                                        	<input type="hidden" id="input-approval-user" name="input-approval-user"/>
+					                                                            <input type="hidden" id="input-approval-level" name="input-approval-level"/>
+					                                                            <input type="hidden" id="input-approval-duty" name="input-approval-duty"/>
+					                                                            <input type="hidden" id="input-approval-belt" name="input-approval-belt"/>
+					                                                            <input type="hidden" id="input-approval-group-code" name="input-approval-group-code"/>
+					                                                            <input type="text" id="input-approval-group" name="input-approval-group" value="" readonly="readonly" style="background-color: #FFF;"/>
+					                                                            <button type="button" class="btn-approval-member-search-modal">검색</button>
+					                                                        </div>
+					                                                    </div>
+					                                                </td>
+																	<td id="text-approval-name"></td>
+																	<td id="text-approval-level"></td>
+																	<td id="text-approval-duty"></td>
+																	<td id="text-approval-belt"></td>
+																</tr>															
+															</c:when>
+															<c:when test="${item.comPosition eq 'FG0' and scoreTotal >= 90}">
+																<tr>
+																	<th rowspan="2"><span class="asterisk">*</span>결재자 지정</th>
+																	<th colspan="5" class="align-center">소속</th>
+																	<th class="align-center">이름</th>
+																	<th class="align-center">직위</th>
+																	<th class="align-center">직책</th>
+																	<th class="align-center">Belt</th>
+																</tr>
+																<tr>
+																	<td colspan="5" class="pd3">
+					                                                    <div class="row">
+					                                                        <div class="col s12 input-text search">
+					                                        					<input type="hidden" id="input-approval-code" name="input-approval-code"/>
+					                                                        	<input type="hidden" id="input-approval-name" name="input-approval-name"/>
+					                                                        	<input type="hidden" id="input-approval-user" name="input-approval-user"/>
+					                                                            <input type="hidden" id="input-approval-level" name="input-approval-level"/>
+					                                                            <input type="hidden" id="input-approval-duty" name="input-approval-duty"/>
+					                                                            <input type="hidden" id="input-approval-belt" name="input-approval-belt"/>
+					                                                            <input type="hidden" id="input-approval-group-code" name="input-approval-group-code"/>
+					                                                            <input type="text" id="input-approval-group" name="input-approval-group" value="" readonly="readonly" style="background-color: #FFF;"/>
+					                                                            <button type="button" class="btn-approval-member-search-modal">검색</button>
+					                                                        </div>
+					                                                    </div>
+					                                                </td>
+																	<td id="text-approval-name"></td>
+																	<td id="text-approval-level"></td>
+																	<td id="text-approval-duty"></td>
+																	<td id="text-approval-belt"></td>
+																</tr>															
+															</c:when>
+														</c:choose>
+													</c:if>
+												</c:if>																						
 											</c:if>
-										</c:forEach>
-										<c:if test="${proposalVO.propTypeCode eq 'PPS_TYP_1'.toString() }">
-											<tr>
-												<th rowspan="2"><span class="asterisk">*</span>결재자 지정</th>
-												<th colspan="5" class="align-center">소속</th>
-												<th class="align-center">이름</th>
-												<th class="align-center">직위</th>
-												<th class="align-center">직책</th>
-												<th class="align-center">Belt</th>
-											</tr>
-											<tr>
-												<td colspan="5" class="pd3">
-                                                    <div class="row">
-                                                        <div class="col s12 input-text search">
-                                        					<input type="hidden" id="input-approval-code" name="input-approval-code"/>
-                                                        	<input type="hidden" id="input-approval-name" name="input-approval-name"/>
-                                                        	<input type="hidden" id="input-approval-user" name="input-approval-user"/>
-                                                            <input type="hidden" id="input-approval-level" name="input-approval-level"/>
-                                                            <input type="hidden" id="input-approval-duty" name="input-approval-duty"/>
-                                                            <input type="hidden" id="input-approval-belt" name="input-approval-belt"/>
-                                                            <input type="hidden" id="input-approval-group-code" name="input-approval-group-code"/>
-                                                            <input type="text" id="input-approval-group" name="input-approval-group" value="" readonly="readonly" style="background-color: #FFF;"/>
-                                                            <button type="button" class="btn-approval-member-search-modal">검색</button>
-                                                        </div>
-                                                    </div>
-                                                </td>
-												<td id="text-approval-name"></td>
-												<td id="text-approval-level"></td>
-												<td id="text-approval-duty"></td>
-												<td id="text-approval-belt"></td>
-											</tr>
-										</c:if>
+											</c:forEach>
 										</tbody>
 									</table>									
 								</div>
@@ -451,6 +507,17 @@ $(document).ready(function(){
 			return false;
 		}
 		
+		if($('.detail-com-position').val() == 'FG0'){
+			if($('#input-approval-group-code').val() != '58184745'){
+				alert('제안 점수가90점이상입니다 생산솔루션 팀장을 결재자로 지정해 주세요.');
+				return false;
+			}
+			if($('#input-approval-duty').val() != 'FG0'){
+				alert('제안 점수가90점이상입니다 생산솔루션 팀장을 결재자로 지정해 주세요.');
+				return false;				
+			}
+		}
+		
 		$.post('/apprv/approveProposalReq.do', { 
 			propUser: $($(this).prev()).val(),
 			propApprovalUser: $('#input-approval-user').val(),
@@ -486,15 +553,15 @@ function setApprovalMemberInfo(el, d){
 	}
 	
 	$('#text-approval-name').html(d.userName);
-	$('#text-approval-level').html(d.comPositionNm);
-	$('#text-approval-duty').html(d.comJobxNm);
+	$('#text-approval-level').html(d.comJobxNm);
+	$('#text-approval-duty').html(d.comPositionNm);
 	$('#text-approval-belt').html(d.comCertBeltNm);
 	
 	$('#input-approval-code').val(d.comNo);
 	$('#input-approval-name').val(d.userName);
 	$('#input-approval-user').val(d.comNo);
-	$('#input-approval-level').val(d.comPosition);
-	$('#input-approval-duty').val(d.comJobx);
+	$('#input-approval-level').val(d.comJobx);
+	$('#input-approval-duty').val(d.comPosition);
 	$('#input-approval-belt').val(d.comCertBelt);
 	$('#input-approval-group-code').val(d.comDepartCode);
 	$('#input-approval-group').val(d.deptFullName);
@@ -538,7 +605,12 @@ function callback_popApprove(obj, data){
 	$(".detail-score6").val(data.score6);
 	$(".detail-score7").val(data.score7);
 	$(".detail-total").val(data.scoreTotal);
-	$(".detail-comment").val(data.txtComment);	
+	$(".detail-comment").val(data.txtComment);
+	
+	//실장평가시 80점을 넘을수 없음
+	//if(($('.detail-com-position').val() == 'FC0' || $('.detail-com-position').val() == 'GB1') && data.scoreTotal >= 80){
+	//	alert('80점 이상 점수를 입력 할 수 없습니다.');
+	//}
 	
 	$("#defaultForm")[0].submit();
 }
