@@ -519,7 +519,7 @@
     	}
     	
     	
-    	let objDeptTreeData = ${deptFullList};
+    	const objDeptTreeData = ${deptFullList};
         </script>
         
         

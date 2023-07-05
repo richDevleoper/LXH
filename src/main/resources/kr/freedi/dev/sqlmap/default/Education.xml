@@ -1108,6 +1108,17 @@
 			 WHERE 1=1
 		  ORDER BY T.IDX DESC		
 	</select>
+	
+	<select id="selectCountMyEducation" resultType="int">
+		SELECT 
+		   COUNT(*) as edu_cnt
+		FROM 
+		   TB_STUDENT_DETAIL
+		WHERE 
+		   STD_CLASS_DIVISION NOT IN ('07','08','09')
+		   AND STD_REG_DATE BETWEEN TRUNC (SYSDATE, 'YEAR') AND TO_CHAR(sysdate, 'yyyy-mm-dd hh24:mi:ss')
+		   AND COM_NO = #{comNo}
+	</select>
 	                                      
 </mapper>                                 
                                           

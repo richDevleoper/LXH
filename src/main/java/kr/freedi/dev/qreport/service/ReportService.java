@@ -214,6 +214,15 @@ public class ReportService {
 	// 과제 결재요청
 	public void regApproveReport(ReportVO reportVO, List<ReportTeamVO> approveMemberList, String aprovalType) throws Exception {
 		
+		ApproveVO paramVO = new ApproveVO(); 
+		paramVO.setRefBusCode(reportVO.getRepCode().toString());
+		paramVO.setRefBusSubCode(reportVO.getRepCurrStepCode());
+		ApproveVO checkApprVO = approveService.select(paramVO);
+		if(checkApprVO!=null) {
+			System.out.println("이미 존재하는 결재건임.");
+			return;
+		}
+		
 		ApproveVO newApprVO = new ApproveVO();
 		newApprVO.setAprovalType(aprovalType); 		// 결재 종류 (1-과제신청, 2-드랍신청, 3-6시그마프로세스, 6-실시제안, 7-쪽지제안) (code_grp_id='APR_TYPE')
 		
@@ -500,7 +509,7 @@ public class ReportService {
 			&& originVO.getRepTypeCode().equals(newVO.getRepTypeCode())
 			&& originVO.getRepSectorCode().equals(newVO.getRepSectorCode())
 			&& originVO.getRepProductClass().equals(newVO.getRepProductClass())
-			&& originVO.getRepLeaderBeltCode().equals(newVO.getRepLeaderBeltCode())
+			&& (originVO.getRepLeaderBeltCode()!= null && originVO.getRepLeaderBeltCode().equals(newVO.getRepLeaderBeltCode()))
 			&& originVO.getRepActionTypeCode().equals(newVO.getRepActionTypeCode())
 			&& originVO.getRepMbbUseRateCode().equals(newVO.getRepMbbUseRateCode())
 			&& originVO.getRepUseRefDate().equals(newVO.getRepUseRefDate())

@@ -407,6 +407,4 @@ public class MakeService {
 	public int selectKpiListCount(KpiSearchVO searchVO) {
 		return (Integer) dao.selectOne("KPI.selectCirclListCount", searchVO);
 	}
-	
-	
 }

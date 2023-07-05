@@ -665,6 +665,7 @@ public class MenuService implements IMenuService {
 		
 		int countReport = 0;
 		int countApprove = 0;
+		int countEducation = 0;
 		if(userId!=null) {
 			ReportSearchVO reportSearchVO = new ReportSearchVO();
 			reportSearchVO.setSearchUserid(userSession.getUserId());
@@ -673,12 +674,16 @@ public class MenuService implements IMenuService {
 			
 			ApproveSearchVO approveSearchVO = new ApproveSearchVO();
 			approveSearchVO.setSearchUserId(userSession.getUserId());
-			countApprove = (Integer) dao.selectOne("Approval.selectListTotalCount", approveSearchVO);	
+			countApprove = (Integer) dao.selectOne("Approval.selectListTotalCount", approveSearchVO);
+			
+			HashMap<String, String> paramMap = new HashMap<>();
+			paramMap.put("comNo", userSession.getUserId());
+			countEducation = (Integer) dao.selectOne("Education.selectCountMyEducation", paramMap);
 		}
 		
 		request.setAttribute("countReport", countReport);
 		request.setAttribute("countApprove", countApprove);
-		request.setAttribute("countEducation", 0);
+		request.setAttribute("countEducation", countEducation);
 	}
 }
 

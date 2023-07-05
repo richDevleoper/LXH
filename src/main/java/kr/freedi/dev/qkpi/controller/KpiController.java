@@ -110,7 +110,6 @@ public class KpiController {
 			LocalDate now = LocalDate.now();
 	        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy");
 			searchVO.setSearchYear(now.format(formatter));
-	
 		}
         
 		Integer totalCount = makeService.selectKpiListCount(searchVO);
@@ -120,6 +119,10 @@ public class KpiController {
 		List<KpiManageVO> list = makeService.selectKpiFullList(searchVO);
 		model.addAttribute("mgrList", list);	
 	
+		List<DepartVO> dbList = qPopupService.selectTreeList();
+		JsonArray deptList = makeService.convertTreeJson(dbList);
+		model.addAttribute("deptFullList", deptList);
+		
 		return "app/kpi/MgrList";
 	}
 	
@@ -390,7 +393,7 @@ public class KpiController {
 				kpiVO.setKmGbUserCnt(val);
 			} else if(colIdx.indexOf("BB이상")>-1) {
 				kpiVO.setKmBbuUserCnt(val);				
-			} else if(colIdx.indexOf("MBB_MGR")>-1) {
+			} else if(colIdx.indexOf("MBB_CNT")>-1) {
 				kpiVO.setKmMbbManageCnt(val);
 			} else if(colIdx.indexOf("MBB")>-1) {
 				kpiVO.setKmMbbUserCnt(val);

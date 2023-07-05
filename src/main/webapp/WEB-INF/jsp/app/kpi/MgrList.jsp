@@ -69,6 +69,7 @@
 														<form:option value="D001">BB</form:option>
 														<form:option value="D002">MBB</form:option>
 														<form:option value="D003">MGB</form:option>
+														<form:option value="7">No Belt</form:option>
                                                     </form:select>
                                                 </div>
                                                 <div class="form-inline form-select">
@@ -277,16 +278,42 @@
 		
 		// common.js 이벤트 비활성
 		$(".tab-group > .tab-btn > button").off("click");
+		
+		initFooterDeptPopup();
+	}
+	
+	function initFooterDeptPopup(){
+		$('#objDeptTree').jstree({
+	    	"core": {
+	    	      "data": objDeptTreeData	// controller에서 데이터 바인딩.
+	    	    },
+	        "plugins" : ['checkbox','search'],
+	        "search" : {
+	            "show_only_matches" : true,
+            	"show_only_matches_children" : true,
+    		},
+	    })
+	    .on("check_node.jstree uncheck_node.jstree", function (e, data) {
+
+	        if (e.type == "uncheck_node") {
+	        	debugger;
+	            $("#orgSelAllDept").prop( "checked", false );                
+	        }
+		    else if (e.type == "check_node") {
+		    	debugger;
+	            if ($(this).jstree().get_json('#', {flat:true}).length === $(this).jstree().get_checked(true).length)
+	                $("#orgSelAllDept").prop( "checked", true ); 					
+	        }
+	    });
 	}
 	
 	// 조직 조회 호출부
 	function callPopup_searchDepartment(obj){
 
-		popDept.init();
-		// footer.jsp 내 영역 호출
-		popDept.returnObjId = "searchDepart";
-		popDept.returnFunc = callback_popDept;
-		popDept.open();
+		popMDept.init();
+		popMDept.returnObjId = "searchDepart";
+		popMDept.returnFunc = callback_popDept;
+		popMDept.open();
 	}
 	
 	function onchange_recordCountPerPage(vCount){
@@ -297,8 +324,8 @@
 	// 조직 조회 콜백부
 	function callback_popDept(objId, data){
 		
-		$("#"+objId).val(data.deptCode);
-		$("#searchDepartName").val(data.deptName);
+		$("#"+objId).val(data.deptCodes);
+		$("#searchDepartName").val(data.deptNames);
 	}
 
 	function onclick_userid(comNo){
@@ -341,6 +368,8 @@
 		}
 			
 	}
+	
+	const objDeptTreeData = ${deptFullList};
 	
 </script>
 

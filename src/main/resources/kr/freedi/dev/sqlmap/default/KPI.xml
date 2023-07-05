@@ -37,8 +37,19 @@
 					AND T.KUD_YEAR = #{searchYear}
 				</if>
 				<if test="searchDepart != null and searchDepart != ''">
-					AND T.COM_DEPART_CODE = #{searchDepart}
-				</if>				
+					and INSTR(#{searchDepart}, T.COM_DEPART_CODE) <![CDATA[>]]> 0
+				</if>
+				<if test="searchBelt != null and searchBelt != ''">
+					<choose>
+						<when test='searchBelt.equals("7")'>
+							AND KUD_CERT_BELT is null
+						</when>
+						<otherwise>
+							AND KUD_CERT_BELT = #{searchBelt}
+						</otherwise>
+					</choose>
+				</if>		
+				
 				<if test="searchText != null and searchText != ''">
 					<!-- <trim prefixOverrides="AND"> -->
 						<choose>
@@ -46,22 +57,22 @@
 								AND COM_NO = #{searchText}
 							</when>
 							<when test="searchIdx == 2"><!-- 이름 -->
-								AND KUD_USER_NAME = #{searchText}
+								AND KUD_USER_NAME like '%'|| #{searchText}||'%'
 							</when>
 							<when test="searchIdx == 3"><!-- 부문 -->
-								AND KUD_DEPART = #{searchText}
+								AND KUD_PART like '%'|| #{searchText}||'%'
 							</when>
 							<when test="searchIdx == 4"><!-- 소속 -->
-								AND KUD_DEPART = #{searchText}
+								AND kud_belong_name like '%'|| #{searchText}||'%'
 							</when>
 							<when test="searchIdx == 5"><!-- 팀명 -->
-							    AND KUD_DEPART = #{searchText}
+							    AND kud_team_name like '%'|| #{searchText}||'%'
 							</when>
 							<when test="searchIdx == 6"><!-- 직무명 --> 
-								AND KUD_DEPART = #{searchText}
+								AND KUD_JIMU like '%'|| #{searchText}||'%'
 							</when>
 							<otherwise>
-								AND COM_NO || '|' || KUD_USER_NAME || '|' || KUD_USER_NAME like '%'|| #{searchText} ||'%' 
+								AND COM_NO || '|' || KUD_USER_NAME || '|' || KUD_USER_NAME || '|' || KUD_JIMU  || '|' || KUD_PART  || '|' || KUD_TEAM  || '|' || kud_belong_name like '%'|| #{searchText} ||'%' 
 							</otherwise>
 						</choose>
 					<!-- </trim> -->
@@ -194,7 +205,7 @@
 		    , get_code_nm('POSITION', #{comPositionCode})
 		    , get_team_nm(get_depart_nm(#{cirDeptCode}))
 		    , #{cirMemName}
-		    , (select dept_lv3_name from tb_depart_mst where dept_code=#{cirDeptCode})
+		    , (select dept_lv4_name from tb_depart_mst where dept_code=#{cirDeptCode})
 		    , (select dept_lv2_name from tb_depart_mst where dept_code=#{cirDeptCode})
 		    , (select get_code_nm('WPLACE', com_work_place) from tb_user_mst where com_no=#{ComNo})
 		    , null
@@ -213,17 +224,17 @@
 			    , KUD_CHK_TYPE_CODE =  #{kudChkTypeCode}
 			    , KUD_DEPART = get_depart_nm(#{cirDeptCode})
 			    , COM_DEPART_CODE = #{cirDeptCode}
-			    , KUD_JOBX =  get_code_nm('JOBX', #{comJobxCode})
-			    , KUD_POSITION =  get_code_nm('POSITION', #{comPositionCode})
+			    , KUD_JOBX =  (select get_code_nm('JOBX', com_jobx) from tb_user_mst where com_no=#{ComNo})
+			    , KUD_POSITION =  (select get_code_nm('POSITION', com_position) from tb_user_mst where com_no=#{ComNo})
 			    , KUD_TEAM_NAME =  get_team_nm(get_depart_nm(#{cirDeptCode}))
-			    , KUD_USER_NAME =  #{cirMemName}
-			    , KUD_BELONG_NAME =  (select dept_lv3_name from tb_depart_mst where dept_code=#{cirDeptCode})
+			    , KUD_USER_NAME =  (select user_name from tb_user_mst where com_no=#{ComNo})
+			    , KUD_BELONG_NAME =  (select dept_lv4_name from tb_depart_mst where dept_code=#{cirDeptCode})
 			    , KUD_PART =  (select dept_lv2_name from tb_depart_mst where dept_code=#{cirDeptCode})
-			    , KUD_PLACE =  (select com_work_place from tb_user_mst where com_no=#{ComNo})
+			    , KUD_PLACE =  (select get_code_nm('WPLACE', com_work_place) from tb_user_mst where com_no=#{ComNo})
 			    , KUD_USER_IDENTITY =  null
 			    , KUD_JOIN_DATE =  (select com_join_date from tb_user_mst where com_no=#{ComNo})
 			    , KUD_LAST_DEGREE =  null
-			    , KUD_CERT_BELT = #{beltCode}
+			    , KUD_CERT_BELT = (select com_cert_belt from tb_user_mst where com_no=#{ComNo})
 			    , KUD_UPDATE_USER =  #{cirUpdateUser}
 			    , KUD_UPDATE_DATE =  sysdate
 		  where STD_SEQ = #{cirMemCode}
@@ -269,106 +280,117 @@
 	
 	<select id="selectMgrPlan" resultType="egovMap">
  
-	  WITH V_DEPART_MST AS (
-        select 
-        		DEPT_CODE, DEPT_NAME, DEPT_UPER_CODE, DEPT_STATE_CODE
-         from 
-         		tb_depart_mst
-         where 
-			DEPT_STATE_CODE <![CDATA[<>]]> 'D'
-				<if test="searchDepart != null and searchDepart != ''">
-					AND INSTR(#{searchDepart}, DEPT_CODE) <![CDATA[>]]> 0
+	   WITH SRC_DEPART AS (
+            SELECT 
+             COM_DEPART_CODE
+             ,KUD_DEPART
+             ,sum(CASE WHEN KUD_CERT_BELT IS NULL THEN to_char(1) ELSE to_char(0) END) AS GB_CNT
+             ,sum(CASE WHEN KUD_CERT_BELT = 'D000' THEN to_char(1) ELSE to_char(0) END) AS BB_CNT
+             ,sum(CASE WHEN KUD_CERT_BELT = 'D001' THEN to_char(1) ELSE to_char(0) END) AS MBB_CNT
+             ,sum(CASE WHEN KUD_CERT_BELT NOT IN ('D000','D001','D002') THEN to_char(1) ELSE to_char(0) END) AS BBU_CNT
+          FROM
+             TB_KPI_USER_DETAIL
+          WHERE 
+             KUD_IDX = #{kudIdx}
+                AND KUD_REG_DATE BETWEEN TRUNC (SYSDATE, 'YEAR') AND TO_CHAR(sysdate, 'yyyy-mm-dd hh24:mi:ss')
+             GROUP BY COM_DEPART_CODE , KUD_DEPART
+       )
+       ,V_DEPART_MST AS (
+            SELECT
+                d.dept_code COM_DEPART_CODE, d.dept_name KUD_DEPART, d.dept_uper_code, sd.gb_cnt, sd.bb_cnt, sd.mbb_cnt, sd.bbu_cnt
+            FROM
+                tb_depart_mst d
+                , SRC_DEPART sd
+            WHERE
+                d.dept_state_code <![CDATA[<>]]> 'D'
+                and d.dept_code=sd.com_depart_code(+)
+            START WITH
+                dept_code IN (
+                    SELECT com_depart_code FROM SRC_DEPART SD
+              <where>
+				<trim prefixOverrides="AND|OR">    
+                <if test="searchDepart != null and searchDepart != ''">
+					and INSTR(#{searchDepart}, com_depart_code) <![CDATA[>]]> 0
 				</if>
-    START WITH
-           	dept_code in (select com_depart_code from tb_kpi_user_detail 
-               	           where kud_idx=#{kudIdx}
-                   	       group by com_depart_code)
-	CONNECT BY PRIOR
-			dept_uper_code = dept_code
-	group by 
-			DEPT_CODE, DEPT_NAME, DEPT_UPER_CODE, DEPT_STATE_CODE
-	  )
- 		,V_DEPART_MST2 as (
-        select level, a.*
-          from v_depart_mst a
-          start with dept_code='50000000'
-          connect by prior dept_code=dept_uper_code
-      )
-      SELECT 
-		   DEPT_CODE,DEPT_NAME,DEPT_UPER_CODE
-		   ,GB_CNT_1,KUD_GB_CNT_1,NVL(KUD_GB_CNT_1 / DECODE(GB_CNT_1,0,NULL,GB_CNT_1),0) * 100 AS GB_RAT_1
-		   ,BB_CNT_1,KUD_BB_CNT_1,NVL(KUD_BB_CNT_1 / DECODE(BB_CNT_1,0,NULL,BB_CNT_1),0) * 100 AS BB_RAT_1
-		   ,MBB_CNT_1,KUD_MBB_CNT_1,NVL(KUD_MBB_CNT_1 / DECODE(MBB_CNT_1,0,NULL,MBB_CNT_1),0) * 100  AS MBB_RAT_1
-		   ,BBU_CNT_1,KUD_BBU_CNT_1,NVL(KUD_BBU_CNT_1 / DECODE(BBU_CNT_1,0,NULL,BBU_CNT_1),0) * 100  AS BBU_RAT_1
+				<if test="searchWorkPlace != null and searchWorkPlace != ''">
+					and exists (
+						select 1 
+						  from tb_user_mst
+						  where to_number(nvl(com_leader_no, '0'))=to_number(com_no)
+						  and com_depart_code=SD.com_depart_code
+						  and REGEXP_INSTR(com_no,'[^0-9]')=0
+						  and com_work_place=#{searchWorkPlace}
+                    )
+                </if>
+                </trim>
+              </where>
+                    GROUP BY com_depart_code
+                )
+            CONNECT BY
+                PRIOR dept_uper_code = dept_code
+            GROUP BY
+                d.dept_code, d.dept_name, d.dept_uper_code, sd.gb_cnt, sd.bb_cnt, sd.mbb_cnt, sd.bbu_cnt
+	   )
+		SELECT
+		   KUD.COM_DEPART_CODE DEPT_CODE
+		   ,KUD.KUD_DEPART DEPT_NAME
+		   ,KUD.DEPT_UPER_CODE
+		      
+		   ,NVL(KM.KM_GB_USER_CNT,0) AS KM_GB_USER_CNT 
+		   ,NVL(KUD.GB_CNT,0) AS GB_CNT
+		   ,ROUND(NVL(KM.KM_GB_USER_CNT / NULLIF(KUD.GB_CNT,0),0) * 100) AS GB_RAT
+		   ,NVL(KM.KM_BB_USER_CNT,0) AS KM_BB_USER_CNT
+		   ,NVL(KUD.BB_CNT,0) AS BB_CNT
+		   ,ROUND(NVL(KM.KM_BB_USER_CNT / NULLIF(KUD.BB_CNT,0),0) * 100) AS BB_RAT
+		   ,NVL(KM.KM_MBB_USER_CNT,0) AS KM_MBB_USER_CNT
+		   ,NVL(KUD.MBB_CNT,0) AS MBB_CNT
+		   ,ROUND(NVL(KM.KM_MBB_USER_CNT / NULLIF(KUD.MBB_CNT,0),0) * 100) AS MBB_RAT
+		   ,NVL(KM.KM_BBU_USER_CNT,0) AS KM_BBU_USER_CNT
+		   ,NVL(KUD.BBU_CNT,0) AS BBU_CNT
+		   ,ROUND(NVL(KM.KM_BBU_USER_CNT / NULLIF(KUD.BBU_CNT,0),0) * 100) AS BBU_RAT
 		   
-		   ,GB_CNT_2,KUD_GB_CNT_2,NVL(KUD_GB_CNT_2 / DECODE(GB_CNT_2,0,NULL,GB_CNT_2),0) * 100 AS GB_RAT_2
-		   ,BB_CNT_2,KUD_BB_CNT_2,NVL(KUD_BB_CNT_2 / DECODE(BB_CNT_2,0,NULL,BB_CNT_2),0) * 100 AS BB_RAT_2
-		   ,MBB_CNT_2,KUD_MBB_CNT_2,NVL(KUD_MBB_CNT_2 / DECODE(MBB_CNT_2,0,NULL,MBB_CNT_2),0) * 100  AS MBB_RAT_2
-		   ,BBU_CNT_2,KUD_BBU_CNT_2,NVL(KUD_BBU_CNT_2 / DECODE(BBU_CNT_2,0,NULL,BBU_CNT_2),0) * 100  AS BBU_RAT_2
+		   ,NVL(SD.GB_CERT_CNT,0) AS GB_CERT_CNT
+		   ,ROUND(NVL(SD.GB_CERT_CNT / KM.KM_GB_USER_CNT,0) * 100) AS GB_CERT_RAT
+		   ,NVL(SD.BB_CERT_CNT,0) AS BB_CERT_CNT
+		   ,ROUND(NVL(SD.BB_CERT_CNT / KM.KM_BB_USER_CNT,0) * 100) AS BB_CERT_RAT
+		   ,NVL(SD.MBB_CERT_CNT,0) AS MBB_CERT_CNT
+		   ,ROUND(NVL(SD.MBB_CERT_CNT / KM.KM_MBB_USER_CNT,0) * 100) AS MBB_CERT_RAT
+		   ,NVL(SD.BBU_CERT_CNT,0) AS BBU_CERT_CNT
+		   ,ROUND(NVL(SD.BBU_CERT_CNT / KM.KM_BBU_USER_CNT,0) * 100) AS BBU_CERT_RAT
+		   ,NVL((GB_CNT + BB_CNT + MBB_CNT + BBU_CNT),0) AS TOT_CNT
 		   
-		   ,GB_CNT_3,KUD_GB_CNT_3,NVL(KUD_GB_CNT_3 / DECODE(GB_CNT_3,0,NULL,GB_CNT_3),0) * 100 AS GB_RAT_3
-		   ,BB_CNT_3,KUD_BB_CNT_3,NVL(KUD_BB_CNT_3 / DECODE(BB_CNT_3,0,NULL,BB_CNT_3),0) * 100 AS BB_RAT_3
-		   ,MBB_CNT_3,KUD_MBB_CNT_3,NVL(KUD_MBB_CNT_3 / DECODE(MBB_CNT_3,0,NULL,MBB_CNT_3),0) * 100  AS MBB_RAT_3
-		   ,BBU_CNT_3,KUD_BBU_CNT_3,NVL(KUD_BBU_CNT_3 / DECODE(BBU_CNT_3,0,NULL,BBU_CNT_3),0) * 100  AS BBU_RAT_3
-		FROM
+		FROM 
+		   V_DEPART_MST KUD
+		   LEFT OUTER JOIN
 		   (
-		   SELECT 
-		    DM.DEPT_CODE  
-		    ,DM.DEPT_NAME
-		    ,DM.DEPT_UPER_CODE
-		    ,(CASE  WHEN KM.KM_GB_USER_CNT IS NOT NULL THEN TO_CHAR(KM.KM_GB_USER_CNT) ELSE TO_CHAR(0) END) AS GB_CNT_1
-		    ,(SELECT COUNT(*) FROM TB_KPI_USER_DETAIL KUD WHERE KUD.COM_DEPART_CODE = DM.DEPT_CODE AND KUD.KUD_YEAR = '2022' AND KUD.KUD_CERT_BELT = 'D000') AS KUD_GB_CNT_1
-		    ,(CASE  WHEN KM.KM_BB_USER_CNT IS NOT NULL THEN TO_CHAR(KM.KM_BB_USER_CNT) ELSE TO_CHAR(0) END) AS BB_CNT_1
-		    ,(SELECT COUNT(*) FROM TB_KPI_USER_DETAIL KUD WHERE KUD.COM_DEPART_CODE = DM.DEPT_CODE AND KUD.KUD_YEAR = '2022' AND KUD.KUD_CERT_BELT = 'D001') AS KUD_BB_CNT_1
-		    ,(CASE  WHEN KM.KM_MBB_USER_CNT IS NOT NULL THEN TO_CHAR(KM.KM_MBB_USER_CNT) ELSE TO_CHAR(0) END) AS MBB_CNT_1
-		    ,(SELECT COUNT(*) FROM TB_KPI_USER_DETAIL KUD WHERE KUD.COM_DEPART_CODE = DM.DEPT_CODE AND KUD.KUD_YEAR = '2022' AND KUD.KUD_CERT_BELT = 'D002') AS KUD_MBB_CNT_1
-		    ,(CASE  WHEN KM.KM_BBU_USER_CNT IS NOT NULL THEN TO_CHAR(KM.KM_BBU_USER_CNT) ELSE TO_CHAR(0) END) AS BBU_CNT_1
-		    ,(SELECT COUNT(*) FROM TB_KPI_USER_DETAIL KUD WHERE KUD.COM_DEPART_CODE = DM.DEPT_CODE AND KUD.KUD_YEAR = '2022' AND KUD.KUD_CERT_BELT NOT IN ('D000','D001','D002')) AS KUD_BBU_CNT_1
-		    
-		    ,(CASE  WHEN KM.KM_GB_USER_CNT IS NOT NULL THEN TO_CHAR(KM.KM_GB_USER_CNT) ELSE TO_CHAR(0) END) AS GB_CNT_2
-		    ,(SELECT COUNT(*) FROM TB_KPI_USER_DETAIL KUD WHERE KUD.COM_DEPART_CODE = DM.DEPT_CODE AND KUD.KUD_YEAR = '2023' AND KUD.KUD_CERT_BELT = 'D000') AS KUD_GB_CNT_2
-		    ,(CASE  WHEN KM.KM_BB_USER_CNT IS NOT NULL THEN TO_CHAR(KM.KM_BB_USER_CNT) ELSE TO_CHAR(0) END) AS BB_CNT_2
-		    ,(SELECT COUNT(*) FROM TB_KPI_USER_DETAIL KUD WHERE KUD.COM_DEPART_CODE = DM.DEPT_CODE AND KUD.KUD_YEAR = '2023' AND KUD.KUD_CERT_BELT = 'D001') AS KUD_BB_CNT_2
-		    ,(CASE  WHEN KM.KM_MBB_USER_CNT IS NOT NULL THEN TO_CHAR(KM.KM_MBB_USER_CNT) ELSE TO_CHAR(0) END) AS MBB_CNT_2
-		    ,(SELECT COUNT(*) FROM TB_KPI_USER_DETAIL KUD WHERE KUD.COM_DEPART_CODE = DM.DEPT_CODE AND KUD.KUD_YEAR = '2023' AND KUD.KUD_CERT_BELT = 'D002') AS KUD_MBB_CNT_2
-		    ,(CASE  WHEN KM.KM_BBU_USER_CNT IS NOT NULL THEN TO_CHAR(KM.KM_BBU_USER_CNT) ELSE TO_CHAR(0) END) AS BBU_CNT_2
-		    ,(SELECT COUNT(*) FROM TB_KPI_USER_DETAIL KUD WHERE KUD.COM_DEPART_CODE = DM.DEPT_CODE AND KUD.KUD_YEAR = '2023' AND KUD.KUD_CERT_BELT NOT IN ('D000','D001','D002')) AS KUD_BBU_CNT_2
-		    
-		    ,(CASE  WHEN KM.KM_GB_USER_CNT IS NOT NULL THEN TO_CHAR(KM.KM_GB_USER_CNT) ELSE TO_CHAR(0) END) AS GB_CNT_3
-		    ,(
-		       SELECT  COUNT(*) 
-		       FROM    TB_KPI_USER_DETAIL KUD 
-		       WHERE  KUD.COM_DEPART_CODE = DM.DEPT_CODE AND KUD.KUD_YEAR = #{searchYear} AND KUD.KUD_CERT_BELT = 'D000' AND KUD.KUD_IDX = '6SIG'
-		              AND KUD_REG_DATE BETWEEN TRUNC (SYSDATE, 'YEAR') AND TO_CHAR(sysdate, 'yyyy-mm-dd hh24:mi:ss')
-		    ) AS KUD_GB_CNT_3
-		    ,(CASE WHEN KM.KM_BB_USER_CNT IS NOT NULL THEN TO_CHAR(KM.KM_BB_USER_CNT) ELSE TO_CHAR(0) END) AS BB_CNT_3
-		    ,(
-		       SELECT   COUNT(*) 
-		       FROM     TB_KPI_USER_DETAIL KUD 
-		       WHERE    KUD.COM_DEPART_CODE = DM.DEPT_CODE AND KUD.KUD_YEAR = #{searchYear} AND KUD.KUD_CERT_BELT = 'D001' AND KUD.KUD_IDX = '6SIG'
-		                AND KUD_REG_DATE BETWEEN TRUNC (SYSDATE, 'YEAR') AND TO_CHAR(sysdate, 'yyyy-mm-dd hh24:mi:ss')
-		    ) AS KUD_BB_CNT_3
-		    ,(CASE  WHEN KM.KM_MBB_USER_CNT IS NOT NULL THEN TO_CHAR(KM.KM_MBB_USER_CNT) ELSE TO_CHAR(0) END) AS MBB_CNT_3
-		    ,(
-		       SELECT  COUNT(*) 
-		       FROM    TB_KPI_USER_DETAIL KUD 
-		       WHERE   KUD.COM_DEPART_CODE = DM.DEPT_CODE AND KUD.KUD_YEAR = #{searchYear} AND KUD.KUD_CERT_BELT = 'D002' AND KUD.KUD_IDX = '6SIG'
-		               AND KUD_REG_DATE BETWEEN TRUNC (SYSDATE, 'YEAR') AND TO_CHAR(sysdate, 'yyyy-mm-dd hh24:mi:ss')
-		       ) AS KUD_MBB_CNT_3          
-		    ,(CASE WHEN KM.KM_BBU_USER_CNT IS NOT NULL THEN TO_CHAR(KM.KM_BBU_USER_CNT) ELSE TO_CHAR(0) END) AS BBU_CNT_3
-		    ,(
-		       SELECT  COUNT(*) 
-		       FROM    TB_KPI_USER_DETAIL KUD 
-		       WHERE   KUD.COM_DEPART_CODE = DM.DEPT_CODE AND KUD.KUD_YEAR = #{searchYear} AND KUD.KUD_CERT_BELT NOT IN ('D000','D001','D002') AND KUD.KUD_IDX = '6SIG'
-		               AND KUD_REG_DATE BETWEEN TRUNC (SYSDATE, 'YEAR') AND TO_CHAR(sysdate, 'yyyy-mm-dd hh24:mi:ss')
-		    ) AS KUD_BBU_CNT_3
-		   FROM 
-		    V_DEPART_MST2 DM,
-		    TB_KPI_MASTER KM
-		   WHERE  
-		    DM.DEPT_CODE = KM.DEPT_CODE(+)
-
-		) 
+		      SELECT 
+		        DEPT_CODE
+		        ,DEPT_NAME
+		        ,NVL(KM_GB_USER_CNT,0) AS KM_GB_USER_CNT
+		        ,NVL(KM_BB_USER_CNT,0) AS KM_BB_USER_CNT
+		        ,NVL(KM_MBB_USER_CNT,0) AS KM_MBB_USER_CNT
+		        ,NVL(KM_BBU_USER_CNT,0) AS KM_BBU_USER_CNT
+		      FROM 
+		         TB_KPI_MASTER 
+		      WHERE 
+		         KM_YEAR = #{searchYear}
+		   ) KM  ON KM.DEPT_CODE = KUD.COM_DEPART_CODE
+		   LEFT OUTER JOIN 
+		   (
+		      SELECT
+		      STD_DEPART
+		      ,sum(CASE WHEN STD_BELT_CODE IS NULL THEN to_char(1) ELSE to_char(0) END) AS GB_CERT_CNT
+		      ,sum(CASE WHEN STD_BELT_CODE = 'D000' THEN to_char(1) ELSE to_char(0) END) AS BB_CERT_CNT
+		      ,sum(CASE WHEN STD_BELT_CODE = 'D001' THEN to_char(1) ELSE to_char(0) END) AS MBB_CERT_CNT
+		      ,sum(CASE WHEN STD_BELT_CODE NOT IN ('D000','D001','D002') THEN to_char(1) ELSE to_char(0) END) AS BBU_CERT_CNT
+		      FROM 
+		         TB_STUDENT_DETAIL SD
+		      WHERE 
+		         STD_CLASS_DIVISION IN ('07','08','09')
+		         AND STD_CERT_CODE = 'Y'
+		         AND STD_CERT_DATE BETWEEN TRUNC (SYSDATE, 'YEAR') AND TO_CHAR(sysdate, 'yyyy-mm-dd hh24:mi:ss')
+		      GROUP BY STD_DEPART
+		   ) SD ON KUD.COM_DEPART_CODE = SD.STD_DEPART  
 		
 	</select>
 	
@@ -480,9 +502,10 @@
 	<update id="updateKpiMaster">
 	UPDATE TB_KPI_MASTER SET
 	    	update_date=sysdate
+	    	,dept_name=get_depart_nm(#{deptCode})
 	    <if test="kmGbUserCnt != null and kmGbUserCnt != ''">,KM_GB_USER_CNT=#{kmGbUserCnt}</if>
 	    <if test="kmBbuUserCnt != null and kmBbuUserCnt != ''">,KM_BBU_USER_CNT=#{kmBbuUserCnt}</if>
-	    <if test="kmMbbManageCnt != null and kmMbbManageCnt != ''">,KM_BBU_USER_CNT=#{kmMbbManageCnt}</if>
+	    <if test="kmMbbManageCnt != null and kmMbbManageCnt != ''">,KM_MBB_MANAGE_CNT=#{kmMbbManageCnt}</if>
 	    <if test="kmMbbUserCnt != null and kmMbbUserCnt != ''">,KM_MBB_USER_CNT=#{kmMbbUserCnt}</if>
 	    <if test="kmBbUserCnt != null and kmBbUserCnt != ''">,km_bb_user_cnt=#{kmBbUserCnt}</if>
 	    where dept_code=#{deptCode}
@@ -491,15 +514,15 @@
 	
 	<insert id="insertKpiMaster">
 		insert into TB_KPI_MASTER 
-		(dept_code, km_year, update_date
+		(dept_code, dept_name, km_year, reg_date
 		<if test="kmGbUserCnt != null and kmGbUserCnt != ''">,KM_GB_USER_CNT</if>
 	    <if test="kmBbuUserCnt != null and kmBbuUserCnt != ''">,KM_BBU_USER_CNT</if>
-	    <if test="kmMbbManageCnt != null and kmMbbManageCnt != ''">,KM_BBU_USER_CNT</if>
+	    <if test="kmMbbManageCnt != null and kmMbbManageCnt != ''">,KM_MBB_MANAGE_CNT</if>
 	    <if test="kmMbbUserCnt != null and kmMbbUserCnt != ''">,KM_MBB_USER_CNT</if>
 	    <if test="kmBbUserCnt != null and kmBbUserCnt != ''">,km_BB_user_cnt</if>
 		)
 		values
-		(#{deptCode}, #{kmYear}, sysdate
+		(#{deptCode}, get_depart_nm(#{deptCode}), #{kmYear}, sysdate
 		<if test="kmGbUserCnt != null and kmGbUserCnt != ''">,#{kmGbUserCnt}</if>
 	    <if test="kmBbuUserCnt != null and kmBbuUserCnt != ''">,#{kmBbuUserCnt}</if>
 	    <if test="kmMbbManageCnt != null and kmMbbManageCnt != ''">,#{kmMbbManageCnt}</if>

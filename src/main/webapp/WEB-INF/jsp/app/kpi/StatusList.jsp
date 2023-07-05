@@ -465,7 +465,7 @@
 		}
 		
 		function onclick_search(){
-			$("#defaultForm").attr("action", "statusMBB.do");
+			$("#defaultForm").attr("action", "${action}");
 			$("#defaultForm")[0].submit();
 		}
 		

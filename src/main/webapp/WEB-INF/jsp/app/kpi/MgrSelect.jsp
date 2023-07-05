@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
@@ -78,164 +77,100 @@
 								</div>
 								<div class="inr" style="overflow: auto">
 									<p>사원목록<span id="empTit"></span></p>
-									                                                                                <div class="list-wrap">
-                                                                                    <div class="list-table list">
-                                                                                        <table id="emptab">
-                                                                                            <colgroup>
-                                                                                                <col style="width:20%">
-                                                                                                <col style="width:30%">
-                                                                                                <col style="width:25%">
-                                                                                                <col style="width:25%">
-                                                                                                <%-- <col style="width:20%"> --%>
-                                                                                            </colgroup>
-                                                                                            <thead>
-                                                                                                <tr>
-                                                                                                    <th>
-																									 	<div>
-																					                        <input type="checkbox" id="empSelAll">
-																					                        <label for="empSelAll"></label>
-																					                    </div>
-																									</th>
-                                                                                                    <th><span>이름</span></th>
-                                                                                                    <th><span>직위</span></th>
-                                                                                                    <!-- <th><span>학력</span></th> -->
-                                                                                                    <th><span>직책</span></th>
-                                                                                                </tr>
-                                                                                            </thead>
-                                                                                            <tbody>
-                                                                                            	
-                                                                                            </tbody>
-                                                                                        </table>
-                                                                                    </div>
-                                                                                </div>
+                                    <div class="list-wrap">
+                                        <div class="list-table list">
+                                            <table id="emptab">
+                                                <colgroup>
+                                                            <col style="width:12%">
+                                                            <col style="width:22%">
+                                                            <col style="width:21%">
+                                                            <col style="width:21%">
+                                                            <col style="width:24%">
+                                                </colgroup>
+                                                <thead>
+                                                    <tr>
+                                                        <th>
+                                                            <div>
+                                                                <input type="checkbox" id="empSelAll">
+                                                                <label for="empSelAll"></label>
+                                                            </div>
+                                                        </th>
+                                                        <th><span>이름</span></th>
+                                                        <th><span>학력</span></th>
+                                                        <th><span>직무</span></th>
+                                                        <th><span>직책</span></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                	
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
 								</div>
 								<div class="inr border0">
-									<div class="box">
+									<div class="box" style="height: 760px;">
 										<p>
 											생산/기술/R&D/품질 인재<span id="leaderTit"></span>
 										</p>
-										<div style="overflow: auto; height: 326px;">
-                                                                         <div class="list-wrap">
-                                                                                    <div class="list-table list">
-                                                                                        <table id="leadertab">
-                                                                                            <colgroup>
-                                                                                                <col style="width:20%">
-                                                                                                <col style="width:30%">
-                                                                                                <col style="width:25%">
-                                                                                                <col style="width:25%">
-                                                                                                <%-- <col style="width:20%"> --%>
-                                                                                            </colgroup>
-                                                                                            <thead>
-                                                                                                <tr>
-                                                                                                    <th>
-																									 	<div>
-																					                        <input type="checkbox" id="leaderDelAll">
-																					                        <label for="leaderDelAll"></label>
-																					                    </div>
-																									</th>
-                                                                                                    <th><span>이름</span></th>
-                                                                                                    <th><span>직위</span></th>
-                                                                                                    <!-- <th><span>학력</span></th> -->
-                                                                                                    <th><span>직책</span></th>
-                                                                                                </tr>
-                                                                                            </thead>
-                                                                                            <tbody>
-                                                                                            <c:forEach var="item" items="${kpiMgrList}" varStatus="status">
-                                                                                            	<c:if test="${item.kudChkTypeCode eq 'KUD001'}">
-																									<tr comno="${item.comNo}" 
-																									    username="${item.kudUserName}" 
-																									    comdepartcode="${item.comDepartCode}" 
-																									    deptfullname="${item.kudDepart}" 
-																										comjobx="${item.kudJobx}" 
-																										composition="${item.kudPosition}" 
-																										kudPlace="${item.kudPlace}" 
-																										comCertBelt="${item.kudCertBelt}"
-																										cirMemCode="${item.stdSeq}"
-																										>
-																										<td class="text-align-center"><div><input type="checkbox" id="chkleader_${status.index}" name="chkleader">
-																										<label for="chkleader_${status.index}"></label></div></td>
-																										<td class="text-align-center"><span>${item.kudUserName}</span></td>
-																										<td class="text-align-center"><span>${item.kudJobx}</span></td>
-																										<td class="text-align-center"><span>${item.kudPosition}</span></td>
-																									</tr>
-																								</c:if>
-																							</c:forEach>
-                                                                                            </tbody>
-                                                                                        </table>
-                                                                                    </div>
-                                                                                </div>
-                                                                        
-                                                                                <!-- </li>
-                                                                            </ul> -->
-                                                                        </div>
+										<div style="overflow: auto; height: 720px;">
+                                            <div class="list-wrap">
+                                                <div class="list-table list">
+                                                    <table id="leadertab">
+                                                        <colgroup>
+                                                            <col style="width:20%">
+                                                            <col style="width:20%">
+                                                            <col style="width:20%">
+                                                            <col style="width:20%">
+                                                            <col style="width:20%">
+                                                        </colgroup>
+                                                        <thead>
+                                                            <tr>
+                                                                <th>
+																 	<div>
+												                        <input type="checkbox" id="leaderDelAll">
+												                        <label for="leaderDelAll"></label>
+												                    </div>
+																</th>
+                                                                <th><span>이름</span></th>
+                                                                <th><span>학력</span></th>
+                                                                <th><span>직무</span></th>
+                                                                <th><span>직책</span></th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        <c:forEach var="item" items="${kpiMgrList}" varStatus="status">
+                                                        	<c:if test="${item.kudChkTypeCode eq 'KUD001'}">
+																<tr comno="${item.comNo}" 
+																    username="${item.kudUserName}" 
+																    comdepartcode="${item.comDepartCode}" 
+																    deptfullname="${item.kudDepart}" 
+																	comjobx="${item.kudJobx}" 
+																	composition="${item.kudPosition}" 
+																	kudPlace="${item.kudPlace}" 
+																	comCertBelt="${item.kudCertBelt}"
+																	cirMemCode="${item.stdSeq}"
+																	>
+																	<td class="text-align-center"><div><input type="checkbox" id="chkleader_${item.comNo}" name="chkleader">
+																	<label for="chkleader_${item.comNo}"></label></div></td>
+																	<td class="text-align-center"><span>${item.kudUserName}</span></td>
+																	<td class="text-align-center"><span><!-- 학력 --></span></td>
+																	<td class="text-align-center"><span><!-- 직무 --></span></td>
+																	<td class="text-align-center"><span>${item.kudPosition}</span></td>
+																</tr>
+															</c:if>
+														</c:forEach>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
 										<div class="btn-group">
                                                 <button type="button" id="AppLeader"><i class="ico add"><em>추가</em></i></button>
                                                 <button type="button" id="delLeader"><i class="ico del"><em>삭제</em></i></button>
-                                            </div>
+                                        </div>
 									</div>
-									<div class="box">
-										<p>
-											생산/기술/R&D/품질 외 인재<span id="teamTit"></span>
-										</p>
-                                                                        <div style="overflow: auto; height: 326px;">
-                                                                        			<div class="list-wrap">
-                                                                                        <div class="list-table list">
-                                                                                            <table id="teamtab">
-	                                                                                            <colgroup>
-	                                                                                                <col style="width:20%">
-	                                                                                                <col style="width:30%">
-	                                                                                                <col style="width:25%">
-	                                                                                                <col style="width:25%">
-	                                                                                                <%-- <col style="width:20%"> --%>
-	                                                                                            </colgroup>
-	                                                                                            <thead>
-	                                                                                                <tr>
-	                                                                                                    <th>
-																										 	<div>
-																						                        <input type="checkbox" id="teamDelAll">
-																						                        <label for="teamDelAll"></label>
-																						                    </div>
-																										</th>
-	                                                                                                    <th><span>이름</span></th>
-	                                                                                                    <th><span>직위</span></th>
-	                                                                                                    <!-- <th><span>학력</span></th> -->
-	                                                                                                    <th><span>직첵</span></th>
-	                                                                                                </tr>
-	                                                                                            </thead>
-	                                                                                            <tbody>
-	                                                                                            <c:forEach var="item" items="${kpiMgrList}" varStatus="status">
-                                                                                            	<c:if test="${item.kudChkTypeCode eq 'KUD002'}">
-																									<tr comno="${item.comNo}" 
-																									    username="${item.kudUserName}" 
-																									    comdepartcode="${item.comDepartCode}" 
-																									    deptfullname="${item.kudDepart}" 
-																										comjobx="${item.kudJobx}" 
-																										composition="${item.kudPosition}" 
-																										kudPlace="${item.kudPlace}" 
-																										comCertBelt="${item.kudCertBelt}"
-																										cirMemCode="${item.stdSeq}"
-																										>
-																										<td class="text-align-center"><div><input type="checkbox" id="chkteam_${status.index}" name="chkteam">
-																										<label for="chkteam_${status.index}"></label></div></td>
-																										<td class="text-align-center"><span>${item.kudUserName}</span></td>
-																										<td class="text-align-center"><span>${item.kudJobx}</span></td>
-																										<td class="text-align-center"><span>${item.kudPosition}</span></td>
-																									</tr>
-																								</c:if>
-																								</c:forEach>
-	                                                                                            </tbody>
-	                                                                                        </table>
-                                                                                        </div>
-                                                                                    </div>            
-                                                                               <!--  </li>
-                                                                               
-                                                                            </ul> -->
-                                                                        </div>
-                                                                        <div class="btn-group">
-                                                                            <button type="button" id="AppTeam"><i class="ico add"><em>추가</em></i></button>
-                                                                            <button type="button" id="delTeam"><i class="ico del"><em>삭제</em></i></button>
-                                                                        </div>
-									</div>
+
 								</div>
 							</div>
 						</div>
@@ -334,17 +269,17 @@
 						//console.log(comDepartCode);
 						
 						vhtml.push("<tr comNo='"+comNo+"' userName='"+userName+"' comDepartCode='"+comDepartCode+"' deptFullName='"+deptFullName+"' comJobx='"+comJobx+"' comPosition='"+comPosition+"' comPositionNm='"+strChk(comPositionNm)+"' comCertBelt='"+comCertBelt+"' comCertBeltNm='"+comCertBeltNm+"' cirMemCode=''>");
-		        		vhtml.push("<td class='text-align-center'>"); 
+		        		vhtml.push("<td class='text-align-center' style='padding: 11px 0px !important;'>"); 
 		        		vhtml.push("<div>");
 		        		vhtml.push("<input type='checkbox' id='chkleader_"+i+"' name='chkleader'>");
 		        		vhtml.push("<label for='chkleader_"+i+"'></label>");
 		        		vhtml.push("</div>");
 		        		vhtml.push("</td>");
 		        		 
-						vhtml.push("<td class='text-align-center'><span>" + strChk(userName) + "</span></td>");
-						vhtml.push("<td class='text-align-center'><span>" + strChk(comJobxNm) + "</span></td>");
-						vhtml.push("<td class='text-align-center'><span>" + strChk(comPositionNm)+ "</span></td>");
-						//vhtml.push("<td><span>" + strChk(comCertBeltNm) + "</span></td>");
+		        		vhtml.push("<td class='text-align-center'><span>" + strChk(userName) + "</span></td>");
+						vhtml.push("<td class='text-align-center'></td>");//학력
+						vhtml.push("<td class='text-align-center'></td>");//직무
+						vhtml.push("<td class='text-align-center' style='padding: 11px 0px !important;'><span>" + strChk(comPositionNm)+ "</span></td>");
 						vhtml.push("</tr>");
 					}
 				}
@@ -352,8 +287,7 @@
 			});
 			$("#leadertab").find("tbody").append(vhtml.join(''));
 			
-			let lCnt = $("#leadertab").children("tbody:first").children("tr[comNo]").length;
-			$("#leaderTit").text("총 "+lCnt+"명");
+			updateCountEmpTab();
 			
 			/* $('#dept-tree-list').jstree();
 			$('#dept-tree-list').jstree(true).settings.core.data = deptList;
@@ -410,7 +344,7 @@
 						console.log(comDepartCode);
 						
 						vhtml.push("<tr comNo='"+comNo+"' userName='"+userName+"' comDepartCode='"+comDepartCode+"' deptFullName='"+deptFullName+"' comJobx='"+comJobx+"' comPosition='"+comPosition+"' comPositionNm='"+strChk(comPositionNm)+"' comCertBelt='"+comCertBelt+"' comCertBeltNm='"+comCertBeltNm+"' cirMemCode=''>");
-		        		vhtml.push("<td class='text-align-center'>"); 
+		        		vhtml.push("<td class='text-align-center' style='padding: 11px 0px !important;'>"); 
 		        		vhtml.push("<div>");
 		        		vhtml.push("<input type='checkbox' id='chkteam_"+i+"' name='chkteam'>");
 		        		vhtml.push("<label for='chkteam_"+i+"'></label>");
@@ -418,9 +352,9 @@
 		        		vhtml.push("</td>");
 		        		 
 						vhtml.push("<td class='text-align-center'><span>" + strChk(userName) + "</span></td>");
-						vhtml.push("<td class='text-align-center'><span>" + strChk(comJobxNm) + "</span></td>");
-						vhtml.push("<td class='text-align-center'><span>" + strChk(comPositionNm)+ "</span></td>");
-						//vhtml.push("<td><span>" + strChk(comCertBeltNm) + "</span></td>");
+						vhtml.push("<td class='text-align-center'></td>");//학력
+						vhtml.push("<td class='text-align-center'></td>");//직무
+						vhtml.push("<td class='text-align-center' style='padding: 11px 0px !important;'><span>" + strChk(comPositionNm)+ "</span></td>");
 						vhtml.push("</tr>");
 					}
 				}
@@ -481,10 +415,15 @@
 	        $(this).addClass("on").siblings().removeClass("on");
 	        $(this).closest(".tab-group").children(".tab-inr").find(" > .tab-box:eq("+ $idx +")").addClass("on").siblings().removeClass("on");
 	    });
-	 	
-	 	
+		
+		updateCountEmpTab();
 	});
 
+	function updateCountEmpTab(){
+		let lCnt = $("#leadertab").children("tbody:first").children("tr[comNo]").length;
+		$("#leaderTit").text("총 "+lCnt+"명");
+	}
+	
 		function getEmpSearch(par){
 			let params = {};
 			params.comDepartCode = par;		
@@ -511,7 +450,7 @@
 							let item = data[i];
 						
 		            		vhtml.push("<tr comNo='"+strChk(item.comNo)+"' userName='"+strChk(item.userName)+"' comDepartCode='"+strChk(item.comDepartCode)+"' deptFullName='"+strChk(item.deptFullName)+"' comJobx='"+strChk(item.comJobx)+"' comJobxNm='"+item.comJobxNm+"' comPosition='"+strChk(item.comPosition)+"' comPositionNm='"+strChk(item.comPositionNm)+"' comCertBelt='"+strChk(item.comCertBelt)+"' comCertBeltNm='"+strChk(item.comCertBeltNm)+"' >");
-		            		vhtml.push("<td class='text-align-center'>"); 
+		            		vhtml.push("<td class='text-align-center' style='padding: 11px 0px !important;'>"); 
 		            		vhtml.push("<div>");
 		            		vhtml.push("<input type='checkbox' id='chkNo_"+i+"' name='chkNo'>");
 		            		vhtml.push("<label for='chkNo_"+i+"'></label>");
@@ -519,9 +458,9 @@
 		            		vhtml.push("</td>");
 		            		 
 							vhtml.push("<td class='text-align-center'><span>" + strChk(item.userName) + "</span></td>");
-							vhtml.push("<td class='text-align-center'><span>" + strChk(item.comJobxNm) + "</span></td>");
-							vhtml.push("<td class='text-align-center'><span>" + strChk(item.comPositionNm)+ "</span></td>");
-							//vhtml.push("<td><span>" + strChk(item.comCertBeltNm) + "</span></td>");
+							vhtml.push("<td class='text-align-center'><span> </span></td>");
+							vhtml.push("<td class='text-align-center'><span> </span></td>");
+							vhtml.push("<td class='text-align-center' style='padding: 11px 0px !important;'><span>" + strChk(item.comPositionNm)+ "</span></td>");
 							vhtml.push("</tr>");
 							
 							cntNum = cntNum+1;

@@ -72,12 +72,21 @@
                                 </div>
                                 <div class="tab-box ${cssOn2}">
                                     <div class="list-wrap">
+ 			<form:form commandName="searchVO" id="defaultForm" name="defaultForm"  action="${action}" method="get" modelAttribute="searchVO">
+				${searchVO.superHiddenTag}
+				<form:hidden path="kudIdx"/>
+				<input type="hidden" name="update_fields" id="updateFields">                                    
                                         <div class="list-header mg-t20">
+			                                        
                                             <p class="title">대상연도 선택</p>
-                                            <select name="limit" class="limit">
-                                                <option value="10">2023년</option>
-                                            </select>
+								            <fmt:formatDate value="${now}" pattern="yyyy" var="yearNow"/>
+								            <form:select path="searchYear" class="limit">
+											<c:forEach begin="${yearStart}" end="${yearNow}" var="result" step="1">
+												<option value="<c:out value="${result}" />" <c:if test="${(result) == searchVO.searchYear}"> selected="selected"</c:if>><c:out value="${result}" /></option>
+											</c:forEach>
+											</form:select>                                         
                                         </div>
+			</form:form>        
                                         
                                         <div class="list-wrap">
                                             <div class="list-content">
@@ -87,7 +96,7 @@
                                         
                                         <div class="list-footer">
                                             <div class="list-btns center">
-                                                <button type="button" class="btn bg-gray">계획저장</button>
+                                                <button type="button" class="btn bg-gray" id="btnSave2">계획저장</button>
                                                 <button type="button" class="btn-excel">
                                                     <img src="/assets/images/icon_excel.png" alt="">
                                                     <span>다운로드</span>
@@ -177,8 +186,8 @@
 				dataTreeStartExpanded:true,
 	            columnHeaderVertAlign:"middle", //align header contents to bottom of cell
 				columns:[
-	                {title:"대상구분", field:"name",headerSort:false, width:160},
-	                {//create column group
+	                { title:"대상구분", field:"name",headerSort:false, width:250, frozen: true },
+	                { //create column group
 	                    title:"‘${fn:substring(searchVO.searchYear-1,2,4)}년(직전년도)",field:"name2",
 	                    columns:[
 	                        {
@@ -324,7 +333,7 @@
 	              fontSize: "smaller"
 	            },
 				columns:[
-	                {title:"대상구분", field:"DEPT_NAME",headerSort:false, width:160},
+	                {title:"대상구분", field:"DEPT_NAME",headerSort:false, width:220, frozen: true},
 	                {title:"‘${fn:substring(searchVO.searchYear,2,4)}MBB 인원", field:"MBB_23",headerSort:false},
 	                {//create column group
 	                    title:"‘${fn:substring(searchVO.searchYear,2,4)}년 육성",field:"name3",
@@ -380,7 +389,8 @@
 			// common.js 이벤트 비활성
 			$(".tab-group > .tab-btn > button").off("click");
 			
-			$("#btnSave").off("click").on("click", onclick_btnSave)
+			$("#btnSave").off("click").on("click", onclick_btnSave);
+			$("#btnSave2").off("click").on("click", onclick_btnSave);
 			
 		}
 		
@@ -389,7 +399,7 @@
 		}
 		
 		function onclick_btnSave(e){
-			
+			debugger;
 			let arrTextObj = $("input.grid-text-box");
 			if(arrTextObj.length>0){
 				let arrTextVal = {};
@@ -407,7 +417,9 @@
 					data: params,
 					dataType : 'json',
 					success:function(data){
-						console.log("return", data);
+						//console.log("return", data);
+						alert("저장되었습니다.");
+						location.reload();
 					}
 				});
 			} else {

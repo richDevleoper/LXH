@@ -1244,7 +1244,8 @@ function onchange_resultType(obj){
 						return false;
 					}
 					
-					if(checkLdrBelt(true)){
+					//리더벨트 체크
+					if(vMenuType==="REPORT" && checkLdrBelt(true)){ // 메시지 출력 여부 true
 						return false;
 					}
 					
