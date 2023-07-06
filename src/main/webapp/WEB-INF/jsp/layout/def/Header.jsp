@@ -86,7 +86,7 @@ hr { display:none; }
                             <form method="GET" action="/search/">
                             <input type="hidden" name="menuKey" value="36">
                                 <span>전체</span>
-                                <input type="text" name="searchText" placeholder="검색어를 입력하세요">
+                                <input type="text" name="searchRepName" placeholder="검색어를 입력하세요">
                                 <button type="submit" class="btn-search">검색</button>
                             </form>
                         </div>

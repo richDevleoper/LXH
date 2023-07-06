@@ -26,10 +26,9 @@
                     <div class="page-category search">통합검색</div>
                     <div class="search-box">
                         <div class="search-form">
-                        	<form:form commandName="reportSearchVO" id="defaultForm" method="get" action="./" >
-                                ${reportSearchVO.superHiddenTag}
+                        	<form:form commandName="searchAllVO" id="defaultForm" method="get" action="/search/">
                                 <span>전체</span>
-                                <form:input path="searchRepName" placeholder="검색어를 입력하세요" />
+                                <form:input type="text" path="searchText" placeholder="검색어를 입력하세요" />
                                 <button type="submit" class="btn-search">검색</button>
                             </form:form>
                         </div>
@@ -62,50 +61,15 @@
                                         <p class="title">조회된 과제</p>
                                         <span class="bar"></span>
                                         <p class="total">총 100</p>
-                                        <select name="limit" class="limit"  onchange="onchange_recordCountPerPage(this.value)">
-	                                        <option value="10" <c:if test="${reportSearchVO.recordCountPerPage eq '10' }">selected="selected"</c:if>>10개</option>
-		                                    <option value="50" <c:if test="${reportSearchVO.recordCountPerPage eq '50' }">selected="selected"</c:if>>50개</option>
-		                                    <option value="100" <c:if test="${reportSearchVO.recordCountPerPage eq '100' }">selected="selected"</c:if>>100개</option>
-	                                    </select>
+                                        <select name="limit" class="limit">
+                                            <option value="10">10개</option>
+                                            <option value="50">50개</option>
+                                            <option value="100">100개</option>
+                                        </select>
                                     </div>
                                     <section class="new_list" style="width: 100% !important;">
                                         <div class="inr">
-                                        
                                             <ul>
-<c:forEach items="${reportList}" var="item" varStatus="i">
-                                            <li class="border">
-                                                <div>
-                                                    <ul>
-                                                        <li class="title <c:if test="${item.repStatusCode eq '5'}">gray</c:if>">
-                                                            <span>${item.repStatus}</span>
-                                                        </li>
-                                                        <li>
-                                                            <span>${item.repDivision}</span>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                                <p class="list">
-                                                    <a href="./SearchView.do?menuKey=${menuKey}&repCode=${item.repCode}" title="${item.repName}">과제명 : ${item.repName}</a>
-                                                    <span>활동Process(소) : ${item.repType}
-                                                    , 활동분야 : ${item.repActionType}
-                                                    , MBB활용율 : ${item.repMbbUseRate}
-                                                    , 부문 : ${item.repSector}
-                                                    , 사업장 : ${item.repPlace}
-                                                    , 과제리더 : ${item.repTeamLeaderName}
-                                                    , 팀원 : ${item.repTeamMemberName}
-<c:if test="${item.repTeamProcessOwnerName eq ''}">                                       
-                                                    , Process Owner : ${item.repTeamProcessOwnerName}
-</c:if>                                             
-                                                    , 챔피언 : ${item.repTeamChapionName}
-                                                    , 착수(예정)일 : <fmt:formatDate pattern="yyyy.MM.dd" value="${item.repStartDate}" />
-                                                    , 완료(예정)일 : <fmt:formatDate pattern="yyyy.MM.dd" value="${item.repFinishDate}" />
-                                                    <%-- <c:out value="${item}"/> --%>
-                                                    </span>
-                                                </p>
-                                            </li>
-</c:forEach>                                            
-                                            
-                                            <!-- 
                                                 <li class="border">
                                                     <div>
                                                         <ul>
@@ -266,14 +230,11 @@
                                                         <span>활동Process(소) : DMAIC, 활동분야 : 품질개선, 활동유형 : MBB, 부문 : 창호, 사업장 : 청주공장, 과제리더 : 홍길동, 팀원 : 홍길동, 이길동, Process Owner : 홍길동, 챔피언 : 홍길동, 착수(예정)일 : 2023.01.01, 완료(예정)일 : 2023.06.30</span>
                                                     </p>
                                                 </li>
-                                                -->
                                             </ul>
-                                        
                                         </div>
                                     </section>
                                     <div class="list-footer">
-                                    	<ui:pagination paginationInfo="${reportSearchVO}" type="defDefault" jsFunction="cfnPageLink" />
-                                        <!-- <div class="pagination">
+                                        <div class="pagination">
                                             <a href="" class="first">처음</a>
                                             <a href="" class="prev">이전</a>
                                             <a href="" class="cur num">1</a>
@@ -283,7 +244,7 @@
                                             <a href="" class="num">5</a>
                                             <a href="" class="next">다음</a>
                                             <a href="" class="last">끝</a>
-                                        </div> -->
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -294,16 +255,6 @@
 
         </div>
         <!-- //container -->
-<script>
 
-function onclick_search(){
-	$("#defaultForm")[0].submit();
-}
-
-function onchange_recordCountPerPage(vCount){
-	$("#recordCountPerPage").val(vCount);
-	onclick_search();// 검색 '조회'버튼 클릭
-}
-</script>
 </body>
 </html>

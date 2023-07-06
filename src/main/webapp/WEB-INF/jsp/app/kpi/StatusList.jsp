@@ -204,7 +204,7 @@
 					title : "대상구분",
 					field : "name",
 					headerSort : false,
-					width : 300,
+					width : 240,
 					frozen: true
 				}, {//create column group
 					title : "‘${fn:substring(searchVO.searchYear-1,2,4)}년(직전년도)",
@@ -226,6 +226,7 @@
 							title : "율(%)",
 							field : "GB1_2",
 							headerSort : false,
+							hozAlign : 'right',
 							width : 40
 						}, ],
 					}, {
@@ -243,6 +244,7 @@
 							title : "율(%)",
 							field : "BB1_2",
 							headerSort : false,
+							hozAlign : 'right',
 							width : 40
 						}, ],
 
@@ -261,6 +263,7 @@
 							title : "율(%)",
 							field : "MBB1_2",
 							headerSort : false,
+							hozAlign : 'right',
 							width : 40
 						}, ],
 					}, {
@@ -278,6 +281,7 @@
 							title : "율(%)",
 							field : "BB이상1_2",
 							headerSort : false,
+							hozAlign : 'right',
 							width : 40
 						}, ],
 					} ],
@@ -285,6 +289,11 @@
 					title : "‘${fn:substring(searchVO.searchYear,2,4)}년 육성 계획",
 					field : "name3",
 					columns : [ {
+						title : "총인원",
+						field : "KPI_CNT",
+						headerSort : false,
+						hozAlign : 'right',
+					},{
 						title : "GB",
 						field : "GB2",
 						columns : [ {
@@ -299,6 +308,7 @@
 							title : "율(%)",
 							field : "GB2_2",
 							headerSort : false,
+							hozAlign : 'right',
 							width : 40
 						}, ],
 					}, {
@@ -316,6 +326,7 @@
 							title : "율(%)",
 							field : "BB2_2",
 							headerSort : false,
+							hozAlign : 'right',
 							width : 40
 						}, ],
 
@@ -334,6 +345,7 @@
 							title : "율(%)",
 							field : "MBB2_2",
 							headerSort : false,
+							hozAlign : 'right',
 							width : 40
 						}, ],
 					}, {
@@ -351,6 +363,7 @@
 							title : "율(%)",
 							field : "BB이상2_2",
 							headerSort : false,
+							hozAlign : 'right',
 							width : 40
 						}, ],
 					} ],
@@ -373,6 +386,7 @@
 							title : "율(%)",
 							field : "GB3_2",
 							headerSort : false,
+							hozAlign : 'right',
 							width : 40
 						}, ],
 					}, {
@@ -390,6 +404,7 @@
 							title : "율(%)",
 							field : "BB3_2",
 							headerSort : false,
+							hozAlign : 'right',
 							width : 40
 						}, ],
 
@@ -408,6 +423,7 @@
 							title : "율(%)",
 							field : "MBB3_2",
 							headerSort : false,
+							hozAlign : 'right',
 							width : 40
 						}, ],
 					}, {
@@ -425,6 +441,7 @@
 							title : "율(%)",
 							field : "BB이상3_2",
 							headerSort : false,
+							hozAlign : 'right',
 							width : 40
 						}, ],
 					} ],
@@ -432,6 +449,7 @@
 					title : "대상인원",
 					field : "name5",
 					headerSort : false,
+					hozAlign : 'right',
 					width : 60
 				}, ],
 			});
@@ -440,12 +458,18 @@
 		
 
 		function onclickCell(e, cell) {
-			location.href = "statusView.do?idx="
+			if('${searchVO.kudIdx}'=='6SIG'){
+				location.href = "statusView.do?idx="
 					+ cell.getColumn().getDefinition().field + "&seq="
-					+ cell.getRow().getData().id + "&menuKey=${menuKey}";
+					+ cell.getRow().getData().id + "&eduYear="+$("#searchYear").val()+"&menuKey=${menuKey}";	
+			} else {
+				location.href = "statusViewMBB.do?idx="
+					+ cell.getColumn().getDefinition().field + "&seq="
+					+ cell.getRow().getData().id + "&eduYear="+ $("#searchYear").val() +"&menuKey=${menuKey}";
+			}
+			
 			//alert(cell.getColumn().getDefinition().field +", "+ cell.getRow().getData().id);
-			console.log(cell.getColumn().getDefinition().field, cell.getRow()
-					.getData().id);
+			//console.log(cell.getColumn().getDefinition().field, cell.getRow().getData().id);
 		}
 
 		$(document).ready(init);

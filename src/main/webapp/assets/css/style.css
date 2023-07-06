@@ -516,6 +516,7 @@
     box-sizing: border-box;
     position: relative;
     padding: 4px 0;
+    font-size: small;
 }
 .tabulator .tabulator-header .tabulator-col .tabulator-col-content .tabulator-header-popup-button {
     padding: 0 8px;
@@ -1458,6 +1459,8 @@ body.tabulator-print-fullscreen-hide > *:not(.tabulator-print-fullscreen) {
     padding: 17px 10px 14px;
     line-height: 1em;
     box-sizing: border-box;
+    font-size: small;
+    padding-right: 3px;
 }
 .tabulator-row .tabulator-cell input[type=text]{position:absolute;top:50%;right:5px;left:5px;height:20px;margin-top:-10px;border:1px solid #c8c8c8;font-size:12px;text-align:center;box-sizing:border-box}
 .tabulator-row .tabulator-cell.tabulator-row-handle .tabulator-row-handle-box .tabulator-row-handle-bar {

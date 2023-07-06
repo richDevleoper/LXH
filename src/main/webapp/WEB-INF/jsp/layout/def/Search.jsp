@@ -90,7 +90,7 @@
                 </div>
             </div>
         </div>                    
-           <div class="dimmed"></div>
+        <div class="dimmed"></div>
 
 	<%@ include file="/WEB-INF/jsp/layout/def/Footer.jsp" %>
 	</div>

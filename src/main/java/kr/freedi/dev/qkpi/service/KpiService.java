@@ -1,5 +1,7 @@
 package kr.freedi.dev.qkpi.service;
 
+import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -72,6 +74,12 @@ public class KpiService {
         		node.addProperty("BB이상1_1", "0");
         		node.addProperty("BB이상1_2", "0");
         		
+        		int totalCnt = Integer.parseInt(item.get("gbCnt").toString());
+        		totalCnt += Integer.parseInt(item.get("bbCnt").toString());
+        		totalCnt += Integer.parseInt(item.get("mbbCnt").toString());
+        		totalCnt += Integer.parseInt(item.get("bbuCnt").toString());
+        		
+        		node.addProperty("KPI_CNT", String.valueOf(totalCnt));
         		node.addProperty("GB2_1", String.valueOf(item.get("kmGbUserCnt")));
         		node.addProperty("GB2_2", String.valueOf(item.get("gbRat")));
         		node.addProperty("BB2_1", String.valueOf(item.get("kmBbUserCnt")));
@@ -178,5 +186,11 @@ public class KpiService {
 		return (Integer)dao.insert("KPI.insertKpiMaster", vo);
 	}
 	
-	
+	public List<HashMap<String, String>> getDeptStatus(HashMap<String, String> param){
+		return dao.selectList("KPI.getDeptStatus", param);
+	}
+
+	public String selectDepartName(HashMap<String, String> param) {
+		return (String) dao.selectOne("KPI.selectDepartName", param);
+	}
 }

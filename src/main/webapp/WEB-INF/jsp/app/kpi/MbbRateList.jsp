@@ -117,7 +117,7 @@
 				dataTreeStartExpanded:true,
 	            columnHeaderVertAlign:"middle", //align header contents to bottom of cell
 				columns:[
-	                {title:"대상구분", field:"name",headerSort:false, width:160, cssClass: "link-cell", cellClick:onclickCell},
+	                {title:"대상구분", field:"name",headerSort:false, width:160, cssClass: "link-cell", cellClick:onclickCell, frozen: true},
 	                {title:"‘${fn:substring(searchVO.searchYear,2,4)}MBB 인원", field:"name2",headerSort:false},
 	                {//create column group
 	                    title:"‘${fn:substring(searchVO.searchYear,2,4)}년 계획",field:"name3",

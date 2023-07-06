@@ -288,14 +288,49 @@ public class KpiController {
 	}
 	
 	@RequestMapping({"/statusView.do"})
-	public String handler_statusList6SIG(HttpServletRequest request, ModelMap model,
+	public String handler_statusView6SIG(HttpServletRequest request, ModelMap model,
 			@ModelAttribute("kpiVO") KpiVO kpiVO,
 			@ModelAttribute("kpiSearchVO") KpiSearchVO searchVO, 
 			UserVO userSession)throws Exception {
 		
 		model.addAttribute("menuKey", searchVO.getMenuKey());
+		model.addAttribute("eduYear", request.getParameter("eduYear"));
 		
+		HashMap<String, String> param = new HashMap<>();
+		param.put("deptCode", request.getParameter("seq"));
+		String deptName = kpiService.selectDepartName(param);
+		model.addAttribute("deptName", deptName);
 		
+		param = new HashMap<>();
+		param.put("deptCode", request.getParameter("seq"));
+		param.put("eduYear", request.getParameter("eduYear"));
+		
+		List<HashMap<String, String>> data = kpiService.getDeptStatus(param);
+		model.addAttribute("tableData", data);
+		
+		return "app/kpi/StatusView";
+	}
+	
+	@RequestMapping({"/statusViewMBB.do"})
+	public String handler_statusViewMBB (HttpServletRequest request, ModelMap model,
+			@ModelAttribute("kpiVO") KpiVO kpiVO,
+			@ModelAttribute("kpiSearchVO") KpiSearchVO searchVO, 
+			UserVO userSession)throws Exception {
+		
+		model.addAttribute("menuKey", searchVO.getMenuKey());
+		model.addAttribute("eduYear", request.getParameter("eduYear"));
+		
+		HashMap<String, String> param = new HashMap<>();
+		param.put("deptCode", request.getParameter("seq"));
+		String deptName = kpiService.selectDepartName(param);
+		model.addAttribute("deptName", deptName);
+		
+		param = new HashMap<>();
+		param.put("deptCode", request.getParameter("seq"));
+		param.put("eduYear", request.getParameter("eduYear"));
+		
+		List<HashMap<String, String>> data = kpiService.getDeptStatus(param);
+		model.addAttribute("tableData", data);
 		
 		return "app/kpi/StatusView";
 	}
