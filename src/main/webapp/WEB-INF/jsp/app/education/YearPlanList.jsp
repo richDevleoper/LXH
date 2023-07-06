@@ -88,6 +88,7 @@
 		<form:form commandName="frmYearPlan" id="defaultForm" name="defaultForm" onsubmit="return false" method="post" modelAttribute="EducationVO">
            <form:hidden path="eduCode" id="eduCode"/>
            <form:hidden path="eduFixed" id="eduFixed"/>
+           <form:hidden path="eduClassDivision" id="eduClassDivision"/>
            <form:hidden path="mode" />
            <%-- <form:hidden path="comCertBelt" id="comCertBelt" value="${comCertBelt}"/>    --%>  
          </form:form>     
@@ -220,9 +221,11 @@ function init(){
 function reqeustSave(){
 	let tit = $("#eduCol1").text();
 	let eduCode = $("#eduCode").val();
+	let eduClassDivision = $("#eduClassDivision").val();
 	
 	let params = {};
 	params.eduCode = eduCode;
+	params.eduClassDivision = eduClassDivision;
 	params.mode = "Y";	
 	
 	if(confirm(tit + " 교육을 신청하시겠습니까?")){
@@ -246,9 +249,11 @@ function reqeustSave(){
 function cnacleSave(){
 	let tit = $("#eduCol1").text();
 	let eduCode = $("#eduCode").val();
+	let eduClassDivision = $("#eduClassDivision").val();
 	
 	let params = {};
 	params.eduCode = eduCode;
+	params.eduClassDivision = eduClassDivision;
 	params.mode = "N";	
 	
 	if(confirm(tit + " 교육을 취소하시겠습니까?")){
@@ -284,6 +289,7 @@ function detailView(eduCode){
 			$("#titTab").text(data.eduName);
 			$("#titTab2").html("정원 : <b>"+data.eduFixed+"</b>명, 신청 : <b>"+data.tsdCnt+"</b>명");
 			$("#eduFixed").val(data.eduFixed);
+			$("#eduClassDivision").val(data.eduClassDivision);
 			
 			$("#eduCode").val(data.eduCode);
 			$("#detailDiv").show();

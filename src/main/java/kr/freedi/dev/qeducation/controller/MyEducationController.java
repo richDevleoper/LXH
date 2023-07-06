@@ -155,6 +155,7 @@ public class MyEducationController {
 		   UserVO userSession)throws Exception {
 		
 		String eduCode   = (String)params.get("eduCode");
+		String eduClassDivision = (String)params.get("eduClassDivision");
 		String mode   = (String)params.get("mode");
 		
 		// 사용자 마스터 정보조회
@@ -177,6 +178,7 @@ public class MyEducationController {
 			
 			// 수강생 정보 세팅
 			studentVO.setEduCode(eduCode);
+			studentVO.setStdClassDivision(eduClassDivision);
 			studentVO.setComNo(comNo);
 			studentVO.setStdUserId(userId);
 			studentVO.setStdName(userName);
@@ -205,6 +207,7 @@ public class MyEducationController {
 		   UserVO userSession)throws Exception {
 		
 		String eduCode   = (String)params.get("eduCode");
+		String eduClassDivision = (String)params.get("eduClassDivision");
 		String mode   = (String)params.get("mode");
 		
 		// 사용자 마스터 정보조회
@@ -228,6 +231,7 @@ public class MyEducationController {
 				studentVO.setResult("N"); // 결과값
 			}else {
 				studentVO.setEduCode(eduCode);
+				studentVO.setStdClassDivision(eduClassDivision);
 				studentVO.setStdSeq(stdSeq);
 				studentVO.setStdStatus("N");
 				studentVO.setStdReapplyYn(mode);
@@ -252,6 +256,7 @@ public class MyEducationController {
 		   UserVO userSession)throws Exception {
 		
 		String eduCode   = (String)params.get("eduCode");
+		String eduClassDivision = (String)params.get("eduClassDivision");
 		String stdSeq   = (String)params.get("stdSeq");
 		String mode   = (String)params.get("mode");
 		
@@ -264,6 +269,7 @@ public class MyEducationController {
 		}else {
 			// 수강생 정보 세팅
 			studentVO.setEduCode(eduCode);
+			studentVO.setStdClassDivision(eduClassDivision);
 			studentVO.setStdSeq(stdSeq);
 			studentVO.setComNo(myUserId);
 			studentVO.setStdStatus(mode);

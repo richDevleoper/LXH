@@ -26,6 +26,7 @@ public class StudentVO extends CommonVO {
 	private String stdUpdateDate;          // 수정일 
 	private String stdTestCode;
 	private String stdTestDate;
+	private String stdClassDivision;
 	
 	private String stdDepartNm;
 	private String stdJobxNm;
@@ -210,6 +211,14 @@ public class StudentVO extends CommonVO {
 
 	public void setStdTestDate(String stdTestDate) {
 		this.stdTestDate = stdTestDate;
+	}
+
+	public String getStdClassDivision() {
+		return stdClassDivision;
+	}
+
+	public void setStdClassDivision(String stdClassDivision) {
+		this.stdClassDivision = stdClassDivision;
 	}
 
 	public String getStdDepartNm() {

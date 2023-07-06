@@ -837,19 +837,6 @@
 					 	   	M.EDU_REG_DATE,
 					 	   	D.STD_SEQ,
 					 	   	D.COM_NO,
-					 	   	(
-					 	   		SELECT NVL(COUNT(*),0) AS CNT 
-								  FROM TB_EDUCATION_MST TE
-								   LEFT OUTER JOIN TB_STUDENT_DETAIL TS ON TE.EDU_CODE = TS.EDU_CODE 
-									WHERE TE.EDU_NUMBER = '1' AND TE.EDU_CLASS_TYPE = '02' AND TS.STD_COMPLETE_YN = 'Y'
-					 	   	) AS GBCNT,
-					 	   	(
-						 	   	SELECT COUNT(*) 
-								  FROM TB_EDUCATION_MST TE
-								   LEFT OUTER JOIN TB_STUDENT_DETAIL TS ON TE.EDU_CODE = TS.EDU_CODE 
-									WHERE TE.EDU_CLASS_DIVISION = '08' AND TS.STD_COMPLETE_YN = 'Y'
-					 	   	) AS BBCNT,
-					 	   	(SELECT NVL(COUNT(*),0) AS CNT FROM TB_STUDENT_DETAIL TB WHERE TB.COM_NO=D.COM_NO AND TB.STD_TEST_CODE='Y') AS MBBCNT,
 					 	   	D.STD_NAME,
 							D.STD_USERID,
 							D.STD_DEPART,
@@ -878,24 +865,14 @@
 				 LEFT OUTER JOIN tb_code cd_pos ON cd_pos.code_grp_id='POSITION' AND cd_pos.code_id = D.STD_POSITION 
 				 LEFT OUTER JOIN tb_code cd_blt ON cd_blt.code_grp_id='LDRBELT' AND cd_blt.code_id = D.STD_BELT_CODE 
 					  WHERE D.STD_NAME IS NOT NULL
+					    AND D.STD_CLASS_DIVISION IN ('07','08','09')
 					    AND D.STD_COMPLETE_YN = 'Y'
+					    AND D.STD_CERT_CODE = 'N'
+					    AND D.STD_CERT_DATE IS NULL 
 		  	   ) RS 
 		 WHERE 1=1
 		 <if test="searchbeltCode != null and searchbeltCode neq ''.toString()">
 			AND RS.EDU_BELTCODE = #{searchbeltCode}
-			<choose>
-		        <when test="searchbeltCode != null and searchbeltCode eq 'D000'.toString()">
-		        	AND RS.GBCNT <![CDATA[>]]> 0
-		        </when>
-		        <when test="searchbeltCode != null and searchbeltCode eq 'D001'.toString()">
-		        	AND RS.BBCNT <![CDATA[>]]> 0
-		        </when>
-		        <when test="searchbeltCode != null and searchbeltCode eq 'D002'.toString()">
-		        	AND RS.MBBCNT <![CDATA[>]]> 0
-		        </when>
-		        <otherwise>
-		        </otherwise>
-		    </choose>
 		 </if>  
 		 <if test="searchStdName != null and searchStdName neq ''.toString()">
 			AND RS.STD_NAME like '%' || #{searchStdName} || '%'
@@ -913,7 +890,7 @@
 	
 	<select id="selectMngList" resultMap="EducationMap">
 			WITH EDU_MNG AS (
-					SELECT  ROW_NUMBER() OVER( ORDER BY RS.EDU_CODE DESC, RS.STD_NAME ASC ) IDX, ROW_NUMBER() OVER( ORDER BY RS.EDU_CODE DESC, RS.STD_NAME ASC ) ROWIDX, 
+					SELECT  ROW_NUMBER() OVER( ORDER BY RS.EDU_BELTCODE ASC ) IDX, ROW_NUMBER() OVER( ORDER BY RS.EDU_BELTCODE ASC ) ROWIDX, 
 					   		RS.*,
 					   		RS.EDU_NUMBER || '차 ' || RS.STD_COMPLETE_NN AS MNG_TIT
 					  FROM (
@@ -929,19 +906,6 @@
 								 	   	M.EDU_REG_DATE,
 								 	   	D.STD_SEQ,
 								 	   	D.COM_NO,
-								 	   	(
-								 	   		SELECT NVL(COUNT(*),0) AS CNT 
-											  FROM TB_EDUCATION_MST TE
-											   LEFT OUTER JOIN TB_STUDENT_DETAIL TS ON TE.EDU_CODE = TS.EDU_CODE 
-												WHERE TE.EDU_NUMBER = '1' AND TE.EDU_CLASS_DIVISION IN ('02','04','05') AND TS.STD_COMPLETE_YN = 'Y'
-								 	   	) AS GBCNT,
-								 	   	(
-									 	   	SELECT COUNT(*) 
-											  FROM TB_EDUCATION_MST TE
-											   LEFT OUTER JOIN TB_STUDENT_DETAIL TS ON TE.EDU_CODE = TS.EDU_CODE 
-												WHERE TE.EDU_CLASS_DIVISION = '05' AND TS.STD_COMPLETE_YN = 'Y'
-								 	   	) AS BBCNT,
-								 	   	(SELECT NVL(COUNT(*),0) AS CNT FROM TB_STUDENT_DETAIL TB WHERE TB.COM_NO=D.COM_NO AND TB.STD_TEST_CODE='Y') AS MBBCNT,
 								 	   	D.STD_NAME,
 										D.STD_USERID,
 										D.STD_DEPART,
@@ -970,24 +934,14 @@
 							 LEFT OUTER JOIN tb_code cd_pos ON cd_pos.code_grp_id='POSITION' AND cd_pos.code_id = D.STD_POSITION 
 							 LEFT OUTER JOIN tb_code cd_blt ON cd_blt.code_grp_id='LDRBELT' AND cd_blt.code_id = D.STD_BELT_CODE 
 								  WHERE D.STD_NAME IS NOT NULL
-					    			AND D.STD_COMPLETE_YN = 'Y'
+								    AND D.STD_CLASS_DIVISION IN ('07','08','09')
+								    AND D.STD_COMPLETE_YN = 'Y'
+								    AND D.STD_CERT_CODE = 'N'
+								    AND D.STD_CERT_DATE IS NULL 
 					  	   ) RS 
 					 WHERE 1=1
 					 <if test="searchbeltCode != null and searchbeltCode neq ''.toString()">
 						AND RS.EDU_BELTCODE = #{searchbeltCode}
-						<choose>
-					        <when test="searchbeltCode != null and searchbeltCode eq 'D000'.toString()">
-					        	AND RS.GBCNT <![CDATA[>]]> 0
-					        </when>
-					        <when test="searchbeltCode != null and searchbeltCode eq 'D001'.toString()">
-					        	AND RS.BBCNT <![CDATA[>]]> 0
-					        </when>
-					        <when test="searchbeltCode != null and searchbeltCode eq 'D002'.toString()">
-					        	AND RS.MBBCNT <![CDATA[>]]> 0
-					        </when>
-					        <otherwise>
-					        </otherwise>
-					    </choose>
 					 </if>  
 					 <if test="searchStdName != null and searchStdName neq ''.toString()">
 						AND RS.STD_NAME like '%' || #{searchStdName} || '%'
@@ -1001,7 +955,7 @@
 					 <if test="searchCertFromDt != null and searchCertFromDt neq ''.toString() and searchCertToDt != null and searchCertToDt neq ''.toString()">
 						AND TO_CHAR(EDU_REG_DATE, 'YYYY-MM-DD') <![CDATA[>=]]> #{searchCertFromDt} AND TO_CHAR(EDU_REG_DATE, 'YYYY-MM-DD') <![CDATA[<=]]> #{searchCertToDt}
 					 </if>	
-					ORDER BY RS.EDU_CODE DESC, RS.STD_NAME ASC
+					ORDER BY RS.EDU_BELTCODE ASC
 			)
 			SELECT *
 			  FROM EDU_MNG T
@@ -1011,7 +965,7 @@
 	
 	<select id="selectMngListExcel" parameterType="java.util.HashMap" resultType="java.util.HashMap">
 			WITH EDU_MNG AS (
-					SELECT  ROW_NUMBER() OVER( ORDER BY RS.EDU_CODE DESC, RS.STD_NAME ASC ) IDX, ROW_NUMBER() OVER( ORDER BY RS.EDU_CODE DESC, RS.STD_NAME ASC ) ROWIDX, 
+					SELECT  ROW_NUMBER() OVER( ORDER BY RS.EDU_BELTCODE ASC ) IDX, ROW_NUMBER() OVER( ORDER BY RS.EDU_BELTCODE ASC ) ROWIDX,  
 					   		RS.*,
 					   		RS.EDU_NUMBER || '차 ' || RS.STD_COMPLETE_NN AS MNG_TIT
 					  FROM (
@@ -1027,19 +981,6 @@
 								 	   	M.EDU_REG_DATE,
 								 	   	D.STD_SEQ,
 								 	   	D.COM_NO,
-								 	   	(
-								 	   		SELECT NVL(COUNT(*),0) AS CNT 
-											  FROM TB_EDUCATION_MST TE
-											   LEFT OUTER JOIN TB_STUDENT_DETAIL TS ON TE.EDU_CODE = TS.EDU_CODE 
-												WHERE TE.EDU_NUMBER = '1' AND TE.EDU_CLASS_DIVISION IN ('02','04','05') AND TS.STD_COMPLETE_YN = 'Y'
-								 	   	) AS GBCNT,
-								 	   	(
-									 	   	SELECT COUNT(*) 
-											  FROM TB_EDUCATION_MST TE
-											   LEFT OUTER JOIN TB_STUDENT_DETAIL TS ON TE.EDU_CODE = TS.EDU_CODE 
-												WHERE TE.EDU_CLASS_DIVISION = '05' AND TS.STD_COMPLETE_YN = 'Y'
-								 	   	) AS BBCNT,
-								 	   	(SELECT NVL(COUNT(*),0) AS CNT FROM TB_STUDENT_DETAIL TB WHERE TB.COM_NO=D.COM_NO AND TB.STD_TEST_CODE='Y') AS MBBCNT,
 								 	   	D.STD_NAME,
 										D.STD_USERID,
 										D.STD_DEPART,
@@ -1069,25 +1010,15 @@
 							 LEFT OUTER JOIN tb_code cd_job ON cd_job.code_grp_id='JOBX' AND cd_job.code_id = D.STD_JOBX
 							 LEFT OUTER JOIN tb_code cd_pos ON cd_pos.code_grp_id='POSITION' AND cd_pos.code_id = D.STD_POSITION 
 							 LEFT OUTER JOIN tb_code cd_blt ON cd_blt.code_grp_id='LDRBELT' AND cd_blt.code_id = D.STD_BELT_CODE 
-								 WHERE STD_NAME IS NOT NULL
-								   AND D.STD_COMPLETE_YN = 'Y'
-					  	   ) RS 
+								 WHERE D.STD_NAME IS NOT NULL
+							       AND D.STD_CLASS_DIVISION IN ('07','08','09')
+							       AND D.STD_COMPLETE_YN = 'Y'
+							       AND D.STD_CERT_CODE = 'N'
+							       AND D.STD_CERT_DATE IS NULL 
+							) RS 
 					 WHERE 1=1
 					 <if test="searchbeltCode != null and searchbeltCode neq ''.toString()">
 						AND RS.EDU_BELTCODE = #{searchbeltCode}
-						<choose>
-					        <when test="searchbeltCode != null and searchbeltCode eq 'D000'.toString()">
-					        	AND RS.GBCNT <![CDATA[>]]> 0
-					        </when>
-					        <when test="searchbeltCode != null and searchbeltCode eq 'D001'.toString()">
-					        	AND RS.BBCNT <![CDATA[>]]> 0
-					        </when>
-					        <when test="searchbeltCode != null and searchbeltCode eq 'D002'.toString()">
-					        	AND RS.MBBCNT <![CDATA[>]]> 0
-					        </when>
-					        <otherwise>
-					        </otherwise>
-					    </choose>
 					 </if>  
 					 <if test="searchStdName != null and searchStdName neq ''.toString()">
 						AND RS.STD_NAME like '%' || #{searchStdName} || '%'
@@ -1101,23 +1032,12 @@
 					 <if test="searchCertFromDt != null and searchCertFromDt neq ''.toString() and searchCertToDt != null and searchCertToDt neq ''.toString()">
 						AND TO_CHAR(EDU_REG_DATE, 'YYYY-MM-DD') <![CDATA[>=]]> #{searchCertFromDt} AND TO_CHAR(EDU_REG_DATE, 'YYYY-MM-DD') <![CDATA[<=]]> #{searchCertToDt}
 					 </if>	
-					ORDER BY RS.EDU_CODE DESC, RS.STD_NAME ASC
+					ORDER BY RS.EDU_BELTCODE ASC
 			)
 			SELECT *
 			  FROM EDU_MNG T
 			 WHERE 1=1
 		  ORDER BY T.IDX DESC		
-	</select>
-	
-	<select id="selectCountMyEducation" resultType="int">
-		SELECT 
-		   COUNT(*) as edu_cnt
-		FROM 
-		   TB_STUDENT_DETAIL
-		WHERE 
-		   STD_CLASS_DIVISION NOT IN ('07','08','09')
-		   AND STD_REG_DATE BETWEEN TRUNC (SYSDATE, 'YEAR') AND TO_CHAR(sysdate, 'yyyy-mm-dd hh24:mi:ss')
-		   AND COM_NO = #{comNo}
 	</select>
 	                                      
 </mapper>                                 

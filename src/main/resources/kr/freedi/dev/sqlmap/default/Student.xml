@@ -22,6 +22,7 @@
 		<result column="STD_UPDATE_DATE"            property="stdUpdateDate"/> 
 		<result column="STD_TEST_CODE"	 	     	property="stdTestCode"/> 
 		<result column="STD_TEST_DATE"	 	     	property="stdTestDate"/> 
+		<result column="STD_CLASS_DIVISION"	 	    property="stdClassDivision"/>
 		
 		<result column="STD_DEPART_NM"            	property="stdDepartNm"/> 
 		<result column="STD_JOBX_NM"            	property="stdJobxNm"/> 
@@ -199,6 +200,7 @@
 			STD_CERT_CODE,
 			STD_CERT_DATE,
 			STD_REAPPLY_YN,
+			STD_CLASS_DIVISION,
 			STD_REG_USER,
 			STD_REG_DATE
 		) VALUES (
@@ -216,6 +218,7 @@
 			'N',    
 			#{stdCertDate},    
 			'N',   
+			#{stdClassDivision},
 			#{stdRegUser},     
 			SYSDATE  
 		)
@@ -238,7 +241,9 @@
 				<if test="stdCertDate != null">STD_CERT_DATE = #{stdCertDate},</if>     
 				<if test="stdReapplyYn != null and stdReapplyYn neq ''.toString()">STD_REAPPLY_YN = #{stdReapplyYn},</if>    
 				<if test="stdTestCode != null and stdTestCode neq ''.toString()">STD_TEST_CODE = #{stdTestCode},</if>     
-				<if test="stdTestDate != null">STD_TEST_DATE = #{stdTestDate},</if>    
+				<if test="stdTestDate != null">STD_TEST_DATE = #{stdTestDate},</if> 
+				<if test="stdClassDivision != null">STD_CLASS_DIVISION = #{stdClassDivision},</if> 
+				   
 				STD_UPDATE_USER = #{stdUpdateUser},
 				STD_UPDATE_DATE = SYSDATE
 		 WHERE 1=1 
