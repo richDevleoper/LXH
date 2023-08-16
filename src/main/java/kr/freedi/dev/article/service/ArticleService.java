@@ -159,8 +159,6 @@ public class ArticleService {
 
 	public void reply(ArticleVO articleVO) throws Exception {
 		
-		log.debug(articleVO.toString());
-		
 		//부모글 가져오기
 		ArticleVO vo = new ArticleVO();
 		vo.setArticleKey(articleVO.getPkey());
@@ -198,6 +196,8 @@ public class ArticleService {
 		if(StringUtils.isNotEmpty(articleVO.getWriterPwd())){
 			articleVO.setWriterPwd(EncriptUtil.encript(articleVO.getWriterPwd()));
 		}
+		
+		log.debug(articleVO.getContent());
 		dao.insert("Article.insert", articleVO);
 	}
 

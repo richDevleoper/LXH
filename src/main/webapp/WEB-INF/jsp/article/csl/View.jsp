@@ -66,6 +66,8 @@ function recovery() {
 //답변
 function replyForm(){
 	$("#defaultForm").validationEngine('detach');
+	console.log("csl########")
+	console.log($("#defaultForm"));
 	$("#defaultForm").attr('action', 'replyForm.do');
 	$("#defaultForm").submit();
 }

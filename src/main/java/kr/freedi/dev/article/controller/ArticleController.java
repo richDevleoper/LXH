@@ -522,14 +522,20 @@ public class ArticleController {
 		//부모글
 		ArticleVO parentVO = articleService.select(articleVO);
 		model.addAttribute("parentVO", parentVO);
-
+		log.debug("***********1");
+		log.debug("***********1");
+		log.debug("***********1");
+		log.debug(articleVO.getContent());
+		log.debug("***********");
+		log.debug("***********");
+		log.debug("***********");
 		//새글세팅
 		articleVO.setArticleKey(idGnrService.getNextIntegerId());
 		articleVO.setBoardKey(articleVO.getBoardKey());
 		articleVO.setPkey(parentVO.getArticleKey());
 		articleVO.setWriter(userSession.getUserNm());
 		model.addAttribute("articleVO", articleVO);
-
+		
 		//카테고리정보
 		if(StringUtils.equals(boardVO.getCatgrFlg(), "Y")){
 			CodeVO codeVO = new CodeVO();
@@ -569,6 +575,13 @@ public class ArticleController {
 		articleVO.setFrstOperId(userSession.getUserId());
 		articleVO.setFrstOperIp(userIp);
 		
+		log.debug("***********");
+		log.debug("***********");
+		log.debug("***********");
+		log.debug(articleVO.getContent());
+		log.debug("***********");
+		log.debug("***********");
+		log.debug("***********");
 		//insert article
 		articleService.reply(articleVO);
 
@@ -637,7 +650,6 @@ public class ArticleController {
 		ArticleVO tArticleVO = new ArticleVO();
 		tArticleVO = articleService.select(articleVO);
 		model.addAttribute("articleVO", tArticleVO);
-		
 		if(!isMngr){
 			//로그인없이 쓴 글
 			if(StringUtils.isEmpty(tArticleVO.getFrstOperId())){
@@ -668,11 +680,11 @@ public class ArticleController {
 				}
 			}
 		}
-		
+		log.debug("#################로그인 하고 썼는디요..");
 		articleVO.setLastOperId(userSession.getUserId());
 		articleVO.setLastOperIp(userIp);
 		articleVO.setDeleteTyp(userSession.getUserTyp());
-		
+		log.debug("#################3");
 		articleService.disable(articleVO);
 
 		return "redirect:view.do?articleKey=" + articleVO.getArticleKey() + "&" + searchVO.getParam();

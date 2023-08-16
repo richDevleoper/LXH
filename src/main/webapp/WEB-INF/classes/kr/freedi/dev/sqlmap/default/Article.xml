@@ -322,7 +322,7 @@
 			,#{writer}
 			,#{writerPwd}
 			,#{noticeFlg}
-			,#{secretFlg}
+			,NVL(#{secretFlg}, 'N')
 			,#{viewStartDt}
 			,#{viewEndDt}
 			,NULL

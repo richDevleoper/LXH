@@ -102,7 +102,7 @@ ${articleSearchVO.hiddenTag }
 
 <!-- 게시판 폼 영역 -->
 <fieldset>
-	<table cellpadding="0" class="article_form" summary="현재 누르신 글의 제목,작성자,작성일,조회수, 첨부, 내용에 대한 테이블 정보입니다." style="width: 970px;">
+	<table cellpadding="0" class="article_form" summary="현재 누르신 글의 제목,작성자,작성일,조회수,첨부,내용에 대한 테이블 정보입니다." style="width: 970px;">
 		<caption><span>글의 제목을 출력해주세요</span></caption>
 		<colgroup>
 		<col width="15%" />
@@ -190,7 +190,7 @@ ${articleSearchVO.hiddenTag }
 <div class="list-footer">
 	<div class="list-btns">
 		<a href="#none" class="at_btn_st2 btn bg-gray" onclick="return insert();">확인</a>
-		<a href="#none" class="at_btn_st2 btn bg-gray" onclick="return list();;">취소</a>			
+		<a href="#none" class="at_btn_st2 btn bg-gray" onclick="return list();">취소</a>			
 	</div>
 </div>
 <!-- <div class="article_bottom">

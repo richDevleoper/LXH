@@ -44,7 +44,7 @@ $(function() {
 		onValidationComplete: function(form, status){
 			if(status == true) {
 				if(confirm("저장하시겠습니까?")) {
-					//contentsEditors.getById["content"].exec("UPDATE_CONTENTS_FIELD", []);
+					contentsEditors.getById["content"].exec("UPDATE_CONTENTS_FIELD", []);
 					return true;
 				} 
 				return false;
@@ -69,6 +69,7 @@ $(function() {
 
 //저장
 function insert(){
+	console.log($("#defaultForm"))
 	$("#defaultForm").submit();
 	return false;
 }
@@ -193,8 +194,7 @@ ${articleSearchVO.hiddenTag }
 
 <!-- 게시판 폼 영역 -->
 <fieldset>
-	<legend class="hidden">게시글2 수정</legend>
-	<table class="article_form" summary="현재 누르신 글의 제목,작성자,작성일,조회수, 첨부, 내용에 대한 테이블 정보입니다.">
+	<table class="article_form" summary="현재 누르신 글의 제목,작성자,작성일,조회수,첨부,내용에 대한 테이블 정보입니다." style="width: 970px;">
 		<caption><span>글의 제목을 출력해주세요</span></caption>
 		<colgroup>
 		<col width="15%" />
@@ -243,12 +243,12 @@ ${articleSearchVO.hiddenTag }
 			<tr>
 				<th scope="row">제목</th>
 				<td>
-					<form:input path="title" title="제목" cssClass="validate[required,maxSize[255]] ip_type va_m" cssStyle="width:97%;" maxlength="255"/>
+					<form:input path="title" title="제목" cssClass="validate[required,maxSize[255]] ip_type va_m" cssStyle="width:97%; margin-top: 5px;" maxlength="255"/>
 				</td>
 			</tr>
 			<tr>
-				<th>원글내용</th>
-				<td colspan="3" style="vertical-align:top;">
+				<th style="padding-top: 5px;">원글내용</th>
+				<td colspan="3" style="vertical-align:top; padding-top: 5px;">
 					<div><a href="#none" onclick="return viewParentContent(this);" class="at_btn_st2">원글보기</a></div>
 					<div style="margin-top:10px;display:none;">
 						${fn:replace(parentVO.content, LF, '<br />')}
@@ -289,13 +289,11 @@ ${articleSearchVO.hiddenTag }
 </fieldset>
 <!-- //게시판 폼 영역 -->
 	
-<div class="article_bottom">
-	<!-- 버튼 -->
-	<p class="ta_r">
-	<a href="#none" onclick="return insert();" class="at_btn_st2">확인</a>
-	<a href="#none" onclick="return list();" class="at_btn_st2">취소</a>
-	</p>
-	<!-- //버튼 -->
+<div class="list-footer">
+	<div class="list-btns">
+		<a href="#none" class="at_btn_st2 btn bg-gray" onclick="return insert();">확인</a>
+		<a href="#none" class="at_btn_st2 btn bg-gray" onclick="return list();">취소</a>			
+	</div>
 </div>
 <!-- //게시글 쓰기 -->
 
