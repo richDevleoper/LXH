@@ -1,5 +1,16 @@
 package kr.freedi.dev.common.util;
 
+import java.util.Date;
+import java.util.Properties;
+
+import javax.mail.Authenticator;
+import javax.mail.Message;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+
 import laf.application.mail.LMail;
 import laf.application.mail.LMailException;
 import laf.core.exception.LSysException;
@@ -119,5 +130,56 @@ public class SendMailUtil {
         }
         return 1;
     }
+    
+    /**
+     * 메일을 보낸다.
+      *
+      * @param sender 보내는 사람 이메일주
+     * @return 
+      */
+     public static void CustomSendMail(String receiver, String comno, String type) throws LSysException  {
+ 		final String fromEmail = "designgun@hausyspartner.com";
+ 		final String password = "eoeeqspqxaxlbzeg";
+ 		final String toEmail = "designgun@hausyspartner.com"; 
+ 		
+ 		Properties props = new Properties();
+ 		props.put("mail.smtp.host", "subspam.lxhausys.com"); 	//SMTP Host
+ 		props.put("mail.smtp.port", "25"); 						//TLS Port
+ 		props.put("mail.smtp.auth", "true"); 					//enable authentication
+ 		props.put("mail.smtp.starttls.enable", "false"); 		//enable STARTTLS
+ 		Authenticator auth = new Authenticator() {
+ 			protected PasswordAuthentication getPasswordAuthentication() {
+ 				return new PasswordAuthentication(fromEmail, password);
+ 			}
+ 		};
+ 		Session session = Session.getInstance(props, auth);
+ 		
+		try
+	    {
+	      MimeMessage msg = new MimeMessage(session);
+	      //set message headers
+	      msg.addHeader("Content-type", "text/HTML; charset=UTF-8");
+	      msg.addHeader("format", "flowed");
+	      msg.addHeader("Content-Transfer-Encoding", "8bit");
+	      msg.setFrom(new InternetAddress("designgun@hausyspartner.com", "품질혁신지원 시스템"));
+	      msg.setReplyTo(InternetAddress.parse("designgun@hausyspartner.com", false));
+	      msg.setSubject("품질혁신지원시스템에서 메일이 도착하였습니다.", "UTF-8");
+	      
+	      if(type.equals("request")) {
+	    	  msg.setText("[전자결재] 결재요청(Approval Request) 되었습니다. 결재문서 링크 : http://6sigma2.lxhausys.com/intf/login.do?com_no="+comno, "UTF-8");
+	      }else {
+	    	  msg.setText("[전자결재] 결재완료(Approval Complete) 되었습니다. 결재문서 링크 : http://6sigma2.lxhausys.com/intf/login.do?com_no="+comno, "UTF-8");
+	      }
+	      msg.setSentDate(new Date());
+	      msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail, false));
+    	  Transport.send(msg);  
+	      System.out.println("EMail Sent Successfully!!");
+	    }
+	    catch (Exception e) {
+	    	System.out.println("EMAIL FAIL!!!!!!!");
+	    	System.out.println(e.getMessage());
+	    	e.printStackTrace();
+	    }
+	}
 
 }

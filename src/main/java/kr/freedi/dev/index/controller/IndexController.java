@@ -3,6 +3,7 @@ package kr.freedi.dev.index.controller;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Date;
+import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import egovframework.rte.fdl.property.EgovPropertyService;
 import kr.freedi.dev.article.domain.ArticleSearchVO;
+import kr.freedi.dev.article.domain.ArticleVO;
 import kr.freedi.dev.article.service.ArticleService;
 import kr.freedi.dev.banner.domain.BannerVO;
 import kr.freedi.dev.banner.service.IBannerService;
@@ -131,7 +133,30 @@ public class IndexController {
 	public String indexHandler(HttpServletRequest request, ModelMap model,
 			@RequestParam(required = false, value = "login_no") String empNo) throws Exception {
 		
-		menuService.setHeaderInormation(request); 
+		menuService.setHeaderInormation(request);
+		
+		// 공지사항
+        ArticleSearchVO searchVO = new ArticleSearchVO();
+        searchVO.setRecordCountPerPage(5);
+		searchVO.setPageSize(5);
+        searchVO.setOrderByTyp("RECENTLY");
+        searchVO.setSearchDeleteFlg("N"); //select deleteFlg=N
+		searchVO.setSearchViewPrdFlg("Y"); //select compare {viewStartDt, viewEndDt} and sysdate
+		searchVO.setBoardKey(5);
+        List<ArticleVO> noticeList = articleService.selectList(searchVO);
+		model.addAttribute("noticeList", noticeList);
+		
+		
+        // 자료실
+        searchVO.setBoardKey(4);
+        List<ArticleVO> libList = articleService.selectList(searchVO);
+		model.addAttribute("libList", libList);
+		
+		// BP사례
+        searchVO.setBoardKey(12);
+        List<ArticleVO> bpList = articleService.selectList(searchVO);
+		model.addAttribute("bpList", bpList);
+		
 		
 		return "index/qi/Index";
 	}

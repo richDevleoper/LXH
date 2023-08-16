@@ -30,6 +30,9 @@ public class CodeVO {
 	private String lastOperId;
 	private Date lastOperDt;
 	
+	private String comNo;   // 로그인한 유저 사번
+	private String ruleNo;  // 로그인한 유저 권한 번호
+	
 	private String[] codeGrpIdList;
 
 	public CodeVO(){
@@ -136,5 +139,25 @@ public class CodeVO {
 
 	public String toString(){
 		return ToStringBuilder.reflectionToString(this);
+	}
+
+
+	public String getComNo() {
+		return comNo;
+	}
+
+
+	public void setComNo(String comNo) {
+		this.comNo = comNo;
+	}
+
+
+	public String getRuleNo() {
+		return ruleNo;
+	}
+
+
+	public void setRuleNo(String ruleNo) {
+		this.ruleNo = ruleNo;
 	}
 }

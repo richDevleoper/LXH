@@ -129,7 +129,7 @@ public class ReportService {
 			String apprMemCode = "";
 			String apprMemRoleCode = "";
 			switch (vo.getRepStepCode()) {
-			case "1": // 6시그마
+			//case "1": // 6시그마
 			case "7": // 일반과제
 				vo.setRepStatus("1");
 				apprMemCode = teamMember5.getComNo(); 
@@ -218,10 +218,10 @@ public class ReportService {
 		paramVO.setRefBusCode(reportVO.getRepCode().toString());
 		paramVO.setRefBusSubCode(reportVO.getRepCurrStepCode());
 		ApproveVO checkApprVO = approveService.select(paramVO);
-		if(checkApprVO!=null) {
-			System.out.println("이미 존재하는 결재건임.");
-			return;
-		}
+//		if(checkApprVO!=null) {
+//			System.out.println("이미 존재하는 결재건임.");
+//			return;
+//		}
 		
 		ApproveVO newApprVO = new ApproveVO();
 		newApprVO.setAprovalType(aprovalType); 		// 결재 종류 (1-과제신청, 2-드랍신청, 3-6시그마프로세스, 6-실시제안, 7-쪽지제안) (code_grp_id='APR_TYPE')
@@ -251,7 +251,7 @@ public class ReportService {
 		}	
 		newApprVO.setDetailList(newList);	
 		
-		approveService.insert(newApprVO);
+		approveService.insert(newApprVO);	
 	}	
 	
 	public void update(ReportVO reportVO) throws Exception {
@@ -296,6 +296,11 @@ public class ReportService {
 	
 	public void updateReportMaster(ReportVO reportVO) throws Exception {
 
+		dao.update("Report.update", reportVO);
+	}
+	
+	public void updateReportMasterAndResult(ReportVO reportVO) throws Exception {
+
 		// report_detail 저장
 		// report_team 저장
 		// report_result 저장
@@ -306,6 +311,19 @@ public class ReportService {
 		
 		
 		dao.update("Report.update", reportVO);
+		
+		// 일정계획 : 그대로
+		// 팀멤버 : 그대로
+		// 성과 저장
+		// 주요지표 저장
+		
+		for (ReportResultVO vo : reportVO.getRepResultList()) {
+			reportResultService.save(vo);	
+		}
+		
+		for (ReportIndicatorVO vo : reportVO.getRepIndicatorList()) {
+			reportIndicatorService.save(vo);	
+		}
 	}
 	
 	
@@ -324,7 +342,7 @@ public class ReportService {
 				vo.setAprovalType("1");								// 과제선정 (과제-분임조과제 공통)
 				vo.setRefBusCode(reportVO.getRepCode().toString());	// 과제코드
 				approveService.cancelApprove(vo);					// 해당 결재건 지우기	
-			} else if (repStatusCode.equals("3")) { // 과제등록시 '진행중'인 상태에서 단계별 결재를 취소하면
+			} else if (repStatusCode.equals("3") || repStatusCode.equals("4") || repStatusCode.equals("5")) { // 과제등록시 '진행중'인 상태에서 단계별 결재를 취소하면
 				
 				ApproveVO vo = new ApproveVO();  // 수정대상 검색조건 설정
 				vo.setAprovalType("3");								// 6시그마 결재건
@@ -366,11 +384,54 @@ public class ReportService {
 	public void updateStep6Sigma(ReportVO reportVO) throws Exception {
 		
 		// report_detail 의 특정 
-		String step = reportVO.getRepCurrStepCode();
+		String currStepNumber = reportVO.getRepCurrStepCode();
 		
-		ReportDetailVO vo = reportVO.getRepDetailList().get(Integer.parseInt(step)-1);
+		ReportDetailVO vo = reportVO.getRepDetailList().get(Integer.parseInt(currStepNumber)-1);
 		vo.setRepUpdateUser(reportVO.getRepUpdateUser());
 		reportDetailService.updateStep(vo);
+		
+		// 팀 멤버 업데이트
+		ReportTeamVO teamMember3 = new ReportTeamVO(); // 지도사원
+		ReportTeamVO teamMember5 = new ReportTeamVO(); // 챔피언
+		for (ReportTeamVO repTeamVO : reportVO.getRepTeamMemberList()) {
+			repTeamVO.setRepCode(reportVO.getRepCode());
+			repTeamVO.setRepTeamUpdateUser(reportVO.getRepRegUser());
+			reportTeamService.update(repTeamVO);
+			
+			if(repTeamVO.getRepTeamMemRole().equals("3"))
+				teamMember3 = repTeamVO;
+			else if(repTeamVO.getRepTeamMemRole().equals("5"))
+				teamMember5 = repTeamVO;
+		}
+		
+		
+		vo.setRepCode(reportVO.getRepCode());
+		vo.setRepSeq(null);
+		List<ReportDetailVO> detailList = reportDetailService.selectFullList(vo);
+		
+		// 일정별 담당자 갱신(현재 프로세스 이후에 대한 변경)
+		if(Integer.parseInt(currStepNumber)<=6) {
+			
+			for(int i=Integer.parseInt(currStepNumber)-1; i<6; i++) {
+				vo = detailList.get(i);
+				vo.setRepUpdateUser(reportVO.getRepUpdateUser());
+				if(i==5) {
+					vo.setRepApprovalMemCode(teamMember5.getComNo());
+				} else {
+					vo.setRepApprovalMemCode(teamMember3.getComNo());	
+				}
+				vo.setRepUpdateUser(reportVO.getRepUpdateUser());
+				reportDetailService.updateApprovalMemCode(vo);
+			}
+		}		
+		
+		for (ReportResultVO repResultVO : reportVO.getRepResultList()) {
+			reportResultService.save(repResultVO);	
+		}
+		
+		for (ReportIndicatorVO repIndVO : reportVO.getRepIndicatorList()) {
+			reportIndicatorService.save(repIndVO);	
+		}
 		
 	}
 	
@@ -497,25 +558,49 @@ public class ReportService {
 		dao.delete("Report.delete", reportVO);  	// 결재선 지우기
 	}
 	
-	public Boolean checkChangeBaseInfo(ReportVO originVO, ReportVO newVO) {
+	public Boolean compareReportBaseInfo(ReportVO originVO, ReportVO newVO) {
 		
 		/***
 		 * 과제 기본정보 변경시 true, 변경사항 없으면 false
+		 * 변경 체크 대상은 과제정보에 국한함. (확인. 천진석 책임)
 		 * ****/
 		
+		if(originVO.getRepProductClass()==null)
+			originVO.setRepProductClass("");
+		
+		if(originVO.getRepLeaderBeltCode()==null)
+			originVO.setRepLeaderBeltCode("");
+		
+		if(originVO.getRepActionTypeCode()==null)
+			originVO.setRepActionTypeCode("");
+		 
 		if(		
 			originVO.getRepName().equals(newVO.getRepName())
 			&& originVO.getRepDivisionCode().equals(newVO.getRepDivisionCode())
 			&& originVO.getRepTypeCode().equals(newVO.getRepTypeCode())
 			&& originVO.getRepSectorCode().equals(newVO.getRepSectorCode())
-			&& originVO.getRepProductClass().equals(newVO.getRepProductClass())
-			&& (originVO.getRepLeaderBeltCode()!= null && originVO.getRepLeaderBeltCode().equals(newVO.getRepLeaderBeltCode()))
-			&& originVO.getRepActionTypeCode().equals(newVO.getRepActionTypeCode())
-			&& originVO.getRepMbbUseRateCode().equals(newVO.getRepMbbUseRateCode())
-			&& originVO.getRepUseRefDate().equals(newVO.getRepUseRefDate())
+			&& originVO.getRepProductClass().equals(newVO.getRepProductClass())	
 			&& originVO.getRepKeyword().equals(newVO.getRepKeyword())   ) {
-			return false;
+			
+			if(originVO.getRepMenuCode().equals("REPORT")) {
+				if( originVO.getRepLeaderBeltCode().equals(newVO.getRepLeaderBeltCode())
+					&& originVO.getRepActionTypeCode().equals(newVO.getRepActionTypeCode())
+					&& originVO.getRepMbbUseRateCode().equals(newVO.getRepMbbUseRateCode())
+					&& originVO.getRepUseRefDate().equals(newVO.getRepUseRefDate())) {
+					// 과제는 리더벨트, 활동분야, MBB활용율, 활용율 반영년도 추가 체크하여 다 같으면 바뀐거 없음
+					return false;
+				} else {
+					// 하나라도 다르면 바뀐거 있음.
+					return true;
+				}
+				
+			} else {
+				// 분임조, 체크할 것 하고 하나라도 다르면
+				return false;
+			}
+			
 		} else {
+			// 바뀐거 있으면 
 			return true;
 		}
 	}
@@ -692,7 +777,7 @@ public class ReportService {
 		String currStepCode = savedVO.getRepCurrStepCode();
 		
 		//1. 6sigma 과제 확인, 진행중 여부 확인
-		if(savedVO.getRepDivisionCode().equals("1") && "3,4,5".indexOf(statusCode)>-1) {
+		if(savedVO.getRepDivisionCode().equals("1") && "3,4,5,10".indexOf(statusCode)>-1) {
 			
 			Integer currStepNum = Integer.parseInt(currStepCode);
 			

@@ -26,9 +26,10 @@
                     <div class="page-category search">통합검색</div>
                     <div class="search-box">
                         <div class="search-form">
-                        	<form:form commandName="searchAllVO" id="defaultForm" method="get" action="/search/">
+                        	<form:form commandName="proposalSearchVO" id="defaultForm" method="get" action="props.do" >
+                        	${proposalSearchVO.superHiddenTag}
                                 <span>전체</span>
-                                <form:input type="text" path="searchText" placeholder="검색어를 입력하세요" />
+                                <form:input type="text" path="searchPropName" placeholder="검색어를 입력하세요" />
                                 <button type="submit" class="btn-search">검색</button>
                             </form:form>
                         </div>
@@ -45,10 +46,10 @@
                         <div class="tab-group">
                             <div class="tab-btn center">
                                 <!-- [D] 현재 활성화된 메뉴에 on클래스 추가해주세요. -->
-                                <button type="button" class="on">과제검색</button>
-                                <button type="button">분임조활동검색</button>
-                                <button type="button">제안검색</button>
-                                <button type="button">커뮤니티</button>
+                                <button type="button" param="1">과제검색</button>
+                                <button type="button" param="2">분임조활동검색</button>
+                                <button type="button" param="3" class="on">제안검색</button>
+                                <button type="button" param="4">커뮤니티</button>
                             </div>
                             <div class="tab-inr">
                                 <div class="tab-box"></div>
@@ -60,191 +61,67 @@
                                     <div class="list-header mg-t20">
                                         <p class="title">조회된 과제</p>
                                         <span class="bar"></span>
-                                        <p class="total">총 100</p>
-                                        <select name="limit" class="limit">
-                                            <option value="10">10개</option>
-                                            <option value="50">50개</option>
-                                            <option value="100">100개</option>
-                                        </select>
+                                        <p class="total">총 ${PROP_TOTAL}</p>
+                                        <select name="limit" class="limit" onchange="onchange_recordCountPerPage(this.value)">
+		                                    <option value="10" <c:if test="${proposalSearchVO.recordCountPerPage eq '10' }">selected="selected"</c:if>>10개</option>
+		                                    <option value="50" <c:if test="${proposalSearchVO.recordCountPerPage eq '50' }">selected="selected"</c:if>>50개</option>
+		                                    <option value="100" <c:if test="${proposalSearchVO.recordCountPerPage eq '100' }">selected="selected"</c:if>>100개</option>
+		                                </select>
                                     </div>
                                     <section class="new_list" style="width: 100% !important;">
                                         <div class="inr">
                                             <ul>
-                                                <li class="border">
-                                                    <div>
-                                                        <ul>
-                                                            <li class="title">
-                                                                <span>진행중(On-track)</span>
-                                                            </li>
-                                                            <li>
-                                                                <span>6σ Full Process</span>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                    <p class="list">
-                                                        <a href="" title="바로가기">과제명 : 예시) 23년 신제품 싸움닭 초기 유동관리를 통한 품질 안정화 과제</a>
-                                                        <span>활동Process(소) : DMAIC, 활동분야 : 품질개선, 활동유형 : MBB, 부문 : 창호, 사업장 : 청주공장, 과제리더 : 홍길동, 팀원 : 홍길동, 이길동, Process Owner : 홍길동, 챔피언 : 홍길동, 착수(예정)일 : 2023.01.01, 완료(예정)일 : 2023.06.30</span>
-                                                    </p>
-                                                </li>
-                                                <li class="border">
-                                                    <div>
-                                                        <ul>
-                                                            <li class="title gray">
-                                                                <span>Drop</span>
-                                                            </li>
-                                                            <li>
-                                                                <span>6σ Full Process</span>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                    <p class="list">
-                                                        <a href="" title="바로가기">과제명 : 예시) 23년 신제품 싸움닭 초기 유동관리를 통한 품질 안정화 과제</a>
-                                                        <span>활동Process(소) : DMAIC, 활동분야 : 품질개선, 활동유형 : MBB, 부문 : 창호, 사업장 : 청주공장, 과제리더 : 홍길동, 팀원 : 홍길동, 이길동, Process Owner : 홍길동, 챔피언 : 홍길동, 착수(예정)일 : 2023.01.01, 완료(예정)일 : 2023.06.30</span>
-                                                    </p>
-                                                </li>
-                                                <li class="border">
-                                                    <div>
-                                                        <ul>
-                                                            <li class="title">
-                                                                <span>진행중(On-track)</span>
-                                                            </li>
-                                                            <li>
-                                                                <span>6σ Full Process</span>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                    <p class="list">
-                                                        <a href="" title="바로가기">과제명 : 예시) 23년 신제품 싸움닭 초기 유동관리를 통한 품질 안정화 과제</a>
-                                                        <span>활동Process(소) : DMAIC, 활동분야 : 품질개선, 활동유형 : MBB, 부문 : 창호, 사업장 : 청주공장, 과제리더 : 홍길동, 팀원 : 홍길동, 이길동, Process Owner : 홍길동, 챔피언 : 홍길동, 착수(예정)일 : 2023.01.01, 완료(예정)일 : 2023.06.30</span>
-                                                    </p>
-                                                </li>
-                                                <li class="border">
-                                                    <div>
-                                                        <ul>
-                                                            <li class="title">
-                                                                <span>진행중(On-track)</span>
-                                                            </li>
-                                                            <li>
-                                                                <span>6σ Full Process</span>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                    <p class="list">
-                                                        <a href="" title="바로가기">과제명 : 예시) 23년 신제품 싸움닭 초기 유동관리를 통한 품질 안정화 과제</a>
-                                                        <span>활동Process(소) : DMAIC, 활동분야 : 품질개선, 활동유형 : MBB, 부문 : 창호, 사업장 : 청주공장, 과제리더 : 홍길동, 팀원 : 홍길동, 이길동, Process Owner : 홍길동, 챔피언 : 홍길동, 착수(예정)일 : 2023.01.01, 완료(예정)일 : 2023.06.30</span>
-                                                    </p>
-                                                </li>
-                                                <li class="border">
-                                                    <div>
-                                                        <ul>
-                                                            <li class="title">
-                                                                <span>진행중(On-track)</span>
-                                                            </li>
-                                                            <li>
-                                                                <span>6σ Full Process</span>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                    <p class="list">
-                                                        <a href="" title="바로가기">과제명 : 예시) 23년 신제품 싸움닭 초기 유동관리를 통한 품질 안정화 과제</a>
-                                                        <span>활동Process(소) : DMAIC, 활동분야 : 품질개선, 활동유형 : MBB, 부문 : 창호, 사업장 : 청주공장, 과제리더 : 홍길동, 팀원 : 홍길동, 이길동, Process Owner : 홍길동, 챔피언 : 홍길동, 착수(예정)일 : 2023.01.01, 완료(예정)일 : 2023.06.30</span>
-                                                    </p>
-                                                </li>
-                                                <li class="border">
-                                                    <div>
-                                                        <ul>
-                                                            <li class="title">
-                                                                <span>진행중(On-track)</span>
-                                                            </li>
-                                                            <li>
-                                                                <span>6σ Full Process</span>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                    <p class="list">
-                                                        <a href="" title="바로가기">과제명 : 예시) 23년 신제품 싸움닭 초기 유동관리를 통한 품질 안정화 과제</a>
-                                                        <span>활동Process(소) : DMAIC, 활동분야 : 품질개선, 활동유형 : MBB, 부문 : 창호, 사업장 : 청주공장, 과제리더 : 홍길동, 팀원 : 홍길동, 이길동, Process Owner : 홍길동, 챔피언 : 홍길동, 착수(예정)일 : 2023.01.01, 완료(예정)일 : 2023.06.30</span>
-                                                    </p>
-                                                </li>
-                                                <li class="border">
-                                                    <div>
-                                                        <ul>
-                                                            <li class="title">
-                                                                <span>진행중(On-track)</span>
-                                                            </li>
-                                                            <li>
-                                                                <span>6σ Full Process</span>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                    <p class="list">
-                                                        <a href="" title="바로가기">과제명 : 예시) 23년 신제품 싸움닭 초기 유동관리를 통한 품질 안정화 과제</a>
-                                                        <span>활동Process(소) : DMAIC, 활동분야 : 품질개선, 활동유형 : MBB, 부문 : 창호, 사업장 : 청주공장, 과제리더 : 홍길동, 팀원 : 홍길동, 이길동, Process Owner : 홍길동, 챔피언 : 홍길동, 착수(예정)일 : 2023.01.01, 완료(예정)일 : 2023.06.30</span>
-                                                    </p>
-                                                </li>
-                                                <li class="border">
-                                                    <div>
-                                                        <ul>
-                                                            <li class="title">
-                                                                <span>진행중(On-track)</span>
-                                                            </li>
-                                                            <li>
-                                                                <span>6σ Full Process</span>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                    <p class="list">
-                                                        <a href="" title="바로가기">과제명 : 예시) 23년 신제품 싸움닭 초기 유동관리를 통한 품질 안정화 과제</a>
-                                                        <span>활동Process(소) : DMAIC, 활동분야 : 품질개선, 활동유형 : MBB, 부문 : 창호, 사업장 : 청주공장, 과제리더 : 홍길동, 팀원 : 홍길동, 이길동, Process Owner : 홍길동, 챔피언 : 홍길동, 착수(예정)일 : 2023.01.01, 완료(예정)일 : 2023.06.30</span>
-                                                    </p>
-                                                </li>
-                                                <li class="border">
-                                                    <div>
-                                                        <ul>
-                                                            <li class="title">
-                                                                <span>진행중(On-track)</span>
-                                                            </li>
-                                                            <li>
-                                                                <span>6σ Full Process</span>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                    <p class="list">
-                                                        <a href="" title="바로가기">과제명 : 예시) 23년 신제품 싸움닭 초기 유동관리를 통한 품질 안정화 과제</a>
-                                                        <span>활동Process(소) : DMAIC, 활동분야 : 품질개선, 활동유형 : MBB, 부문 : 창호, 사업장 : 청주공장, 과제리더 : 홍길동, 팀원 : 홍길동, 이길동, Process Owner : 홍길동, 챔피언 : 홍길동, 착수(예정)일 : 2023.01.01, 완료(예정)일 : 2023.06.30</span>
-                                                    </p>
-                                                </li>
-                                                <li class="border">
-                                                    <div>
-                                                        <ul>
-                                                            <li class="title">
-                                                                <span>진행중(On-track)</span>
-                                                            </li>
-                                                            <li>
-                                                                <span>6σ Full Process</span>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                    <p class="list">
-                                                        <a href="" title="바로가기">과제명 : 예시) 23년 신제품 싸움닭 초기 유동관리를 통한 품질 안정화 과제</a>
-                                                        <span>활동Process(소) : DMAIC, 활동분야 : 품질개선, 활동유형 : MBB, 부문 : 창호, 사업장 : 청주공장, 과제리더 : 홍길동, 팀원 : 홍길동, 이길동, Process Owner : 홍길동, 챔피언 : 홍길동, 착수(예정)일 : 2023.01.01, 완료(예정)일 : 2023.06.30</span>
-                                                    </p>
-                                                </li>
+                                            <c:forEach items="${PROP_LIST}" var="item">
+                                        		<li class="border">
+                                        			<div>
+                                        				<ul>
+                                        					<c:choose>
+                                        						<c:when test="${item.propPropStatCode eq 'NA' }">
+                                        							<li class="title_gray">
+                                        						</c:when>
+                                        						<c:otherwise>
+                                        							<li class="title">
+                                        						</c:otherwise>
+                                        					</c:choose>
+                                        					<c:choose>
+                                        						<c:when test="${item.propEvalLvCodeName != null  and item.propEvalLvCodeName ne ''}">
+                                        							<span>${item.propEvalLvCodeName }</span>
+                                        						</c:when>
+                                        						<c:otherwise>
+                                        							<span>${item.propPropStatCodeName }</span>
+                                        						</c:otherwise>
+                                        					</c:choose>                                        					
+                                        					</li>
+                                        					<li>
+                                        						<span>${item.propTypeCodeName }제안</span>
+                                        					</li>
+                                        				</ul>
+                                        			</div>
+                                        			<p class="list">
+                                        				<c:choose>
+                                        					<c:when test="${item.propTypeCode eq 'PPS_TYP_1' }">
+                                        						<a href="/proposal/detail.do?menuKey=36&propSeq=${item.propSeq }">제안명: ${item.propName }</a>
+                                        					</c:when>
+                                        					<c:otherwise>
+                                        						<a href="/proposal/memodetail.do?menuKey=36&propSeq=${item.propSeq }">제안명: ${item.propName }</a>
+                                        					</c:otherwise>
+                                        				</c:choose>         
+                                        				<br>                               				
+                                        				<span>
+                                        					제안자: ${item.propUserName }, 조직명: ${item.propGroupName }, 분임조: ${item.propCircleName }, 제안유형: ${item.propCategoryCodeName }, 제안일: ${item.propDate }
+                                        					<c:if test="${item.propTypeCode eq 'PPS_TYP_1' }">
+                                        						<fmt:formatNumber var="propYearEffect" value="${item.propYearEffect}" type="currency" currencySymbol="₩"/>
+                                        						, 실행완료일: ${item.propPracticeCompDate }, 년간 효과금액: ${item.propYearEffectCodeName } ( ${propYearEffect } )
+                                        					</c:if>
+                                        				</span>
+                                        			</p>
+                                        		</li>
+                                        	</c:forEach>
                                             </ul>
                                         </div>
                                     </section>
                                     <div class="list-footer">
-                                        <div class="pagination">
-                                            <a href="" class="first">처음</a>
-                                            <a href="" class="prev">이전</a>
-                                            <a href="" class="cur num">1</a>
-                                            <a href="" class="num">2</a>
-                                            <a href="" class="num">3</a>
-                                            <a href="" class="num">4</a>
-                                            <a href="" class="num">5</a>
-                                            <a href="" class="next">다음</a>
-                                            <a href="" class="last">끝</a>
-                                        </div>
+                                        <ui:pagination paginationInfo="${proposalSearchVO}" type="defDefault" jsFunction="cfnPageLink" />
                                     </div>
                                 </div>
                             </div>
@@ -255,6 +132,38 @@
 
         </div>
         <!-- //container -->
+<script>
+$(document).ready(init);
+function init(){
+	$(".tab-btn button").off("click").on("click", onclick_tab)
+}
 
+function onclick_search(){
+	$("#defaultForm")[0].submit();
+}
+
+function onchange_recordCountPerPage(vCount){
+	$("#currentPageNo").val("1");
+	$("#recordCountPerPage").val(vCount);
+	onclick_search();// 검색 '조회'버튼 클릭
+}
+
+function onclick_tab(){
+	idx = $(this).attr("param");
+	let strAction="";
+	if(idx==2)
+		strAction="team.do";
+	else if(idx==3)
+		strAction="props.do";
+	else if(idx==4)
+		strAction="board.do";	
+	else
+		strAction="";
+		
+	$("#currentPageNo").val("1");
+	$("#defaultForm").attr("action", "./"+strAction);
+	onclick_search();
+}
+</script>        
 </body>
 </html>

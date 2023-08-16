@@ -30,6 +30,10 @@ public class ApproveDetailVO {
 	private String userName; // 사원명
 	private String comJobNm; //직위명
 	private String comPositionNm; //직책명
+	private String comPlaceCd; // 사업장
+	
+	
+	
 	public String getAprovalCode() {
 		return aprovalCode;
 	}
@@ -185,5 +189,11 @@ public class ApproveDetailVO {
 				+ aprovalComment + ", score1=" + score1 + ", score4=" + score4 + ", score5=" + score5 + ", score6="
 				+ score6 + ", score7=" + score7 + ", scoreTotal=" + scoreTotal + ", aprovalStat=" + aprovalStat
 				+ ", aprovalType=" + aprovalType + ", userName=" + userName + ", comJobNm=" + comJobNm + ", comPositionNm=" + comPositionNm +"]";
+	}
+	public String getComPlaceCd() {
+		return comPlaceCd;
+	}
+	public void setComPlaceCd(String comPlaceCd) {
+		this.comPlaceCd = comPlaceCd;
 	}
 }

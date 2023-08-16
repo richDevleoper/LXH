@@ -180,9 +180,11 @@ public class ApproveController {
 				model.addAttribute("circleVO", circleVO);
 			}
 			return "app/approve/ApprForm"; // 과제 페이지
-		} else if("3|4".indexOf(savedVO.getRefBusType()) > -1) {
+		} else if("3|4".indexOf(savedVO.getRefBusType()) > -1) { // 제안 결제 상세화면 처리
+			
 			ProposalSearchVO searchProposalVO = new ProposalSearchVO();
 			searchProposalVO.setSearchPropSeq(Integer.valueOf(savedVO.getRefBusCode()));
+			
 			ProposalVO proposalVO = proposalService.selectProposalDetailInfo(searchProposalVO);
 
 			// 첨부파일 로딩
@@ -198,6 +200,7 @@ public class ApproveController {
 			proposalVO.setAfterAttachFileList(afterAttachFileList);
 			proposalVO.setAttachFileList(attachFileList);
 			
+			// 사용자 VO
 			kr.freedi.dev.qpopup.domain.UserVO userVO = new kr.freedi.dev.qpopup.domain.UserVO();
 			userVO.setComNo(proposalVO.getPropApproverCode());				
 			List<EgovMap> userInfo = proposalService.selectApproverUserInfo(userVO);
@@ -223,7 +226,7 @@ public class ApproveController {
 			model.addAttribute("proposalVO", proposalVO);
 			model.addAttribute("approveVO", savedVO);
 			model.addAttribute("sessionCompNo", userSession.getIntfUserVO().getComNo());
-			return "app/approve/ApprFormPropose"; // 과제 페이지
+			return "app/approve/ApprFormPropose"; // 제안 페이지
 			//return "redirect:apprv/list.do?menuKey=73"; // 과제 페이지
 		} else {
 			return "redirect:apprv/list.do?menuKey=73";
@@ -287,7 +290,13 @@ public class ApproveController {
 					reportService.updateStatus(reportVO);
 				} else if (approveVO.getAprovalType().equals("3")) {  // 6시그마 단계별 승인
 				
-					reportService.update6SigmaStepNext(reportVO);
+					if(approveVO.getAprovalState().equals("4")) {	//승인
+						reportService.update6SigmaStepNext(reportVO);
+					}else if(approveVO.getAprovalState().equals("3")) { // 반려
+						//reportService.update6SigmaStepBefore(reportVO);
+						reportVO.setRepStatusCode("10"); // 반려(6SIG)
+						reportService.updateStatus(reportVO);
+					}
 				} else if(approveVO.getAprovalType().equals("2")) {  // Drop결재건 승인시
 					
 					if(approveVO.getAprovalState().equals("4")) {	//승인
@@ -318,25 +327,25 @@ public class ApproveController {
 							if(Integer.parseInt(detailItem.getScoreTotal()) < 70 ) {
 								proposalVO.setPropEvalLvCode("D");
 								proposalVO.setPropEvalScore(detailItem.getScoreTotal());
-								proposalVO.setPropPropStatCode("PRG_5"); // 70점 미만으로 등급평가 마감 (비용지급 처리 전)
+								proposalVO.setPropPropStatCode("PRG_4"); // 70점 미만으로 등급평가 마감 (비용지급 처리 전)
 							}else if(Integer.parseInt(detailItem.getScoreTotal()) >= 70 && Integer.parseInt(detailItem.getScoreTotal()) < 80) {
 								//70점 이상으로 2차 평가 진행
 								proposalVO.setPropEvalLvCode("C");
 								proposalVO.setPropEvalScore(detailItem.getScoreTotal());
-								proposalVO.setPropPropStatCode("PRG_5");
+								proposalVO.setPropPropStatCode("PRG_4");
 							}else if(Integer.parseInt(detailItem.getScoreTotal()) >= 80 && Integer.parseInt(detailItem.getScoreTotal()) < 90) {
 								//70점 이상으로 2차 평가 진행
 								proposalVO.setPropEvalLvCode("B");
 								proposalVO.setPropEvalScore(detailItem.getScoreTotal());
-								proposalVO.setPropPropStatCode("PRG_5");							
+								proposalVO.setPropPropStatCode("PRG_4");							
 							}else if(Integer.parseInt(detailItem.getScoreTotal()) >= 90 && Integer.parseInt(detailItem.getScoreTotal()) < 95) {
 								proposalVO.setPropEvalLvCode("A");
 								proposalVO.setPropEvalScore(detailItem.getScoreTotal());
-								proposalVO.setPropPropStatCode("PRG_5");							
+								proposalVO.setPropPropStatCode("PRG_4");							
 							}else if(Integer.parseInt(detailItem.getScoreTotal()) >= 95) {
 								proposalVO.setPropEvalLvCode("S");
 								proposalVO.setPropEvalScore(detailItem.getScoreTotal());
-								proposalVO.setPropPropStatCode("PRG_5");								
+								proposalVO.setPropPropStatCode("PRG_4");								
 							}
 						}				
 					}			
@@ -479,7 +488,10 @@ public class ApproveController {
 		ApproveVO savedVO = service.select(approveVO);
 		
 		if("3,4".indexOf(savedVO.getRefBusType())>-1) {
-			// TODO 과제/분임조과제 페이지 이동
+			
+
+			
+			// TODO 제안 페이지 이동
 			ProposalSearchVO searchProposalVO = new ProposalSearchVO();
 			searchProposalVO.setSearchPropSeq(Integer.valueOf(savedVO.getRefBusCode()));
 			
@@ -487,10 +499,13 @@ public class ApproveController {
 			// 첨부파일 로딩
 			
 			AttachFileVO fileVO = new AttachFileVO();
+			
 			fileVO.setFileId("proposal_before_" + proposalVO.getPropSeq());
 			List<AttachFileVO> beforeAttachFileList = attachFileService.selectFullList(fileVO); // 개선 전
+			
 			fileVO.setFileId("proposal_after_" + proposalVO.getPropSeq());
 			List<AttachFileVO> afterAttachFileList = attachFileService.selectFullList(fileVO); // 개선 후
+			
 			fileVO.setFileId("proposal_attach_" + proposalVO.getPropSeq());
 			List<AttachFileVO> attachFileList = attachFileService.selectFullList(fileVO); //첨부 파일
 			
@@ -498,8 +513,31 @@ public class ApproveController {
 			proposalVO.setAfterAttachFileList(afterAttachFileList);
 			proposalVO.setAttachFileList(attachFileList);
 			
+			// 사용자 VO
+			kr.freedi.dev.qpopup.domain.UserVO userVO = new kr.freedi.dev.qpopup.domain.UserVO();
+			userVO.setComNo(proposalVO.getPropApproverCode());				
+			List<EgovMap> userInfo = proposalService.selectApproverUserInfo(userVO);
+			
+			if(userInfo != null && userInfo.size() > 0) {
+				for(int index = 0; index < userInfo.size(); index++) {
+					EgovMap item = userInfo.get(index);
+					proposalVO.setPropApprovalUser(String.valueOf(item.get("comNo")));
+					proposalVO.setPropApprovalName(String.valueOf(item.get("userName")));
+					proposalVO.setPropApprovalLevelCode(String.valueOf(item.get("comJobx")));
+					proposalVO.setPropApprovalLevel(String.valueOf(item.get("comJobxNm")));
+					proposalVO.setPropApprovalDutyCode(String.valueOf(item.get("comPosition")));
+					proposalVO.setPropApprovalDuty(String.valueOf(item.get("comPositionNm")));
+					proposalVO.setPropApprovalBeltCode(String.valueOf(item.get("comCertBelt")));
+					proposalVO.setPropApprovalBelt(String.valueOf(item.get("comCertBeltNm")));
+					proposalVO.setPropApprovalGroup(String.valueOf(item.get("deptFullName")));
+					proposalVO.setPropApprovalGroupCode(String.valueOf(item.get("comDepartCode")));
+				}
+			}
+
+			
 			model.addAttribute("proposalVO", proposalVO);
 			model.addAttribute("approveVO", savedVO);
+			model.addAttribute("sessionCompNo", userSession.getIntfUserVO().getComNo());
 			return "app/approve/ReqViewProps";
 		} else {
 			return "redirect:list.do";

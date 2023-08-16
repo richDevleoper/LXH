@@ -152,13 +152,21 @@ public class EducationService {
 		return dao.selectList("Education.selectMngListExcel", searchVO);
 	}
 	
-	public Map<String, Object> selectMyStatistics(StudentVO studentVO) {
-		return dao.selectOne("Education.selectMyStatistics", studentVO);
+	public List<HashMap<String,Object>> selectMyStatistics(StudentVO studentVO) {
+		return dao.selectList("Education.selectMyStatistics", studentVO);
 	}
 	
+	/*
+	 * 2023.08.01 
+	 * 도성욱 추가 내용
+	 * */
+	public List<EducationVO> selectMngListNew(EducationSearchVO searchVO) {
+		return dao.selectList("Education.selectMngListNew", searchVO);
+	}
 	
-	
-	
+	public int selectMngListCntNew(EducationSearchVO searchVO) {
+		return (Integer) dao.selectOne("Education.selectMngListCntNew", searchVO);
+	}
 	
 	
 	

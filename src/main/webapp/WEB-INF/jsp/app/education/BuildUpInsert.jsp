@@ -20,7 +20,7 @@
 	<script type="text/javascript" src="<c:url value='/def/attachfile/js/jquery.iframe-transport.js'/>"></script>
 	<script type="text/javascript" src="<c:url value='/def/attachfile/js/jquery.fileupload.js'/>"></script>
 	<script type="text/javascript" src="<c:url value='/def/attachfile/js/jquery.fileupload-process.js'/>"></script>
-	<script type="text/javascript" src="<c:url value='/def/attachfile/js/jquery.fileupload-validate.js'/>"></script>
+	<script type="text/javascript" src="<c:url value='/def/attachfile/js/jquery.fileupload-validate.js?ver=1'/>"></script>
 	<script type="text/javascript" src="<c:url value='/def/attachfile/js/jquery.fileupload-ui.js'/>"></script>
 	<script type="text/javascript" src="<c:url value='/def/attachfile/js/jquery.fileupload-jquery-ui.js'/>"></script>
 	<script type="text/javascript" src="<c:url value='/def/attachfile/js/attachfile-fileuploader.js'/>"></script>
@@ -34,7 +34,7 @@
                         <!-- breadcrumb -->
                         <div class="breadcrumb">
                             <ul>
-                                <li>교육과정 등록</li>
+                                <li>과정 등록</li>
                             </ul>
                         </div>
                         
@@ -58,17 +58,17 @@
                                         </colgroup>
                                         <tbody>
                                             <tr>
-                                                <th><label for="text1"><span class="asterisk">*</span>교육과정명</label></th>
+                                                <th><label for="text1"><span class="asterisk">*</span>과정명</label></th>
                                                 <td colspan="3">
                                                     <div class="row">
                                                         <div class="col s12 input-text">
-                                                            <form:input type="text" id="eduName" path="eduName" value="" title="교육과정명을 입력해주세요." cssClass="validate[required]"/>
+                                                            <form:input type="text" id="eduName" path="eduName" value="" title="과정명을 입력해주세요." cssClass="validate[required]"/>
                                                         </div>
                                                     </div>
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <th><label for="text2"><span class="asterisk">*</span>교육연도</label></th>
+                                                <th><label for="text2"><span class="asterisk">*</span>연도</label></th>
                                                 <td>
                                                     <div class="row">
                                                         <div class="col s12 select-group">
@@ -93,7 +93,7 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <th><span class="asterisk">*</span>교육유형</th>
+                                                <th><span class="asterisk">*</span>유형</th>
                                                 <td>
                                                     <div class="row">
                                                         <div class="col s12 select-group">
@@ -115,7 +115,7 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <th><label for="select1"><span class="asterisk">*</span>교육차수</label></th>
+                                                <th><label for="select1"><span class="asterisk">*</span>차수</label></th>
                                                 <td>
                                                     <div class="row">
                                                         <div class="col s12 select-group">
@@ -128,7 +128,7 @@
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <th><label for="text4"><span class="asterisk">*</span>교육정원</label></th>
+                                                <th><label for="text4"><span class="asterisk">*</span>정원</label></th>
                                                 <td>
                                                     <div class="row">
                                                         <div class="col s12 input-text">                                                            
@@ -139,14 +139,14 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <th><label for="text1"><span class="asterisk">*</span>교육일정</label></th>
+                                                <th><label for="text1"><span class="asterisk">*</span>일정</label></th>
                                                 <td colspan="3">
                                                     <div class="row">
                                                     	<div class="col s2 select-group">
                                                     		<form:select path="eduDateDiv">
 				                                                <option value="">전체</option>
 				                                    			<option value="01" <c:if test="${'01' eq educationVO.eduDateDiv }">selected</c:if> >단일</option>
-				                                    			<option value="02" <c:if test="${'02' eq educationVO.eduDateDiv }">selected</c:if> >격일</option>
+				                                    			<option value="02" <c:if test="${'02' eq educationVO.eduDateDiv }">selected</c:if> >지정일</option>
 				                                    			<option value="03" <c:if test="${'03' eq educationVO.eduDateDiv }">selected</c:if> >범위</option>
 				                                            </form:select>
                                                     	</div>
@@ -183,10 +183,10 @@
                                             </tr>
                                             
                                             <tr>
-                                                <th colspan="4" class="align-center"><span class="asterisk">*</span>교육내용</th>
+                                                <th colspan="4" class="align-center"><span class="asterisk">*</span>내용</th>
                                             </tr>
                                             <tr>
-                                                <th><label for="text6"><span class="asterisk">*</span>교육방식</label></th>
+                                                <th><label for="text6"><span class="asterisk">*</span>방식</label></th>
                                                 <td colspan="3">
                                                     <div class="row">
                                                     <%-- <pre><c:out value="${educationVO.eduClassIntro}" /></pre> --%>
@@ -263,7 +263,7 @@
                         </div>
                         <div class="list-footer">
                             <div class="list-btns">                                
-                                <button type="button" class="btn bg-gray" id="btnSave">교육등록</button>                                
+                                <button type="button" class="btn bg-gray" id="btnSave">과정등록</button>                                
                                 <a href="/education/buildup.do?menuKey=67" class="btn">목록</a>
                             </div>
                         </div>
@@ -299,6 +299,7 @@ $(document).ready(function(){
 	});
 	
 	$("#eDate01").datepicker({
+		minDate:0,
         dateFormat:"yy/mm/dd",
         dayNamesMin:["일","월","화","수","목","금","토"],
         monthNames:["1월","2월","3월","4월","5월","6월","7월","8월","9월","10월","11월","12월"],
@@ -313,6 +314,7 @@ $(document).ready(function(){
     });
 	 
 	$("#eDate02").datepicker({
+		minDate :0,
         dateFormat:"yy/mm/dd",
         dayNamesMin:["일","월","화","수","목","금","토"],
         monthNames:["1월","2월","3월","4월","5월","6월","7월","8월","9월","10월","11월","12월"],
@@ -339,6 +341,7 @@ $(document).ready(function(){
     });
 	
 	$("#eduFromDt").datepicker({
+		minDate:0,
         dateFormat:"yy/mm/dd",
         dayNamesMin:["일","월","화","수","목","금","토"],
         monthNames:["1월","2월","3월","4월","5월","6월","7월","8월","9월","10월","11월","12월"],
@@ -353,6 +356,7 @@ $(document).ready(function(){
     });
 	
 	$("#eduToDt").datepicker({
+		minDate:+1,
         dateFormat:"yy/mm/dd",
         dayNamesMin:["일","월","화","수","목","금","토"],
         monthNames:["1월","2월","3월","4월","5월","6월","7월","8월","9월","10월","11월","12월"],
@@ -451,12 +455,14 @@ function selectBeltCode(){
 	}else if(eduBeltCode == "D002"){
 		if(eduClassType == "01"){
 			vHtml.push("<option value=''>전체</option>");
-			vHtml.push("<option value='01'>온라인 동영상 교육</option>");
-			vHtml.push("<option value='02'>온라인 실시간 교육</option>");
+//			vHtml.push("<option value='01'>온라인 동영상 교육</option>");
+//			vHtml.push("<option value='02'>온라인 실시간 교육</option>");
 			vHtml.push("<option value='03'>6σ Process 과정</option>");
 			vHtml.push("<option value='04'>통계적 사고 과정</option>");
 			vHtml.push("<option value='05'>고급 통계 과정</option>");
 			vHtml.push("<option value='06'>Summary</option>");
+			vHtml.push("<option value='07'>빅데이터 기초과정</option>");
+			vHtml.push("<option value='08'>AI 비전검사</option>");
 		}else if(eduClassType == "02"){
 			vHtml.push("<option value=''>전체</option>");
 			vHtml.push("<option value='07'>통계Test</option>");
@@ -533,8 +539,8 @@ function initCode(){
 		}else if(eduBeltCode == "D002"){
 			if(eduClassType == "01"){
 				vHtml.push("<option value=''>전체</option>");
-				vHtml.push("<option value='01'>온라인 동영상 교육</option>");
-				vHtml.push("<option value='02'>온라인 실시간 교육</option>");
+//				vHtml.push("<option value='01'>온라인 동영상 교육</option>");
+//				vHtml.push("<option value='02'>온라인 실시간 교육</option>");
 				vHtml.push("<option value='03'>6σ Process 과정</option>");
 				vHtml.push("<option value='04'>통계적 사고 과정</option>");
 				vHtml.push("<option value='05'>고급 통계 과정</option>");

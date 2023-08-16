@@ -154,8 +154,8 @@
 																	<td class="text-align-center"><div><input type="checkbox" id="chkleader_${item.comNo}" name="chkleader">
 																	<label for="chkleader_${item.comNo}"></label></div></td>
 																	<td class="text-align-center"><span>${item.kudUserName}</span></td>
-																	<td class="text-align-center"><span><!-- 학력 --></span></td>
-																	<td class="text-align-center"><span><!-- 직무 --></span></td>
+																	<td class="text-align-center"><span>${item.kudLastDegree}</span></td>
+																	<td class="text-align-center"><span>${item.kudJimu}</td>
 																	<td class="text-align-center"><span>${item.kudPosition}</span></td>
 																</tr>
 															</c:if>
@@ -252,6 +252,8 @@
 				var comCertBelt   = $(this).attr("comCertBelt");
 				var comCertBeltNm   = $(this).attr("comCertBeltNm");
 				var cirMemCode = $(this).attr("cirMemCode");
+				var comJimu = $(this).attr("comJimu");
+				var userSchool = $(this).attr("userSchool");
 				
 				let res = true;
 				
@@ -268,7 +270,7 @@
 						//console.log(comNo);
 						//console.log(comDepartCode);
 						
-						vhtml.push("<tr comNo='"+comNo+"' userName='"+userName+"' comDepartCode='"+comDepartCode+"' deptFullName='"+deptFullName+"' comJobx='"+comJobx+"' comPosition='"+comPosition+"' comPositionNm='"+strChk(comPositionNm)+"' comCertBelt='"+comCertBelt+"' comCertBeltNm='"+comCertBeltNm+"' cirMemCode=''>");
+						vhtml.push("<tr comNo='"+comNo+"' userName='"+userName+"' comDepartCode='"+comDepartCode+"' deptFullName='"+deptFullName+"' comJobx='"+comJobx+"' comPosition='"+comPosition+"' comPositionNm='"+strChk(comPositionNm)+"' comCertBelt='"+comCertBelt+"' comCertBeltNm='"+comCertBeltNm+"' cirMemCode='' comJimu='"+comJimu+"' userSchool='"+ userSchool +"'>");
 		        		vhtml.push("<td class='text-align-center' style='padding: 11px 0px !important;'>"); 
 		        		vhtml.push("<div>");
 		        		vhtml.push("<input type='checkbox' id='chkleader_"+i+"' name='chkleader'>");
@@ -277,8 +279,8 @@
 		        		vhtml.push("</td>");
 		        		 
 		        		vhtml.push("<td class='text-align-center'><span>" + strChk(userName) + "</span></td>");
-						vhtml.push("<td class='text-align-center'></td>");//학력
-						vhtml.push("<td class='text-align-center'></td>");//직무
+		        		vhtml.push("<td class='text-align-center'>" + strChk(userSchool) + "</td>");//직무
+		        		vhtml.push("<td class='text-align-center'>" + strChk(comJimu) + "</td>");//학력
 						vhtml.push("<td class='text-align-center' style='padding: 11px 0px !important;'><span>" + strChk(comPositionNm)+ "</span></td>");
 						vhtml.push("</tr>");
 					}
@@ -449,7 +451,7 @@
 						for ( var i in data) {
 							let item = data[i];
 						
-		            		vhtml.push("<tr comNo='"+strChk(item.comNo)+"' userName='"+strChk(item.userName)+"' comDepartCode='"+strChk(item.comDepartCode)+"' deptFullName='"+strChk(item.deptFullName)+"' comJobx='"+strChk(item.comJobx)+"' comJobxNm='"+item.comJobxNm+"' comPosition='"+strChk(item.comPosition)+"' comPositionNm='"+strChk(item.comPositionNm)+"' comCertBelt='"+strChk(item.comCertBelt)+"' comCertBeltNm='"+strChk(item.comCertBeltNm)+"' >");
+		            		vhtml.push("<tr comNo='"+strChk(item.comNo)+"' userName='"+strChk(item.userName)+"' comDepartCode='"+strChk(item.comDepartCode)+"' deptFullName='"+strChk(item.deptFullName)+"' comJobx='"+strChk(item.comJobx)+"' comJobxNm='"+item.comJobxNm+"' comPosition='"+strChk(item.comPosition)+"' comPositionNm='"+strChk(item.comPositionNm)+"' comCertBelt='"+strChk(item.comCertBelt)+"' comCertBeltNm='"+strChk(item.comCertBeltNm)+"'  comJimu='"+strChk(item.comJimu)+"' userSchool='"+ strChk(item.userSchool) +"' >");
 		            		vhtml.push("<td class='text-align-center' style='padding: 11px 0px !important;'>"); 
 		            		vhtml.push("<div>");
 		            		vhtml.push("<input type='checkbox' id='chkNo_"+i+"' name='chkNo'>");
@@ -458,8 +460,8 @@
 		            		vhtml.push("</td>");
 		            		 
 							vhtml.push("<td class='text-align-center'><span>" + strChk(item.userName) + "</span></td>");
-							vhtml.push("<td class='text-align-center'><span> </span></td>");
-							vhtml.push("<td class='text-align-center'><span> </span></td>");
+							vhtml.push("<td class='text-align-center'><span>" + strChk(item.userSchool) + "</span></td>");
+							vhtml.push("<td class='text-align-center'><span>" + strChk(item.comJimu) + "</span></td>");
 							vhtml.push("<td class='text-align-center' style='padding: 11px 0px !important;'><span>" + strChk(item.comPositionNm)+ "</span></td>");
 							vhtml.push("</tr>");
 							

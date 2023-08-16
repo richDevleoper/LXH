@@ -21,9 +21,9 @@ public class ReportProposalSearchVO extends CommonVO{
 	private int searchPropSeq;
 	
 	@ParamField
-	private String searchGroupCode;
+	private String searchGroupCode; // 그룹코드
 	@ParamField
-	private String searchGroupName;
+	private String searchGroupName; // 그룹이름
 	@ParamField
 	private String searchBizPlaceCode;
 	@ParamField
@@ -48,6 +48,9 @@ public class ReportProposalSearchVO extends CommonVO{
 	private String searchUserTypeCode;
 	@ParamField
 	private String searchPaymentCode;
+	
+	private String searchRuleCode;	// 사용자 권한을 적용하기 위해 만든 Flag 변수
+	private String searchRuleDept;  // 사용자 권한에 따라 조직별 노출을 위한 변수
 	
 	public String getSearchPropCategoryCode() {
 		return searchPropCategoryCode;
@@ -168,5 +171,17 @@ public class ReportProposalSearchVO extends CommonVO{
 	}
 	public void setSearchPaymentCode(String searchPaymentCode) {
 		this.searchPaymentCode = searchPaymentCode;
+	}
+	public String getSearchRuleCode() {
+		return searchRuleCode;
+	}
+	public void setSearchRuleCode(String searchRuleCode) {
+		this.searchRuleCode = searchRuleCode;
+	}
+	public String getSearchRuleDept() {
+		return searchRuleDept;
+	}
+	public void setSearchRuleDept(String searchRuleDept) {
+		this.searchRuleDept = searchRuleDept;
 	}
 }

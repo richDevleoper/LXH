@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
@@ -91,7 +90,7 @@
 								</form:form>
                             </div>
                             <div class="list-header">
-                                <p class="title">나의 결재의뢰함</p>
+                                <p class="title">나의 결재함</p>
                                 <span class="bar"></span>
                                 <p class="total">총 ${totalCount}건(승인 : ${count_4}건, 반려 : ${count_3}건, 미결 ${count_2}건)</p>
                                 <select name="limit" class="limit" onchange="onchange_recordCountPerPage(this.value)">
@@ -149,12 +148,9 @@
     <script type="text/javascript">
     
     $(document).ready(init);
-	
+    
 	function init(){
-		
-		
 		$("#defaultForm input").off("keyup").on("keyup", function(e){
-			
 		    if(e.keyCode===13 && this.value.trim().length>0){
 		    	onclick_search();
 		    }
@@ -166,6 +162,7 @@
 	}
     
     function onchange_recordCountPerPage(vCount){
+    	$("#currentPageNo").val("1");
 		$("#recordCountPerPage").val(vCount);
 		onclick_search();// 검색 '조회'버튼 클릭
 	}
@@ -173,6 +170,23 @@
     function onclick_reportName(aprovalCode){
     	location.href="/apprv/apprForm.do?menuKey=${menuKey}&aprovalCode="+aprovalCode;
 	}
+    
+ // 현재 페이지 정보 저장
+    history.pushState(null,null,location.href);
+    
+    // input / textarea 제외 키보드 뒤로가기 방지
+    $(document).keydown(function(e){
+    	if(e.keyCode === 8 && e.target.nodeName != 'INPUT' && e.target.nodeName != "TEXTAREA"){
+    		return false;
+    	}
+    });
+    
+    // 브라우저 뒤로가기 버튼 방지
+    window.onpopstate = function(event){
+    	history.go(1);
+    };
+    
+    
     </script>
 </body>
 </html>

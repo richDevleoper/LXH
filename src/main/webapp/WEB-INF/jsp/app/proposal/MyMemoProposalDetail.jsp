@@ -21,7 +21,7 @@
 	<script type="text/javascript" src="<c:url value='/def/attachfile/js/jquery.iframe-transport.js'/>"></script>
 	<script type="text/javascript" src="<c:url value='/def/attachfile/js/jquery.fileupload.js'/>"></script>
 	<script type="text/javascript" src="<c:url value='/def/attachfile/js/jquery.fileupload-process.js'/>"></script>
-	<script type="text/javascript" src="<c:url value='/def/attachfile/js/jquery.fileupload-validate.js'/>"></script>
+	<script type="text/javascript" src="<c:url value='/def/attachfile/js/jquery.fileupload-validate.js?ver=1'/>"></script>
 	<script type="text/javascript" src="<c:url value='/def/attachfile/js/jquery.fileupload-ui.js'/>"></script>
 	<script type="text/javascript" src="<c:url value='/def/attachfile/js/jquery.fileupload-jquery-ui.js'/>"></script>
 	<script type="text/javascript" src="<c:url value='/def/attachfile/js/attachfile-fileuploader.js'/>"></script>
@@ -160,7 +160,7 @@
                                                                     <caption></caption>
                                                                     <colgroup>
                                                                         <col>
-                                                                        <col style="width:90px">
+                                                                        <col style="width:200px">
                                                                         <col style="width:90px">
                                                                         <col style="width:90px">
                                                                         <col style="width:90px">
@@ -176,25 +176,26 @@
                                                                     </thead>
                                                                     <tbody>
                                                                         <tr>
+	                                                                        <td id="text-approval-group" class="align-center">${PROP_INFO.propApprovalGroup}</td>
 	                                                                        <td class="pd3">
-	                                                                            <div class="row">
+	                                                                        	<div class="row">
 	                                                                                <div class="col s12 input-text search">
 	                                                                                	<form:input type="hidden" id="input-approval-code" name="input-approval-code" path="propApproverCode"/>
-	                                                                                	<form:input type="hidden" id="input-approval-name" name="input-approval-name" path="propApprovalName"/>
+	                                                                                	<%-- <form:input type="hidden" id="" name="input-approval-name" path="propApprovalName"/> --%>
 	                                                                                	<form:input type="hidden" id="input-approval-user" name="input-approval-user" path="propApprovalUser"/>
 	                                                                                    <form:input type="hidden" id="input-approval-level" name="input-approval-level" path="propApprovalLevelCode"/>
 	                                                                                    <form:input type="hidden" id="input-approval-duty" name="input-approval-duty" path="propApprovalDutyCode"/>
 	                                                                                    <form:input type="hidden" id="input-approval-belt" name="input-approval-belt" path="propApprovalBeltCode"/>
 	                                                                                    <form:input type="hidden" id="input-approval-group-code" name="input-approval-group-code" path="propApprovalGroupCode"/>
-	                                                                                    <form:input type="text" id="input-approval-group" name="input-approval-group" value="" readonly="readonly" style="background-color: #FFF;" path="propApprovalGroup"/>
+	                                                                                    <form:input type="hidden" id="input-approval-group" name="input-approval-group" path="propApprovalGroup"/>
+	                                                                                    <form:input type="text" id="input-approval-name" name="input-approval-name" value="" readonly="readonly" style="background-color: #FFF;" path="propApprovalName"/>
 	                                                                                    <button type="button" class="btn-approval-member-search-modal">검색</button>
 	                                                                                </div>
 	                                                                            </div>
 	                                                                        </td>
-	                                                                        <td id="text-approval-name">${PROP_INFO.propApprovalName }</td>
-	                                                                        <td id="text-approval-level">${PROP_INFO.propApprovalLevel }</td>
-	                                                                        <td id="text-approval-duty">${PROP_INFO.propApprovalDuty }</td>
-	                                                                        <td id="text-approval-belt">${PROP_INFO.propApprovalBelt }</td>
+	                                                                        <td id="text-approval-level" class="align-center">${PROP_INFO.propApprovalLevel}</td>
+	                                                                        <td id="text-approval-duty" class="align-center">${PROP_INFO.propApprovalDuty}</td>
+	                                                                        <td id="text-approval-belt" class="align-center">${PROP_INFO.propApprovalBelt}</td>
                                                                         </tr>
                                                                     </tbody>
                                                                 </table>
@@ -228,10 +229,10 @@
 																objectId="attachFileUpload"
 																ctx=""
 																wrapperId="attachFileUploadWrap"
-																fileId="proposal_memo_attach_${PROP_INFO.propSeq }"
+																fileId="proposal_attach_${PROP_INFO.propSeq }"
 																fileGrp="proposal"
 																autoUpload="false"
-																maxFileSize="${15*1000000}"
+																maxFileSize="${30*1000000}"
 																maxNumberOfFiles="3"/>
                                                         </div>
                                                     </div>
@@ -245,7 +246,7 @@
                         <div class="list-footer">
                             <div class="list-btns">
                                 <button type="button" class="btn light-gray" id="btn-temp-save">저장</button>
-                                <button type="button" class="btn bg-gray" id="btn-req-approval">결제의뢰</button>                                
+                                <button type="button" class="btn bg-gray" id="btn-req-approval">결재의뢰</button>                                
                                 <a href="/proposal/memolist.do?menuKey=49" class="btn">목록</a>
                             </div>
                         </div>
@@ -256,14 +257,12 @@
  		if($('#propPropStatCode').val() != 'PRG_1' && $('#crud').val() == 'U'){ // 결재진행중 상태
 			$('input').attr('disabled', true);
 			$('textarea').attr('disabled', true);
-			$('button').prop('disabled', true);
 			$('select').attr('disabled', true);
 			$('i').prop('disabled', true);
 		}else{
 			$('input').attr('disabled', false);
 			$('input').attr('disabled', false);
 			$('textarea').attr('disabled', false);
-			$('button').prop('disabled', false);
 			$('select').attr('disabled', false);
 			$('i').prop('disabled', false);
 		}
@@ -290,11 +289,19 @@
 		
 		//제안활동 내용 저장 (임시) - PRG_1
 		$('#btn-temp-save').off('click').on('click', function(){
+			if($('#propPropStatCode').val() != '' && $('#propPropStatCode').val() != 'PRG_1'){
+				alert('평가중인 제안은 수정 할 수 없습니다.');
+				return false;
+			}
 			setProposalInfoTempSave();
 		});
 		
 		//제안활동 내용 결재 상신 - PRG_2
 		$('#btn-req-approval').off('click').on('click', function(){
+			if($('#propPropStatCode').val() != '' && $('#propPropStatCode').val() != 'PRG_1'){
+				alert('평가중인 제안은 수정 할 수 없습니다.');
+				return false;
+			}
 			setProposalInfoApprove();
 		});
 	});
@@ -305,7 +312,7 @@
 		$('#text-proposal-group').html(d.deptFullName);
 		$('#input-proposal-group').val(d.deptFullName);
 		$('#input-proposal-belt-hidden').val(d.comCertBelt);
-		//$('#input-proposal-bizplace-hidden').val(d.comNo);
+		$('#input-proposal-bizplace-hidden').val(d.comWorkPlace);
 		
 		$.post( "/proposal/selectCircleInfo.do", { comNo: d.comNo, deptCode: d.comDepartCode }, function(data){
 			if(data != null && data.length > 0){
@@ -317,12 +324,14 @@
 	}
 	
 	function setApprovalMemberInfo(el, d){
+		/*
 		if(d.comPosition == null || d.comPosition == ''){
 			alert('결재권한이 없는 사용자 입니다.\n다시 선택해 주세요.');
 			$('#text-approval-name').html('');
 			$('#text-approval-level').html('');
 			$('#text-approval-duty').html('');
 			$('#text-approval-belt').html('');
+			$('#text-approval-group').html('');
 			
 			$('#input-approval-name').val('');
 			$('#input-approval-user').val('');
@@ -333,11 +342,13 @@
 			$('#input-approval-group').val('');
 			return false;
 		}
+		*/
 		
 		$('#text-approval-name').html(d.userName);
-		$('#text-approval-level').html(d.comPositionNm);
-		$('#text-approval-duty').html(d.comJobxNm);
+		$('#text-approval-level').html(d.comJobxNm);
+		$('#text-approval-duty').html(d.comPositionNm);
 		$('#text-approval-belt').html(d.comCertBeltNm);
+		$('#text-approval-group').html(d.deptFullName);
 		
 		$('#input-approval-name').val(d.userName);
 		$('#input-approval-user').val(d.comNo);
@@ -372,17 +383,18 @@
 				alert('결재자를 선택해 주세요.');
 				return false;
 			}
-			
+			/*
 			if($('#input-approval-level').val() == null || $('#input-approval-level').val() == ''){
 				alert('결재자를 선택해 주세요.');
 				return false;
 			}
 			
+			
 			if($('#input-approval-duty').val() == null || $('#input-approval-duty').val() == ''){
-				alert('결재자를 선택해 주세요.');
+				alert('결재자를 선택해 주세요.3');
 				return false;
 			}
-			
+			*/
 			if($('#input-approval-group-code').val() == null || $('#input-approval-group-code').val() == ''){
 				alert('결재자를 선택해 주세요.');
 				return false;

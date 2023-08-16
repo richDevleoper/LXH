@@ -73,4 +73,7 @@ public class ProposalService {
 	public List<EgovMap> selectCircleInfo(Map<String, Object> reqMap) {
 		return dao.selectList("Proposal.selectCircleInfo", reqMap);
 	}
+	public String selectProposalEmail(String comNo) {
+		return dao.selectOne("Proposal.selectProposalEmail", comNo);
+	}
 }

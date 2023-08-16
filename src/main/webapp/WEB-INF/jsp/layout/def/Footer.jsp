@@ -506,17 +506,12 @@
 	    	            		let checkedItem = $(".radio-selected-smember:checked").closest("tr");
 	    	            		let retData = checkedItem.attr("data");
 	    	            		retData = JSON.parse(retData);
-	    	            		
 	    	            		if(this.returnFunc){
 	    	            			this.returnFunc(this.returnObjId, retData); //리턴함수 호출, 초기화 전 객체명 넘기기
 	    	            			this.close(true);	// 팝업 Close, 각 파라메터 초기화
 	    	            		} else {
 	    	            			alert("반환 함수가 정의되지 않았습니다.");
 	    	            		}
-	    	            		
-	    	            		
-	    	            		
-	    	            		
 	    	            	}
 	            	};
 

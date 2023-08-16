@@ -145,7 +145,7 @@
 			,'N'
 			,NULL
 			,#{frstOperId}
-			,SYSDATE()
+			,SYSDATE
 			,#{frstOperIp}
 			,NULL
 			,NULL
@@ -159,7 +159,7 @@
 			,WRITER = #{writer}
 			<if test="writerPwd != null and writerPwd != ''">,WRITER_PWD = #{writerPwd}</if>
 			,LAST_OPER_ID = #{lastOperId}
-			,LAST_OPER_DT = SYSDATE()
+			,LAST_OPER_DT = SYSDATE
 			,LAST_OPER_IP = #{lastOperIp}
 		WHERE ARTICLE_COMMENT_KEY = #{articleCommentKey}
 	</update>
@@ -184,7 +184,7 @@
 			ORDER BY OKEY DESC
 		)T
 		where rownum<![CDATA[<=]]>1
-	</select>
+	</select> 
 	
 	<update id="updateOkey">
 		UPDATE TB_ARTICLE_COMMENT 
@@ -197,7 +197,7 @@
 			DELETE_FLG = 'Y'
 			,DELETE_TYP = #{deleteTyp}
 			,LAST_OPER_ID = #{lastOperId}
-			,LAST_OPER_DT = SYSDATE()
+			,LAST_OPER_DT = SYSDATE
 			,LAST_OPER_IP = #{lastOperIp}
 		WHERE ARTICLE_COMMENT_KEY = #{articleCommentKey}
 	</update>
@@ -207,7 +207,7 @@
 			DELETE_FLG = 'N' 
 			,DELETE_TYP = #{deleteTyp}
 			,LAST_OPER_ID = #{lastOperId}
-			,LAST_OPER_DT = SYSDATE()
+			,LAST_OPER_DT = SYSDATE
 			,LAST_OPER_IP = #{lastOperIp}
 		WHERE ARTICLE_COMMENT_KEY = #{articleCommentKey}
 	</update>

@@ -149,7 +149,7 @@
                                                 <th class="bg-gray font-weight-bold">No</th>
                                                 <th class="bg-gray font-weight-bold">년도</th>
                                                 <th class="bg-gray font-weight-bold">벨트</th>
-                                                <th class="bg-gray font-weight-bold">교육유형</th>
+                                                <th class="bg-gray font-weight-bold">유형</th>
                                                 <th class="bg-gray font-weight-bold">상세유형</th>
                                                 <th class="bg-gray font-weight-bold">차수</th>
                                                 <th class="bg-gray font-weight-bold">과정명</th>
@@ -432,6 +432,7 @@
 	}
 	
 	function onchange_recordCountPerPage(vCount){
+		$("#currentPageNo").val("1");
 		$("#recordCountPerPage").val(vCount);
 		onclick_search();// 검색 '조회'버튼 클릭
 	}

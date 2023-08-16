@@ -437,8 +437,10 @@
 .table_box.count_type .tabulator {
     padding-top: 33px;
 }
+/*
 .tabulator.point-type .tabulator-table > div:first-child,
 .tabulator.point-type .tabulator-table > div:last-child{background:#746661;color:#fff}
+*/
 .tabulator.point-type .tabulator-table > div:first-child .tabulator-cell,
 .tabulator.point-type .tabulator-table > div:last-child .tabulator-cell{border-color:#d8d8d8}
 .tabulator {

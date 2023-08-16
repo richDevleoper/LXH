@@ -36,7 +36,7 @@
 <c:if test="${ empty repMenuCode }"><%-- 해당 값은 "과제/분임조과제" 에서만 나옴. --%>
                         <div class="breadcrumb">
                             <ul>
-                                <li>결제종류 : 과제 > 과제선정	<!-- 과제 > 6σ Full Process > DMAIC > Define --></li>
+                                <li>결재종류 : 과제 > 과제선정	<!-- 과제 > 6σ Full Process > DMAIC > Define --></li>
                             </ul>
 							<div class="header-btns">
 							<c:if test="${approveVO.aprovalState ne '3' && approveVO.aprovalState ne '4'}">

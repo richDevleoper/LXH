@@ -21,6 +21,7 @@
 		<result property="refBusType" column="REF_BUS_TYPE" />
 		<result property="refBusTypeNm" column="REF_BUS_TYPE_NM" />
 		<result property="refBusCode" column="REF_BUS_CODE" />
+		<result property="refBusType" column="REF_BUS_TYPE" />
 		<result property="refBusSubCode" column="REF_BUS_SUB_CODE" />
 	</resultMap>
 
@@ -40,7 +41,9 @@
 		</if>
 		
 		<if test="searchUserId != null and searchUserId != ''">
-			AND EXISTS (select 1 from tb_approval_detail where aproval_code=T.aproval_code and com_no=#{searchUserId}) 
+			AND EXISTS (select 1 from tb_approval_detail where aproval_code=T.aproval_code and com_no=#{searchUserId})
+			/* 이전 결재자 미결건 있거나 반려건 있으면 리스트에서 제외 (2023-07-20) */
+			AND NOT EXISTS (select 1 from tb_approval_detail sd where sd.aproval_code=T.aproval_code and sd.aproval_seq <![CDATA[<]]> d.aproval_seq and aproval_stat_code in ('2','3'))    
 		</if>
 		
 		<if test="searchRegUserId != null and searchRegUserId != ''">
@@ -71,6 +74,9 @@
 		<if test="refBusCode != null and refBusCode != ''">
 			AND REF_BUS_CODE = #{refBusCode}
 		</if>
+		<if test="refBusType != null and refBusType != ''">
+			AND REF_BUS_TYPE = #{refBusType}
+		</if>
 		<if test="refBusSubCode != null and refBusSubCode != ''">
 			AND REF_BUS_SUB_CODE = #{refBusSubCode}
 		</if>
@@ -79,14 +85,19 @@
 
 	<sql id="selectListBasic">
 	    WITH v_approval_mst AS (
-            SELECT ROW_NUMBER() OVER( ORDER BY TO_NUMBER(aproval_code) ASC ) idx,
-                ROW_NUMBER() OVER( ORDER BY TO_NUMBER(aproval_code) DESC ) rowidx,
+            SELECT ROW_NUMBER() OVER( ORDER BY TO_NUMBER(T.aproval_code) ASC ) idx,
+                ROW_NUMBER() OVER( ORDER BY TO_NUMBER(T.aproval_code) DESC ) rowidx,
                 T.*,
-                u.USER_NAME
+                u.USER_NAME,
+                d.aproval_seq as my_seq
             FROM  tb_approval_mst T,
-		          tb_user_mst     u
+		          tb_user_mst     u,
+		          tb_approval_detail d
             WHERE 
                    T.user_id = u.com_no (+)
+                   <if test="searchUserId != null and searchUserId != ''">
+                   AND T.aproval_code=D.aproval_code and D.com_no=#{searchUserId} 
+                   </if>
             <include refid="defCond"></include>
 	    )
 	 	SELECT
@@ -185,7 +196,8 @@
 	 	    T.idx,
 		    T.aproval_code,
 		    T.aproval_type,
-		    get_code_nm('APR_TYPE', T.aproval_type) || case TO_CHAR(aproval_type) when '3' then to_char(GET_6SIGMA_STEP_NM(T.ref_bus_code, T.ref_bus_sub_code)) else '' end aproval_type_nm,
+		    --get_code_nm('APR_TYPE', T.aproval_type) || case TO_CHAR(aproval_type) when '3' then to_char(GET_6SIGMA_STEP_NM(T.ref_bus_code, T.ref_bus_sub_code)) else '' end aproval_type_nm,
+		    case when T.ref_bus_type in ('1', '2') then get_code_nm('BUS_TYPE', T.ref_bus_type) || ' > ' else '' end || get_code_nm('APR_TYPE', T.aproval_type) || case TO_CHAR(aproval_type) when '3' then to_char(GET_6SIGMA_STEP_NM(T.ref_bus_code, T.ref_bus_sub_code)) else '' end aproval_type_nm,
 		    T.aproval_state,
 		    get_code_nm('APR_STAT', T.aproval_state) aproval_state_nm,
 		    T.aproval_subject,

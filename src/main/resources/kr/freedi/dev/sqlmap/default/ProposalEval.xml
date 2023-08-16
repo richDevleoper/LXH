@@ -73,6 +73,38 @@
 				<if test="searchPropName != null and searchPropName neq ''.toString()">
 					AND PROP_NAME LIKE '%'||#{searchPropName}||'%'
 				</if>
+				<if test="searchGroupName != null and searchGroupName neq ''.toString()">
+					AND PROP_GROUP_NAME = #{searchGroupName}
+				</if>
+				<if test="searchBizPlaceCode != null and searchBizPlaceCode neq ''.toString()">
+					AND PROP_BIZ_PLACE_CODE = #{searchBizPlaceCode}
+				</if>
+				<if test="searchPropUser != null and searchPropUser neq ''.toString()">
+					AND PROP_USER = #{searchPropUser}
+				</if>
+				<if test="searchPropClassCode != null and searchPropClassCode neq ''.toString()">
+					AND PROP_EVAL_LV_CODE = #{searchPropClassCode}
+				</if>
+				<if test="searchFinalEvalUser != null and searchFinalEvalUser neq ''.toString()">
+					AND (
+							SELECT COM_NO FROM 
+							(
+								SELECT 
+									A.COM_NO AS COM_NO
+									,B.REF_BUS_CODE AS REF_BUS_CODE
+								FROM
+									TB_APPROVAL_DETAIL A
+									LEFT JOIN TB_APPROVAL_MST B
+									ON  A.APROVAL_CODE = B.APROVAL_CODE 
+									ORDER BY A.APROVAL_SEQ DESC
+							) WHERE ROWNUM = 1
+							AND REF_BUS_CODE = TB_PROPOSAL_DETAIL.PROP_SEQ
+					) = #{searchFinalEvalUser}
+				</if>
+				<if test="searchPropTypeCode != null and searchPropTypeCode neq ''.toString()">
+					AND PROP_TYPE_CODE = #{searchPropTypeCode}
+				</if>
+				
             ) T
 		)
 		SELECT T.*
@@ -121,7 +153,7 @@
 				       PROP_USER, GET_USER_NM(PROP_USER) AS PROP_USER_NM,
 				       NVL(GET_USER_NM(PROP_APPROVER_CODE), '-') AS PROP_APPROVER_NM
 				FROM TB_PROPOSAL_DETAIL	 
-				WHERE PROP_PROP_STAT_CODE NOT IN ('PRG_1', 'PRG_2', 'PRG_3', 'PRG_4')
+				WHERE PROP_PROP_STAT_CODE NOT IN ('PRG_1', 'PRG_2', 'PRG_3', 'PRG_4') AND PROP_EVAL_LV_CODE NOT IN ('NA')
 				<if test="searchPropFromDate != null and searchPropFromDate neq ''.toString() and searchPropToDate != null and searchPropToDate neq ''.toString()">
 					AND PROP_DATE BETWEEN TO_DATE(#{searchPropFromDate}, 'YYYY-MM-DD') AND TO_DATE(#{searchPropToDate}, 'YYYY-MM-DD')
 				</if>							
@@ -131,6 +163,38 @@
 				<if test="searchPropName != null and searchPropName neq ''.toString()">
 					AND PROP_NAME LIKE '%'||#{searchPropName}||'%'
 				</if>
+				<if test="searchGroupName != null and searchGroupName neq ''.toString()">
+					AND PROP_GROUP_NAME = #{searchGroupName}
+				</if>
+				<if test="searchBizPlaceCode != null and searchBizPlaceCode neq ''.toString()">
+					AND PROP_BIZ_PLACE_CODE = #{searchBizPlaceCode}
+				</if>
+				<if test="searchPropUser != null and searchPropUser neq ''.toString() and searchUserTypeCode eq 'RU'">
+					AND PROP_USER = #{searchPropUser}
+				</if>
+				<if test="searchPropUser != null and searchPropUser neq ''.toString() and searchUserTypeCode eq 'EU'">
+					AND (
+						SELECT COM_NO FROM 
+						(
+							SELECT 
+								A.COM_NO AS COM_NO
+								,B.REF_BUS_CODE AS REF_BUS_CODE
+							FROM
+								TB_APPROVAL_DETAIL A
+								LEFT OUTER JOIN TB_APPROVAL_MST B
+								ON  A.APROVAL_CODE = B.APROVAL_CODE 
+								ORDER BY A.APROVAL_SEQ DESC
+						) WHERE ROWNUM = 1
+						AND REF_BUS_CODE = TB_PROPOSAL_DETAIL.PROP_SEQ
+						) = #{searchPropUser}
+				</if>
+				<if test="searchPropClassCode != null and searchPropClassCode neq ''.toString()">
+					AND PROP_EVAL_LV_CODE = #{searchPropClassCode}
+				</if>
+				<if test="searchPaymentCode != null and searchPaymentCode neq ''.toString()">
+					AND PROP_PAYMENT_YN = #{searchPaymentCode}
+				</if>
+				
             ) T
 		)
 		SELECT T.*
@@ -155,7 +219,6 @@
 	<update id="updatePropPaymentInfo" parameterType="kr.freedi.dev.qproposal.domain.EvalProposalVO">
 		UPDATE TB_PROPOSAL_DETAIL 
 		SET 
-			PROP_SUBSIDY = #{propSubsidy, jdbcType=VARCHAR}, 
 			PROP_PAYMENT_YN = #{propPaymentYn, jdbcType=VARCHAR}, 
 			PROP_PAYMENT_DATE = SYSDATE, 
 			PROP_PROP_STAT_CODE = 'PRG_6' 

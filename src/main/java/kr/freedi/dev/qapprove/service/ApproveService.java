@@ -72,8 +72,10 @@ public class ApproveService {
 			detail = dao.selectList("ApprovalDetail.selectList", retVO);
 			retVO.setDetailList(detail);
 			
+			// -- 이거 왜 넣는지 모르겠다 (2023.08.13 - DOS)
 			ApproveVO paramVO = new ApproveVO();
 			paramVO.setRefBusCode(retVO.getRefBusCode());
+			paramVO.setAprovalCode(retVO.getAprovalCode()); // 결제 코드도 같이 넘겨준다(없으면 과제/제안 결재자 목록에 중복이 이뤄남)
 			detail = dao.selectList("ApprovalDetail.selectList", paramVO);
 			retVO.setDetailHistory(detail);	
 		} 
@@ -122,7 +124,8 @@ public class ApproveService {
 		List<ApproveDetailVO> detail = inputVO.getDetailList();
 		
 		// check 하고 다 결재 되었으면 결재마스터 상태 업데이트
-		Boolean apprComplete = true;
+		Boolean apprComplete = true;  // 전원 결재여부 체크, 미결된 사람이 있으면 false, 미결 없거나(=결재 전원 완료되거나) 반려건이 있으면  true
+		Boolean isRejected = false;   // 반려건 있는지 체크하고 있으면 결재완료처리하여 진행
 		
 		
 		if(detail!=null) {
@@ -139,16 +142,23 @@ public class ApproveService {
 			
 			ApproveVO dbVO = this.select(inputVO);
 			
-
 			List<ApproveDetailVO> approvalList = dbVO.getDetailList();
 			for(int i=0; i<approvalList.size(); i++) {
 				ApproveDetailVO tmpItem = approvalList.get(i);
-				if(tmpItem.getAprovalStatCode() != null && tmpItem.getAprovalStatCode().equals("2")) {
-					apprComplete = false;
+				if(tmpItem.getAprovalStatCode() != null) {
+					if(tmpItem.getAprovalStatCode().equals("2"))
+						apprComplete = false;
+					else if(tmpItem.getAprovalStatCode().equals("3"))
+						isRejected = true;
 				}
 			}
 			
+			if(isRejected) {
+				apprComplete = true; // 반려시 이후 결재 안되도록 상태 변경
+			}
+			
 			if(apprComplete) {
+				
 				dao.update("Approval.updateStatus", inputVO);
 			}
 		}

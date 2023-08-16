@@ -77,7 +77,7 @@
                 maxNumberOfFiles: 'Maximum number of files exceeded',
                 acceptFileTypes: 'File type not allowed',
                 denyFileTypes: 'File type not allowed',
-                maxFileSize: 'File is too large',
+                maxFileSize: '30M 이하 첨부 가능',
                 minFileSize: 'File is too small'
             	
             	//20170331 pdh

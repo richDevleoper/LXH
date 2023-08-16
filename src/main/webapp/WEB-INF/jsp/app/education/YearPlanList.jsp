@@ -286,6 +286,8 @@ function detailView(eduCode){
 		data: params,
 		dataType : 'json',
 		success:function(data){
+			console.log(data);
+			
 			$("#titTab").text(data.eduName);
 			$("#titTab2").html("정원 : <b>"+data.eduFixed+"</b>명, 신청 : <b>"+data.tsdCnt+"</b>명");
 			$("#eduFixed").val(data.eduFixed);
@@ -332,6 +334,20 @@ function detailView(eduCode){
 				}
 				$("#eduCol6").html(flHtml.join(''));
 			}
+			
+			//신청버튼 프로시저
+			let rsYn = data.rsYn;
+			if(rsYn == "" || rsYn=="N"){
+				$("#btnRegEdu").hide();
+				$("#btnCnlEdu").hide();
+			}else if(rsYn == "Y"){
+				$("#btnRegEdu").show();
+				$("#btnCnlEdu").show();
+			}
+			
+			
+			
+			
 		}
 	});
 	

@@ -21,14 +21,14 @@
 	<script type="text/javascript" src="<c:url value='/def/attachfile/js/jquery.iframe-transport.js'/>"></script>
 	<script type="text/javascript" src="<c:url value='/def/attachfile/js/jquery.fileupload.js'/>"></script>
 	<script type="text/javascript" src="<c:url value='/def/attachfile/js/jquery.fileupload-process.js'/>"></script>
-	<script type="text/javascript" src="<c:url value='/def/attachfile/js/jquery.fileupload-validate.js'/>"></script>
+	<script type="text/javascript" src="<c:url value='/def/attachfile/js/jquery.fileupload-validate.js?ver=1'/>"></script>
 	<script type="text/javascript" src="<c:url value='/def/attachfile/js/jquery.fileupload-ui.js'/>"></script>
 	<script type="text/javascript" src="<c:url value='/def/attachfile/js/jquery.fileupload-jquery-ui.js'/>"></script>
 	<script type="text/javascript" src="<c:url value='/def/attachfile/js/attachfile-fileuploader.js'/>"></script>
 </head>
 <body>
 <form:form id="defaultForm" name="defaultForm"  action="${action}" onsubmit="return false" method="post" modelAttribute="proposalVO" commandName="PROP_INFO" enctype="multipart/form-data">
-<form:hidden value="${propSeq }" path="propSeq" id="propSeq"/>
+<form:hidden path="propSeq" id="propSeq" value="${propSeq }" />
 <form:hidden path="propTypeCode" id="propTypeCode"/>
 <form:hidden path="propRelMemoYn" id="propRelMemoYn"/>
 <form:hidden path="propPropStatCode" id="propPropStatCode" value="${propPropStatCode }"/>
@@ -162,7 +162,8 @@
                                                             </form:select>
                                                         </div> --%>
                                                         <div class="col s12 input-text">
-                                                            <form:input type="text" id="input-yeareffect-remark" name="input-yeareffect-remark" value="" style="background-color: #FFF;" path="propYearEffect"/>
+                                                        	<fmt:formatNumber var="propYearEffect" value="${PROP_INFO.propYearEffect}" type="currency" currencySymbol=""/>
+                                                            <form:input type="text" id="input-yeareffect-remark" name="input-yeareffect-remark" value="${propYearEffect }" style="background-color: #FFF;" path="propYearEffect"/>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -246,6 +247,7 @@
 	                                                                            					<input type="file" name="beforeAttachFiles[]" accept="image/*" onchange="setSelectedFileInfo(this);">
 	                                                                            					<label style="border-radius: 2px; height: 29px; line-height: 27px; text-align: center;" onclick="selectImageFile(this);">파일선택</label>
                                                                             					</div>
+                                                                            					<div class="fileUploadPreView"></div>
                                                                             				</div>                                                                           				
                                                                             			</c:otherwise>
                                                                             		</c:choose>                                                                 	
@@ -295,6 +297,7 @@
 	                                                                            					<input type="file" name="afterAttachFiles[]" accept="image/*" onchange="setSelectedFileInfo(this);">
 	                                                                            					<label style="border-radius: 2px; height: 29px; line-height: 27px; text-align: center;" onclick="selectImageFile(this);">파일선택</label>
                                                                             					</div>
+                                                                            					<div class="fileUploadPreView"></div>
                                                                             				</div>                                                                           				
                                                                             			</c:otherwise>
                                                                             		</c:choose>                                                                 	
@@ -342,7 +345,7 @@
 																fileId="proposal_attach_${PROP_INFO.propSeq }"
 																fileGrp="proposal"
 																autoUpload="false"
-																maxFileSize="${15*1000000}"
+																maxFileSize="${30*1000000}"
 																maxNumberOfFiles="3"/>
                                                         </div>
                                                     </div>
@@ -384,7 +387,7 @@
 			                            							<caption></caption>
 			                            							<colgroup>
 			                            								<col>
-			                                                            <col style="width:90px">
+			                                                            <col style="width:200px">
 			                                                            <col style="width:90px">
 			                                                            <col style="width:90px">
 			                                                            <col style="width:90px">
@@ -400,25 +403,26 @@
 			                                                        </thead>
 			                                                        <tbody>
 			                                                        	<tr>
+			                                                        		<td id="text-approval-group" class="align-center">${PROP_INFO.propApprovalGroup}</td>
 			                                                        		<td class="pd3">
 			                                                        			<div class="row">
 			                                                        				<div class="col s12 input-text search">
 			                                                        					<form:input type="hidden" id="input-approval-code" name="input-approval-code" path="propApproverCode"/>
-			                                                                        	<form:input type="hidden" id="input-approval-name" name="input-approval-name" path="propApprovalName"/>
+			                                                                        	<%-- <form:input type="hidden" id="input-approval-name" name="input-approval-name" path="propApprovalName"/> --%>
 			                                                                        	<form:input type="hidden" id="input-approval-user" name="input-approval-user" path="propApprovalUser"/>
 			                                                                            <form:input type="hidden" id="input-approval-level" name="input-approval-level" path="propApprovalLevelCode"/>
 			                                                                            <form:input type="hidden" id="input-approval-duty" name="input-approval-duty" path="propApprovalDutyCode"/>
 			                                                                            <form:input type="hidden" id="input-approval-belt" name="input-approval-belt" path="propApprovalBeltCode"/>
 			                                                                            <form:input type="hidden" id="input-approval-group-code" name="input-approval-group-code" path="propApprovalGroupCode"/>
-			                                                                            <form:input type="text" id="input-approval-group" name="input-approval-group" value="" readonly="readonly" style="background-color: #FFF;" path="propApprovalGroup"/>
+			                                                                            <form:input type="hidden" id="input-approval-group" name="input-approval-group" path="propApprovalGroup"/>
+			                                                                            <form:input type="text" id="input-approval-name" name="input-approval-name" value="" readonly="readonly" style="background-color: #FFF;" path="propApprovalName"/>
 			                                                                            <button type="button" class="btn-approval-member-search-modal">검색</button>
 				                                                                    </div>
 				                                                                 </div>
 				                                                           </td>
-			                                                               <td id="text-approval-name">${PROP_INFO.propApprovalName }</td>
-			                                                               <td id="text-approval-level">${PROP_INFO.propApprovalLevel }</td>
-			                                                               <td id="text-approval-duty">${PROP_INFO.propApprovalDuty }</td>
-			                                                               <td id="text-approval-belt">${PROP_INFO.propApprovalBelt }</td>
+			                                                               <td id="text-approval-level" class="align-center">${PROP_INFO.propApprovalLevel }</td>
+			                                                               <td id="text-approval-duty" class="align-center">${PROP_INFO.propApprovalDuty }</td>
+			                                                               <td id="text-approval-belt" class="align-center">${PROP_INFO.propApprovalBelt }</td>
 			                                                            </tr>
 			                                                        </tbody>
 			                                                    </table>
@@ -434,9 +438,25 @@
 			            </div>
                         <div class="list-footer">
                             <div class="list-btns">
-                                <button type="button" class="btn light-gray" id="btn-temp-save">저장</button>
-                                <button type="button" class="btn bg-gray" id="btn-req-approval">결제의뢰</button>                
-                                <a href="/proposal/list.do?menuKey=48" class="btn">목록</a>
+                                <c:choose>
+                            		<c:when test="${crud eq 'I'}">
+                            			<button type="button" class="btn light-gray" id="btn-temp-save">저장</button>
+		                                <button type="button" class="btn bg-gray" id="btn-req-approval">결재의뢰</button>                
+		                                <a href="/proposal/list.do?menuKey=48" class="btn">목록</a>
+                            		</c:when>
+                            		<c:when test="${crud eq 'U'}">
+                            			<a href="/proposal/list.do?menuKey=48" class="btn">목록</a>
+                                		<a href="/proposal/detail.do?menuKey=48&propSeq=${propSeq}&chkPropMode=R" class="btn bg-gray">재작성</a>
+                            		</c:when>
+                            		<c:when test="${crud eq 'R'}">
+                            			<button type="button" class="btn light-gray" id="btn-temp-save">저장</button>
+		                                <button type="button" class="btn bg-gray" id="btn-req-approval">결재의뢰</button>                
+		                                <a href="/proposal/list.do?menuKey=48" class="btn">목록</a>
+                            		</c:when>                            		
+                            		<c:otherwise>
+                            			<a href="/proposal/judge/list.do?menuKey=48" class="btn">목록</a>
+                            		</c:otherwise>
+                            	</c:choose>
                             </div>
                         </div>
 </form:form> 
@@ -444,17 +464,22 @@
 	var proposalInfo = {};
 	$(document).ready(function(){
 		
+		// 재등록일 경우 업데이트 체크값을 초기화 한다.
+		if($('#crud').val() == 'R'){
+			$('#crud').val('I');
+			$('#propPropStatCode').val('');
+			$('#propPropStatCode').val('PRG_1'); 
+		}
+		
  		if($('#propPropStatCode').val() != 'PRG_1' && $('#crud').val() == 'U'){ // 결재진행중 상태
 			$('input').attr('disabled', true);
 			$('textarea').attr('disabled', true);
-			$('button').prop('disabled', true);
 			$('select').attr('disabled', true);
 			$('i').prop('disabled', true);
 		}else{
 			$('input').attr('disabled', false);
 			$('input').attr('disabled', false);
 			$('textarea').attr('disabled', false);
-			$('button').prop('disabled', false);
 			$('select').attr('disabled', false);
 			$('i').prop('disabled', false);
 		}
@@ -499,11 +524,19 @@
 		
 		//제안활동 내용 저장 (임시) - IP
 		$('#btn-temp-save').off('click').on('click', function(){
+			if($('#propPropStatCode').val() != '' && $('#propPropStatCode').val() != 'PRG_1'){
+				alert('평가중인 제안은 수정 할 수 없습니다.');
+				return false;
+			}
 			setProposalInfoTempSave();
 		});
 		
 		//제안활동 내용 결재 상신 - EV
 		$('#btn-req-approval').off('click').on('click', function(){
+			if($('#propPropStatCode').val() != '' && $('#propPropStatCode').val() != 'PRG_1'){
+				alert('평가중인 제안은 수정 할 수 없습니다.');
+				return false;
+			}
 			setProposalInfoApprove();
 		});
 		
@@ -530,7 +563,7 @@
 			html += '</span>';
 			html += '<input type="file" name="beforeAttachFiles[]" accept="image/*" onchange="setSelectedFileInfo(this);">';
 			html += '<label style="border-radius: 2px; height: 29px; line-height: 27px; text-align: center;" onclick="selectImageFile(this);">파일선택</label>';
-			html += '</div></div>';
+			html += '</div><div class="fileUploadPreView"></div></div>';
 			$('#beforeFileUploadWrap').append(html);
 		});
 		
@@ -543,7 +576,7 @@
 			html += '</span>';
 			html += '<input type="file" name="afterAttachFiles[]" accept="image/*" onchange="setSelectedFileInfo(this);">';
 			html += '<label style="border-radius: 2px; height: 29px; line-height: 27px; text-align: center;" onclick="selectImageFile(this);">파일선택</label>';
-			html += '</div></div>';
+			html += '</div><div class="fileUploadPreView"></div></div>';
 			$('#afterFileUploadWrap').append(html);			
 		});
 		
@@ -555,6 +588,18 @@
 				$('#input-yeareffect-remark').val('');
 				$('#input-yeareffect-remark').attr('readonly', false);
 			}
+		}); */
+		
+/* 		$('#input-yeareffect-remark').keyup(function(){
+			console.log($('#input-yeareffect-remark').val());
+			var value = $('#input-yeareffect-remark').val().trim().replace(/,/gi, ""); 
+			if(value != '' && /^[0-9]+$/.test(value) == false){
+				alert('숫자만 입력가능합니다');
+				$('#input-yeareffect-remark').val($('#input-yeareffect-remark').val().substring(0, $('#input-yeareffect-remark').val().length -1));
+				return false;
+			}
+			value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+			$('#input-yeareffect-remark').val(value);
 		}); */
 	});
 	
@@ -568,6 +613,19 @@
 		var fileName = $(el).val().split('\\');
 		//console.log(fileName[fileName.length - 1]);
 		$(el).prev().find('input[type=text]').val(fileName[fileName.length - 1]);
+		
+		var reader = new FileReader();
+		reader.onload = function(event){
+			var img = document.createElement('img');
+			img.setAttribute('src', event.target.result);
+			img.addEventListener('click', function(){
+				popupImageView(this);
+			});
+			$(img).attr('style', 'margin-top: 10px;');
+			$($(el).parent().next()).append(img);
+		};
+		
+		reader.readAsDataURL(event.target.files[0]);
 	}
 	
 	function resetFileInfo(el){
@@ -626,7 +684,7 @@
 							$('#' + attachFileGroup + '-attach-file-' + fileSeq).remove();
 						}
 					},
-					type: 'DELETE'
+					type: 'POST'
 				});
 			}
 		}else{
@@ -636,12 +694,15 @@
 	}
 	
 	function setProposalMemberInfo(el, d){
+		
+		console.log(JSON.stringify(d));
+		
 		$('#input-proposal').val(d.userName);
 		$('#input-proposal-user').val(d.comNo);
 		$('#text-proposal-group').html(d.deptFullName);
 		$('#input-proposal-group').val(d.deptFullName);
 		$('#input-proposal-belt-hidden').val(d.comCertBelt);
-		//$('#input-proposal-bizplace-hidden').val(d.comNo);
+		$('#input-proposal-bizplace-hidden').val(d.comWorkPlace);
 		
 		$.post( "/proposal/selectCircleInfo.do", { comNo: d.comNo, deptCode: d.comDepartCode }, function(data){
 			if(data != null && data.length > 0){
@@ -653,17 +714,28 @@
 	}
 	
 	function setRelMemoProposal(el, d){
+		
+		console.log(JSON.stringify(d));
+		
 		$('#input-proposal-memo').val(d.propName);
 		$('#input-proposal-memo-hidden').val(d.propSeq);
+		
+		// 쪽지제안 내용 추가
+		$('#textarea-proposal-problem').val(d.propProblem); 			// 현상 및 문제점
+		$('#textarea-proposal-enhance').val(d.propImprovementCont);		// 개선내용
+		$('#textarea-proposal-effect').val(d.propBenefit);				// 기대효과
 	}
 	
 	function setApprovalMemberInfo(el, d){
+		console.log(JSON.stringify(d));
+		/*
 		if(d.comPosition == null || d.comPosition == ''){
 			alert('결재권한이 없는 사용자 입니다.\n다시 선택해 주세요.');
 			$('#text-approval-name').html('');
 			$('#text-approval-level').html('');
 			$('#text-approval-duty').html('');
 			$('#text-approval-belt').html('');
+			$('#text-approval-group').html('');
 			
 			$('#input-approval-code').val('');
 			$('#input-approval-name').val('');
@@ -675,11 +747,13 @@
 			$('#input-approval-group').val('');
 			return false;
 		}
+		*/
 		
 		$('#text-approval-name').html(d.userName);
-		$('#text-approval-level').html(d.comPositionNm);
-		$('#text-approval-duty').html(d.comJobxNm);
+		$('#text-approval-level').html(d.comJobxNm);
+		$('#text-approval-duty').html(d.comPositionNm);
 		$('#text-approval-belt').html(d.comCertBeltNm);
+		$('#text-approval-group').html(d.deptFullName);
 		
 		$('#input-approval-code').val(d.comNo);
 		$('#input-approval-name').val(d.userName);
@@ -767,16 +841,18 @@
 				alert('결재자를 선택해 주세요.');
 				return false;
 			}
-			
+			/*
 			if($('#input-approval-level').val() == null || $('#input-approval-level').val() == ''){
 				alert('결재자를 선택해 주세요.');
 				return false;
 			}
 			
+			
 			if($('#input-approval-duty').val() == null || $('#input-approval-duty').val() == ''){
 				alert('결재자를 선택해 주세요.');
 				return false;
 			}
+			*/
 			
 			if($('#input-approval-group-code').val() == null || $('#input-approval-group-code').val() == ''){
 				alert('결재자를 선택해 주세요.');
@@ -874,7 +950,8 @@
 			return false;
 		}
 		
-		if($('#input-yeareffect-remark').val().trim() != '' && /^[0-9]+$/.test($('#input-yeareffect-remark').val().trim()) == false){
+		var value = $('#input-yeareffect-remark').val().trim().replace(/,/gi, "");
+		if(value != '' && /^[0-9]+$/.test(value) == false){
 			alert('년간 효과금액 숫자만 입력해 주세요.'); $('#input-yeareffect-remark').focus();
 			return false;			
 		}

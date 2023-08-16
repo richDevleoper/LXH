@@ -104,6 +104,34 @@ public class EducationVO {
 	private String eduStartDate;
 	private String eduEndDate;
 	
+	
+	/*
+	 * 2023.08.01
+	 * 도성욱 추가
+	 */
+	private String rsYn;
+	
+	// 인증 테이블 컬럼값 추가
+	private String seq;
+	private String cudComNo;
+	private String deptCode;
+	private String beforeBelt;
+	private String afterBelt;
+	private String deptName;
+	private String jobXName;
+	private String positionName;
+	private String teamName;
+	private String userName;
+	private String belongName;
+	private String eduHist;
+	private String certStat;
+	private String cudEduCode;
+	private String testHist;
+	private String certDate;
+
+	
+	
+	
 	public String getEduCode() {
 		return eduCode;
 	}
@@ -622,6 +650,108 @@ public class EducationVO {
 	}
 	public void setEduEndDate(String eduEndDate) {
 		this.eduEndDate = eduEndDate;
+	}
+	public String getRsYn() {
+		return rsYn;
+	}
+	public void setRsYn(String rsYn) {
+		this.rsYn = rsYn;
+	}
+	public String getSeq() {
+		return seq;
+	}
+	public void setSeq(String seq) {
+		this.seq = seq;
+	}
+	public String getCudComNo() {
+		return cudComNo;
+	}
+	public void setCudComNo(String cudComNo) {
+		this.cudComNo = cudComNo;
+	}
+	public String getDeptCode() {
+		return deptCode;
+	}
+	public void setDeptCode(String deptCode) {
+		this.deptCode = deptCode;
+	}
+	public String getBeforeBelt() {
+		return beforeBelt;
+	}
+	public void setBeforeBelt(String beforeBelt) {
+		this.beforeBelt = beforeBelt;
+	}
+	public String getAfterBelt() {
+		return afterBelt;
+	}
+	public void setAfterBelt(String afterBelt) {
+		this.afterBelt = afterBelt;
+	}
+	public String getDeptName() {
+		return deptName;
+	}
+	public void setDeptName(String deptName) {
+		this.deptName = deptName;
+	}
+	public String getJobXName() {
+		return jobXName;
+	}
+	public void setJobXName(String jobXName) {
+		this.jobXName = jobXName;
+	}
+	public String getPositionName() {
+		return positionName;
+	}
+	public void setPositionName(String positionName) {
+		this.positionName = positionName;
+	}
+	public String getTeamName() {
+		return teamName;
+	}
+	public void setTeamName(String teamName) {
+		this.teamName = teamName;
+	}
+	public String getBelongName() {
+		return belongName;
+	}
+	public void setBelongName(String belongName) {
+		this.belongName = belongName;
+	}
+	public String getUserName() {
+		return userName;
+	}
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+	public String getEduHist() {
+		return eduHist;
+	}
+	public void setEduHist(String eduHist) {
+		this.eduHist = eduHist;
+	}
+	public String getCertStat() {
+		return certStat;
+	}
+	public void setCertStat(String certStat) {
+		this.certStat = certStat;
+	}
+	public String getCudEduCode() {
+		return cudEduCode;
+	}
+	public void setCudEduCode(String cudEduCode) {
+		this.cudEduCode = cudEduCode;
+	}
+	public String getTestHist() {
+		return testHist;
+	}
+	public void setTestHist(String testHist) {
+		this.testHist = testHist;
+	}
+	public String getCertDate() {
+		return certDate;
+	}
+	public void setCertDate(String certDate) {
+		this.certDate = certDate;
 	}
 	
 	

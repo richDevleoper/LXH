@@ -21,7 +21,7 @@
 	<script type="text/javascript" src="<c:url value='/def/attachfile/js/jquery.iframe-transport.js'/>"></script>
 	<script type="text/javascript" src="<c:url value='/def/attachfile/js/jquery.fileupload.js'/>"></script>
 	<script type="text/javascript" src="<c:url value='/def/attachfile/js/jquery.fileupload-process.js'/>"></script>
-	<script type="text/javascript" src="<c:url value='/def/attachfile/js/jquery.fileupload-validate.js'/>"></script>
+	<script type="text/javascript" src="<c:url value='/def/attachfile/js/jquery.fileupload-validate.js?ver=1'/>"></script>
 	<script type="text/javascript" src="<c:url value='/def/attachfile/js/jquery.fileupload-ui.js'/>"></script>
 	<script type="text/javascript" src="<c:url value='/def/attachfile/js/jquery.fileupload-jquery-ui.js'/>"></script>
 	<script type="text/javascript" src="<c:url value='/def/attachfile/js/attachfile-fileuploader.js'/>"></script>
@@ -271,7 +271,7 @@
 																fileId="proposal_attach_${PROP_INFO.propSeq }"
 																fileGrp="proposal"
 																autoUpload="false"
-																maxFileSize="${15*1000000}"
+																maxFileSize="${30*1000000}"
 																maxNumberOfFiles="3"/>
                                                         </div>
                                                     </div>
@@ -308,25 +308,66 @@
                                             <col>
                                         </colgroup>
                                         <thead>
-                                            <tr>
-                                                <th>결재상태 및 결재일</th>
-                                                <th>결재자</th>
-                                                <th>직책</th>
-                                                <th>결재종류</th>
-                                                <th>평가점수(등급)</th>
-                                                <th>결재의견</th>                                                
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>준비중</td>
-                                                <td>준비중</td>
-                                                <td>준비중</td>
-                                                <td>준비중</td>
-                                                <td>준비중</td>
-                                                <td>준비중</td>                                                
-                                            </tr>
-                                        </tbody>                                        
+											<tr>
+												<th>결재상태 및 결재일</th>
+												<th>결재자</th>
+												<th>직책</th>
+												<th>결재종류</th>
+												<th>평가점수(등급)</th>
+												<th>결재의견</th>
+											</tr>
+										</thead>
+                                        <tbody>  
+										    <c:forEach var="item" items="${approveVO.detailHistory}">
+												<tr>
+												<td class="align-center">
+													${item.aprovalStat}
+													<c:if test="${not empty item.aprovalCompltDate}">
+														(<fmt:formatDate pattern="yyyy.MM.dd" value="${item.aprovalCompltDate}" />)
+													</c:if>
+												</td>
+												<td class="align-center">${item.userName}</td>
+												<td class="align-center">${item.comPositionNm}</td>
+												<td class="align-left">${item.aprovalType}</td>
+												<td class="align-center">
+												<c:if test="${item.aprovalStatCode eq '4' }">
+													${item.scoreTotal }점 (
+														<c:choose>
+															<c:when test="${item.scoreTotal >= 60 && item.scoreTotal < 70 }">
+																D급
+															</c:when>
+															<c:when test="${item.scoreTotal >= 70 && item.scoreTotal < 80 }">
+																C급
+															</c:when>			
+															<c:when test="${item.scoreTotal >= 80 && item.scoreTotal < 90 }">
+																B급
+															</c:when>	
+															<c:when test="${item.scoreTotal >= 90 && item.scoreTotal < 95 }">
+																A급
+															</c:when>			
+															<c:when test="${item.scoreTotal >= 95 && item.scoreTotal <= 100 }">
+																S급
+															</c:when>		
+															<c:otherwise>
+																불채택
+															</c:otherwise>																																																			
+														</c:choose>
+													)
+												</c:if>
+												</td>
+												<td class="align-left">${item.aprovalComment}</td>
+											</tr>
+											</c:forEach>
+<!-- 											<tr>
+												<td>1차 승인(2023.06.30)</td>
+												<td>홍길동</td>
+												<td>실장</td>
+												<td>제안 > 실시제안</td>
+												<td>70점(C)</td>
+												<td class="align-left">수고하셧습니다. 2차 팀장님 결재 의뢰</td>
+											</tr> -->
+											
+										</tbody>                                      
                                     </table>
                                 </div>
                             </div>

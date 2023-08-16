@@ -59,6 +59,19 @@
 		WHERE T.CODE_GRP_ID = #{codeGrpId} 
 		AND T.CODE_ID = #{codeId}
 	</select>
+	
+	<select id="selectRuleNo" resultType="java.lang.String">
+		SELECT 
+			CASE WHEN count(*) > 0 THEN
+				max(ROLE_NO) 
+			ELSE 
+				'0'
+			END 
+		FROM 
+			TB_ROLE_USER
+		WHERE 
+			COM_NO = #{comNo}
+	</select>
 
 	<insert id="insert">
 		INSERT INTO TB_CODE (

@@ -67,6 +67,9 @@ public class ReportProposalController {
 			UserVO userSession) throws Exception{
 		model.addAttribute("menuKey", searchVO.getMenuKey());
 		
+		String ruleCode = ""; // 권한 변수
+		
+		
 		if(searchVO.getSearchPropFromDate() == null && searchVO.getSearchPropToDate() == null) {
 			DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 			Calendar calendar = Calendar.getInstance();
@@ -83,6 +86,22 @@ public class ReportProposalController {
 		List<EgovMap> categoryList = codeService.selectFullList(codeVO);
 		codeVO.setCodeGrpId("PPS_CLS"); // 제안등급코드 조회
 		List<EgovMap> classList = codeService.selectFullList(codeVO);
+		codeVO.setCodeGrpId("PPS_PRG"); // 제안연간효과코드 조쇠
+		List<EgovMap> progressList = codeService.selectFullList(codeVO);
+		
+
+		// 사번을 이용해서 사용자 권한 번호를 String 형태로 받아 온다.
+		ruleCode = codeService.selectRule(userSession.getUserId());
+		
+		System.out.println("###############################");
+		System.out.println(ruleCode);
+		System.out.println(userSession.getUserId());
+		System.out.println("###############################");
+		
+		// 전사 권한이 아닌경우 사용자의 소속만 보여준다.
+		if(ruleCode.equals("0") || ruleCode.equals("2") || ruleCode.equals("3") || ruleCode.equals("4")) {
+			searchVO.setSearchRuleDept(userSession.getUserId());
+		}
 		
 		//나의 제안 조회
 		List<ProposalVO> resultItems = reportProposalService.selectProposalMasterInfo(searchVO);
@@ -103,6 +122,7 @@ public class ReportProposalController {
 				summary.put(item.get("propTypeCode"), item.get("total"));
 			}
 		}
+		
 		
 		total += Integer.parseInt(summary.get("ppsTyp1").toString());
 		total += Integer.parseInt(summary.get("ppsTyp2").toString());
@@ -236,6 +256,7 @@ public class ReportProposalController {
 		model.addAttribute("PROP_CATEGORY_CODE", searchVO.getSearchPropCategoryCode());
 		model.addAttribute("PROP_CLASS_CODE", searchVO.getSearchPropClassCode());
 		model.addAttribute("PROP_NAME", searchVO.getSearchPropName());
+		model.addAttribute("PROGRESS_LIST", progressList);
 		
 		
 		List<DepartVO> dbList = qPopupService.selectTreeList();

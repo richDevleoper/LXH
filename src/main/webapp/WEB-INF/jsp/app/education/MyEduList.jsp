@@ -57,7 +57,6 @@
 	<div class="tab-group" id="detailDiv">
 		<form:form commandName="frmMyEdu" id="defaultForm" name="defaultForm" onsubmit="return false" method="post" modelAttribute="EducationVO">
            <form:hidden path="eduCode" id="eduCode"/>
-           <form:hidden path="eduClassDivision" id="eduClassDivision"/>
            <form:hidden path="stdSeq" id="stdSeq"/>
            <form:hidden path="eduFixed" id="eduFixed"/>
            <form:hidden path="mode" />
@@ -236,7 +235,6 @@ function onclick_educationInfo(eduCode, stdSeq, status){
 			$("#titTab").text(data.eduName);
 			$("#titTab2").html("정원 : <b>"+data.eduFixed+"</b>명, 신청 : <b>"+data.tsdCnt+"</b>명");
 			$("#eduFixed").val(data.eduFixed);
-			$("#eduClassDivision").val(data.eduClassDivision);
 			
 			$("#eduCode").val(data.eduCode);
 			$("#detailDiv").show();
@@ -279,12 +277,10 @@ function reofferSave(){
 	let tit = $("#eduCol1").text();
 	let eduCode = $("#eduCode").val();
 	let stdSeq = $("#stdSeq").val();
-	let eduClassDivision = $("#eduClassDivision").val();
 	
 	let params = {};
 	params.eduCode = eduCode;
 	params.stdSeq = stdSeq;
-	params.eduClassDivision = eduClassDivision;
 	params.mode = "Y";
 	
 	if(confirm(tit + " 교육을 재신청하시겠습니까?")){

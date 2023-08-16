@@ -184,7 +184,7 @@
 				ORDER BY FRST_OPER_DT DESC
 			</otherwise>
 		</choose>
-			) where num between #{firstRecordIndex} and  #{recordCountPerPage}
+			) where num between (#{currentPageNo}*#{recordCountPerPage}+1-#{recordCountPerPage}) and (#{currentPageNo}*#{recordCountPerPage})
 	</select>
 
 	<select id="selectFullList" resultMap="articleMap">

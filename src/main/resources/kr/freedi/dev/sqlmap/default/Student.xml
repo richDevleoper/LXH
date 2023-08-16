@@ -36,7 +36,23 @@
 		<result column="COM_DEPART_CODE"     		property="comDepartCode"/>          
 		<result column="COM_JOBX"	 	     		property="comJobx"/>        
 		<result column="COM_POSITION"	 	     	property="comPosition"/>                    
-		<result column="COM_CERT_BELT"	 	     	property="comCertBelt"/>      
+		<result column="COM_CERT_BELT"	 	     	property="comCertBelt"/>     
+		
+		<result column="SEQ"	 	     			property="Seq"/>     
+		<result column="CUD_BEFORE_BELT_CODE"	 	property="cudBeforeBeltCode"/>     
+		<result column="CUD_AFTER_BELT_CODE"	 	property="cudAfterBeltCode"/>     
+		<result column="CUD_DEPART"	 	     		property="cudDepart"/>     
+		<result column="CUD_TEAM_NAME"	 	     	property="cudTeamName"/>     
+		<result column="CUD_USER_NAME"	 	     	property="cudUserName"/>     
+		<result column="CUD_BELONG_NAME"	 	    property="cudBelongName"/>     
+		<result column="CUD_CERT_HISTORY"	 	    property="cudCertHistory"/>     
+		<result column="CUD_CERT_DATE"	 	     	property="cudCertDate"/>     
+		<result column="CUD_CERT_STATUS"	 	    property="cudCertStatus"/>     
+		<result column="CUD_REG_USER"	 	     	property="cudRegUser"/>     
+		<result column="CUD_REG_DATE"	 	     	property="cudRegDate"/>     
+		<result column="CUD_UPDATE_USER"	 	    property="cudUpdateUser"/>     
+		<result column="CUD_UPDATE_DATE"	 	    property="cudUpdateDate"/>     
+		<result column="CUD_EDU_CODE"	 	     	property="cudEduCode"/>               
    
 							
 	</resultMap>
@@ -236,7 +252,10 @@
 				<if test="stdPosition != null and stdPosition neq ''.toString()">STD_POSITION = #{stdPosition},</if>     
 				<if test="stdBeltCode != null and stdBeltCode neq ''.toString()">STD_BELT_CODE = #{stdBeltCode},</if>     
 				<if test="stdStatus != null and stdStatus neq ''.toString()">STD_STATUS = #{stdStatus},</if>       
-				<if test="stdCompleteYn != null and stdCompleteYn neq ''.toString()">STD_COMPLETE_YN = #{stdCompleteYn},</if>   
+				<if test="stdCompleteYn != null and stdCompleteYn neq ''.toString()">
+					STD_COMPLETE_YN = #{stdCompleteYn},
+					STD_COMPLETE_DATE = SYSDATE,
+				</if>   
 				<if test="stdCertCode != null and stdCertCode neq ''.toString()">STD_CERT_CODE = #{stdCertCode},</if>     
 				<if test="stdCertDate != null">STD_CERT_DATE = #{stdCertDate},</if>     
 				<if test="stdReapplyYn != null and stdReapplyYn neq ''.toString()">STD_REAPPLY_YN = #{stdReapplyYn},</if>    
@@ -292,5 +311,125 @@
 		    )
 		ORDER BY COM_JOBX ASC, USER_NAME
 	</select>
+	
+	<select id="checkReqbtnPROC" statementType="CALLABLE" parameterType="HashMap" resultType="HashMap"> 
+	    <!-- { -->
+	    CALL PROC_EDU_STATUS_CHECK(
+	            #{RQ_COM_NO, mode=IN, jdbcType=VARCHAR},
+	            #{RQ_EDU_ID, mode=IN, jdbcType=VARCHAR},
+	            #{RS_YN, mode=OUT, jdbcType=VARCHAR}
+	            <!-- ,
+	            #{OUT_ERROR_CODE, mode=OUT, jdbcType=DECIMAL, javaType=long},
+	            #{OUT_ERROR_MESSAGE, mode=OUT, jdbcType=VARCHAR, javaType=java.lang.String} -->
+	        )
+	    <!-- } -->
+	</select>
+	
+	<insert id="insertCertDetail" parameterType="kr.freedi.dev.qeducation.domain.StudentVO">
+		INSERT INTO	TB_CERT_USER_DETAIL (
+			SEQ,
+			COM_NO,
+			COM_DEPART_CODE,
+			CUD_BEFORE_BELT_CODE,
+			CUD_AFTER_BELT_CODE,
+			CUD_DEPART,
+			CUD_JOBX,
+			CUD_POSITION,
+			CUD_TEAM_NAME,
+			CUD_USER_NAME,
+			CUD_BELONG_NAME,
+			CUD_CERT_HISTORY,
+			CUD_CERT_DATE,
+			CUD_CERT_STATUS,
+			CUD_EDU_CODE,
+			CUD_REG_USER,
+			CUD_REG_DATE
+		) VALUES (
+			#{Seq},  
+			#{comNo},
+			#{comDepartCode},
+			#{cudBeforeBeltCode}, 
+			#{cudAfterBeltCode},  
+			#{cudDepart},  
+			#{comJobx},
+			#{comPosition},
+			#{cudTeamName},  
+			#{cudUserName},  
+			#{cudBelongName},  
+			#{cudCertHistory},  
+			#{cudCertDate},  
+			#{cudCertStatus}, 
+			#{cudEduCode},  
+			#{cudRegUser},  
+			SYSDATE
+		)
+	</insert>
+	
+	<update id="updateCertDetail" parameterType="kr.freedi.dev.qeducation.domain.StudentVO">
+		UPDATE TB_CERT_USER_DETAIL
+		   SET
+				<if test="comNo != null and comNo neq ''.toString()">COM_NO = #{comNo},</if>          
+				<if test="comDepartCode != null and comDepartCode neq ''.toString()">COM_DEPART_CODE = #{comDepartCode},</if>  
+				<if test="cudBeforeBeltCode != null and cudBeforeBeltCode neq ''.toString()">CUD_BEFORE_BELT_CODE = #{cudBeforeBeltCode},</if>  
+				<if test="cudAfterBeltCode != null and cudAfterBeltCode neq ''.toString()">CUD_AFTER_BELT_CODE = #{cudAfterBeltCode},</if>  
+				<if test="cudDepart != null and cudDepart neq ''.toString()">CUD_DEPART = #{cudDepart},</if>  
+				<if test="comJobx != null and comJobx neq ''.toString()">CUD_JOBX = #{comJobx},</if>  
+				<if test="comPosition != null and comPosition neq ''.toString()">CUD_POSITION = #{comPosition},</if>  
+				<if test="cudTeamName != null and cudTeamName neq ''.toString()">CUD_TEAM_NAME = #{cudTeamName},</if>  
+				<if test="cudUserName != null and cudUserName neq ''.toString()">CUD_USER_NAME = #{cudUserName},</if>  
+				<if test="cudBelongName != null and cudBelongName neq ''.toString()">CUD_BELONG_NAME = #{cudBelongName},</if>  
+				<if test="cudCertHistory != null and cudCertHistory neq ''.toString()">CUD_CERT_HISTORY = #{cudCertHistory},</if>  
+				<if test="cudCertDate != null and cudCertDate neq ''.toString()">CUD_CERT_DATE, = #{cudCertDate},</if>  
+				<if test="cudCertStatus != null and cudCertStatus neq ''.toString()">CUD_CERT_STATUS = #{cudCertStatus},</if>  
+				<if test="cudEduCode != null and cudEduCode neq ''.toString()">CUD_EDU_CODE = #{cudEduCode},</if>  
+								   
+				CUD_UPDATE_USER = #{cudUpdateUser},
+				CUD_UPDATE_DATE = SYSDATE
+		 WHERE 1=1 
+		 <if test="Seq != null and Seq neq ''.toString()">
+			AND SEQ = #{Seq}
+		 </if>
+		 <if test="cudEduCode != null and cudEduCode neq ''.toString()">
+			AND CUD_EDU_CODE = #{cudEduCode}
+		 </if>
+	</update>
+	
+	<!-- 인증테이블 등록 프로시저 -->
+	<select id="insertCertMem" statementType="CALLABLE" parameterType="HashMap" resultType="HashMap"> 
+	    <!-- { -->
+	    CALL PROC_CERT_MEM_INSERT(
+	            #{RQ_STD_NO, mode=IN, jdbcType=VARCHAR},
+	            #{RQ_STD_YN, mode=IN, jdbcType=VARCHAR},
+	            #{RQ_REG_ID, mode=IN, jdbcType=VARCHAR}
+	            <!-- ,
+	            #{OUT_ERROR_CODE, mode=OUT, jdbcType=DECIMAL, javaType=long},
+	            #{OUT_ERROR_MESSAGE, mode=OUT, jdbcType=VARCHAR, javaType=java.lang.String} -->
+	        )
+	    <!-- } -->
+	</select>
+	
+	<!-- 인증상태 변경 프로시저 -->
+	<select id="updateCertStatusUpdate" statementType="CALLABLE" parameterType="HashMap" resultType="HashMap"> 
+	    <!-- { -->
+	    CALL PROC_CERT_STATUS_UPDATE(
+	            #{RQ_STD_NO, mode=IN, jdbcType=VARCHAR},
+	            #{RQ_STD_DATE, mode=IN, jdbcType=VARCHAR},
+	            #{RQ_STD_YN, mode=IN, jdbcType=VARCHAR},
+	            #{RQ_REG_ID, mode=IN, jdbcType=VARCHAR}
+	        )
+	    <!-- } -->
+	</select>
+	
+	<!-- 인증 상태 변경 쿼리 -->
+	<update id="updateCertMem" parameterType="kr.freedi.dev.qeducation.domain.StudentVO">
+		UPDATE TB_CERT_USER_DETAIL
+		   SET
+				CUD_CERT_STATUS	= #{RQ_STD_YN},
+				CUD_UPDATE_USER = #{RQ_REG_ID},
+				CUD_CERT_DATE	= #{RQ_STD_DATE},
+				CUD_UPDATE_DATE = SYSDATE
+		 WHERE 
+		 		SEQ = #{RQ_STD_NO}
+	</update>
 	
 </mapper>

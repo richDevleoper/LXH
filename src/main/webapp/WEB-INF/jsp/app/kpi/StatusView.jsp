@@ -17,37 +17,10 @@
 <body>
    
                         <div class="list-wrap">
-                            <%-- <div class="list-search">
-                                <form>
-                                    <div class="search-form">
-                                        <div class="form-inline form-input">
-                                            <label>이름</label>
-                                            <input type="text" name="">
-                                        </div>
-                                        <div class="form-inline form-input">
-                                            <label>조직</label>
-                                            <input type="text" name="">
-                                            <button type="button" class="btn-org comPopup_orgSearch">검색</button>
-                                        </div>
-                                        <div class="form-inline form-input">
-                                            <label>직책</label>
-                                            <input type="text" name="">
-                                            <button type="button" class="btn-org comPopup_posSearch">검색</button>
-                                        </div>
-                                        
-                                        <button type="button" class="btn-submit">조회</button>
-                                    </div>
-                                </form>
-                            </div> --%>
+
                             <div class="list-header">
                                 <p class="title">‘${eduYear}년, ${deptName}, <!-- GB,  -->인재육성인원</p>
                                 <span class="bar"></span>
-                                <!-- <p class="total">총 305</p>
-                                <select name="limit" class="limit">
-                                    <option value="10">10개</option>
-                                    <option value="50">50개</option>
-                                    <option value="100">100개</option>
-                                </select> -->
                             </div>
                             <div class="list-content">
                                 <div class="list-table">
@@ -59,24 +32,24 @@
                                                 <th class="bg-gray" rowspan="2">이름</th>
                                                 <th class="bg-gray" rowspan="2">직위</th>
                                                 <th class="bg-gray" rowspan="2">직책</th>
-                                                <th class="bg-gray" colspan="2">GB</th>
-                                                <th class="bg-gray" colspan="4">MGB</th>
-                                                <th class="bg-gray" colspan="4">BB</th>
+                                                <th class="bg-gray" colspan="3">GB</th>
+                                                <th class="bg-gray" colspan="5">MGB</th>
+                                                <th class="bg-gray" colspan="5">BB</th>
                                                 <th class="bg-gray" colspan="6">MBB</th>
                                             </tr>
                                             <tr>
                                                 <th>교육<br/>이수</th>
-                                                <!-- <th>필기<br/>Test</th> -->
+                                                <th>통계<br/>Test</th>
                                                 <th>인증</th>
                                                 
                                                 <th>교육<br/>이수</th>
-                                                <!-- <th>필기<br/>Test</th> -->
+                                                <th>통계<br/>Test</th>
                                                 <th>과제<br/>수행</th>
                                                 <th>과제<br/>Test</th>
                                                 <th>인증</th>
                                                 
                                                 <th>교육<br/>이수</th>
-                                                <!-- <th>Paper<br/>Test</th> -->
+                                                <th>통계<br/>Test</th>
                                                 <th>과제<br/>수행</th>
                                                 <th>과제<br/>Test</th>
                                                 <th>인증</th>
@@ -93,166 +66,51 @@
                                         <c:forEach items="${tableData}" var="item" varStatus="i">
                                             <tr>
                                                 <td>${i.count}</td>
-                                                <td>${item.DEPT_NM}</td>
-                                                <td>${item.USER_NAME }</td>
-                                                <td>${item.COM_JOBX }</td>
-                                                <td>${item.COM_POSIGION}</td>
+                                                <td>${item.STD_DEPART}</td>
+                                                <td>${item.STD_NAME }</td>
+                                                <td>${item.STD_JOBX }</td>
+                                                <td>${item.STD_POSITION}</td>
                                                 
-                                                <td>${item.GB_EDU_YN}</td>
-                                                <!-- <td>O</td> -->
-                                                <td>${item.GB_CERT_YN}</td>
+                                                <td>${item.GB_EDU_TXT}</td>
+                                                <td>${item.GB_TEST_TXT}</td>
+                                                <td>${item.GB_CERT_TXT}</td>
                                                 
-                                                <td>${item.MGB_EDU_YN}</td>
-                                                <!-- <td>O</td> -->
-                                                <td>${item.MGB_REP_YN}</td>
-                                                <td>${item.MGB_REP_TEST_YN}</td>
-                                                <td>${item.MGB_CERT_YN}</td>
+                                                <td>${item.MGB_EDU_TXT}</td>
+                                                <td>${item.MGB_TEST07_TXT}</td>
+                                                <td>${item.MGB_REP_TXT}</td>
+                                                <td>${item.MGB_TEST08_TXT}</td>
+                                                <td>${item.MGB_CERT_TXT}</td>
                                                 
-                                                <td>${item.BB_EDU_YN}</td>
-                                                <!-- <td>O</td> -->
-                                                <td>${item.BB_REP_YN}</td>
-                                                <td>${item.BB_REP_TEST_YN}</td>
-                                                <td>${item.BB_CERT_YN}</td>
+                                                <td>${item.BB_EDU_TXT}</td>
+                                                <td>${item.BB_TEST07_TXT}</td>
+                                                <td>${item.BB_REP_TXT}</td>
+                                                <td>${item.BB_TEST08_TXT}</td>
+                                                <td>${item.BB_CERT_TXT}</td>
                                                 
-                                                <td>${item.MBB_EDU_YN}</td>
-                                                <td>${item.MBB_STATIS_TEST_YN}</td>
-                                                <td>${item.MBB_REP_YN}</td>
-                                                <td>${item.MBB_REP_TEST_YN}</td>
-                                                <td>${item.MBB_ENDOW_TEST_YN}</td>
-                                                <td>${item.MBB_CERT_YN}</td>
+                                                <td>${item.MBB_EDU_TXT}</td>
+                                                <td>${item.MBB_TEST07_TXT}</td>
+                                                <td>${item.MBB_TEST08_TXT}</td>
+                                                <td>${item.MBB_REP_TXT}</td>
+                                                <td>${item.MBB_TEST09_TXT}</td>
+                                                <td>${item.MBB_CERT_TXT}</td>
                                             </tr>
                                         </c:forEach>
-                                          <!--   <tr>
-                                                <td>304</td>
-                                                <td>창호사업부</td>
-                                                <td>홍길동</td>
-                                                <td>직위</td>
-                                                <td>직책</td>
-                                                <td>O</td>
-                                                <td>O</td>
-                                                <td>-</td>
-                                                <td>O</td>
-                                                <td>O</td>
-                                                <td>O</td>
-                                                <td>O</td>
-                                                <td>해당<br/>없음</td>
-                                                <td>O</td>
-                                                <td>O</td>
-                                                <td>O</td>
-                                                <td>O</td>
-                                                <td>O</td>
-                                                <td>-</td>
-                                                <td>-</td>
-                                                <td>2건</td>
-                                                <td>-</td>
-                                                <td>-</td>
-                                                <td>진행</td>
+                                        <c:if test="${fn:length(tableData) eq 0}">
+                                        	<tr>
+                                                <td colspan="24" style="height: 50px; background-color: white;">지정된 구성원이 없습니다.</td>
                                             </tr>
-                                            <tr>
-                                                <td>303</td>
-                                                <td>창호사업부</td>
-                                                <td>홍길동</td>
-                                                <td>직위</td>
-                                                <td>직책</td>
-                                                <td>O</td>
-                                                <td>O</td>
-                                                <td>-</td>
-                                                <td>O</td>
-                                                <td>O</td>
-                                                <td>O</td>
-                                                <td>O</td>
-                                                <td>해당<br/>없음</td>
-                                                <td>O</td>
-                                                <td>O</td>
-                                                <td>O</td>
-                                                <td>O</td>
-                                                <td>O</td>
-                                                <td>-</td>
-                                                <td>-</td>
-                                                <td>2건</td>
-                                                <td>-</td>
-                                                <td>-</td>
-                                                <td>진행</td>
-                                            </tr>
-                                            <tr>
-                                                <td>302</td>
-                                                <td>창호사업부</td>
-                                                <td>홍길동</td>
-                                                <td>직위</td>
-                                                <td>직책</td>
-                                                <td>O</td>
-                                                <td>O</td>
-                                                <td>-</td>
-                                                <td>O</td>
-                                                <td>O</td>
-                                                <td>O</td>
-                                                <td>O</td>
-                                                <td>해당<br/>없음</td>
-                                                <td>O</td>
-                                                <td>O</td>
-                                                <td>O</td>
-                                                <td>O</td>
-                                                <td>O</td>
-                                                <td>-</td>
-                                                <td>-</td>
-                                                <td>2건</td>
-                                                <td>-</td>
-                                                <td>-</td>
-                                                <td>진행</td>
-                                            </tr>
-                                            <tr>
-                                                <td>301</td>
-                                                <td>창호사업부</td>
-                                                <td>홍길동</td>
-                                                <td>직위</td>
-                                                <td>직책</td>
-                                                <td>O</td>
-                                                <td>O</td>
-                                                <td>-</td>
-                                                <td>O</td>
-                                                <td>O</td>
-                                                <td>O</td>
-                                                <td>O</td>
-                                                <td>해당<br/>없음</td>
-                                                <td>O</td>
-                                                <td>O</td>
-                                                <td>O</td>
-                                                <td>O</td>
-                                                <td>O</td>
-                                                <td>-</td>
-                                                <td>-</td>
-                                                <td>2건</td>
-                                                <td>-</td>
-                                                <td>-</td>
-                                                <td>진행</td>
-                                            </tr> -->
+                                        </c:if>
+                                          
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
                             <div class="list-footer">
-                                <!-- <div class="pagination">
-                                    <a href="" class="first">처음</a>
-                                    <a href="" class="prev">이전</a>
-                                    <a href="" class="cur num">1</a>
-                                    <a href="" class="num">2</a>
-                                    <a href="" class="num">3</a>
-                                    <a href="" class="num">4</a>
-                                    <a href="" class="num">5</a>
-                                    <a href="" class="next">다음</a>
-                                    <a href="" class="last">끝</a>
-                                </div> -->
+                             
                                 <div class="list-btns">
-                                    <!-- <button type="button" class="btn-excel">
-                                        <img src="/assets/images/icon_excel.png" alt="">
-                                        <span>다운로드</span>
-                                    </button> -->
-                                    <a href="">목록</a>
+                                    <a href="./${listAddr}?menuKey=${menuKey}">목록</a>
                                 </div>
                             </div>
                         </div>
-                    
-
-
 </body>
 </html>

@@ -51,6 +51,9 @@ public class EvalProposalController {
 		binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormatter, true));
 	}
 	
+	/*
+	 * 제안활동 > 제안마감 > 등급평가 목록
+	 */
 	@RequestMapping("/eval/classlist.do")
 	public String ClassListView(HttpServletRequest request, ModelMap model,
 			@ModelAttribute("proposalVo") ProposalVO proposalVO, 
@@ -68,17 +71,23 @@ public class EvalProposalController {
 		codeVO.setCodeGrpId("WPLACE"); // 제안연간효과코드 조쇠
 		List<EgovMap> bizPlaceList = codeService.selectFullList(codeVO);
 		
+		// 검색 시작일 및 종료일 세팅
 		if(searchVO.getSearchPropFromDate() == null && searchVO.getSearchPropToDate() == null) {
 			DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 			Calendar calendar = Calendar.getInstance();
 			calendar.setTime(new Date());
-			searchVO.setSearchPropToDate(df.format(calendar.getTime()));
+			searchVO.setSearchPropToDate(df.format(calendar.getTime())); // 시작일 없으면 기본 세팅
 			calendar.add(Calendar.MONTH, -1);
-			searchVO.setSearchPropFromDate(df.format(calendar.getTime()));
+			searchVO.setSearchPropFromDate(df.format(calendar.getTime())); // 종료일 없으면 기본 세팅
 		}
+		// 실시 제안만 목록에 노출할 수 있도록 제안 Type Code를 검색 조건에 넣는다
+		searchVO.setSearchPropTypeCode("PPS_TYP_1"); 
 		
+		// 제안 전체 목록
 		List<ProposalVO> resultItems = evalProposalService.selectEvalForClassProposalMasterInfo(searchVO);
+		// 제안 전체 카운트
 		EgovMap resultItem = evalProposalService.selectForClassListCount(searchVO);
+		// 제안 전체 카운트 세팅
 		searchVO.setTotalRecordCount(Integer.parseInt(String.valueOf(resultItem.get("count"))));
 		
 		model.addAttribute("TYPE_LIST", typeList);
@@ -123,6 +132,7 @@ public class EvalProposalController {
 		List<ProposalVO> resultItems = evalProposalService.selectEvalForPaymentProposalMasterInfo(searchVO);
 		EgovMap resultItem = evalProposalService.selectForPaymentListCount(searchVO);
 		searchVO.setTotalRecordCount(Integer.parseInt(String.valueOf(resultItem.get("count"))));
+
 		
 		model.addAttribute("TYPE_LIST", typeList);
 		model.addAttribute("CATEGORY_LIST", categoryList);

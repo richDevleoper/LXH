@@ -114,6 +114,9 @@
 			<if test="searchToDt != null and searchToDt != ''">
 				AND D.end_date <![CDATA[<=]]> to_date(#{searchToDt}, 'YYYY-MM-DD') 
 			</if>
+			<if test="searchUseRefDate != null and searchUseRefDate != ''">
+				AND to_char(T.REP_USE_REF_DATE, 'YYYY') = #{searchUseRefDate}
+			</if>
 	</sql> 
 	
 	<sql id="selectListBasic">
@@ -136,14 +139,14 @@
             t.rep_devision_code,
             c_div.code_nm AS rep_division,
             t.rep_type_code,
-            c_ty.code_nm  AS rep_type,
+            nvl(c_ty.code_nm, '-')  AS rep_type,
             t.rep_status_code,
             c_st.code_nm  AS rep_status,
             (select min(REP_PLAN_START_DATE) from tb_report_detail m where m.rep_code=t.rep_code) rep_start_date,
             (select case when rep_devision_code='1' then max(REP_PLAN_START_DATE) else max(REP_PLAN_END_DATE) end as rep_finish_date from tb_report_detail m where m.rep_code=T.rep_code group by rep_code, m.rep_devision_code) rep_finish_date
             
         FROM
-            report_mst T,
+            report_mst T, 
             tb_code    c_div,
             tb_code    c_ty,
             tb_code    c_st
@@ -366,8 +369,8 @@
 			, c_ty.code_nm as REP_TYPE
 			, T.REP_SECTOR_CODE
 			, get_code_nm('SECTOR', T.REP_SECTOR_CODE) rep_sector
-			, T.REP_PRODUCT_CLASS
-			, get_code_nm('BUSGRP', T.REP_PRODUCT_CLASS) REP_PRODUCT_CLASS_NAME
+			, nvl(T.REP_PRODUCT_CLASS, '') REP_PRODUCT_CLASS
+			, nvl(get_code_nm('BUSGRP', T.REP_PRODUCT_CLASS), '-') REP_PRODUCT_CLASS_NAME
 			, T.REP_LEADER_BELT_CODE
             , get_code_nm('LDRBELT', T.REP_LEADER_BELT_CODE) REP_LEADER_BELT
 			, T.REP_ACTION_TYPE_CODE

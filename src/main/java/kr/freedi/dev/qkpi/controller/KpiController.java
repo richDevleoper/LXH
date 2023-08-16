@@ -1,14 +1,11 @@
 package kr.freedi.dev.qkpi.controller;
 
-import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -33,7 +30,6 @@ import com.google.gson.JsonArray;
 
 import egovframework.rte.psl.dataaccess.util.EgovMap;
 import kr.freedi.dev.article.domain.ArticleSearchVO;
-import kr.freedi.dev.article.domain.ArticleVO;
 import kr.freedi.dev.code.domain.CodeVO;
 import kr.freedi.dev.code.service.CodeService;
 import kr.freedi.dev.qeducation.controller.EducationController;
@@ -183,8 +179,12 @@ public class KpiController {
 		JsonArray resultArray;
 		if(searchVO.getKudIdx().equals("6SIG")){
 			resultArray = kpiService.getPlanData(searchVO);
-		} else {	//MBB
+		} else if(searchVO.getKudIdx().equals("MBB")){
+			resultArray = kpiService.getPlanData(searchVO);
+		} else {	//MBB활용율
+			searchVO.setKudIdx("6SIG");  // 6SIG 구분자로 기록하기
 			resultArray = kpiService.getPlanDataTMbb(searchVO);
+			searchVO.setKudIdx("MBB_RATE");
 		}		
 		model.addAttribute("tableData", resultArray);
 		
@@ -237,7 +237,9 @@ public class KpiController {
 		codeVO.setActFlg("Y"); 
 		model.addAttribute("code_wplace", codeService.selectFullList(codeVO));
 		
+		// Grid data 조회
 		searchVO.setKudIdx("6SIG");
+		searchVO.setSearchUserid(userSession.getUserId());
 		JsonArray resultArray = kpiService.getPlanData(searchVO);
 		model.addAttribute("tableData", resultArray);
 		
@@ -277,6 +279,7 @@ public class KpiController {
 		model.addAttribute("code_wplace", codeService.selectFullList(codeVO));
 		
 		searchVO.setKudIdx("MBB");
+		searchVO.setSearchUserid(userSession.getUserId());
 		JsonArray resultArray = kpiService.getPlanData(searchVO);
 		model.addAttribute("tableData", resultArray);
 		
@@ -295,6 +298,7 @@ public class KpiController {
 		
 		model.addAttribute("menuKey", searchVO.getMenuKey());
 		model.addAttribute("eduYear", request.getParameter("eduYear"));
+		model.addAttribute("listAddr", "status6SIG.do");
 		
 		HashMap<String, String> param = new HashMap<>();
 		param.put("deptCode", request.getParameter("seq"));
@@ -304,6 +308,7 @@ public class KpiController {
 		param = new HashMap<>();
 		param.put("deptCode", request.getParameter("seq"));
 		param.put("eduYear", request.getParameter("eduYear"));
+		param.put("kudIdx", "6SIG");
 		
 		List<HashMap<String, String>> data = kpiService.getDeptStatus(param);
 		model.addAttribute("tableData", data);
@@ -319,6 +324,7 @@ public class KpiController {
 		
 		model.addAttribute("menuKey", searchVO.getMenuKey());
 		model.addAttribute("eduYear", request.getParameter("eduYear"));
+		model.addAttribute("listAddr", "statusMBB.do");
 		
 		HashMap<String, String> param = new HashMap<>();
 		param.put("deptCode", request.getParameter("seq"));
@@ -328,6 +334,7 @@ public class KpiController {
 		param = new HashMap<>();
 		param.put("deptCode", request.getParameter("seq"));
 		param.put("eduYear", request.getParameter("eduYear"));
+		param.put("kudIdx", "MBB");
 		
 		List<HashMap<String, String>> data = kpiService.getDeptStatus(param);
 		model.addAttribute("tableData", data);
@@ -357,6 +364,11 @@ public class KpiController {
 			searchVO.setSearchMonth(now.format(formatter));
 		}
 		
+		JsonArray resultArray;
+		searchVO.setKudIdx("6SIG");  // 6SIG 구분자로 기록하기
+		resultArray = kpiService.getPlanDataTMbb(searchVO);
+		searchVO.setKudIdx("MBB_RATE");	
+		model.addAttribute("tableData", resultArray);
 		
 		CodeVO codeVO = new CodeVO(); 
 		codeVO.setCodeGrpId("WPLACE");
@@ -376,6 +388,66 @@ public class KpiController {
 			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
 			UserVO userSession)throws Exception {
 		model.addAttribute("menuKey", searchVO.getMenuKey());
+
+		// 파라메터 : 부서코드
+		String pDeptCode = request.getParameter("dept_code");
+		String pComNo = request.getParameter("com_no");
+		String pUseRefYear = request.getParameter("search_year");
+		String pRepCode = request.getParameter("rep_code");
+		
+		// 검색년도 초기화
+		LocalDate now = LocalDate.now();
+		DateTimeFormatter formatter;
+		if(pUseRefYear==null) {
+			formatter = DateTimeFormatter.ofPattern("yyyy");
+			pUseRefYear = now.format(formatter);
+		}
+
+		// 1. 부서 기본정보 가져오기
+		// DepartVO
+		DepartVO departVO = new DepartVO();
+		departVO.setDeptCode(pDeptCode);
+		List<DepartVO> deptInfo = qPopupService.selectListMap(departVO);
+		model.addAttribute("deptInfo", deptInfo);
+				
+		// 2. 부서 구성원 가져오기
+		// UserVO
+		kr.freedi.dev.qpopup.domain.UserVO userVO = new kr.freedi.dev.qpopup.domain.UserVO();
+		userVO.setComDepartCode(pDeptCode);
+		userVO.setComCertBelt("D002"); //MBB만 추려서.
+		List<EgovMap> mbbUserList = qPopupService.select(userVO);
+		if(pComNo==null)
+			pComNo = (String)mbbUserList.get(0).get("comNo");
+		model.addAttribute("paramDeptCode", pDeptCode);
+		model.addAttribute("paramComNo", pComNo);
+		model.addAttribute("paramUseRefYear", pUseRefYear);
+		model.addAttribute("mbbUserList", mbbUserList);
+		
+		// 과제 리스트 가져오기
+		// List<ReportVO>
+		ReportSearchVO repSearchVO = new ReportSearchVO();
+		repSearchVO.setMenuCode("REPORT");
+		repSearchVO.setSearchUserid(pComNo);
+		repSearchVO.setSearchUseRefDate(pUseRefYear);
+		List<ReportVO> reportList = reportService.selectList(repSearchVO);
+		
+		if(pRepCode!=null && pRepCode.isEmpty() && reportList.size()>0) {
+			pRepCode = reportList.get(0).getRepCode().toString();	
+		}
+		
+		model.addAttribute("paramRepCode", pRepCode);
+		model.addAttribute("reportList", reportList);
+		
+		
+		if(pRepCode!=null) {
+			// 선택한 과제 정보 가져오기
+			// ReportVO
+			ReportVO repVO = new ReportVO();
+			repVO.setRepCode(pRepCode);
+			repVO = reportService.select(repVO);
+			model.addAttribute("reportVO", repVO); 
+		}
+		
 		
 		return "app/kpi/MbbRateView";
 	}
@@ -408,6 +480,7 @@ public class KpiController {
 		   @RequestParam Map<String, Object> params)throws Exception {
 		
 		String kmYear = (String)params.get("km_year");
+		String kudIdx = (String)params.get("kud_idx");
 		
 		Iterator<String> itr = params.keySet().iterator();
 		//System.out.println(params);
@@ -436,6 +509,7 @@ public class KpiController {
 				kpiVO.setKmBbUserCnt(val);
 			}
 			kpiVO.setKmYear(kmYear);
+			kpiVO.setKudIdx(kudIdx);
 			int retCnt = kpiService.updateMaster(kpiVO);
 			if(retCnt==0) {
 				kpiService.insertMaster(kpiVO); 

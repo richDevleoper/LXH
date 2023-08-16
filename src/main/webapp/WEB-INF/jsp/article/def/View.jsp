@@ -16,9 +16,82 @@
 <title>글보기</title>
 <meta name="keywords" content="" />
 <meta name="description" content="" />
+<style>
+#article_view h4.skin1{padding:20px 0; border-top:2px solid #151515; border-bottom:1px solid #aaaaaa; font-size:14px; color:#333; text-align:center;}
+#article_view h4.skin2{padding:20px 0; border-top:2px solid #151515; border-bottom:1px solid #aaaaaa; font-size:14px; color:#333; text-align:center; background:#fafafa;}
+#article_view h4 img {vertical-align:middle; }
+#article_view .article_date{padding:13px 0 11px 10px; color:#5c6472; text-align:right;}
+#article_view .article_date dl{overflow:hidden;}
+#article_view .article_date dl dt{display:inline; padding:0; margin:0; font-weight:bold; color:#555;}
+#article_view .article_date dl dd{display:inline; padding:0 20px 0 0; margin:0; color:#666;}
 
+#article_view .article_cont{min-height:200px; padding:20px 10px;   color:#5c6472; text-align:left; line-height:180%; text-align:justify;}
+#article_view .movie_cont{overflow:hidden; _height:1%; padding:20px 10px;}
+#article_view .movie_cont p.movie_area {float:left; width:50%; padding:15px; background:#f8f8f8; border:1px solid #b4b4b4;}
+#article_view .movie_cont p.movie_area img{width:100%;}
+#article_view .movie_cont .movie_content{float:right; width:40%; margin-top:15px;}
+#article_view .movie_cont .movie_content h4{font-size:13px; letter-spacing:-1px;}
+#article_view .movie_cont .movie_summary{overflow-y:scroll; width:94%; height:250px; margin-top:10px; padding:10px 7px; line-height:18px; text-align:justify;}
+
+#article_view .file_show{color:#555;}
+#article_view .file_show p{border-bottom:1px dotted #b9b9b9;}
+#article_view .file_show p img{ vertical-align:middle; padding-bottom:1px;}
+#article_view .file_show p a{padding:13px 0 11px 2px; color:#666; font-weight:bold;}
+#article_view .file_show ul{overflow:hidden; padding:13px 0 11px 0;  }
+#article_view .file_show ul li{float:left; width:48%; /*width:48.8%;*/ padding:5px 0 4px 12px; vertical-align:middle;}
+#article_view .file_show ul li img{ vertical-align:middle; padding-bottom:3px;}
+#article_view .file_show ul li a{padding:13px 0 11px 2px; color:#666; font-weight:bold;}
+
+.article_cont img { width: 70% !important;}
+
+.hidden {display: none;}
+
+
+/* 댓글 */
+.cmnt_view{margin:20px 0 0 0;}
+.cmnt_view p.cmnt_count{padding:0 0 0 10px; font-weight:bold; color:#555;}
+.cmnt_view .cmntListWrap{width:96%; margin:5px 0 0 0; padding:0 2% 10px 2%; background:#f4f4f4;}
+.cmnt_view .cmntListWrap ul{margin-bottom:20px;border-bottom:1px dotted #aaa}
+.cmnt_view .cmntListWrap ul li{position:relative; margin:0 0 15px 0; padding:15px 0 0 0; border-top:1px dotted #aaa;}
+.cmnt_view .cmntListWrap ul li.first{border-top:0;}
+.cmnt_view .cmntListWrap ul li:first-child{border:0;}
+.cmnt_view .cmntListWrap ul li.reply{padding:0 0 15px 30px; border:0; background:url(/def/img/article/bu_reply.png) no-repeat 18px 0;}
+.cmnt_view .cmntListWrap ul li .user{padding:5px 0 0 20px; font-size:13px; font-weight:bold; color:#555; background:url(/def/img/article/icon_rp_wt.gif) no-repeat;}
+.cmnt_view .cmntListWrap ul li .date{margin:0 5px; font-size:12px; font-weight:normal; color:#999;}
+.cmnt_view .cmntListWrap ul li .answer{position:absolute; top:17px; right:0;}
+.cmnt_view .cmntListWrap ul li .answer a{font-size:12px; font-weight:normal; color:#888;}
+.cmnt_view .cmntListWrap ul li .answer span{padding:0 0 0 10px; /*background:url(/def/img/article/article_bar.gif) no-repeat 5px 2px;*/}
+.cmnt_view .cmntListWrap ul li .cmnt_wt_cont{width:88%; margin:10px 0 0 15px; font-weight:normal; color:#555; line-height:18px;}
+.cmnt_view .cmntListWrap ul li .cmnt_wt_cont .reply_user{display:inline-block; margin:0 5px 0 0;}
+.cmnt_view .cmntListWrap ul li .cmnt_wt_cont .reply_user a{font-weight:normal; color:#888;}
+
+/* 댓글등록 */
+.cmnt_write{position:relative; width:100%; padding:0;}
+.cmnt_write input{border:1px solid #dadada; height:17px;}
+.cmnt_write .cancel{position:absolute; top:0; right:0;}
+.cmnt_write .cancel a{font-size:12px; font-weight:normal; color:#888;}
+.cmnt_write .cancel span{padding:0 0 0 10px; }
+.cmnt_write label{padding:5px 6px 4px 6px;background-color:#e7e7e7;}
+.cmnt_write textarea{float:left; width:85%; height:62px; margin:0 0 20px 0; border:1px solid #dadada; font-size:12px; color:#666; padding:10px 1%;}
+.cmnt_write .btn_signup{float:right; display:inline-block; width:11%;}
+.cmnt_write .btn_signup a{display:block; width:80%; height:35px; padding:37px 10% 10px 10%; background:#fff; border:1px solid #bbb; text-align:center; font-size:12px; color:#666;}
+.cmnt_write .text_num{display:inline;padding-left:5px;}
+.cmnt_write .text_num b{color:#ff6257;}
+
+/* 검색영역 */
+#article_header {width:100%;}
+	#article_search {width:99.8%; padding:15px 0; margin:0 auto; text-align:center; border:1px solid #e2e2e2; background:#fafafa;}
+	#article_sel label{font-weight:bold;}
+	#article_sel .btn_st1{height:29px; padding:6px 15px 8px 15px; background:#888; text-align:center; font-size:13px; color:#fff; border:0;}
+	#page_info {margin:30px 0 0 0; color:#555;}
+	#page_info span{color:#222;}
+	.at_calender{width:26px; height:25px; border:0; background:url("/def/img/article/btn_calender.gif") no-repeat;}
+
+
+
+</style>
 <script type="text/javascript">
-<!--
+
 $(function() {
 	//달력
 	$('.datepicker').datepicker({
@@ -73,7 +146,7 @@ function list(){
 	$("#defaultForm").attr('action', 'list.do');
 	$("#defaultForm").submit();
 }
-//-->
+
 </script>
 </head>
 <body>
@@ -84,34 +157,81 @@ ${articleSearchVO.superHiddenTag}
 <input type="hidden" id="boardKey" name="boardKey" value="${articleSearchVO.boardKey }" />
 <input type="hidden" id="articleKey" name="articleKey" value="${articleVO.articleKey }" />
 
-<!-- article_view2 -->
-<div id="article_view">
-	<!-- 게시판출력 -->
-	<h4 class="skin2">
-		${articleVO.title }
-		<c:if test="${articleVO.secretFlg eq 'Y'}">
-			<img src="/def/img/article/icon_secret.gif" alt="비밀글" />
-		</c:if>
-		<c:if test="${articleVO.operPrd <= boardVO.newPrd}">
-			<img src="/def/img/article/icon_new.png" alt="새글" />
-		</c:if>
-	</h4>
-	<div class="article_date">
-		<dl>
-			<dt>등록일 :</dt>
-			<dd><fmt:formatDate pattern="yyyy-MM-dd" value="${articleVO.frstOperDt}" /></dd>
-			<dt>작성자 :</dt>
-			<dd>${articleVO.writer}</dd>
-			<dt>조회수 :</dt>
-			<dd>${articleVO.viewCnt}</dd>
-		</dl>
-	</div>
-	<div class="article_cont">
-		${fn:replace(articleVO.content, LF, '<br />')}
-	</div>
-	<div class="file_show">
+
+                        <!-- breadcrumb -->
+                        <div class="breadcrumb">
+                            <ul>
+                                <li>
+								${articleVO.title }
+										<c:if test="${articleVO.secretFlg eq 'Y'}">
+											<img src="/def/img/article/icon_secret.gif" alt="비밀글" />
+										</c:if>
+										<c:if test="${articleVO.operPrd <= boardVO.newPrd}">
+											<img src="/def/img/article/icon_new.png" alt="새글" />
+										</c:if>
+								</li>
+                            </ul>
+                        </div>
+                        <p class="content_title"> </p>
+                        <div class="list-wrap">
+                            <div class="list-content">
+                                <div class="list-table list" id="article_view">
+                                    <table>
+                                        <caption></caption>
+                                        <colgroup>
+                                            <col style="width:180px">
+                                            <col>
+                                            <col style="width:180px">
+                                            <col>
+                                        </colgroup>
+                                        <tbody>
+                                            <tr>
+                                                <th><label for="text1">등록일</label></th>
+                                                <td>
+                                                    <div class="row">
+                                                        <div class="col s12 input-text">
+                                                            <fmt:formatDate pattern="yyyy-MM-dd" value="${articleVO.frstOperDt}" />
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <th><label for="text1">작성자</label></th>
+                                                <td>
+                                                    <div class="row">
+                                                        <div class="col s12 input-text">
+                                                            ${articleVO.writer}
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th><label for="text1">조회수</label></th>
+                                                <td colspan="3">
+                                                    <div class="row">
+                                                        <div class="col s12 select-group">
+                                                            ${articleVO.viewCnt}
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                
+                                            </tr>
+                                            <tr>
+                                                <th><label for="text1">내용</label></th>
+                                                <td colspan="3">
+                                                    <div class="row">
+														<div class="article_cont">
+															${fn:replace(articleVO.content, LF, '<br />')}
+														</div>
+                                                    </div>
+                                                </td>
+                                            </tr>
 		<c:if test="${boardVO.attachFlg eq 'Y'}">
 			<c:if test="${not empty articleVO.fileList }">
+
+                                            <tr>
+                                                <th><label for="select4">첨부파일</label></th>
+                                                <td colspan="3">
+                                                    <div class="row">
+
 				<div class="file_show">
 					<p>
 						첨부파일 ${fn:length(articleVO.fileList)}개
@@ -143,292 +263,46 @@ ${articleSearchVO.superHiddenTag}
 						</c:forEach>
 					</ul>
 				</div>
+                                                     
+                                                    </div>
+                                                </td>
+                                            </tr>
 			</c:if>
-		</c:if>
-	</div>
-	<!-- //게시판출력 -->
+		</c:if>                                 
+                                            
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
 
-	<div class="article_bottom">
-		<!-- 버튼 -->
-		<p class="ta_r">
-			<c:if test="${boardVO.replyFlg eq 'Y'}">
-				<c:if test="${isUseGrpForReply}">
-					<a href="#none" class="at_btn_st2" onclick="return replyForm();">답변</a>
-				</c:if>
-			</c:if>
-			<c:if test="${isUseGrpForWrite}">
-				<a href="#none" class="at_btn_st2" onclick="return updateForm();">수정</a>
-				<a href="#none" class="at_btn_st2" onclick="return disable();">삭제</a>			
-			</c:if>
-			<a href="#none" class="at_btn_st2" onclick="list();">목록</a>
-		</p>
-		<!-- //버튼 -->
-	</div>
-
-	<c:if test="${boardVO.commentFlg eq 'Y'}">
-		<div class="comment_area">
-			<%@ include file="/WEB-INF/jsp/article/def/Comment.jsp" %>
-		</div>
-	</c:if>
-</div>
-<!-- //article_view -->
+                        <div class="list-footer">
+                            <div class="list-btns">
+                            
+								<c:if test="${boardVO.replyFlg eq 'Y'}">
+									<c:if test="${isUseGrpForReply}">
+										<button type="button" class="btn bg-gray" onclick="return replyForm();">답변</button>
+									</c:if>
+								</c:if>
+								<c:if test="${isUseGrpForWrite}">
+									<a href="#none" class="at_btn_st2 btn bg-gray" onclick="return updateForm();">수정</a>
+									<a href="#none" class="at_btn_st2 btn bg-gray" onclick="return disable();">삭제</a>			
+								</c:if>
+								<a href="#none" class="at_btn_st2 btn" onclick="list();">목록</a>                            
+                            
+                                
+                            </div>
+                        </div>
 
 
-<!-- 목록 ============================================================== -->
-<script type="text/javascript">
-<!--
-//검색
-function searchList(){
-	$('#currentPageNo').val('1');
-	$("#defaultForm").attr('action', 'list.do');
-	$("#defaultForm").submit();
-}
-//추가
-function insertForm(){
-	$("#defaultForm").validationEngine('detach');
-	$("#defaultForm").attr('action', 'insertForm.do');
-	$("#defaultForm").submit();
-}
-//조회
-function view(key){
-	$("#defaultForm").validationEngine('detach');
-	$("#defaultForm").attr('action', 'view.do');
-	$("#articleKey").attr('value', key);
-	$("#defaultForm").submit();
-}
-//-->
-</script>
-<br /><br /><br />
-<div id="article_header">
-	<!-- 검색영역 -->
-	<fieldset id="article_search">
-	<legend class="hidden">게시글 검색</legend>
-	<div id="article_sel">
-		<label for="event_sdate1" class="hidden">조회기간</label> 
-		<input type="text" id="searchStartFrstOperDt" name="searchStartFrstOperDt" value="${articleSearchVO.searchStartFrstOperDt}" class="datepicker ip_type va_m" size="10"/>
-		<%-- <input type="button" title="날짜선택" class="at_calender va_m" /> --%>
-		~
-		<input type="text" id="searchEndFrstOperDt" name="searchEndFrstOperDt" value="${articleSearchVO.searchEndFrstOperDt}" class="datepicker ip_type va_m" size="10"/>
-		<%-- <input type="button" title="날짜선택" class="at_calender va_m" /> --%>
-		<c:if test="${boardVO.catgrFlg eq 'Y'}">
-			<label class="hidden" for="searchCatgr">카테고리</label>
-			<select id="searchCatgr" name="searchCatgr" class="sel_type ml15" style="width:100px;">
-				<option value="" >전체</option>	
-				<c:forEach var="item" items="${catgrList }">
-					<option value="${item.codeId}">${item.codeNm }</option>
-				</c:forEach>
-			</select>
-		</c:if>
-				
-		<label class="hidden" for="searchClass">검색구분</label>
-		<form:select path="searchClass" cssClass="sel_type ml15" cssStyle="width:80px;">
-			<form:option value="TITLE" label="제목" />
-			<form:option value="CONTENT" label="내용" />
-			<form:option value="WRITER" label="작성자" />
-		</form:select>
-		<form:input path="searchValue" cssClass="ip_type va_m" title="검색어" size="20" />
-		<input type="button" id="search" name="search" value="검색" class="btn_st1 va_m" onclick="searchList();" />
-	</div>
-	</fieldset>
-	<!-- //검색영역 -->
-	<!-- 페이지 정보 -->
-	<div id="page_info">
-		<p>검색건수 <strong><fmt:formatNumber value="${articleSearchVO.totalRecordCount}" /></strong> 건,&nbsp; 페이지 <strong> <span><fmt:formatNumber value="${articleSearchVO.currentPageNo}" /></span> / <fmt:formatNumber value="${articleSearchVO.totalPageCount}" /></strong></p>
-	</div>
-	<!-- //페이지 정보 -->
-</div>
-<div id="article_body">
-	<!-- 게시판 리스트 영역 -->
-	<table cellspacing="0" class="article_list" summary="게시판의 테이블 입니다." >
-		<caption><span>게시판 이름</span></caption>
-		<colgroup>
-			<c:choose>
-				<c:when test="${boardVO.catgrFlg eq 'Y'}">
-					<col width="6%"/>
-					<col width="10%"/>
-					<col width="44%"/>
-					<col width="12%"/>
-					<col width="10%"/>
-					<col width="10%"/>
-					<col width="8%"/>
-				</c:when>
-				<c:otherwise>
-					<col width="6%"/>
-					<col width="54%"/>
-					<col width="12%"/>
-					<col width="10%"/>
-					<col width="10%"/>
-					<col width="8%"/>
-				</c:otherwise>
-			</c:choose>
-		</colgroup>
-		<thead class="skin2">
-			<tr>
-				<th scope="col">번호</th>
-				<c:if test="${boardVO.catgrFlg eq 'Y'}">
-					<th scope="col">카테고리</th>
-				</c:if>
-				<th scope="col">제목</th>
-				<th scope="col">작성자</th>
-				<th scope="col">파일</th>
-				<th scope="col">등록일</th>
-				<th scope="col">조회</th>
-			</tr>
-		</thead>
-		<tbody class="tb_center">
-			<!-- articleList -->
-			<c:forEach items="${noticeList }" var="item" varStatus="i">
-				<tr>
-					<td scope="row">
-						<c:choose>
-							<c:when test="${item.articleKey eq articleVO.articleKey}"><span style="color:blue;font-weight:bold;">공지</span></c:when>
-							<c:otherwise>공지</c:otherwise>
-						</c:choose>
-					</td>
-					<c:if test="${boardVO.catgrFlg eq 'Y'}">
-						<td scope="row">
-							-
-						</td>
-					</c:if>
-					<td class="tx_al">
-						<c:if test="${item.gkey > 0}">
-							<c:forEach begin="1" end="${item.gkey }">
-								&nbsp;&nbsp;&nbsp;
-							</c:forEach>
-							<img src="/def/img/article/icon_re.png" alt="답변글" />
-						</c:if>
-						<a href="#none" onclick="view('${item.articleKey}');" title="${item.title }">
-							${item.title }
-							<c:if test="${item.operPrd <= boardVO.newPrd}">
-								<img src="/def/img/article/icon_new.png" alt="새글" />
-							</c:if>
-						</a>
-					</td>
-					<td>${item.writer }</td>
-					<td>
-						<c:if test="${not empty item.fileList}">
-							<c:choose>
-								<c:when test="${fn:length(item.fileList) > 1}">
-									<a href="/attachfile/downloadAll.do?fileId=article_${item.articleKey}" target="downloadFrame">
-										<img src="/def/img/article/icon_multiple.gif" alt="파일 다운로드" />
-									</a>
-								</c:when>
-								<c:otherwise>
-									<a href="/attachfile/downloadFile.do?fileId=${item.fileList[0].fileId}&amp;fileSeq=${item.fileList[0].fileSeq}" target="downloadFrame">
-										<c:set var="extList" value="hwp,xls,xlsx,ppt,pptx,pdf,doc,docx" />
-										<c:set var="ext" value="${fn:split(item.fileList[0].fileNm, '.')}" />
-										<c:choose>
-											<c:when test="${fn:indexOf(extList, ext[fn:length(ext)-1]) != -1}">
-												<img src="/def/img/article/icon_${ext[fn:length(ext)-1]}.gif" alt="파일 다운로드" />
-											</c:when>
-											<c:otherwise>
-												<img src="/def/img/article/icon_default.gif" alt="파일 다운로드" />
-											</c:otherwise>
-										</c:choose>
-									</a>
-								</c:otherwise>
-							</c:choose>
-						</c:if>
-					</td>
-					<td><fmt:formatDate pattern="yyyy-MM-dd" value="${item.frstOperDt}" /></td>
-					<td>${item.viewCnt }</td>
-				</tr>			
-			</c:forEach>
-			<!--//noticeList -->
-			
-			<!-- articleList -->
-			<c:forEach items="${articleList }" var="item" varStatus="i">
-				<tr>
-					<td scope="row">
-						<c:choose>
-							<c:when test="${item.articleKey eq articleVO.articleKey}">
-								<span style="color:blue;font-weight:bold;">${articleSearchVO.totalRecordCount-((articleSearchVO.currentPageNo-1)*articleSearchVO.recordCountPerPage)-(i.count-1) }</span>
-							</c:when>
-							<c:otherwise>
-								${articleSearchVO.totalRecordCount-((articleSearchVO.currentPageNo-1)*articleSearchVO.recordCountPerPage)-(i.count-1) }
-							</c:otherwise>
-						</c:choose>
-					</td>
-					<c:if test="${boardVO.catgrFlg eq 'Y'}">
-						<td scope="row">
-							<c:forEach var="catgr" items="${catgrList }">
-								<c:if test="${item.catgr eq catgr.codeId }">${catgr.codeNm }</c:if>
-							</c:forEach>
-						</td>
-					</c:if>
-					<td class="tx_al">
-						<c:if test="${boardVO.replyFlg eq 'Y' }">
-							<c:if test="${item.gkey > 0}">
-								<c:forEach begin="1" end="${item.gkey }">
-									&nbsp;&nbsp;
-								</c:forEach>
-								<img src="/def/img/article/icon_re.png" alt="답변글" />
-							</c:if>
-						</c:if>
-						<a href="#none" onclick="view('${item.articleKey}');" title="${item.title }">
-							${item.title }
-							<c:if test="${item.operPrd <= boardVO.newPrd}">
-								<img src="/def/img/article/icon_new.png" alt="새글" />
-							</c:if>
-						</a>
-					</td>
-					<td>${item.writer }</td>
-					<td>
-						<c:if test="${not empty item.fileList}">
-							<c:choose>
-								<c:when test="${fn:length(item.fileList) > 1}">
-									<a href="/attachfile/downloadAll.do?fileId=article_${item.articleKey}" target="downloadFrame">
-										<img src="/def/img/article/icon_multiple.gif" alt="파일 다운로드" />
-									</a>
-								</c:when>
-								<c:otherwise>
-									<a href="/attachfile/downloadFile.do?fileId=${item.fileList[0].fileId}&amp;fileSeq=${item.fileList[0].fileSeq}" target="downloadFrame">
-										<c:set var="extList" value="hwp,xls,xlsx,ppt,pptx,pdf,doc,docx" />
-										<c:set var="ext" value="${fn:split(item.fileList[0].fileNm, '.')}" />
-										<c:choose>
-											<c:when test="${fn:indexOf(extList, ext[fn:length(ext)-1]) != -1}">
-												<img src="/def/img/article/icon_${ext[fn:length(ext)-1]}.gif" alt="파일 다운로드" />
-											</c:when>
-											<c:otherwise>
-												<img src="/def/img/article/icon_default.gif" alt="파일 다운로드" />
-											</c:otherwise>
-										</c:choose>
-									</a>
-								</c:otherwise>
-							</c:choose>
-						</c:if>
-					</td>
-					<td><fmt:formatDate pattern="yyyy-MM-dd" value="${item.frstOperDt}" /></td>
-					<td>${item.viewCnt }</td>
-				</tr>			
-			</c:forEach>
-			<c:if test="${empty articleList and empty articleList }">
-				<tr>
-					<c:choose>
-						<c:when test="${boardVO.catgrFlg eq 'Y'}"><td colspan="7">검색된 결과가 없습니다</td></c:when>
-						<c:otherwise><td colspan="6">검색된 결과가 없습니다</td></c:otherwise>
-					</c:choose>
-				</tr>
-			</c:if>
-		</tbody>
-	</table>
-	<!-- //게시판 리스트 영역 -->
+		<c:if test="${boardVO.commentFlg eq 'Y'}">              
+                                           
+														<div class="comment_area" style="font-size: small;">
+															<%@ include file="/WEB-INF/jsp/article/def/Comment.jsp" %>
+														</div>
+		</c:if>     
 
-	<div class="article_bottom">
-		<!-- 페이징 -->
-		<ui:pagination paginationInfo="${articleSearchVO }" type="defDefault" jsFunction="cfnPageLink" />
-		<!-- //페이징 -->
-		<!-- 버튼 -->
-		<div class="at_btn">
-			<p>
-				<c:if test="${isUseGrpForWrite }">
-					<a href="#none" onclick="insertForm();" class="at_btn_st2">글쓰기</a>
-				</c:if>
-			</p>
-		</div>
-		<!-- //버튼 -->
-	</div>
-</div>
+
 
 </form:form>
 </body>

@@ -51,6 +51,10 @@ public class CodeService {
 		return (CodeVO) dao.selectOne("Code.select", codeVO);
 	}
 	
+	public String selectRule(String comNo) {
+		return (String) dao.selectOne("Code.selectRuleNo", comNo);
+	}
+	
 	public Integer insert(CodeVO codeVO) {
 		return (Integer)dao.insert("Code.insert", codeVO);
 	}

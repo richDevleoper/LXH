@@ -9,7 +9,7 @@
 			http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd">
 
 	<!-- ========================= DWR CONFIGURATION ======================== -->
-	<dwr:controller id="dwrController" debug="true">
+	<dwr:controller id="dwrController" debug="false">
 		<!-- 	  
 		<dwr:config-param name="crossDomainSessionSecurity" value="false" />
 	    <dwr:config-param name="allowScriptTagRemoting" value="true" /> 

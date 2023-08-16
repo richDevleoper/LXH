@@ -130,4 +130,14 @@ public class ArticleSearchVO extends CommonVO {
 		this.searchViewPrdFlg = searchViewPrdFlg;
 	}
 
+	
+	@Override
+	public String toString() {
+		return "ArticleSearchVO [boardKey=" + boardKey + ", searchCatgr=" + searchCatgr + ", searchClass=" + searchClass
+				+ ", searchValue=" + searchValue + ", searchStartFrstOperDt=" + searchStartFrstOperDt
+				+ ", searchEndFrstOperDt=" + searchEndFrstOperDt + ", searchViewPrdFlg=" + searchViewPrdFlg
+				+ ", searchDeleteFlg=" + searchDeleteFlg + ", searchWriterPwd=" + searchWriterPwd + ", orderByTyp="
+				+ orderByTyp + "]";
+	}
+
 }

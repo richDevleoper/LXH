@@ -72,7 +72,7 @@
 	                                                <option value="">전체</option>
                                                     <c:forEach var="item" items="${TYPE_LIST }">
                                                     	<c:choose>
-                                                    		<c:when test="${PROP_TYPE_CODE eq item.codeId }">
+                                                    		<c:when test="${searchPropTypeCode eq item.codeId }">
                                                     			<option value="${item.codeId }" selected="selected">${item.codeNm }</option>
                                                     		</c:when>
                                                     		<c:otherwise>
@@ -182,12 +182,18 @@
                                         						</c:otherwise>
                                         					</c:choose>
                                         					<c:choose>
-                                        						<c:when test="${item.propEvalLvCodeName != null  and item.propEvalLvCodeName ne ''}">
-                                        							<span>${item.propEvalLvCodeName }</span>
-                                        						</c:when>
-                                        						<c:otherwise>
-                                        							<span>${item.propPropStatCodeName }</span>
-                                        						</c:otherwise>
+                                        						<c:when test="${item.propPropStatCode eq 'PRG_4'}">
+	                                            					<span>${item.propPropStatCodeName }</span>
+	                                            				</c:when>
+	                                            				<c:when test="${item.propPropStatCode eq 'PRG_5'}">
+	                                            					<span>${item.propEvalLvCodeName }</span>
+	                                            				</c:when>
+	                                            				<c:when test="${item.propPropStatCode eq 'PRG_6' and item.propEvalLvCode eq 'NA'}">
+	                                            					<span>${item.propEvalLvCodeName }</span>
+	                                            				</c:when>
+	                                            				<c:otherwise>
+	                                            					<span>${item.propPropStatCodeName }</span>
+	                                            				</c:otherwise>
                                         					</c:choose>                                        					
                                         					</li>
                                         					<li>
@@ -261,6 +267,7 @@
 			popEmp.open();
 		});
 		
+		// 조직 조회 팝업
 		$('.btn-proposal-group-search-modal').off('click').on('click', function(){
 			popDept.init();
 			
@@ -276,6 +283,7 @@
 	}
 	
 	function onchange_recordCountPerPage(vCount){
+		$("#currentPageNo").val("1");
 		$("#recordCountPerPage").val(vCount);
 		onclick_search();// 검색 '조회'버튼 클릭
 	}

@@ -89,7 +89,8 @@ public class MakeController {
 		model.addAttribute("menuKey", searchVO.getMenuKey());
 		searchVO.setSearchUserid(userSession.getUserId());
 		
-		List<DepartVO> dbList = qPopupService.selectTreeList();
+		//List<DepartVO> dbList = qPopupService.selectTreeList();
+		List<DepartVO> dbList = qPopupService.selectListMap();
 		JsonArray deptList = makeService.convertTreeJson(dbList);
 		
 		model.addAttribute("makeVO", makeVO);
@@ -114,7 +115,7 @@ public class MakeController {
 		makeVO = makeService.select(makeVO);
 		model.addAttribute("makeVO", makeVO);
 		
-		List<DepartVO> dbList = qPopupService.selectTreeList();
+		List<DepartVO> dbList = qPopupService.selectListMap();
 		JsonArray deptList = makeService.convertTreeJson(dbList);
 		model.addAttribute("deptList", deptList);
 		
@@ -157,7 +158,6 @@ public class MakeController {
 			makeVO.setCirUpdateUser(userSession.getUserId());
 			makeService.update(makeVO);
 		}
-		
 
 		return "redirect:/sub.do?menuKey=70";
 		

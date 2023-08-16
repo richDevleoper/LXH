@@ -64,6 +64,9 @@ public class ProposalVO {
 	private String propApprovalGroup;
 	private String propApprovalGroupCode;
 	
+	private String propUserSess;
+	
+	
 	//////////////////////////////////////////////////////////////////////////////////
 	// 마감
 	//////////////////////////////////////////////////////////////////////////////////
@@ -491,5 +494,13 @@ public class ProposalVO {
 
 	public void setEvalProposalList(List<EvalProposalVO> evalProposalList) {
 		this.evalProposalList = evalProposalList;
+	}
+
+	public String getPropUserSess() {
+		return propUserSess;
+	}
+
+	public void setPropUserSess(String propUserSess) {
+		this.propUserSess = propUserSess;
 	}
 }

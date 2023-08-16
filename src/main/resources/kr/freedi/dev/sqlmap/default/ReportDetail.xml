@@ -96,8 +96,6 @@
 		
 	</select>
 	
-
-	
 	<select id="selectListCount" resultType="int">
 		SELECT COUNT(*) FROM tb_report_detail  T where 1=1 
 		<include refid="defCond"></include>
@@ -181,6 +179,16 @@
 				, REP_UPDATE_USER = #{repUpdateUser}
 				, REP_UPDATE_DATE = SYSDATE
 		WHERE REP_SEQ = #{repSeq}
+	</update>
+	
+	<update id="updateApprovalMemCode">
+		
+		UPDATE TB_REPORT_DETAIL
+		   SET rep_approval_mem_code = #{repApprovalMemCode}
+		       , REP_UPDATE_USER = #{repUpdateUser}
+			   , REP_UPDATE_DATE = SYSDATE
+		 WHERE REP_CODE=#{repCode}
+		   AND REP_STEP_CODE=#{repStepCode}
 	</update>
 	
 	<update id="updateStep">

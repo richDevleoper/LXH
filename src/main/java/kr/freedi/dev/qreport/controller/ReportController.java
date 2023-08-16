@@ -38,6 +38,7 @@ import kr.freedi.dev.qeducation.domain.StudentVO;
 import kr.freedi.dev.qeducation.excel.ExcelFunction;
 import kr.freedi.dev.qpopup.domain.DepartVO;
 import kr.freedi.dev.qpopup.service.QPopupService;
+import kr.freedi.dev.qproposal.service.ProposalService;
 import kr.freedi.dev.qreport.domain.ReportSearchVO;
 import kr.freedi.dev.qreport.domain.ReportTeamVO;
 import kr.freedi.dev.qreport.domain.ReportVO;
@@ -76,8 +77,8 @@ public class ReportController {
 	@Resource(name = "codeService")
 	private CodeService codeService;
 	
-
-	
+	@Resource(name = "proposalService")
+	private ProposalService proposalService;
 	
 	@InitBinder
 	public void customizeBinding(WebDataBinder binder) {
@@ -101,10 +102,9 @@ public class ReportController {
 		if(pSearchUser==null)
 			pSearchUser = "x";
 		searchVO.setSearchUserid(pSearchUser);
-		
-		
+
 		List<EgovMap> countList = reportService.selectListCount2(searchVO);
-				
+
 		int totalCount = 0;
 		for (EgovMap egovMap : countList) {
 			BigDecimal currVal = (BigDecimal)egovMap.get("cnt");
@@ -117,35 +117,35 @@ public class ReportController {
 		
 		//페이징 기본설정
 		searchVO.setTotalRecordCount(totalCount);
-		
+
 		List<ReportVO> reportList = reportService.selectList(searchVO);
 		model.addAttribute("reportList", reportList);
 		model.addAttribute("totalCount", totalCount);
-	
-		CodeVO codeVO = new CodeVO(); 
+
+		CodeVO codeVO = new CodeVO();
 		codeVO.setCodeGrpId("6SIG_YN");
-		codeVO.setActFlg("Y"); 
+		codeVO.setActFlg("Y");
 		model.addAttribute("searchRepName", codeService.selectFullList(codeVO));
-		
+
 		codeVO.setCodeGrpId("RP_TY1");
-		codeVO.setActFlg("Y"); 
+		codeVO.setActFlg("Y");
 		model.addAttribute("typeCode1", codeService.selectFullList(codeVO));
-		
+
 		codeVO.setCodeGrpId("RP_TY2");
-		codeVO.setActFlg("Y"); 
+		codeVO.setActFlg("Y");
 		model.addAttribute("typeCode2", codeService.selectFullList(codeVO));
-		
+
 		codeVO.setCodeGrpId("RP_TY3");
-		codeVO.setActFlg("Y"); 
+		codeVO.setActFlg("Y");
 		model.addAttribute("typeCode3", codeService.selectFullList(codeVO));
-		
+
 		codeVO.setCodeGrpId("REP_STAT");
-		codeVO.setActFlg("Y"); 
+		codeVO.setActFlg("Y");
 		model.addAttribute("searchStatus", codeService.selectFullList(codeVO));
-		
+
 		return "app/report/List";
 	}
-	
+
 	// 리스트에서 클릭시 (상황별 수정페이지로 이동)
 	@RequestMapping({"/updateForm.do"})
 	public String updateForm(HttpServletRequest request, ModelMap model,
@@ -173,13 +173,13 @@ public class ReportController {
 			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO,
 			@ModelAttribute("reportVO") ReportVO reportVO, 
 			UserVO userSession) throws Exception {
-		
+
 		reportService.proc_reportFormHandler(req, model, searchVO, reportVO, userSession);
 		model.addAttribute("action", "/report/updateStep.do");
 		model.addAttribute("repMenuCode", REP_MENU_CODE);
-				
+
 		return "app/report/InsertFormStat3";
-	}  
+	}
 
 	// 과제(등록화면) - 상태 '임시저장'
 	@RequestMapping({"/insertForm.do"})
@@ -187,10 +187,10 @@ public class ReportController {
 			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO,
 			@ModelAttribute("reportVO") ReportVO reportVO, 
 			UserVO userSession) throws Exception {
-		
+
 		model.addAttribute("repMenuCode", REP_MENU_CODE);
-		reportVO.setRepMenuCode(REP_MENU_CODE); //화면 바인딩을 위해 세팅하여 서비스에 전달
-		
+		reportVO.setRepMenuCode(REP_MENU_CODE); // 화면 바인딩을 위해 세팅하여 서비스에 전달
+
 		// 페이지 바인딩
 		ReportVO retVO = reportService.proc_reportFormHandler(req, model, searchVO, reportVO, userSession);
 		model.addAttribute("action", "/report/insert.do");
@@ -228,7 +228,12 @@ public class ReportController {
 		} else {
 			// 신규입력 결재의뢰/임시저장
 			reportVO.setRepRegUser(userId);
-			reportService.insert(reportVO);	
+			reportService.insert(reportVO);
+			if(reportVO.getRepTeamMemberList().size()>0) {
+				String email = "";
+				email = proposalService.selectProposalEmail(reportVO.getRepTeamMemberList().get(0).getComNo());
+				SendMailUtil.CustomSendMail(email, reportVO.getRepTeamMemberList().get(0).getComNo(), "request");
+			}
 		}
 		
 		return "redirect:/sub.do?menuKey=29";
@@ -244,7 +249,7 @@ public class ReportController {
 
 		String userId = userSession.getUserId();
 		String repCurrStep = reportVO.getRepCurrStepCode();
-		
+
 		// 챔피언, 지도사원 저장
 		List<ReportTeamVO> approveMemberList = new ArrayList<>();
 		
@@ -258,14 +263,15 @@ public class ReportController {
 			}
 		}
 		
+		reportVO.setRepUpdateUser(userId);
 		if(reportVO.getMode().equals("CANCEL")) {  // 결재취소
 
 			// 마지막 단계 결재상신건 취소하기			
 			reportService.cancelApprove(reportVO);
-			
+
 		} else if(reportVO.getMode().equals("DROP")) { // Drop신청
 
-			// 결재자 정보 추가
+			// 마지막 단계 결재상신건 취소하기			
 			approveMemberList.add(memChamp);  
 			reportVO.setRepUpdateUser(userId);
 			// 과제 진행 중 Drop하기
@@ -275,11 +281,12 @@ public class ReportController {
 			
 			//1. 단계저장 - 6시그마  ---------------------------------
 			if(reportVO.getRepDivisionCode().equals("1")) {
+				
 				reportService.updateStep6Sigma(reportVO);
 			} 
 			
 			// 2. 과제마스터 변경사항 체크하기  ---------------------------------
-			ReportVO originReportVO = reportService.selectReportDefaultInfo(reportVO);
+			ReportVO originReportVO = reportService.select(reportVO);
 			
 			// Finish 결재인 경우 챔피언 결재선 추가
 			if(repCurrStep.equals("6")) {
@@ -289,17 +296,17 @@ public class ReportController {
 			if("1,2,3,4,5".indexOf(repCurrStep)>-1) {
 				approveMemberList.add(memLeader);
 				
-				// 과제 마스터 변경사항 발생시 결재선에 챔피언 등록
-				Boolean isChanged = reportService.checkChangeBaseInfo(originReportVO, reportVO); // 변경사항 체크
-				if(isChanged) {
+				// 과제 마스터 변경사항 발생시 결재선에 챔피언 등록 
+				Boolean isChanged = reportService.compareReportBaseInfo(originReportVO, reportVO); // 변경사항 체크
+				if(isChanged) { 
 					approveMemberList.add(memChamp);
 					
 					reportVO.setRepUpdateUser(userSession.getUserId());
-					reportService.updateReportMaster(reportVO);
-				}
+					reportService.updateReportMasterAndResult(reportVO);
+				} 
 			}
-			
-			// 3. 결재올리기  ---------------------------------
+
+			// 3. 결재올리기 ---------------------------------
 			reportVO.setRepUpdateUser(userId);
 			//reportService.regApproveType3(reportVO, approveMemberList);
 			reportService.regApproveReport(reportVO, approveMemberList, "3");
@@ -320,11 +327,9 @@ public class ReportController {
 
 		model.addAttribute("menuKey", searchVO.getMenuKey());
 		model.addAttribute("repMenuCode", REP_MENU_CODE);
-		
-		searchVO.setMenuCode(REP_MENU_CODE);  // 과제 or 분임조과제 구분
-		
-		
-		
+
+		searchVO.setMenuCode(REP_MENU_CODE); // 과제 or 분임조과제 구분
+
 		// 페이지 초기값 세팅을 위한 코드값 바인딩
 		CodeVO codeVO = new CodeVO(); 
 		codeVO.setCodeGrpId("6SIG_YN");
@@ -354,16 +359,16 @@ public class ReportController {
 		}
 		model.addAttribute("countList", countList);
 		
-		//페이징 기본설정8
+		//페이징 기본설정
 		searchVO.setTotalRecordCount(totalCount);
-		
+
 		List<ReportVO> reportList = reportService.selectFullList(searchVO);
 		model.addAttribute("reportList", reportList);
 		model.addAttribute("totalCount", totalCount);
-		
+
 		return "app/report/Search";
 	}
-	
+
 	// 과제검색_상세보기
 	@RequestMapping({"/SearchView.do"})
 	public String handler_searchView(HttpServletRequest req, ModelMap model,
@@ -381,10 +386,9 @@ public class ReportController {
 		// TODO 과제 정보 가져오기
 		ReportVO dbReportVO = reportService.proc_reportFormHandler(req, model, searchVO, reportVO, userSession);
 		model.addAttribute("reportVO", dbReportVO);
-		
+
 		// TODO 분임조 정보 가져오기
 
-		
 		return "app/report/SearchView"; // 과제 페이지
 	}
 	
@@ -401,22 +405,19 @@ public class ReportController {
 		CodeVO codeVO = new CodeVO(); 
 		String[] arrCodeGrpIds = {"6SIG_YN", "RP_TY1", "RP_TY2", "RP_TY3", "SECTOR", "ACTTYPE", "LDRBELT", "MBBUSERT", "RESULTTY", "REP_ROLE", "WPLACE", "REP_STAT"};
 		codeVO.setCodeGrpIdList(arrCodeGrpIds);
-		codeVO.setActFlg("Y"); 
-		List<EgovMap> allCodes = codeService.selectFullList(codeVO);		//item.codeGrpId, codeId, codeNm
+		codeVO.setActFlg("Y");
+		List<EgovMap> allCodes = codeService.selectFullList(codeVO); // item.codeGrpId, codeId, codeNm
 		model.addAttribute("allCodes", allCodes);
 		
 		searchVO.setMenuCode(REP_MENU_CODE);
-		
-		
+
 		List<DepartVO> dbList = qPopupService.selectTreeList();
 		JsonArray deptList = makeService.convertTreeJson(dbList);
 		model.addAttribute("deptFullList", deptList);
-				
-		//searchVO.setSearchDepart("58153604,IE");
 		
 		List<EgovMap> reportList = reportService.selectReportList(searchVO);
 		model.addAttribute("reportList", reportList);
-		
+
 		return "app/report/ReportList";
 	}
 	

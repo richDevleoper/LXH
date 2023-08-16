@@ -41,54 +41,19 @@ protected Log log = LogFactory.getLog(this.getClass());
 	@Resource(name = "proposalIdGnrService")
 	private EgovIdGnrService idGnrService;
 	
+	
+	// 연간계획 목록화면
 	@RequestMapping({"/yearplan.do"})
 	public String YearPlan(HttpServletRequest request, ModelMap model,
 			@ModelAttribute("EducationSearchVO") EducationSearchVO searchVO, 
 			@ModelAttribute("EducationVO") EducationVO educationVO, 
 			UserVO userSession)throws Exception {
+		
+		// 메뉴키 및 세션 세팅
 		model.addAttribute("menuKey", searchVO.getMenuKey());
 		searchVO.setSearchUserid(userSession.getUserId());
 		
-		
-		/* 
-		 * 
-		 * 
-			String comCertBelt = userSession.getComCertBelt();
-			System.out.println("comCertBelt : " + comCertBelt);
-			model.addAttribute("comCertBelt", comCertBelt);
-		
-			벨트코드 신청 조건
-			
-			무인증
-			GB -  D000 
-				교육 : 온라인동영상교육, 온라인실시간교육
-				TEST : 통계TEST (온라인 동영상/실시간 교육 이수 시 가능)
-					   과제TEST (온라인 동영상/실시간 교육 이수 + 과제신청 이력이 있을 시 가능)
- 
-			BB -  D001
-				교육 : 온라인동영상교육, 온라인실시간교육
-				TEST : 통계TEST
-					   과제TEST (과제 1건 이상 완료 또는 진행중 상태)
- 
-			MBB - D002
-				교육 : 온라인동영상교육
-					   온라인실시간교육
-					   6σ Process 과정
-					   통계적 사고 과정
-					   고급 통계 과정
-					   Summary
-				TEST : 통계TEST
-					   과제TEST (과제 1건 이상 완료 또는 진행중 상태)
-					   통계구사능력 Test
- 
-			MGB - D003
-				교육 : 
-				TEST :  
- 
-		 */
-		
-		
-		
+		// 년간계획 목록 가져오기
 		List<EducationVO> selectYearPlanList = studentService.selectYearPlanList(searchVO);
 		model.addAttribute("selectYearPlanList", selectYearPlanList);
 		model.addAttribute("action", "/education/requeststd.do");
@@ -96,15 +61,29 @@ protected Log log = LogFactory.getLog(this.getClass());
 		return "app/education/YearPlanList";
 	}
 	
+	// 년간계획 교육 선택 시 교육내용 가져오기
 	@RequestMapping({"/searchedu.do"})
 	public @ResponseBody String searchedu(HttpServletRequest request,
 		   @ModelAttribute("EducationVO") EducationVO educationVO,
-		   @RequestParam Map<String, Object> params)throws Exception {
+		   @RequestParam Map<String, Object> params, 
+		   UserVO userSession)throws Exception {
 		
+		String myUserId = userSession.getUserId();
 		String eduCode   = (String)params.get("eduCode");
 		educationVO.setEduCode(eduCode);
 		
 		EducationVO resVO = studentService.selectYearPlanInfo(educationVO);
+		
+		//신청버튼 체크 프로시저 호출
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("RQ_COM_NO", myUserId);
+		paramMap.put("RQ_EDU_ID", eduCode);
+		
+		//신청버튼 출력 여부 프로시저 호출 결과
+		Map<String,Object> checkReqbtn =  studentService.checkReqbtn(paramMap);
+		String rsYn = String.valueOf(checkReqbtn.get("RS_YN"));
+		resVO.setRsYn(rsYn);
+		
 		return new ObjectMapper().writeValueAsString(resVO);
 	}
 	

@@ -515,11 +515,7 @@ public class MenuService implements IMenuService {
 		List<MenuVO> parentMenuList = this.selectActTopMenuList(menuTyp);
 		EgovMap param = new EgovMap();
 		param.put("menuTyp", menuTyp);
-		if(isAdmin.equals("1")) {
-			param.put("isAdmin", ""); // admin
-		} else {
-			param.put("isAdmin", "0"); // 일반유저
-		} 	
+		param.put("isAdmin", isAdmin); // admin 	
 		
 		List<MenuVO> menuList = this.selectActMenuList(param);
 		

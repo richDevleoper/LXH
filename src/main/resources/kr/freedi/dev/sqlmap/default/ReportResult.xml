@@ -103,7 +103,7 @@
 		        , REP_RESULT_REG_DATE=#{repResultRegDate}
 		        , REP_RESULT_UPDATE_USER=#{repResultUpdateUser}
 		        , REP_RESULT_UPDATE_DATE=#{repResultUpdateDate}
-		WHERE REP_RESULT_CODE = #{repCode}
+		WHERE REP_RESULT_CODE = #{repResultCode}
 	</update>
 	
 	<select id="select" resultMap="reportResultMap">

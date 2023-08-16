@@ -272,10 +272,14 @@ $(document).ready(function(){
  	
 });
 
+// 대상 선택여부를 판별해서 api에 대상자를 전달
 function chkBoxSave(){
-	let eduCode = $("#eduCode").val();
-	let arrSeq = "";
-	let arrVal = "";
+	let eduCode		= $("#eduCode").val();
+	let eduBeltCode = "${educationVO.eduBeltCode}"; // 과정 벨트 코드
+	let eduClassDiv	= "${educationVO.eduClassDivision}";
+	let arrSeq 		= "";
+	let arrVal 		= "";
+	let boolAuthMemYn = "N"; // 인증 대상여부 판별코드
 	
 	let chkNum = 0;
 	$("#chTab").children("tbody:first").children("tr[stdSeq]").each(function(i){
@@ -303,17 +307,60 @@ function chkBoxSave(){
 	params.arrSeq = arrSeq;	
 	params.arrVal = arrVal;	
 	
+	// 벨트 코드와 상세 유형으로 인증 대상등록 여부를 확인한다.
+	if(eduBeltCode == 'D000' && eduClassDiv == '07'){ // GB 대상인경우
+		boolAuthMemYn = 'Y';
+	}
+	if((eduBeltCode == 'D001' || eduBeltCode == 'D003')  && eduClassDiv == '08'){ // MGB ,BB 대상인경우
+		boolAuthMemYn = 'Y';
+	}
+	if(eduBeltCode == 'D002' && eduClassDiv == '09'){ // MBB 대상인경우
+		boolAuthMemYn = 'Y';
+	}
+	
 	$.ajax({
 		url:'/education/stdupdate.do',
 		type: 'POST',
 		data: params,
 		dataType : 'json',
 		success:function(data){
-			alert("저장되었습니다.");
-			location.reload();	
+			if(boolAuthMemYn == 'Y'){ // 인증 대상인 경우
+				checkAuthMem(params , function (res){
+					if(res === 'Y'){
+						alert("저장되었습니다.(인증)");
+						location.reload();
+					}else{
+						alert("인증처리에 실패했습니다.");
+						location.reload();
+					}
+				});
+			}else{ // 인증 대상이 아닌경우
+				alert("저장되었습니다.");
+				location.reload();	
+			}
+			return;
 		}
 	});
+}
+
+// 인증 대상여부를 판별해서 인증 테이블에 등록하는 함수
+function checkAuthMem(params , cb){
 	
+	// 인증 등록 api에 값 전달
+	$.ajax({
+		url:'/education/ajaxCheckCert.do',
+		type: 'POST',
+		data: params,
+		dataType : 'json',
+		success:function(data){
+			cb('Y');	
+		},
+		error : function (err){
+			console.log("err : " + err);
+			cb('N');
+		}
+	});
+	return;
 }
 
 </script>   

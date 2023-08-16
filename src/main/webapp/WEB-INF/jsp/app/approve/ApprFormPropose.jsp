@@ -38,24 +38,25 @@
 					<form:input type="hidden" path="detailList[${i-1 }].score7" cssClass="detail-score7"/>
 					<form:input type="hidden" path="detailList[${i-1 }].scoreTotal" cssClass="detail-total"/>
 					<form:input type="hidden" path="detailList[${i-1 }].comPosition" cssClass="detail-com-position"/>
+					<form:input type="hidden" path="detailList[${i-1 }].comDepartCode" cssClass="detail-com-departcode"/>
 										
                     <section id="page-content">
 
                         <!-- breadcrumb -->
                         <div class="breadcrumb">
                             <ul>
-                                <li>실시 제안정보</li>
+                                <li>제안정보</li>
                             </ul>
 							<div class="header-btns">
 							<c:choose>
 								<c:when test="${sessionCompNo eq approveVO.detailList[i-1].comNo}">
 		                            <c:choose>
 		                            	<c:when test="${approveVO.aprovalState ne '3' && approveVO.aprovalState ne '4'}">
-											<button type="button" class="btn bg-gray" onclick="onclick_procApprove('4');">승인</button>
-			                                <button type="button" class="btn bg-gray" onclick="onclick_procApprove('3');">반려</button>                            	
+											<button type="button" class="btn bg-gray" onclick="onclick_procApprove('4','${proposalVO.propTypeCode}');">승인</button>
+			                                <button type="button" class="btn bg-gray" onclick="onclick_procApprove('3','');">반려</button>                            	
 		                            	</c:when>
 		                            	<c:when test="${approveVO.aprovalState eq '4' }">
-		                            		<button type="button" class="btn bg-gray" onclick="onclick_procApprove('4');">재등록</button>
+		                            		<button type="button" class="btn bg-gray" onclick="onclick_procApprove('4','');">재등록</button>
 		                            	</c:when>
 		                            </c:choose>								
 								</c:when>
@@ -63,7 +64,7 @@
                                 <a href="/sub.do?menuKey=${menuKey}" class="btn">목록</a>
 							</div>
                         </div>
-                        <p class="content_title">1. 실시 제안정보</p>
+                        <p class="content_title">1. 제안정보</p>
                         <div class="list-wrap">
                             <div class="list-content">
                                 <div class="list-table list">
@@ -289,14 +290,16 @@
                         <div class="list-footer">
                             <div class="list-btns">
 							<c:choose>
+							
+							
 								<c:when test="${sessionCompNo eq approveVO.detailList[i-1].comNo}">
 		                            <c:choose>
 		                            	<c:when test="${approveVO.aprovalState ne '3' && approveVO.aprovalState ne '4'}">
-											<button type="button" class="btn bg-gray" onclick="onclick_procApprove('4');">승인</button>
-			                                <button type="button" class="btn bg-gray" onclick="onclick_procApprove('3');">반려</button>                            	
+											<button type="button" class="btn bg-gray" onclick="onclick_procApprove('4','${proposalVO.propTypeCode}');">승인</button>
+			                                <button type="button" class="btn bg-gray" onclick="onclick_procApprove('3','');">반려</button>                            	
 		                            	</c:when>
 		                            	<c:when test="${approveVO.aprovalState eq '4' }">
-		                            		<button type="button" class="btn bg-gray" onclick="onclick_procApprove('4');">재등록</button>
+		                            		<button type="button" class="btn bg-gray" onclick="onclick_procApprove('4','');">재등록</button>
 		                            	</c:when>
 		                            </c:choose>								
 								</c:when>
@@ -305,6 +308,7 @@
                             </div>
                         </div>
 						<div class="line_bar mg-t20"></div>
+						
 						<p class="content_title">승인/반려_결재이력</p>
 						<div class="list-wrap">
 							<div class="list-content">
@@ -336,9 +340,10 @@
 										<tbody>
 										<c:forEach var="item" items="${approveVO.detailList}" varStatus="status">
 											<fmt:parseNumber var="scoreTotal" type="number" value="${item.scoreTotal}" />
+											<fmt:formatDate var="aprovalCompltDate" pattern="yyyy.MM.dd" value="${item.aprovalCompltDate }"/>												
 											<c:if test="${item.aprovalStatCode != null && item.aprovalStatCode ne ''.toString()}">
 												<tr>
-													<td>${item.aprovalStat}(2023.06.30)</td>
+													<td>${item.aprovalStat}(${aprovalCompltDate })</td>
 													<td>${item.userName}</td>
 													<td>${item.comPositionNm }</td>
 													<td>${item.aprovalType}</td>
@@ -366,92 +371,51 @@
 													)</td>
 													<td colspan="5">
 														<div class="comment-btn"><div>${item.aprovalComment}</div>
-														<c:if test="${sessionCompNo eq approveVO.detailList[i-1].comNo and proposalVO.propTypeCode eq 'PPS_TYP_1'.toString() }">
-															<c:if test="${status.last and item.aprovalStatCode eq '4'}">
-																<c:choose>
-																	<c:when test="${(item.comPosition eq 'FC0' or item.comPosition eq 'GB1') and scoreTotal >= 70}">
-																		<input type="hidden" value="${item.comNo}">
-																		<button type="button" class="btn bg-gray btn-req-approval">결재의뢰</button>																	
-																	</c:when>
-																	<c:when test="${item.comPosition eq 'FG0' and scoreTotal >= 90}">
-																		<input type="hidden" value="${item.comNo}">
-																		<button type="button" class="btn bg-gray btn-req-approval">결재의뢰</button>																	
-																	</c:when>																	
-																</c:choose>
-															</c:if>
-														</c:if>
-														</div>														
+														
+														</div>
 													</td>
-												</tr>	
-												<c:if test="${sessionCompNo eq approveVO.detailList[i-1].comNo and proposalVO.propTypeCode eq 'PPS_TYP_1'.toString() }">
+												</tr>
+												
+											<c:if test="${sessionCompNo eq approveVO.detailList[i-1].comNo and proposalVO.propTypeCode eq 'PPS_TYP_1'.toString() }">
+											
 													<c:if test="${status.last and item.aprovalStatCode eq '4'}">
-														<c:choose>
-															<c:when test="${(item.comPosition eq 'FC0' or item.comPosition eq 'GB1') and scoreTotal >= 70}">
 																<tr>
 																	<th rowspan="2"><span class="asterisk">*</span>결재자 지정</th>
-																	<th colspan="5" class="align-center">소속</th>
-																	<th class="align-center">이름</th>
+																	<th colspan="2" class="align-center">소속</th>
+																	<th colspan="2" class="align-center">이름</th>
 																	<th class="align-center">직위</th>
 																	<th class="align-center">직책</th>
 																	<th class="align-center">Belt</th>
+																	<th colspan="2" class="align-center">결재의뢰</th>
 																</tr>
 																<tr>
-																	<td colspan="5" class="pd3">
-					                                                    <div class="row">
+																	<td colspan="2" id="text-approval-group"></td>
+																	<td colspan="2" class="pd3">
+																		<div class="row">
 					                                                        <div class="col s12 input-text search">
 					                                        					<input type="hidden" id="input-approval-code" name="input-approval-code"/>
-					                                                        	<input type="hidden" id="input-approval-name" name="input-approval-name"/>
 					                                                        	<input type="hidden" id="input-approval-user" name="input-approval-user"/>
 					                                                            <input type="hidden" id="input-approval-level" name="input-approval-level"/>
 					                                                            <input type="hidden" id="input-approval-duty" name="input-approval-duty"/>
 					                                                            <input type="hidden" id="input-approval-belt" name="input-approval-belt"/>
+					                                                            <input type="hidden" id="input-approval-group" name="input-approval-group"/>
 					                                                            <input type="hidden" id="input-approval-group-code" name="input-approval-group-code"/>
-					                                                            <input type="text" id="input-approval-group" name="input-approval-group" value="" readonly="readonly" style="background-color: #FFF;"/>
+					                                                            <input type="text" id="input-approval-name" name="input-approval-name" value="" readonly="readonly" style="background-color: #FFF;"/>
 					                                                            <button type="button" class="btn-approval-member-search-modal">검색</button>
 					                                                        </div>
 					                                                    </div>
-					                                                </td>
-																	<td id="text-approval-name"></td>
+																	</td>
 																	<td id="text-approval-level"></td>
 																	<td id="text-approval-duty"></td>
 																	<td id="text-approval-belt"></td>
+																	<td colspan="2" class="align-center">
+																		<input type="hidden" value="${item.comNo}">
+																		<button type="button" class="btn bg-gray btn-req-approval">결재의뢰</button>
+																	</td>
 																</tr>															
-															</c:when>
-															<c:when test="${item.comPosition eq 'FG0' and scoreTotal >= 90}">
-																<tr>
-																	<th rowspan="2"><span class="asterisk">*</span>결재자 지정</th>
-																	<th colspan="5" class="align-center">소속</th>
-																	<th class="align-center">이름</th>
-																	<th class="align-center">직위</th>
-																	<th class="align-center">직책</th>
-																	<th class="align-center">Belt</th>
-																</tr>
-																<tr>
-																	<td colspan="5" class="pd3">
-					                                                    <div class="row">
-					                                                        <div class="col s12 input-text search">
-					                                        					<input type="hidden" id="input-approval-code" name="input-approval-code"/>
-					                                                        	<input type="hidden" id="input-approval-name" name="input-approval-name"/>
-					                                                        	<input type="hidden" id="input-approval-user" name="input-approval-user"/>
-					                                                            <input type="hidden" id="input-approval-level" name="input-approval-level"/>
-					                                                            <input type="hidden" id="input-approval-duty" name="input-approval-duty"/>
-					                                                            <input type="hidden" id="input-approval-belt" name="input-approval-belt"/>
-					                                                            <input type="hidden" id="input-approval-group-code" name="input-approval-group-code"/>
-					                                                            <input type="text" id="input-approval-group" name="input-approval-group" value="" readonly="readonly" style="background-color: #FFF;"/>
-					                                                            <button type="button" class="btn-approval-member-search-modal">검색</button>
-					                                                        </div>
-					                                                    </div>
-					                                                </td>
-																	<td id="text-approval-name"></td>
-																	<td id="text-approval-level"></td>
-																	<td id="text-approval-duty"></td>
-																	<td id="text-approval-belt"></td>
-																</tr>															
-															</c:when>
-														</c:choose>
 													</c:if>
-												</c:if>																						
-											</c:if>
+												</c:if>
+												</c:if>						
 											</c:forEach>
 										</tbody>
 									</table>									
@@ -466,57 +430,73 @@
 <script type="text/javascript">
 
 $(document).ready(function(){
+	
+	
+	
 	//결재자 조회
 	$('.btn-approval-member-search-modal').off('click').on('click', function(){
 		popEmp.init();
 		
 		popEmp.returnObjId = $('#input-proposal-memo');
 		popEmp.returnFunc = setApprovalMemberInfo;
-		
 		popEmp.open();			
 	});
 	
 	$('.btn-req-approval').off('click').on('click', function(){
+		
+		let strPropTypeCode = '${proposalVO.propTypeCode}';
+		
 		if($('#input-approval-name').val() == null || $('#input-approval-name').val() == ''){
-			alert('결재자를 선택해 주세요.');
+			alert('결재자를 선택해 주세요.1');
 			return false;
 		}
 		
 		if($('#input-approval-user').val() == null || $('#input-approval-user').val() == ''){
-			alert('결재자를 선택해 주세요.');
+			alert('결재자를 선택해 주세요.2');
 			return false;
 		}
 		
 		if($('#input-approval-level').val() == null || $('#input-approval-level').val() == ''){
-			alert('결재자를 선택해 주세요.');
+			alert('결재자를 선택해 주세요.3');
 			return false;
 		}
-		
+		/*
 		if($('#input-approval-duty').val() == null || $('#input-approval-duty').val() == ''){
-			alert('결재자를 선택해 주세요.');
+			alert('결재자를 선택해 주세요.4');
 			return false;
 		}
+		*/
 		
 		if($('#input-approval-group-code').val() == null || $('#input-approval-group-code').val() == ''){
-			alert('결재자를 선택해 주세요.');
+			alert('결재자를 선택해 주세요.5');
 			return false;
 		}
 		
 		if($('#input-approval-group').val() == null || $('#input-approval-group').val() == ''){
-			alert('결재자를 선택해 주세요.');
+			alert('결재자를 선택해 주세요.6');
 			return false;
 		}
 		
-		if($('.detail-com-position').val() == 'FG0'){
-			if($('#input-approval-group-code').val() != '58184745'){
-				alert('제안 점수가90점이상입니다 생산솔루션 팀장을 결재자로 지정해 주세요.');
-				return false;
-			}
-			if($('#input-approval-duty').val() != 'FG0'){
-				alert('제안 점수가90점이상입니다 생산솔루션 팀장을 결재자로 지정해 주세요.');
-				return false;				
+		// 실지 제인일때만 결재자 지정 프로세스를 실행한다.
+		/*
+		if(strPropTypeCode === "PPS_TYP_1"){
+			if($('.detail-com-position').val() == 'FG0' && $('.detail-com-departcode').val() == '58184745'){
+				if($('#input-approval-user').val() != '00209453'){
+					alert('4차평가자는 생산기술 담당으로 결재자로 지정해 주세요');
+					return false;
+				}		
+			}else if($('.detail-com-position').val() == 'FG0'){
+				if($('#input-approval-group-code').val() != '58184745'){
+					alert('제안 점수가90점이상입니다 생산솔루션 팀장을 결재자로 지정해 주세요.');
+					return false;
+				}
+				if($('#input-approval-duty').val() != 'FG0'){
+					alert('제안 점수가90점이상입니다 생산솔루션 팀장을 결재자로 지정해 주세요.');
+					return false;				
+				}
 			}
 		}
+		*/
 		
 		$.post('/apprv/approveProposalReq.do', { 
 			propUser: $($(this).prev()).val(),
@@ -534,41 +514,23 @@ $(document).ready(function(){
 });
 
 function setApprovalMemberInfo(el, d){
-	if(d.comPosition == null || d.comPosition == ''){
-		alert('결재권한이 없는 사용자 입니다.\n다시 선택해 주세요.');
-		$('#text-approval-name').html('');
-		$('#text-approval-level').html('');
-		$('#text-approval-duty').html('');
-		$('#text-approval-belt').html('');
-		
-		$('#input-approval-code').val('');
-		$('#input-approval-name').val('');
-		$('#input-approval-user').val('');
-		$('#input-approval-level').val('');
-		$('#input-approval-duty').val('');
-		$('#input-approval-belt').val('');
-		$('#input-approval-group-code').val('');
-		$('#input-approval-group').val('');
-		return false;
-	}
-	
-	$('#text-approval-name').html(d.userName);
+	console.log(JSON.stringify(d));
+	$('#text-approval-group').html(d.deptFullName);
 	$('#text-approval-level').html(d.comJobxNm);
 	$('#text-approval-duty').html(d.comPositionNm);
 	$('#text-approval-belt').html(d.comCertBeltNm);
 	
 	$('#input-approval-code').val(d.comNo);
-	$('#input-approval-name').val(d.userName);
+	$('#input-approval-group').val(d.deptFullName);
 	$('#input-approval-user').val(d.comNo);
 	$('#input-approval-level').val(d.comJobx);
 	$('#input-approval-duty').val(d.comPosition);
 	$('#input-approval-belt').val(d.comCertBelt);
 	$('#input-approval-group-code').val(d.comDepartCode);
-	$('#input-approval-group').val(d.deptFullName);
+	$('#input-approval-name').val(d.userName);
 }
 
-
-function onclick_procApprove(gubn){
+function onclick_procApprove(gubn,strPropTypeCode = ''){
 	
 	$("#aprovalState").val(gubn);
 	$(".aproval-state-code").val(gubn);
@@ -577,6 +539,10 @@ function onclick_procApprove(gubn){
 	if(gubn==='4'){ // 승인
 		popup = popApprove; 
 		popup.init();
+		
+		if(strPropTypeCode === "PPS_TYP_2"){
+			popup.setGenAppr();  // 제안 점수표 삭제하기
+		}
 		
 		popup.returnFunc = callback_popApprove;
 		popup.returnObjId = null; //$(obj).closest("td").find("input").attr("id");

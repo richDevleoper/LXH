@@ -63,8 +63,33 @@
 				       PROP_USER, GET_USER_NM(PROP_USER) AS PROP_USER_NM,
 				       NVL(GET_USER_NM(PROP_APPROVER_CODE), '-') AS PROP_APPROVER_NM
 				FROM TB_PROPOSAL_DETAIL	 
+				
 				<where>
 					<choose>
+						<when test="propUserSess != null">
+							PROP_USER = #{propUserSess}
+							<if test="searchPropFromDate != null and searchPropFromDate neq ''.toString() and searchPropToDate != null and searchPropToDate neq ''.toString()">
+								AND PROP_DATE BETWEEN TO_DATE(#{searchPropFromDate}, 'YYYY-MM-DD') AND TO_DATE(#{searchPropToDate}, 'YYYY-MM-DD')
+							</if>							
+							<if test="searchPropCategoryCode != null and searchPropCategoryCode neq ''.toString()">
+								AND PROP_CATEGORY_CODE = #{searchPropCategoryCode}
+							</if>
+							<if test="searchPropName != null and searchPropName neq ''.toString()">
+								AND PROP_NAME LIKE '%'||#{searchPropName}||'%'
+							</if>
+							<if test="searchPropTypeCode != null and searchPropTypeCode neq ''.toString()">
+								AND PROP_TYPE_CODE = #{searchPropTypeCode}
+							</if>
+							<if test="searchPropClassCode != null and searchPropClassCode neq ''.toString()">
+								AND PROP_EVAL_LV_CODE = #{searchPropClassCode} AND PROP_PROP_STAT_CODE = 'PRG_5'
+							</if>
+							<if test="searchPropUser != null and searchPropUser neq ''.toString()">
+								AND PROP_USER = #{searchPropUser}
+							</if>	
+							<if test="searchGroupName != null and searchGroupName neq ''.toString()">
+								AND PROP_GROUP_NAME = #{searchGroupName}
+							</if>
+						</when>
 						<when test="searchPropSeq != null and searchPropSeq > 0">
 							PROP_SEQ = #{searchPropSeq}
 						</when>
@@ -82,10 +107,16 @@
 								AND PROP_TYPE_CODE = #{searchPropTypeCode}
 							</if>
 							<if test="searchPropClassCode != null and searchPropClassCode neq ''.toString()">
-								AND PROP_PROP_STAT_CODE = #{searchPropClassCode}
+								AND PROP_EVAL_LV_CODE = #{searchPropClassCode} AND PROP_PROP_STAT_CODE = 'PRG_5'
+							</if>
+							<if test="searchPropStatCode != null and searchPropStatCode neq ''.toString()">
+								AND PROP_PROP_STAT_CODE = #{searchPropStatCode}
 							</if>
 							<if test="searchPropUser != null and searchPropUser neq ''.toString()">
 								AND PROP_USER = #{searchPropUser}
+							</if>
+							<if test="searchBizPlaceCode != null and searchBizPlaceCode neq ''.toString()">
+								AND PROP_BIZ_PLACE_CODE = #{searchBizPlaceCode}
 							</if>	
 							<if test="searchGroupName != null and searchGroupName neq ''.toString()">
 								AND PROP_GROUP_NAME = #{searchGroupName}
@@ -97,6 +128,7 @@
 		)
 		SELECT T.*
 		FROM PROPOSAL_MASTER T
+		
 	</sql>
 	
 	<sql id="selectProposalMasterInfoWithPaging">
@@ -122,6 +154,7 @@
 	<select id="selectProposalClassByCount" resultType="egovMap">
 		SELECT COUNT(PROP_EVAL_LV_CODE) TOTAL, PROP_EVAL_LV_CODE
 		FROM(<include refid="selectProposalInfo"></include>)
+		WHERE PROP_PROP_STAT_CODE = 'PRG_5' OR PROP_PROP_STAT_CODE = 'PRG_6'
 		GROUP BY PROP_EVAL_LV_CODE
 	</select>
 	
@@ -185,7 +218,7 @@
 			#{propEvalScore, 					jdbcType=VARCHAR},
 			#{propEffectScore, 					jdbcType=VARCHAR},
 			#{propSubsidy, 						jdbcType=VARCHAR},
-			#{propPaymentYn, 					jdbcType=VARCHAR},
+			NVL(#{propPaymentYn, 				jdbcType=VARCHAR}, 'N'),
 			TO_DATE(#{propPaymentDate, 			jdbcType=VARCHAR}, 'YYYY-MM-DD'),
 			TO_DATE(#{propDate, 				jdbcType=VARCHAR}, 'YYYY-MM-DD'),
 			TO_DATE(#{propPracticeCompDate, 	jdbcType=VARCHAR}, 'YYYY-MM-DD'),
@@ -246,4 +279,13 @@
 		FROM TB_CIRCLE_DETAIL A JOIN TB_CIRCLE_MST B ON A.CIR_CODE = B.CIR_CODE 
 		WHERE A.COM_NO = #{comNo, jdbcType=VARCHAR} AND A.DEPT_CODE = #{deptCode, jdbcType=VARCHAR}
 	</select>
+	<select id="selectProposalEmail" resultType="java.lang.String">
+		SELECT 
+			USER_EMAIL
+		FROM 
+			TB_USER_MST 
+		WHERE 
+			COM_NO = #{comNo, jdbcType=VARCHAR}
+	</select>
+	
 </mapper>

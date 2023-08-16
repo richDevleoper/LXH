@@ -52,7 +52,7 @@
 	</sql>
 
 	<select id="selectListCount" resultType="int">
-		SELECT COUNT(*) FROM TB_CODE_GRP T 
+		SELECT COUNT(*) FROM TB_CODE_GRP T
 		<include refid="defCond"></include>
 	</select>
 
@@ -100,7 +100,7 @@
 			</otherwise>
 		</choose>
 		) 
-		where num between #{firstRecordIndex} and #{recordCountPerPage}
+		where num between (#{currentPageNo}*#{recordCountPerPage}+1-#{recordCountPerPage}) and (#{currentPageNo}*#{recordCountPerPage})
 	</select>
 	
 	<select id="selectFullList" resultType="egovMap">

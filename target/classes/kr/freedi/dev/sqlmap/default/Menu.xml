@@ -62,11 +62,11 @@
 	</select>
 	
 	<select id="selectActMenuList" resultMap="menu">
-		SELECT * FROM TB_MENU
+		SELECT * FROM TB_MENU T
 		WHERE MENU_TYP = #{menuTyp}
 		AND ACT_FLG = 'Y'
 		<if test="isAdmin != null and isAdmin != ''">
-		AND NVL(ADM_FLG, 'N') != 'Y'
+		AND exists (select 1 from tb_role_menu where role_no=#{isAdmin} and menu_key=T.menu_key)
 		</if>
 		ORDER BY FKEY, GKEY, OKEY
 	</select>

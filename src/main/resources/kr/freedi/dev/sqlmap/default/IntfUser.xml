@@ -39,7 +39,7 @@
 	       , APPOINTMENT_DATE as appointmentDate
 	       , UPDATE_DATE as updateDate
 	       , REG_DATE  as regDate
-	       , (select count(1) from tb_mngr_user where user_id=T.com_no) as isAdmin
+	       , nvl((select max(role_no) from tb_role_user where com_no=T.COM_NO), 0) as isAdmin
 		from TB_USER_MST T
 		<where>
 			<trim prefixOverrides="AND|OR">

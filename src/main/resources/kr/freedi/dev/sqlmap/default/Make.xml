@@ -92,7 +92,7 @@
 						CIR_REG_NUM,
 						T.DEPT_CODE,
 						T.DEPT_NAME,
-						U.COM_WORK_PLACE,
+						get_code_nm('WPLACE', U.COM_WORK_PLACE) COM_WORK_PLACE,
 						CIR_TCH_COM_NO,
 						GET_USER_NM(CIR_TCH_COM_NO) CIR_TCH_COM_NAME, 
 						CIR_WORK_MEM_NO,
@@ -290,7 +290,9 @@
 					, GET_CODE_NM('POSITION', com_position) com_position_nm            
 					, t.com_cert_belt              
 					, cd_blt.code_nm com_cert_belt_nm
-					, (select count(1) from tb_circle_detail where com_no=T.COM_NO) as circle_join_yn       
+					, (select count(1) from tb_circle_detail where com_no=T.COM_NO) as circle_join_yn
+                    , get_code_nm('JIMU', t.com_jimu) com_jimu
+                    , nvl(T.user_school, '') user_school
               FROM tb_user_mst T
                    LEFT OUTER JOIN tb_code cd_job ON cd_job.code_grp_id='JOBX' AND cd_job.code_id=T.com_jobx
                    LEFT OUTER JOIN tb_code cd_blt ON cd_blt.code_grp_id='LDRBELT' AND cd_blt.code_id=T.com_cert_belt 

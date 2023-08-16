@@ -271,9 +271,9 @@
                                                                             </thead>
                                                                             
                                                                             <tbody>
+                                                                            <c:if test="${reportVO.repMenuCode eq 'REPORT' }" >
                                                                                 <tr>
                                                                                     <td>계획</td>
-                                                                                    
                                                                                     <td class="pd3" colspan="2">
                                                                                         <div class="row">
                                                                                             <div class="col s12 input-text input-date" style="float:none;width:120px;margin:0 auto !important">
@@ -288,8 +288,8 @@
                                                                                             </div>
                                                                                         </div>
                                                                                     </td>
-   
                                                                                 </tr>
+                                                                            </c:if>    
                                                                                 <tr>
                                                                                     <td>실시</td>
                                                                                     <td class="pd3" colspan="2">
@@ -340,33 +340,25 @@
                                                                                 <col style="width:80px">
                                                                                 <col>                                                                                
                                                                                 <col style="width:70px">
+                                                                                <%-- <col style="width:70px">
                                                                                 <col style="width:70px">
-                                                                                <col style="width:70px">
-                                                                                <col style="width:70px">
+                                                                                <col style="width:70px"> --%>
                                                                             </colgroup>
                                                                             <tbody>
                                                                                 <tr>
                                                                                     <th colspan="4">Finish 요약</th>                                                                                    
-                                                                                    <th colspan="3">활동결과(실적)</th>
+                                                                                    <!-- <th colspan="3">활동결과(실적)</th> -->
                                                                                 </tr>
                                                                                 <tr>
-                                                                                    <td rowspan="2" colspan="4">
-                                                                                        <div class="input-text align-left">
+                                                                                    <td colspan="4">
+                                                                                        <div class="input-text align-left" style="min-height: 40px;">
                                                                                             ${item.repFinishSummary}
                                                                                         </div>
-                                                                                    </td>                                                                                    
-                                                                                    <td>CTQ/CTP</td>
-                                                                                    <td>KPI</td>
-                                                                                    <td>예상성과</td>                                                                                        
-                                                                                </tr>
-                                                                                <tr>              
-                                                                                    <td><div class="col s2 input-text pd3">${item.repCtqCtp}</div></td>
-                                                                                    <td><div class="col s2 input-text pd3" style="width:100%">${item.repKpi}</div></td>
-                                                                                    <td><div class="col s2 input-text pd-r10" style="width:100%">${item.repExpectationResult}</div></td>                                 
+                                                                                    </td>                                                                                                                                                                            
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <th colspan="2" class="pd-r10 align-right"> 첨부파일 </th>
-                                                                                    <td colspan="5" style="text-align: left;">
+                                                                                    <td colspan="2" style="text-align: left;">
                                                                                     	<div class="col s12 input-text file">
 	                                                                                    	
 								                                                            <!-- [kr.freedi.dev.attachfile.domain.AttachFileVO@790a7e68[fileId=reportDetail_7_167,fileSeq=1,fileGrp=reportDetail

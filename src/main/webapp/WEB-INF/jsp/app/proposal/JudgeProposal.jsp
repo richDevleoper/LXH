@@ -34,7 +34,7 @@
 	                                        </div>
                                       		<div class="pd-l10 col s9 input-text search">
                                       			<form:input path="searchGroupCode" type="hidden" id="input-proposal-group-code" name="input-proposal-group-code"/>
-                                      			<form:input type="text" id="input-proposal-group" name="input-proposal-group" readonly="readonly" style="background-color: #FFF;" path="searchGroupName"/>
+                                      			<form:input type="text" id="input-proposal-group" name="input-proposal-group" readonly="true" style="background-color: #FFF;" path="searchGroupName"/>
                                       			<button type="button" class="btn-proposal-group-search-modal">검색</button>                               		
                                       		</div>
 	                                    </div>
@@ -228,6 +228,16 @@
 			popEmp.open();
 		});
 		
+		// 조직 조회 팝업
+		$('.btn-proposal-group-search-modal').off('click').on('click', function(){
+			popDept.init();
+			
+			popDept.returnObjId = $('#input-proposal-group');
+			popDept.returnFunc = setProposalGroupInfo;
+			
+			popDept.open();			
+		});
+		
 		$('#button-search').off('click').on('click', function(){
 			onclick_search();
 		});
@@ -243,8 +253,20 @@
 	}
 	
 	function onchange_recordCountPerPage(vCount){
+		$("#currentPageNo").val("1");
 		$("#recordCountPerPage").val(vCount);
 		onclick_search();// 검색 '조회'버튼 클릭
+	}
+	
+	// 조직정보 매핑
+	function setProposalGroupInfo(el, d){
+		if(d != null){
+			$('#input-proposal-group').val(d.deptName);
+			$('#input-proposal-group-code').val(d.comCode);			
+		}else{
+			$('#input-proposal-group').val('');
+			$('#input-proposal-group-code').val('');	
+		}
 	}
 	
 	function onclick_poposalInfo(propSeq, propTypeCode){

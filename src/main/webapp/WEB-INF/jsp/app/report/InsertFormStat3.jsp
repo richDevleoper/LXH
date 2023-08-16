@@ -21,7 +21,7 @@
 	<script type="text/javascript" src="<c:url value='/def/attachfile/js/jquery.iframe-transport.js'/>"></script>
 	<script type="text/javascript" src="<c:url value='/def/attachfile/js/jquery.fileupload.js'/>"></script>
 	<script type="text/javascript" src="<c:url value='/def/attachfile/js/jquery.fileupload-process.js'/>"></script>
-	<script type="text/javascript" src="<c:url value='/def/attachfile/js/jquery.fileupload-validate.js'/>"></script>
+	<script type="text/javascript" src="<c:url value='/def/attachfile/js/jquery.fileupload-validate.js?ver=1'/>"></script>
 	<script type="text/javascript" src="<c:url value='/def/attachfile/js/jquery.fileupload-ui.js'/>"></script>
 	<script type="text/javascript" src="<c:url value='/def/attachfile/js/jquery.fileupload-jquery-ui.js'/>"></script>
 	<script type="text/javascript" src="<c:url value='/def/attachfile/js/attachfile-fileuploader.js'/>"></script>
@@ -37,6 +37,7 @@
 		<form:hidden path="repCode" />
 		<form:hidden path="repMenuCode" />
 		<form:hidden path="repCurrStepCode" />
+		<form:hidden path="repCurrApproveState" />
 		<form:hidden path="mode" />
                         <!-- breadcrumb -->
                         <div class="breadcrumb">
@@ -228,7 +229,7 @@
                                                                             <thead>
                                                                                 <tr>
                                                                                     <th>구분</th>
-                                                                                    <th><span id="lbl6sigmaStepNm_${status.count}"></span></th>
+                                                                                    <th><span id="lbl6sigmaStepNm_${status.count}" class="lbl-6sigma-step-nm"></span></th>
                                                                                     <th colspan="4">활동요약</th>
                                                                                 </tr>
                                                                             </thead>
@@ -243,7 +244,7 @@
 		                                                                                        	// 아직 진행되지 않은 step의 토글 방지
 			                                                                                        $(document).ready(function(){
 		                                                                                        		let objNm = "#toggleBox_${status.count}";
-		                                                                                            	$(objNm).find("input, textarea").prop("disabled", true); // 완료된 항목 disable 시키기
+		                                                                                            	$(objNm).find("input, textarea, i").prop("disabled", true); // 완료된 항목 disable 시키기
 		                                                                                        	});
 		                                                                                        	</script>
 	                                                                                        	</c:when>
@@ -284,10 +285,10 @@
                                                                                                             <td class="pd3">
                                                                                                                 <div class="row">
                                                                                                                     <div class="col s12 input-text input-date">
+	<form:input type="text" path="repDetailList[${status.index}].repPlanStartDate" cssClass="datepicker validate[required]" />
 	<form:input type="hidden" path="repDetailList[${status.index}].repSeq"/>
 	<form:input type="hidden" path="repDetailList[${status.index}].repStepCode"/>
 	<form:input type="hidden" path="repDetailList[${status.index}].repStatus"/>                                                                                                                    
-	<form:input type="text" path="repDetailList[${status.index}].repPlanStartDate" cssClass="datepicker validate[required]" />
                                                                                                                         <i class="ico calendar"></i>
                                                                                                                     </div>
                                                                                                                 </div>
@@ -346,7 +347,7 @@
                                                                                                      	<c:when test="${reportVO.repStatusCode eq '6' || reportVO.repStatusCode eq '7'}">
 	                                                                                                        <tr  style="height: 50px;">
 	                                                                                                            <th colspan="2" class="pd-r10 align-right">
-	                                                                                                            	첨부파일
+	                                                                                                            	<span class="asterisk">*</span> 첨부파일
 	                                                                                                            </th>
 	                                                                                                            <td colspan="5">
 	                                                                                                                <div class="file-drop-box align-left">
@@ -360,10 +361,17 @@
                                                                                                      	<c:otherwise>
 	                                                                                                        <tr>
 	                                                                                                            <th colspan="2" class="pd-r10 align-right">
-	                                                                                                            	첨부파일<br>(Up to 10)
+	                                                                                                            	<span class="asterisk">*</span> 첨부파일<br>(Up to 10)
 	                                                                                                            </th>
-	                                                                                                            <td colspan="5">
-	                                                                                                                <div class="file-drop-box">
+	                                                                                                            <td colspan="5" class="align-left">
+	                                                                                                            <c:choose> 
+	                                                                                        						<c:when test="${item.repStatus eq '0' || item.repStatus eq '2'}">
+	                                                                                        							<c:forEach var="item_sub" items="${item.repDetailFileList}" varStatus="status">
+	                                                                                                                   		<a href="/attachfile/downloadFile.do?fileId=${item_sub.fileId}&fileSeq=${item_sub.fileSeq}" title="다운받기">${item_sub.fileNm}</a><a href="/attachfile/downloadFile.do?fileId=${item_sub.fileId}&fileSeq=${item_sub.fileSeq}" title="다운받기" class="btn color gray mg-l15">다운받기</a><br>
+	                                                                                                                    </c:forEach>
+	                                                                                        						</c:when>
+	                                                                                        						<c:when test="${item.repStatus eq '1'}">
+	                                                                                        						<div class="file-drop-box">
 	                                                                                                                   <div class="col s12 input-text file">
 																                                                            <attachfile:fileuploader
 																															objectId="fileUpload_report_sub_${status.count}"
@@ -372,10 +380,15 @@
 																															fileId="reportDetail_${status.count}_${reportVO.repCode}"
 																															fileGrp="reportDetail"
 																															autoUpload="false"
-																															maxFileSize="${15*1000000}"
+																															maxFileSize="${30*1000000}"
 																															maxNumberOfFiles="10"/>
 																                                                        </div>
 	                                                                                                                </div>
+	                                                                                        						</c:when>
+	                                                                                                                <c:otherwise>
+	                                                                                                                	
+	                                                                                                                </c:otherwise>
+	                                                                                                            </c:choose>
 	                                                                                                            </td>
 	                                                                                                        </tr>                                                                                                     	
                                                                                                      	</c:otherwise>
@@ -528,7 +541,7 @@
                                                                                     </div></td>                                 
                                                                                 </tr>
                                                                                 <tr>
-                                                                                    <th colspan="2" class="pd-r10 align-right"> 첨부파일<br> (Up to 10) </th>
+                                                                                    <th colspan="2" class="pd-r10 align-right"> <span class="asterisk">*</span> 첨부파일<br> (Up to 10) </th>
                                                                                     <td colspan="5" style="text-align: left;">
                                                                                     	<div class="col s12 input-text file">
 								                                                            <attachfile:fileuploader
@@ -538,7 +551,7 @@
 																							fileId="reportDetail_7_${reportVO.repCode}"
 																							fileGrp="reportDetail"
 																							autoUpload="false"
-																							maxFileSize="${15*1000000}"
+																							maxFileSize="${30*1000000}"
 																							maxNumberOfFiles="5"/>
 								                                                        </div>                                                                                    
                                                                                     </td>
@@ -764,24 +777,31 @@ function onchange_resultType(obj){
 			                                               	</script>                                                        
                                                         	<form:input type="hidden" cssClass="result-code" path="repResultList[${status.index}].repResultCode"/>
                                                         	<form:input type="hidden" cssClass="result-report-code" path="repResultList[${status.index}].repCode"/>
-                                                        
-                                                        <c:choose>  
-															<c:when test="${status.first}">
-																<form:select path="repResultList[${status.index}].repResultTypeCode" title="성과항목을 선택하세요" cssClass="only-first validate[required]" onchange="onchange_resultType(this)">
-	                                                            <c:forEach var="option" items="${codeResultTy}" >
-		                                                            <form:option value="${option.codeId}" label="${option.codeNm}" />
-		                                                        </c:forEach>    
-	                                                            </form:select>
-															</c:when>
-															<c:otherwise>
-																<form:select path="repResultList[${status.index}].repResultTypeCode" title="성과항목을 선택하세요" onchange="onchange_resultType(this)">
-	                                                            <c:forEach var="option" items="${codeResultTy}" >
-		                                                            <form:option value="${option.codeId}" label="${option.codeNm}" />
-		                                                        </c:forEach>    
-	                                                            </form:select>
-															</c:otherwise>
-														</c:choose>
-                                                            
+	                                                        <c:choose>
+																<c:when test="${reportVO.repMenuCode eq 'TEAM'}">
+																	<form:select path="repResultList[${status.index}].repResultTypeCode" title="성과항목을 선택하세요" cssClass="only-first validate[required]" onchange="onchange_resultType(this)">
+																		<form:option value="8" label="영업이익" />
+																	</form:select>
+																</c:when>
+																<c:otherwise>
+																	<c:choose>
+																		<c:when test="${status.first}">
+																			<form:select path="repResultList[${status.index}].repResultTypeCode" title="성과항목을 선택하세요" cssClass="only-first validate[required]" onchange="onchange_resultType(this)">
+																				<c:forEach var="option" items="${codeResultTy}">
+																					<form:option value="${option.codeId}" label="${option.codeNm}" />
+																				</c:forEach>
+																			</form:select>
+																		</c:when>
+																		<c:otherwise>
+																			<form:select path="repResultList[${status.index}].repResultTypeCode" title="성과항목을 선택하세요" onchange="onchange_resultType(this)">
+																				<c:forEach var="option" items="${codeResultTy}">
+																					<form:option value="${option.codeId}" label="${option.codeNm}" />
+																				</c:forEach>
+																			</form:select>
+																		</c:otherwise>
+																	</c:choose>
+																</c:otherwise>
+															</c:choose>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -961,7 +981,7 @@ function onchange_resultType(obj){
                                         </colgroup>
                                         <tbody>
                                             <tr>
-                                                <th>첨부파일 (신규/수정)</th>
+                                                <th><span class="asterisk">*</span> 첨부파일 (신규/수정)</th>
                                                 <td>
                                                     <div class="row">
                                                         <div class="col s12 input-text file">
@@ -972,14 +992,14 @@ function onchange_resultType(obj){
 															fileId="report_${reportVO.repCode}"
 															fileGrp="report"
 															autoUpload="false"
-															maxFileSize="${15*1000000}"
+															maxFileSize="${30*1000000}"
 															maxNumberOfFiles="10"/>
                                                         </div>
                                                     </div>
                                                 </td>
                                             </tr>
                                             <tr style="display:none;">
-                                                <th>첨부파일 (조회)</th>
+                                                <th><span class="asterisk">*</span>첨부파일 (조회)</th>
                                                 <td>
                                                     <div class="file-link">
                                                         <ul>
@@ -995,22 +1015,31 @@ function onchange_resultType(obj){
                         </div>
                         <div class="list-footer">
                             <div class="list-btns">
+                            
 								<c:choose>
-									<c:when test="${reportVO.repStatusCode eq '2' || reportVO.repStatusCode eq '9'}">	<!-- 선정중 -->
+									<c:when test="${reportVO.repCurrApproveState eq '2'}">	<!-- 현재 결재상태가 미결인 건.-->
+										<!-- 선정중 -->
+										<button type="button" class="btn bg-gray" id="btnCancelApproval">결재취소</button>
+									</c:when>
+									<c:when test="${reportVO.repStatusCode eq '2' || reportVO.repStatusCode eq '9'}">	
 										<!-- 선정중 -->
 										<button type="button" class="btn bg-gray" id="btnCancelApproval">결재취소</button>
 									</c:when>
 									<c:when
-										test="${reportVO.repStatusCode eq '3' || reportVO.repStatusCode eq '4'|| reportVO.repStatusCode eq '5'}">
+										test="${reportVO.repStatusCode eq '3' || reportVO.repStatusCode eq '4'|| reportVO.repStatusCode eq '5'}"> <!-- 3 : 선정완료, 4:진행중(on) 5:진행중(OFF) -->
 										<!-- 진행중 -->
 										<button type="button" class="btn bg-gray" id="btnReqApproval">결재의뢰</button>
 										<button type="button" class="btn bg-gray" id="btnReqDrop">Drop신청</button>
 									</c:when>
-									<c:when test="${reportVO.repStatusCode eq '6' || reportVO.repStatusCode eq '7'}"> <!-- Drop -->
+									<c:when test="${reportVO.repStatusCode eq '6' || reportVO.repStatusCode eq '7'}"> <!-- Drop, 완료 -->
 									
 									</c:when>
 									<c:when test="${reportVO.repStatusCode eq '8'}"> <!-- 반려 -->
 										<button type="button" class="btn bg-gray" id="btnReqApproval">결재 재요청</button>
+										<button type="button" class="btn bg-gray" id="btnDelete">삭제</button>
+									</c:when>
+									<c:when test="${reportVO.repStatusCode eq '10'}"> <!-- 6SIG -->
+										<button type="button" class="btn bg-gray" id="btnReqApproval6Sig">결재 재요청</button>
 										<button type="button" class="btn bg-gray" id="btnDelete">삭제</button>
 									</c:when>
 									<c:otherwise>
@@ -1020,7 +1049,9 @@ function onchange_resultType(obj){
 											<button type="button" class="btn bg-gray" id="btnDelete">삭제</button>
 										</c:if>
 									</c:otherwise>
-								</c:choose>                          
+								</c:choose>
+
+							                          
                                 <a href="./list.do?menuKey=${menuKey}" class="btn">목록</a>
                             </div>
                         </div>
@@ -1210,6 +1241,14 @@ function onchange_resultType(obj){
 			};
 		});
 		
+		$("#btnReqApproval6Sig").off("click").on("click", function(){
+			if($("#defaultForm").validationEngine('validate')){
+				//$("#repStatusCode").val("2"); // 상태 임시저장 으로 저장
+				$("#defaultForm")[0].submit();	
+			};
+		});
+		
+		
 		// 삭제버튼
 		$("#btnDelete").off("click").on("click", function(){
 			if(confirm("삭제하시겠습니까?")){
@@ -1244,6 +1283,7 @@ function onchange_resultType(obj){
 			callPopup_searchLeader(this);
 		});
 
+		
 		$("#defaultForm").validationEngine('attach', {
 			unbindEngine:false,
 			validationEventTrigger: "submit",
@@ -1259,9 +1299,20 @@ function onchange_resultType(obj){
 						alert("과제등록서 첨부파일이 등록되지 않았습니다. \n파일 선택 후 '전체첨부' 혹은 '첨부' 버튼을 클릭하시고 진행해주세요.");
 						return false;
 					}
+
+<c:if test="${reportVO.repDivisionCode eq '1'}">
+//6시그마 프로세스 진행중이면.
+//해당 단계의 파일 첨부 체크하고 확인하기.
+if($("#fileUploadWrap_${reportVO.repCurrStepCode}").find(".files tr.template-download").length===0){
+	const currStepName = $("#fileUploadWrap_${reportVO.repCurrStepCode}").closest(".list-content").find(".lbl-6sigma-step-nm").text();
+	alert(currStepName+ " 활동 첨부파일이 등록되지 않았습니다. \n파일 선택 후 '전체첨부' 혹은 '첨부' 버튼을 클릭하시고 진행해주세요.");
+	return false;
+}
+</c:if>
 					
-					if(checkLdrBelt(true)){
-						return false;
+					let vRepMenuCode = "${repMenuCode}" 
+					if(vRepMenuCode==="REPORT" && checkLdrBelt(true)){
+						return false; 
 					}
 					
 					if(confirm("저장하시겠습니까?")) {
@@ -1392,7 +1443,20 @@ function onchange_resultType(obj){
 		let cdBusGrpFiltered = cdBusGrp.filter(function(code){
 		    return code.key.startsWith('0'+sectorCode);
 		});
-		setDropDown("repProductClass", cdBusGrpFiltered, true);
+
+		if(sectorCode===""){
+			setDropDown("repProductClass", [], true, "부문을 선택하세요");
+			$("label[for=repProductClass]").parent().find("span").show();
+			$("#repProductClass").addClass("validate[required]");
+		} else if (cdBusGrpFiltered.length===0){
+			setDropDown("repProductClass", [], true, "(해당없음)");
+			$("label[for=repProductClass]").parent().find("span").hide();
+			$("#repProductClass").removeClass("validate[required]");
+		} else {
+			setDropDown("repProductClass", cdBusGrpFiltered, true);
+			$("label[for=repProductClass]").parent().find("span").show();
+			$("#repProductClass").addClass("validate[required]");
+		}
 	}
 	
 	function onchange_ddlRepTypeCode(e){

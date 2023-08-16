@@ -503,6 +503,8 @@
 	            			var data = tr.attr('data');
 	            			data = JSON.parse(decodeURIComponent(data));
 	            			
+	            			
+	            			
     	            		if(this.returnFunc){
     	            			this.returnFunc(this.returnObjId, data); //리턴함수 호출, 초기화 전 객체명 넘기기
     	            			this.close();	// 팝업 Close, 각 파라메터 초기화

@@ -11,6 +11,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import egovframework.rte.fdl.cmmn.exception.FdlException;
@@ -48,7 +49,7 @@ public class KpiService {
 	
 	public JsonArray buildTree(List<EgovMap> list, String parentId) {
 		
-		//System.out.println("BuildTree - " + parentId);
+		System.out.println("BuildTree - " + parentId);
 		
         JsonArray resultArray = new JsonArray();
 
@@ -59,6 +60,8 @@ public class KpiService {
             String id = (String) item.get("deptCode");
             String name = (String) item.get("deptName");
             String parent = (String) item.get("deptUperCode");
+            
+            String[] fieldNames = {"GB1_1","GB1_2","BB1_1","BB1_2","MBB1_1","MBB1_2","BB이상1_1","BB이상1_2","KPI_CNT","GB2_1","GB2_2","BB2_1","BB2_2","MBB2_1","MBB2_2","BB이상2_1","BB이상2_2","GB3_1","GB3_2","BB3_1","BB3_2","MBB3_1","MBB3_2","BB이상3_1","BB이상3_2"};
 
             if ((parentId == null && parent == null) || (parentId != null && parentId.equals(parent))) {
                 JsonObject node = new JsonObject();
@@ -99,17 +102,46 @@ public class KpiService {
         		node.addProperty("BB이상3_2", String.valueOf(item.get("bbuCertRat")));
         		node.addProperty("name5", String.valueOf(item.get("totCnt")));
                 
-                
                 JsonArray children = buildTree(list, id);
                 if (children.size() > 0) {
+                	
+                	for (int ji=0; ji<children.size(); ji++) {
+                		
+                		// node에 children 각 값들을 더하여 node에 반영.
+                		JsonObject tmp = (JsonObject)children.get(ji);
+                		node = this.addChildNodesCount(node, tmp, fieldNames);						
+					}
                     node.add("_children", children);
                 }
+                
+                //System.out.println(node.get("name").getAsString() + " : " + );
+                // 파트 단위는 포함시키지 않음. 마지막 노드 체크(size()>0) 및 끝이 괄호로 끝나는 조직코드는 숫자만 더하고 노드 추가하지 않음.
+                if(node.get("name").getAsString().endsWith(")")) {
+                	System.out.print("# 반영안된노드");
+                	System.out.println(node.get("KPI_CNT").getAsNumber());
+                } else {
+                	//resultArray.add(node);
+                }
                 resultArray.add(node);
+                
             }
         }
         
         return resultArray;
     }
+	
+	
+	// 부모 팀 노드에 자녀 팀 노드의 수치를 합산하여 반영. (6SIG 인재현황, 팀장MBB현황)
+	private JsonObject addChildNodesCount(JsonObject parnet, JsonObject child, String[] fieldNames) {
+		
+		for(int i=0; i<fieldNames.length; i++) {
+			String field = fieldNames[i];
+			int parentAttrValue = Integer.parseInt(parnet.get(field).getAsString()) + Integer.parseInt(child.get(field).getAsString());
+			parnet.addProperty(field, Integer.toString(parentAttrValue));	
+		}
+		
+		return parnet;
+	}
 	
 	public JsonArray getPlanDataTMbb(KpiSearchVO vo) {
 		
@@ -119,9 +151,7 @@ public class KpiService {
 	}
 	
 	public JsonArray buildTMbbTree(List<EgovMap> list, String parentId) {
-		
-		//System.out.println("BuildTree - " + parentId);
-		
+				
         JsonArray resultArray = new JsonArray();
 
         for (int i = 0; i < list.size(); i++) {
@@ -138,7 +168,7 @@ public class KpiService {
 //                	name="생산/기술/R&D/품질";
                 node.addProperty("DEPT_NAME", name);
         		node.addProperty("MBB_23", String.valueOf(item.get("gbCnt1")));
-        		node.addProperty("MBB_CNT", String.valueOf(item.get("gbRat1")));
+        		node.addProperty("MBB_CNT", String.valueOf(item.get("mbbManageCnt2")));
         		node.addProperty("MBB_RATE", String.valueOf(item.get("bbCnt1")));
         		node.addProperty("ST_DIRECT", String.valueOf(item.get("bbRat1")));
         		node.addProperty("ST_DIRECT_RMK", String.valueOf(item.get("mbbCnt1")));
@@ -150,7 +180,6 @@ public class KpiService {
         		node.addProperty("ACT_RATE", String.valueOf(item.get("bbCnt2")));
         		node.addProperty("YPLAN_CNT", String.valueOf(item.get("bbRat2")));
         		node.addProperty("YPLAN_RATE", String.valueOf(item.get("mbbCnt2")));
-                
                 
                 JsonArray children = buildTMbbTree(list, id);
                 if (children.size() > 0) {

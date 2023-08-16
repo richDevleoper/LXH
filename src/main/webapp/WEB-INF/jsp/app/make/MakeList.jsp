@@ -199,6 +199,7 @@ function onclick_search(){
 }
 
 function onchange_recordCountPerPage(vCount){
+	$("#currentPageNo").val("1");
 	$("#recordCountPerPage").val(vCount);
 	onclick_search();// 검색 '조회'버튼 클릭
 }

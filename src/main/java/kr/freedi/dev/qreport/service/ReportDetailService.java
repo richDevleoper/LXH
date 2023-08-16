@@ -52,6 +52,11 @@ public class ReportDetailService {
 		dao.update("ReportDetail.updateStep", vo);
 	}
 	
+	public void updateApprovalMemCode(ReportDetailVO vo) throws Exception {
+		
+		dao.update("ReportDetail.updateApprovalMemCode", vo);
+	}
+	
 	/** 
 	 *  6시그마 다음단계 활성화
 	 *  rep_code	  	과제코드

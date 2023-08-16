@@ -1,5 +1,6 @@
 package kr.freedi.dev.qeducation.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -60,8 +61,9 @@ public class MyEducationController {
 		
 		String myUserId = userSession.getUserId();
 		studentVO.setComNo(myUserId);
-		Map<String, Object> selectMyStatistics = educationService.selectMyStatistics(studentVO);
-		model.addAttribute("selectMyStatistics", selectMyStatistics);
+		//studentVO.setComNo("00205167");
+		List<HashMap<String,Object>> selectMyStatistics = educationService.selectMyStatistics(studentVO);
+		model.addAttribute("myStatisticsList", selectMyStatistics);
 		
 		return "app/education/MyStatusList";
 	}
@@ -145,7 +147,7 @@ public class MyEducationController {
 		return new ObjectMapper().writeValueAsString(studentVO);
 	}
 	
-	//교육신청
+	//교육신청 가능 여부 및 교육 내용값 가져오기
 	@RequestMapping({"/requeststd.do"})
 	public @ResponseBody String requestStd(HttpServletRequest request,
 		   @ModelAttribute("EducationSearchVO") EducationSearchVO searchVO, 
@@ -154,9 +156,9 @@ public class MyEducationController {
 		   @RequestParam Map<String, Object> params,
 		   UserVO userSession)throws Exception {
 		
-		String eduCode   = (String)params.get("eduCode");
+		String eduCode   		= (String)params.get("eduCode");
 		String eduClassDivision = (String)params.get("eduClassDivision");
-		String mode   = (String)params.get("mode");
+		String mode   			= (String)params.get("mode");
 		
 		// 사용자 마스터 정보조회
 		String myUserId = userSession.getUserId();

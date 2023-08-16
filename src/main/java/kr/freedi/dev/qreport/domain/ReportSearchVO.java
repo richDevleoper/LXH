@@ -50,6 +50,8 @@ public class ReportSearchVO extends CommonVO {
 	
 	private String searchTeamMemberName;
 	
+	private String searchUseRefDate; // 활용률 반영년도
+	
 	private String searchFromDt; // 조회기간(시작)
 	
 	private String searchToDt; // 조회기간(끝)
@@ -188,18 +190,24 @@ public class ReportSearchVO extends CommonVO {
 		this.searchDepartName = searchDepartName;
 	}
 
+	public String getSearchUseRefDate() {
+		return searchUseRefDate;
+	}
 
-
+	public void setSearchUseRefDate(String searchUseRefDate) {
+		this.searchUseRefDate = searchUseRefDate;
+	}
 
 	@Override
 	public String toString() {
 		return "ReportSearchVO [searchRepName=" + searchRepName + ", searchDivision=" + searchDivision + ", searchType="
 				+ searchType + ", searchStatus=" + searchStatus + ", searchDepart=" + searchDepart
-				+ ", searchDepartName=" + searchDepartName + ", searchDepartList=" + ", menuCode="
-				+ menuCode + ", searchSectorCode=" + searchSectorCode + ", searchPlaceCode=" + searchPlaceCode
-				+ ", searchActionTypeCode=" + searchActionTypeCode + ", searchLeaderBeltCode=" + searchLeaderBeltCode
-				+ ", searchTeamMemberType=" + searchTeamMemberType + ", searchTeamMemberName=" + searchTeamMemberName
-				+ ", searchFromDt=" + searchFromDt + ", searchToDt=" + searchToDt + ", orderByTyp=" + orderByTyp + "]";
+				+ ", searchDepartName=" + searchDepartName + ", menuCode=" + menuCode + ", searchSectorCode="
+				+ searchSectorCode + ", searchPlaceCode=" + searchPlaceCode + ", searchActionTypeCode="
+				+ searchActionTypeCode + ", searchLeaderBeltCode=" + searchLeaderBeltCode + ", searchTeamMemberType="
+				+ searchTeamMemberType + ", searchTeamMemberName=" + searchTeamMemberName + ", searchUseRefDate="
+				+ searchUseRefDate + ", searchFromDt=" + searchFromDt + ", searchToDt=" + searchToDt + ", orderByTyp="
+				+ orderByTyp + "]";
 	}
 	
 }

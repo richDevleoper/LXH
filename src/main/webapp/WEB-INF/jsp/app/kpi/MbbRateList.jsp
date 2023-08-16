@@ -79,7 +79,9 @@
                     
       
     <script>
-		var tableDataNested = [
+    
+    	var tableDataNested = ${tableData};
+		/* var tableDataNested = [
             {id: 101, name:"생산/기술/R&D/품질",name2:"47",data3_1:"26",data3_2:"15",data4_1:"11",data4_2:"-",data4_3:"26",data4_4:"-",data4_5:"26",data4_6:"-",data5_1:"26",data5_2:"55",data6_1:"26",data6_2:"+55"},
 			{id: 102, name:"창호 사업부",name2:"47",data3_1:"26",data3_2:"15",data4_1:"11",data4_2:"-",data4_3:"26",data4_4:"-",data4_5:"26",data4_6:"-",data5_1:"26",data5_2:"55",data6_1:"26",data6_2:"+55",
                 _children:[
@@ -106,7 +108,7 @@
                 ]
             },
             {id: 110, name:"생산/기술/R&D/품질 外",name2:"47",data3_1:"26",data3_2:"15",data4_1:"11",data4_2:"-",data4_3:"26",data4_4:"-",data4_5:"26",data4_6:"-",data5_1:"26",data5_2:"55",data6_1:"26",data6_2:"+55"},
-		];
+		]; */
 
 		$(document).ready(init);
 		function init(){
@@ -117,38 +119,33 @@
 				dataTreeStartExpanded:true,
 	            columnHeaderVertAlign:"middle", //align header contents to bottom of cell
 				columns:[
-	                {title:"대상구분", field:"name",headerSort:false, width:160, cssClass: "link-cell", cellClick:onclickCell, frozen: true},
-	                {title:"‘${fn:substring(searchVO.searchYear,2,4)}MBB 인원", field:"name2",headerSort:false},
+	                {title:"대상구분", field:"DEPT_NAME",headerSort:false, width:160, cssClass: "link-cell", cellClick:onclickCell, frozen: true},
+	                {title:"‘${fn:substring(searchVO.searchYear,2,4)}MBB 인원", field:"MBB_23",headerSort:false},
 	                {//create column group
 	                    title:"‘${fn:substring(searchVO.searchYear,2,4)}년 계획",field:"name3",
 	                    columns:[
-	                        {title:"인원", field:"data3_1",headerSort:false, width:40},
-	                        {title:"율(%)", field:"data3_2",headerSort:false, width:40},
+	                        {title:"인원(명)", field:"MBB_CNT",headerSort:false, width:60},
+	                        {title:"율(%)", field:"MBB_RATE",headerSort:false, width:40},
 	                    ],
 	                },
 	                {//create column group
 	                    title:"활동 현황",field:"name4",
 	                    columns:[
-	                        {title:"직접 수행",field:"data4_1",headerSort:false, width:80},
-	                        {title:"비고(직접수행)",field:"data4_2",headerSort:false, width:100},
-	                        {title:"지원MBB",field:"data4_3",headerSort:false, width:80},
-	                        {title:"비고(지원MBB활동)",field:"data4_4",headerSort:false, width:130},
-	                        {title:"팀장MBB",field:"data4_5",headerSort:false, width:80},
-	                        {title:"비고(팀장MBB활동)",field:"data4_6",headerSort:false, width:130}
-	                    ],
-	                },
-	                {//create column group
-	                    title:"활동인원(계)",field:"name5",
-	                    columns:[
-	                    {title:"인원(명)", field:"data5_1",headerSort:false, width:60},
-	                        {title:"활용율(%)", field:"data5_2",headerSort:false, width:80},
+	                        {title:"직접 수행인원",field:"ST_DIRECT",headerSort:false, width:80 },
+	                        {title:"비고(직접수행)",field:"ST_DIRECT_RMK",headerSort:false, width:100},
+	                        {title:"지원MBB인원",field:"ST_SUPORT",headerSort:false, width:80},
+	                        {title:"비고(지원MBB활동)",field:"ST_SUPORT_RMK",headerSort:false, width:130},
+	                        {title:"팀장MBB인원",field:"ST_TMBB",headerSort:false, width:80},
+	                        {title:"비고(팀장MBB활동)",field:"ST_TMBB_RMK",headerSort:false, width:130},
+	                        {title:"활동인원(명)", field:"ACT_CNT",headerSort:false, width:80},
+	                        {title:"활용율(%)", field:"ACT_RATE",headerSort:false, width:80},
 	                    ],
 	                },
 	                {//create column group
 	                    title:"계획대비(연간)",field:"name6",
 	                    columns:[
-	                    {title:"인원(명)", field:"data6_1",headerSort:false, width:60},
-	                        {title:"활용율(%)", field:"data6_2",headerSort:false, width:80},
+	                    {title:"인원(명)", field:"YPLAN_CNT",headerSort:false, width:60},
+	                        {title:"활용율(%)", field:"YPLAN_RATE",headerSort:false, width:80},
 	                    ],
 	                }
 	            ],
@@ -164,9 +161,8 @@
 		}
 		
 		function onclickCell(e, cell){
-			location.href="MbbRateView.do?idx="+cell.getColumn().getDefinition().field+"&seq="+cell.getRow().getData().id+"&menuKey=${menuKey}";
-			//alert( cell.getRow().getData().id);
-			console.log(cell.getColumn().getDefinition().field, cell.getRow().getData().id);
+			
+			location.href="MbbRateView.do?dept_code="+cell.getRow().getData().id+"&search_year="+$("#searchYear").val()+"&menuKey=${menuKey}";
 		}
 		
 		// 조직 조회 호출부

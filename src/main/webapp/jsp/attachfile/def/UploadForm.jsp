@@ -91,7 +91,7 @@
 					{% } %}
 				</td>
 				<td>
-					<div class="progress" style="height:20px;text-align:center;">
+					<div class="progress" style="height:20px;text-align:center; display:none;">
 						{% if(file.image){ %}
 							<button style="color:green;" class="ui-button ui-corner-all ui-widget" onclick="pasteEditor('image', '', '#ctx#/attachfile/viewImage.do?fileId={%= file.fileId %}&fileSeq={%=file.fileSeq%}');return false;">사진입력</button>
 						{% }else { %}

@@ -19,21 +19,29 @@
 <c:choose>
 	<c:when test="${searchVO.kudIdx eq 'MBB'}">
 		<c:set var="cssOn1" value=""></c:set>
-		<c:set var="cssOn2" value="on"></c:set>
+		<c:set var="cssOn2" value=""></c:set>
+		<c:set var="cssOn3" value="on"></c:set>
 	</c:when>
-	<c:otherwise>
+	<c:when test="${searchVO.kudIdx eq '6SIG'}">
 		<c:set var="cssOn1" value="on"></c:set>
 		<c:set var="cssOn2" value=""></c:set>
+		<c:set var="cssOn3" value=""></c:set>
+	</c:when>
+	<c:otherwise>
+		<c:set var="cssOn1" value=""></c:set>
+		<c:set var="cssOn2" value="on"></c:set>
+		<c:set var="cssOn3" value=""></c:set>
 	</c:otherwise>
 </c:choose>
 
                         <div class="tab-group">
                             <div class="tab-btn">
                                 <button type="button" class="${cssOn1}" onclick="onclick_tab('6SIG')">6σ인재 육성계획</button>
-                                <button type="button" class="${cssOn2}" onclick="onclick_tab('MBB')">MBB 활용율 계획</button>
+                                <button type="button" class="${cssOn3}" onclick="onclick_tab('MBB')">팀장MBB 육성계획</button>
+                                <button type="button" class="${cssOn2}" onclick="onclick_tab('MBB_RATE')">MBB 활용율 계획</button>
                             </div>
                             <div class="tab-inr">
-                                <div class="tab-box ${cssOn1}">
+                                <div class="tab-box ${cssOn1} ${cssOn3}">
                                     <div class="list-wrap">
 			<form:form commandName="searchVO" id="defaultForm" name="defaultForm"  action="${action}" method="get" modelAttribute="searchVO">
 				${searchVO.superHiddenTag}
@@ -223,7 +231,12 @@
 	                },
 	                {//create column group
 	                    title:"‘${fn:substring(searchVO.searchYear,2,4)}년 육성 계획",field:"name3",
-	                    columns:[
+	                    columns:[{
+								title : "대상인원",
+								field : "KPI_CNT",
+								headerSort : false,
+								hozAlign : 'right',
+							},
 	                        {
 	                            title:"GB",field:"GB2",
 	                            columns:[
@@ -289,7 +302,7 @@
 	                        }
 	                    ],
 	                },
-	                {title:"대상인원", field:"name5",headerSort:false, width:60},
+	                /* {title:"대상인원", field:"name5",headerSort:false, width:60}, */
 	            ],
 			});
 		}
@@ -336,27 +349,22 @@
 	                {title:"대상구분", field:"DEPT_NAME",headerSort:false, width:220, frozen: true},
 	                {title:"‘${fn:substring(searchVO.searchYear,2,4)}MBB 인원", field:"MBB_23",headerSort:false},
 	                {//create column group
-	                    title:"‘${fn:substring(searchVO.searchYear,2,4)}년 육성",field:"name3",
+	                    title:"‘${fn:substring(searchVO.searchYear,2,4)}년 계획",field:"name3",
 	                    columns:[
-	                        {title:"인원", field:"MBB_CNT",headerSort:false, width:40,formatter: gridCellFormatter},
+	                        {title:"인원(명)", field:"MBB_CNT",headerSort:false, width:60,formatter: gridCellFormatter},
 	                        {title:"율(%)", field:"MBB_RATE",headerSort:false, width:40},
 	                    ],
 	                },
 	                {//create column group
 	                    title:"활동 현황",field:"name4",
 	                    columns:[
-	                        {title:"직접 수행",field:"ST_DIRECT",headerSort:false, width:80},
+	                        {title:"직접 수행인원",field:"ST_DIRECT",headerSort:false, width:80},
 	                        {title:"비고(직접수행)",field:"ST_DIRECT_RMK",headerSort:false, width:100},
-	                        {title:"지원MBB",field:"ST_SUPORT",headerSort:false, width:80},
+	                        {title:"지원MBB인원",field:"ST_SUPORT",headerSort:false, width:80},
 	                        {title:"비고(지원MBB활동)",field:"ST_SUPORT_RMK",headerSort:false, width:130},
-	                        {title:"팀장MBB",field:"ST_TMBB",headerSort:false, width:80},
-	                        {title:"비고(팀장MBB활동)",field:"ST_TMBB_RMK",headerSort:false, width:130}
-	                    ],
-	                },
-	                {//create column group
-	                    title:"활동인원(계)",field:"name5",
-	                    columns:[
-	                    {title:"인원(명)", field:"ACT_CNT",headerSort:false, width:60},
+	                        {title:"팀장MBB인원",field:"ST_TMBB",headerSort:false, width:80},
+	                        {title:"비고(팀장MBB활동)",field:"ST_TMBB_RMK",headerSort:false, width:130},
+	                        {title:"활동인원(명)", field:"ACT_CNT",headerSort:false, width:80},
 	                        {title:"활용율(%)", field:"ACT_RATE",headerSort:false, width:80},
 	                    ],
 	                },
@@ -408,6 +416,9 @@
 					arrTextVal[tmp.id] = tmp.value;
 				}
 				arrTextVal["km_year"] = $("#searchYear").val();
+				if(kudIdx==="MBB_RATE")
+					kudIdx = "6SIG";
+				arrTextVal["kud_idx"] = kudIdx;
 				
 				let params = arrTextVal;
 				

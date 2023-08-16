@@ -30,34 +30,37 @@
                             <span>2023년 기준</span>
                         </div>
                         <div class="dashboard-item-bottom">
-                            <p>2023육성계획<br>(500명)</p>
+                            <p>2023육성계획<br>(0명)</p>
                             <canvas id="chart_1"></canvas>
                             <div class="chart-1-items">
-                                <span>82.1%</span>
+                                <!-- <span>82.1%</span>
                                 <span>13%</span>
-                                <span>4.9%</span>
+                                <span>4.9%</span> -->
+                                <span>0%</span>
+                                <span>0%</span>
+                                <span>0%</span>
                             </div>
                             <div class="chart-1-items2">
-                                <span>BB : 305명</span>
-                                <span>MBB : 112명</span>
+                                <span>BB : 0명</span>
+                                <span>MBB : 0명</span>
                             </div>
                             <div class="chart-container">
                                 <div class="center-circle">
                                     <p class="text">100%</p>
                                 </div>
-                                <div class="segment" style="--percent: 13; --start: 0">
+                                <div class="segment" style="--percent: 1; --start: 0">
                                     <div class="overlay">
-                                        <p>13%</p>
+                                        <p>0%</p>
                                     </div>
                                 </div>
-                                <div class="segment" style="--percent: 4.9; --start: 13">
+                                <div class="segment" style="--percent: 1; --start: 1">
                                     <div class="overlay">
-                                        <p>4.9%</p>
+                                        <p>0%</p>
                                     </div>
                                 </div>
-                                <div class="segment" style="--percent: 82.1; --start: 18">
+                                <div class="segment" style="--percent: 100; --start: 0">
                                     <div class="overlay">
-                                        <p>82.1%</p>
+                                        <p>100%</p>
                                     </div>
                                 </div>
                             </div>
@@ -73,100 +76,14 @@
                         </div>
                         <div class="dashboard-item-bottom">
                             <div class="bar-chart color-or" id="chart" style="min-height: 365px">
-                                <!-- <ul class="bar-chart-head">
-                                    <li>0</li>
-                                    <li>50</li>
-                                    <li>100</li>
-                                </ul>
-                                <ul class="bar-chart-contents">
-                                    <li>
-                                        <span>창호</span>
-                                        <div style="background-color:#c4c4c4">
-                                            <div></div>
-                                            <p><span class="color-white">80</span></p>
-                                            <span class="color-white">
-                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;20</span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <span>바닥재</span>
-                                        <div style="background-color:#c4c4c4">
-                                            <p><span class="color-white">45</span></p>
-                                            <span class="color-white">
-                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;55</span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <span>단열재</span>
-                                        <div style="background-color:#c4c4c4">
-                                            <p><span class="color-white">90</span></p>
-                                            <span class="color-white">10</span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <span>벽지</span>
-                                        <div style="background-color:#c4c4c4">
-                                            <p><span class="color-white">70</span></p>
-                                            <span class="color-white">
-                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;30</span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <span>표면소재</span>
-                                        <div style="background-color:#c4c4c4">
-                                            <p><span class="color-white">60</span></p>
-                                            <span class="color-white">
-                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;40</span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <span>산업용필름</span>
-                                        <div style="background-color:#c4c4c4">
-                                            <p><span class="color-white">80</span></p>
-                                            <span class="color-white">
-                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;20</span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <span>자동차소재</span>
-                                        <div style="background-color:#c4c4c4">
-                                            <p><span class="color-white">80</span></p>
-                                            <span class="color-white">
-                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;20</span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <span>인테리어</span>
-                                        <div style="background-color:#c4c4c4">
-                                            <p><span class="color-white">80</span></p>
-                                            <span class="color-white">
-                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;20</span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <span>연구소</span>
-                                        <div style="background-color:#c4c4c4">
-                                            <p><span class="color-white">80</span></p>
-                                            <span class="color-white">
-                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;20</span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <span>품질</span>
-                                        <div style="background-color:#c4c4c4">
-                                            <p><span class="color-white">80</span></p>
-                                            <span class="color-white">
-                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;20</span>
-                                        </div>
-                                    </li>
-                                </ul> -->
+                               
                             </div>
                             <script>
                                 var options = {
                                     series: [{
-                                        data: [44, 55, 55, 55, 55, 55, 55, 55, 55, 55],
+                                        data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                                     }, {
-                                        data: [53, 32, 33, 52, 13, 53, 32, 33, 52, 13],
+                                        data: [100, 100, 100, 100, 100, 100, 100, 100, 100, 100],
                                     }],
                                     chart: {
                                         type: 'bar',
@@ -236,9 +153,9 @@
                                 <script>
                                     var options = {
                                         series: [{
-                                            data: [44, 55, 55, 55, 55, 55, 55, 55, 55, 55],
+                                            data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                                         }, {
-                                            data: [53, 32, 33, 52, 13, 53, 32, 33, 52, 13],
+                                            data: [100, 100, 100, 100, 100, 100, 100, 100, 100, 100],
                                         }],
                                         chart: {
                                             type: 'bar',
@@ -292,92 +209,7 @@
                                     var chart = new ApexCharts(document.querySelector("#chart2"), options);
                                     chart.render();
                                 </script>
-                                <!-- <ul class="bar-chart-head">
-                                    <li>0</li>
-                                    <li>50</li>
-                                    <li>100</li>
-                                </ul>
-                                <ul class="bar-chart-contents">
-                                    <li>
-                                        <span>창호</span>
-                                        <div style="background-color:#c4c4c4">
-                                            <p><span class="color-white">80</span></p>
-                                            <span class="color-white">
-                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;20</span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <span>바닥재</span>
-                                        <div style="background-color:#c4c4c4">
-                                            <p><span class="color-white">45</span></p>
-                                            <span class="color-white">
-                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;55</span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <span>단열재</span>
-                                        <div style="background-color:#c4c4c4">
-                                            <p><span class="color-white">90</span></p>
-                                            <span class="color-white">10</span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <span>벽지</span>
-                                        <div style="background-color:#c4c4c4">
-                                            <p><span class="color-white">70</span></p>
-                                            <span class="color-white">
-                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;30</span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <span>표면소재</span>
-                                        <div style="background-color:#c4c4c4">
-                                            <p><span class="color-white">60</span></p>
-                                            <span class="color-white">
-                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;40</span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <span>산업용필름</span>
-                                        <div style="background-color:#c4c4c4">
-                                            <p><span class="color-white">80</span></p>
-                                            <span class="color-white">
-                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;20</span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <span>자동차소재</span>
-                                        <div style="background-color:#c4c4c4">
-                                            <p><span class="color-white">80</span></p>
-                                            <span class="color-white">
-                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;20</span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <span>인테리어</span>
-                                        <div style="background-color:#c4c4c4">
-                                            <p><span class="color-white">80</span></p>
-                                            <span class="color-white">
-                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;20</span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <span>연구소</span>
-                                        <div style="background-color:#c4c4c4">
-                                            <p><span class="color-white">80</span></p>
-                                            <span class="color-white">
-                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;20</span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <span>품질</span>
-                                        <div style="background-color:#c4c4c4">
-                                            <p><span class="color-white">80</span></p>
-                                            <span class="color-white">
-                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;20</span>
-                                        </div>
-                                    </li>
-                                </ul> -->
+                       
                             </div>
                         </div>
                     </li>
@@ -389,40 +221,44 @@
                     <li>
                         <div class="board-view-item-top flex-col2">
                             <h1>공지사항</h1>
-                            <a href=""></a>
+                            <a href="javascript:location.href='/sub.do?menuKey=59';"></a>
                         </div>
                         <ul>
-                            <li><a href=""> · 품질혁신지원시스템 공지사항을 보여줍니다....</a></li>
-                            <li><a href=""> · 품질혁신지원시스템 공지사항을 보여줍니다....</a></li>
-                            <li><a href=""> · 품질혁신지원시스템 공지사항을 보여줍니다....</a></li>
-                            <li><a href=""> · 품질혁신지원시스템 공지사항을 보여줍니다....</a></li>
-                            <li><a href=""> · 품질혁신지원시스템 공지사항을 보여줍니다....</a></li>
+                        <c:forEach items="${noticeList}" var="item" varStatus="i">
+                        	<li><a href="/article/view.do?menuKey=59&boardKey=5&articleKey=${item.articleKey}"> · ${item.title}</a></li>
+                        </c:forEach>
+                        <c:forEach begin="1" end="${5-fn:length(noticeList)}" var="item" varStatus="i">
+                        	<li style="border-bottom: 0px;"></li>
+                        </c:forEach>
                         </ul>
                     </li>
                     <li>
                         <div class="board-view-item-top flex-col2">
                             <h1>최신자료실</h1>
-                            <a href=""></a>
+                            <a href="javascript:location.href='/sub.do?menuKey=57';"></a>
                         </div>
                         <ul>
-                            <li><a href=""> · 품질혁신지원시스템 공지사항을 보여줍니다....</a></li>
-                            <li><a href=""> · 품질혁신지원시스템 공지사항을 보여줍니다....</a></li>
-                            <li><a href=""> · 품질혁신지원시스템 공지사항을 보여줍니다....</a></li>
-                            <li><a href=""> · 품질혁신지원시스템 공지사항을 보여줍니다....</a></li>
-                            <li><a href=""> · 품질혁신지원시스템 공지사항을 보여줍니다....</a></li>
+                            <c:forEach items="${libList}" var="item" varStatus="i">
+	                        	<li><a href="/article/view.do?menuKey=57&boardKey=4&articleKey=${item.articleKey}"> · ${item.title}</a></li>
+	                        </c:forEach>
+	                        <c:forEach begin="1" end="${5-fn:length(libList)}" var="item" varStatus="i">
+	                        	<li style="border-bottom: 0px;"></li>
+	                        </c:forEach>
                         </ul>
+                        
                     </li>
                     <li>
                         <div class="board-view-item-top flex-col2">
                             <h1>BP사례</h1>
-                            <a href=""></a>
+                            <a href="javascript:location.href='/sub.do?menuKey=58';"></a>
                         </div>
                         <ul>
-                            <li><a href=""> · 품질혁신지원시스템 공지사항을 보여줍니다....</a></li>
-                            <li><a href=""> · 품질혁신지원시스템 공지사항을 보여줍니다....</a></li>
-                            <li><a href=""> · 품질혁신지원시스템 공지사항을 보여줍니다....</a></li>
-                            <li><a href=""> · 품질혁신지원시스템 공지사항을 보여줍니다....</a></li>
-                            <li><a href=""> · 품질혁신지원시스템 공지사항을 보여줍니다....</a></li>
+                            <c:forEach items="${bpList}" var="item" varStatus="i">
+	                        	<li><a href="/article/view.do?menuKey=58&boardKey=12&articleKey=${item.articleKey}"> · ${item.title}</a></li>
+	                        </c:forEach>
+	                        <c:forEach begin="1" end="${5-fn:length(bpList)}" var="item" varStatus="i">
+	                        	<li style="border-bottom: 0px;"></li>
+	                        </c:forEach>
                         </ul>
                     </li>
                 </ul>

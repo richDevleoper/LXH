@@ -46,10 +46,10 @@
                         <div class="tab-group">
                             <div class="tab-btn center">
                                 <!-- [D] 현재 활성화된 메뉴에 on클래스 추가해주세요. -->
-                                <button type="button" class="on">과제검색</button>
-                                <button type="button">분임조활동검색</button>
-                                <button type="button">제안검색</button>
-                                <button type="button">커뮤니티</button>
+                                <button type="button" class="on" param="1">과제검색</button>
+                                <button type="button" param="2">분임조활동검색</button>
+                                <button type="button" param="3">제안검색</button>
+                                <button type="button" param="4">커뮤니티</button>
                             </div>
                             <div class="tab-inr">
                                 <div class="tab-box"></div>
@@ -61,7 +61,7 @@
                                     <div class="list-header mg-t20">
                                         <p class="title">조회된 과제</p>
                                         <span class="bar"></span>
-                                        <p class="total">총 100</p>
+                                        <p class="total">총 <fmt:formatNumber value="${reportSearchVO.totalRecordCount}" pattern="#,###"/>건</p>
                                         <select name="limit" class="limit"  onchange="onchange_recordCountPerPage(this.value)">
 	                                        <option value="10" <c:if test="${reportSearchVO.recordCountPerPage eq '10' }">selected="selected"</c:if>>10개</option>
 		                                    <option value="50" <c:if test="${reportSearchVO.recordCountPerPage eq '50' }">selected="selected"</c:if>>50개</option>
@@ -85,7 +85,7 @@
                                                     </ul>
                                                 </div>
                                                 <p class="list">
-                                                    <a href="./SearchView.do?menuKey=${menuKey}&repCode=${item.repCode}" title="${item.repName}">과제명 : ${item.repName}</a>
+                                                    <a href="/report/SearchView.do?menuKey=30&repCode=${item.repCode}" title="${item.repName}">과제명 : ${item.repName}</a>
                                                     <span>활동Process(소) : ${item.repType}
                                                     , 활동분야 : ${item.repActionType}
                                                     , MBB활용율 : ${item.repMbbUseRate}
@@ -296,13 +296,35 @@
         <!-- //container -->
 <script>
 
+$(document).ready(init);
+function init(){
+	$(".tab-btn button").off("click").on("click", onclick_tab)
+}
+
 function onclick_search(){
 	$("#defaultForm")[0].submit();
 }
 
 function onchange_recordCountPerPage(vCount){
+	$("#currentPageNo").val("1");
 	$("#recordCountPerPage").val(vCount);
 	onclick_search();// 검색 '조회'버튼 클릭
+}
+
+function onclick_tab(){
+	idx = $(this).attr("param");
+	let strAction="";
+	if(idx==2)
+		strAction="team.do";
+	else if(idx==3)
+		strAction="props.do";
+	else if(idx==4)
+		strAction="board.do";	
+	else
+		strAction="";
+		
+	$("#defaultForm").attr("action", "./"+strAction);
+	onclick_search();
 }
 </script>
 </body>

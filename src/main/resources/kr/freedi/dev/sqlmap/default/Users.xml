@@ -11,6 +11,13 @@
 			<if test="comNo != null and comNo != ''">
 				AND T.com_no = #{comNo}
 			</if>
+			<if test="comDepartCode != null and comDepartCode != ''">
+				AND T.com_depart_code = #{comDepartCode}
+			</if>
+			<if test="comCertBelt != null and comCertBelt != ''">
+				AND T.com_cert_belt= #{comCertBelt}
+			</if>
+			
 		</where>
 	</sql>
 
@@ -28,14 +35,15 @@
             SELECT t.com_no
 					, t.user_id            
 					, t.user_name               
-					, t.com_depart_code          
+					, t.com_depart_code 
+					, t.com_work_place         
 					, (select dept_name from tb_depart_mst d where dept_code=t.com_depart_code) dept_full_name    
 					, t.com_jobx        
 					, cd_job.code_nm com_jobx_nm                     
 					, t.com_position                    
-					, get_code_nm('POSITION', com_position) com_position_nm            
+					, NVL(get_code_nm('POSITION', com_position),'-') as com_position_nm            
 					, t.com_cert_belt              
-					, cd_blt.code_nm com_cert_belt_nm       
+					, NVL(cd_blt.code_nm,'-') as com_cert_belt_nm       
               FROM tb_user_mst T
                    LEFT OUTER JOIN tb_code cd_job ON cd_job.code_grp_id='JOBX' AND cd_job.code_id=T.com_jobx
                    LEFT OUTER JOIN tb_code cd_blt ON cd_blt.code_grp_id='LDRBELT' AND cd_blt.code_id=T.com_cert_belt 

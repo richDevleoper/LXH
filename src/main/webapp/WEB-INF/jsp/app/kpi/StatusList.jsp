@@ -213,9 +213,7 @@
 						title : "GB",
 						field : "GB1",
 						columns : [ {
-							title : "인원",
-							field : "GB1_1",
-							headerSort : false,
+							title : "인원", field : "GB1_1", headerSort : false,
 							width : 40,
 							hozAlign : 'right',
 							cssClass : "font-small",
@@ -289,7 +287,7 @@
 					title : "‘${fn:substring(searchVO.searchYear,2,4)}년 육성 계획",
 					field : "name3",
 					columns : [ {
-						title : "총인원",
+						title : "대상인원",
 						field : "KPI_CNT",
 						headerSort : false,
 						hozAlign : 'right',
@@ -445,13 +443,13 @@
 							width : 40
 						}, ],
 					} ],
-				}, {
+				}/* , {
 					title : "대상인원",
 					field : "name5",
 					headerSort : false,
 					hozAlign : 'right',
 					width : 60
-				}, ],
+				}, */ ],
 			});
 		}
 		

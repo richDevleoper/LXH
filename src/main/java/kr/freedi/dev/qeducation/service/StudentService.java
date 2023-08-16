@@ -85,5 +85,30 @@ public class StudentService {
 		dao.insert("Student.updateStdDetail", studentVO);
 	}
 	
+	public Map<String, Object> checkReqbtn(Map<String, Object> paramMap){
+		//List<HashMap<String, Object>> resultMap = dao.selectList("Student.checkReqbtnPROC", paramMap);
+		//System.out.println(paramMap);
+		dao.selectOne("Student.checkReqbtnPROC", paramMap); 
+		return paramMap;
+	}
 	
+	
+	public void insertCertDetail(StudentVO studentVO) throws Exception {
+		int cudSeq = idGnrService.getNextIntegerId();
+		studentVO.setSeq(Integer.toString(cudSeq));
+		dao.insert("Student.insertCertDetail", studentVO);
+	}
+	
+	// 테스트 합격 시 인증여부를 판별해서 인증 테이블 등록하는 프로시저 IF
+	public void insertAuthMemProc(Map<String, Object> paramMap){
+		//List<HashMap<String, Object>> resultMap = dao.selectList("Student.checkReqbtnPROC", paramMap);
+		//System.out.println(paramMap);
+		dao.selectOne("Student.insertCertMem", paramMap); 
+	}
+	
+	// 인증 상태변경 IF
+	public void updateCertStateUpdate(Map<String, Object> paramMap) {
+		//dao.insert("Student.updateCertMem", paramMap);
+		dao.insert("Student.updateCertStatusUpdate", paramMap);
+	}
 }

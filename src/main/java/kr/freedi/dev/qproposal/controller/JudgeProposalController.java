@@ -24,9 +24,12 @@ import kr.freedi.dev.attachfile.domain.AttachFileVO;
 import kr.freedi.dev.attachfile.service.AttachFileService;
 import kr.freedi.dev.code.domain.CodeVO;
 import kr.freedi.dev.code.service.CodeService;
+import kr.freedi.dev.qapprove.domain.ApproveVO;
+import kr.freedi.dev.qapprove.service.ApproveService;
 import kr.freedi.dev.qproposal.domain.ProposalSearchVO;
 import kr.freedi.dev.qproposal.domain.ProposalVO;
 import kr.freedi.dev.qproposal.service.JudgeProposalService;
+import kr.freedi.dev.qproposal.service.ProposalService;
 import kr.freedi.dev.user.domain.UserVO;
 
 @Controller
@@ -39,6 +42,12 @@ public class JudgeProposalController {
 	
 	@Resource(name = "codeService")
 	private CodeService codeService;
+	
+	@Resource(name = "approveService")
+	private ApproveService service;
+	
+	@Resource(name = "proposalService")
+	private ProposalService proposalService;
 	
 	@Resource(name = "judgeProposalService")
 	private JudgeProposalService judgeProposalService;
@@ -58,6 +67,8 @@ public class JudgeProposalController {
 			@ModelAttribute("proposalVo") ProposalVO proposalVO, 
 			@ModelAttribute("proposalSearchVO") ProposalSearchVO searchVO,
 			UserVO userSession) throws Exception{
+		
+		
 		model.addAttribute("menuKey", searchVO.getMenuKey());
 		CodeVO codeVO = new CodeVO();
 		codeVO.setCodeGrpId("PPS_TYP"); // 제안구분코드 조회
@@ -82,6 +93,8 @@ public class JudgeProposalController {
 			searchVO.setSearchPropFromDate(df.format(calendar.getTime()));
 		}
 		
+		
+		
 		List<ProposalVO> resultItems = judgeProposalService.selectProposalMasterInfo(searchVO);
 		//구분별 통계
 		List<EgovMap> resultItemsCount = judgeProposalService.selectProposalTypeByCount(searchVO);
@@ -102,6 +115,8 @@ public class JudgeProposalController {
 		summary.put("tt", total);
 		searchVO.setTotalRecordCount(total);
 		
+		
+		
 		model.addAttribute("TYPE_LIST", typeList);
 		model.addAttribute("CATEGORY_LIST", categoryList);		
 		model.addAttribute("CLASS_LIST", classList);
@@ -109,21 +124,36 @@ public class JudgeProposalController {
 		model.addAttribute("BIZ_PLACE_LIST", bizPlaceList);
 		model.addAttribute("PROGRESS_LIST", progressList);
 		model.addAttribute("SUMMARY", summary);
-		model.addAttribute("PROP_LIST", resultItems);		
+		model.addAttribute("PROP_LIST", resultItems);	
 		
 		return "app/proposal/JudgeProposal";
 	}
 	
+	/*
+	 * 제안활동 > 등급평가 > (실시제안) 상세정보화면
+	 */
 	@RequestMapping("/judge/detail.do")
 	public String detailView(HttpServletRequest request, ModelMap model,
 			@ModelAttribute("proposalVO") ProposalVO proposalVO, 
 			@ModelAttribute("proposalSearchVO") ProposalSearchVO searchVO,
+			@ModelAttribute("approveVO") ApproveVO approveVO,
 			UserVO userSession) throws Exception{
 		model.addAttribute("menuKey", searchVO.getMenuKey());
 		
+		// 제안 SEQ를 받아서 결재 코드에 세팅한다.
+		approveVO.setRefBusCode(Integer.toString(proposalVO.getPropSeq())); // 업무코드 세팅
+		approveVO.setRefBusType("4"); // 실시 제안의 경우 업무타입코드가 4로 해야 분임조와 중복 검색되지 않는다.
+		
+		// 결제 정보를 가져온다.
+		// I/F 파일에 결재 history 및 결재 상세 내역을  합쳐주는 I/F가 추가로 구성되어 있음
+		// 결재자 목록에 중복 또는 누락이 발생하면 service I/F쪽도 확인 필요함 
+		ApproveVO savedVO = service.select(approveVO);
+		
+		// 제안 상세정보 가져오기
 		searchVO.setSearchPropSeq(proposalVO.getPropSeq());
 		ProposalVO resultItem = judgeProposalService.selectProposalDetailInfo(searchVO);
-		
+
+		// 첨부 파일 정보 가져오기
 		AttachFileVO fileVO = new AttachFileVO();
 		fileVO.setFileId("proposal_before_" + proposalVO.getPropSeq());
 		List<AttachFileVO> beforeAttachFileList = attachFileService.selectFullList(fileVO); // 개선 전
@@ -137,6 +167,7 @@ public class JudgeProposalController {
 		if(!resultItem.getPropPropStatCode().equals("PRG_1")) {
 			kr.freedi.dev.qpopup.domain.UserVO userVO = new kr.freedi.dev.qpopup.domain.UserVO();
 			userVO.setComNo(resultItem.getPropApproverCode());				
+			
 			List<EgovMap> userInfo = judgeProposalService.selectApproverUserInfo(userVO);
 			
 			if(userInfo != null && userInfo.size() > 0) {
@@ -160,6 +191,8 @@ public class JudgeProposalController {
 		model.addAttribute("propSeq", resultItem.getPropSeq());
 		model.addAttribute("crud", "R");
 		model.addAttribute("PROP_INFO", resultItem);
+		model.addAttribute("approveVO", savedVO);
+		
 		return "app/proposal/JudgeProposalDetail";
 	}
 	
@@ -174,7 +207,7 @@ public class JudgeProposalController {
 		ProposalVO resultItem = judgeProposalService.selectProposalDetailInfo(searchVO);
 		
 		//결재자 정보 조회
-		if(!resultItem.getPropPropStatCode().equals("PRG_1")) {
+		//if(!resultItem.getPropPropStatCode().equals("PRG_1")) {
 			kr.freedi.dev.qpopup.domain.UserVO userVO = new kr.freedi.dev.qpopup.domain.UserVO();
 			userVO.setComNo(resultItem.getPropApproverCode());				
 			List<EgovMap> userInfo = judgeProposalService.selectApproverUserInfo(userVO);
@@ -194,7 +227,7 @@ public class JudgeProposalController {
 					resultItem.setPropApprovalGroupCode(String.valueOf(item.get("compDepartCode")));
 				}
 			}
-		}
+		//}
 		
 		model.addAttribute("listSource", searchVO.getListSource());
 		model.addAttribute("propSeq", resultItem.getPropSeq());

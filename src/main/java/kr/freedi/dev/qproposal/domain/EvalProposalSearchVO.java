@@ -10,7 +10,7 @@ public class EvalProposalSearchVO extends CommonVO{
 	@ParamField
 	private String searchPropName;
 	@ParamField
-	private String searchPropTypeCode;
+	private String searchPropTypeCode; // 제안 종류 구분 (실시 : PPS_TYP_1 /쪽지 : PPS_TYP_2)
 	@ParamField
 	private String searchPropClassCode;
 	@ParamField
@@ -48,6 +48,8 @@ public class EvalProposalSearchVO extends CommonVO{
 	private String searchUserTypeCode;
 	@ParamField
 	private String searchPaymentCode;
+	
+	
 	
 	public String getSearchPropCategoryCode() {
 		return searchPropCategoryCode;

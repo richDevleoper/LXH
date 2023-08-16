@@ -277,6 +277,16 @@
 			onclick_search();
 		});
 		
+		// 조직 조회 팝업
+		$('.btn-proposal-group-search-modal').off('click').on('click', function(){
+			popDept.init();
+			
+			popDept.returnObjId = $('#input-proposal-group');
+			popDept.returnFunc = setProposalGroupInfo;
+			
+			popDept.open();			
+		});
+		
 		$('#btn-eval-payment').off('click').on('click', function(){
 			//$("#evalForm")[0].submit();
 			//선택된 로우만 submit			
@@ -290,16 +300,18 @@
 					evalForm.attr('target', 'evalFormFrame');
  					for(var index = 0; index < list.length; index++){
 						var item = $(list[index]);
-						var subsidy = $('#input-proposal-subsidy-' + item.val() +'').val().trim();
+						var subsidy = $('#input-proposal-subsidy-' + item.val() +'').val();
 						var payment = $('#select-proposal-payment-yn-' + item.val()+'').val();
 						if(subsidy == ''){
 							alert('마감시 지급비용이 입력되어야 합니다.');
 							return false;
 						}
+						/*
 						if(/^[0-9]+$/.test(subsidy) == false){
 							alert('지급금액은 숫자만 입력가능합니다.');
 							return false;							
 						}
+						*/
 						if(payment != 'Y'){
 							alert('마감시 비용지급이 완료되어야 합니다');
 							return false;							
@@ -363,8 +375,20 @@
 	}
 	
 	function onchange_recordCountPerPage(vCount){
+		$("#currentPageNo").val("1");
 		$("#recordCountPerPage").val(vCount);
 		onclick_search();// 검색 '조회'버튼 클릭
+	}
+	
+	// 조직정보 매핑
+	function setProposalGroupInfo(el, d){
+		if(d != null){
+			$('#input-proposal-group').val(d.deptName);
+			$('#input-proposal-group-code').val(d.comCode);			
+		}else{
+			$('#input-proposal-group').val('');
+			$('#input-proposal-group-code').val('');	
+		}
 	}
 	
 	function onclick_poposalInfo(propSeq, propTypeCode){

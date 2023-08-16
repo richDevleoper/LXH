@@ -21,7 +21,7 @@
 	<script type="text/javascript" src="<c:url value='/def/attachfile/js/jquery.iframe-transport.js'/>"></script>
 	<script type="text/javascript" src="<c:url value='/def/attachfile/js/jquery.fileupload.js'/>"></script>
 	<script type="text/javascript" src="<c:url value='/def/attachfile/js/jquery.fileupload-process.js'/>"></script>
-	<script type="text/javascript" src="<c:url value='/def/attachfile/js/jquery.fileupload-validate.js'/>"></script>
+	<script type="text/javascript" src="<c:url value='/def/attachfile/js/jquery.fileupload-validate.js?ver=1'/>"></script>
 	<script type="text/javascript" src="<c:url value='/def/attachfile/js/jquery.fileupload-ui.js'/>"></script>
 	<script type="text/javascript" src="<c:url value='/def/attachfile/js/jquery.fileupload-jquery-ui.js'/>"></script>
 	<script type="text/javascript" src="<c:url value='/def/attachfile/js/attachfile-fileuploader.js'/>"></script>
@@ -37,6 +37,7 @@
 		<form:hidden path="repCode" />
 		<form:hidden path="repMenuCode" />
 		<form:hidden path="repCurrStepCode" />
+		<form:hidden path="repCurrApproveState" />
 		<form:hidden path="mode" />
 		<!-- breadcrumb -->
 		<div class="breadcrumb">
@@ -298,7 +299,7 @@
 																												<div class="col s12 input-text input-date">
 																													<form:input type="text"
 																														path="repDetailList[${status.index}].repActStartDate"
-																														cssClass="datepicker validate[required]" />
+																														cssClass="datepicker validate[required] " />
 																													<i class="ico calendar"></i>
 																												</div>
 																											</div>
@@ -340,7 +341,7 @@
 																									</tr>
 																									<tr>
 																										<th colspan="2" class="pd-r10 align-right">
-																											첨부파일<br> (Up to 10)
+																											<span class="asterisk">*</span> 첨부파일<br> (Up to 10)
 																										</th>
 																										<td colspan="5">
 																											<div class="file-drop-box">
@@ -403,7 +404,7 @@
 																						style="float: none; width: 120px; margin: 0 auto !important">
 																						<form:input type="text"
 																							path="repDetailList[0].repPlanStartDate"
-																							cssClass="datepicker validate[required]" />
+																							cssClass="datepicker validate[required] plan-date" />
 																						<i class="ico calendar"></i>
 																					</div>
 																				</div>
@@ -414,7 +415,7 @@
 																						style="float: none; width: 120px; margin: 0 auto !important">
 																						<form:input type="text"
 																							path="repDetailList[0].repPlanEndDate"
-																							cssClass="datepicker validate[required]" />
+																							cssClass="datepicker validate[required] plan-date" />
 																						<i class="ico calendar"></i>
 																					</div>
 																				</div>
@@ -429,7 +430,7 @@
 																						style="float: none; width: 120px; margin: 0 auto !important">
 																						<form:input type="text"
 																							path="repDetailList[0].repActStartDate"
-																							cssClass="datepicker validate[required]" />
+																							cssClass="datepicker validate[required] act-date" />
 																						<i class="ico calendar"></i>
 																					</div>
 																				</div>
@@ -440,7 +441,7 @@
 																						style="float: none; width: 120px; margin: 0 auto !important">
 																						<form:input type="text"
 																							path="repDetailList[0].repActEndDate"
-																							cssClass="datepicker validate[required]" />
+																							cssClass="datepicker validate[required] act-date" />
 																						<i class="ico calendar"></i>
 																					</div>
 																				</div>
@@ -504,7 +505,7 @@
                                                                                     <td><div class="col s2 input-text pd-r10" style="width:100%"><form:input type="text" path="repDetailList[0].repExpectationResult" /></div></td>                                 
                                                                                 </tr> --%>
 																		<tr>
-																			<th colspan="2" class="pd-r10 align-right">첨부파일<br>
+																			<th colspan="2" class="pd-r10 align-right"><span class="asterisk">*</span> 첨부파일<br>
 																				(Up to 10)
 																			</th>
 																			<td colspan="2" style="text-align: left;">
@@ -514,7 +515,7 @@
 																						wrapperId="fileUploadWrap_7"
 																						fileId="reportDetail_7_${reportVO.repCode}"
 																						fileGrp="reportDetail" autoUpload="false"
-																						maxFileSize="${15*1000000}" maxNumberOfFiles="10" />
+																						maxFileSize="${30*1000000}" maxNumberOfFiles="10" />
 																				</div>
 																			</td>
 																		</tr>
@@ -1000,21 +1001,21 @@ function onchange_resultType(obj){
 						</colgroup>
 						<tbody>
 							<tr>
-								<th>첨부파일 (신규/수정)</th>
+								<th><span class="asterisk">*</span> 첨부파일 (신규/수정)</th>
 								<td>
 									<div class="row">
 										<div class="col s12 input-text file">
 											<attachfile:fileuploader objectId="fileUploadObj_01" ctx=""
 												wrapperId="fileUploadWrap"
 												fileId="report_${reportVO.repCode}" fileGrp="report"
-												autoUpload="false" maxFileSize="${15*1000000}"
+												autoUpload="false" maxFileSize="${30*1000000}"
 												maxNumberOfFiles="10" />
 										</div>
 									</div>
 								</td>
 							</tr>
 							<tr style="display: none;">
-								<th>첨부파일 (조회)</th>
+								<th><span class="asterisk">*</span> 첨부파일 (조회)</th>
 								<td>
 									<div class="file-link">
 										<ul>
@@ -1261,8 +1262,41 @@ function onchange_resultType(obj){
 			},
 			onValidationComplete: function(form, status){
 				if(status == true) {
-					if(checkLdrBelt(true)){
-						return true;
+					
+					if($("#fileUploadWrap").find(".files tr.template-download").length===0){
+						alert("과제등록서 첨부파일이 등록되지 않았습니다. \n파일 선택 후 '전체첨부' 혹은 '첨부' 버튼을 클릭하시고 진행해주세요.");
+						return false;
+					}
+					
+					
+					// 일정 순차 입력여부 확인 (6시그마:date-6sigma, 그 외  act-date)
+					let repDevCd = $("#repDivisionCode").val();
+					if("2,3".indexOf(repDevCd)>-1){		// 일반과제, 10+과제일 경우
+						
+						if(vMenuType==="REPORT"){ //6시그마과제의 일반/10+과제일 경우
+							if(exeDateCheck("plan-date")){
+								alert("계획일정을 순서대로 입력하세요.");
+								$(".plan-date:eq(0)").focus();
+								return false;
+							}
+						}
+						
+						if(exeDateCheck("act-date")){
+							alert("실시일정을 순서대로 입력하세요.");
+							$(".act-date:eq(0)").focus();
+							return false;
+						}
+						
+					} else {
+						if(exeDateCheck("date-6sigma")){
+							alert("단계별 계획 일정이 잘못되었으므로 확인하시기 바랍니다.");
+							$(".date-6sigma:eq(0)").focus();
+							return false;
+						}
+					}
+					
+					if(vMenuType==="REPORT" && checkLdrBelt(true)){
+						return false;
 					}
 					if(confirm("저장하시겠습니까?")) {
 						//contentsEditors.getById["content"].exec("UPDATE_CONTENTS_FIELD", []);
@@ -1273,6 +1307,31 @@ function onchange_resultType(obj){
 				}
 			}
 		});	
+	}
+	
+	function exeDateCheck(classNm){
+		
+		let isWrong = false;
+		$("."+classNm).each(function(i, o){
+		    let currDate = $("."+ classNm +":eq("+i+")").val();
+		    //console.log(i+"번째", "반복중 현재 체크할 날짜:", currDate);
+		    for(let k=0; k<i; k++){
+		        let tmpDate = $("."+ classNm +":eq("+k+")").val();
+		        //console.log(i, k, $(".date-6sigma:eq("+k+")").attr("id"), currDate, tmpDate, currDate>=tmpDate);   
+		        if(currDate<tmpDate){
+		            //console.log("커!");
+		            isWrong = true;
+		            return;
+		        }
+		    }
+		    //console.log("---------");
+		});
+		
+		return isWrong;
+		
+		//checkDateOrder("date-6sigma", this);
+		//checkDateOrder("act-date", this);
+		
 	}
 	
 	function addRow(mode, obj){

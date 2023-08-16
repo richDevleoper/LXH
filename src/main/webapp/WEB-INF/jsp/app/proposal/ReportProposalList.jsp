@@ -36,17 +36,28 @@
 	                                        <div class="pd-l10 col s9 input-text search">
                                       			<form:input path="searchGroupCode" type="hidden" id="input-proposal-group-code" name="input-proposal-group-code"/>
                                       			<form:input type="text" id="input-proposal-group" name="input-proposal-group" readonly="true" style="background-color: #FFF;" path="searchGroupName"/>
-                                      			<button type="button" class="btn-proposal-group-search-modal">검색</button> 
-	                                        </div>
+                                      			<button type="button" class="btn-proposal-group-search-modal">검색</button>                               		
+                                      		</div>
 	                                    </div>
 	                                    <div class="form-inline form-input col s4">
-	                                        <div class="col s5 align-right">
+	                                    <!--     <div class="col s5 align-right">
 	                                            <label>등급 평가마감</label>
 	                                        </div>
 	                                        <div class="pd-l10 col s7">
 	                                            <select name="" id="">
 	                                                <option value="">전체</option>
 	                                            </select>
+	                                        </div> -->
+	                                        <div class="col s3 align-right">
+	                                            <label>진행단계</label>
+	                                        </div>
+	                                        <div class="pd-l10 col s9">
+	                                            <form:select name="select-stat-code" id="select-stat-code" path="searchPropStatCode">
+	                                                <option value="">전체</option>
+	                                                <c:forEach var="item" items="${PROGRESS_LIST }">
+	                                                	<option value="${item.codeId }">${item.codeNm }</option>                                                    	
+                                                    </c:forEach>	                                                
+	                                            </form:select>
 	                                        </div>
 	                                    </div>
 	                                </div>
@@ -361,23 +372,13 @@
 			onclick_search();
 		});
 		
-		//부서검색 팝업 트리 초기화
-		initFooterDeptPopup();
-		
 		$('.btn-proposal-group-search-modal').off('click').on('click', function(){
-			/*
 			popDept.init();
 			
 			popDept.returnObjId = $('#input-proposal-group');
 			popDept.returnFunc = setProposalGroupInfo;
 			
-			popDept.open();
-			*/
-			
-			popMDept.init();
-    		popMDept.returnObjId = "input-proposal-group";
-    		popMDept.returnFunc = setProposalGroupInfo;
-    		popMDept.open();
+			popDept.open();			
 		});
 	});
 	
@@ -425,6 +426,7 @@
 	}
 	
 	function onchange_recordCountPerPage(vCount){
+		$("#currentPageNo").val("1");
 		$("#recordCountPerPage").val(vCount);
 		onclick_search();// 검색 '조회'버튼 클릭
 	}
@@ -439,10 +441,11 @@
 	
 	// 부서 팝업 콜백
 	function setProposalGroupInfo(el, d){
+		console.log(JSON.stringify(d));
 		
 		if(d != null){
-			$('#input-proposal-group').val(d.deptNames);
-			$('#input-proposal-group-code').val(d.deptCodes);			
+			$('#input-proposal-group').val(d.deptName);
+			$('#input-proposal-group-code').val(d.deptCode);			
 		}else{
 			$('#input-proposal-group').val('');
 			$('#input-proposal-group-code').val('');	

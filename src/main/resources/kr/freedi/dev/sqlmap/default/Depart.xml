@@ -26,10 +26,12 @@
 
 	<sql id="defCond">
 		<where>
-			dept_state_code <![CDATA[<>]]>
-			'D'
+			dept_state_code <![CDATA[<>]]> 'D'
 			<if test="deptName != null and deptName != ''">
 				AND T.DEPT_NAME like '%' || #{deptName} || '%'
+			</if>
+			<if test="deptCode != null and deptCode != ''">
+				AND T.DEPT_CODE = #{deptCode}
 			</if>
 			<if test="comNo != null and comNo != ''">
 				AND T.com_no = #{comNo}

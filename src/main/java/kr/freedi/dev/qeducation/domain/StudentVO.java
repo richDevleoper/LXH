@@ -52,6 +52,26 @@ public class StudentVO extends CommonVO {
 	private String stdStatusNm;
 	
 	private List<AttachFileVO> fileList;
+	
+	private String Seq;  
+	private String cudBeforeBeltCode;  
+	private String cudAfterBeltCode;  
+	private String cudDepart;  
+	private String cudTeamName;  
+	private String cudUserName;  
+	private String cudBelongName;  
+	private String cudCertHistory;  
+	private String cudCertDate;  
+	private String cudCertStatus;  
+	private String cudRegUser;  
+	private String cudRegDate;  
+	private String cudUpdateUser;  
+	private String cudUpdateDate;  
+	private String cudEduCode;      
+	
+	private String commonResVal;
+	
+	
 
 	public String getStdSeq() {
 		return stdSeq;
@@ -363,6 +383,134 @@ public class StudentVO extends CommonVO {
 
 	public void setStdStatusNm(String stdStatusNm) {
 		this.stdStatusNm = stdStatusNm;
+	}
+
+	public String getSeq() {
+		return Seq;
+	}
+
+	public void setSeq(String seq) {
+		Seq = seq;
+	}
+
+	public String getCudBeforeBeltCode() {
+		return cudBeforeBeltCode;
+	}
+
+	public void setCudBeforeBeltCode(String cudBeforeBeltCode) {
+		this.cudBeforeBeltCode = cudBeforeBeltCode;
+	}
+
+	public String getCudAfterBeltCode() {
+		return cudAfterBeltCode;
+	}
+
+	public void setCudAfterBeltCode(String cudAfterBeltCode) {
+		this.cudAfterBeltCode = cudAfterBeltCode;
+	}
+
+	public String getCudDepart() {
+		return cudDepart;
+	}
+
+	public void setCudDepart(String cudDepart) {
+		this.cudDepart = cudDepart;
+	}
+
+	public String getCudTeamName() {
+		return cudTeamName;
+	}
+
+	public void setCudTeamName(String cudTeamName) {
+		this.cudTeamName = cudTeamName;
+	}
+
+	public String getCudUserName() {
+		return cudUserName;
+	}
+
+	public void setCudUserName(String cudUserName) {
+		this.cudUserName = cudUserName;
+	}
+
+	public String getCudBelongName() {
+		return cudBelongName;
+	}
+
+	public void setCudBelongName(String cudBelongName) {
+		this.cudBelongName = cudBelongName;
+	}
+
+	public String getCudCertHistory() {
+		return cudCertHistory;
+	}
+
+	public void setCudCertHistory(String cudCertHistory) {
+		this.cudCertHistory = cudCertHistory;
+	}
+
+	public String getCudCertDate() {
+		return cudCertDate;
+	}
+
+	public void setCudCertDate(String cudCertDate) {
+		this.cudCertDate = cudCertDate;
+	}
+
+	public String getCudCertStatus() {
+		return cudCertStatus;
+	}
+
+	public void setCudCertStatus(String cudCertStatus) {
+		this.cudCertStatus = cudCertStatus;
+	}
+
+	public String getCudRegUser() {
+		return cudRegUser;
+	}
+
+	public void setCudRegUser(String cudRegUser) {
+		this.cudRegUser = cudRegUser;
+	}
+
+	public String getCudRegDate() {
+		return cudRegDate;
+	}
+
+	public void setCudRegDate(String cudRegDate) {
+		this.cudRegDate = cudRegDate;
+	}
+
+	public String getCudUpdateUser() {
+		return cudUpdateUser;
+	}
+
+	public void setCudUpdateUser(String cudUpdateUser) {
+		this.cudUpdateUser = cudUpdateUser;
+	}
+
+	public String getCudUpdateDate() {
+		return cudUpdateDate;
+	}
+
+	public void setCudUpdateDate(String cudUpdateDate) {
+		this.cudUpdateDate = cudUpdateDate;
+	}
+
+	public String getCudEduCode() {
+		return cudEduCode;
+	}
+
+	public void setCudEduCode(String cudEduCode) {
+		this.cudEduCode = cudEduCode;
+	}
+
+	public String getCommonResVal() {
+		return commonResVal;
+	}
+
+	public void setCommonResVal(String commonResVal) {
+		this.commonResVal = commonResVal;
 	}
 	
 	

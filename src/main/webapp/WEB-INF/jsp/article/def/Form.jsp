@@ -20,7 +20,7 @@
 <script type="text/javascript" src="<c:url value='/def/attachfile/js/jquery.iframe-transport.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/def/attachfile/js/jquery.fileupload.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/def/attachfile/js/jquery.fileupload-process.js'/>"></script>
-<script type="text/javascript" src="<c:url value='/def/attachfile/js/jquery.fileupload-validate.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/def/attachfile/js/jquery.fileupload-validate.js?ver=1'/>"></script>
 <script type="text/javascript" src="<c:url value='/def/attachfile/js/jquery.fileupload-ui.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/def/attachfile/js/jquery.fileupload-jquery-ui.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/def/attachfile/js/attachfile-fileuploader.js'/>"></script>
@@ -102,8 +102,7 @@ ${articleSearchVO.hiddenTag }
 
 <!-- 게시판 폼 영역 -->
 <fieldset>
-	<legend class="hidden">게시글1 수정</legend>
-	<table cellpadding="0" class="article_form" summary="현재 누르신 글의 제목,작성자,작성일,조회수, 첨부, 내용에 대한 테이블 정보입니다.">
+	<table cellpadding="0" class="article_form" summary="현재 누르신 글의 제목,작성자,작성일,조회수, 첨부, 내용에 대한 테이블 정보입니다." style="width: 970px;">
 		<caption><span>글의 제목을 출력해주세요</span></caption>
 		<colgroup>
 		<col width="15%" />
@@ -152,7 +151,7 @@ ${articleSearchVO.hiddenTag }
 			<tr>
 				<th scope="row">제목</th>
 				<td>
-					<form:input path="title" title="제목" cssClass="validate[required,maxSize[255]] ip_type va_m" cssStyle="width:97%;" maxlength="255"/>
+					<form:input path="title" title="제목" cssClass="validate[required,maxSize[255]] ip_type va_m" cssStyle="width:97%; margin-top: 5px;" maxlength="255"/>
 				</td>
 			</tr>
 			<%-- 
@@ -188,15 +187,20 @@ ${articleSearchVO.hiddenTag }
 	</table>
 </fieldset>
 <!-- //게시판 폼 영역 -->
-
-<div class="article_bottom">
-	<!-- 버튼 -->
+<div class="list-footer">
+	<div class="list-btns">
+		<a href="#none" class="at_btn_st2 btn bg-gray" onclick="return insert();">확인</a>
+		<a href="#none" class="at_btn_st2 btn bg-gray" onclick="return list();;">취소</a>			
+	</div>
+</div>
+<!-- <div class="article_bottom">
+	버튼
 	<p class="ta_r">
 	<a href="#none" onclick="return insert();" class="at_btn_st2">확인</a>
 	<a href="#none" onclick="return list();" class="at_btn_st2">취소</a>
 	</p>
-	<!-- //버튼 -->
-</div>
+	//버튼
+</div> -->
 
 </form:form>
 

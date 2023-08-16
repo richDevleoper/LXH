@@ -133,6 +133,17 @@ ${articleSearchVO.superHiddenTag}
 	<div class="list-content">
 		<div class="list-table">
 			<table class="even">
+                <colgroup>
+                    <col style="width:70px">
+                 <c:if test="${boardVO.catgrFlg eq 'Y'}">
+                    <co>
+				 </c:if>
+                    <col>
+                    <col style="width:150px">
+                    <col style="width:80px">
+                    <col style="width:100px">
+                    <col style="width:80px">
+                </colgroup>			
 				<thead>
 					<tr>
 						<th class="bg-gray">번호</th>
@@ -175,7 +186,7 @@ ${articleSearchVO.superHiddenTag}
 									<c:choose>
 										<c:when test="${fn:length(item.fileList) > 1}">
 											<a href="/attachfile/downloadAll.do?fileId=article_${item.articleKey}" target="downloadFrame">
-												<img src="/def/img/board/icon_multiple.gif" alt="파일 다운로드" />
+												<img src="/def/img/article/icon_multiple.gif" alt="파일 다운로드" />
 											</a>
 										</c:when>
 										<c:otherwise>
@@ -184,10 +195,10 @@ ${articleSearchVO.superHiddenTag}
 												<c:set var="ext" value="${fn:split(item.fileList[0].fileNm, '.')}" />
 												<c:choose>
 													<c:when test="${fn:indexOf(extList, ext[fn:length(ext)-1]) != -1}">
-														<img src="/def/img/board/icon_${ext[fn:length(ext)-1]}.gif" alt="파일 다운로드" />
+														<img src="/def/img/article/icon_${ext[fn:length(ext)-1]}.gif" alt="파일 다운로드" />
 													</c:when>
 													<c:otherwise>
-														<img src="/def/img/board/icon_default.gif" alt="파일 다운로드" />
+														<img src="/def/img/article/icon_default.gif" alt="파일 다운로드" />
 													</c:otherwise>
 												</c:choose>
 											</a>

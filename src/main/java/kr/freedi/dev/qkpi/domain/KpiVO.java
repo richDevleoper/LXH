@@ -17,6 +17,7 @@ public class KpiVO {
 	private String kmMbbUserCnt;
 	private String kmBbuUserCnt;
 	private String kmMbbManageCnt;
+	private String kudIdx;
 	
 	public String getDeptCode() {
 		return deptCode;
@@ -78,11 +79,17 @@ public class KpiVO {
 	public void setKmMbbManageCnt(String kmMbbManageCnt) {
 		this.kmMbbManageCnt = kmMbbManageCnt;
 	}
+	public String getKudIdx() {
+		return kudIdx;
+	}
+	public void setKudIdx(String kudIdx) {
+		this.kudIdx = kudIdx;
+	}
 	@Override
 	public String toString() {
 		return "KpiVO [deptCode=" + deptCode + ", deptName=" + deptName + ", updateDate=" + updateDate + ", regDate="
 				+ regDate + ", kmYear=" + kmYear + ", kmGbUserCnt=" + kmGbUserCnt + ", kmBbUserCnt=" + kmBbUserCnt
 				+ ", kmMbbUserCnt=" + kmMbbUserCnt + ", kmBbuUserCnt=" + kmBbuUserCnt + ", kmMbbManageCnt="
-				+ kmMbbManageCnt + "]";
+				+ kmMbbManageCnt + ", kudIdx=" + kudIdx + "]";
 	}
 }

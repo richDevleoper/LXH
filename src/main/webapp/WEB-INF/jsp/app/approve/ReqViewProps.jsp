@@ -44,16 +44,41 @@
 										<tbody>  
 										    <c:forEach var="item" items="${approveVO.detailHistory}">
 												<tr>
-												<td>
+												<td class="align-center">
 													${item.aprovalStat}
 													<c:if test="${not empty item.aprovalCompltDate}">
 														(<fmt:formatDate pattern="yyyy.MM.dd" value="${item.aprovalCompltDate}" />)
 													</c:if>
 												</td>
-												<td>${item.userName}</td>
-												<td>${item.comPosition}</td>
+												<td class="align-center">${item.userName}</td>
+												<td class="align-center">${item.comPositionNm}</td>
 												<td class="align-left">${item.aprovalType}</td>
-												<td><!-- 70점(C) --></td>
+												<td class="align-center">
+												<c:if test="${item.aprovalStatCode eq '4' }">
+													${item.scoreTotal }점 (
+														<c:choose>
+															<c:when test="${item.scoreTotal >= 60 && item.scoreTotal < 70 }">
+																D급
+															</c:when>
+															<c:when test="${item.scoreTotal >= 70 && item.scoreTotal < 80 }">
+																C급
+															</c:when>			
+															<c:when test="${item.scoreTotal >= 80 && item.scoreTotal < 90 }">
+																B급
+															</c:when>	
+															<c:when test="${item.scoreTotal >= 90 && item.scoreTotal < 95 }">
+																A급
+															</c:when>			
+															<c:when test="${item.scoreTotal >= 95 && item.scoreTotal <= 100 }">
+																S급
+															</c:when>		
+															<c:otherwise>
+																불채택
+															</c:otherwise>																																																			
+														</c:choose>
+													)
+												</c:if>
+												</td>
 												<td class="align-left">${item.aprovalComment}</td>
 											</tr>
 											</c:forEach>
@@ -173,9 +198,20 @@
                                                                             <td>
 																				<div class="file-link">
 																					<ul>
-										<c:forEach var="item_sub" items="${proposalVO.beforeAttachFileList}" varStatus="status">
-																																			<li><a href="/attachfile/downloadFile.do?fileId=${item_sub.fileId}&fileSeq=${item_sub.fileSeq}" title="다운받기">${item_sub.fileNm}</a><a href="/attachfile/downloadFile.do?fileId=${item_sub.fileId}&fileSeq=${item_sub.fileSeq}" title="다운받기" class="btn color gray mg-l15">다운받기</a></li>
-										</c:forEach>  															
+																						<c:choose>
+	                                                                            			<c:when test="${proposalVO.beforeAttachFileList != null }">
+	                                                                            				<c:forEach items="${proposalVO.beforeAttachFileList }" var="item">
+	                                                                            					<div class="row" id="before-attach-file-${item.fileSeq }">
+	                                                                            						<div class="col 12" style="border-bottom: 1px solid #c3c3c3; padding-bottom: 11px;">
+	                                                                            							<input type="hidden" name="hidden-before-fileId" value="${item.fileId }">
+	                                                                            							<input type="hidden" name="hidden-before-fileSeq" value="${item.fileSeq }">
+	                                                                            							<img src="/attachfile/downloadFile.do?fileId=${item.fileId }&fileSeq=${item.fileSeq}" onclick="popupImageView(this);" style="cursor: pointer;">
+	                                                                            							<a href="/attachfile/downloadFile.do?fileId=${item_sub.fileId}&fileSeq=${item_sub.fileSeq}" title="다운받기" class="btn color gray mg-l15">다운받기</a>
+	                                                                            						</div>
+	                                                                            					</div>
+	                                                                            				</c:forEach>
+	                                                                            			</c:when>
+	                                                                            		</c:choose>
 																					</ul>
 																				</div>                                                                                
                                                                                 
@@ -189,9 +225,20 @@
                                                                             <td>
 																				<div class="file-link">
 																					<ul>
-										<c:forEach var="item_sub" items="${proposalVO.afterAttachFileList}" varStatus="status">
-																																			<li><a href="/attachfile/downloadFile.do?fileId=${item_sub.fileId}&fileSeq=${item_sub.fileSeq}" title="다운받기">${item_sub.fileNm}</a><a href="/attachfile/downloadFile.do?fileId=${item_sub.fileId}&fileSeq=${item_sub.fileSeq}" title="다운받기" class="btn color gray mg-l15">다운받기</a></li>
-										</c:forEach>  															
+																						<c:choose>
+	                                                                            			<c:when test="${proposalVO.afterAttachFileList != null }">
+	                                                                            				<c:forEach items="${proposalVO.afterAttachFileList }" var="item">
+	                                                                            					<div class="row" id="before-attach-file-${item.fileSeq }">
+	                                                                            						<div class="col 12" style="border-bottom: 1px solid #c3c3c3; padding-bottom: 11px;">
+	                                                                            							<input type="hidden" name="hidden-before-fileId" value="${item.fileId }">
+	                                                                            							<input type="hidden" name="hidden-before-fileSeq" value="${item.fileSeq }">
+	                                                                            							<img src="/attachfile/downloadFile.do?fileId=${item.fileId }&fileSeq=${item.fileSeq}" onclick="popupImageView(this);" style="cursor: pointer;">
+	                                                                            							<a href="/attachfile/downloadFile.do?fileId=${item_sub.fileId}&fileSeq=${item_sub.fileSeq}" title="다운받기" class="btn color gray mg-l15">다운받기</a>
+	                                                                            						</div>
+	                                                                            					</div>
+	                                                                            				</c:forEach>
+	                                                                            			</c:when>
+	                                                                            		</c:choose>
 																					</ul>
 																				</div>
                                                                                 <!-- <div class="themb-box">
@@ -239,9 +286,9 @@
 											<tr>
 												<td colspan="5">${proposalVO.propApprovalGroup}</td>
 												<td class="align-center">${proposalVO.propApproverName}</td>
-												<td class="align-center">책임</td>
-												<td class="align-center">팀장</td>
-												<td class="align-center">MBB</td>
+												<td class="align-center">${proposalVO.propApprovalLevel}</td>
+												<td class="align-center">${proposalVO.propApprovalDuty}</td>
+												<td class="align-center">${proposalVO.propApprovalBelt}</td>
 											</tr>
                                         </tbody>
                                     </table>
@@ -281,6 +328,10 @@
                                 <a href="/sub.do?menuKey=${menuKey}" class="btn">목록</a>
                             </div>
                         </div>
-
+<script>
+function selectImageFile(el){
+	$($(el).prev()).click();
+}
+</script>
 </body>
 </html>

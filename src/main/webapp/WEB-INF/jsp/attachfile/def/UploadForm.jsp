@@ -93,9 +93,9 @@
 				<td>
 					<div class="progress" style="height:20px;text-align:center;">
 						{% if(file.image){ %}
-							<button style="color:green;" class="ui-button ui-corner-all ui-widget" onclick="pasteEditor('image', '', '#ctx#/attachfile/viewImage.do?fileId={%= file.fileId %}&fileSeq={%=file.fileSeq%}');return false;">사진입력</button>
+							<button style="color:green; display:none;" class="ui-button ui-corner-all ui-widget" onclick="pasteEditor('image', '', '#ctx#/attachfile/viewImage.do?fileId={%= file.fileId %}&fileSeq={%=file.fileSeq%}');return false;">사진입력</button>
 						{% }else { %}
-							<button class="ui-button ui-corner-all ui-widget" onclick="pasteEditor('file', '{%=file.fileNm%}', '#ctx#/attachfile/downloadFile.do?fileId={%= file.fileId %}&fileSeq={%=file.fileSeq%}');return false;">파일입력</button>
+							<button style="display:none;" class="ui-button ui-corner-all ui-widget" onclick="pasteEditor('file', '{%=file.fileNm%}', '#ctx#/attachfile/downloadFile.do?fileId={%= file.fileId %}&fileSeq={%=file.fileSeq%}');return false;">파일입력</button>
 						{% } %}
 					</div>
 				</td>

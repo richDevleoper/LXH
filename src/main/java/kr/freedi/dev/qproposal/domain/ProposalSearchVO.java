@@ -38,6 +38,9 @@ public class ProposalSearchVO extends CommonVO{
 	@ParamField
 	private String listSource;
 	
+	
+	private String propUserSess; // 사용자 세션 아이디
+	
 	public String getSearchPropCategoryCode() {
 		return searchPropCategoryCode;
 	}
@@ -127,5 +130,11 @@ public class ProposalSearchVO extends CommonVO{
 	}
 	public void setListSource(String listSource) {
 		this.listSource = listSource;
+	}
+	public String getPropUserSess() {
+		return propUserSess;
+	}
+	public void setPropUserSess(String propUserSess) {
+		this.propUserSess = propUserSess;
 	}
 }

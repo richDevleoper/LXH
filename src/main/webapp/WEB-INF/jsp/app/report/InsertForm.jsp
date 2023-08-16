@@ -21,7 +21,7 @@
 	<script type="text/javascript" src="<c:url value='/def/attachfile/js/jquery.iframe-transport.js'/>"></script>
 	<script type="text/javascript" src="<c:url value='/def/attachfile/js/jquery.fileupload.js'/>"></script>
 	<script type="text/javascript" src="<c:url value='/def/attachfile/js/jquery.fileupload-process.js'/>"></script>
-	<script type="text/javascript" src="<c:url value='/def/attachfile/js/jquery.fileupload-validate.js'/>"></script>
+	<script type="text/javascript" src="<c:url value='/def/attachfile/js/jquery.fileupload-validate.js?ver=1'/>"></script>
 	<script type="text/javascript" src="<c:url value='/def/attachfile/js/jquery.fileupload-ui.js'/>"></script>
 	<script type="text/javascript" src="<c:url value='/def/attachfile/js/jquery.fileupload-jquery-ui.js'/>"></script>
 	<script type="text/javascript" src="<c:url value='/def/attachfile/js/attachfile-fileuploader.js'/>"></script>
@@ -37,6 +37,7 @@
 		<form:hidden path="repCode" />
 		<form:hidden path="repMenuCode" />
 		<form:hidden path="repCurrStepCode" />
+		<form:hidden path="repCurrApproveState" />
 		<form:hidden path="mode" />
 		<!-- breadcrumb -->
 		<div class="breadcrumb">
@@ -44,7 +45,7 @@
 				<li>과제등록 | <span style="color: #9a3530b3;">일반과제<c:if test="${reportVO.repMenuCode eq 'REPORT'}"> 및 10+No Policy 활동과제</c:if>는 활동결과까지 함께 등록합니다.</span></li>
 			</ul>
 		</div>
-		<p class="content_title">1. 과제정보</p>
+		<p class="content_title">1. 과제정보<span style="color: #9a3530b3;">과제정보/수행 영역은 수정 시에 챔피언에게 다시 결재가 의뢰됩니다.</span></p>
 		<div class="list-wrap">
 			<div class="list-content">
 				<div class="list-table list">
@@ -87,8 +88,7 @@
 								<th><form:label path="repTypeCode"><span class="asterisk">*</span>과제유형</form:label></th>
 								<td>
 									<div class="row">
-										<div class="col s12 select-group"
-											<c:if test="${reportVO.mode eq 'UPDATE' }">style="pointer-events: none;"</c:if>>
+										<div class="col s12 select-group" <c:if test="${reportVO.mode eq 'UPDATE' }">style="pointer-events: none;"</c:if>>
 											<form:select path="repTypeCode" title="과제유형을 선택하세요." cssClass="validate[required]"></form:select>
 										</div>
 									</div>
@@ -143,15 +143,27 @@
 										<th><form:label path="repMbbUseRateCode">
 												<span class="asterisk">*</span>MBB활용율</form:label></th>
 										<td>
-											<div class="row">
-												<div class="col s12 select-group">
-													<select id="ddlRepMbbUseRateCode" title="MBB활용율을 선택하세요." class="validate[required]"></select>
-													<form:hidden path="repMbbUseRateCode"></form:hidden>
-												</div>
+										<div class="row">											
+											<div class="col s12 select-group">
+												<select id="ddlRepMbbUseRateCode" title="MBB활용율을 선택하세요." class="validate[required]"></select>
+												<form:hidden path="repMbbUseRateCode"></form:hidden>
 											</div>
+										</div>
 										</td>
 										<th>활용율 반영년도</th>
-										<td><span id="lblUseRefDt">-</span>년 <form:input type="hidden" path="repUseRefDate" /></td>
+										<td><%-- <span id="lblUseRefDt">-</span>년 <form:input type="hidden" path="repUseRefDate" /> --%>
+										<div class="row">											
+											<div class="col s12 select-group">
+												<jsp:useBean id="now" class="java.util.Date" />
+									            <fmt:formatDate value="${now}" pattern="yyyy" var="yearNow"/>
+									            <form:select path="repUseRefDate" class="limit" cssClass="only-first validate[required]" >
+													<option value="${yearNow}">${yearNow}년</option>
+													<option value="${yearNow+1}">${yearNow+1}년</option>
+													<option value="${yearNow+2}">${yearNow+2}년</option>
+												</form:select>
+											</div>
+										</div>
+										</td>
 									</tr>
 								</c:when>
 								<c:otherwise>
@@ -211,21 +223,23 @@
 											</thead>
 											<tbody>
 												<tr>
-													<c:forEach var="item" items="${reportVO.repDetailList}"
-														varStatus="status">
+													<c:forEach var="item" items="${reportVO.repDetailList}" varStatus="status">
 
 														<td class="pd3">
 															<div class="row">
 																<!-- Define -->
-																<form:input type="hidden"
-																	path="repDetailList[${status.index}].repSeq" />
-																<form:input type="hidden"
-																	path="repDetailList[${status.index}].repCode" />
-																<form:input type="hidden"
-																	path="repDetailList[${status.index}].repStepCode" />
+																<form:input type="hidden" path="repDetailList[${status.index}].repSeq" />
+																<form:input type="hidden" path="repDetailList[${status.index}].repCode" />
+																<form:input type="hidden" path="repDetailList[${status.index}].repDivisionCode" />
+																<form:input type="hidden" path="repDetailList[${status.index}].repStepCode" />
+																<form:input type="hidden" path="repDetailList[${status.index}].repApprovalMemCode" />
+																<form:input type="hidden" path="repDetailList[${status.index}].repApprovalMemRole" />
+																<form:input type="hidden" path="repDetailList[${status.index}].repStatus" />
+																
 																<div class="col s12 input-text input-date">
 																	<form:input type="text"
 																		path="repDetailList[${status.index}].repPlanStartDate"
+																		seq="${status.index}"
 																		title="일정계획을 입력하세요."
 																		cssClass="datepicker validate[required] date-6sigma" />
 																	<i class="ico calendar"></i>
@@ -380,7 +394,7 @@
 																	<td><div class="col s2 input-text pd-r10" style="width: 100%"><form:input type="text" path="repDetailList[0].repExpectationResult" /></div></td>
 																</tr> --%>
 																<tr>
-																	<th colspan="2" class="pd-r10 align-right">첨부파일<br>(Up to 10)</th>
+																	<th colspan="2" class="pd-r10 align-right"><span class="asterisk">*</span> 첨부파일<br>(Up to 10)</th>
 																	<td colspan="2" style="text-align: left;">
 																		<div class="col s12 input-text file">
 																			<attachfile:fileuploader
@@ -388,7 +402,7 @@
 																				wrapperId="fileUploadWrap_7"
 																				fileId="reportDetail_7_${reportVO.repCode}"
 																				fileGrp="reportDetail" autoUpload="false"
-																				maxFileSize="${15*1000000}" maxNumberOfFiles="10" />
+																				maxFileSize="${30*1000000}" maxNumberOfFiles="10" />
 																		</div>
 																	</td>
 																</tr>
@@ -475,7 +489,7 @@
 																						</tr>
 																						<tr>
 																							<th colspan="2" class="pd-r10 align-right">
-																								첨부파일<br> (Up to 10)
+																								<span class="asterisk">*</span> 첨부파일<br> (Up to 10)
 																							</th>
 																							<td colspan="5">
 																								<div class="file-list">
@@ -975,21 +989,21 @@ function onchange_resultType(obj){
 						</colgroup>
 						<tbody>
 							<tr>
-								<th>첨부파일 (신규/수정)</th>
+								<th><span class="asterisk">*</span> 첨부파일 (신규/수정)</th>
 								<td>
 									<div class="row">
 										<div class="col s12 input-text file">
 											<attachfile:fileuploader objectId="fileUploadObj_01" ctx=""
 												wrapperId="fileUploadWrap"
 												fileId="report_${reportVO.repCode}" fileGrp="report"
-												autoUpload="false" maxFileSize="${15*1000000}"
+												autoUpload="false" maxFileSize="${30*1000000}"
 												maxNumberOfFiles="10" />
 										</div>
 									</div>
 								</td>
 							</tr>
 							<tr style="display: none;">
-								<th>첨부파일 (조회)</th>
+								<th><span class="asterisk">*</span> 첨부파일 (조회)</th>
 								<td>
 									<div class="file-link">
 										<ul>
@@ -1244,6 +1258,34 @@ function onchange_resultType(obj){
 						return false;
 					}
 					
+					
+					// 일정 순차 입력여부 확인 (6시그마:date-6sigma, 그 외  act-date)
+					let repDevCd = $("#repDivisionCode").val();
+					if("2,3".indexOf(repDevCd)>-1){		// 일반과제, 10+과제일 경우
+						
+						if(vMenuType==="REPORT"){ //6시그마과제의 일반/10+과제일 경우
+							if(exeDateCheck("plan-date")){
+								alert("단계별 계획 일정이 잘못되었으므로 확인하시기 바랍니다.");
+								$(".plan-date:eq(0)").focus();
+								return false;
+							}
+						}
+						
+						if(exeDateCheck("act-date")){
+							alert("단계별 계획 일정이 잘못되었으므로 확인하시기 바랍니다.");
+							$(".act-date:eq(0)").focus();
+							return false;
+						}
+						
+					} else {
+						if(exeDateCheck("date-6sigma")){
+							alert("단계별 계획 일정이 잘못되었으므로 확인하시기 바랍니다.");
+							$(".date-6sigma:eq(0)").focus();
+							return false;
+						}
+					}
+					
+					
 					//리더벨트 체크
 					if(vMenuType==="REPORT" && checkLdrBelt(true)){ // 메시지 출력 여부 true
 						return false;
@@ -1260,34 +1302,62 @@ function onchange_resultType(obj){
 		});
 		
 		// 6시그마 날짜 순차 체크
-		$(".date-6sigma").off("change").on("change", function(e){
-
-		    checkDateOrder("date-6sigma", this);
-		});
+		//$(".date-6sigma").off("change").on("change", function(e){
+		//    checkDateOrder("date-6sigma", this);
+		//});
+		// 저장할 때 한번에 체크하기
 		
 		// 일반과제, 10+과제 날짜 순차 체크
-		$(".act-date").off("change").on("change", function(e){
-
-		    checkDateOrder("act-date", this);
+		//$(".act-date").off("change").on("change", function(e){
+		//    checkDateOrder("act-date", this);
+		//});
+		
+	}
+	
+	function exeDateCheck(classNm){
+		
+		let isWrong = false;
+		$("."+classNm).each(function(i, o){
+			let currDate = $("."+ classNm +":eq("+i+")").val();
+		    //console.log(i+"번째", "반복중 현재 체크할 날짜:", currDate);
+		    for(let k=0; k<i; k++){
+		    	let tmpDate = $("."+ classNm +":eq("+k+")").val();
+		        //console.log(i, k, $(".date-6sigma:eq("+k+")").attr("id"), currDate, tmpDate, currDate>=tmpDate);   
+		        if(currDate<tmpDate){
+		            //console.log("커!");
+		            isWrong = true;
+		            return;
+		        }
+		    }
+		    //console.log("---------");
 		});
+		
+		return isWrong;
+		
+		//checkDateOrder("date-6sigma", this);
+		//checkDateOrder("act-date", this);
 		
 	}
 	
 	// 순서대로 가면서 현재 입력된 날짜보다 큰 날짜가 있는지 체크
-	function checkDateOrder(className, currObj){
+	/* function checkDateOrder(className, currObj){
 		
 	    $("."+className).each(function(i,o){
 	    
 	        let currObjDt = $(currObj).val();
 	        let tmpObjDt = $(o).val();
 	        //console.log("현재ID : ", $(currObj).attr("id"));
-	        if(currObjDt<tmpObjDt){
-	            alert("이전 단계 이전의 날짜를 선택할 수 없습니다.");
-	            $(currObj).val("");
-	            return false;
+	        let currSeq = Number($(currObj).attr("seq"));
+	        
+	        if(i<currSeq){
+		        if($(currObj).attr("id")!=$(o).attr("id") && currObjDt<tmpObjDt){
+		            alert("이전 단계 이전의 날짜를 선택할 수 없습니다.");
+		            $(currObj).val("");
+		            return false;
+		        }	
 	        }
 	    });
-	}
+	} */
 	
 	function addRow(mode, obj){
 
@@ -1461,7 +1531,7 @@ function onchange_resultType(obj){
 		
 		$(".obj-rep-keyword").each(function(i,o){
 			if(!$(o).val()){
-				console.log("없음!")
+				//console.log("없음!")
 			} else {
 				if(i>0)
 			    	sumStr += ",";
@@ -1470,7 +1540,7 @@ function onchange_resultType(obj){
 		});
 		
 		$("#repKeyword").val(sumStr);
-		console.log($("#repKeyword").val())
+		//console.log($("#repKeyword").val())
 	}
 	
 	function filterString(obj){

@@ -78,6 +78,11 @@ public class ReportVO {
 	public void setRepCode(Integer repCode) {
 		this.repCode = repCode;
 	}
+	
+	public void setRepCode(String repCode) {
+		if(repCode!=null && repCode != "")
+			this.repCode = Integer.parseInt(repCode);
+	}
 
 	public String getRepName() {
 		return repName;

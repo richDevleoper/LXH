@@ -15,7 +15,6 @@
 	<meta name="description" content="" />
 </head>
 <body>
-    
                         <div class="list-wrap">
                             <div class="list-content">
                                 <div class="list-table list even">
@@ -54,28 +53,67 @@
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <td>항목</td>
-                                                <td>교육<br>이수</td>
-                                                <td>필기test</td>
+                                                <td class="bg-white align-center" >항목</td>
+                                                <td>교육이수</td>
+                                                <td>통계Test</td>
                                                 <td>인증</td>
-                                                <td>교육<br>이수</td>
-                                                <td>필기<br>test</td>
-                                                <td>과제<br>수행</td>
-                                                <td>과제Test</td>
+                                                <td>교육이수</td>
+                                                <td>통계TEST</td>
+                                                <td>과제수행</td>
+                                                <td>과제TEST</td>
                                                 <td>인증</td>
-                                                <td>교육<br>이수</td>
-                                                <td>Paper<br>Test</td>
-                                                <td>과제<br>수행</td>
-                                                <td>과제<br>Test</td>
-                                                <td>인증</td>
-                                                <td>교육<br>이수</td>
-                                                <td>통계<br>Test</td>
-                                                <td>과제<br>수행</td>
-                                                <td>과제<br>Test</td>
-                                                <td>자질<br>평가</td>
+												<td>교육이수</td>
+												<td>통계TEST</td>
+												<td>과제수행</td>
+												<td>과제TEST</td>
+												<td>인증</td>
+												<td>교육이수</td>
+                                                <td>통계TEST</td>
+                                                <td>과제수행</td>
+                                                <td>과제TEST</td>
+                                                <td>자질평가</td>
                                                 <td>인증</td>
                                             </tr>
-                                            <tr>
+                                            
+                                            <c:choose>
+											    <c:when test="${fn:length(myStatisticsList) == 0}">
+											        <tr>
+		                                                <td colspan="20" class="bg-white align-center" ><span>조회결과가 없습니다.</span></td>
+		                                            </tr>
+											    </c:when>
+											    <c:otherwise>
+											    	<c:forEach var="myResult" items="${myStatisticsList}" varStatus="status">
+											    		<tr>
+		                                                	<td class="bg-white align-center" >${myResult.TIT}</td>
+		                                                	<td class="bg-white align-center" >${myResult.M1}</td>
+		                                                	<td class="bg-white align-center" >${myResult.M2}</td>
+		                                                	<td class="bg-white align-center" >${myResult.M3}</td>
+		                                                	<td class="bg-white align-center" >${myResult.M4}</td>
+		                                                	<td class="bg-white align-center" >${myResult.M5}</td>
+		                                                	<td class="bg-white align-center" >${myResult.M6}</td>
+		                                                	<td class="bg-white align-center" >${myResult.M7}</td>
+		                                                	<td class="bg-white align-center" >${myResult.M8}</td>
+		                                                	<td class="bg-white align-center" >${myResult.M9}</td>
+		                                                	<td class="bg-white align-center" >${myResult.M10}</td>
+		                                                	<td class="bg-white align-center" >${myResult.M11}</td>
+		                                                	<td class="bg-white align-center" >${myResult.M12}</td>
+		                                                	<td class="bg-white align-center" >${myResult.M13}</td>
+		                                                	<td class="bg-white align-center" >${myResult.M14}</td>
+		                                                	<td class="bg-white align-center" >${myResult.M15}</td>
+		                                                	<td class="bg-white align-center" >${myResult.M16}</td>
+		                                                	<td class="bg-white align-center" >${myResult.M17}</td>
+		                                                	<td class="bg-white align-center" >${myResult.M18}</td>
+		                                                	<td class="bg-white align-center" >${myResult.M19}</td>
+		                                            	</tr>
+											    	</c:forEach>
+											    	
+											    </c:otherwise>
+											</c:choose>
+                                            
+                                            
+                                            
+                                            
+                                            <!-- <tr>
                                                 <td>현황</td>
                                                 <td>이수<br>완료</td>
                                                 <td>합격</td>
@@ -118,7 +156,7 @@
                                                 <td></td>
                                                 <td></td>
                                                 <td></td>
-                                            </tr>
+                                            </tr> -->
                                         </tbody>
                                     </table>
                                     

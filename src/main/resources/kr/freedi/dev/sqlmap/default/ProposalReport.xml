@@ -64,6 +64,9 @@
 				       NVL(GET_USER_NM(PROP_APPROVER_CODE), '-') AS PROP_APPROVER_NM
 				FROM TB_PROPOSAL_DETAIL
 				<where>
+					<if test="searchRuleDept != null and searchRuleDept neq ''.toString()">
+						AND PROP_GROUP_NAME = ( SELECT GET_DEPART_NM(COM_DEPART_CODE) AS DNAME FROM TB_USER_MST WHERE COM_NO = #{searchRuleDept} )
+					</if>
 					<if test="searchPropFromDate != null and searchPropFromDate neq ''.toString() and searchPropToDate != null and searchPropToDate neq ''.toString()">
 						AND PROP_DATE BETWEEN TO_DATE(#{searchPropFromDate}, 'YYYY-MM-DD') AND TO_DATE(#{searchPropToDate}, 'YYYY-MM-DD')
 					</if>							
@@ -81,6 +84,9 @@
 					</if>
 					<if test="searchPropClassCode != null and searchPropClassCode neq ''.toString()">
 						AND PROP_EVAL_LV_CODE = #{searchPropClassCode}
+					</if>
+					<if test="searchPropStatCode != null and searchPropStatCode neq ''.toString()">
+						AND PROP_PROP_STAT_CODE = #{searchPropStatCode}
 					</if>
 					<if test="searchGroupName != null and searchGroupName neq ''.toString()">
 						AND PROP_GROUP_NAME = #{searchGroupName}

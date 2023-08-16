@@ -15,32 +15,54 @@
 <meta name="description" content="" />
 </head>
 <body>
+<form id="frmSearch" action="MbbRateView.do" method="get">
+	<input type="hidden" name="menuKey" value="${menuKey}">
+	<input type="hidden" name="dept_code" value="${paramDeptCode}">
+	<input type="hidden" name="search_year" value="${paramUseRefYear}">
+	<input type="hidden" name="com_no" id="hidComNo" value="${paramComNo}">
+	<input type="hidden" name="rep_code" id="hidRepCode" value="${paramRepCode}">
+</form>
+
                         <!-- breadcrumb -->
                         <div class="breadcrumb">
                             <ul>
-                                <li>자동차소재부품 사업부 &gt;</li>
-                                <li>경량화사업담당 &gt;</li>
-                                <li>자동차소재부품.투명과학플라스틱연구PJT</li>
+                                <li>${deptInfo[0].deptLv1Name} &gt;</li>
+                                <c:if test="${not empty deptInfo[0].deptLv3Name}">
+                                <li>${deptInfo[0].deptLv2Name}</li>
+                                </c:if>
+                                <c:if test="${not empty deptInfo[0].deptLv3Name}">
+                                	<li>&gt; ${deptInfo[0].deptLv3Name}</li>
+                                </c:if>
+                                <c:if test="${not empty deptInfo[0].deptLv4Name}">
+                                	<li>&gt; ${deptInfo[0].deptLv4Name}</li>
+                                </c:if>
                             </ul>
                         </div>
                         <!-- //breadcrumb -->
                         <div class="tab-group">
                             <div class="tab-btn">
-                                <!-- [D] 현재 활성화된 메뉴에 on클래스 추가해주세요. -->
-                                <button type="button" class="on">홍길동</button>
-                                <button type="button">이길동</button>
-                                <button type="button">이길동</button>
-                                <button type="button">이길동</button>
+                            <c:forEach var="item" items="${mbbUserList}" varStatus="status">
+                            	<button type="button" class="<c:if test="${item.comNo eq paramComNo}">on</c:if>" onclick="onclick_tabLv1('${item.comNo}')">${item.userName}</button>
+                            </c:forEach>
                             </div>
                             <div class="tab-inr">
                                 <!-- [D] 현재 활성화된 내용에 on클래스 추가해주세요. -->
                                 <div class="tab-box on">
                                     <div class="tab-group underline-type">
                                         <div class="tab-btn">
-                                            <button type="button" class="on">과제정보1</button>
-                                            <button type="button">과제정보2</button>
-                                            <button type="button">과제정보3</button>
+				                            <c:forEach var="item" items="${reportList}" varStatus="status">
+				                            	<button type="button" class="<c:if test="${item.repCode eq paramRepCode}">on</c:if>" onclick="onclick_tabLv2('${item.repCode}', '${paramRepCode}')">과제정보 ${status.count}</button>
+				                             </c:forEach>
                                         </div>
+<c:choose>
+	<c:when test="${empty reportVO}">
+                                        <div class="tab-inr">
+                                        <div style="height: 150px; width: 100%; text-align: center; line-height: 150px;"> 수행 과제 정보가 없습니다.</div>
+                                        </div>
+	</c:when>
+	<c:otherwise>
+	
+
                                         <div class="tab-inr">
                                             <div class="tab-box on">
                                                 <p class="content_title">1. 과제정보/수행</p>
@@ -58,42 +80,73 @@
                                                                 <tbody>
                                                                     <tr>
                                                                         <th>과제명</th>
-                                                                        <td colspan="3">예시) 진행중인 과제명 </td>
+                                                                        <td colspan="3">${reportVO.repName}</td>
                                                                     </tr>
                                                                     <tr>
                                                                         <th>6σ Full Process여부</th>
-                                                                        <td>6σ Full Process</td>
+                                                                        <td>${reportVO.repDivision}</td>
                                                                         <th>과제유형</th>
-                                                                        <td>DMAIC</td>
+                                                                        <td>${reportVO.repType}</td>
                                                                     </tr>
                                                                     <tr>
                                                                         <th>부문</th>
-                                                                        <td>바닥재</td>
+                                                                        <td>${reportVO.repSector}</td>
                                                                         <th>제품군</th>
-                                                                        <td>직접입력</td>
+                                                                        <td>${reportVO.repProductClassName}</td>
                                                                     </tr>
                                                                     <tr>
                                                                         <th>과제리더벨트</th>
-                                                                        <td>MBB</td>
+                                                                        <td>${reportVO.repLeaderBelt}</td>
                                                                         <th>활동분야</th>
-                                                                        <td>품질개선</td>
+                                                                        <td>${reportVO.repActionType}</td>
                                                                     </tr>
                                                                     <tr>
                                                                         <th>MBB활용율</th>
-                                                                        <td>선택</td>
+                                                                        <td>${reportVO.repMbbUseRate}</td>
                                                                         <th>활용율 반영년도</th>
-                                                                        <td>2023년</td>
+                                                                        <td>${reportVO.repUseRefDate}년</td>
                                                                     </tr>
                                                                     <tr>
                                                                         <th>일정계획 및 수행</th>
                                                                         <td colspan="3">
-                                                                            <div class="list-wrap toggle">
-                                                                                <!-- [D] 상태에따라 열기/닫기 텍스트 구분해주세요. -->
-                                                                                <span class="blind">열기/닫기</span>
-                                                                                <ul>
-                                                                                    <!-- [D] 열린상태일 경우 active 클래스를 추가해주세요. -->
-                                                                                    <li>
-                                                                                        <div class="list-content">
+
+<c:choose>  
+	<c:when test="${reportVO.repDivisionCode eq '1'}">
+	<!-- 6시그마 -->
+
+                                                   <div class="list-wrap toggle">
+                                                        <!-- [D] 상태에따라 열기/닫기 텍스트 구분해주세요. -->
+                                                        <span class="blind">열기/닫기</span>
+                                                        <ul>
+		<c:forEach var="item" items="${reportVO.repDetailList}" varStatus="status">
+
+
+                                                            <!-- [D] 열린상태일 경우 active 클래스를 추가해주세요. -->
+                                                            <li> <!-- class="active" -->
+                                                                <div class="list-content">
+                                                                    <div class="list-table list">
+                                                                    
+                                                                        <table <c:if test="${approveVO.refBusSubCode eq item.repStepCode}">style="border: 3px solid #9a3530;"</c:if> >
+                                                                            <caption>일정계획 및 수행 테이블</caption>
+                                                                            <colgroup>
+                                                                                <col style="width:60px">
+                                                                                <col style="width:145px">
+                                                                                <col>
+                                                                                <col style="width:80px">
+                                                                                <col style="width:80px">
+                                                                                <col style="width:80px">
+                                                                            </colgroup>
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <th>구분</th>
+                                                                                    <th><label id="lbl6sigmaStepNm_${status.count}"></label></th>
+                                                                                    <th colspan="4">활동요약</th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <td colspan="6" class="pd0 border0">
+                                                                                        <div class="toggle-box" style="display: block;"><%-- <c:if test="${item.repStatus eq '1'}">style="display: block;"</c:if> --%>
                                                                                             <div class="list-table list">
                                                                                                 <table>
                                                                                                     <caption>일정계획 및 수행 테이블</caption>
@@ -105,128 +158,29 @@
                                                                                                         <col style="width:80px">
                                                                                                         <col style="width:80px">
                                                                                                     </colgroup>
-                                                                                                    <thead>
-                                                                                                        <tr>
-                                                                                                            <th>구분</th>
-                                                                                                            <th>Define</th>
-                                                                                                            <th colspan="4">활동요약</th>
-                                                                                                        </tr>
-                                                                                                    </thead>
                                                                                                     <tbody>
                                                                                                         <tr>
-                                                                                                            <td colspan="6" class="pd0 border0">
-                                                                                                                <div class="toggle-box">
-                                                                                                                    <div class="list-table list">
-                                                                                                                        <table>
-                                                                                                                            <caption>일정계획 및 수행 테이블</caption>
-                                                                                                                            <colgroup>
-                                                                                                                                <col style="width:60px">
-                                                                                                                                <col style="width:145px">
-                                                                                                                                <col>
-                                                                                                                                <col style="width:80px">
-                                                                                                                                <col style="width:80px">
-                                                                                                                                <col style="width:80px">
-                                                                                                                            </colgroup>
-                                                                                                                            <tbody>
-                                                                                                                                <tr>
-                                                                                                                                    <td>계획</td>
-                                                                                                                                    <td>2023.01.01</td>
-                                                                                                                                    <td rowspan="2" colspan="4">
-                                                                                                                                        <div class="input-text">
-                                                                                                                                            <textarea name="" id="">활동요약 내용(실시결과 내용)</textarea>
-                                                                                                                                        </div>
-                                                                                                                                    </td>
-                                                                                                                                </tr>
-                                                                                                                                <tr>
-                                                                                                                                    <td>실시</td>
-                                                                                                                                    <td>2023.01.01</td>
-                                                                                                                                </tr>
-                                                                                                                                <tr>
-                                                                                                                                    <td>계획</td>
-                                                                                                                                    <td>2023.01.01</td>
-                                                                                                                                    <td rowspan="2">
-                                                                                                                                        <div class="input-text">
-                                                                                                                                            <textarea name="" id="">활동요약 내용(실시결과 내용)</textarea>
-                                                                                                                                        </div>
-                                                                                                                                    </td>
-                                                                                                                                    <td>CTQ/CTP</td>
-                                                                                                                                    <td>KPI</td>
-                                                                                                                                    <td>예상성과</td>
-                                                                                                                                </tr>
-                                                                                                                                <tr>
-                                                                                                                                    <td>실시</td>
-                                                                                                                                    <td>2023.01.01</td>
-                                                                                                                                    <td>&nbsp;</td>
-                                                                                                                                    <td>&nbsp;</td>
-                                                                                                                                    <td>&nbsp;</td>
-                                                                                                                                </tr>
-                                                                                                                            </tbody>
-                                                                                                                        </table>
+                                                                                                            <td>계획</td>
+                                                                                                            <td class="pd3">
+                                                                                                                <div class="row">
+                                                                                                                    <div class="col s12 input-text">
+                                                                                                                    	<fmt:formatDate pattern="yyyy.MM.dd" value="${item.repPlanStartDate}" />
                                                                                                                     </div>
-                                                                                                                    <div class="list-table list">
-                                                                                                                        <table>
-                                                                                                                            <caption>일정계획 및 수행 테이블</caption>
-                                                                                                                            <colgroup>
-                                                                                                                                <col style="width:60px">
-                                                                                                                                <col style="width:80px">
-                                                                                                                                <col>
-                                                                                                                                <col style="width:60px">
-                                                                                                                                <col style="width:60px">
-                                                                                                                                <col style="width:60px">
-                                                                                                                                <col style="width:60px">
-                                                                                                                            </colgroup>
-                                                                                                                            <tbody>
-                                                                                                                                <tr>
-                                                                                                                                    <th rowspan="2">승인자</th>
-                                                                                                                                    <th>참여형태</th>
-                                                                                                                                    <th>소속</th>
-                                                                                                                                    <th>이름</th>
-                                                                                                                                    <th>직위</th>
-                                                                                                                                    <th>직책</th>
-                                                                                                                                    <th>Belt</th>
-                                                                                                                                </tr>
-                                                                                                                                <tr>
-                                                                                                                                    <td>지도사원</td>
-                                                                                                                                    <td>자동차소재부품 사업부 &gt; 경량화사업담당 &gt; 자동차소재부품.투명과학플라스틱연구PJT</td>
-                                                                                                                                    <td>홍길동</td>
-                                                                                                                                    <td>책임</td>
-                                                                                                                                    <td>팀장</td>
-                                                                                                                                    <td>BB</td>
-                                                                                                                                </tr>
-                                                                                                                                <tr>
-                                                                                                                                    <th colspan="2" class="pd-r10 align-right">
-                                                                                                                                        첨부파일<br>
-                                                                                                                                        (Up to 10)
-                                                                                                                                    </th>
-                                                                                                                                    <td colspan="5">
-                                                                                                                                        <div class="file-list">
-                                                                                                                                            <ul>
-                                                                                                                                                <li>
-                                                                                                                                                    <div class="input-text">
-                                                                                                                                                        <input type="text" id="" name="" value="LG_Hausys_UI_Design_Guide.pptx [1.27MB]" readonly>
-                                                                                                                                                    </div>
-                                                                                                                                                </li>
-                                                                                                                                                <li>
-                                                                                                                                                    <div class="input-text">
-                                                                                                                                                        <input type="text" id="" name="" value="LG_Hausys_UI_Design_Guide.pptx [1.27MB]" readonly>
-                                                                                                                                                    </div>
-                                                                                                                                                </li>
-                                                                                                                                                <li>
-                                                                                                                                                    <div class="input-text">
-                                                                                                                                                        <input type="text" id="" name="" value="LG_Hausys_UI_Design_Guide.pptx [1.27MB]" readonly>
-                                                                                                                                                    </div>
-                                                                                                                                                </li>
-                                                                                                                                                <li>
-                                                                                                                                                    <div class="input-text">
-                                                                                                                                                        <input type="text" id="" name="" value="LG_Hausys_UI_Design_Guide.pptx [1.27MB]" readonly>
-                                                                                                                                                    </div>
-                                                                                                                                                </li>
-                                                                                                                                            </ul>
-                                                                                                                                        </div>
-                                                                                                                                    </td>
-                                                                                                                                </tr>
-                                                                                                                            </tbody>
-                                                                                                                        </table>
+                                                                                                                </div>
+                                                                                                            </td>
+                                                                                                            <td rowspan="2" colspan="4">
+                                                                                                            
+                                                                                                                <div class="input-text align-left">
+                                                                                                                ${item.repFinishSummary}
+                                                                                                                </div>
+                                                                                                            </td>
+                                                                                                        </tr>
+                                                                                                        <tr>
+                                                                                                            <td>실시</td>
+                                                                                                            <td class="pd3">
+                                                                                                                <div class="row">
+                                                                                                                    <div class="col s12 input-text">
+                                                                                                                    <fmt:formatDate pattern="yyyy.MM.dd" value="${item.repActStartDate}" />
                                                                                                                     </div>
                                                                                                                 </div>
                                                                                                             </td>
@@ -234,447 +188,253 @@
                                                                                                     </tbody>
                                                                                                 </table>
                                                                                             </div>
-                                                                                        </div>
-                                                                                    </li>
-                                                                                    <li>
-                                                                                        <div class="list-content">
                                                                                             <div class="list-table list">
                                                                                                 <table>
                                                                                                     <caption>일정계획 및 수행 테이블</caption>
                                                                                                     <colgroup>
                                                                                                         <col style="width:60px">
-                                                                                                        <col style="width:145px">
+                                                                                                        <col style="width:80px">
                                                                                                         <col>
-                                                                                                        <col style="width:80px">
-                                                                                                        <col style="width:80px">
-                                                                                                        <col style="width:80px">
-                                                                                                    </colgroup>
-                                                                                                    <thead>
-                                                                                                        <tr>
-                                                                                                            <th>구분</th>
-                                                                                                            <th>Define</th>
-                                                                                                            <th colspan="4">활동요약</th>
-                                                                                                        </tr>
-                                                                                                    </thead>
-                                                                                                    <tbody>
-                                                                                                        <tr>
-                                                                                                            <td colspan="6" class="pd0 border0">
-                                                                                                                <div class="toggle-box">
-                                                                                                                    <div class="list-table list">
-                                                                                                                        <table>
-                                                                                                                            <caption>일정계획 및 수행 테이블</caption>
-                                                                                                                            <colgroup>
-                                                                                                                                <col style="width:60px">
-                                                                                                                                <col style="width:145px">
-                                                                                                                                <col>
-                                                                                                                                <col style="width:80px">
-                                                                                                                                <col style="width:80px">
-                                                                                                                                <col style="width:80px">
-                                                                                                                            </colgroup>
-                                                                                                                            <tbody>
-                                                                                                                                <tr>
-                                                                                                                                    <td>계획</td>
-                                                                                                                                    <td>2023.01.01</td>
-                                                                                                                                    <td rowspan="2" colspan="4">
-                                                                                                                                        <div class="input-text">
-                                                                                                                                            <textarea name="" id="">활동요약 내용(실시결과 내용)</textarea>
-                                                                                                                                        </div>
-                                                                                                                                    </td>
-                                                                                                                                </tr>
-                                                                                                                                <tr>
-                                                                                                                                    <td>실시</td>
-                                                                                                                                    <td>2023.01.01</td>
-                                                                                                                                </tr>
-                                                                                                                                <tr>
-                                                                                                                                    <td>계획</td>
-                                                                                                                                    <td>2023.01.01</td>
-                                                                                                                                    <td rowspan="2">
-                                                                                                                                        <div class="input-text">
-                                                                                                                                            <textarea name="" id="">활동요약 내용(실시결과 내용)</textarea>
-                                                                                                                                        </div>
-                                                                                                                                    </td>
-                                                                                                                                    <td>CTQ/CTP</td>
-                                                                                                                                    <td>KPI</td>
-                                                                                                                                    <td>예상성과</td>
-                                                                                                                                </tr>
-                                                                                                                                <tr>
-                                                                                                                                    <td>실시</td>
-                                                                                                                                    <td>2023.01.01</td>
-                                                                                                                                    <td>&nbsp;</td>
-                                                                                                                                    <td>&nbsp;</td>
-                                                                                                                                    <td>&nbsp;</td>
-                                                                                                                                </tr>
-                                                                                                                            </tbody>
-                                                                                                                        </table>
-                                                                                                                    </div>
-                                                                                                                    <div class="list-table list">
-                                                                                                                        <table>
-                                                                                                                            <caption>일정계획 및 수행 테이블</caption>
-                                                                                                                            <colgroup>
-                                                                                                                                <col style="width:60px">
-                                                                                                                                <col style="width:80px">
-                                                                                                                                <col>
-                                                                                                                                <col style="width:60px">
-                                                                                                                                <col style="width:60px">
-                                                                                                                                <col style="width:60px">
-                                                                                                                                <col style="width:60px">
-                                                                                                                            </colgroup>
-                                                                                                                            <tbody>
-                                                                                                                                <tr>
-                                                                                                                                    <th rowspan="2">승인자</th>
-                                                                                                                                    <th>참여형태</th>
-                                                                                                                                    <th>소속</th>
-                                                                                                                                    <th>이름</th>
-                                                                                                                                    <th>직위</th>
-                                                                                                                                    <th>직책</th>
-                                                                                                                                    <th>Belt</th>
-                                                                                                                                </tr>
-                                                                                                                                <tr>
-                                                                                                                                    <td>지도사원</td>
-                                                                                                                                    <td>자동차소재부품 사업부 &gt; 경량화사업담당 &gt; 자동차소재부품.투명과학플라스틱연구PJT</td>
-                                                                                                                                    <td>홍길동</td>
-                                                                                                                                    <td>책임</td>
-                                                                                                                                    <td>팀장</td>
-                                                                                                                                    <td>BB</td>
-                                                                                                                                </tr>
-                                                                                                                                <tr>
-                                                                                                                                    <th colspan="2" class="pd-r10 align-right">
-                                                                                                                                        첨부파일<br>
-                                                                                                                                        (Up to 10)
-                                                                                                                                    </th>
-                                                                                                                                    <td colspan="5">
-                                                                                                                                        <div class="file-list">
-                                                                                                                                            <ul>
-                                                                                                                                                <li>
-                                                                                                                                                    <div class="input-text">
-                                                                                                                                                        <input type="text" id="" name="" value="LG_Hausys_UI_Design_Guide.pptx [1.27MB]" readonly>
-                                                                                                                                                    </div>
-                                                                                                                                                </li>
-                                                                                                                                                <li>
-                                                                                                                                                    <div class="input-text">
-                                                                                                                                                        <input type="text" id="" name="" value="LG_Hausys_UI_Design_Guide.pptx [1.27MB]" readonly>
-                                                                                                                                                    </div>
-                                                                                                                                                </li>
-                                                                                                                                                <li>
-                                                                                                                                                    <div class="input-text">
-                                                                                                                                                        <input type="text" id="" name="" value="LG_Hausys_UI_Design_Guide.pptx [1.27MB]" readonly>
-                                                                                                                                                    </div>
-                                                                                                                                                </li>
-                                                                                                                                                <li>
-                                                                                                                                                    <div class="input-text">
-                                                                                                                                                        <input type="text" id="" name="" value="LG_Hausys_UI_Design_Guide.pptx [1.27MB]" readonly>
-                                                                                                                                                    </div>
-                                                                                                                                                </li>
-                                                                                                                                            </ul>
-                                                                                                                                        </div>
-                                                                                                                                    </td>
-                                                                                                                                </tr>
-                                                                                                                            </tbody>
-                                                                                                                        </table>
-                                                                                                                    </div>
-                                                                                                                </div>
-                                                                                                            </td>
-                                                                                                        </tr>
-                                                                                                    </tbody>
-                                                                                                </table>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </li>
-                                                                                    <li>
-                                                                                        <div class="list-content">
-                                                                                            <div class="list-table list">
-                                                                                                <table>
-                                                                                                    <caption>일정계획 및 수행 테이블</caption>
-                                                                                                    <colgroup>
                                                                                                         <col style="width:60px">
-                                                                                                        <col style="width:145px">
-                                                                                                        <col>
-                                                                                                        <col style="width:80px">
-                                                                                                        <col style="width:80px">
-                                                                                                        <col style="width:80px">
-                                                                                                    </colgroup>
-                                                                                                    <thead>
-                                                                                                        <tr>
-                                                                                                            <th>구분</th>
-                                                                                                            <th>Define</th>
-                                                                                                            <th colspan="4">활동요약</th>
-                                                                                                        </tr>
-                                                                                                    </thead>
-                                                                                                    <tbody>
-                                                                                                        <tr>
-                                                                                                            <td colspan="6" class="pd0 border0">
-                                                                                                                <div class="toggle-box">
-                                                                                                                    <div class="list-table list">
-                                                                                                                        <table>
-                                                                                                                            <caption>일정계획 및 수행 테이블</caption>
-                                                                                                                            <colgroup>
-                                                                                                                                <col style="width:60px">
-                                                                                                                                <col style="width:145px">
-                                                                                                                                <col>
-                                                                                                                                <col style="width:80px">
-                                                                                                                                <col style="width:80px">
-                                                                                                                                <col style="width:80px">
-                                                                                                                            </colgroup>
-                                                                                                                            <tbody>
-                                                                                                                                <tr>
-                                                                                                                                    <td>계획</td>
-                                                                                                                                    <td>2023.01.01</td>
-                                                                                                                                    <td rowspan="2" colspan="4">
-                                                                                                                                        <div class="input-text">
-                                                                                                                                            <textarea name="" id="">활동요약 내용(실시결과 내용)</textarea>
-                                                                                                                                        </div>
-                                                                                                                                    </td>
-                                                                                                                                </tr>
-                                                                                                                                <tr>
-                                                                                                                                    <td>실시</td>
-                                                                                                                                    <td>2023.01.01</td>
-                                                                                                                                </tr>
-                                                                                                                                <tr>
-                                                                                                                                    <td>계획</td>
-                                                                                                                                    <td>2023.01.01</td>
-                                                                                                                                    <td rowspan="2">
-                                                                                                                                        <div class="input-text">
-                                                                                                                                            <textarea name="" id="">활동요약 내용(실시결과 내용)</textarea>
-                                                                                                                                        </div>
-                                                                                                                                    </td>
-                                                                                                                                    <td>CTQ/CTP</td>
-                                                                                                                                    <td>KPI</td>
-                                                                                                                                    <td>예상성과</td>
-                                                                                                                                </tr>
-                                                                                                                                <tr>
-                                                                                                                                    <td>실시</td>
-                                                                                                                                    <td>2023.01.01</td>
-                                                                                                                                    <td>&nbsp;</td>
-                                                                                                                                    <td>&nbsp;</td>
-                                                                                                                                    <td>&nbsp;</td>
-                                                                                                                                </tr>
-                                                                                                                            </tbody>
-                                                                                                                        </table>
-                                                                                                                    </div>
-                                                                                                                    <div class="list-table list">
-                                                                                                                        <table>
-                                                                                                                            <caption>일정계획 및 수행 테이블</caption>
-                                                                                                                            <colgroup>
-                                                                                                                                <col style="width:60px">
-                                                                                                                                <col style="width:80px">
-                                                                                                                                <col>
-                                                                                                                                <col style="width:60px">
-                                                                                                                                <col style="width:60px">
-                                                                                                                                <col style="width:60px">
-                                                                                                                                <col style="width:60px">
-                                                                                                                            </colgroup>
-                                                                                                                            <tbody>
-                                                                                                                                <tr>
-                                                                                                                                    <th rowspan="2">승인자</th>
-                                                                                                                                    <th>참여형태</th>
-                                                                                                                                    <th>소속</th>
-                                                                                                                                    <th>이름</th>
-                                                                                                                                    <th>직위</th>
-                                                                                                                                    <th>직책</th>
-                                                                                                                                    <th>Belt</th>
-                                                                                                                                </tr>
-                                                                                                                                <tr>
-                                                                                                                                    <td>지도사원</td>
-                                                                                                                                    <td>자동차소재부품 사업부 &gt; 경량화사업담당 &gt; 자동차소재부품.투명과학플라스틱연구PJT</td>
-                                                                                                                                    <td>홍길동</td>
-                                                                                                                                    <td>책임</td>
-                                                                                                                                    <td>팀장</td>
-                                                                                                                                    <td>BB</td>
-                                                                                                                                </tr>
-                                                                                                                                <tr>
-                                                                                                                                    <th colspan="2" class="pd-r10 align-right">
-                                                                                                                                        첨부파일<br>
-                                                                                                                                        (Up to 10)
-                                                                                                                                    </th>
-                                                                                                                                    <td colspan="5">
-                                                                                                                                        <div class="file-list">
-                                                                                                                                            <ul>
-                                                                                                                                                <li>
-                                                                                                                                                    <div class="input-text">
-                                                                                                                                                        <input type="text" id="" name="" value="LG_Hausys_UI_Design_Guide.pptx [1.27MB]" readonly>
-                                                                                                                                                    </div>
-                                                                                                                                                </li>
-                                                                                                                                                <li>
-                                                                                                                                                    <div class="input-text">
-                                                                                                                                                        <input type="text" id="" name="" value="LG_Hausys_UI_Design_Guide.pptx [1.27MB]" readonly>
-                                                                                                                                                    </div>
-                                                                                                                                                </li>
-                                                                                                                                                <li>
-                                                                                                                                                    <div class="input-text">
-                                                                                                                                                        <input type="text" id="" name="" value="LG_Hausys_UI_Design_Guide.pptx [1.27MB]" readonly>
-                                                                                                                                                    </div>
-                                                                                                                                                </li>
-                                                                                                                                                <li>
-                                                                                                                                                    <div class="input-text">
-                                                                                                                                                        <input type="text" id="" name="" value="LG_Hausys_UI_Design_Guide.pptx [1.27MB]" readonly>
-                                                                                                                                                    </div>
-                                                                                                                                                </li>
-                                                                                                                                            </ul>
-                                                                                                                                        </div>
-                                                                                                                                    </td>
-                                                                                                                                </tr>
-                                                                                                                            </tbody>
-                                                                                                                        </table>
-                                                                                                                    </div>
-                                                                                                                </div>
-                                                                                                            </td>
-                                                                                                        </tr>
-                                                                                                    </tbody>
-                                                                                                </table>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </li>
-                                                                                    <li>
-                                                                                        <div class="list-content">
-                                                                                            <div class="list-table list">
-                                                                                                <table>
-                                                                                                    <caption>일정계획 및 수행 테이블</caption>
-                                                                                                    <colgroup>
                                                                                                         <col style="width:60px">
-                                                                                                        <col style="width:145px">
-                                                                                                        <col>
-                                                                                                        <col style="width:80px">
-                                                                                                        <col style="width:80px">
-                                                                                                        <col style="width:80px">
+                                                                                                        <col style="width:60px">
+                                                                                                        <col style="width:60px">
                                                                                                     </colgroup>
-                                                                                                    <thead>
-                                                                                                        <tr>
-                                                                                                            <th>구분</th>
-                                                                                                            <th>Define</th>
-                                                                                                            <th colspan="4">활동요약</th>
-                                                                                                        </tr>
-                                                                                                    </thead>
                                                                                                     <tbody>
                                                                                                         <tr>
-                                                                                                            <td colspan="6" class="pd0 border0">
-                                                                                                                <div class="toggle-box">
-                                                                                                                    <div class="list-table list">
-                                                                                                                        <table>
-                                                                                                                            <caption>일정계획 및 수행 테이블</caption>
-                                                                                                                            <colgroup>
-                                                                                                                                <col style="width:60px">
-                                                                                                                                <col style="width:145px">
-                                                                                                                                <col>
-                                                                                                                                <col style="width:80px">
-                                                                                                                                <col style="width:80px">
-                                                                                                                                <col style="width:80px">
-                                                                                                                            </colgroup>
-                                                                                                                            <tbody>
-                                                                                                                                <tr>
-                                                                                                                                    <td>계획</td>
-                                                                                                                                    <td>2023.01.01</td>
-                                                                                                                                    <td rowspan="2" colspan="4">
-                                                                                                                                        <div class="input-text">
-                                                                                                                                            <textarea name="" id="">활동요약 내용(실시결과 내용)</textarea>
-                                                                                                                                        </div>
-                                                                                                                                    </td>
-                                                                                                                                </tr>
-                                                                                                                                <tr>
-                                                                                                                                    <td>실시</td>
-                                                                                                                                    <td>2023.01.01</td>
-                                                                                                                                </tr>
-                                                                                                                                <tr>
-                                                                                                                                    <td>계획</td>
-                                                                                                                                    <td>2023.01.01</td>
-                                                                                                                                    <td rowspan="2">
-                                                                                                                                        <div class="input-text">
-                                                                                                                                            <textarea name="" id="">활동요약 내용(실시결과 내용)</textarea>
-                                                                                                                                        </div>
-                                                                                                                                    </td>
-                                                                                                                                    <td>CTQ/CTP</td>
-                                                                                                                                    <td>KPI</td>
-                                                                                                                                    <td>예상성과</td>
-                                                                                                                                </tr>
-                                                                                                                                <tr>
-                                                                                                                                    <td>실시</td>
-                                                                                                                                    <td>2023.01.01</td>
-                                                                                                                                    <td>&nbsp;</td>
-                                                                                                                                    <td>&nbsp;</td>
-                                                                                                                                    <td>&nbsp;</td>
-                                                                                                                                </tr>
-                                                                                                                            </tbody>
-                                                                                                                        </table>
-                                                                                                                    </div>
-                                                                                                                    <div class="list-table list">
-                                                                                                                        <table>
-                                                                                                                            <caption>일정계획 및 수행 테이블</caption>
-                                                                                                                            <colgroup>
-                                                                                                                                <col style="width:60px">
-                                                                                                                                <col style="width:80px">
-                                                                                                                                <col>
-                                                                                                                                <col style="width:60px">
-                                                                                                                                <col style="width:60px">
-                                                                                                                                <col style="width:60px">
-                                                                                                                                <col style="width:60px">
-                                                                                                                            </colgroup>
-                                                                                                                            <tbody>
-                                                                                                                                <tr>
-                                                                                                                                    <th rowspan="2">승인자</th>
-                                                                                                                                    <th>참여형태</th>
-                                                                                                                                    <th>소속</th>
-                                                                                                                                    <th>이름</th>
-                                                                                                                                    <th>직위</th>
-                                                                                                                                    <th>직책</th>
-                                                                                                                                    <th>Belt</th>
-                                                                                                                                </tr>
-                                                                                                                                <tr>
-                                                                                                                                    <td>지도사원</td>
-                                                                                                                                    <td>자동차소재부품 사업부 &gt; 경량화사업담당 &gt; 자동차소재부품.투명과학플라스틱연구PJT</td>
-                                                                                                                                    <td>홍길동</td>
-                                                                                                                                    <td>책임</td>
-                                                                                                                                    <td>팀장</td>
-                                                                                                                                    <td>BB</td>
-                                                                                                                                </tr>
-                                                                                                                                <tr>
-                                                                                                                                    <th colspan="2" class="pd-r10 align-right">
-                                                                                                                                        첨부파일<br>
-                                                                                                                                        (Up to 10)
-                                                                                                                                    </th>
-                                                                                                                                    <td colspan="5">
-                                                                                                                                        <div class="file-list">
-                                                                                                                                            <ul>
-                                                                                                                                                <li>
-                                                                                                                                                    <div class="input-text">
-                                                                                                                                                        <input type="text" id="" name="" value="LG_Hausys_UI_Design_Guide.pptx [1.27MB]" readonly>
-                                                                                                                                                    </div>
-                                                                                                                                                </li>
-                                                                                                                                                <li>
-                                                                                                                                                    <div class="input-text">
-                                                                                                                                                        <input type="text" id="" name="" value="LG_Hausys_UI_Design_Guide.pptx [1.27MB]" readonly>
-                                                                                                                                                    </div>
-                                                                                                                                                </li>
-                                                                                                                                                <li>
-                                                                                                                                                    <div class="input-text">
-                                                                                                                                                        <input type="text" id="" name="" value="LG_Hausys_UI_Design_Guide.pptx [1.27MB]" readonly>
-                                                                                                                                                    </div>
-                                                                                                                                                </li>
-                                                                                                                                                <li>
-                                                                                                                                                    <div class="input-text">
-                                                                                                                                                        <input type="text" id="" name="" value="LG_Hausys_UI_Design_Guide.pptx [1.27MB]" readonly>
-                                                                                                                                                    </div>
-                                                                                                                                                </li>
-                                                                                                                                            </ul>
-                                                                                                                                        </div>
-                                                                                                                                    </td>
-                                                                                                                                </tr>
-                                                                                                                            </tbody>
-                                                                                                                        </table>
-                                                                                                                    </div>
+                                                                                                            <th rowspan="2">승인자</th>
+                                                                                                            <th>참여형태</th>
+                                                                                                            <th>소속</th>
+                                                                                                            <th>이름</th>
+                                                                                                            <th>직위</th>
+                                                                                                            <th>직책</th>
+                                                                                                            <th>Belt</th>
+                                                                                                        </tr>
+                                                                                                        <tr>
+                                                                                                            <td>${item.repApprovalMemRoleName}</td>
+                                                                                                            <td class="align-left">${item.repApprovalMemDeptName}<!-- 자동차소재부품 사업부 &gt; 경량화사업담당 &gt; 자동차소재부품.투명과학플라스틱연구PJT --></td>
+                                                                                                            <td>${item.repApprovalMemName}</td>
+                                                                                                            <td>${item.repApprovalMemComJobx}</td>
+                                                                                                            <td>${item.repApprovalMemComPosition}</td>
+                                                                                                            <td>${item.repApprovalMemComCertBelt}</td>
+                                                                                                        </tr>
+                                                                                                        <tr>
+                                                                                                            <th colspan="2" class="pd-r10 align-right">첨부파일</th>
+                                                                                                            <td colspan="5">
+                                                                                                                <div class="file-drop-box">
+                                                                                                                    <%-- <c:out value="${item.repDetailFileList }"/> --%>
+																													<div class="file-link">
+																														<ul>
+			<c:forEach var="item_sub" items="${item.repDetailFileList}" varStatus="status">														
+																															<li><a href="/attachfile/downloadFile.do?fileId=${item_sub.fileId}&fileSeq=${item_sub.fileSeq}" title="다운받기">${item_sub.fileNm}</a><a href="/attachfile/downloadFile.do?fileId=${item_sub.fileId}&fileSeq=${item_sub.fileSeq}" title="다운받기" class="btn color gray mg-l15">다운받기</a></li>
+			</c:forEach>															
+																														</ul>
+																													</div>                                                                                                                    
                                                                                                                 </div>
                                                                                                             </td>
                                                                                                         </tr>
+                                                                                                        
                                                                                                     </tbody>
                                                                                                 </table>
                                                                                             </div>
                                                                                         </div>
-                                                                                    </li>
-                                                                                </ul>
-                                                                            </div>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+		</c:forEach>
+                                                        </ul>
+                                                    </div>		
+	
+	<!-- End of 6시그마 -->
+	</c:when>
+	<c:otherwise>
+	<!-- 일반 / 10+ -->
+		<c:forEach var="item" items="${reportVO.repDetailList}" varStatus="status">
+			<%-- <c:out value="${item}"/> --%>
+<div class="list-wrap toggle">
+                                                        <!-- [D] 상태에따라 열기/닫기 텍스트 구분해주세요. -->
+                                                        <span class="blind">열기/닫기</span>
+                                                        <ul>
+                                                            <li><!-- [D] 열린상태일 경우 active 클래스를 추가해주세요. -->
+                                                                <div class="list-content">
+                                                                    <div class="list-table list">
+                                                                        <table>
+                                                                            <caption>일정계획 및 수행 테이블</caption>
+                                                                            <colgroup>
+                                                                                <col style="width:60px">
+                                                                                <col style="width:80px">
+                                                                                <col>
+                                                                                <col style="width:80px">
+                                                                                <col style="width:60px">
+                                                                            </colgroup>
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <th>구분</th>
+                                                                                    <th colspan="2">착수(예정)일</th>
+                                                                                    <th colspan="3">완료(예정)일</th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            
+                                                                            <tbody>
+                                                                            <c:if test="${reportVO.repMenuCode eq 'REPORT' }" >
+                                                                                <tr>
+                                                                                    <td>계획</td>
+                                                                                    <td class="pd3" colspan="2">
+                                                                                        <div class="row">
+                                                                                            <div class="col s12 input-text input-date" style="float:none;width:120px;margin:0 auto !important">
+																								<fmt:formatDate pattern="yyyy.MM.dd" value="${item.repPlanStartDate}" />                                                                                                
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </td>
+                                                                                    <td class="pd3" colspan="3">
+                                                                                        <div class="row">
+                                                                                            <div class="col s12 input-text input-date" style="float:none;width:120px;margin:0 auto !important">
+                                                                                                <fmt:formatDate pattern="yyyy.MM.dd" value="${item.repPlanEndDate}" />
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </c:if>    
+                                                                                <tr>
+                                                                                    <td>실시</td>
+                                                                                    <td class="pd3" colspan="2">
+                                                                                        <div class="row">
+                                                                                            <div class="col s12 input-text input-date" style="float:none;width:120px;margin:0 auto !important">
+                                                                                                <fmt:formatDate pattern="yyyy.MM.dd" value="${item.repActStartDate}" />
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </td>
+                                                                                    <td class="pd3" colspan="3">
+                                                                                        <div class="row">
+                                                                                            <div class="col s12 input-text input-date" style="float:none;width:120px;margin:0 auto !important">
+                                                                                                <fmt:formatDate pattern="yyyy.MM.dd" value="${item.repActEndDate}" />
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <th rowspan="2">활동계획</th>
+                                                                                    <th>추진배경</th>                                                                                    
+                                                                                    <td td colspan="4">
+                                                                                    <div class="input-text align-left">
+                                                                                        ${item.repPropelBg}
+                                                                                    </div>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>                                                                                    
+                                                                                    <th>주요활동</th>                                                                                    
+                                                                                    <td colspan="4"><div class="input-text align-left">
+                                                                                        ${item.repActivity}
+                                                                                    </div>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                 
+                                                                        </table>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+
+                                                            <li>
+                                                                <div class="list-content">
+                                                                    <div class="list-table list">
+                                                                        <table>
+                                                                            <caption>일정계획 및 수행 테이블</caption>
+                                                                            <colgroup>
+                                                                                <col style="width:60px">
+                                                                                <col style="width:80px">
+                                                                                <col>                                                                                
+                                                                                <col style="width:70px">
+                                                                                <%-- <col style="width:70px">
+                                                                                <col style="width:70px">
+                                                                                <col style="width:70px"> --%>
+                                                                            </colgroup>
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <th colspan="4">Finish 요약</th>                                                                                    
+                                                                                    <!-- <th colspan="3">활동결과(실적)</th> -->
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td colspan="4">
+                                                                                        <div class="input-text align-left" style="min-height: 40px;">
+                                                                                            ${item.repFinishSummary}
+                                                                                        </div>
+                                                                                    </td>                                                                                                                                                                            
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <th colspan="2" class="pd-r10 align-right"> 첨부파일 </th>
+                                                                                    <td colspan="2" style="text-align: left;">
+                                                                                    	<div class="col s12 input-text file">
+	                                                                                    	
+								                                                            <!-- [kr.freedi.dev.attachfile.domain.AttachFileVO@790a7e68[fileId=reportDetail_7_167,fileSeq=1,fileGrp=reportDetail
+								                                                            ,fileNm=test - 복사본 (1) (1).txt,fileSiz=4,fileMsk=20230503034019bdcytcymqyurby,dwnldCnt=0,deleteFlg=N
+								                                                            ,operDt=Wed May 03 03:40:20 KST 2023,filePath=,isImage=false]]
+								                                                             -->
+								                                                            
+								                                                        </div>  
+								                                                        <div class="file-link">								                                                        
+                                                                                            <ul>
+	                                                                                            <c:forEach var="itemFile" items="${item.repDetailFileList}" varStatus="statusSub">
+		                                                                                    		<li><a href="/attachfile/downloadFile.do?fileId=${itemFile.fileId}&fileSeq=${itemFile.fileSeq}" title="다운받기">${itemFile.fileNm}</a><a href="/attachfile/downloadFile.do?fileId=${itemFile.fileId}&fileSeq=${itemFile.fileSeq}" title="다운받기" class="btn color gray mg-l15">다운받기</a></li>
+		                                                                                    	</c:forEach>
+                                                                                            </ul>
+                                                                                        </div>                                                                                  
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                            <!---->
+                                                            <!---->
+                                                        </ul>
+                                                    </div>	
+		</c:forEach>	
+	<!-- End of 일반 / 10+ -->	
+	</c:otherwise>
+</c:choose>	  
+
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
                                                                         <th>키워드</th>
-                                                                        <td colspan="3">키워드1, 키워드2, 키워드3, 키워드4, 키워드5</td>
+                                                                        <td colspan="3">
+                                                                         <script type="text/javascript">
+																			$(document).ready(init);
+																			function init(){
+																				const vKeyWord = "${reportVO.repKeyword}";
+																				let arr = vKeyWord.split(",");
+																				let keyCont = "";
+																				for(let i=0; i<arr.length; i++){
+																					if(i>0){
+																						keyCont += " ";
+																					}
+																					keyCont += '#'+arr[i];
+																				}
+																				$("#divKeyword").html(keyCont);
+																				
+																				let arrTypeCodeNm;
+																				if("${reportVO.repDivisionCode}"==="1"){
+																					if("${reportVO.repTypeCode}"==="11"){
+																						// DMAIC : Define, Measure, Analyze, Improve, Control, Finish
+																						arrTypeCodeNm = ["Define", "Measure", "Analyze", "Improve", "Control", "Finish"];
+																					} else {
+																						// DMEDI : Define, Measure, Explore, Develop, Implement, Finish
+																						arrTypeCodeNm = ["Define", "Measure", "Explore", "Develop", "Implement", "Finish"];
+																					}
+																					for ( var i in arrTypeCodeNm) {
+																						$("#lbl6sigmaStepNm_"+(Number(i)+1)).text(arrTypeCodeNm[i]);
+																					}
+																				}
+																			}
+																		</script>
+																		<div id="divKeyword"></div>                                                                        
+                                                                        </td>
                                                                     </tr>
                                                                 </tbody>
                                                             </table>
@@ -685,82 +445,36 @@
                                                                 <div class="list-table list">
                                                                     <table class="centered">
                                                                         <caption></caption>
-                                                                        <colgroup>
-                                                                            <col style="width:160px">
-                                                                            <col>
-                                                                            <col style="width:60px">
-                                                                            <col style="width:60px">
-                                                                            <col style="width:60px">
-                                                                            <col style="width:60px">
-                                                                        </colgroup>
-                                                                        <thead>
-                                                                            <tr>
-                                                                                <th class="align-right" style="padding-right:23px">참여형태</th>
-                                                                                <th>소속</th>
-                                                                                <th>이름</th>
-                                                                                <th>직위</th>
-                                                                                <th>직책</th>
-                                                                                <th>Belt</th>
-                                                                            </tr>
-                                                                        </thead>
-                                                                        <tbody>
-                                                                            <tr>
-                                                                                <th>과제리더</th>
-                                                                                <td class="align-left">자동차소재부품 사업부 &gt; 경량화사업담당 &gt; 자동차소재부품.투명과학플라스틱연구PJT</td>
-                                                                                <td><b>홍길동</b></td>
-                                                                                <td>책임</td>
-                                                                                <td>팀장</td>
-                                                                                <td>MBB</td>
-                                                                            </tr>
-                                                                            <tr>
-                                                                                <th>팀멤버</th>
-                                                                                <td class="align-left">자동차소재부품 사업부 &gt; 경량화사업담당 &gt; 자동차소재부품.투명과학플라스틱연구PJT</td>
-                                                                                <td><b>홍길동</b></td>
-                                                                                <td>책임</td>
-                                                                                <td>팀장</td>
-                                                                                <td>MBB</td>
-                                                                            </tr>
-                                                                            <tr>
-                                                                                <th>팀멤버</th>
-                                                                                <td class="align-left">자동차소재부품 사업부 &gt; 경량화사업담당 &gt; 자동차소재부품.투명과학플라스틱연구PJT</td>
-                                                                                <td><b>홍길동</b></td>
-                                                                                <td>책임</td>
-                                                                                <td>팀장</td>
-                                                                                <td>MBB</td>
-                                                                            </tr>
-                                                                            <tr>
-                                                                                <th>팀멤버</th>
-                                                                                <td class="align-left">자동차소재부품 사업부 &gt; 경량화사업담당 &gt; 자동차소재부품.투명과학플라스틱연구PJT</td>
-                                                                                <td><b>홍길동</b></td>
-                                                                                <td>책임</td>
-                                                                                <td>팀장</td>
-                                                                                <td>MBB</td>
-                                                                            </tr>
-                                                                            <tr>
-                                                                                <th>과제지도/사원</th>
-                                                                                <td class="align-left">자동차소재부품 사업부 &gt; 경량화사업담당 &gt; 자동차소재부품.투명과학플라스틱연구PJT</td>
-                                                                                <td><b>홍길동</b></td>
-                                                                                <td>책임</td>
-                                                                                <td>팀장</td>
-                                                                                <td>MBB</td>
-                                                                            </tr>
-                                                                            <tr>
-                                                                                <th class="color primary">Process Owner</th>
-                                                                                <td class="align-left">자동차소재부품 사업부 &gt; 경량화사업담당 &gt; 자동차소재부품.투명과학플라스틱연구PJT</td>
-                                                                                <td><b>홍길동</b></td>
-                                                                                <td>책임</td>
-                                                                                <td>팀장</td>
-                                                                                <td>MBB</td>
-                                                                            </tr>
-                                                                            <tr>
-                                                                                <th class="color primary">챔피언</th>
-                                                                                <td class="align-left">자동차소재부품 사업부 &gt; 경량화사업담당 &gt; 자동차소재부품.투명과학플라스틱연구PJT</td>
-                                                                                <td><b>홍길동</b></td>
-                                                                                <td>책임</td>
-                                                                                <td>팀장</td>
-                                                                                <td>MBB</td>
-                                                                            </tr>
-                                                                        </tbody>
+                                        <colgroup>
+                                            <col style="width:180px">
+                                            <col style="">
+											<col style="width:90px">
+                                            <col style="width:90px">
+											<col style="width:90px">
+                                            <col style="width:90px">
+                                        </colgroup>
+                                        <thead>
+                                            <tr>
+                                                <th>참여형태</th>
+												<th>소속</th>
+												<th>이름</th>
+												<th>직위</th>
+												<th>직책</th>
+												<th>Belt</th>
+                                            </tr>
+                                        </thead>                                            
+                                        <tbody>
+<c:forEach var="item" items="${reportVO.repTeamMemberList}" varStatus="status">                                        
+                                            <tr>
+                                                <th>${item.repTeamMemRoleNm}</th>
+                                                <td class="align-left">${item.deptName}</td>
+												<td class="align-center">${item.repTeamMemName}</td>
+                                                <td class="align-center">${item.comJobxNm}</td>
+												<td class="align-center">${item.comPositionNm}</td>
+                                                <td class="align-center">${item.beltNm}</td>
+                                            </tr>
+</c:forEach>
+                                        </tbody>
                                                                     </table>
                                                                 </div>
                                                             </div>
@@ -785,22 +499,16 @@
                                                                             </tr>
                                                                         </thead>
                                                                         <tbody>
+<c:forEach var="item" items="${reportVO.repResultList}" varStatus="status">                                                                        
                                                                             <tr>
                                                                                 <th class="align-center">성과항목</th>
-                                                                                <td>성과항목1</td>
+                                                                                <td class="align-center">${item.repResultType}</td>
                                                                                 <th class="align-center">년내(당해년)</th>
-                                                                                <td>10억</td>
+                                                                                <td class="align-right"><fmt:formatNumber value="${item.repResultWithinYear}" pattern="#,###" /></td>
                                                                                 <th class="align-center">산출 Logic</th>
-                                                                                <td>산출로직정보</td>
+                                                                                <td class="align-left">${item.repResultCalLogic}</td>
                                                                             </tr>
-                                                                            <tr>
-                                                                                <th class="align-center">성과항목</th>
-                                                                                <td>성과항목2</td>
-                                                                                <th class="align-center">년내(당해년)</th>
-                                                                                <td>10억</td>
-                                                                                <th class="align-center">산출 Logic</th>
-                                                                                <td>산출로직정보</td>
-                                                                            </tr>
+</c:forEach>
                                                                         </tbody>
                                                                     </table>
                                                                 </div>
@@ -834,26 +542,18 @@
                                                                             </tr>
                                                                         </thead>
                                                                         <tbody>
-                                                                            <tr>
-                                                                                <td>항목1</td>
-                                                                                <td>단위1</td>
-                                                                                <td>10</td>
-                                                                                <td>10</td>
-                                                                                <td>항목1</td>
-                                                                                <td>단위1</td>
-                                                                                <td>10</td>
-                                                                                <td>10</td>
-                                                                            </tr>
-                                                                            <tr>
-                                                                                <td>항목2</td>
-                                                                                <td>단위2</td>
-                                                                                <td>10</td>
-                                                                                <td>10</td>
-                                                                                <td>항목2</td>
-                                                                                <td>단위2</td>
-                                                                                <td>10</td>
-                                                                                <td>10</td>
-                                                                            </tr>
+<c:forEach var="item" items="${reportVO.repIndicatorList}" varStatus="status">
+	                                            <tr>
+	                                                <td>${item.repIndiPyItem}</td>
+													<td>${item.repIndiPyUnit}</td>
+													<td>${item.repIndiPyBefore}</td>
+													<td>${item.repIndiPyGoal}</td>
+													<td>${item.repIndiKpiItem}</td>
+													<td>${item.repIndiKpiUnit}</td>
+													<td>${item.repIndiKpiBefore}</td>
+													<td>${item.repIndiKpiGoal}</td>
+	                                            </tr>
+</c:forEach>
                                                                         </tbody>
                                                                     </table>
                                                                 </div>
@@ -875,7 +575,9 @@
                                                                                 <td>
                                                                                     <div class="file-link">
                                                                                         <ul>
-                                                                                            <li><a href="#" title="다운받기">UI표준정의서.pptx</a><a href="#" title="다운받기" class="btn color gray mg-l15">다운받기</a></li>
+<c:forEach var="item" items="${reportVO.fileList}" varStatus="status">														
+															<li><a href="/attachfile/downloadFile.do?fileId=${item.fileId}&fileSeq=${item.fileSeq}" title="다운받기">${item.fileNm}</a><a href="/attachfile/downloadFile.do?fileId=${item.fileId}&fileSeq=${item.fileSeq}" title="다운받기" class="btn color gray mg-l15">다운받기</a></li>
+</c:forEach>
                                                                                         </ul>
                                                                                     </div>
                                                                                 </td>
@@ -888,11 +590,11 @@
                                                     </div>
                                                     <div class="list-footer">
                                                         <div class="list-btns">
-                                                            <button type="button" class="btn-excel">
+                                                            <!-- <button type="button" class="btn-excel">
                                                                 <img src="/assets/images/icon_excel.png" alt="">
                                                                 <span>다운로드</span>
-                                                            </button>
-                                                            <a href="">목록</a>
+                                                            </button> -->
+                                                            <a href="/kpi/MbbRateList.do?menuKey=${menuKey}">목록</a>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -900,6 +602,8 @@
                                             <div class="tab-box"></div>
                                             <div class="tab-box"></div>
                                         </div>
+	</c:otherwise>
+</c:choose>                                        
                                     </div>
                                 </div>
                                 <div class="tab-box"></div>
@@ -907,108 +611,17 @@
                                 <div class="tab-box"></div>
                             </div>
                         </div>
-                   
-        <!-- 조직도 -->
-        <div class="modal-dimmed"></div>
-        <div class="org-modal">
-            <div class="modal-header">
-                <h4>조직조회</h4>
-                <button type="button" class="btn-close">닫기</button>
-            </div>
-            <div class="modal-content">
-                <div class="list-wrap">
-                    <div class="list-search">
-                        <form id="org-form" onsubmit="org_search();return false;">
-                            <div class="search-form">
-                                <div class="form-inline form-input">
-                                    <label>조직명</label>
-                                    <input type="text" name="">
-                                </div>
-                                <button type="submit" class="btn-submit">조회</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-                <div class="tree-header">
-                    <div>
-                        <input type="checkbox" id="orgSelAll">
-                        <label for="orgSelAll"></label>
-                    </div>
-                    <div>
-                        6σ 인재육성대상 조직명
-                    </div>
-                </div>
-                <div id="org-tree">
-                    <ul>
-                        <li>창호 사업부
-                            <ul>
-                                <li>창호.생산담당
-                                    <ul>
-                                        <li>· 창호.프로파일생산팀</li>
-                                        <li>· 창호.기술팀</li>
-                                        <li>· 창호.공정혁신팀</li>
-                                        <li>· 창호.완성창공정기술팀</li>
-                                    </ul>
-                                </li>
-                                <li>유리</li>
-                                <li>연구소 근무</li>
-                                <li>창호.시스템창사업담당</li>
-                                <li>창호.중문팀</li>
-                                <li>바닥재 사업담당	</li>
-                            </ul>
-                        </li>
-                        <li>단열재 사업담당
-                            <ul>
-                                <li>창호.프로파일생산팀</li>
-                            </ul>
-                        </li>
-                        <li>벽지 사업담당	
-                            <ul>
-                                <li>창호.프로파일생산팀</li>
-                            </ul>
-                        </li>
-                        <li>표면소재 사업담당
-                            <ul>
-                                <li>창호.프로파일생산팀</li>
-                            </ul>
-                        </li>
-                        <li>산업용필름 사업담당
-                            <ul>
-                                <li>창호.프로파일생산팀</li>
-                            </ul>
-                        </li>
-                        <li>자동차소재부품 사업부
-                            <ul>
-                                <li>창호.프로파일생산팀</li>
-                            </ul>
-                        </li>
-                        <li>인테리어 사업부
-                            <ul>
-                                <li>창호.프로파일생산팀</li>
-                            </ul>
-                        </li>
-                        <li>연구소
-                            <ul>
-                                <li>창호.프로파일생산팀</li>
-                            </ul>
-                        </li>
-                        <li>품질 담당
-                            <ul>
-                                <li>창호.프로파일생산팀</li>
-                            </ul>
-                        </li>
-                        <li>생산/기술/R&D/품질 外
-                            <ul>
-                                <li>창호.프로파일생산팀</li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
-                <div class="btns">
-                    <button type="button" class="btn-submit">확인</button>
-                    <button type="button" class="btn-cancel">취소</button>
-                </div>
-            </div>
-        </div>
+<script>
+function onclick_tabLv1(comNo){
+	
+	$("#hidComNo").val(comNo);
+	$("#frmSearch").submit();
+}
+
+function onclick_tabLv2(repCode){
+	$("#hidRepCode").val(repCode);
+	$("#frmSearch").submit();
+}
+</script>                        
 </body>
 </html>

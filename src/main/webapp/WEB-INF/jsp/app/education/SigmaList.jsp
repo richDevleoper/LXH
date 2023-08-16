@@ -152,26 +152,18 @@
 								    </c:when>
 								    <c:otherwise>
 								        <c:forEach var="selectMngList" items="${selectMngList}" varStatus="status">
-								            <tr stdSeq=${selectMngList.stdSeq}>
-                                                <td><input type="checkbox" name="ch_list" id="ch_${selectMngList.idx}" /><label for="ch_${selectMngList.idx}"></td>
-                                                <td>${selectMngList.stdName}</td>
-												<td>${selectMngList.comNo}</td>
-												<td class="align-left pd-l10">
-												<c:if test="${selectMngList.eduClassType eq '01'}">
-													${selectMngList.mngTit}
-												</c:if>
-												</td>
-												<td class="align-left pd-l10">
-												<c:if test="${selectMngList.eduClassType eq '02'}">
-													${selectMngList.mngTit}
-												</c:if>
-												</td>
-												<td>${selectMngList.stdDepartNm}</td>
-												<td>${selectMngList.stdJobxNm}</td>
-												<td>${selectMngList.stdPosNm}</td>
+								            <tr stdSeq=${selectMngList.seq} comNo=${selectMngList.cudComNo} eduCode=${selectMngList.cudEduCode}>
+                                                <td><input type="checkbox" name="ch_list" id="ch_${selectMngList.seq}" /><label for="ch_${selectMngList.seq}"></td>
+                                                <td>${selectMngList.userName}</td>
+												<td>${selectMngList.cudComNo}</td>
+												<td class="align-left pd-l10">${selectMngList.eduHist}</td>
+												<td class="align-left pd-l10">${selectMngList.testHist}</td>
+												<td>${selectMngList.deptName}</td>
+												<td>${selectMngList.jobXName}</td>
+												<td>${selectMngList.positionName}</td>
 												<td><div class="row">
 												<div class="col input-text input-date">
-												<input type="text" class="datepick" name="stdCertDate" id="stdCertDate_${selectMngList.idx}" value="${selectMngList.stdCertDate}" /> 
+												<input type="text" class="datepick" name="stdCertDate" id="stdCertDate_${selectMngList.seq}" value="${selectMngList.certDate}" /> 
 												<i class="ico calendar"></i>
 												</div>
 												</div></td>
@@ -179,8 +171,9 @@
 												<div class="pd-l10 col s8">
 													<select name="stdCertCode" id="stdCertCode_${selectMngList.idx}">
 														<option value="">선택</option>
-														<option value="Y" <c:if test ="${selectMngList.stdCertCode eq 'Y'}">selected="selected"</c:if>>인증</option>
-														<option value="N" <c:if test ="${selectMngList.stdCertCode eq 'N'}">selected="selected"</c:if>>미인증</option>
+														<option value="S" <c:if test ="${selectMngList.certStat eq 'S'}">selected="selected"</c:if>>대기</option>
+														<option value="Y" <c:if test ="${selectMngList.certStat eq 'Y'}">selected="selected"</c:if>>인증</option>
+														<option value="N" <c:if test ="${selectMngList.certStat eq 'N'}">selected="selected"</c:if>>미인증</option>
 													</select>
 												</div>
 												</td>
@@ -283,6 +276,8 @@
 	function chkBoxSave(){
 		let gb = "${gb}";
 		let arrSeq = "";
+		let arrComNo = "";
+		let arrEduCode = "";
 		let arrCertDate = "";
 		let arrCertCode = "";
 		let arrTestDate = "";
@@ -291,12 +286,17 @@
 		let chkNum = 0;
 		$("#chTab").children("tbody:first").children("tr[stdSeq]").each(function(i){
 			var stdSeq = $(this).attr("stdSeq");
-			 
+			var comNo = $(this).attr("comNo");
+			var eduCode = $(this).attr("eduCode");
+			
 			if($(this).find("input:checkbox[name='ch_list']").is(":checked")){
 				let stdCertDate = $(this).find("input[name=stdCertDate]").val();
 				let stdCertCode = $(this).find("select[name=stdCertCode]").val();
 				
 				arrSeq += stdSeq + ",";
+				arrComNo += comNo + ",";
+				arrEduCode += eduCode + ",";
+				
 				// 미인증 일자 빈값처리
 				if(stdCertCode == "N"){
 					arrCertDate += " ,";
@@ -326,9 +326,16 @@
 			return false;
 		}
 		
+		
 		arrSeq = arrSeq.substring(0, arrSeq.length-1);
+		arrComNo = arrComNo.substring(0, arrComNo.length-1);
+		arrEduCode = arrEduCode.substring(0, arrEduCode.length-1);
 		arrCertDate = arrCertDate.substring(0, arrCertDate.length-1);
 		arrCertCode = arrCertCode.substring(0, arrCertCode.length-1);
+		console.log("arrComNo : " + arrComNo);
+		console.log("arrEduCode : " + arrEduCode);
+		console.log("arrCertDate : " + arrCertDate);
+		console.log("arrCertCode : " + arrCertCode);
 		
 		if(gb == "04"){
 			arrTestDate = arrTestDate.substring(0, arrTestDate.length-1);
@@ -339,6 +346,8 @@
 			let params = {};
 			params.gb = gb;
 			params.arrSeq = arrSeq;		
+			params.arrComNo = arrComNo;	
+			params.arrEduCode = arrEduCode;
 			params.arrCertDate = arrCertDate;	
 			params.arrCertCode = arrCertCode;	
 			
@@ -348,15 +357,20 @@
 			}
 			
 			$.ajax({
-				url:'/education/mngupdate.do',
+				url:'/education/ajaxCertStateUpdate.do',
 				type: 'POST',
 				data: params,
 				dataType : 'json',
 				success:function(data){
 					alert("저장되었습니다.");
 					location.reload();	
+				},
+				error:function(res){
+					alert('시스템 에러');
+					return;
 				}
 			});
+			
 		}
 		
 

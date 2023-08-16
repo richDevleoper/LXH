@@ -15,7 +15,6 @@
 	<meta name="description" content="" />
 </head>
 <body>
-
                         <div class="list-wrap">
                             <div class="list-search" style="padding-left: 15px; padding-right: 15px;">
                                 <form:form commandName="proposalSearchVO" id="defaultForm" method="get" action="list.do" >
@@ -92,7 +91,10 @@
                             <div class="list-header">
                                 <p class="title">나의 실시제안</p>
                                 <span class="bar"></span>
-                                <p class="total" id="total-summary">총 ${SUMMARY.tt }(S급 : ${SUMMARY.s }건, A급 : ${SUMMARY.a }건, B급 : ${SUMMARY.b }건, C급 : ${SUMMARY.c }건, D급 : ${SUMMARY.d }건, 불체택 : ${SUMMARY.na }건, 등급평가중 : ${SUMMARY.prg4 }건, 입력중 : ${SUMMARY.prg1 }건)</p>
+                                <fmt:parseNumber var="prg2" type="number" value="${SUMMARY.prg2}" />
+                                <fmt:parseNumber var="prg3" type="number" value="${SUMMARY.prg3}" />
+                                <fmt:parseNumber var="prg4" type="number" value="${SUMMARY.prg4}" />
+                                <p class="total" id="total-summary">총 ${SUMMARY.tt }(S급 : ${SUMMARY.s }건, A급 : ${SUMMARY.a }건, B급 : ${SUMMARY.b }건, C급 : ${SUMMARY.c }건, D급 : ${SUMMARY.d }건, 반려 : ${SUMMARY.na }건, 등급평가중 : ${prg2 + prg4 + prg3 }건, 입력중 : ${SUMMARY.prg1 }건)</p>
                                 <select name="limit" class="limit" onchange="onchange_recordCountPerPage(this.value)">
                                     <option value="10" <c:if test="${proposalSearchVO.recordCountPerPage eq '10' }">selected="selected"</c:if>>10개</option>
                                     <option value="50" <c:if test="${proposalSearchVO.recordCountPerPage eq '50' }">selected="selected"</c:if>>50개</option>
@@ -136,14 +138,17 @@
                                             		<td>${item.propGroupName }</td>
                                             		<td>
                                             			<c:choose>
-                                            				<c:when test="${item.propPropStatCode ne 'PRG_5' && item.propPropStatCode ne 'PRG_6' }">
+                                            				<c:when test="${item.propPropStatCode eq 'PRG_4'}">
                                             					${item.propPropStatCodeName }
+                                            				</c:when>
+                                            				<c:when test="${item.propPropStatCode eq 'PRG_5'}">
+                                            					${item.propEvalLvCodeName }
                                             				</c:when>
                                             				<c:when test="${item.propPropStatCode eq 'PRG_6' and item.propEvalLvCode eq 'NA'}">
                                             					${item.propEvalLvCodeName }
                                             				</c:when>
                                             				<c:otherwise>
-                                            					${item.propEvalLvCodeName }
+                                            					${item.propPropStatCodeName }
                                             				</c:otherwise>
                                             			</c:choose>
                                             		</td>
@@ -185,6 +190,7 @@
 	}
 	
 	function onchange_recordCountPerPage(vCount){
+		$("#currentPageNo").val("1");
 		$("#recordCountPerPage").val(vCount);
 		onclick_search();// 검색 '조회'버튼 클릭
 	}
@@ -196,6 +202,7 @@
 			location.href="/proposal/memodetail.do?menuKey=49&propSeq="+propSeq;
 		}		
 	}
+	
 </script>
 </body>
 </html>
