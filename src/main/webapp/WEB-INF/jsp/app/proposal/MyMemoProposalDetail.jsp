@@ -245,8 +245,12 @@
                         </div>
                         <div class="list-footer">
                             <div class="list-btns">
-                                <button type="button" class="btn light-gray" id="btn-temp-save">저장</button>
-                                <button type="button" class="btn bg-gray" id="btn-req-approval">결재의뢰</button>                                
+                            	<c:choose>
+                            		<c:when test="${crud eq 'I'}">
+                                		<button type="button" class="btn light-gray" id="btn-temp-save">저장</button>
+                                		<button type="button" class="btn bg-gray" id="btn-req-approval">결재의뢰</button>
+                                	</c:when>
+                                </c:choose>                                
                                 <a href="/proposal/memolist.do?menuKey=49" class="btn">목록</a>
                             </div>
                         </div>

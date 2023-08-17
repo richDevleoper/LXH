@@ -127,30 +127,6 @@ public class ReportProposalController {
 		total += Integer.parseInt(summary.get("ppsTyp1").toString());
 		total += Integer.parseInt(summary.get("ppsTyp2").toString());
 		
-//		summary.put("prg1", "0"); // 입력중
-//		summary.put("prg2", "0"); // 결재진행중
-//		summary.put("prg3", "0"); // 심사대기중
-//		summary.put("prg4", "0"); // 심사진행중
-//		summary.put("prg5", "0"); // 심사완료
-//		summary.put("prg6", "0"); // 마감
-//		
-//		if(progressCount != null && progressCount.size() > 0) {
-//			for(int index = 0; index < progressCount.size(); index++) {
-//				EgovMap item = progressCount.get(index);
-//				if(item.get("propPropStatCode") != null) {
-//					summary.put(item.get("propPropStatCode"), item.get("total"));
-//				}
-//			}
-//		}
-		
-//		int prgCount = 0;
-//		prgCount += Integer.parseInt(summary.get("prg1").toString());
-//		prgCount += Integer.parseInt(summary.get("prg2").toString());
-//		prgCount += Integer.parseInt(summary.get("prg3").toString());
-//		prgCount += Integer.parseInt(summary.get("prg4").toString());
-		
-//		List<EgovMap> classCount = reportProposalService.selectProposalClassByCount(searchVO);
-		
 		summary.put("s", "0"); // S급
 		summary.put("a", "0"); // A급
 		summary.put("b", "0"); // B급
@@ -158,16 +134,6 @@ public class ReportProposalController {
 		summary.put("d", "0"); // D급
 		summary.put("na", "0"); // 불채택
 		summary.put("prg", "0"); // 심사중
-		
-//		if(classCount != null && classCount.size() > 0) {
-//			for(int index = 0; index < classCount.size(); index++) {
-//				EgovMap item = classCount.get(index);
-//				if(item.get("propEvalLvCode") != null){
-//					summary.put(item.get("propEvalLvCode"), item.get("total"));
-//				}
-//				
-//			}
-//		}
 		
 		List<EgovMap> paymentCount = reportProposalService.selectProposalPaymentByCount(searchVO);
 		summary.put("pys", "0");
@@ -190,13 +156,19 @@ public class ReportProposalController {
 			for(int index = 0; index < paymentCount.size(); index++) {
 				EgovMap item = paymentCount.get(index);
 				if(item.get("propPaymentYn") != null && item.get("propEvalLvCode") != null){
-					String key = "p"+String.valueOf(item.get("propPaymentYn")).toLowerCase() + String.valueOf(item.get("propEvalLvCode")).toLowerCase();
-					summary.put(key, item.get("total"));
+					if(item.get("propEvalLvCode").equals("PRG")) {
+						if(item.get("propPaymentYn").equals("Y")) {
+							summary.put("pyprg", (Integer.parseInt(summary.get("pyprg").toString()) + Integer.parseInt(item.get("total").toString())));
+						}else {
+							summary.put("pnprg", (Integer.parseInt(summary.get("pnprg").toString()) + Integer.parseInt(item.get("total").toString())));
+						}
+					}else {
+						String key = "p"+String.valueOf(item.get("propPaymentYn")).toLowerCase() + String.valueOf(item.get("propEvalLvCode")).toLowerCase();
+						summary.put(key, item.get("total"));
+					}
 				}
-				
 			}
 		}
-		
 		
 		summary.put("s", (Integer.parseInt(summary.get("pys").toString()) + Integer.parseInt(summary.get("pns").toString())));
 		summary.put("a", (Integer.parseInt(summary.get("pya").toString()) + Integer.parseInt(summary.get("pna").toString())));

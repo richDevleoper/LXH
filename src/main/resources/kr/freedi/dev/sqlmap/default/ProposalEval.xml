@@ -221,7 +221,7 @@
 		SET 
 			PROP_PAYMENT_YN = #{propPaymentYn, jdbcType=VARCHAR}, 
 			PROP_PAYMENT_DATE = SYSDATE, 
-			PROP_PROP_STAT_CODE = 'PRG_6' 
+			PROP_PROP_STAT_CODE = 'PRG_5' 
 		WHERE PROP_SEQ = #{propSeq}
 	</update>
 	
