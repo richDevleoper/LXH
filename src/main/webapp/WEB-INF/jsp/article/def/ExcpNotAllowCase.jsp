@@ -15,6 +15,8 @@
 
 <script type="text/javascript">
 <!--
+alert("사용할 수 있는 케이스가 아닙니다.");
+prevPage();
 var contentsEditors = [];
 $(function() {
 	$("#defaultForm").validationEngine('attach', {

@@ -15,6 +15,8 @@
 
 <script type="text/javascript">
 <!--
+alert("존재하지 않거나 삭제된 게시물입니다.");
+prevPage();
 var contentsEditors = [];
 $(function() {
 	$("#defaultForm").validationEngine('attach', {

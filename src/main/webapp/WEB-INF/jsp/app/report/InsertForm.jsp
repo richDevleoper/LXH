@@ -45,7 +45,7 @@
 				<li>과제등록 | <span style="color: #9a3530b3;">일반과제<c:if test="${reportVO.repMenuCode eq 'REPORT'}"> 및 10+No Policy 활동과제</c:if>는 활동결과까지 함께 등록합니다.</span></li>
 			</ul>
 		</div>
-		<p class="content_title">1. 과제정보<span style="color: #9a3530b3;">과제정보/수행 영역은 수정 시에 챔피언에게 다시 결재가 의뢰됩니다.</span></p>
+		<p class="content_title">1. 과제정보 <span style="color: #9a3530b3;">과제정보/수행 영역은 수정 시에 챔피언에게 다시 결재가 의뢰됩니다.</span></p>
 		<div class="list-wrap">
 			<div class="list-content">
 				<div class="list-table list">
@@ -140,23 +140,26 @@
 										</td>
 									</tr>
 									<tr>
-										<th><form:label path="repMbbUseRateCode">
-												<span class="asterisk">*</span>MBB활용율</form:label></th>
-										<td>
-										<div class="row">											
-											<div class="col s12 select-group">
-												<select id="ddlRepMbbUseRateCode" title="MBB활용율을 선택하세요." class="validate[required]"></select>
-												<form:hidden path="repMbbUseRateCode"></form:hidden>
+										<%-- <th>
+											<form:label path="repMbbUseRateCode">
+											<span class="asterisk">*</span>MBB활용율</form:label>
+										</th> --%>
+										<%-- <th>
+											<div class="row">											
+												<div class="col s12 select-group">
+													<select id="ddlRepMbbUseRateCode" title="MBB활용율을 선택하세요." class="validate[required]"></select>
+													<form:hidden path="repMbbUseRateCode"></form:hidden>
+												</div>
 											</div>
-										</div>
-										</td>
-										<th>활용율 반영년도</th>
-										<td><%-- <span id="lblUseRefDt">-</span>년 <form:input type="hidden" path="repUseRefDate" /> --%>
+										</th> --%>
+										<th>MBB활용율 반영년도</th>
+										<td colspan="3"><%-- <span id="lblUseRefDt">-</span>년 <form:input type="hidden" path="repUseRefDate" /> --%>
 										<div class="row">											
 											<div class="col s12 select-group">
 												<jsp:useBean id="now" class="java.util.Date" />
 									            <fmt:formatDate value="${now}" pattern="yyyy" var="yearNow"/>
 									            <form:select path="repUseRefDate" class="limit" cssClass="only-first validate[required]" >
+													<option value="none">해당없음</option>
 													<option value="${yearNow}">${yearNow}년</option>
 													<option value="${yearNow+1}">${yearNow+1}년</option>
 													<option value="${yearNow+2}">${yearNow+2}년</option>
@@ -1127,7 +1130,8 @@ function onchange_resultType(obj){
 		
 		//setDropDown(".ddl-rep-result-type", cdRepResultType, true);//성과항목
 		const currYear = new Date().getFullYear();
-		$("#lblUseRefDt").text(currYear); $("#repUseRefDate").val(currYear);	//활용율 반영년도
+		$("#lblUseRefDt").text(currYear); 
+		//$("#repUseRefDate").val(currYear);	//활용율 반영년도
 
 		onchange_ddlRepDevisionCode();	// 과제유형
 		$("#repTypeCode").val("${reportVO.repTypeCode}");

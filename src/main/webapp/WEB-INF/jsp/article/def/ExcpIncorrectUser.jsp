@@ -15,6 +15,8 @@
 
 <script type="text/javascript">
 <!--
+alert(">해당 기능에 대한 사용자 정보가 일치하지 않습니다.");
+prevPage();
 var contentsEditors = [];
 $(function() {
 	$("#defaultForm").validationEngine('attach', {

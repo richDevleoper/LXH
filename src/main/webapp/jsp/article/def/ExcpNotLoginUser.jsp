@@ -61,7 +61,7 @@ ${articleSearchVO.hiddenTag }
 	<div class="authority">
 		<div class="auth_cont">
 			<h4>사용자정보 확인</h4>
-			<p>해당 기능을 위한 사용자정보가 없습니다.</p>
+			<p>해당 기능을 위한 사용자 정보가 없습니다.</p>
 			<p class="etc_box_btn"><a href="#none" onclick="prevPage();">이전페이지</a></p>
 			<p class="etc_box_btn"><a href="#none" onclick="genrLoginForm();">개인회원 로그인</a></p>
 			<p class="etc_box_btn"><a href="#none" onclick="corpLoginForm();">기업회원 로그인</a></p>
