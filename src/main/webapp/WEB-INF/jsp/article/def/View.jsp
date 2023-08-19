@@ -286,7 +286,8 @@ ${articleSearchVO.superHiddenTag}
 								</c:if>
 								<c:if test="${isUseGrpForWrite}">
 									<a href="#none" class="at_btn_st2 btn bg-gray" onclick="return updateForm();">수정</a>
-									<a href="#none" class="at_btn_st2 btn bg-gray" onclick="return disable();">삭제</a>			
+									<!-- <a href="#none" class="at_btn_st2 btn bg-gray" onclick="return disable();">삭제</a> -->
+									<!--  삭제는 CMS 관리자만 가능하게 임시방편  -->			
 								</c:if>
 								<a href="#none" class="at_btn_st2 btn" onclick="list();">목록</a>                            
                             

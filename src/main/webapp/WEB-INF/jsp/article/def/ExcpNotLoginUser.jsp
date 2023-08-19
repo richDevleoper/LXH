@@ -14,7 +14,10 @@
 <meta name="description" content="" />
 
 <script type="text/javascript">
+
 <!--
+alert("해당 기능을 위한 사용자정보가 없습니다.");
+prevPage();
 $(function() {
 	$("#defaultForm").validationEngine('attach', {
 		unbindEngine:false,

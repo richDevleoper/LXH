@@ -35,6 +35,7 @@ import kr.freedi.dev.code.domain.CodeVO;
 import kr.freedi.dev.code.service.CodeService;
 import kr.freedi.dev.common.util.EncriptUtil;
 import kr.freedi.dev.common.util.MapUtil;
+import kr.freedi.dev.user.domain.IntfUserVO;
 import kr.freedi.dev.user.domain.UserVO;
 
 /**
@@ -119,17 +120,16 @@ public class ArticleController {
 			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO, 
 			UserVO userSession)throws Exception {
 		
-		log.debug(searchVO.toString());
-		
 		//권한체크
 		//boolean isMngr = articleService.isMngr(userSession, articleVO);
+		//model.addAttribute("userVO", userSession);
 		
 		//게시판설정
 		BoardVO pBoardVO = new BoardVO();
 		pBoardVO.setBoardKey(searchVO.getBoardKey());
 		BoardVO boardVO = boardService.select(pBoardVO);
 		model.addAttribute("boardVO", boardVO);
-		
+		model.addAttribute("userVO", userSession);
 		//orderby 설정
 		if(StringUtils.equals(boardVO.getReplyFlg(), "Y")){
 			searchVO.setOrderByTyp(ARTICLE_ORDERBY_HIERARCHY);
@@ -404,33 +404,38 @@ public class ArticleController {
 		tArticleVO = articleService.select(articleVO);
 		model.addAttribute("articleVO", tArticleVO);
 		
-		if(!isMngr){
-			//로그인없이 쓴 글
-			if(StringUtils.isEmpty(tArticleVO.getFrstOperId())){
-				if(StringUtils.isEmpty(searchVO.getSearchWriterPwd())){
-					model.addAttribute("cmd", "update");
-					model.addAttribute("cause", "empty");
-					model.addAttribute("action", "updateForm.do");
-					return getPath(request, "PwdCheckForm", boardVO.getBoardTyp());
-					
-				}else{
-					if(!StringUtils.equals(EncriptUtil.encript(searchVO.getSearchWriterPwd()), tArticleVO.getWriterPwd())){
+		log.debug("@@@@@@@@@@@@@@@@@@@@@@@@@@");
+		log.debug(userSession.toString());
+		log.debug("@@@@@@@@@@@@@@@@@@@@@@@@@@");
+		if(!(tArticleVO.getFrstOperId().equals(userSession.getIntfUserVO().getComNo()))) {
+			if(!isMngr){
+				//로그인없이 쓴 글
+				if(StringUtils.isEmpty(tArticleVO.getFrstOperId())){
+					if(StringUtils.isEmpty(searchVO.getSearchWriterPwd())){
 						model.addAttribute("cmd", "update");
-						model.addAttribute("cause", "wrong");
+						model.addAttribute("cause", "empty");
 						model.addAttribute("action", "updateForm.do");
 						return getPath(request, "PwdCheckForm", boardVO.getBoardTyp());
+						
+					}else{
+						if(!StringUtils.equals(EncriptUtil.encript(searchVO.getSearchWriterPwd()), tArticleVO.getWriterPwd())){
+							model.addAttribute("cmd", "update");
+							model.addAttribute("cause", "wrong");
+							model.addAttribute("action", "updateForm.do");
+							return getPath(request, "PwdCheckForm", boardVO.getBoardTyp());
+						}
 					}
-				}
-				
-			//로그인해서 쓴글
-			}else{
-				if(userSession.isLoginUser()){
-					if(!StringUtils.equals(userSession.getUserId(), tArticleVO.getFrstOperId())){
-						return getPath(request, "ExcpIncorrectUser", "exception");
-					}
+					
+				//로그인해서 쓴글
 				}else{
-					request.getSession().setAttribute("destinationAfterLogin", request.getHeader("referer"));
-					return getPath(request, "ExcpNotLoginUser", "exception");
+					if(userSession.isLoginUser()){
+						if(!StringUtils.equals(userSession.getUserId(), tArticleVO.getFrstOperId())){
+							return getPath(request, "ExcpIncorrectUser", "exception");
+						}
+					}else{
+						request.getSession().setAttribute("destinationAfterLogin", request.getHeader("referer"));
+						return getPath(request, "ExcpNotLoginUser", "exception");
+					}
 				}
 			}
 		}
@@ -522,13 +527,6 @@ public class ArticleController {
 		//부모글
 		ArticleVO parentVO = articleService.select(articleVO);
 		model.addAttribute("parentVO", parentVO);
-		log.debug("***********1");
-		log.debug("***********1");
-		log.debug("***********1");
-		log.debug(articleVO.getContent());
-		log.debug("***********");
-		log.debug("***********");
-		log.debug("***********");
 		//새글세팅
 		articleVO.setArticleKey(idGnrService.getNextIntegerId());
 		articleVO.setBoardKey(articleVO.getBoardKey());
@@ -575,13 +573,6 @@ public class ArticleController {
 		articleVO.setFrstOperId(userSession.getUserId());
 		articleVO.setFrstOperIp(userIp);
 		
-		log.debug("***********");
-		log.debug("***********");
-		log.debug("***********");
-		log.debug(articleVO.getContent());
-		log.debug("***********");
-		log.debug("***********");
-		log.debug("***********");
 		//insert article
 		articleService.reply(articleVO);
 
@@ -631,9 +622,12 @@ public class ArticleController {
 			@ModelAttribute("articleSearchVO") ArticleSearchVO searchVO,
 			UserVO userSession,
 			String userIp)throws Exception {
-
+		
+		boolean isMngr = false;
 		//권한체크
-		boolean isMngr = articleService.isMngr(userSession, articleVO);
+		//isMngr = articleService.isMngr(userSession, articleVO); //TB_BOARD_USE 테이블에서 권한 체크
+		
+		//글에 대한 수정, 삭제, 답글 이런 것들을 할 수 있는 권한 인지 확인
 		boolean isUseGrpForWrite = articleService.isUseGrp(userSession, articleVO, BOARD_USE_TYP_WRITE);
 		if(!isMngr && !isUseGrpForWrite){
 			//throw new ArticlePermissionDeniedException();
@@ -680,11 +674,9 @@ public class ArticleController {
 				}
 			}
 		}
-		log.debug("#################로그인 하고 썼는디요..");
 		articleVO.setLastOperId(userSession.getUserId());
 		articleVO.setLastOperIp(userIp);
 		articleVO.setDeleteTyp(userSession.getUserTyp());
-		log.debug("#################3");
 		articleService.disable(articleVO);
 
 		return "redirect:view.do?articleKey=" + articleVO.getArticleKey() + "&" + searchVO.getParam();
