@@ -33,7 +33,7 @@
 					</colgroup>
 					<thead>
 						<tr>
-							<th class="bg-gray">구분</th>
+							<th class="bg-gray">구분4/4</th>
 							<th class="bg-gray" colspan="2"></th>
 							<th class="bg-gray">1Q</th>
 							<th class="bg-gray">2Q</th>
