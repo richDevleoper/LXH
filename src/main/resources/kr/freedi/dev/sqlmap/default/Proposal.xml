@@ -219,7 +219,7 @@
 			#{propEffectScore, 					jdbcType=VARCHAR},
 			#{propSubsidy, 						jdbcType=VARCHAR},
 			NVL(#{propPaymentYn, 				jdbcType=VARCHAR}, 'N'),
-			TO_DATE(#{propPaymentDate, 			jdbcType=VARCHAR}, 'YYYY-MM-DD'),
+			TO_DATE(#{propPaymentDate}, 'YYYY-MM-DD'),
 			TO_DATE(#{propDate, 				jdbcType=VARCHAR}, 'YYYY-MM-DD'),
 			TO_DATE(#{propPracticeCompDate, 	jdbcType=VARCHAR}, 'YYYY-MM-DD'),
 			#{propUser,							jdbcType=VARCHAR},

@@ -116,7 +116,7 @@ public class SendMailUtil {
             mail.setHtml    (  linkcontent  );
 //            mail.setSubject ( new String ( title.getBytes(), "UTF-8")     );
 //            mail.setHtml    ( new String ( linkcontent.getBytes(), "UTF-8")  );
-
+ 
 //            mail.printCurrentConfigInfo();
             mail.send();
             try {
@@ -137,7 +137,7 @@ public class SendMailUtil {
       * @param sender 보내는 사람 이메일주
      * @return 
       */
-     public static void CustomSendMail(String receiver, String comno, String type) throws LSysException  {
+     public static void CustomSendMail(String sender, String receiver, String comno, String type) throws LSysException  {
  		final String fromEmail = "designgun@hausyspartner.com";
  		final String password = "eoeeqspqxaxlbzeg";
  		final String toEmail = "designgun@hausyspartner.com"; 
@@ -161,17 +161,18 @@ public class SendMailUtil {
 	      msg.addHeader("Content-type", "text/HTML; charset=UTF-8");
 	      msg.addHeader("format", "flowed");
 	      msg.addHeader("Content-Transfer-Encoding", "8bit");
-	      msg.setFrom(new InternetAddress("designgun@hausyspartner.com", "품질혁신지원 시스템"));
-	      msg.setReplyTo(InternetAddress.parse("designgun@hausyspartner.com", false));
-	      msg.setSubject("품질혁신지원시스템에서 메일이 도착하였습니다.", "UTF-8");
+	
 	      
 	      if(type.equals("request")) {
+	          msg.setFrom(new InternetAddress(sender, "품질혁신지원 시스템"));
+		      msg.setReplyTo(InternetAddress.parse(sender, false));
+		      msg.setSubject("품질혁신지원시스템에서 메일이 도착하였습니다.", "UTF-8");
 	    	  msg.setText("[전자결재] 결재요청(Approval Request) 되었습니다. 결재문서 링크 : http://6sigma2.lxhausys.com/intf/login.do?com_no="+comno, "UTF-8");
 	      }else {
 	    	  msg.setText("[전자결재] 결재완료(Approval Complete) 되었습니다. 결재문서 링크 : http://6sigma2.lxhausys.com/intf/login.do?com_no="+comno, "UTF-8");
 	      }
 	      msg.setSentDate(new Date());
-	      msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail, false));
+	      msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(receiver, false));
     	  Transport.send(msg);  
 	      System.out.println("EMail Sent Successfully!!");
 	    }

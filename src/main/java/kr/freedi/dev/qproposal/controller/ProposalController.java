@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.poi.util.StringUtil;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -27,6 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.itextpdf.text.pdf.StringUtils;
 
 import egovframework.rte.fdl.idgnr.EgovIdGnrService;
 import egovframework.rte.psl.dataaccess.util.EgovMap;
@@ -264,6 +266,8 @@ public class ProposalController {
 			@ModelAttribute("proposalSearchVO") ProposalSearchVO searchVO, @ModelAttribute("")
 			UserVO userSession) throws Exception{
 		
+		String propsalFrom = "";
+		String propsalTo = "";
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		//첨부파일 등록
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -291,7 +295,6 @@ public class ProposalController {
 				}			
 			}			
 		}
-		
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		//제안정보 등록
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////		
@@ -309,6 +312,7 @@ public class ProposalController {
 			
 			ApproveDetailVO approveDetailVO = new ApproveDetailVO();
 			approveDetailVO.setComNo(proposalVO.getPropApprovalUser()); // 결재자 사번
+			propsalFrom = approveDetailVO.getComNo();
 			approveDetailVO.setComDepartCode(proposalVO.getPropApprovalGroupCode()); // 결재자 부서코드
 			approveDetailVO.setComJobx(proposalVO.getPropApprovalLevelCode()); //결재자 직위코드
 			approveDetailVO.setComPosition(proposalVO.getPropApprovalDutyCode()); // 결재자 직책코드
@@ -318,10 +322,9 @@ public class ProposalController {
 			List<ApproveDetailVO> approveList = new ArrayList<>();
 			approveList.add(approveDetailVO);
 			approveVO.setDetailList(approveList);
-			
 			approveVO = approveService.insertSelectApprovalInfo(approveVO); // 결재선 등록			
 			proposalVO.setPropApproverCode(proposalVO.getPropApprovalUser()); // 결재자 사번으로 저장 - 의뢰시
-			
+			 
 			String actAprovalNo = approveService.selectApprovalActNo(approveVO);
 			approveVO.setActAprovalNo(actAprovalNo);
 			approveService.updateApprovalActNo(approveVO);
@@ -337,15 +340,21 @@ public class ProposalController {
 		proposalVO.setPropRegUser(userSession.getUserId());
 		
 		String vPropYearEffect = proposalVO.getPropYearEffect();
-		if(vPropYearEffect!=null)
+			
+		if(vPropYearEffect!=null) {
 			vPropYearEffect = vPropYearEffect.replaceAll(",", "");
+		}
 		proposalVO.setPropYearEffect(vPropYearEffect);
-		
+
 		int result = proposalService.insertProposalInfo(proposalVO);
+		propsalTo = proposalVO.getPropUser();
+		log.debug(userSession.toString());
 		if(result > 0) {
-			String email = "";
-			email = proposalService.selectProposalEmail(proposalVO.getPropApprovalUser());
-			SendMailUtil.CustomSendMail(email, proposalVO.getPropApprovalUser(), "request");
+			String sender = "";
+			sender = proposalService.selectProposalEmail(propsalTo);
+			String receiver = "";
+			receiver = proposalService.selectProposalEmail(propsalFrom);
+			SendMailUtil.CustomSendMail(sender, receiver, propsalFrom, "request");
 			if(proposalVO.getPropTypeCode().equals("PPS_TYP_1")) {
 				return "redirect:/sub.do?menuKey=48";
 			}else {

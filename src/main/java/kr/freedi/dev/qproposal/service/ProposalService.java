@@ -51,6 +51,7 @@ public class ProposalService {
 	
 	public int insertProposalInfo(ProposalVO proposalVO) {
 		// TODO Auto-generated method stub
+		System.out.println("프로포살 ... ==>"+proposalVO.toString());
 		return dao.insert("Proposal.insertProposalInfo", proposalVO);
 	}
 	

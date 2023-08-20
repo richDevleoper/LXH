@@ -230,9 +230,11 @@ public class ReportController {
 			reportVO.setRepRegUser(userId);
 			reportService.insert(reportVO);
 			if(reportVO.getRepTeamMemberList().size()>0) {
-				String email = "";
-				email = proposalService.selectProposalEmail(reportVO.getRepTeamMemberList().get(0).getComNo());
-				SendMailUtil.CustomSendMail(email, reportVO.getRepTeamMemberList().get(0).getComNo(), "request");
+				String sender = "";
+				sender = proposalService.selectProposalEmail(userSession.getIntfUserVO().getComCode());
+				String receiver = "";
+				receiver = proposalService.selectProposalEmail(reportVO.getRepTeamMemberList().get(0).getComNo());
+				SendMailUtil.CustomSendMail(sender, receiver, reportVO.getRepTeamMemberList().get(0).getComNo(), "request");
 			}
 		}
 		
