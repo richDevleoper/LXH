@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ContentHstry">
+
+	<sql id="fullCond">
+		<where>
+			<trim prefixOverrides="AND|OR">
+				<if test="contentKey != null and contentKey != ''">
+					AND T.CONTENT_KEY = #{contentKey}	
+				</if>
+			</trim>
+		</where>
+	</sql>
+
+	<select id="selectFullList" resultType="kr.freedi.dev.content.domain.ContentHstryVO">
+		SELECT
+			T.CONTENT_HSTRY_KEY
+			,T.CONTENT_KEY
+			,T.CONTENT
+			,T.OPER_ID
+			,T.OPER_DT
+		FROM TB_CONTENT_HSTRY T
+		<include refid="fullCond"></include>
+		ORDER BY T.OPER_DT DESC
+	</select>
+
+	<select id="select" resultType="kr.freedi.dev.content.domain.ContentHstryVO">
+		SELECT 
+			T.CONTENT_HSTRY_KEY contentHstryKey
+			,T.CONTENT_KEY contentKey
+			,T.CONTENT content
+			,T.OPER_ID operId
+			,T.OPER_DT operDt
+		FROM TB_CONTENT_HSTRY T 
+		WHERE T.CONTENT_HSTRY_KEY = #{contentHstryKey}
+	</select>
+
+	<insert id="insert">
+		<selectKey keyProperty="contentHstryKey" resultType="int"  order="BEFORE">
+			SELECT NVL(MAX(CONTENT_HSTRY_KEY), 0) + 1 contentHstryKey FROM TB_CONTENT_HSTRY
+		</selectKey>
+		INSERT INTO TB_CONTENT_HSTRY (
+			CONTENT_HSTRY_KEY
+			,CONTENT_KEY
+			,CONTENT
+			,OPER_ID
+			,OPER_DT
+		) VALUES (
+			#{contentHstryKey}
+			,#{contentKey}
+			,#{content}
+			,#{operId}
+			,SYSDATE
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE TB_CONTENT_HSTRY SET 
+			CONTENT_KEY = #{contentKey}
+			,CONTENT = #{content}
+			,OPER_ID = #{operId}
+			,OPER_DT = #{operDt}
+		WHERE
+		CONTENT_HSTRY_KEY = #{contentHstryKey}
+	</update>
+
+	<delete id="delete">
+		DELETE FROM TB_CONTENT_HSTRY	WHERE CONTENT_HSTRY_KEY = #{contentHstryKey}
+	</delete>	
+</mapper>
+

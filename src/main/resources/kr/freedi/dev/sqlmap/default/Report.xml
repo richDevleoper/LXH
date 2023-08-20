@@ -1,0 +1,514 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Report">
+
+	<resultMap id="reportMap" type="kr.freedi.dev.qreport.domain.ReportVO">		
+		<result property="repCode" column="REP_CODE" />
+		<result property="repName" column="REP_NAME" />
+		<result property="repMenuCode" column="REP_MENU_CODE" />
+		<result property="repDivisionCode" column="REP_DEVISION_CODE" />
+		<result property="repTypeCode" column="REP_TYPE_CODE" />
+		<result property="repSectorCode" column="REP_SECTOR_CODE" />
+		<result property="repProductClass" column="REP_PRODUCT_CLASS" />
+		<result property="repLeaderBeltCode" column="REP_LEADER_BELT_CODE" />
+		<result property="repActionTypeCode" column="REP_ACTION_TYPE_CODE" />
+		<result property="repMbbUseRateCode" column="REP_MBB_USE_RATE_CODE" />
+		<result property="repUseRefDate" column="REP_USE_REF_DATE" />
+		<result property="repStatusCode" column="REP_STATUS_CODE" />
+		<!-- <result property="repSixMeasureDate" column="REP_SIX_MEASUER_DATE" />
+		<result property="repSixExploreDate" column="REP_SIX_EXPLORE_DATE" />
+		<result property="repSixDevelopDate" column="REP_SIX_DEVELOP_DATE" />
+		<result property="repSixImplementDate" column="REP_SIX_IMPLEMENT_DATE" /> -->
+		<result property="repStartDate" column="REP_START_DATE" />
+		<result property="repFinishDate" column="REP_FINISH_DATE" />
+		<result property="repKeyword" column="REP_KEYWORD" />
+		<result property="repRegUser" column="REP_REG_USER" />
+		<result property="repRegDate" column="REP_REG_DATE" />
+		<result property="repUpdateUser" column="REP_UPDATE_USER" />
+		<result property="repUpdateDate" column="REP_UPDATE_DATE" />
+		<result property="repApprovalCode" column="REP_APPROVAL_CODE" />
+		<result property="repUseYn" column="REP_USE_YN" />
+		<result property="repMailSendYn" column="REP_MAIL_SEND_YN" />
+		<result property="repMailSendDate" column="REP_MAIL_SEND_DATE" />
+		<result property="repPlaceCode" column="REP_PLACE_CODE" />
+		<result property="repLeaderCode" column="REP_LEADER_CODE" />
+		<result property="repFileYn" column="REP_FILE_YN" />
+
+		<result property="idx" column="IDX" />
+		<result property="repDivision" column="REP_DEVISION" />
+		<result property="repType" column="REP_TYPE" />
+		<result property="repStatus" column="REP_STATUS" />
+		<result property="repSector" column="REP_SECTOR" />
+		<result property="repPlace" column="REP_PLACE" />
+		
+		<result property="repTeamLeaderName" column="REP_TEAM_LEADER_NAME" />
+		<result property="repTeamMemberName" column="REP_TEAM_MEMBER_NAME" />
+		<result property="repTeamProcessOwnerName" column="REP_TEAM_PROCESS_OWNER_NAME" />
+		<result property="repTeamChapionName" column="REP_TEAM_CHAMPION_NAME" />
+		<result property="repLeaderName" column="REP_LEADER_NAME" />
+		
+		<result property="repCurrStepCode" column="REP_CURR_STEP_CODE" />
+		<result property="repCurrApproveState" column="CURR_APR_STATE" />
+		<result property="repProductClassName" column="REP_PRODUCT_CLASS_NAME" />
+		
+	</resultMap>
+	
+	<sql id="defCond">
+			<if test="searchRepName != null and searchRepName != ''">
+				AND T.REP_NAME||T.REP_KEYWORD like '%' || #{searchRepName} || '%'
+			</if>
+			<if test="searchDivision != null and searchDivision != ''">
+				AND T.REP_DEVISION_CODE = #{searchDivision}
+			</if>
+			<if test="searchType != null and searchType != ''">
+				AND T.REP_TYPE_CODE = #{searchType}
+			</if>
+			<if test="searchStatus != null and searchStatus != ''">
+				AND T.REP_STATUS_CODE = #{searchStatus}
+			</if>
+			<if test="menuCode != null and menuCode != ''">
+				AND T.REP_MENU_CODE = #{menuCode}
+			</if>
+			<if test="searchUserid != null and searchUserid != ''">
+				AND (T.REP_REG_USER = #{searchUserid} or exists (select 1 from tb_report_team where rep_code=T.REP_CODE and com_no=#{searchUserid}))
+			</if>
+			
+			<if test="searchDepart != null and searchDepart != ''">
+				AND EXISTS (SELECT 1 FROM TB_USER_MST 
+		             WHERE COM_NO=T.REP_REG_USER 
+		               AND INSTR(#{searchDepart}, COM_DEPART_CODE) <![CDATA[>]]> 0
+				    )
+			</if>
+
+			<if test="searchTeamMemberName != null and searchTeamMemberName != ''">
+				AND EXISTS (SELECT 1 
+				              FROM TB_REPORT_TEAM 
+				             WHERE REP_CODE=T.REP_CODE
+				             <choose>
+								<when test="searchTeamMemberType != null and searchTeamMemberType != ''">
+									AND REP_TEAM_MEM_ROLE IN ( #{searchTeamMemberType} )
+								</when>
+								<otherwise>
+								    AND REP_TEAM_MEM_ROLE IN (1,2,3,4,5)
+								</otherwise>
+							</choose> 
+							    
+							   AND REP_TEAM_MEM_NAME LIKE '%'|| #{searchTeamMemberName} ||'%'
+						    )
+			</if>
+			<if test="searchSectorCode != null and searchSectorCode != ''">
+				AND T.REP_SECTOR_CODE = #{searchSectorCode}
+			</if>
+			<if test="searchPlaceCode != null and searchPlaceCode != ''">
+				AND EXISTS (SELECT 1 FROM TB_USER_MST WHERE COM_NO=T.REP_REG_USER AND COM_WORK_PLACE=#{searchPlaceCode})
+			</if>
+			<if test="searchActionTypeCode != null and searchActionTypeCode != ''">
+				AND T.REP_ACTION_TYPE_CODE = #{searchActionTypeCode}
+			</if>
+			<if test="searchLeaderBeltCode != null and searchLeaderBeltCode != ''">
+				AND T.REP_LEADER_BELT_CODE = #{searchLeaderBeltCode}
+			</if>
+			<if test="searchFromDt != null and searchFromDt != ''">
+				AND D.start_date <![CDATA[>=]]> to_date(#{searchFromDt}, 'YYYY-MM-DD')
+			</if>
+			<if test="searchToDt != null and searchToDt != ''">
+				AND D.end_date <![CDATA[<=]]> to_date(#{searchToDt}, 'YYYY-MM-DD') 
+			</if>
+			<if test="searchUseRefDate != null and searchUseRefDate != ''">
+				AND to_char(T.REP_USE_REF_DATE, 'YYYY') = #{searchUseRefDate}
+			</if>
+	</sql> 
+	
+	<sql id="selectListBasic">
+	    WITH report_mst AS (
+            SELECT ROW_NUMBER() OVER( ORDER BY TO_NUMBER(T.rep_code) ASC ) idx,
+                ROW_NUMBER() OVER( ORDER BY TO_NUMBER(T.rep_code) DESC ) rowidx,
+                T.*
+            FROM   tb_report_mst T
+                   , (select rep_code, min(rep_plan_start_date) start_date
+                             , (case when rep_devision_code='1' then max(REP_PLAN_START_DATE) else max(REP_PLAN_END_DATE) end) as end_date
+                        from tb_report_detail 
+                       group by rep_code, rep_devision_code) d
+            WHERE t.rep_code=d.rep_code(+)
+            <include refid="defCond"></include>
+        )
+        SELECT
+            idx,
+            t.rep_code,
+            t.rep_name,
+            t.rep_devision_code,
+            c_div.code_nm AS rep_division,
+            t.rep_type_code,
+            nvl(c_ty.code_nm, '-')  AS rep_type,
+            t.rep_status_code,
+            c_st.code_nm  AS rep_status,
+            (select min(REP_PLAN_START_DATE) from tb_report_detail m where m.rep_code=t.rep_code) rep_start_date,
+            (select case when rep_devision_code='1' then max(REP_PLAN_START_DATE) else max(REP_PLAN_END_DATE) end as rep_finish_date from tb_report_detail m where m.rep_code=T.rep_code group by rep_code, m.rep_devision_code) rep_finish_date
+            
+        FROM
+            report_mst T, 
+            tb_code    c_div,
+            tb_code    c_ty,
+            tb_code    c_st
+        WHERE   
+                T.rep_devision_code = c_div.code_id(+) 	AND c_div.code_grp_id(+) = '6SIG_YN' 
+            AND T.rep_type_code = c_ty.code_id(+) 		AND c_ty.code_grp_id(+) IN ('RP_TY1', 'RP_TY2', 'RP_TY3')
+            AND T.rep_status_code = c_st.code_id(+) 	AND c_st.code_grp_id(+) = 'REP_STAT'
+            
+	</sql>
+	
+	<select id="selectList" resultMap="reportMap">
+		<include refid="selectListBasic"></include>
+		  and rowidx between (#{currentPageNo}*#{recordCountPerPage}+1-#{recordCountPerPage}) and (#{currentPageNo}*#{recordCountPerPage})
+		  order by idx desc
+	</select>
+	
+	
+	<sql id="selectFullListBasic">
+		WITH report_mst AS (
+            SELECT ROW_NUMBER() OVER( ORDER BY TO_NUMBER(T.rep_code) ASC ) idx,
+                ROW_NUMBER() OVER( ORDER BY TO_NUMBER(T.rep_code) DESC ) rowidx,
+                T.*
+            FROM   tb_report_mst T
+                   , (select rep_code, min(rep_plan_start_date) start_date
+                             , (case when rep_devision_code='1' then max(REP_PLAN_START_DATE) else max(REP_PLAN_END_DATE) end) as end_date
+                        from tb_report_detail 
+                       group by rep_code, rep_devision_code) d
+            WHERE t.rep_code=d.rep_code(+)
+            <include refid="defCond"></include>
+        )
+        SELECT
+            idx
+            ,t.rep_code
+            ,t.rep_name
+            ,t.rep_devision_code
+            ,c_div.code_nm AS rep_division
+            ,t.rep_type_code
+            ,c_ty.code_nm  AS rep_type
+            ,t.rep_status_code
+            ,c_st.code_nm  AS rep_status
+            
+            ,(select min(REP_PLAN_START_DATE) from tb_report_detail m where m.rep_code=t.rep_code) rep_start_date
+            ,(select case when rep_devision_code='1' then max(REP_PLAN_START_DATE) else max(REP_PLAN_END_DATE) end as rep_finish_date from tb_report_detail m where m.rep_code=T.rep_code group by rep_code, m.rep_devision_code) rep_finish_date
+            ,(select code_nm from tb_code where code_grp_id='ACTTYPE' and code_id=t.REP_ACTION_TYPE_CODE) as REP_ACTION_TYPE
+            ,(select code_nm from tb_code where code_grp_id='MBBUSERT' and code_id=t.REP_MBB_USE_RATE_CODE) as REP_MBB_USE_RATE
+            ,(select code_nm from tb_code where code_grp_id='SECTOR' and code_id=t.REP_SECTOR_CODE) as REP_SECTOR
+            ,(select code_nm from tb_code where code_grp_id='WPLACE' and code_id=t.REP_PLACE_CODE) as REP_PLACE
+            ,(select rep_team_mem_name from tb_report_team where rep_code=t.REP_CODE and rep_team_mem_role='1') REP_TEAM_LEADER_NAME
+            ,(select LISTAGG(cast(rep_team_mem_name as varchar(100)), ',') WITHIN GROUP(ORDER BY REP_TEAM_CODE) from tb_report_team where rep_code=t.REP_CODE and rep_team_mem_role='2') as REP_TEAM_MEMBER_NAME
+            ,(select rep_team_mem_name from tb_report_team where rep_code=t.REP_CODE and rep_team_mem_role='4') REP_TEAM_PROCESS_OWNER_NAME
+            ,(select rep_team_mem_name from tb_report_team where rep_code=t.REP_CODE and rep_team_mem_role='5') REP_TEAM_CHAMPION_NAME
+            
+        FROM
+            report_mst T,
+            tb_code    c_div,
+            tb_code    c_ty,
+            tb_code    c_st
+        WHERE   
+                T.rep_devision_code = c_div.code_id(+) 	AND c_div.code_grp_id(+) = '6SIG_YN' 
+            AND T.rep_type_code = c_ty.code_id(+) 		AND c_ty.code_grp_id(+) IN ('RP_TY1', 'RP_TY2', 'RP_TY3')
+            AND T.rep_status_code = c_st.code_id(+) 	AND c_st.code_grp_id(+) = 'REP_STAT'
+           
+	</sql>
+		    
+	<select id="selectFullList" resultMap="reportMap">
+		<include refid="selectFullListBasic"></include>
+			and rowidx between (#{currentPageNo}*#{recordCountPerPage}+1-#{recordCountPerPage}) and (#{currentPageNo}*#{recordCountPerPage})
+		    order by idx desc
+	</select>
+	
+	<select id="selectFullListExcel" resultType="java.util.HashMap">
+			<include refid="selectFullListBasic"></include> 
+		    order by idx desc
+	</select>
+	
+	<select id="selectFullListCount" resultType="egovMap">
+		
+		SELECT c.code_id rep_devision_code, c.code_nm rep_division, COUNT(a.rep_code) cnt
+          FROM tb_code c,
+		      (
+		<include refid="selectFullListBasic"></include>
+		       ) a
+		 WHERE c.code_id=a.rep_devision_code(+)
+		   AND c.code_grp_id='6SIG_YN'
+	  GROUP BY code_id, code_nm
+	  ORDER BY rep_devision_code
+				 
+	 </select>
+	 
+	 <select id="selectFullListTotalCount" resultType="int">
+		
+		SELECT COUNT(1) cnt
+          FROM (
+		<include refid="selectFullListBasic"></include>
+		       ) 
+	 </select>
+	
+	<select id="selectListCount2" resultType="egovMap">
+		SELECT
+		    c.code_id repStatusCode, c.code_nm repStatus, nvl(m.cnt, 0) AS cnt
+		FROM tb_code c,
+		     (
+		        SELECT
+		            rep_status_code, rep_status, COUNT(1) cnt
+		        FROM (
+					<include refid="selectListBasic"></include>
+					 ) a
+		        GROUP BY a.rep_status_code, a.rep_status
+		    ) m
+		WHERE c.code_id = m.rep_status_code (+)
+		  AND c.code_grp_id = 'REP_STAT'
+		  AND c.act_flg = 'Y'
+      ORDER BY c.code_id		 
+	 </select>
+	
+	<select id="selectListCount" resultType="int">
+		SELECT COUNT(*) FROM tb_report_mst T 
+		<include refid="defCond"></include>
+	</select>
+	
+	<select id="selectNextFkey" resultType="int">
+		SELECT MAX(TO_NUMBER(NVL(REP_CODE, 0))) + 1 REP_CODE FROM TB_REPORT_MST
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO TB_REPORT_MST (
+			REP_CODE
+			, REP_NAME
+			, REP_MENU_CODE
+			, REP_DEVISION_CODE
+			, REP_TYPE_CODE
+			, REP_SECTOR_CODE
+			, REP_PRODUCT_CLASS
+			, REP_LEADER_BELT_CODE
+			, REP_ACTION_TYPE_CODE
+			, REP_MBB_USE_RATE_CODE
+			, REP_USE_REF_DATE
+			, REP_STATUS_CODE
+			
+			, REP_KEYWORD
+			, REP_REG_USER
+			, REP_REG_DATE
+			, REP_APPROVAL_CODE
+			, REP_USE_YN
+			, REP_MAIL_SEND_YN
+			, REP_MAIL_SEND_DATE
+			, REP_PLACE_CODE
+			, REP_LEADER_CODE
+			, REP_FILE_YN
+		) VALUES (
+			#{repCode} 
+			,#{repName} 
+			,#{repMenuCode} 
+			,#{repDivisionCode} 
+			,#{repTypeCode} 
+			,#{repSectorCode} 
+			,#{repProductClass} 
+			,#{repLeaderBeltCode} 
+			,#{repActionTypeCode} 
+			,#{repMbbUseRateCode} 
+			,to_date(#{repUseRefDate}, 'YYYY') 
+			,#{repStatusCode} 
+			 
+			,#{repKeyword} 
+			,#{repRegUser}
+			, sysdate 
+			,#{repApprovalCode} 
+			,#{repUseYn} 
+			,#{repMailSendYn} 
+			,#{repMailSendDate} 
+			,#{repPlaceCode} 
+			,#{repLeaderCode} 
+			,#{repFileYn} 
+		)
+	</insert>
+	
+	<update id="update">
+	
+		UPDATE TB_REPORT_MST SET 
+			REP_NAME = #{repName} 
+			, REP_DEVISION_CODE = #{repDivisionCode} 
+			, REP_TYPE_CODE = #{repTypeCode} 
+			, REP_SECTOR_CODE = #{repSectorCode} 
+			, REP_PRODUCT_CLASS = #{repProductClass} 
+			, REP_LEADER_BELT_CODE = #{repLeaderBeltCode} 
+			, REP_ACTION_TYPE_CODE = #{repActionTypeCode} 
+			, REP_MBB_USE_RATE_CODE = #{repMbbUseRateCode}
+			, REP_USE_REF_DATE = to_date(#{repUseRefDate}, 'YYYY') 
+			, REP_STATUS_CODE = #{repStatusCode} 
+ 
+			, REP_KEYWORD = #{repKeyword} 
+			, REP_UPDATE_USER = #{repRegUser} 
+			, REP_UPDATE_DATE = sysdate
+			, REP_APPROVAL_CODE = #{repApprovalCode} 
+			, REP_USE_YN = #{repUseYn} 
+			, REP_MAIL_SEND_YN = #{repMailSendYn} 
+			, REP_MAIL_SEND_DATE = #{repMailSendDate} 
+			, REP_PLACE_CODE = #{repPlaceCode} 
+			, REP_LEADER_CODE = #{repLeaderCode} 
+			, REP_FILE_YN = #{repFileYn} 
+		WHERE
+		REP_CODE = #{repCode}
+	</update>
+	
+	<update id="updateStatus">
+		UPDATE TB_REPORT_MST
+		SET    REP_STATUS_CODE=#{repStatusCode} 
+		WHERE REP_CODE=#{repCode}
+		    
+	</update>
+	
+	<select id="select" resultMap="reportMap">
+		SELECT 
+			T.REP_CODE
+			, T.REP_NAME
+			, T.REP_MENU_CODE
+			, T.REP_DEVISION_CODE
+			, get_code_nm('6SIG_YN', T.rep_devision_code) as REP_DIVISION
+			, T.REP_TYPE_CODE
+			, c_ty.code_nm as REP_TYPE
+			, T.REP_SECTOR_CODE
+			, get_code_nm('SECTOR', T.REP_SECTOR_CODE) rep_sector
+			, nvl(T.REP_PRODUCT_CLASS, '') REP_PRODUCT_CLASS
+			, nvl(get_code_nm('BUSGRP', T.REP_PRODUCT_CLASS), '-') REP_PRODUCT_CLASS_NAME
+			, T.REP_LEADER_BELT_CODE
+            , get_code_nm('LDRBELT', T.REP_LEADER_BELT_CODE) REP_LEADER_BELT
+			, T.REP_ACTION_TYPE_CODE
+            , get_code_nm('ACTTYPE', T.REP_ACTION_TYPE_CODE) REP_ACTION_TYPE
+			, T.REP_MBB_USE_RATE_CODE
+            , get_code_nm('MBBUSERT', T.REP_MBB_USE_RATE_CODE) REP_MBB_USE_RATE
+			, to_char(T.REP_USE_REF_DATE, 'YYYY') REP_USE_REF_DATE
+			, T.REP_STATUS_CODE
+			, T.REP_KEYWORD
+			, T.REP_REG_USER
+			, T.REP_REG_DATE
+			, T.REP_UPDATE_USER
+			, T.REP_UPDATE_DATE
+			, T.REP_APPROVAL_CODE
+			, T.REP_USE_YN
+			, T.REP_MAIL_SEND_YN
+			, T.REP_MAIL_SEND_DATE
+			, T.REP_PLACE_CODE
+			, T.REP_LEADER_CODE
+			, (select user_name from tb_user_mst where com_no=T.REP_LEADER_CODE) REP_LEADER_NAME
+			, T.REP_FILE_YN
+			, nvl((select max(rep_step_code) from tb_report_detail where rep_code=T.REP_CODE and rep_status>0), 1) REP_CURR_STEP_CODE
+			, (select aproval_state from (select * from tb_approval_mst where ref_bus_code=#{repCode} order by aproval_code desc) a where rownum=1) CURR_APR_STATE
+		FROM TB_REPORT_MST T,
+            tb_code    c_ty
+        WHERE    
+                T.rep_type_code = c_ty.code_id(+) 			AND c_ty.code_grp_id(+) IN ('RP_TY1', 'RP_TY2', 'RP_TY3')
+            AND T.REP_CODE = #{repCode}
+	</select>
+	
+	
+	<select id="reportSelectExcel" resultType="java.util.HashMap">
+		<include refid="reportSelectBase"></include>
+	</select>
+	
+	<select id="reportSelect" resultType="egovMap">
+		<include refid="reportSelectBase"></include>
+	</select>
+	<sql id="reportSelectBase">
+	with tb_report_result_custom as (
+       select rep_code
+              , case when to_char(rep_result_type_code) in ('4','5','6','7') then '8' else to_char(rep_result_type_code) end as rep_result_type_code
+              , rep_result_within_year
+              , rep_result_year
+         from tb_report_result
+    ),raw_data as (  
+	   select get_code_nm('RESULTTY', rep_result_type_code) as rep_result_type
+	          , a.rep_result_type_code
+	          --, get_code_nm('ACTTYPE', T.REP_ACTION_TYPE_CODE) as REP_ACTION_TYPE
+	          , T.REP_ACTION_TYPE_CODE
+	          , a.rep_result_within_year as iny_total
+	          , case when T.REP_ACTION_TYPE_CODE='1' then to_number(a.rep_result_within_year) else null end as iny_act_1
+	          , case when T.REP_ACTION_TYPE_CODE='2' then to_number(a.rep_result_within_year) else null end as iny_act_2
+	          , case when T.REP_ACTION_TYPE_CODE='3' then to_number(a.rep_result_within_year) else null end as iny_act_3
+	          , case when T.REP_ACTION_TYPE_CODE='4' then to_number(a.rep_result_within_year) else null end as iny_act_4
+	          , case when T.REP_ACTION_TYPE_CODE='5' then to_number(a.rep_result_within_year) else null end as iny_act_5
+	          , a.rep_result_year y_total 
+	          , case when T.REP_ACTION_TYPE_CODE='1' then to_number(a.rep_result_year) else null end as y_act_1
+	          , case when T.REP_ACTION_TYPE_CODE='2' then to_number(a.rep_result_year) else null end as y_act_2
+	          , case when T.REP_ACTION_TYPE_CODE='3' then to_number(a.rep_result_year) else null end as y_act_3
+	          , case when T.REP_ACTION_TYPE_CODE='4' then to_number(a.rep_result_year) else null end as y_act_4
+	          , case when T.REP_ACTION_TYPE_CODE='5' then to_number(a.rep_result_year) else null end as y_act_5
+	     from tb_report_result_custom a
+	          , tb_report_mst T
+	          , (select rep_code, min(rep_plan_start_date) start_date
+                             , (case when rep_devision_code='1' then max(REP_PLAN_START_DATE) else max(REP_PLAN_END_DATE) end) as end_date
+                        from tb_report_detail 
+                       group by rep_code, rep_devision_code) d
+	    where a.rep_code=T.rep_code
+	      and t.rep_code=d.rep_code(+)
+	      -- 사업장, 부서, 조회기간은 작성자를 기준으로 검색한다. (5/17 이종일부장 확인)
+	      <include refid="defCond"></include>
+	), v_count as (
+
+       select  count(iny_total) as iny_total
+	           , count(iny_act_1) as iny_act_1
+	           , count(iny_act_2) as iny_act_2
+	           , count(iny_act_3) as iny_act_3
+	           , count(iny_act_4) as iny_act_4
+	           , count(iny_act_5) as iny_act_5
+	           , count(y_total) as y_total
+	           , count(y_act_1) as y_act_1
+	           , count(y_act_2) as y_act_2
+	           , count(y_act_3) as y_act_3
+	           , count(y_act_4) as y_act_4
+	           , count(y_act_5) as y_act_5
+          from raw_data    
+    ), v_summary as (
+	    select rep_result_type
+	           , rep_result_type_code
+	           , sum(iny_total) as iny_total
+	           , sum(iny_act_1) as iny_act_1
+	           , sum(iny_act_2) as iny_act_2
+	           , sum(iny_act_3) as iny_act_3
+	           , sum(iny_act_4) as iny_act_4
+	           , sum(iny_act_5) as iny_act_5
+	           , sum(y_total) as y_total
+	           , sum(y_act_1) as y_act_1
+	           , sum(y_act_2) as y_act_2
+	           , sum(y_act_3) as y_act_3
+	           , sum(y_act_4) as y_act_4
+	           , sum(y_act_5) as y_act_5
+	    from raw_data
+	    group by rep_result_type, rep_result_type_code
+	)
+    select '건수' as repResultType
+           , c.iny_total, c.iny_act_1, c.iny_act_2, c.iny_act_3, c.iny_act_4, c.iny_act_5, c.y_total, c.y_act_1, c.y_act_2, c.y_act_3, c.y_act_4, c.y_act_5
+      from v_count c
+    union all 	
+	select c.code_nm as rep_result_type
+	       , nvl(s.iny_total, 0) iny_total
+	       , nvl(s.iny_act_1, 0) iny_act_1
+	       , nvl(s.iny_act_2, 0) iny_act_2
+	       , nvl(s.iny_act_3, 0) iny_act_3
+	       , nvl(s.iny_act_4, 0) iny_act_4
+	       , nvl(s.iny_act_5, 0) iny_act_5
+	       , nvl(s.y_total, 0) y_total
+	       , nvl(s.y_act_1, 0) y_act_1
+	       , nvl(s.y_act_2, 0) y_act_2
+	       , nvl(s.y_act_3, 0) y_act_3
+	       , nvl(s.y_act_4, 0) y_act_4
+	       , nvl(s.y_act_5, 0) y_act_5
+	  from (select * from tb_code where code_grp_id='RESULTTY' and code_id not in ('4','5','6','7') order by view_ord) c
+	       , v_summary s
+	  where c.code_id=s.rep_result_type_code(+)
+	     
+	</sql>
+	
+	<delete id="delete">
+		DELETE FROM TB_REPORT_MST T
+		<where>
+			<trim prefixOverrides="AND|OR">
+				<if test="repCode != null and repCode != ''">
+					AND T.REP_CODE = #{repCode}
+				</if>
+			</trim>
+		</where>
+	</delete>
+	
+</mapper>
+

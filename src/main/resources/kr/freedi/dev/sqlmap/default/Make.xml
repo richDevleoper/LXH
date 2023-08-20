@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Make">
+	<resultMap id="MakeMap" type="kr.freedi.dev.qreport.domain.MakeVO">	
+		
+		<result column="CIR_CODE"                    	property="cirCode"/>     
+		<result column="CIR_REG_NUM"                    property="cirRegNum"/>     
+		<result column="DEPT_CODE"                    	property="deptCode"/>     
+		<result column="DEPT_NAME"                    	property="deptName"/>
+		<result column="COM_WORK_PLACE"                 property="comWorkPlace"/>     
+		<result column="CIR_TCH_COM_NO"                 property="cirTchComNo"/>
+		<result column="CIR_WORK_MEM_NO"                property="cirWorkMemNo"/>     
+		<result column="CIR_TEAM_LEADER_NO"             property="cirTeamLeaderNo"/>     
+		<result column="CIR_RECORD_CONT"                property="cirRecordCont"/>     
+		<result column="CIR_MEM_CNT"                    property="cirMemCnt"/>  
+		<result column="CIR_MEM_STATUS"                 property="cirMemStatus"/>     
+		<result column="CIR_NAME"                    	property="cirName"/>  
+		<result column="CIR_LEADER_NAME"                property="cirLName"/>  
+		<result column="CIR_LEADER_DEPTNAME"            property="cirLeaderdeptName"/>  
+		    
+		<result column="CIR_REG_USER"                   property="cirRegUser"/>     
+		<result column="CIR_REG_DATE"                   property="cirRegDate"/>     
+		<result column="CIR_UPDATE_USER"                property="cirUpdateUser"/>     
+		<result column="CIR_UPDATE_DATE"                property="cirUpdateDate"/>     
+			
+		<result column="CIR_MEM_CODE"                   property="cirMemCode"/>      
+		<result column="CIR_CODE"                    	property="cirCode"/>      
+		<result column="COM_NO"                    		property="ComNo"/>      
+		<result column="DEPT_CODE"                    	property="cirDeptCode"/>      
+		<result column="DEPT_NAME"                    	property="comJobxCode"/>      
+		<result column="COM_JOBX_CODE"                  property="comPositionCode"/>      
+		<result column="COM_POSITION_CODE"              property="beltCode"/>      
+		<result column="COM_JIMU"              			property="comJimu"/>
+		<result column="BELT_CODE"                    	property="cirMemName"/>      
+		<result column="CIR_MEM_NAME"                   property="cirMemRole"/>      
+		<result column="CIR_MEM_EDU_CODE"               property="cirMemEduCode"/>      
+		<result column="CIR_MEM_ROLE"                   property="cirMemRole"/>   
+		
+		<result column="CIR_TCH_COM_NAME"               property="cirTchComName"/>
+		<result column="CIR_WORK_MEM_NAME"              property="cirWorkMemName"/>
+		<result column="CIR_TEAM_LEADER_NAME"           property="cirTeamLeaderName"/>
+	</resultMap>
+	
+	<sql id="defCond">
+		<if test="searchDiv != null and searchDiv != ''">
+			<choose>
+				<when test="searchDiv == 'comNo'">
+					AND T.CIR_TCH_COM_NO like '%' || #{searchText} || '%' 
+				</when>
+				<when test="searchDiv == 'userName'">
+					AND T.CIR_LEADER_NAME like '%' || #{searchText} || '%' 
+				</when>
+				<when test="searchDiv == 'bumun'">
+					AND T.CIR_LEADER_DEPTNAME like '%' || #{searchText} || '%' 
+				</when>
+				<when test="searchDiv == 'deptName'">
+					AND T.CIR_LEADER_DEPTNAME like '%' || #{searchText} || '%' 
+				</when>
+				<when test="searchDiv == 'teamName'">
+					AND T.CIR_LEADER_DEPTNAME like '%' || #{searchText} || '%' 
+				</when>
+				<when test="searchDiv == 'jobName'">
+					AND T.CIR_LEADER_DEPTNAME like '%' || #{searchText} || '%' 
+				</when>
+				<otherwise>
+					AND T.CIR_TCH_COM_NO || '|' || T.CIR_LEADER_NAME || '|' || T.CIR_LEADER_DEPTNAME || '|' || T.CIR_LEADER_DEPTNAME
+					like '%'|| #{searchText} ||'%' 
+				</otherwise>
+			</choose>
+		</if>
+		<if test="cirCode != null and cirCode != ''">
+			AND C.CIR_CODE = #{cirCode}
+		</if>
+		<if test="searchPlaceCode != null and searchPlaceCode != ''">
+			AND U.COM_WORK_PLACE = #{searchPlaceCode}
+		</if>
+		<if test="searchDepart != null and searchDepart != ''">
+			AND T.DEPT_CODE = #{searchDepart}
+		</if>
+	</sql>
+	
+	<select id="selectCirclListCount" resultType="int">
+		SELECT COUNT(*) 
+		  FROM (
+		  <include refid="circleBaseQuery"></include>
+		  ) T
+	</select>
+	
+	<sql id="circleBaseQuery">
+				SELECT 
+					 	CIR_CODE,
+						CIR_REG_NUM,
+						T.DEPT_CODE,
+						T.DEPT_NAME,
+						get_code_nm('WPLACE', U.COM_WORK_PLACE) COM_WORK_PLACE,
+						CIR_TCH_COM_NO,
+						GET_USER_NM(CIR_TCH_COM_NO) CIR_TCH_COM_NAME, 
+						CIR_WORK_MEM_NO,
+						GET_USER_NM(CIR_WORK_MEM_NO) CIR_WORK_MEM_NAME,
+						CIR_TEAM_LEADER_NO,
+						GET_USER_NM(CIR_TEAM_LEADER_NO) CIR_TEAM_LEADER_NAME, -- 분임조 팀장
+						dept_lv2_name as comJimu,
+						CIR_RECORD_CONT,
+						CIR_MEM_CNT,
+						CIR_MEM_STATUS,
+						CIR_NAME,
+						CIR_LEADER_NAME,		-- 분임조장
+						CIR_LEADER_DEPTNAME,  
+						CIR_REG_USER,
+					 	CIR_REG_DATE
+				FROM TB_CIRCLE_MST T
+                     , tb_USER_mst U
+                     , tb_depart_mst d
+				WHERE T.CIR_TEAM_LEADER_NO=U.COM_NO	 
+                  and d.dept_code=t.dept_code
+				<include refid="defCond"></include>
+	</sql>
+	
+	<select id="selectCirclList" resultMap="MakeMap">
+		WITH CIRCLE_MASTER AS (
+            SELECT ROW_NUMBER() OVER( ORDER BY TO_NUMBER(T.CIR_CODE) ASC ) IDX, ROW_NUMBER() OVER( ORDER BY TO_NUMBER(T.CIR_CODE) DESC ) ROWIDX, 
+            	   
+            	   T.*
+            FROM(
+				<include refid="circleBaseQuery"></include>
+            ) T
+		)
+		SELECT *
+		FROM CIRCLE_MASTER T
+		WHERE T.ROWIDX BETWEEN (#{currentPageNo}*#{recordCountPerPage}+1-#{recordCountPerPage}) AND (#{currentPageNo}*#{recordCountPerPage})
+		ORDER BY T.IDX DESC
+	</select>
+	
+	<select id="select" resultMap="MakeMap">
+		        
+		select        
+				CIR_CODE
+				, CIR_REG_NUM
+				, DEPT_CODE
+				, DEPT_NAME
+				, CIR_TCH_COM_NO
+				, GET_USER_NM(CIR_TCH_COM_NO) CIR_TCH_COM_NAME
+				, CIR_WORK_MEM_NO
+				, CIR_TEAM_LEADER_NO
+				, CIR_RECORD_CONT
+				, CIR_MEM_CNT
+				, CIR_REG_USER
+				, CIR_REG_DATE
+				, CIR_UPDATE_USER
+				, CIR_UPDATE_DATE
+				, CIR_MEM_STATUS
+				, CIR_NAME
+				, CIR_LEADER_NAME
+				, CIR_LEADER_DEPTNAME
+				
+				, GET_USER_NM(T.CIR_WORK_MEM_NO) CIR_WORK_MEM_NAME
+				, GET_USER_NM(T.CIR_TEAM_LEADER_NO) CIR_TEAM_LEADER_NAME -- 분임조 팀장   
+		FROM TB_CIRCLE_MST T
+        WHERE T.CIR_CODE = #{cirCode}
+	</select>
+	
+	<insert id="insertCircleMst" parameterType="kr.freedi.dev.qreport.domain.MakeVO">
+		INSERT INTO	TB_CIRCLE_MST( 
+			CIR_CODE,
+			CIR_REG_NUM,
+			DEPT_CODE,
+			DEPT_NAME,
+			CIR_TCH_COM_NO,
+			CIR_WORK_MEM_NO,
+			CIR_TEAM_LEADER_NO,
+			CIR_RECORD_CONT,
+			CIR_MEM_CNT,
+			CIR_MEM_STATUS,
+			CIR_NAME,
+			CIR_LEADER_NAME,
+			CIR_LEADER_DEPTNAME,  
+			CIR_REG_USER,
+			CIR_REG_DATE
+		)VALUES(
+			 #{cirCode}        
+			,#{cirRegNum}      
+			,#{deptCode}       
+			,#{deptName}       
+			,#{cirTchComNo}    
+			,#{cirWorkMemNo}   
+			,#{cirTeamLeaderNo}    
+			,#{cirRecordCont}      
+			,#{cirMemCnt}          
+			,#{cirMemStatus}       
+			,#{cirName}
+			,#{cirLName}       
+			,#{cirLeaderdeptName}
+			,#{cirRegUser}         
+			,SYSDATE         		    
+		)
+	</insert>
+	
+	<insert id="insertCircleDtl" parameterType="kr.freedi.dev.qreport.domain.MakeVO">
+		INSERT INTO	TB_CIRCLE_DETAIL( 
+			CIR_MEM_CODE,
+			CIR_CODE,
+			COM_NO,
+			DEPT_CODE,
+			DEPT_NAME,
+			COM_JOBX_CODE,
+			COM_POSITION_CODE,
+			BELT_CODE,
+			CIR_MEM_NAME,
+			CIR_MEM_EDU_CODE,
+			CIR_MEM_ROLE,
+			CIR_MEM_STATUS,
+			CIR_REG_USER,
+			CIR_REG_DATE
+		)VALUES(
+			 #{cirMemCode} 
+			,#{cirCode} 
+			,#{ComNo} 
+			,#{cirDeptCode} 
+			,#{cirDeptName} 
+			,#{comJobxCode}
+			,#{comPositionCode}
+			,#{beltCode}
+			,#{cirMemName}
+			,#{cirMemEduCode}
+			,#{cirMemRole}
+			,#{cirMemStatus} 
+			,#{cirRegUser} 
+			,SYSDATE
+		)
+	</insert>    
+	
+	
+	<insert id="updateCircleMst" parameterType="kr.freedi.dev.qreport.domain.MakeVO">
+		 update TB_CIRCLE_MST 
+			set CIR_REG_NUM = #{cirRegNum}
+				, DEPT_CODE = #{deptCode}
+				, DEPT_NAME = #{deptName}
+				, CIR_TCH_COM_NO = #{cirTchComNo}
+				, CIR_WORK_MEM_NO = #{cirWorkMemNo}
+				, CIR_TEAM_LEADER_NO = #{cirTeamLeaderNo}
+				, CIR_RECORD_CONT = #{cirRecordCont}
+				, CIR_MEM_CNT = #{cirMemCnt}
+				, CIR_MEM_STATUS = #{cirMemStatus}
+				, CIR_NAME = #{cirName}
+				, CIR_LEADER_NAME = #{cirLName}
+				, CIR_LEADER_DEPTNAME = #{cirLeaderdeptName}
+				, CIR_UPDATE_USER = #{cirUpdateUser}
+				, CIR_UPDATE_DATE = SYSDATE
+		  where CIR_CODE = #{cirCode}
+	</insert>
+	
+	<update id="updateCircleDtl" parameterType="kr.freedi.dev.qreport.domain.MakeVO">
+		update TB_CIRCLE_DETAIL set
+				 CIR_CODE = #{cirCode} 
+				, COM_NO = #{ComNo} 
+				, DEPT_CODE = #{cirDeptCode} 
+				, DEPT_NAME = #{cirDeptName} 
+				, COM_JOBX_CODE = #{comJobxCode}
+				, COM_POSITION_CODE = #{comPositionCode}
+				, BELT_CODE = #{beltCode}
+				, CIR_MEM_NAME = #{cirMemName}
+				, CIR_MEM_EDU_CODE = #{cirMemEduCode}
+				, CIR_MEM_ROLE = #{cirMemRole}
+				, CIR_MEM_STATUS = #{cirMemStatus} 
+				, CIR_UPDATE_USER = #{cirUpdateUser} 
+				, CIR_UPDATE_DATE = SYSDATE
+		where CIR_MEM_CODE = #{cirMemCode}
+		 
+	</update>  
+	  
+	<sql id="detCond">
+		<where>
+			<if test="comDepartCode != null and comDepartCode != ''">
+				AND T.COM_DEPART_CODE = #{comDepartCode}
+			</if>
+		</where>
+	</sql>
+	
+	<select id="selectEmpSearch" resultType="egovMap">
+     SELECT *
+	   FROM (
+            SELECT t.com_no
+					, t.user_id            
+					, t.user_name               
+					, t.com_depart_code          
+					, (select dept_name from tb_depart_mst d where dept_code=t.com_depart_code) dept_full_name    
+					, t.com_jobx        
+					, cd_job.code_nm com_jobx_nm                     
+					, t.com_position                    
+					, GET_CODE_NM('POSITION', com_position) com_position_nm            
+					, t.com_cert_belt              
+					, cd_blt.code_nm com_cert_belt_nm
+					, (select count(1) from tb_circle_detail where com_no=T.COM_NO) as circle_join_yn
+                    , get_code_nm('JIMU', t.com_jimu) com_jimu
+                    , nvl(T.user_school, '') user_school
+              FROM tb_user_mst T
+                   LEFT OUTER JOIN tb_code cd_job ON cd_job.code_grp_id='JOBX' AND cd_job.code_id=T.com_jobx
+                   LEFT OUTER JOIN tb_code cd_blt ON cd_blt.code_grp_id='LDRBELT' AND cd_blt.code_id=T.com_cert_belt 
+		<include refid="detCond"></include>
+		    )
+		ORDER BY COM_POSITION, COM_JOBX ASC, USER_NAME
+	</select>
+	
+	<sql id="detCondCircleDetail">
+		<where>
+			<trim prefixOverrides="AND|OR">
+				<if test="cirMemCode != null and cirMemCode != ''">
+					AND CIR_MEM_CODE = #{cirMemCode}
+				</if>
+				<if test="comNo != null and comNo != ''">
+					AND COM_NO = #{ComNo}
+				</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<delete id="deleteCircleDtl">
+		DELETE FROM TB_CIRCLE_DETAIL 
+		<include refid="detCondCircleDetail"></include>
+	</delete>
+	
+</mapper>

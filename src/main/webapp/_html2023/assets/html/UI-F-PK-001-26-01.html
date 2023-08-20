@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/tree.css">
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/style.css">
+
+    <!-- JS -->
+    <script src="../js/jquery-3.3.1.min.js"></script>
+    <script src="../js/jstree.min.js"></script>
+    <script src="../js/tabulator.min.js"></script>
+    <script src="../js/common.js"></script>
+
+    <title>품질혁신지원시스템</title>
+</head>
+<body>
+    <div id="wrap">
+        <!-- header -->
+        <header>
+            <div class="header-top">
+                <div class="inner">
+                    <h1>
+                        <img src="../images/logo.png" alt="">
+                        <span>품질혁신지원시스템</span>
+                    </h1>
+                    <div class="header-util">
+                        <p>홍길동(품질관리팀) 과제 <a href="" class="lx-red">3</a>건, 결제 <a href="" class="lx-red">1</a>건, 교육 <a href="" class="lx-red">1</a>건</p>
+                        <ul>
+                            <li><a href=""><img src="../images/icon_mypage.png" alt=""><span>마이페이지</span></a></li>
+                            <li><a href=""><img src="../images/icon_help.png" alt=""><span>도움말</span></a></li>
+                            <li><a href=""><img src="../images/icon_logout.png" alt=""><span>로그아웃</span></a></li>
+                            <li><a href=""><img src="../images/icon_admin.png" alt=""></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="header-btm">
+                <div class="inner">
+                    <div class="header-menu">
+                        <button type="button" class="btn-gnb">메뉴</button>
+                        <nav>
+                            <ul>
+                                <li><a href="">품질KPI</a></li>
+                                <li><a href="">과제/10+ No Policy활동</a></li>
+                                <li><a href="">분임조활동</a></li>
+                                <li><a href="">제안활동</a></li>
+                                <li><a href="">품질인재육성</a></li>
+                                <li><a href="">Big Data/커뮤니티</a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                    <div class="search-box">
+                        <div class="search-form">
+                            <form method="GET">
+                                <span>전체</span>
+                                <input type="text" name="" placeholder="검색어를 입력하세요">
+                                <button type="submit" class="btn-search">검색</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div id="total-menu">
+                    <div class="inner">
+                        <div id="gnb">
+                            <ul>
+                                <li>
+                                    <a href="">품질KPI</a>
+                                    <div>
+                                        <ul class="depth1">
+                                            <li><a href="">6σ인재 현황</a></li>
+                                            <li><a href="">팀장MBB율</a></li>
+                                            <li><a href="">MBB활용율</a></li>
+                                            <li>
+                                                <a class="lx-red" href="">KPI관리</a>
+                                                <ul class="depth2">
+                                                    <li><a class="lx-red" href="">- 관리대상</a></li>
+                                                    <li><a class="lx-red" href="">- 계획수립</a></li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li>
+                                    <a href="">과제/10+ No Policy활동</a>
+                                    <div>
+                                        <ul class="depth1">
+                                            <li>
+                                                <a href="">나의 과제</a>                                                
+                                            </li>
+                                            <li><a href="">과제검색</a></li>
+                                            <li><a href="" class="lx-red">Report</a></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li>
+                                    <a href="">분임조활동</a>
+                                    <div>
+                                        <ul class="depth1">
+                                            <li>
+                                                <a href="">나의 분임조과제</a>                                                
+                                            </li>
+                                            <li><a href="">과제검색</a></li>
+                                            <li><a href="" class="lx-red">분임조 편성</a></li>
+                                            <li><a href="" class="lx-red">Report</a></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li>
+                                    <a href="">제안활동y</a>
+                                    <div>
+                                        <ul class="depth1">
+                                            <li>
+                                                <a href="">나의 제안</a>
+                                                <ul class="depth2">
+                                                    <li><a href="">- 실시제안</a></li>
+                                                    <li><a href="">- 쪽지제안</a></li>
+                                                </ul>
+                                            </li>
+                                            <li><a href="">제안검색</a></li>
+                                            <li><a href="" class="lx-red">제안 심사</a></li>
+                                            <li>
+                                                <a href="" class="lx-red">제안 마감</a>
+                                                <ul class="depth2">
+                                                    <li><a href="">- 등급평가</a></li>
+                                                    <li><a href="">- 비용지급</a></li>
+                                                </ul>
+                                            </li>
+                                            <li><a href="">10+ No Policy</a></li>
+                                            <li><a href="" class="lx-red">Report</a></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li>
+                                    <a href="">품질인재육성</a>
+                                    <div>
+                                        <ul class="depth1">
+                                            <li><a href="">나의 육성 현황</a></li>
+                                            <ul class="depth2">
+                                                <li><a href="">- GB</a></li>
+                                                <li><a href="">- MGB</a></li>
+                                                <li><a href="">- BB</a></li>
+                                                <li><a href="">- MBB</a></li>
+                                            </ul>
+                                            <li><a href="">년간계획(교육,Test)</a></li>                                            
+                                            <li>
+                                                <a href="" class="lx-red">교육/Test/인증</a>
+                                                <ul class="depth2">
+                                                    <li><a href="">- 계획수립</a></li>
+                                                    <li><a href="">- 실적입력</a></li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li>
+                                    <a href="">Big Data/커뮤니티</a>
+                                    <div>
+                                        <ul class="depth1">
+                                            <li><a href="">Big DATA</a></li>
+                                            <li><a href="">자료실</a></li>
+                                            <li><a href="">BP사례</a></li>
+                                            <li><a href="">공지사항</a></li>
+                                            <li><a href="">Q&A</a></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+        
+                        <button type="button" class="btn-close">닫기</button>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <div class="dimmed"></div>
+        <!-- //header -->
+        <!-- container -->
+        <div id="container">
+            <div id="page-header">
+                <div class="inner">
+                    <div class="page-category">품질인재육성</div>
+                    <div id="path">
+                        <a href="">홈</a>
+                        <span class="arr">></span>
+                        <a href="">품질인재육성</a>
+                        <span class="arr">></span>
+                        <a href="">교육/Test인증(관리)</a>
+                        <span class="arr">></span>
+                        <a href="javascript:void(0);">실적입력</a>
+                    </div>
+                    <button tpye="button" class="btn-print">
+                        <img src="../images/btn_print.png" alt="">
+                        <span>인쇄</span>
+                    </button>
+                </div>
+            </div>
+            <div id="page-container">
+                <div class="inner">
+                    <nav id="page-left">
+                        <ul class="depth1">
+                            <li><a href="">나의 육성 현황</a></li>
+                            <li><a href="">년간계획(교육,Test)</a></li>
+                            <li>
+                                <a href="javascript:void(0)" class="has-depth cur">교육/Test인증(관리)</a>
+                                <ul class="depth2" style="display:block">
+                                    <li><a href="">계획수립</a></li>
+                                    <li><a href="" class="lx-red">실적입력</a></li>
+                                    <li><a href="">인증관리</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </nav>
+                    <section id="page-content">
+                        <!-- breadcrumb -->
+						<div class="list-header">
+							<p class="title">실적입력</p>						
+						</div>
+                        <div class="list-wrap mg-t10">
+                            <div class="list-content">
+                                <div class="list-table list">
+                                    <table>
+                                        <caption></caption>
+                                        <colgroup>
+                                            <col style="width:180px">
+                                            <col>
+                                            <col style="width:180px">
+                                            <col>
+                                        </colgroup>
+                                        <tbody>
+                                            <tr>
+                                                <th><label for="text1">교육과정명</label></th>
+                                                <td colspan="3">OOOOOOOOOO교육과정명</td>
+                                            </tr>
+                                            <tr>
+                                                <th><label for="text2">교육연도</label></th>
+                                                <td>2023</td>
+                                                <th><label for="text3">벨트</label></th>
+                                                <td>BB</td>
+                                            </tr>
+											<tr>
+                                                <th><label for="text4">교육유형</label></th>
+                                                <td>교육</td>
+                                                <th><label for="text5">상세유형</label></th>
+                                                <td>6 Process 과정</td>
+                                            </tr>
+											<tr>
+                                                <th><label for="text6">교육차수</label></th>
+                                                <td>4차</td>
+                                                <th><label for="text7">교육일정</label></th>
+                                                <td>20.01/02.02/02.04</td>
+                                            </tr>
+											<tr>
+                                                <th><label for="text8">교육정원/신청</label></th>
+                                                <td colspan="3">40/10</td>
+                                            </tr>
+											<tr>
+                                                <th colspan="4" class="align-center"><label for="text1">실적입력</label></th>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="list-header mg-t20">
+							<p class="title">교육인원</p>
+							<span class="bar"></span>
+							<p class="total">총 10</p>							
+						</div>
+                        <div class="list-content mg-t10">
+							<div class="list-table">
+								<table class="even">
+									<caption></caption>
+									<colgroup>
+										<col style="width:50px">
+										<col style="width:80px">
+										<col style="width:110px">
+										<col>
+										<col style="width:110px">
+										<col style="width:110px">
+										<col style="width:110px">
+										<col style="width:120px">
+									</colgroup>
+									<thead>
+										<tr>
+											<th class="bg-gray font-weight-bold"><input type="checkbox" name="ch_list" id="ch_all" /><label for="ch_all"></label></th>
+											<th class="bg-gray font-weight-bold">성명</th>
+											<th class="bg-gray font-weight-bold">사번</th>
+											<th class="bg-gray font-weight-bold">조직명</th>
+											<th class="bg-gray font-weight-bold">직위</th>
+											<th class="bg-gray font-weight-bold">직책</th>
+											<th class="bg-gray font-weight-bold">소속벨트</th>
+											<th class="bg-gray font-weight-bold">이수여부</th>
+										</tr>                                            
+									</thead>
+									<tbody>
+										<tr>
+											<td><input type="checkbox" name="ch_list" id="ch01" /><label for="ch01"></label></td>
+											<td>홍길동</td>
+											<td>FB00000</td>
+											<td>조직명</td>
+											<td>직위명</td>
+											<td>직책명</td>
+											<td>GB</td>
+											<td class="select-table"><select name="" id=""><option value="">선택</option></select></td>
+										</tr>
+										<tr>
+											<td><input type="checkbox" name="ch_list" id="ch02" /><label for="ch02"></label></td>
+											<td>홍길동</td>
+											<td>FB00000</td>
+											<td>조직명</td>
+											<td>직위명</td>
+											<td>직책명</td>
+											<td>GB</td>
+											<td class="select-table"><select name="" id=""><option value="">선택</option></select></td>
+										</tr>
+										<tr>
+											<td><input type="checkbox" name="ch_list" id="ch03" /><label for="ch03"></label></td>
+											<td>홍길동</td>
+											<td>FB00000</td>
+											<td>조직명</td>
+											<td>직위명</td>
+											<td>직책명</td>
+											<td>GB</td>
+											<td class="select-table"><select name="" id=""><option value="">선택</option></select></td>
+										</tr>
+										<tr>
+											<td><input type="checkbox" name="ch_list" id="ch04" /><label for="ch04"></label></td>
+											<td>홍길동</td>
+											<td>FB00000</td>
+											<td>조직명</td>
+											<td>직위명</td>
+											<td>직책명</td>
+											<td>GB</td>
+											<td class="select-table"><select name="" id=""><option value="">선택</option></select></td>
+										</tr>
+										<tr>
+											<td><input type="checkbox" name="ch_list" id="ch05" /><label for="ch05"></label></td>
+											<td>홍길동</td>
+											<td>FB00000</td>
+											<td>조직명</td>
+											<td>직위명</td>
+											<td>직책명</td>
+											<td>GB</td>
+											<td class="select-table"><select name="" id=""><option value="">선택</option></select></td>
+										</tr>
+										<tr>
+											<td><input type="checkbox" name="ch_list" id="ch06" /><label for="ch06"></label></td>
+											<td>홍길동</td>
+											<td>FB00000</td>
+											<td>조직명</td>
+											<td>직위명</td>
+											<td>직책명</td>
+											<td>GB</td>
+											<td class="select-table"><select name="" id=""><option value="">선택</option></select></td>
+										</tr>
+										<tr>
+											<td><input type="checkbox" name="ch_list" id="ch07" /><label for="ch07"></label></td>
+											<td>홍길동</td>
+											<td>FB00000</td>
+											<td>조직명</td>
+											<td>직위명</td>
+											<td>직책명</td>
+											<td>GB</td>
+											<td class="select-table"><select name="" id=""><option value="">선택</option></select></td>
+										</tr>
+										<tr>
+											<td><input type="checkbox" name="ch_list" id="ch08" /><label for="ch08"></label></td>
+											<td>홍길동</td>
+											<td>FB00000</td>
+											<td>조직명</td>
+											<td>직위명</td>
+											<td>직책명</td>
+											<td>GB</td>
+											<td class="select-table"><select name="" id=""><option value="">선택</option></select></td>
+										</tr>
+										<tr>
+											<td><input type="checkbox" name="ch_list" id="ch09" /><label for="ch09"></label></td>
+											<td>홍길동</td>
+											<td>FB00000</td>
+											<td>조직명</td>
+											<td>직위명</td>
+											<td>직책명</td>
+											<td>GB</td>
+											<td class="select-table"><select name="" id=""><option value="">선택</option></select></td>
+										</tr>
+										<tr>
+											<td><input type="checkbox" name="ch_list" id="ch10" /><label for="ch10"></label></td>
+											<td>홍길동</td>
+											<td>FB00000</td>
+											<td>조직명</td>
+											<td>직위명</td>
+											<td>직책명</td>
+											<td>GB</td>
+											<td class="select-table"><select name="" id=""><option value="">선택</option></select></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+						
+                        <div class="list-footer">
+                            <div class="list-btns">
+                                <button type="button" class="btn light-gray">저장</button>
+                                <a href="#" class="btn">목록</a>
+								<button type="button" class="btn-excel">
+									<img src="../images/icon_excel.png" alt="">
+									<span>다운로드</span>
+								</button>  
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+        <!-- //container -->
+        <!-- footer -->
+        <footer>
+            <div class="inner">
+                <div class="footer-logo">
+                    <img src="../images/footer_logo.png" alt="LX 하우시스">
+                    <span>품질혁신지원시스템</span>
+                </div>
+                <p class="copyright">COPYRIGHT © 2021 LX HAUSYS. ALL RIGHTS RESERVED.</p>
+            </div>
+        </footer>
+        <!-- //footer -->
+    </div>
+</body>
+<script type="text/javascript">
+$("#ch_all").on("click", function () {
+  if($("input:checkbox[id='ch_all']").prop("checked")){
+  	$("input[type=checkbox]").prop("checked", true);
+  } else {
+  	$("input[type=checkbox]").prop("checked", false);
+  }
+});
+</script>
+</html>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="jarClass" default="copyXmls" basedir=".">
+
+	<property name="srcJarFile" location="lib/hd_const.jar" />
+	<property name="dstJarDir" location="src/main/webapp/WEB-INF/lib" />
+
+	<property name="srcXmlDir" location="src/main/resources" />
+	<property name="dstXmlDir" location="src/main/webapp/WEB-INF/classes" />
+
+	<target name="copyJar">
+		<copy file="${srcJarFile}" todir="${dstJarDir}" overwrite="true" />
+	</target>
+
+	<target name="copyXmls" depends="copyJar">
+		<copy todir="${dstXmlDir}" overwrite="true">
+			<fileset dir="${srcXmlDir}" />
+		</copy>
+	</target>
+
+</project>

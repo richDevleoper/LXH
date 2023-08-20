@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="CodeGrp">
+
+	<sql id="defCond">
+		<where>
+			<trim prefixOverrides="AND|OR">
+				<if test="searchStartFrstOperDt != null and searchStartFrstOperDt != ''">
+					AND T.FRST_OPER_DT <![CDATA[>=]]> #{searchStartFrstOperDt}
+				</if>
+				<if test="searchEndFrstOperDt != null and searchEndFrstOperDt != ''">
+					AND T.FRST_OPER_DT <![CDATA[<=]]> TO_DATE(#{searchEndFrstOperDt}, 'YYYY-MM-DD') + 1
+				</if>
+				<if test="searchActFlg != null and searchActFlg != ''">
+					AND T.ACT_FLG = #{searchActFlg}
+				</if>
+				<if test="searchClass != null and searchClass != ''">
+					<if test="searchValue != null and searchValue != ''">
+						AND 
+						<trim prefixOverrides="AND">
+							<choose>
+								<when test="searchClass == 'CODE_GRP_ID'.toString()">
+									<foreach collection="searchItrValue" index="i" item="item" open="(" close=")" separator=" ">
+										<if test="i != 0">AND </if> T.CODE_GRP_ID LIKE '%' || #{item} || '%'
+									</foreach>
+								</when>
+								<when test="searchClass == 'CODE_GRP_NM'.toString()">
+									<foreach collection="searchItrValue" index="i" item="item" open="(" close=")" separator=" ">
+										<if test="i != 0">AND </if> T.CODE_GRP_NM LIKE '%' || #{item} || '%'
+									</foreach>
+								</when>
+								<otherwise></otherwise>
+							</choose>
+						</trim>
+					</if>			
+				</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<sql id="fullCond">
+		<where>
+			<trim prefixOverrides="AND|OR">
+				<if test="actFlg != null and actFlg != ''">
+					AND T.ACT_FLG = #{actFlg}	
+				</if>
+				<if test="attr != null and attr != ''">
+					AND T.ATTR = #{attr}	
+				</if>
+			</trim>
+		</where>
+	</sql>
+
+	<select id="selectListCount" resultType="int">
+		SELECT COUNT(*) FROM TB_CODE_GRP T
+		<include refid="defCond"></include>
+	</select>
+
+	<select id="selectList" resultType="egovMap">
+	select *
+	  from (
+		SELECT
+			row_number() over (ORDER BY 
+		<choose>
+			<when test="orderBy != null and orderBy != ''">
+				<choose>
+					<when test="orderBy == 'FRST_OPER_DT'.toString()">FRST_OPER_DT DESC</when>
+					<when test="orderBy == 'CODE_GRP_ID'.toString()">CODE_GRP_ID ASC</when>
+					<when test="orderBy == 'CODE_GRP_NM'.toString()">CODE_GRP_NM ASC</when>
+					<otherwise>CODE_GRP_ID ASC</otherwise>
+				</choose>
+			</when>
+			<otherwise>
+				CODE_GRP_ID ASC
+			</otherwise>
+		</choose>
+			) as num
+			,T.CODE_GRP_ID
+			,T.CODE_GRP_NM
+			,T.ATTR
+			,T.ACT_FLG
+			,T.FRST_OPER_ID
+			,T.FRST_OPER_DT
+			,T.LAST_OPER_ID
+			,T.LAST_OPER_DT
+		FROM TB_CODE_GRP T
+		<include refid="defCond"></include>
+		ORDER BY 
+		<choose>
+			<when test="orderBy != null and orderBy != ''">
+				<choose>
+					<when test="orderBy == 'FRST_OPER_DT'.toString()">FRST_OPER_DT DESC</when>
+					<when test="orderBy == 'CODE_GRP_ID'.toString()">CODE_GRP_ID ASC</when>
+					<when test="orderBy == 'CODE_GRP_NM'.toString()">CODE_GRP_NM ASC</when>
+					<otherwise>CODE_GRP_ID ASC</otherwise>
+				</choose>
+			</when>
+			<otherwise>
+				CODE_GRP_ID ASC
+			</otherwise>
+		</choose>
+		) 
+		where num between (#{currentPageNo}*#{recordCountPerPage}+1-#{recordCountPerPage}) and (#{currentPageNo}*#{recordCountPerPage})
+	</select>
+	
+	<select id="selectFullList" resultType="egovMap">
+		SELECT
+			T.CODE_GRP_ID
+			,T.CODE_GRP_NM
+			,T.ATTR
+			,T.ACT_FLG
+			,T.FRST_OPER_ID
+			,T.FRST_OPER_DT
+			,T.LAST_OPER_ID
+			,T.LAST_OPER_DT
+		FROM TB_CODE_GRP T
+		<include refid="fullCond"></include>
+	</select>
+
+	<select id="select" resultType="kr.freedi.dev.code.domain.CodeGrpVO">
+		SELECT 
+			T.CODE_GRP_ID codeGrpId
+			,T.CODE_GRP_NM codeGrpNm
+			,T.ATTR attr
+			,T.ACT_FLG actFlg
+			,T.FRST_OPER_ID frstOperId
+			,T.FRST_OPER_DT frstOperDt
+			,T.LAST_OPER_ID lastOperId
+			,T.LAST_OPER_DT lastOperDt
+		FROM TB_CODE_GRP T 
+		WHERE T.CODE_GRP_ID = #{codeGrpId}
+	</select>
+
+	<insert id="insert">
+		INSERT INTO TB_CODE_GRP (
+			CODE_GRP_ID
+			,CODE_GRP_NM
+			,ATTR
+			,ACT_FLG
+			,FRST_OPER_ID
+			,FRST_OPER_DT
+			,LAST_OPER_ID
+			,LAST_OPER_DT
+		) VALUES (
+			#{codeGrpId}
+			,#{codeGrpNm}
+			,#{attr}
+			,#{actFlg}
+			,#{frstOperId}
+			,SYSDATE
+			,NULL
+			,NULL
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE TB_CODE_GRP SET 
+			CODE_GRP_NM = #{codeGrpNm}
+			,ATTR = #{attr}
+			,ACT_FLG = #{actFlg}
+			,LAST_OPER_ID = #{lastOperId}
+			,LAST_OPER_DT = SYSDATE
+		WHERE
+		CODE_GRP_ID = #{codeGrpId}
+	</update>
+
+	<delete id="delete">
+		DELETE FROM TB_CODE_GRP	WHERE CODE_GRP_ID = #{codeGrpId}
+	</delete>	
+</mapper>
+

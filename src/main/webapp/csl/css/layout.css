@@ -1,0 +1,71 @@
+@charset "utf-8";
+
+/* skipnavigation */
+#skipnavigation {display :block; height:0px; width:0px; overflow:hidden; text-align:center; color:#000;} 
+
+body.bg-top{background:url(/csl/img/common/bg_top_re.gif) repeat-x top;}
+
+/* toparea */
+#header {width:1260px; margin:0 auto; background:url(/csl/img/common/bg_head.gif) no-repeat center;}
+#header h1 {height:60px; text-align:center;}
+
+/* lnb */
+#lnb {text-align:right;}
+	#lnb a {color:#d3d3d3; font-size:12px; font-weight:bold; text-align:center; height:26px; padding:14px 10px 0 10px; display:inline-block; /*background:url(/csl/img/common/lnb_line.gif) no-repeat right;*/}
+	#lnb a:hover, #lnb a:active, #lnb a:focus {color:#fff; text-decoration:none;}
+	/* 현재 선택된 메뉴 일때 */
+	#lnb a.on {color:#fff; text-decoration:none;}
+
+/*
+#container {width:1020px; margin:0 auto; padding:25px 0 30px 0; background:url(/csl/img/common/container_bg.gif) repeat-y left; overflow:hidden; }
+*/
+#container {width:1260px; margin:0 auto; padding:25px 0 30px 0; background:url(/csl/img/common/container_bg.gif) repeat-y left; *zoom:1;}
+#container:after {content:""; display:block; clear:both;}
+
+/* snb */
+#snb{width:160px; float:left;}
+	#snb h2 {height:60px;}
+	#snb ul li a {display:block; width:135px; padding:7px 0 8px 10px; border-bottom:1px solid #d2d2d2; color:#555; font-size:13px; font-weight:bold; background:url(/csl/img/common/bu_arrow.gif) no-repeat 0 10px;}
+	#snb ul li a:hover {display:block; width:135px; padding:7px 0 8px 10px; border-bottom:1px solid #d2d2d2; color:#198bcb; font-weight:bold; text-decoration:none;}
+	/* 2차메뉴 현재 선택된 메뉴 일때 */
+	#snb ul li a.on {display:block; width:135px; padding:7px 0 8px 10px; border-bottom:1px solid #d2d2d2; color:#198bcb; font-weight:bold; text-decoration:none;}
+	
+	#snb ul li ul {margin:3px 0;}
+	#snb ul li ul li a {width:135px; padding:5px 0 3px 15px; color:#666; font-weight:normal; font-size:12px; border-bottom:none; background:none;}
+	#snb ul li ul li a:hover {width:135px; padding:5px 0 3px 15px; color:#fff; font-weight:normal; border-bottom:none; background:#2994d1; text-decoration:none;}
+	/* 3차메뉴 현재 선택된 메뉴 일때 */
+	#snb ul li ul li a.on {width:135px; padding:5px 0 3px 15px; color:#fff; font-weight:normal; border-bottom:none; background:#2994d1; text-decoration:none;}
+
+
+#contents {position:relative; width:1080px; padding-left:10px; float:left; background:url(/csl/img/common/contents_bg.gif) repeat-x;}
+
+/* con_header */
+#con_header h3 {height:33px; color:#222; padding:4px 0 0 25px; font-size:14px; background:url(/csl/img/common/icon_title.gif) no-repeat;}
+#location {position:absolute; top:6px; right:0; text-align:right; font-size:12px;}
+
+/* con_body */
+#con_body {margin-top:10px; min-height:495px; _height:495px;} /* 높이값 지정이유 : 왼쪽bg반복 */
+
+#con_body h4 {color:#5c6472; padding:10px 0 0 20px; font-size:14px; background:url(/csl/img/common/bu_square.gif) no-repeat 3px 14px;}
+
+/* 공통탭 */
+/*
+.cont_tab_wrap {padding-top:6px; border-bottom:1px solid #ddd;}
+.cont_tab_wrap .cont_tab {overflow:hidden; margin-bottom:10px;}
+.cont_tab_wrap .cont_tab li{float:left; border:1px solid #dedede; margin-right:3px;}
+.cont_tab_wrap .cont_tab li a{display:block; padding:9px 25px 6px 25px; font-size:13px; letter-spacing:-1px; text-align:center; color:#666; }
+.cont_tab_wrap .cont_tab li a:hover,
+.cont_tab_wrap .cont_tab li a:focus,
+.cont_tab_wrap .cont_tab li a:active {background:#666; color:#fff; text-decoration:none; }
+.cont_tab_wrap .cont_tab li.on a {background:#666; color:#fff; text-decoration:none; border:0;}
+*/
+.cont_tab_wrap {padding-top:6px;}
+.cont_tab_wrap .cont_tab {overflow:hidden; margin-bottom:10px; background-color:#eee; border:1px solid #dedede;}
+.cont_tab_wrap .cont_tab li{float:left;border-right:1px solid #dedede;margin-right:0px;}
+.cont_tab_wrap .cont_tab li a{display:block; padding:9px 25px 6px 25px; background:#eee; font-size:13px; letter-spacing:-1px; text-align:center; color:#666; }
+.cont_tab_wrap .cont_tab li a:hover,
+.cont_tab_wrap .cont_tab li a:focus,
+.cont_tab_wrap .cont_tab li a:active {background:#fff;text-decoration:none;color:#198bcb;}
+.cont_tab_wrap .cont_tab li.on a {background:#fff;text-decoration:none;color:#198bcb;}
+
+

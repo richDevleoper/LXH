@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="MngrUser">
+
+	<sql id="defCond">
+		<where>
+			<trim prefixOverrides="AND|OR">
+				<if test="searchStartFrstOperDt != null and searchStartFrstOperDt != ''">
+					AND T.FRST_OPER_DT <![CDATA[>=]]> #{searchStartFrstOperDt}
+				</if>
+				<if test="searchEndFrstOperDt != null and searchEndFrstOperDt != ''">
+					AND T.FRST_OPER_DT <![CDATA[<=]]> TO_DATE(#{searchEndFrstOperDt}, 'YYYY-MM-DD') + 1
+				</if>
+				<if test="searchRegSt != null and searchRegSt != ''">
+					AND T.REG_ST = #{searchRegSt}
+				</if>
+				<if test="searchAuthId != null and searchAuthId != ''">
+					AND T.AUTH_ID = #{searchAuthId}
+				</if>
+				<if test="searchClass != null and searchClass != ''">
+					<if test="searchValue != null and searchValue != ''">
+						AND 
+						<trim prefixOverrides="AND">
+							<choose>
+								<when test="searchClass == 'USER_ID'.toString()">
+									T.USER_ID LIKE '%' || #{searchValue} || '%'
+								</when>
+								<when test="searchClass == 'USER_NM'.toString()">
+									T.USER_NM LIKE '%' || #{searchValue} || '%'
+								</when>
+								<when test="searchClass == 'TEL'.toString()">
+									T.TEL LIKE '%' || #{searchValue} || '%'
+								</when>
+								<when test="searchClass == 'MOB'.toString()">
+									T.MOB LIKE '%' || #{searchValue} || '%'
+								</when>
+								<when test="searchClass == 'EMAIL'.toString()">
+									T.EMAIL LIKE '%' || #{searchValue} || '%'
+								</when>
+								<otherwise></otherwise>
+							</choose>
+						</trim>
+					</if>			
+				</if>
+			</trim>
+		</where>
+	</sql>
+
+	<select id="selectListCount" resultType="int">
+		SELECT COUNT(*) FROM TB_MNGR_USER T 
+		<include refid="defCond"></include>
+	</select>
+
+	<select id="selectList" resultType="egovMap">
+	select *
+	  from (
+		SELECT
+		    row_number() over (ORDER BY 
+		<choose>
+			<when test="orderBy != null and orderBy != ''">
+				<choose>
+					<when test="orderBy == 'USER_NM'.toString()">USER_NM ASC</when>
+					<when test="orderBy == 'FRST_OPER_DT'.toString()">FRST_OPER_DT DESC</when>
+					<otherwise>USER_NM ASC</otherwise>
+				</choose>
+			</when>
+			<otherwise>
+				USER_NM ASC
+			</otherwise>
+		</choose>) as num
+			,T.USER_ID
+			,T.USER_PW
+			,T.USER_NM
+			,T.TEL
+			,T.MOB
+			,T.EMAIL
+			,T.REG_ST
+			,T.AUTH_ID
+			,(SELECT AUTH_NM FROM TB_USER_AUTH UA WHERE UA.AUTH_ID = T.AUTH_ID) AUTH_NM
+			,T.LAST_LOGIN_DT
+			,T.FRST_OPER_DT
+			,T.LAST_OPER_DT
+		FROM TB_MNGR_USER T
+		<include refid="defCond"></include>
+		ORDER BY 
+		<choose>
+			<when test="orderBy != null and orderBy != ''">
+				<choose>
+					<when test="orderBy == 'USER_NM'.toString()">USER_NM ASC</when>
+					<when test="orderBy == 'FRST_OPER_DT'.toString()">FRST_OPER_DT DESC</when>
+					<otherwise>USER_NM ASC</otherwise>
+				</choose>
+			</when>
+			<otherwise>
+				USER_NM ASC
+			</otherwise>
+		</choose>
+		) 
+		where num between #{firstRecordIndex} and #{recordCountPerPage}
+	</select>
+
+	<select id="select" resultType="kr.freedi.dev.user.domain.MngrUserVO">
+		SELECT 
+			T.USER_ID userId
+			,T.USER_PW userPw
+			,T.USER_NM userNm
+			,T.TEL tel
+			,T.MOB mob
+			,T.EMAIL email
+			,T.REG_ST regSt
+			,T.AUTH_ID authId
+			,T.LAST_LOGIN_DT lastLoginDt
+			,T.FRST_OPER_DT frstOperDt
+			,T.LAST_OPER_DT lastOperDt
+		FROM TB_MNGR_USER T 
+		WHERE T.USER_ID = #{userId}
+	</select>
+	
+	<select id="selectByUserIdAndUserPw" resultType="kr.freedi.dev.user.domain.MngrUserVO">
+		SELECT 
+			T.USER_ID userId
+			,T.USER_PW userPw
+			,T.USER_NM userNm
+			,T.TEL tel
+			,T.MOB mob
+			,T.EMAIL email
+			,T.REG_ST regSt
+			,T.AUTH_ID authId
+			,T.LAST_LOGIN_DT lastLoginDt
+			,T.FRST_OPER_DT frstOperDt
+			,T.LAST_OPER_DT lastOperDt
+		FROM TB_MNGR_USER T 
+		WHERE T.USER_ID = #{userId}
+		AND T.USER_PW = #{userPw}
+	</select>
+
+	<insert id="insert">
+		INSERT INTO TB_MNGR_USER (
+			USER_ID
+			,USER_PW
+			,USER_NM
+			,TEL
+			,MOB
+			,EMAIL
+			,REG_ST
+			,AUTH_ID
+			,LAST_LOGIN_DT
+			,FRST_OPER_DT
+			,LAST_OPER_DT
+		) VALUES (
+			#{userId}
+			,#{userPw}
+			,#{userNm}
+			,#{tel}
+			,#{mob}
+			,#{email}
+			,#{regSt}
+			,#{authId}
+			,NULL
+			,SYSDATE
+			,NULL
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE TB_MNGR_USER 
+		SET 
+			<trim prefixOverrides=",">
+				<if test="userPw != null and userPw != ''">
+					USER_PW = #{userPw}
+				</if>
+				,USER_NM = #{userNm}
+				,TEL = #{tel}
+				,MOB = #{mob}
+				,EMAIL = #{email}
+				,REG_ST = #{regSt}
+				,AUTH_ID = #{authId}
+				,LAST_OPER_DT = #{lastOperDt}
+			</trim>
+		WHERE
+		USER_ID = #{userId}
+	</update>
+	
+	<update id="updateLastLoginDt">
+		UPDATE TB_MNGR_USER SET LAST_LOGIN_DT = SYSDATE
+		WHERE USER_ID = #{userId}
+	</update>
+	
+	<update id="updateSetNullAuthId">
+		UPDATE TB_MNGR_USER 
+		SET AUTH_ID = NULL
+		WHERE AUTH_ID = #{authId}
+	</update>
+
+	<delete id="delete">
+		DELETE FROM TB_MNGR_USER	WHERE USER_ID = #{userId}
+	</delete>	
+</mapper>
+

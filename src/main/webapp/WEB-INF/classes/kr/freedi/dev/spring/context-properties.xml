@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	<bean name="propertiesService" class="egovframework.rte.fdl.property.impl.EgovPropertyServiceImpl" destroy-method="destroy">
+		<!-- 
+		<property name="extFileName">
+			<set>
+		        <map>
+		        	<entry key="encoding" value="UTF-8"/>
+		        	<entry key="filename" value="file:./src/**/refresh-resource.properties"/>
+		        </map>
+	        	<value>file:./src/**/resource.properties</value>
+		        <map>
+		        	<entry key="encoding" value="UTF-8"/>
+		        	<entry key="filename" value="classpath*:META-INF/korean-resource.properties"/>
+		        </map>
+			</set>
+		</property>
+		-->
+		
+		<property name="properties">
+	        <map>
+	        	<!-- site -->
+	        	<entry key="site.id" value="default" />
+	        	<entry key="site.domain" value="127.0.0.1" />
+	        	<entry key="site.aes.key" value="12345678901234567890123456789012" />
+	        	
+	        	<!-- file -->
+	        	<entry key="file.ext.denied" value="jsp,java,class,html,htm,js,php,php3,php4,asp,inc,pl,cgi,exe,msi"/>
+	        	<entry key="file.ext.images" value="gif,png,bmp,jpg,jpeg,tiff" />
+	        	
+	        	<!-- if not empty (file.root.absolute.path) {root = [file.root.absolute.path]} -->
+	        	<!-- if empty (file.root.absolute.path) {root = servletContext.realPath + / + [file.root.relative.path]} -->
+	        	<!-- <entry key="file.root.absolute.path" value="D:\DATA\"/> -->
+	        	<entry key="file.root.absolute.path" value=""/>
+	        	<entry key="file.root.relative.path" value="upload"/>
+	        	
+	        	<entry key="file.default.path" value="default"/>
+	        	<entry key="file.default.size" value="10" /> <!-- MB -->
+	        	<entry key="file.default.count" value="5" />
+	        	
+	        	<entry key="file.menu.path" value="menu"/>
+	        	<entry key="file.menu.size" value="10" /> <!-- MB -->
+	        	
+	        	<entry key="file.banner.path" value="banner"/>
+	        	<entry key="file.banner.size" value="10"/> <!-- MB -->
+	        	
+	        	<entry key="file.popup.path" value="popup"/>
+	        	<entry key="file.popup.size" value="10"/> <!-- MB -->
+	        	
+	        	<entry key="file.content.path" value="content"/>
+	        	<entry key="file.content.size" value="10"/> <!-- MB -->
+	        	
+	        	<entry key="file.article.path" value="article"/>
+	        	<entry key="file.article.comment.path" value="article/comment"/>
+	        	<entry key="file.article.comment.size" value="10"/> <!-- MB -->
+	        	
+	        	<!-- attachfile -->
+	        	<entry key="attachfile.path.dir" value="attachfile" />
+	        	<entry key="attachfile.noimg.path" value="attachfile/img/noimg.png" />
+	        	<entry key="attachfile.ftp.server.ip" value="127.0.0.1"/>
+	        	<entry key="attachfile.ftp.user.id" value="test"/>
+	        	<entry key="attachfile.ftp.user.pwd" value="test"/>
+	        	
+	        	<!-- template -->
+	        	<entry key="template.jxls.path" value="WEB-INF/template/jxls"/>
+	        	<entry key="template.mail.path" value="WEB-INF/template/mail"/>
+	        	
+	        	<!-- ROLE ADMIN -->
+	        	<!-- TODO -->
+	        	<entry key="role.mngr.admin" value="ROLE_MNGR_ADMIN" />
+	        	
+	        	<!-- 트위터 키 정보 -->
+	        	<!-- <entry key="twit_consumerKey" value="jBVOUr2AUOheKQn8YZRkog" /> -->
+	        	<!-- <entry key="twit_consumerSecret" value="LW2eoY1QDB4JQoWrbwXOFKa53MY4F6XeHwEy3AoQIA" /> -->
+	        	<!-- <entry key="twit_accessToken" value="1647065684-raGDx9HrTRg2dWYchBsUH982iU1qbXhCWJuEM2F" /> -->
+	        	<!-- <entry key="twit_accessTokenSecret" value="PW2Y2FvLKwkm9I4QxqnGcZwowGoHQIGGAtpgiBGvJI" /> -->
+	        	
+	        	<!-- 단축URL 키 정보 -->
+	        	<!-- <entry key="bitly_loginKey" value="o_3jc6unto8m" /> -->
+	        	<!-- <entry key="bitly_apiKey" value="R_5ccf73e219819fdd7c48d8bbaca61f4b" /> -->
+	        	
+	        	<!-- <entry key="daumMapApiKey" value="9d050b97778ac79a51d25ac12b03ac27e4aa5f30" /> -->
+	        	<!-- freedi.iptime.org의 DAUM 로컬 API KEY -->
+	        	<!-- <entry key="daumLocalApiKey" value="aec66d8c7427a99805b6db0794aaaabc6cc763dd" /> -->
+	        	<!-- <entry key="daumLocalApiUrl" value="http://apis.daum.net/local/geo/addr2coord?output=xml[APIKEY][QUERY]" /> -->
+	        </map>
+		</property>
+	</bean>
+	
+	<!-- <bean id="errorPropertiesService" class="kr.freedi.dev.common.service.ErrorPropertiesService">-->
+	<!-- <property name="propertiesPath" value="WEB-INF/classes/kr/freedi/dev/message/message-error_ko_KR.properties" />-->
+	<!-- </bean>-->
+ 
+</beans>	

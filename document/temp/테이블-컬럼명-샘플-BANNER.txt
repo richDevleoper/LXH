@@ -1,0 +1,16 @@
+DROP TABLE CMS_DEFAULT.TB_BANNER CASCADE CONSTRAINTS;
+
+CREATE TABLE CMS_DEFAULT.TB_BANNER (
+  BANNER_KEY        NUMBER(8)              NOT NULL, 
+  TITLE      VARCHAR2(255 BYTE)     NOT NULL, 
+  LINK_URL        VARCHAR2(255 BYTE)         NULL, 
+  FILE_NM      VARCHAR2(255 BYTE)         NULL, 
+  TARGET_GB        CHAR(1 BYTE)          DEFAULT 'N'           NOT NULL, 
+  ACT_FL          CHAR(1 BYTE)          DEFAULT 'Y'           NOT NULL, 
+  VIEW_ORD      NUMBER(4)             DEFAULT 1              NOT NULL, 
+  LOC_GB      VARCHAR2(20 BYTE)          NULL, 
+  FRST_OPER_ID      VARCHAR2(20 BYTE)      NOT NULL, 
+  FRST_OPER_DT    DATE                   NOT NULL, 
+  LAST_OPER_ID      VARCHAR2(20 BYTE)          NULL, 
+  LAST_OPER_DT    DATE                       NULL
+)

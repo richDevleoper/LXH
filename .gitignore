@@ -1,0 +1,5 @@
+*.class
+*.properties
+target/*
+docs/~$*.*x
+.*/*

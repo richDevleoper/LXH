@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ReportIndicator">
+
+	<resultMap id="reportIndicatorMap" type="kr.freedi.dev.qreport.domain.ReportIndicatorVO">		
+		
+		<result property="repIndiCode" column="REP_INDI_CODE" />
+		<result property="repCode" column="REP_CODE" />
+		<result property="repIndiPyItem" column="REP_INDI_PY_ITEM" />
+		<result property="repIndiPyUnit" column="REP_INDI_PY_UNIT" />
+		<result property="repIndiPyBefore" column="REP_INDI_PY_BEFORE" />
+		<result property="repIndiPyGoal" column="REP_INDI_PY_GOAL" />
+		<result property="repIndiKpiItem" column="REP_INDI_KPI_ITEM" />
+		<result property="repIndiKpiUnit" column="REP_INDI_KPI_UNIT" />
+		<result property="repIndiKpiBefore" column="REP_INDI_KPI_BEFORE" />
+		<result property="repIndiKpiGoal" column="REP_INDI_KPI_GOAL" />
+		<result property="repIndiRegUser" column="REP_INDI_REG_USER" />
+		<result property="repIndiRegDate" column="REP_INDI_REG_DATE" />
+		<result property="repIndiUpdateUser" column="REP_INDI_UPDATE_USER" />
+		<result property="repIndiUpdateDate" column="REP_INDI_UPDATE_DATE" />
+		
+	</resultMap>
+	
+	<sql id="defCond">
+		
+		<where>
+			<trim prefixOverrides="AND|OR">
+				<if test="repIndiCode != null and repIndiCode != ''">
+					AND REP_INDI_CODE = #{repIndiCode}
+			  	</if>
+			  	<if test="repCode != null and repCode != ''">
+					AND REP_CODE = #{repCode}
+			  	</if>
+			</trim>
+		</where>
+		
+	</sql> 
+	
+
+	
+	<select id="selectFullList" resultMap="reportIndicatorMap">
+		SELECT rep_indi_code,
+		        rep_code,
+		        rep_indi_py_item,
+		        rep_indi_py_unit,
+		        rep_indi_py_before,
+		        rep_indi_py_goal,
+		        rep_indi_kpi_item,
+		        rep_indi_kpi_unit,
+		        rep_indi_kpi_before,
+		        rep_indi_kpi_goal,
+		        rep_indi_reg_user,
+		        rep_indi_reg_date,
+		        rep_indi_update_user,
+		        rep_indi_update_date
+		   FROM TB_REPORT_INDICATORS
+		
+		<include refid="defCond"></include>
+		
+		ORDER BY rep_indi_reg_date ASC
+		
+	</select>
+	
+
+	
+	<select id="selectListCount" resultType="int">
+		SELECT COUNT(*) FROM TB_REPORT_INDICATORS T 
+		<include refid="defCond"></include>
+	</select>
+	
+	<select id="selectNextFkey" resultType="int">
+		SELECT NVL(MAX(TO_NUMBER(rep_indi_code)), 0) + 1  FROM TB_REPORT_INDICATORS
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO TB_REPORT_INDICATORS (
+			REP_INDI_CODE
+			, REP_CODE
+			, REP_INDI_PY_ITEM
+			, REP_INDI_PY_UNIT
+			, REP_INDI_PY_BEFORE
+			, REP_INDI_PY_GOAL
+			, REP_INDI_KPI_ITEM
+			, REP_INDI_KPI_UNIT
+			, REP_INDI_KPI_BEFORE
+			, REP_INDI_KPI_GOAL
+			, REP_INDI_REG_USER
+			, REP_INDI_REG_DATE
+		) VALUES (
+			#{repIndiCode}
+			, #{repCode}
+			, #{repIndiPyItem}
+			, #{repIndiPyUnit}
+			, #{repIndiPyBefore}
+			, #{repIndiPyGoal}
+			, #{repIndiKpiItem}
+			, #{repIndiKpiUnit}
+			, #{repIndiKpiBefore}
+			, #{repIndiKpiGoal}
+			, #{repIndiRegUser}
+			, sysdate
+		)
+	</insert>
+	
+	<update id="update">
+	
+		UPDATE TB_REPORT_INDICATORS SET 
+			   REP_CODE = #{repCode}
+				, REP_INDI_PY_ITEM = #{repIndiPyItem}
+				, REP_INDI_PY_UNIT = #{repIndiPyUnit}
+				, REP_INDI_PY_BEFORE = #{repIndiPyBefore}
+				, REP_INDI_PY_GOAL = #{repIndiPyGoal}
+				, REP_INDI_KPI_ITEM = #{repIndiKpiItem}
+				, REP_INDI_KPI_UNIT = #{repIndiKpiUnit}
+				, REP_INDI_KPI_BEFORE = #{repIndiKpiBefore}
+				, REP_INDI_KPI_GOAL = #{repIndiKpiGoal}
+				, REP_INDI_REG_USER = #{repIndiRegUser}
+				, REP_INDI_REG_DATE = #{repIndiRegDate}
+				, REP_INDI_UPDATE_USER = #{repIndiUpdateUser}
+				, REP_INDI_UPDATE_DATE = #{repIndiUpdateDate}
+		WHERE REP_INDI_CODE = #{repIndiCode}
+	</update>
+	
+	<select id="select" resultMap="reportIndicatorMap">
+		SELECT REP_INDI_CODE
+				, REP_CODE
+				, REP_INDI_PY_ITEM
+				, REP_INDI_PY_UNIT
+				, REP_INDI_PY_BEFORE
+				, REP_INDI_PY_GOAL
+				, REP_INDI_KPI_ITEM
+				, REP_INDI_KPI_UNIT
+				, REP_INDI_KPI_BEFORE
+				, REP_INDI_KPI_GOAL
+				, REP_INDI_REG_USER
+				, REP_INDI_REG_DATE
+				, REP_INDI_UPDATE_USER
+				, REP_INDI_UPDATE_DATE
+		 FROM TB_REPORT_INDICATORS T  
+		WHERE T.REP_INDI_CODE = #{repIndiCode}
+	</select>
+	
+	<delete id="delete">
+		DELETE FROM TB_REPORT_INDICATORS
+		<include refid="defCond"></include>
+	</delete>
+	
+</mapper>
+

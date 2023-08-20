@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Link">
+
+	<sql id="defCond">
+		<where>
+			<trim prefixOverrides="AND|OR">
+				<if test="searchStartFrstOperDt != null and searchStartFrstOperDt != ''">
+					AND T.FRST_OPER_DT <![CDATA[>=]]> #{searchStartFrstOperDt}
+				</if>
+				<if test="searchEndFrstOperDt != null and searchEndFrstOperDt != ''">
+					AND T.FRST_OPER_DT <![CDATA[<=]]> TO_DATE(#{searchEndFrstOperDt}, 'YYYY-MM-DD') + 1
+				</if>
+				<if test="searchLocateTyp != null and searchLocateTyp != ''">
+					AND T.LOCATE_TYP = #{searchLocateTyp}
+				</if>
+				<if test="searchPbsh != null and searchPbsh != ''">
+					<choose>
+						<when test="searchPbsh == 'Y'.toString()">
+							AND T.ACT_FLG = 'Y'
+							AND ( T.PERIOD_FLG = 'N' OR (T.PERIOD_FLG = 'Y' AND (T.START_DT <![CDATA[<=]]> SYSDATE AND T.END_DT <![CDATA[>=]]> SYSDATE)) )
+						</when>
+						<when test="searchPbsh == 'N'.toString()">
+							OR T.ACT_FLG = 'N'
+							OR ( T.PERIOD_FLG = 'Y' AND (T.START_DT <![CDATA[>=]]> SYSDATE OR T.END_DT <![CDATA[<=]]> SYSDATE))						
+						</when>
+						<otherwise></otherwise>
+					</choose>
+				</if>
+				<if test="searchClass != null and searchClass != ''">
+					<if test="searchValue != null and searchValue != ''">
+						AND 
+						<trim prefixOverrides="AND">
+							<choose>
+								<when test="searchClass == 'TITLE'.toString()">
+									<foreach collection="searchItrValue" index="i" item="item" open="(" close=")" separator=" ">
+										<if test="i != 0">AND </if> T.TITLE LIKE '%' || #{item} || '%'
+									</foreach>
+								</when>
+								<when test="searchClass == 'URL'.toString()">
+									<foreach collection="searchItrValue" index="i" item="item" open="(" close=")" separator=" ">
+										<if test="i != 0">AND </if> T.URL LIKE '%' || #{item} || '%'
+									</foreach>
+								</when>
+								<otherwise></otherwise>
+							</choose>
+						</trim>
+					</if>			
+				</if>
+			</trim>
+		</where>
+	</sql>
+
+	<sql id="fullCond">
+		<where>
+			<trim prefixOverrides="AND|OR">
+				<if test="locateTyp != null and locateTyp != ''">
+					AND T.LOCATE_TYP = #{locateTyp}	
+				</if>
+				<if test="actFlg != null and actFlg != ''">
+					AND T.ACT_FLG = #{actFlg}	
+				</if>
+				AND ( 
+						T.PERIOD_FLG = 'N' OR (T.PERIOD_FLG = 'Y' AND (T.START_DT <![CDATA[<=]]> SYSDATE AND T.END_DT <![CDATA[>=]]> SYSDATE)) 
+					)
+			</trim>
+		</where>
+	</sql>
+	
+	<select id="selectListCount" resultType="int">
+		SELECT COUNT(*) FROM TB_LINK T
+		<include refid="defCond"></include>
+	</select>
+
+	<select id="selectList" resultType="egovMap">
+	select *
+	  from (
+		SELECT
+			row_number() over (order by <choose>
+			<when test="orderBy != null and orderBy != ''">
+				<choose>
+					<when test="orderBy == 'FRST_OPER_DT'.toString()">FRST_OPER_DT DESC</when>
+					<when test="orderBy == 'TITLE'.toString()">TITLE ASC</when>
+					<otherwise>FRST_OPER_DT DESC</otherwise>
+				</choose>
+			</when>
+			<otherwise>
+				FRST_OPER_DT DESC
+			</otherwise>
+		</choose>) as num
+			,T.LINK_KEY
+			,T.LOCATE_TYP
+			,T.TITLE
+			,T.URL
+			,T.TARGET_TYP
+			,T.PERIOD_FLG
+			,T.START_DT
+			,T.END_DT
+			,T.ACT_FLG
+			,T.VIEW_ORD
+			,T.FRST_OPER_ID
+			,T.FRST_OPER_DT
+			,T.LAST_OPER_ID
+			,T.LAST_OPER_DT
+		FROM TB_LINK T
+		<include refid="defCond"></include>
+		ORDER BY 
+		<choose>
+			<when test="orderBy != null and orderBy != ''">
+				<choose>
+					<when test="orderBy == 'FRST_OPER_DT'.toString()">FRST_OPER_DT DESC</when>
+					<when test="orderBy == 'TITLE'.toString()">TITLE ASC</when>
+					<otherwise>FRST_OPER_DT DESC</otherwise>
+				</choose>
+			</when>
+			<otherwise>
+				FRST_OPER_DT DESC
+			</otherwise>
+		</choose>
+		)
+		where num between #{firstRecordIndex} and #{recordCountPerPage}
+	</select>
+	
+	<select id="selectFullList" resultType="egovMap">
+		SELECT
+			T.LINK_KEY
+			,T.LOCATE_TYP
+			,T.TITLE
+			,T.URL
+			,T.TARGET_TYP
+			,T.PERIOD_FLG
+			,T.START_DT
+			,T.END_DT
+			,T.ACT_FLG
+			,T.VIEW_ORD
+			,T.FRST_OPER_ID
+			,T.FRST_OPER_DT
+			,T.LAST_OPER_ID
+			,T.LAST_OPER_DT
+		FROM TB_LINK T
+		<include refid="fullCond"></include>
+		ORDER BY T.FRST_OPER_DT DESC
+	</select>
+
+	<select id="select" resultType="kr.freedi.dev.link.domain.LinkVO">
+		SELECT 
+			LINK_KEY linkKey
+			,LOCATE_TYP locateTyp
+			,TITLE title
+			,URL url
+			,TARGET_TYP targetTyp
+			,PERIOD_FLG periodFlg
+			,START_DT startDt
+			,END_DT endDt
+			,ACT_FLG actFlg
+			,VIEW_ORD viewOrd
+			,FRST_OPER_ID frstOperId
+			,FRST_OPER_DT frstOperDt
+			,LAST_OPER_ID lastOperId
+			,LAST_OPER_DT lastOperDt
+		FROM TB_LINK T 
+		WHERE LINK_KEY = #{linkKey}
+	</select>
+
+	<insert id="insert">
+		<selectKey keyProperty="linkKey" resultType="int" order="BEFORE">
+			SELECT NVL(MAX(LINK_KEY), 0) + 1 linkKey FROM TB_LINK 
+		</selectKey>
+		INSERT INTO TB_LINK (
+			LINK_KEY
+			,LOCATE_TYP
+			,TITLE
+			,URL
+			,TARGET_TYP
+			,PERIOD_FLG
+			,START_DT
+			,END_DT
+			,ACT_FLG
+			,VIEW_ORD
+			,FRST_OPER_ID
+			,FRST_OPER_DT
+			,LAST_OPER_ID
+			,LAST_OPER_DT
+		) VALUES (
+			#{linkKey}
+			,#{locateTyp}
+			,#{title}
+			,#{url}
+			,#{targetTyp}
+			,#{periodFlg}
+			,#{startDt}
+			,#{endDt}
+			,#{actFlg}
+			,0
+			,#{frstOperId}
+			,SYSDATE
+			,NULL
+			,NULL
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE TB_LINK SET 
+			LOCATE_TYP = #{locateTyp}
+			,TITLE = #{title}
+			,URL = #{url}
+			,TARGET_TYP = #{targetTyp}
+			,PERIOD_FLG = #{periodFlg}
+			,START_DT = #{startDt}
+			,END_DT = #{endDt}
+			,ACT_FLG = #{actFlg}
+			<if test="viewOrd != null and viewOrd != ''">
+				,VIEW_ORD = #{viewOrd}
+			</if>
+			,LAST_OPER_ID = #{lastOperId}
+			,LAST_OPER_DT = SYSDATE
+		WHERE
+		LINK_KEY = #{linkKey}
+	</update>
+
+	<delete id="delete">
+		DELETE FROM TB_LINK WHERE LINK_KEY = #{linkKey}
+	</delete>	
+</mapper>
+

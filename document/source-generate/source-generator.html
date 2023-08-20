@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>개발관련 소스 생성</title>
+</head>
+
+<script type="text/javascript" src="jquery-1.9.1.js"></script>
+<script type="text/javascript">String.prototype.trim = function() {return this.replace(/(^\s*)|(\s*$)/gi, "");}</script>
+<script type="text/javascript">
+
+var projectName;
+var authorName;
+var basePackageName;
+var packageName;
+var domainName;
+var tableName;
+var pkColumn;
+var columns;
+
+var domainName_pascalCase;
+
+var tableName_lowerCase;
+var tableName_lowerCase_noUnderLine;
+var tableName_upperCase;
+var tableName_camelCase;
+var tableName_pascalCase;
+
+var pkColumn_lowerCase;
+var pkColumn_upperCase;
+var pkColumn_camelCase;
+
+var time;
+
+var columns_split;
+
+
+//columns sample @i:Intger, @s:String
+var testColumnNames = 
+	"LINK_KEY@i,\n" +
+	"LOCATE_TYP@i,\n" +
+	"TITLE@i,\n" +
+	"URL@s,\n" +
+	"TARGET_TYP@s,\n" +
+	"ORDER_NO@s,\n" +
+	"PERIOD_FLG@s,\n" +
+	"START_DT@s,\n" +
+	"END_DT@s,\n" +
+	"ACT_FLG@s,\n" +
+	"FRST_OPER_ID@s,\n" +
+	"FRST_OPER_DT@s,\n" +
+	"LAST_OPER_ID@s,\n" +
+	"LAST_OPER_DATE@s";
+
+function generateSource() {
+	
+	$('#taSql').empty();
+	$('#taJavaDomain').empty();
+	$('#taJavaController').empty();
+	$('#taJavaService').empty();
+	$('#taJspList').empty();
+	$('#taJspForm').empty();
+	
+	projectName = $('#projectName').val();//프로젝트명
+	authorName = $('#authorName').val();//저자명
+	basePackageName = $('#basePackageName').val();//기본패키지명
+	packageName = $('#packageName').val();//패키지명
+	domainName = $('#domainName').val().toLowerCase();//도메인명
+	tableName = $('#tableName').val().toLowerCase();//테이블명
+	pkColumn = $('#pkColumn').val().toLowerCase(); //pk컬럼
+	columns = $('#columns').val();//컬럼들
+
+	domainName_pascalCase = getPascalCase(domainName);
+	
+	tableName_lowerCase = tableName.toLowerCase();
+	tableName_lowerCase_noUnderLine = tableName.replace(/_/gi,"").toLowerCase();
+	tableName_upperCase = tableName.toUpperCase();
+	tableName_camelCase = getCamelCase(tableName);
+	tableName_pascalCase = getPascalCase(tableName);
+	
+	pkColumn_lowerCase = pkColumn.toLowerCase();
+	pkColumn_upperCase = pkColumn.toUpperCase();
+	pkColumn_camelCase = getCamelCase(pkColumn);
+	
+	
+	//현재시간
+	var date = new Date();
+	var year = date.getFullYear();
+    var month = date.getMonth() + 1;
+    var day = date.getDay();
+    var hours = date.getHours();
+	var minutes = date.getMinutes();
+	var seconds = date.getSeconds();
+	time = year+"/"+month+"/" + day + " "+hours + ":" + minutes + ":" + seconds;
+
+
+	columns_split = columns.toLowerCase().split(',');
+	
+	/*sql *************/
+	_generateSql()
+
+  	/*java domain ******/
+	_generateJavaDomain();
+	
+	/*java controller ******/
+	_generateJavaController()
+}
+
+
+function _generateSql(){
+	var spl2;
+	
+	var query = ""; 
+	query += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+	query += "<!DOCTYPE mapper PUBLIC \"-//mybatis.org//DTD Mapper 3.0//EN\" \"http://mybatis.org/dtd/mybatis-3-mapper.dtd\">\n";
+	query += "<mapper namespace=\"" + domainName_pascalCase +"\">\n";
+	query += "\n";
+	//query += "\t<typeAlias alias=\"egovMap\" type=\"egovframework.rte.psl.dataaccess.util.EgovMap\"/>\n\n";
+
+	/** defCond */
+	query += "\t<sql id=\"defCond\">\n";
+	query += "\t\t<where>\n";
+	query += "\t\t\n";
+	//query += "\t\t1=1\n";
+	
+	//query += "\t\t<isNotEmpty property=\"searchValue\" open=\"(\" close=\")\" removeFirstPrepend=\"true\" prepend=\"AND\">\n";
+	//query += "\t\t\t<isNotEmpty property=\"searchSelect\" removeFirstPrepend=\"true\" prepend=\"AND\">\n";
+	//query += "\t\t\t$searchSelect$ LIKE '%' || #searchValue# || '%'\n";
+	//query += "\t\t\t</isNotEmpty>\n";
+	//query += "\t\t</isNotEmpty>\n";
+	
+	query += "\t\t</where>\n";
+	query += "\t</sql>\n\n";
+
+	/** selectListCount */
+	query += "\t<select id=\"selectListCount\" resultType=\"int\">\n";
+	query += "\t\tSELECT COUNT(*) FROM " + tableName_upperCase + " T \n";
+	query += "\t\t<include refid=\"defCond\"/>\n";
+	query += "\t</select>\n\n";
+	
+	/** selectList */
+	query += "\t<select id=\"selectList\" resultType=\"egovMap\">\n";
+	//query += "\t\tSELECT T2.*\n";
+	//query += "\t\tFROM (\n";
+	//query += "\t\t\tSELECT  ROWNUM RNUM, T1.*\n";
+	//query += "\t\t\tFROM (\n";
+	query += "\t\tSELECT\n";
+
+		/**for**/
+		for(var i=0; i<columns_split.length; i++) {
+			spl2 = columns_split[i].split('@');
+			cnUpperCase = spl2[0].trim().toUpperCase();
+			cnLowerCase = spl2[0].trim().toLowerCase();
+			cnCamelCase = getCamelCase(spl2[0].trim());
+			cnPascalCase = getPascalCase(spl2[0].trim());
+			if(i == 0){query += "\t\t\tT." + cnUpperCase + "\n";}
+			else{query += "\t\t\t,T." + cnUpperCase + "\n";}
+		}
+		/**for**/
+
+	query += "\t\tFROM " + tableName_upperCase +" T\n";
+	query += "\t\t<include refid=\"defCond\"/>\n";
+	//query += "\t\t\t\tORDER BY T." + tableName_upperCase + "_ORDER ASC\n";
+	query += "\t\tLIMIT\n\t\t#{recordCountPerPage}, #{firstRecordIndex}\n";
+	query += "\t</select>\n\n";
+
+	/** select */
+	query += "\t<select id=\"select\" resultType=\"" + basePackageName + "." + packageName + ".domain." + domainName_pascalCase +"VO\">\n";
+	query += "\t\tSELECT \n";
+
+		/**for**/
+		for(var i=0; i<columns_split.length; i++) {
+			spl2 = columns_split[i].split('@');
+			cnUpperCase = spl2[0].trim().toUpperCase();
+			cnLowerCase = spl2[0].trim().toLowerCase();
+			cnCamelCase = getCamelCase(spl2[0].trim());
+			cnPascalCase = getPascalCase(spl2[0].trim());
+			if(i == 0){query += "\t\t\tT." + cnUpperCase + " " + cnCamelCase + "\n";}
+			else{query += "\t\t\t,T." + cnUpperCase + " " + cnCamelCase + "\n";}
+		}
+		/**for**/
+
+	query += "\t\tFROM " + tableName_upperCase + " T \n"
+	query += "\t\tWHERE T." + pkColumn_upperCase + " = #{" + pkColumn_camelCase + "}\n";
+	query += "\t</select>\n\n";
+
+	/** insert */
+	query += "\t<insert id=\"insert\">\n";
+	
+	query += "\t\t<selectKey keyProperty=\"" + pkColumn_camelCase + "\" resultType=\"int\"  order=\"BEFORE\">\n";
+	query += "\t\t\tSELECT NVL(MAX(" + pkColumn_upperCase + "), 0) + 1 " + pkColumn_camelCase + " FROM " + tableName_upperCase + "\n";
+	query += "\t\t</selectKey>\n";
+	
+	query += "\t\tINSERT INTO " + tableName_upperCase +" (\n";
+
+		/**for**/
+		for(var i=0; i<columns_split.length; i++) {
+			spl2 = columns_split[i].split('@');
+			cnUpperCase = spl2[0].trim().toUpperCase();
+			cnLowerCase = spl2[0].trim().toLowerCase();
+			cnCamelCase = getCamelCase(spl2[0].trim());
+			cnPascalCase = getPascalCase(spl2[0].trim());
+			if(i == 0){query += "\t\t\t" + cnUpperCase + "\n";}
+			else{query += "\t\t\t," + cnUpperCase + "\n";}
+		}
+		/**for**/
+
+	query += "\t\t) VALUES (\n";
+		/**for**/
+		for(var i=0; i<columns_split.length; i++) {
+			spl2 = columns_split[i].split('@');
+			cnUpperCase = spl2[0].trim().toUpperCase();
+			cnLowerCase = spl2[0].trim().toLowerCase();
+			cnCamelCase = getCamelCase(spl2[0].trim());
+			cnPascalCase = getPascalCase(spl2[0].trim());
+			if(i == 0){query += "\t\t\t#{" + cnCamelCase + "}\n";}
+			else{query += "\t\t\t,#{" + cnCamelCase + "}\n";}
+		}
+		/**for**/
+	query += "\t\t)\n";
+	query += "\t</insert>\n\n";
+	
+
+	/** update */
+	query += "\t<update id=\"update\">\n";
+	query += "\t\tUPDATE " + tableName_upperCase +" SET \n";
+
+		/**for**/
+		for(var i=0; i<columns_split.length; i++) {
+			spl2 = columns_split[i].split('@');
+			cnUpperCase = spl2[0].trim().toUpperCase();
+			cnLowerCase = spl2[0].trim().toLowerCase();
+			cnCamelCase = getCamelCase(spl2[0].trim());
+			cnPascalCase = getPascalCase(spl2[0].trim());
+			if(i == 0){query += "\t\t\t" + cnUpperCase + " = #{" + cnCamelCase + "}\n";}
+			else{query += "\t\t\t," + cnUpperCase + " = #{" + cnCamelCase + "}\n";}
+		}
+		/**for**/
+
+	query += "\t\tWHERE\n";
+	query += "\t\t" + pkColumn_upperCase + " = #{" + pkColumn_camelCase +"}\n";
+	query += "\t</update>\n\n";
+
+	/** delete */
+	query += "\t<delete id=\"delete\">\n";
+	query += "\t\tDELETE FROM " + tableName_upperCase +" WHERE " + pkColumn_upperCase + " = #{" + pkColumn_camelCase + "}\n";
+	query += "\t</delete>	\n";
+	query += "</mapper>\n\n";
+
+	$('#taSql').html(query);
+}
+
+function _generateJavaDomain(){
+	var spl2;
+	
+	var tagHead = "";
+	var tagFoot = "}";
+	var tagMember = "";
+	var tagConstructor = "";
+	var tabConstructorInitMember = "";
+	var tagMethod = "";
+	var tagToString = "";
+   			
+	tagHead += "package " + basePackageName + "." + packageName + ".domain;\n\n";
+	tagHead += "import org.apache.commons.lang3.builder.ToStringBuilder;\n\n";
+	tagHead += "/**\n";
+	tagHead += " * @project\t: "+projectName+"\n";
+	tagHead += " * @file\t: " + domainName_pascalCase + "VO.java\n";
+	tagHead += " * @author\t: "+authorName+"\n";
+	tagHead += " * @date\t: "+time+"\n";
+	tagHead += " * @history\t:\n";
+	tagHead += " * @comment\t:\n";
+	tagHead += " */\n\n";
+	tagHead += "public class " + domainName_pascalCase + "VO {\n";
+
+	var memberType = "";
+	for(var i=0; i<columns_split.length; i++) {
+		memberType = "";
+
+		spl2 = columns_split[i].split('@');
+		if(spl2[1].toLowerCase() == 's'){memberType = "String";}
+		if(spl2[1].toLowerCase() == 'i'){memberType = "Integer";}
+		if(spl2[1].toLowerCase() == 'd'){memberType = "Date";}
+		
+		cnCamelCase = getCamelCase(spl2[0].trim());
+		cnPascalCase = getPascalCase(spl2[0].trim());
+
+		
+		tagMember += "\tprivate " + memberType + " " + cnCamelCase + ";\n";
+		
+		//if(i==0){tabConstructorInitMember += "\t\t//--.\n";}
+		//if(spl2[1].toLowerCase() == 's'){	tabConstructorInitMember += "\t\t" + cnCamelCase + " = \"\";\n";}
+		//if(spl2[1].toLowerCase() == 'i'){tabConstructorInitMember += "\t\t" + cnCamelCase + " = 0;\n";}
+
+		tagMethod += "\tpublic " + memberType + " get" + cnPascalCase + "(){\n";
+		tagMethod += "\t\treturn " + cnCamelCase + ";\n";
+		tagMethod += "\t}\n";
+		tagMethod += "\tpublic void set" + cnPascalCase + "(" + memberType + " " + cnCamelCase +"){\n";
+		tagMethod += "\t\tthis." + cnCamelCase + " = " + cnCamelCase + ";\n";
+		tagMethod += "\t}\n\n";
+	}
+	
+	tagConstructor = "\tpublic " + domainName_pascalCase + "VO" + "(){\n" + tabConstructorInitMember + "\t}\n\n";
+
+	tagToString += "\tpublic String toString(){\n";
+	tagToString += "\t\treturn ToStringBuilder.reflectionToString(this);\n";
+	tagToString += "\t}\n";
+	
+	$('#taJavaDomain').append(tagHead+"\n");
+	$('#taJavaDomain').append(tagMember+"\n");
+	$('#taJavaDomain').append(tagConstructor+"\n");
+	$('#taJavaDomain').append(tagToString+"\n");
+	$('#taJavaDomain').append(tagMethod+"\n");
+	$('#taJavaDomain').append(tagFoot+"\n");
+}
+	
+	
+	
+	
+
+function _generateJavaController(){
+	var spl2;
+	
+	var tagHead = "";
+	var tagFoot = "}";
+	var tagMember = "";
+	var tagConstructor = "";
+	var tabConstructorInitMember = "";
+	var tagMethod = "";
+	var tagToString = "";
+	var index = 6;
+	
+   			
+	tagHead += "package " + basePackageName + "." + packageName + ".controller;\n\n";
+	
+
+	tagHead += "import org.apache.commons.logging.Log;\n";
+	tagHead += "import org.apache.commons.logging.LogFactory;\n";
+	tagHead += "import org.springframework.stereotype.Controller;\n";
+	tagHead += "import org.springframework.web.bind.annotation.RequestMapping;\n";
+	tagHead += "import org.springframework.ui.ModelMap;\n";
+	tagHead += "import javax.servlet.http.HttpServletRequest;\n";
+	
+	
+
+	tagHead += "/**\n";
+	tagHead += " * @project\t: "+projectName+"\n";
+	tagHead += " * @file\t: " + domainName_pascalCase + "Controller.java\n";
+	tagHead += " * @author\t: "+authorName+"\n";
+	tagHead += " * @date\t: "+time+"\n";
+	tagHead += " * @history\t:\n";
+	tagHead += " * @comment\t:\n";
+	tagHead += " */\n\n";
+	tagHead += " @Controller\n";
+	tagHead += "public class " + domainName_pascalCase + "Controller {\n";
+
+	tagToString += "\tprotected Log log = LogFactory.getLog(this.getClass());\n";
+	
+	var i = 0;
+	var MethodNm = "list";
+	var MethodList = ["list", "insertForm", "insert" , "updateForm" , "update" , "delete"];
+	while(i < index){
+		tagMethod += '\t@RequestMapping({"/' + packageName + '/' + MethodList[i] + '.do"})\n';
+		tagMethod += "\tpublic String " + MethodList[i] + "(HttpServletRequest request, ModelMap model) throws Exception {\n";
+		tagMethod += '\t\treturn "';
+		if(MethodList[i] == "insert" || MethodList[i] == "update" || MethodList[i] == "delete"){
+			tagMethod += 'redirect:list.do?";\n';	
+		}else{
+			tagMethod += packageName + '/';
+			if(MethodList[i].indexOf('Form') > 0){
+				tagMethod += 'Form';
+			}else{
+				tagMethod += MethodList[i];
+			}
+			tagMethod += '";\n';
+		}
+		tagMethod += "\t}\n\n";
+		i++;
+	}
+	//tagToString += "\t}\n";
+	
+	$('#taJavaController').append(tagHead+"\n");
+	$('#taJavaController').append(tagMember+"\n");
+	$('#taJavaController').append(tagConstructor+"\n");
+	$('#taJavaController').append(tagToString+"\n");
+	$('#taJavaController').append(tagMethod+"\n");
+	$('#taJavaController').append(tagFoot+"\n");
+}
+
+
+function getCamelCase(r){
+	var arr = r.toLowerCase().split("_");
+	var tmp = "";
+	for(var i=0; i<arr.length; i++){
+		if(i==0){
+			tmp += arr[i];
+		}else{
+			tmp += (arr[i].substring(0,1).toUpperCase() + arr[i].substring(1));
+		}
+	}
+	return tmp;
+}
+
+function getPascalCase(r){
+	var arr = r.toLowerCase().split("_");
+	var tmp = "";
+	for(var i=0; i<arr.length; i++){
+		tmp += (arr[i].substring(0,1).toUpperCase() + arr[i].substring(1));
+	}
+	return tmp;
+}
+
+$(function(){
+	$('#projectName').attr('value', 'default');
+	$('#authorName').attr('value', 'ParkHyunHyung');
+	$('#basePackageName').attr('value', 'kr.freedi.dev');
+	$('#packageName').attr('value', 'link');
+	$('#domainName').attr('value', 'link');
+	$('#tableName').attr('value', 'tb_link');
+	$('#pkColumn').attr('value', 'link_key');
+	$('#columns').append(testColumnNames);
+});
+
+
+</script>
+<style type="text/css">
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,textarea,blockquote,th,td,input,select,textarea,button {margin:0;padding:0;border:0;}
+body{color:#333; font-size:12px; font-family:'맑은 고딕','Malgun Gothic',Gulim,'굴림',Sans-serif;}
+
+#container{width:1200px; margin:0 auto;}
+#container textarea{width:100%; height:240px; border:1px solid #ddd; overflow-y:scroll;}
+
+.content{margin:30px 0; border:0px solid #ddd;}
+.contHeader{margin:10px 0; padding:10px; background-color:#efefef; border:1px solid #ddd;}
+.contTitle{font-size:14px; font-weight:bold; color:blue;}
+
+.inputTable{width:100%; background-color:#fff; border-collapse:collapse; margin:10px 0 5px 0 ; border:1px solid #d0d3d8;}
+.inputTable caption span{position:absolute; top:-10000em;}
+.inputTable thead th {padding:5px 2px 3px 2px; text-align:center; background:#f8f8f8; border:1px solid #d0d3d8; color:#5c6472;}
+.inputTable tbody th {padding:5px 12px 3px 2px; text-align:right; background:#f8f8f8; border-bottom:1px solid #d0d3d9; color:#5c6472;}
+.inputTable tbody td {padding:5px 2px 3px 2px; text-align:left; border:1px solid #d0d3d8; vertical-align:middle; }
+.inputTable tbody.write td {padding:5px 2px 3px 7px; text-align:left; border:1px solid #d0d3d8; vertical-align:middle; }
+.inputTable tbody .tb_ipty{border:1px solid #d0d3d8; width:95%; vertical-align:middle; padding-left:5px;}
+.inputTable tbody .sel_type{border:1px solid #d0d3d8; vertical-align:middle;}
+.inputTable tbody td img{vertical-align:bottom;}
+.inputTable input{width:30%; border:1px solid #ddd;}
+.inputTable textarea{width:98%; height:190px; border:1px solid #ddd;}
+
+#btnGenerator{width:100%; height:36px; background-color:#aaa; border:1px solid #888;}
+.spanRed{color:red;}
+</style>
+
+<body>
+<div id="header"></div>
+<div id="container">
+	<form id="defaultForm">
+
+		<div class="content">
+			<div class="contHeader">
+				<div class="contTitle">Source Generator</div>
+				<div class="contDesc">
+					<div>
+						- pk가 2개 이상인경우의 처리 안됨(1개로 제너레이트한 후에 보정 필요)
+						<br />
+						- 사용전 onload시 테스트값 세팅되는 부분을 입맛에 맞게 수정하여 사용하기바람
+						<br/>
+						- [2014/09/10][pdh] 생성자에서 멤버변수 초기화 추가
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="content">
+			<div class="contHeader">
+				<table class="inputTable" summary="">
+					<caption><span></span></caption>
+					<colgroup>
+						<col width="20%"/>
+						<col width="80%"/>
+					</colgroup>
+					<tbody>
+						<tr>
+							<th scope="row">프로젝트명</th>
+							<td><input type="text" id="projectName" name="projectName" /> * 선택</td>
+						</tr>
+						<tr>
+							<th scope="row">작성자명</th>
+							<td><input type="text" id="authorName" name="authorName" /> * 선택</td>
+						</tr>
+						<tr>
+							<th scope="row">기본패키지명</th>
+							<td><input type="text" id="basePackageName" name="basePackageName" /> <span class="spanRed">*</span> 필수</td>
+						</tr>
+						<tr>
+							<th scope="row">패키지명</th>
+							<td><input type="text" id="packageName" name="packageName" /> <span class="spanRed">*</span> 필수</td>
+						</tr>
+						<tr>
+							<th scope="row">도메인명</th>
+							<td><input type="text" id="domainName" name="domainName" /> <span class="spanRed">*</span> 필수</td>
+						</tr>
+						<tr>
+							<th scope="row">테이블명</th>
+							<td><input type="text" id="tableName" name="tableName" /> <span class="spanRed">*</span> 필수</td>
+						</tr>
+						<tr>
+							<th scope="row">pk컬럼</th>
+							<td><input type="text" id="pkColumn" name="pkColumn" /> <span class="spanRed">*</span> 필수</td>
+						</tr>
+						<tr>
+							<th scope="row">컬럼정보</th>
+							<td><textarea id="columns" name="columns"></textarea></td>
+						</tr>
+					</tbody>
+				</table>
+
+				<div><input type="button" id="btnGenerator" name="btnGenerator" value="GENERATE" onclick="generateSource();" /></div>
+			</div>
+		</div>
+
+
+		<div class="content">
+			<div class="contHeader">
+				<div class="contTitle">ibatis sql 파일</div>
+				<div class="contDesc">
+					<div>파일위치 : .xml</div>
+					<div>주의사항 : </div>
+				</div>
+			</div>
+			<div><textarea id="taSql" name="taSql"></textarea></div>
+		</div>
+
+
+		<div class="content">
+			<div class="contHeader">
+				<div class="contTitle">java domain 파일</div>
+				<div class="contDesc">
+					<div>파일위치 : .java</div>
+					<div>주의사항 : </div>
+				</div>
+			</div>
+			<div><textarea id="taJavaDomain" name="taJavaDomain"></textarea></div>
+		</div>
+
+		<div class="content">
+			<div class="contHeader">
+				<div class="contTitle">java controller 파일</div>
+				<div>
+					<div>파일위치 : .java</div>
+					<div>주의사항 : </div>
+				</div>
+			</div>
+			<div><textarea id="taJavaController" name="taJavaController"></textarea></div>
+		</div>
+
+		<div class="content">
+			<div class="contHeader">
+				<div class="contTitle">java service 파일</div>
+				<div class="contDesc">
+					<div>파일위치 : .java</div>
+					<div>주의사항 : </div>
+				</div>
+			</div>
+			<div><textarea id="taJavaService" name="taJavaService"></textarea></div>
+		</div>
+
+		<div class="content">
+			<div class="contHeader">
+				<div class="contTitle">jsp List 파일</div>
+				<div class="contDesc">
+					<div>파일위치 : WEB-INF/jsp</div>
+					<div>주의사항 : </div>
+				</div>
+			</div>
+			<div><textarea id="taJspList" name="taJspList"></textarea></div>
+		</div>
+
+		<div class="content">
+			<div class="contHeader">
+				<div class="contTitle">jsp Form 파일</div>
+				<div class="contDesc">
+					<div>파일위치 : WEB-INF/jsp</div>
+					<div>주의사항 : </div>
+				</div>
+			</div>
+			<div><textarea id="taJspForm" name="taJspForm"></textarea></div>
+		</div>
+	</form>
+</div>
+<div id="footer"></div>
+<br /><br /><br /><br />
+</body>
+</html>

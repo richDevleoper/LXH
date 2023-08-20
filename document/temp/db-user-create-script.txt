@@ -1,0 +1,47 @@
+
+
+create tablespace CMS_DEFAULT datafile 'D:\oracle\oradata\CMS_DEFAULT.DBF' size 250M extent management local uniform size 1M;
+create tablespace CMS_DEFAULT_INDEX datafile 'D:\oracle\oradata\CMS_DEFAULT_INDEX.DBF' size 250M extent management local uniform size 1M;
+
+
+create tablespace CMS_DEFAULT datafile 'D:\oracle\oradata\CMS_DEFAULT.DBF' size 250M extent management LOCAL AUTOALLOCATE;
+create tablespace CMS_DEFAULT_INDEX datafile 'D:\oracle\oradata\CMS_DEFAULT_INDEX.DBF' size 250M extent management LOCAL AUTOALLOCATE;
+
+
+
+create user cms_default
+identified by "cms_default123"
+default tablespace cms_default
+temporary tablespace temp
+quota unlimited on cms_default
+quota unlimited on cms_default_index;
+
+
+-- 3. 접속,리소스 권한 부여
+
+grant connect, resource to cms_default;
+
+COMMIT;
+
+create or replace directory db_backup as 'D:\Temp\impexp\datapump';
+
+select * from DBA_DIRECTORIES;
+
+select * FROM user$;
+
+
+expdp system/system123 directory=db_backup schemas=cms10oracle dumpfile=cms10oracle_20170131.dmp logfile=cms10oracle_20170131.log
+
+impdp system/system123 directory=db_backup dumpfile=cms10oracle_20170131.dmp schemas=cms10oracle remap_schema=cms10oracle:cms_default remap_tablespace=cms10oracle:cms_default
+
+
+
+
+drop user cms_default cascade;
+drop tablespace cms_default including contents and datafiles;
+drop tablespace cms_default_index including contents and datafiles;
+
+drop tablespace CMS_DEFALUT including contents and datafiles;
+
+
+출처: http://fmd1225.tistory.com/40 [fmd1225's One day]

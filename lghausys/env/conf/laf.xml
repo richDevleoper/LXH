@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<configuration>
+
+  <!-- LAF/J Component Information -->
+  <laf>
+    <!-- Log file setting -->
+    <log>
+      <format>laf.core.log.LLogFormat</format>
+      <autoflush>true</autoflush>
+      <directory>#home/logs</directory>
+      <filedate>12</filedate>
+      <!-- <filedate> 24 </filedate>  -->
+      <trace>
+        <multiserver>false</multiserver>
+      </trace>
+      <tracelevel>
+        <lafj>true</lafj>
+        <sys>true</sys>
+        <err>true</err>
+        <warn>true</warn>
+        <info>true</info>
+        <debug>true</debug>
+        <dbwrap>true</dbwrap>
+      </tracelevel>
+
+      <!-- both, console, file -->
+      <writer>
+        <lafj>both</lafj>
+        <err>console</err>
+        <debug>console</debug>
+        <info>console</info>
+        <dbwrap>console</dbwrap>
+      </writer>
+
+      <db-trace>true</db-trace>
+
+      <spec name="test">
+        <directory>#home/logs/test</directory>
+      </spec>
+    </log>
+
+    <taglib>
+      <locale>
+        <set-locale-automatic>true</set-locale-automatic>
+        <locale-bind-key>lafj.message.locale.key</locale-bind-key>
+      </locale>
+    </taglib>
+
+    <!-- Message setting -->
+    <message>
+      <resource-type>laf.core.message.LMessageDB</resource-type>
+      <resource-manage-type>
+        laf.core.message.typehandler.LLangType
+      </resource-manage-type>
+      <set-locale-automatic>true</set-locale-automatic>
+      <locale-bind-key>lafj.message.locale.key</locale-bind-key>
+      <resource-name>APP_MESSAGE</resource-name>
+      <dbspec>default</dbspec>
+      <column>
+        <code-column>msg_cd</code-column>
+        <message-column>message</message-column>
+        <table-manage>
+          <single-manage>true</single-manage>
+          <locale-column>locale</locale-column>
+          <module-column>module</module-column>
+        </table-manage>
+      </column>
+    </message>
+
+    <!-- LAF/J Connection Pool Configuration Information -->
+    <default-pool>JNDI</default-pool>
+
+    <jndi-datasource name="default">
+      <url>defaultDs</url>
+    </jndi-datasource>
+
+    <jndi-datasource name="drmDs">
+      <url>drmDs</url>
+    </jndi-datasource>
+
+    <jndi-datasource name="AppIntOraDS">
+      <url>AppIntOraDS</url>
+    </jndi-datasource>
+
+    <jndi-datasource name="AppIntOraDSReal">
+      <url>AppIntOraDSReal</url>
+    </jndi-datasource>
+
+    <!-- Outer Query Information -->
+    <query name="default">
+      <directory>#home/query/default</directory>
+    </query>
+
+    <!-- Outer Query Xml Information -->
+    <xml-query>
+      <directory>#home/xmlquery</directory>
+    </xml-query>
+
+    <!-- Outer Query Dynamic Xml Information -->
+    <dynamic-query>
+      <directory>#home/xmlquery</directory>
+      <auto-dao>true</auto-dao>
+    </dynamic-query>
+
+    <!-- File Upload Configuration -->
+    <upload>
+      <policy name="default">
+        <class>laf.foundation.front.fileupload.policy.strategy.LConflictSafeBySeq</class>
+        <target-directory>#home/temp</target-directory>
+        <maxsize>-1</maxsize>
+        <size-threshold>1024</size-threshold>
+        <header-encoding>UTF-8</header-encoding>
+        <temporary-directory>#home</temporary-directory>
+      </policy>
+
+      <policy name="dateMarker">
+        <class>laf.foundation.front.fileupload.policy.strategy.LAppendDateMark</class>
+        <date-marker>yyyyMMddHHmmssSSS</date-marker>
+        <target-directory>#home/../war/upload/approval/{date:yyyyMM}/{date:dd}</target-directory>
+        <maxsize>-1</maxsize>
+        <size-threshold>1024</size-threshold>
+        <header-encoding>UTF-8</header-encoding>
+        <temporary-directory>#home</temporary-directory>
+      </policy>
+
+      <policy name="perfect">
+        <class>laf.foundation.front.fileupload.policy.strategy.LPerfectPolicy</class>
+        <allow>*</allow>
+        <deny>*.jsp;*.class;*.java</deny>
+        <filename-pattern>
+          {prefix}[{date:yyyyMMddHHmmssSSS}].{ext}
+        </filename-pattern>
+        <target-directory>#home/../war/upload/approval/{date:yyyyMM}/{date:dd}</target-directory>
+        <maxsize>-1</maxsize>
+        <size-threshold>1024</size-threshold>
+        <header-encoding>UTF-8</header-encoding>
+        <temporary-directory>#home</temporary-directory>
+      </policy>
+    </upload>
+
+    <!-- Page Configuration Information -->
+    <page>
+      <!-- Default Paging => MSSQL -->
+      <spec name="default">
+        <row-size>10</row-size>
+        <page-size>10</page-size>
+        <statement>lafx.lgchem.application.page.LMSSQL2008PageStatement</statement>
+        <dao>lafx.lgchem.application.page.LMSSQL2008PageDao</dao>
+        <navigation>lafx.lge.application.page.PageNavigation</navigation>
+        <quote>true</quote>
+      </spec>
+      <spec name="15row">
+        <row-size>15</row-size>
+        <page-size>10</page-size>
+        <statement>lafx.lgchem.application.page.LMSSQL2008PageStatement</statement>
+        <dao>lafx.lgchem.application.page.LMSSQL2008PageDao</dao>
+        <navigation>lafx.lge.application.page.PageNavigation</navigation>
+        <quote>true</quote>
+      </spec>
+      <spec name="20row">
+        <row-size>20</row-size>
+        <page-size>10</page-size>
+        <statement>lafx.lgchem.application.page.LMSSQL2008PageStatement</statement>
+        <dao>lafx.lgchem.application.page.LMSSQL2008PageDao</dao>
+        <navigation>lafx.lge.application.page.PageNavigation</navigation>
+        <quote>true</quote>
+      </spec>
+      <spec name="mssql2000">
+        <row-size>2</row-size>
+        <page-size>10</page-size>
+        <statement>laf.application.page.dao.LMSSQLPageStatement</statement>
+        <dao>laf.application.page.dao.LMSSQLPageDao</dao>
+        <navigation>lafx.lge.application.page.PageNavigation</navigation>
+        <quote>true</quote>
+      </spec>
+      <spec name="oracle">
+        <row-size>10</row-size>
+        <page-size>10</page-size>
+        <statement>laf.application.page.dao.LOraclePageStatement</statement>
+        <dao>laf.application.page.dao.LOraclePageDao</dao>
+        <navigation>lafx.lge.application.page.PageNavigation</navigation>
+        <quote>true</quote>
+      </spec>
+      <spec name="example">
+        <row-size>7</row-size>
+        <page-size>10</page-size>
+        <statement>lafx.bridge.gauce.page.dao.LOraclePageStatement</statement>
+        <dao>lafx.bridge.gauce.page.dao.LOraclePageDao</dao>
+        <navigation>
+          lafx.bridge.gauce.page.LGaucePageNavigationByPost
+        </navigation>
+      </spec>
+      <spec name="webPage">
+        <row-size>5</row-size>
+        <page-size>10</page-size>
+        <statement>laf.application.page.dao.LOraclePageStatement</statement>
+        <dao>laf.application.page.dao.LOraclePageDao</dao>
+        <navigation>
+          laf.application.page.LDefaultPageNavigationByPost
+        </navigation>
+      </spec>
+    </page>
+
+    <!--Message Design Configuration -->
+    <html>
+      <template>
+        <officeplus>
+          lafsample.foundation.front.renderer.template.TableOfficePlusTemplate
+        </officeplus>
+        <circle>
+          lafsample.foundation.front.renderer.template.TableCircleTemplate
+        </circle>
+        <newsforge>
+          lafsample.foundation.front.renderer.template.TableNewsForgeTemplate
+        </newsforge>
+        <lxart>
+          lafsample.foundation.front.renderer.template.TableLxartTemplate
+        </lxart>
+        <papered>
+          lafsample.foundation.front.renderer.template.TablePaperedTemplate
+        </papered>
+        <sfac>
+          lafsample.foundation.front.renderer.template.TableSfacTemplate
+        </sfac>
+        <xjsv>
+          lafsample.foundation.front.renderer.template.TableXjsvTemplate
+        </xjsv>
+      </template>
+    </html>
+
+    <!--DATE Configuration -->
+    <date>
+      <format>yyyy.MM.dd</format>
+      <holiday-path>#home/conf/holiday.conf</holiday-path>
+    </date>
+
+    <navigation name="lgc">
+      <directory>#home/navigation</directory>
+      <encoding-type>UTF-8</encoding-type>
+      <default-handler>forward</default-handler>
+    </navigation>
+
+    <navigation-handlers>
+      <handler name="forward">
+        laf.foundation.front.channel.handler.LFowardHandler
+      </handler>
+      <handler name="alertAndBack">
+        laf.foundation.front.channel.handler.LAlertAndBackHandler
+      </handler>
+      <handler name="alertAndGoUrl">
+        laf.foundation.front.channel.handler.LAlertAndGoUrlHandler
+      </handler>
+      <handler name="historyBack">
+        laf.foundation.front.channel.handler.LHistoryBacktHandler
+      </handler>
+      <handler name="null">
+        laf.foundation.front.channel.handler.LNullHandler
+      </handler>
+      <handler name="redirect">
+        laf.foundation.front.channel.handler.LRedirectHandler
+      </handler>
+      <handler name="redirect2">
+        lgc.approval.front.handler.RedirectParamHandlert
+      </handler>
+      <handler name="alert">
+        lgc.approval.front.handler.AlertHandler
+      </handler>
+    </navigation-handlers>
+
+    <mail>
+      <test-mode>false</test-mode>
+      <test-receivers>
+        blueleeky@lxhausys.com
+      </test-receivers>
+      <spec name="default">
+        <!--mail-host>mail.lge.co.kr</mail-host-->
+        <mail-host>subspam.lxhausys.com</mail-host>
+        <!--mail-host>165.244.235.213</mail-host-->
+        <!-- mail-host>exedge2.lgchem.com</mail-host-->
+        <mail-port>25</mail-port>
+        <session-debug-message-flag>false</session-debug-message-flag>
+        <default-sender-mail-address>
+          dotnet@lxhausys.com
+        </default-sender-mail-address>
+        <default-sender-name>default sender</default-sender-name>
+        <content-type>7bit</content-type>
+        <plain-content-type>text/plain</plain-content-type>
+        <html-content-type>text/html</html-content-type>
+        <charset-type>UTF-8</charset-type>
+        <encoding-type>Q</encoding-type>
+      </spec>
+      <spec name="example">
+        <default-sender-mail-address>
+          dotnet@lxhausys.com
+        </default-sender-mail-address>
+        <default-sender-name>example sender</default-sender-name>
+      </spec>
+      <body-template name="default">
+        <directory>#home/mail</directory>
+        <html name="default">default.html</html>
+        <img-server-ip>127.0.0.1</img-server-ip>
+        <img-server-port>9568</img-server-port>
+        <save-resolvedhtml-flag>true</save-resolvedhtml-flag>
+        <save-resolvedhtml-dir>#home/mail/save</save-resolvedhtml-dir>
+      </body-template>
+      <body-template name="example">
+        <directory>#home/mail/example</directory>
+        <html name="htmlExample">example.html</html>
+      </body-template>
+    </mail>
+
+    <auto-dao>
+      <!-- <query-type> xml </query-type>  -->
+      <!-- <query-type> plain </query-type>  -->
+      <query-type>dynamic</query-type>
+      <query-binding>bind</query-binding>
+      <!-- <query-binding> sequence </query-binding>  -->
+    </auto-dao>
+
+    <xlog-enable>true</xlog-enable>
+
+  </laf>
+
+  <prj name="sflge">
+    <src>#home/conf/sflge.xml</src>
+  </prj>
+
+  <prj name="lgc">
+    <src>#home/conf/lgc.xml</src>
+  </prj>
+</configuration>

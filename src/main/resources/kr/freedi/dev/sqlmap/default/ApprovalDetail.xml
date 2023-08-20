@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ApprovalDetail">
+
+	<resultMap id="approveDetailMap" type="kr.freedi.dev.qapprove.domain.ApproveDetailVO">
+		<result property="aprovalCode" column="APROVAL_CODE" />
+		<result property="aprovalSeq" column="APROVAL_SEQ" />
+		<result property="comNo" column="COM_NO" />
+		<result property="comJobx" column="COM_JOBX" />
+		<result property="comPosition" column="COM_POSITION" />
+		<result property="comDepartCode" column="COM_DEPART_CODE" />
+		<result property="aprovalRegDate" column="APROVAL_REG_DATE" />
+		<result property="aprovalReqComNo" column="APROVAL_REQ_COM_NO" />
+		<result property="aprovalCompltDate" column="APROVAL_COMPLT_DATE" />
+		<result property="aprovalStatCode" column="APROVAL_STAT_CODE" />
+		<result property="aprovalMailSendDate" column="APROVAL_MAIL_SEND_DATE" />
+		<result property="aprovalMailSendYn" column="APROVAL_MAIL_SEND_YN" />
+		<result property="aprovalComment" column="APROVAL_COMMENT" />
+		
+		<result property="score1" column="SCORE1" />
+		<result property="score4" column="SCORE4" />
+		<result property="score5" column="SCORE5" />
+		<result property="score6" column="SCORE6" />
+		<result property="score7" column="SCORE7" />
+		<result property="scoreTotal" column="SCORE_TOTAL" />
+		
+		<result property="userName" column="USER_NAME" />
+		<result property="aprovalStat" column="APROVAL_STAT" />
+		<result property="aprovalType" column="APROVAL_TYPE" />
+		<result property="comJobNm" column="COM_JOBX_NM" />
+	</resultMap>
+
+		<sql id="defCond">
+		
+			<!-- <if test="searchRepName != null and searchRepName != ''">
+				AND T.REP_NAME like '%' || #{searchRepName} || '%'
+			</if>
+			<if test="searchDivision != null and searchDivision != ''">
+				AND T.REP_DEVISION_CODE = #{searchDivision}
+			</if>
+			<if test="searchType != null and searchType != ''">
+				AND T.REP_TYPE_CODE = #{searchType}
+			</if>
+			<if test="searchStatus != null and searchStatus != ''">
+				AND T.REP_STATUS_CODE = #{searchStatus}
+			</if> -->
+		
+	</sql> 
+	
+		<insert id="insert">
+		Insert into 
+			TB_APPROVAL_DETAIL
+			(
+		        APROVAL_CODE
+		        , APROVAL_SEQ
+		        , COM_NO
+		        , COM_JOBX
+		        , COM_POSITION
+		        , COM_DEPART_CODE
+		        , APROVAL_REG_DATE
+		        , APROVAL_REQ_COM_NO
+		        , APROVAL_COMPLT_DATE
+		        , APROVAL_STAT_CODE
+		        , APROVAL_MAIL_SEND_DATE
+		        , APROVAL_MAIL_SEND_YN
+			) values (
+		          #{aprovalCode}
+		        , (select nvl(Max(APROVAL_SEQ), 0)+1 from TB_APPROVAL_DETAIL where APROVAL_CODE=#{aprovalCode} )
+		        , #{comNo}
+		        , #{comJobx}
+		        , #{comPosition}
+		        , #{comDepartCode}
+		        , sysdate
+		        , #{aprovalReqComNo}
+		        , null
+		        , #{aprovalStatCode}
+		        , #{aprovalMailSendDate}
+		        , #{aprovalMailSendYn}
+			)
+	</insert>
+	
+	
+	
+	
+	<select id="selectNextFkey" resultType="string">
+		SELECT GET_NEW_APROVAL_KEY() AS NEW_APROVAL_CODE FROM DUAL
+	</select>
+	
+
+	
+	<update id="updateStatus">
+		UPDATE TB_APPROVAL_DETAIL
+		SET
+			aproval_stat_code = #{aprovalStatCode},
+		    aproval_complt_date = sysdate,
+		    aproval_comment = #{aprovalComment},
+		    score1 = #{score1},
+		    score4 = #{score4},
+		    score5 = #{score5},
+		    score6 = #{score6},
+		    score7 = #{score7},
+		    score_total = #{scoreTotal}
+		WHERE
+	        aproval_code = #{aprovalCode}
+	    AND com_no = #{comNo}
+	</update>
+	
+	<select id="selectList" resultMap="approveDetailMap">
+		SELECT 
+			T.APROVAL_CODE
+			, T.APROVAL_SEQ
+			, T.COM_NO
+			, T.COM_JOBX
+			, T.COM_POSITION
+			, T.COM_DEPART_CODE
+			, T.APROVAL_REG_DATE
+			, T.APROVAL_REQ_COM_NO
+			, T.APROVAL_COMPLT_DATE
+			, T.APROVAL_STAT_CODE
+            , get_code_nm('APR_STAT', T.APROVAL_STAT_CODE) APROVAL_STAT
+            , get_code_nm('APR_TYPE', m.aproval_type) || case TO_CHAR(aproval_type) when '3' then to_char(GET_6SIGMA_STEP_NM(m.ref_bus_code, m.ref_bus_sub_code)) else '' end  AS  aproval_type
+			, T.APROVAL_MAIL_SEND_DATE
+			, T.APROVAL_MAIL_SEND_YN
+            , U.USER_NAME
+            , T.APROVAL_COMMENT
+            , T.SCORE_TOTAL
+            , cd_job.code_nm com_jobx_nm
+            , cd_position.code_nm com_position_nm
+		FROM TB_APPROVAL_DETAIL T
+		     , tb_user_mst U, tb_code cd_job, tb_code cd_position
+		     , tb_approval_mst m  
+		WHERE T.COM_NO = U.COM_NO
+		  AND T.APROVAL_CODE = m.APROVAL_CODE
+		  AND cd_job.code_grp_id(+) ='JOBX' 
+		  AND cd_job.code_id(+) = T.com_jobx
+		  AND cd_position.code_grp_id(+) = 'POSITION'
+		  AND cd_position.code_id(+) = T.com_position
+		  <if test="aprovalCode != null and aprovalCode != ''">
+				AND T.APROVAL_CODE = #{aprovalCode}
+		  </if>
+		  <if test="refBusCode != null and refBusCode != ''">
+				AND m.REF_BUS_CODE = #{refBusCode}
+		  </if>
+		ORDER BY T.APROVAL_CODE desc, T.APROVAL_SEQ asc
+	</select>
+	
+	<delete id="delete">
+		DELETE FROM TB_APPROVAL_DETAIL 
+		WHERE 
+		<trim prefixOverrides="AND|OR">
+		<if test="aprovalCode != null and aprovalCode != ''">
+			AND APROVAL_CODE = #{aprovalCode}
+		</if>
+		</trim>
+	</delete>
+	
+	<select id="selectApprovalActNo" resultType="java.lang.String">
+		select nvl(Max(APROVAL_SEQ), 0) AS APPROVAL_SEQ
+		from TB_APPROVAL_DETAIL 
+		where APROVAL_CODE=#{aprovalCode}
+	</select>
+	
+</mapper>
+

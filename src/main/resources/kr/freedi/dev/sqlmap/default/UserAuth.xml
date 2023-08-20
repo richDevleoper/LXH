@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="UserAuth">
+
+	<sql id="defCond">
+		<where>
+			<if test="searchUserGrp != null and searchUserGrp != ''">
+				AND T.USER_GRP = #{searchUserGrp}
+			</if>
+			<if test="searchStartFrstOperDt != null and searchStartFrstOperDt != ''">
+				AND T.FRST_OPER_DT <![CDATA[>=]]> #{searchStartFrstOperDt}
+			</if>
+			<if test="searchEndFrstOperDt != null and searchEndFrstOperDt != ''">
+				AND T.FRST_OPER_DT <![CDATA[<=]]> TO_DATE(#{searchEndFrstOperDt}, 'YYYY-MM-DD') + 1
+			</if>
+		</where>
+	</sql>
+
+
+	<sql id="fullCond">
+		<where>
+			<trim prefixOverrides="AND|OR">
+				<if test="userGrp != null and userGrp != ''">
+					AND T.USER_GRP = #{userGrp}	
+				</if>
+				<if test="actFlg != null and actFlg != ''">
+					AND T.ACT_FLG = #{actFlg}	
+				</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<select id="selectListCount" resultType="int">
+		SELECT COUNT(*) FROM TB_USER_AUTH T 
+		<include refid="defCond"></include>
+	</select>
+
+	<select id="selectList" resultType="egovMap">
+	select *
+	  from (
+		SELECT
+			row_number() over (order by  T.USER_GRP, T.ORDER_NO ASC) as num
+			,T.AUTH_ID
+			,T.AUTH_NM
+			,T.USER_GRP
+			,T.ORDER_NO
+			,T.ACT_FLG
+			,T.FRST_OPER_ID
+			,to_char(T.FRST_OPER_DT, 'yyyyMMdd') as FRST_OPER_DT
+			,T.LAST_OPER_ID
+			,to_char(T.LAST_OPER_DT, 'yyyyMMdd') as LAST_OPER_DT
+		FROM TB_USER_AUTH T
+		<include refid="defCond"></include>
+		ORDER BY T.USER_GRP, T.ORDER_NO ASC
+		   )
+	  where num between #{firstRecordIndex} and #{recordCountPerPage}
+	</select>
+	
+	<select id="selectFullList" resultType="egovMap">
+		SELECT 
+			T.AUTH_ID
+			,T.AUTH_NM
+			,T.USER_GRP
+			,T.ORDER_NO
+			,T.ACT_FLG
+			,T.FRST_OPER_ID
+			,T.FRST_OPER_DT
+			,T.LAST_OPER_ID
+			,T.LAST_OPER_DT
+		FROM TB_USER_AUTH T 
+		<include refid="fullCond"></include>
+		ORDER BY T.ORDER_NO ASC
+	</select>
+
+	<select id="select" resultType="kr.freedi.dev.user.domain.UserAuthVO">
+		SELECT 
+			T.AUTH_ID authId
+			,T.AUTH_NM authNm
+			,T.USER_GRP userGrp
+			,T.ORDER_NO orderNo
+			,T.ACT_FLG actFlg
+			,T.FRST_OPER_ID frstOperId
+			,T.FRST_OPER_DT frstOperDt
+			,T.LAST_OPER_ID lastOperId
+			,T.LAST_OPER_DT lastOperDt
+		FROM TB_USER_AUTH T 
+		WHERE T.AUTH_ID = #{authId}
+	</select>
+
+	<insert id="insert">
+		INSERT INTO TB_USER_AUTH (
+			AUTH_ID
+			,AUTH_NM
+			,USER_GRP
+			,ORDER_NO
+			,ACT_FLG
+			,FRST_OPER_ID
+			,FRST_OPER_DT
+			,LAST_OPER_ID
+			,LAST_OPER_DT
+		) VALUES (
+			#{authId}
+			,#{authNm}
+			,#{userGrp}
+			,#{orderNo}
+			,#{actFlg}
+			,#{frstOperId}
+			,SYSDATE
+			,NULL
+			,NULL
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE TB_USER_AUTH SET 
+			AUTH_NM = #{authNm}
+			,ORDER_NO = #{orderNo}
+			,ACT_FLG = #{actFlg}
+			,LAST_OPER_ID = #{lastOperId}
+			,LAST_OPER_DT = SYSDATE
+		WHERE
+		AUTH_ID = #{authId}
+	</update>
+
+	<delete id="delete">
+		DELETE FROM TB_USER_AUTH	WHERE AUTH_ID = #{authId}
+	</delete>	
+</mapper>
+

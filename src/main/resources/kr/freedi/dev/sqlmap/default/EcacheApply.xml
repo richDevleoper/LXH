@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="EcacheApply">
+
+	<select id="select" resultType="kr.freedi.dev.ecache.domain.EcacheApplyVO">
+		SELECT 
+			T.NODE_NM nodeNm
+			,T.MENU_FLG menuFlg
+			,T.CONTENT_FLG contentFlg
+			,T.BANNER_FLG bannerFlg
+			,T.POPUP_FLG popupFlg
+			,T.LINK_FLG linkFlg
+			,T.OPER_DT operDt
+		FROM TB_ECACHE_APPLY T 
+		WHERE T.NODE_NM = #{nodeNm}
+	</select>
+
+	<insert id="insert">
+		INSERT INTO TB_ECACHE_APPLY (
+			NODE_NM
+			,MENU_FLG
+			,CONTENT_FLG
+			,BANNER_FLG
+			,POPUP_FLG
+			,LINK_FLG
+			,OPER_DT
+		) VALUES (
+			#{nodeNm}
+			,#{menuFlg}
+			,#{contentFlg}
+			,#{bannerFlg}
+			,#{popupFlg}
+			,#{linkFlg}
+			,SYSDATE
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE TB_ECACHE_APPLY SET 
+			MENU_FLG = #{menuFlg}
+			,CONTENT_FLG = #{contentFlg}
+			,BANNER_FLG = #{bannerFlg}
+			,POPUP_FLG = #{popupFlg}
+			,LINK_FLG = #{linkFlg}
+			,OPER_DT = SYSDATE
+		WHERE NODE_NM = #{nodeNm} 
+	</update>
+	
+	<update id="updateMenuFlg">
+		UPDATE TB_ECACHE_APPLY SET 
+			MENU_FLG = #{menuFlg}
+			,OPER_DT = SYSDATE
+		WHERE NODE_NM = #{nodeNm} 
+	</update>
+	<update id="updateMenuFlgAll">
+		UPDATE TB_ECACHE_APPLY SET 
+			MENU_FLG = #{menuFlg}
+			,OPER_DT = SYSDATE
+	</update>
+	
+	<update id="updateContentFlg">
+		UPDATE TB_ECACHE_APPLY SET 
+			CONTENT_FLG = #{contentFlg}
+			,OPER_DT = SYSDATE
+		WHERE NODE_NM = #{nodeNm} 
+	</update>
+	<update id="updateContentFlgAll">
+		UPDATE TB_ECACHE_APPLY SET 
+			CONTENT_FLG = #{contentFlg}
+			,OPER_DT = SYSDATE
+	</update>
+	
+	<update id="updateBannerFlg">
+		UPDATE TB_ECACHE_APPLY SET 
+			BANNER_FLG = #{bannerFlg}
+			,OPER_DT = SYSDATE
+		WHERE NODE_NM = #{nodeNm} 
+	</update>
+	<update id="updateBannerFlgAll">
+		UPDATE TB_ECACHE_APPLY SET 
+			BANNER_FLG = #{bannerFlg}
+			,OPER_DT = SYSDATE
+	</update>
+	
+	<update id="updatePopupFlg">
+		UPDATE TB_ECACHE_APPLY SET 
+			POPUP_FLG = #{popupFlg}
+			,OPER_DT = SYSDATE
+		WHERE NODE_NM = #{nodeNm} 
+	</update>
+	<update id="updatePopupFlgAll">
+		UPDATE TB_ECACHE_APPLY SET 
+			POPUP_FLG = #{popupFlg}
+			,OPER_DT = SYSDATE
+	</update>
+	
+	<update id="updateLinkFlg">
+		UPDATE TB_ECACHE_APPLY SET 
+			LINK_FLG = #{linkFlg}
+			,OPER_DT = SYSDATE
+		WHERE NODE_NM = #{nodeNm} 
+	</update>
+	<update id="updateLinkFlgAll">
+		UPDATE TB_ECACHE_APPLY SET 
+			LINK_FLG = #{linkFlg}
+			,OPER_DT = SYSDATE
+	</update>
+	
+
+</mapper>
+

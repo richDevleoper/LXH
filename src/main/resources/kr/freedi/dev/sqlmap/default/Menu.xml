@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Menu">
+
+	<resultMap id="menu" type="kr.freedi.dev.menu.domain.MenuVO">
+		<result property="menuKey" column="MENU_KEY"/>
+		<result property="fkey" column="FKEY"/>
+		<result property="pkey" column="PKEY"/>
+		<result property="okey" column="OKEY"/>
+		<result property="gkey" column="GKEY"/>
+
+		<result property="menuNm" column="MENU_NM"/>
+		
+		<result property="naviFlg" column="NAVI_FLG"/>
+		<result property="menuTyp" column="MENU_TYP"/>
+		<result property="linkTyp" column="LINK_TYP"/>
+		<result property="boardKey" column="BOARD_KEY"/>
+		<result property="contentKey" column="CONTENT_KEY"/>
+		<result property="url" column="URL"/>
+		<result property="subViewTyp" column="SUB_VIEW_TYP"/>
+		<result property="actFlg" column="ACT_FLG"/>
+		
+		<result property="mainTopImgOn" column="MAIN_TOP_IMG_ON"/>
+		<result property="mainTopImgOff" column="MAIN_TOP_IMG_OFF"/>		
+		<result property="topImgOn" column="TOP_IMG_ON"/>
+		<result property="topImgOff" column="TOP_IMG_OFF"/>
+		<result property="leftTopImg" column="LEFT_TOP_IMG"/>
+		<result property="leftImgOn" column="LEFT_IMG_ON"/>
+		<result property="leftImgOff" column="LEFT_IMG_OFF"/>		
+		<result property="titleImg" column="TITLE_IMG"/>
+
+		<result property="frstOperId" column="FRST_OPER_ID"/>
+		<result property="frstOperDt" column="FRST_OPER_DT"/>
+		<result property="lastOperId" column="LAST_OPER_ID"/>
+		<result property="lastOperDt" column="LAST_OPER_DT"/>
+	</resultMap>
+	
+<!-- 	<select id="selectMenuList" resultMap="menu">
+		
+        WITH TMP_TABLE AS (
+	        SELECT 0 MENU_KEY, 0 FKEY, -1 PKEY, 0 OKEY, -1 GKEY, 'ROOT' AS MENU_NM FROM DUAL
+	        UNION ALL
+	        SELECT MENU_KEY, FKEY, PKEY, OKEY, GKEY, MENU_NM
+	          FROM TB_MENU
+	        WHERE MENU_TYP = #{menuTyp}
+        ) 
+        SELECT LEVEL AS LVL, O.* 
+        FROM TMP_TABLE O
+              , TB_MENU M
+         WHERE O.MENU_KEY=M.MENU_KEY(+)
+           AND O.MENU_KEY <![CDATA[<>]]> 0
+        START WITH O.MENU_KEY = 0
+        CONNECT BY PRIOR  O.MENU_KEY =O.PKEY
+         ORDER SIBLINGS BY O.OKEY
+	</select> -->
+	
+	<select id="selectMenuList" resultMap="menu">
+		SELECT * FROM TB_MENU
+		WHERE MENU_TYP = #{menuTyp}
+		ORDER BY FKEY, OKEY
+	</select>
+	
+	<select id="selectActMenuList" resultMap="menu">
+		SELECT * FROM TB_MENU T
+		WHERE MENU_TYP = #{menuTyp}
+		AND ACT_FLG = 'Y'
+		<if test="isAdmin != null and isAdmin != ''">
+		AND exists (select 1 from tb_role_menu where role_no=#{isAdmin} and menu_key=T.menu_key)
+		</if>
+		ORDER BY FKEY, GKEY, OKEY
+	</select>
+
+	<select id="selectTopMenuList" resultMap="menu">
+		SELECT * FROM TB_MENU
+		WHERE PKEY = 0
+		AND MENU_TYP = #{menuTyp}
+		ORDER BY FKEY
+	</select>
+	
+	<select id="selectActTopMenuList" resultMap="menu">
+		SELECT * FROM TB_MENU
+		WHERE PKEY = 0
+		AND MENU_TYP = #{menuTyp}
+		AND ACT_FLG = 'Y'
+		ORDER BY FKEY
+	</select>
+	
+	<select id="selectMenu" parameterType="int" resultMap="menu">
+		SELECT * FROM TB_MENU WHERE MENU_KEY = #{menuKey}
+	</select>
+
+	<insert id="insertMenu">
+		INSERT INTO TB_MENU (
+			MENU_KEY
+			,FKEY
+			,PKEY
+			,OKEY
+			,GKEY
+			
+			,MENU_NM
+
+			,NAVI_FLG
+			,MENU_TYP
+			,LINK_TYP
+			,BOARD_KEY
+			,CONTENT_KEY
+			,URL
+			,SUB_VIEW_TYP
+			,ACT_FLG
+			
+			,MAIN_TOP_IMG_ON
+			,MAIN_TOP_IMG_OFF
+			,TOP_IMG_ON
+			,TOP_IMG_OFF
+			,LEFT_TOP_IMG
+			,LEFT_IMG_ON
+			,LEFT_IMG_OFF
+			,TITLE_IMG
+			
+			,FRST_OPER_ID
+			,FRST_OPER_DT
+			,LAST_OPER_ID
+			,LAST_OPER_DT
+		)VALUES (
+			#{menuKey}
+			,#{fkey}
+			,#{pkey}
+			,#{okey}
+			,#{gkey}
+			
+			,#{menuNm}
+
+			,#{naviFlg}
+			,#{menuTyp}
+			,#{linkTyp}
+			,#{boardKey}
+			,#{contentKey}
+			,#{url}
+			,#{subViewTyp}
+			,#{actFlg}
+			
+			,NULL
+			,NULL
+			,NULL
+			,NULL
+			,NULL
+			,NULL
+			,NULL
+			,NULL
+
+			,#{frstOperId}
+			,SYSDATE
+			,NULL
+			,NULL
+		)
+	</insert>
+
+	<update id="updateMenu">
+		UPDATE TB_MENU
+		SET
+		<trim prefixOverrides=",">
+			MENU_NM = #{menuNm}
+			,NAVI_FLG = #{naviFlg}
+			,LINK_TYP = #{linkTyp}
+			,BOARD_KEY = #{boardKey}
+			,CONTENT_KEY = #{contentKey}
+			,URL = #{url}
+			,SUB_VIEW_TYP = #{subViewTyp}
+			,ACT_FLG = #{actFlg}
+			,LAST_OPER_ID = #{lastOperId}
+			,LAST_OPER_DT = SYSDATE
+		</trim>
+		WHERE
+			MENU_KEY=#{menuKey}
+	</update>
+
+	<update id="updateMenuNm">
+		<![CDATA[
+			UPDATE TB_MENU
+			SET
+				MENU_NM = #{menuNm}
+				,LAST_OPER_ID = #{lastOperId}
+				,LAST_OPER_DT = SYSDATE
+			WHERE
+				MENU_KEY=#{menuKey}
+		]]>
+	</update>
+
+	<delete id="deleteMenu" parameterType="int">
+		<![CDATA[
+			DELETE FROM TB_MENU WHERE MENU_KEY=#{menuKey}
+		]]>
+	</delete>
+
+	<update id="updateFile">
+		UPDATE TB_MENU
+		SET
+			MAIN_TOP_IMG_ON = #{mainTopImgOnFile}
+			,MAIN_TOP_IMG_OFF = #{mainTopImgOffFile}
+			,TOP_IMG_ON = #{topImgOnFile}
+			,TOP_IMG_OFF = #{topImgOffFile}
+			,LEFT_TOP_IMG = #{leftTopImgFile}
+			,LEFT_IMG_ON = #{leftImgOnFile}
+			,LEFT_IMG_OFF = #{leftImgOffFile}
+			,TITLE_IMG = #{titleImgFile}
+		WHERE
+		MENU_KEY = #{menuKey}
+	</update>
+	
+	<update id="deleteFile">
+		UPDATE TB_MENU
+		SET
+			<choose>
+				<when test="columnName == 'mainTopImgOn'.toString()">MAIN_TOP_IMG_ON = NULL</when>
+				<when test="columnName == 'mainTopImgOff'.toString()">MAIN_TOP_IMG_OFF = NULL</when>
+				<when test="columnName == 'topImgOn'.toString()">TOP_IMG_ON = NULL</when>
+				<when test="columnName == 'topImgOff'.toString()">TOP_IMG_OFF = NULL</when>
+				<when test="columnName == 'leftTopImg'.toString()">LEFT_TOP_IMG = NULL</when>
+				<when test="columnName == 'leftImgOn'.toString()">LEFT_IMG_ON = NULL</when>
+				<when test="columnName == 'leftImgOff'.toString()">LEFT_IMG_OFF = NULL</when>
+				<when test="columnName == 'titleImg'.toString()">TITLE_IMG = NULL</when>
+				<otherwise></otherwise>
+			</choose>
+		WHERE MENU_KEY = #{menuKey}
+	</update>
+	
+	<select id="selectChildList" resultMap="menu">
+		 SELECT * FROM TB_MENU WHERE PKEY = #{menuKey} ORDER BY OKEY
+	</select>
+	
+	<select id="selectNextMenuKey" resultType="int">
+		SELECT NVL(MAX(MENU_KEY),0) + 1 menuKey FROM TB_MENU
+	</select>
+	
+	<select id="selectNextFkey" resultType="int">
+		SELECT NVL(MAX(FKEY),0) + 1 menuKey FROM TB_MENU WHERE MENU_TYP = #{menuTyp}
+	</select>
+	
+	<select id="selectNextOkey" resultType="int">
+		SELECT NVL(MAX(OKEY),0) + 1 FROM TB_MENU WHERE PKEY = #{pkey}
+	</select>
+	
+	<!-- deprecated 
+	<update id="updateOkey">
+		UPDATE TB_MENU 
+		SET OKEY = OKEY + 1
+		WHERE FKEY = #{fkey} AND OKEY <![CDATA[>=]]> #{okey}
+	</update>
+	-->
+	
+	<update id="updateActFlg">
+		UPDATE TB_MENU 
+		SET ACT_FLG = #{actFlg}
+		WHERE MENU_KEY = #{menuKey}
+	</update>
+	
+	
+	<!-- move ========================================================= -->
+	<!-- topMenu -->
+	<select id="selectListByMenuTypAndFkey" resultMap="menu">
+		SELECT * FROM TB_MENU
+		WHERE MENU_TYP = #{menuTyp}
+		AND FKEY = #{fkey}
+	</select>
+	
+	<select id="selectFkeyForMovePrev" resultType="int">
+		SELECT MAX(FKEY) FKEY
+		FROM (
+			SELECT MAX(FKEY) FKEY FROM TB_MENU
+			WHERE MENU_TYP = #{menuTyp}
+			AND FKEY <![CDATA[<]]> #{fkey}
+			GROUP BY FKEY
+			ORDER BY FKEY
+		) A
+	</select>
+	
+	<select id="selectFkeyForMoveNext" resultType="int">
+		SELECT MIN(FKEY) FKEY
+		FROM (
+			SELECT MAX(FKEY) FKEY FROM TB_MENU
+			WHERE MENU_TYP = #{menuTyp}
+			AND FKEY <![CDATA[>]]> #{fkey}
+			GROUP BY FKEY
+			ORDER BY FKEY
+		) A
+	</select>
+	
+	<update id="updateFkeyForMove">
+		UPDATE TB_MENU 
+		SET FKEY = #{fkey}
+		WHERE MENU_TYP = #{menuTyp}
+		AND MENU_KEY = #{menuKey}
+	</update>
+	
+	<!-- childMenu -->
+	<select id="selectForMovePrev" resultMap="menu">
+		SELECT B.* FROM (
+				SELECT A.* FROM TB_MENU A
+				WHERE MENU_TYP = #{menuTyp}
+		    AND PKEY = #{pkey}
+				AND OKEY <![CDATA[<]]> #{okey}
+				ORDER BY OKEY DESC
+		) B
+		WHERE ROWNUM<![CDATA[<=]]>1
+	</select>
+	
+	<select id="selectForMoveNext" resultMap="menu">
+		SELECT B.* FROM (
+				SELECT * FROM TB_MENU A
+				WHERE MENU_TYP = #{menuTyp}
+		    AND PKEY = #{pkey}
+				AND OKEY <![CDATA[>]]> #{okey}
+				ORDER BY OKEY ASC
+		) B
+		WHERE ROWNUM<![CDATA[<=]]>1
+	</select>
+	
+	<update id="updateOkeyForMove">
+		UPDATE TB_MENU 
+		SET OKEY = #{okey}
+		WHERE MENU_TYP = #{menuTyp}
+		AND MENU_KEY = #{menuKey}
+	</update>
+	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

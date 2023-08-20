@@ -1,0 +1,757 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="KPI">
+	<resultMap id="KpiMap" type="kr.freedi.dev.qkpi.domain.KpiManageVO">
+		<result column="IDX" property="idx"/>	
+		<result column="STD_SEQ" property="stdSeq"/>
+		<result column="KUD_IDX" property="kudIdx" />
+		<result column="COM_NO" property="comNo" />
+		<result column="KUD_YEAR" property="kudYear" /> 
+		<result column="KUD_CHK_TYPE_CODE" property="kudChkTypeCode" />
+		<result column="KUD_DEPART" property="kudDepart" />
+		<result column="COM_DEPART_CODE" property="comDepartCode" />
+		<result column="KUD_JOBX" property="kudJobx" />
+		<result column="KUD_POSITION" property="kudPosition" />
+		<result column="KUD_JIMU" property="kudJimu" />
+		<result column="KUD_TEAM_NAME" property="kudTeamName" />
+		<result column="KUD_USER_NAME" property="kudUserName" />
+		<result column="KUD_BELONG_NAME" property="kudBelongName" />
+		<result column="KUD_PART" property="kudPart" />
+		<result column="KUD_PLACE" property="kudPlace" />
+		<result column="KUD_USER_IDENTITY" property="kudUserIdentity" />
+		<result column="KUD_JOIN_DATE" property="kudJoinDate" />
+		<result column="KUD_LAST_DEGREE" property="kudLastDegree" />
+		<result column="KUD_REG_USER" property="kudRegUser" />
+		<result column="KUD_REG_DATE" property="kudRegDate" />
+		<result column="KUD_UPDATE_USER" property="kudUpdateUser" />
+		<result column="KUD_UPDATE_DATE" property="kudUpdateDate" />
+		<result column="KUD_CERT_BELT" property="kudCertBelt" />
+	</resultMap>
+	
+	<sql id="defCond">
+		/*searchYear, searchDepart, searchBelt, searchIdx, , searchText, orderByTyp*/
+		<!-- <where>
+			<trim prefixOverrides="AND|OR"> -->
+				
+				<if test="searchYear != null and searchYear != ''">
+					AND T.KUD_YEAR = #{searchYear}
+				</if>
+				<if test="searchDepart != null and searchDepart != ''">
+					and INSTR(#{searchDepart}, T.COM_DEPART_CODE) <![CDATA[>]]> 0
+				</if>
+				<if test="searchBelt != null and searchBelt != ''">
+					<choose>
+						<when test='searchBelt.equals("7")'>
+							AND KUD_CERT_BELT is null
+						</when>
+						<otherwise>
+							AND KUD_CERT_BELT = #{searchBelt}
+						</otherwise>
+					</choose>
+				</if>		
+				
+				<if test="searchText != null and searchText != ''">
+					<!-- <trim prefixOverrides="AND"> -->
+						<choose>
+							<when test="searchIdx == 1"><!-- 사번 -->
+								AND COM_NO = #{searchText}
+							</when>
+							<when test="searchIdx == 2"><!-- 이름 -->
+								AND KUD_USER_NAME like '%'|| #{searchText}||'%'
+							</when>
+							<when test="searchIdx == 3"><!-- 부문 -->
+								AND KUD_PART like '%'|| #{searchText}||'%'
+							</when>
+							<when test="searchIdx == 4"><!-- 소속 -->
+								AND kud_belong_name like '%'|| #{searchText}||'%'
+							</when>
+							<when test="searchIdx == 5"><!-- 팀명 -->
+							    AND kud_team_name like '%'|| #{searchText}||'%'
+							</when>
+							<when test="searchIdx == 6"><!-- 직무명 --> 
+								AND KUD_JIMU like '%'|| #{searchText}||'%'
+							</when>
+							<otherwise>
+								AND COM_NO || '|' || KUD_USER_NAME || '|' || KUD_USER_NAME || '|' || KUD_JIMU  || '|' || KUD_PART  || '|' || KUD_TEAM  || '|' || kud_belong_name like '%'|| #{searchText} ||'%' 
+							</otherwise>
+						</choose>
+					<!-- </trim> -->
+				</if>
+			<!--</trim>
+		 </where> -->
+	</sql>
+	
+	<select id="selectCirclListCount" resultType="int">
+		SELECT COUNT(*) 
+		  FROM (
+		  <include refid="kpiMgrBaseQuery"></include>
+		  ) T
+	</select>
+	
+	<sql id="kpiMgrBaseQuery"> 
+				SELECT
+				    std_seq, 
+				    com_no,
+				    kud_user_name,
+				    kud_place,
+				    kud_part,
+				    kud_belong_name,
+				    kud_team_name,
+				    kud_jobx,
+				    kud_position,  
+				    kud_jimu,
+				    get_code_nm('LDRBELT', kud_cert_belt) kud_cert_belt
+				FROM
+				    tb_kpi_user_detail T
+				WHERE
+				    kud_idx = #{kudIdx}
+				<include refid="defCond"></include>
+	</sql>
+	
+	
+	<sql id="selectFullListBasic">
+		WITH CIRCLE_MASTER AS (
+            SELECT ROW_NUMBER() OVER( ORDER BY TO_NUMBER(T.STD_SEQ) ASC ) IDX
+            , ROW_NUMBER() OVER( ORDER BY TO_NUMBER(T.STD_SEQ) DESC ) ROWIDX
+            , T.*
+            FROM(
+				<include refid="kpiMgrBaseQuery"></include>
+            ) T
+		)
+		SELECT *
+		FROM CIRCLE_MASTER T
+		
+	</sql>
+	
+	<select id="selectFullList" resultMap="KpiMap">
+		<include refid="selectFullListBasic"></include>
+		WHERE T.ROWIDX BETWEEN (#{currentPageNo}*#{recordCountPerPage}+1-#{recordCountPerPage}) AND (#{currentPageNo}*#{recordCountPerPage})
+		ORDER BY T.IDX DESC
+	</select>
+	
+	<select id="selectFullListExcel" resultType="java.util.HashMap">
+		<include refid="selectFullListBasic"></include>
+		ORDER BY T.IDX DESC
+	</select>
+	
+	<select id="select" resultMap="KpiMap">
+		        
+		select        
+				CIR_CODE
+				, CIR_REG_NUM
+				, DEPT_CODE
+				, DEPT_NAME
+				, CIR_TCH_COM_NO
+				, GET_USER_NM(CIR_TCH_COM_NO) CIR_TCH_COM_NAME
+				, CIR_WORK_MEM_NO
+				, CIR_TEAM_LEADER_NO
+				, CIR_RECORD_CONT
+				, CIR_MEM_CNT
+				, CIR_REG_USER
+				, CIR_REG_DATE
+				, CIR_UPDATE_USER
+				, CIR_UPDATE_DATE
+				, CIR_MEM_STATUS
+				, CIR_NAME
+				, CIR_LEADER_NAME
+				, CIR_LEADER_DEPTNAME
+				
+				, GET_USER_NM(T.CIR_WORK_MEM_NO) CIR_WORK_MEM_NAME
+				, GET_USER_NM(T.CIR_TEAM_LEADER_NO) CIR_TEAM_LEADER_NAME -- 분임조 팀장   
+		FROM TB_CIRCLE_MST T
+        WHERE T.CIR_CODE = #{cirCode}
+	</select>
+	
+	<select id="selectUserDetail" resultMap="KpiMap">
+		        
+		select STD_SEQ, COM_NO, KUD_YEAR, KUD_CHK_TYPE_CODE, KUD_DEPART, COM_DEPART_CODE, KUD_JOBX, KUD_POSITION, KUD_TEAM_NAME, KUD_USER_NAME, KUD_BELONG_NAME
+		       , KUD_PART, KUD_PLACE, KUD_USER_IDENTITY, KUD_JOIN_DATE, KUD_LAST_DEGREE
+		       , nvl(get_code_nm('JIMU', kud_jimu), KUD_JIMU) kud_jimu 
+		  from tb_kpi_user_detail 
+		 where KUD_IDX=#{kudIdx}
+	</select>
+	
+	
+	<insert id="insertDtl" parameterType="kr.freedi.dev.qreport.domain.MakeVO">
+		insert into TB_KPI_USER_DETAIL (
+		    STD_SEQ
+		    , COM_NO
+		    , KUD_IDX
+		    , KUD_YEAR
+		    , KUD_CHK_TYPE_CODE
+		    , KUD_DEPART
+		    , COM_DEPART_CODE
+		    , KUD_JOBX
+		    , KUD_POSITION
+		    , KUD_TEAM_NAME
+		    , KUD_USER_NAME
+		    , KUD_BELONG_NAME
+		    , KUD_PART
+		    , KUD_PLACE
+		    , KUD_USER_IDENTITY
+		    , KUD_JOIN_DATE
+		    , KUD_LAST_DEGREE
+		    , KUD_CERT_BELT
+		    , KUD_REG_USER
+		    , KUD_REG_DATE
+		    , KUD_JIMU
+		) values (
+		    #{cirMemCode} 
+		    , #{ComNo}
+		    , #{kudIdx}
+		    , #{kudYear}
+		    , #{kudChkTypeCode}
+		    , get_depart_nm(#{cirDeptCode})
+		    , #{cirDeptCode}
+		    , get_code_nm('JOBX', #{comJobxCode})
+		    , get_code_nm('POSITION', #{comPositionCode})
+		    , (select dept_lv3_name from tb_depart_mst where dept_code=#{cirDeptCode})
+		    , #{cirMemName}
+		    , (select dept_lv4_name from tb_depart_mst where dept_code=#{cirDeptCode})
+		    , (select dept_lv2_name from tb_depart_mst where dept_code=#{cirDeptCode})
+		    , (select get_code_nm('WPLACE', com_work_place) from tb_user_mst where com_no=#{ComNo})
+		    , null
+		    , (select com_join_date from tb_user_mst where com_no=#{ComNo})
+		    , (select user_school from tb_user_mst where com_no=#{ComNo})
+		    , #{beltCode}
+		    , #{cirRegUser}
+		    , sysdate
+		    , (select get_code_nm('JIMU', com_jimu) from tb_user_mst where com_no=#{ComNo})
+		)
+	</insert>    
+	
+	<update id="updateDtl" parameterType="kr.freedi.dev.qreport.domain.MakeVO">
+		 update TB_KPI_USER_DETAIL 
+			set KUD_YEAR =  #{kudYear}
+			    , KUD_CHK_TYPE_CODE =  #{kudChkTypeCode}
+			    , KUD_DEPART = get_depart_nm(#{cirDeptCode})
+			    , COM_DEPART_CODE = #{cirDeptCode}
+			    , KUD_JOBX =  (select get_code_nm('JOBX', com_jobx) from tb_user_mst where com_no=#{ComNo})
+			    , KUD_POSITION =  (select get_code_nm('POSITION', com_position) from tb_user_mst where com_no=#{ComNo})
+			    , KUD_PART = 		(select (case to_char(DEPT_LV1_NAME) when 'CPO' then DEPT_LV2_NAME else DEPT_LV1_NAME end) from tb_depart_mst where dept_code=#{cirDeptCode})
+			    , KUD_TEAM_NAME =  	(select get_team_nm(dept_name) from tb_depart_mst where dept_code=#{cirDeptCode})
+			    , KUD_BELONG_NAME = (select (case to_char(DEPT_LV1_NAME) when 'CPO' then DEPT_LV3_NAME else DEPT_LV2_NAME end) from tb_depart_mst where dept_code=#{cirDeptCode})
+			    , KUD_USER_NAME =  (select user_name from tb_user_mst where com_no=#{ComNo})
+			    , KUD_PLACE = (select get_code_nm('WPLACE', com_work_place) from tb_user_mst where com_no=#{ComNo})
+			    , KUD_USER_IDENTITY =  null
+			    , KUD_JOIN_DATE =  (select com_join_date from tb_user_mst where com_no=#{ComNo})
+			    , KUD_LAST_DEGREE =  (select user_school from tb_user_mst where com_no=#{ComNo})
+			    , KUD_CERT_BELT = (select com_cert_belt from tb_user_mst where com_no=#{ComNo})
+			    , KUD_UPDATE_USER =  #{cirUpdateUser}
+			    , KUD_UPDATE_DATE =  sysdate
+			    , KUD_JIMU = (select get_code_nm('JIMU', com_jimu) from tb_user_mst where com_no=#{ComNo})
+			    
+		  where STD_SEQ = #{cirMemCode}
+		    and KUD_IDX = #{kudIdx}
+		    and COM_NO =  #{ComNo}
+
+	</update>       
+	
+	
+	<sql id="detCond">
+		<where>
+			<if test="comDepartCode != null and comDepartCode != ''">
+				AND T.COM_DEPART_CODE = #{comDepartCode}
+			</if>
+		</where>
+	</sql>
+	
+	<select id="selectEmpSearch" resultType="egovMap">
+     SELECT *
+	   FROM (
+            SELECT t.com_no
+					, t.user_id            
+					, t.user_name               
+					, t.com_depart_code          
+					, (select dept_name from tb_depart_mst d where dept_code=t.com_depart_code) dept_full_name    
+					, t.com_jobx        
+					, cd_job.code_nm com_jobx_nm                     
+					, t.com_position                    
+					, GET_CODE_NM('POSITION', com_position) com_position_nm            
+					, t.com_cert_belt              
+					, cd_blt.code_nm com_cert_belt_nm       
+              FROM tb_user_mst T
+                   LEFT OUTER JOIN tb_code cd_job ON cd_job.code_grp_id='JOBX' AND cd_job.code_id=T.com_jobx
+                   LEFT OUTER JOIN tb_code cd_blt ON cd_blt.code_grp_id='LDRBELT' AND cd_blt.code_id=T.com_cert_belt 
+		<include refid="detCond"></include>
+		    )
+		ORDER BY COM_JOBX ASC, USER_NAME
+	</select>
+	
+	<delete id="deleteUserDtl">
+		DELETE FROM TB_KPI_USER_DETAIL WHERE STD_SEQ = #{cirMemCode}
+	</delete>
+	
+	<select id="selectMgrPlan" resultType="egovMap">
+ 
+	   WITH SRC_DEPART AS (
+            SELECT 
+             COM_DEPART_CODE
+             ,KUD_DEPART
+             ,sum(CASE WHEN KUD_CERT_BELT IS NULL THEN to_char(1) ELSE to_char(0) END) AS GB_CNT
+             ,sum(CASE WHEN KUD_CERT_BELT = 'D000' THEN to_char(1) ELSE to_char(0) END) AS BB_CNT
+             ,sum(CASE WHEN KUD_CERT_BELT = 'D001' THEN to_char(1) ELSE to_char(0) END) AS MBB_CNT
+             ,sum(CASE WHEN KUD_CERT_BELT NOT IN ('D000','D001','D002') THEN to_char(1) ELSE to_char(0) END) AS BBU_CNT
+          FROM
+             TB_KPI_USER_DETAIL
+          WHERE 
+             KUD_IDX = #{kudIdx}
+                AND KUD_REG_DATE BETWEEN TRUNC (SYSDATE, 'YEAR') AND TO_CHAR(sysdate, 'yyyy-mm-dd hh24:mi:ss')
+				AND (case when nvl((select role_no from tb_role_user where com_no=#{searchUserid}),'0') in ('4','5','0') then instr(get_allow_dept_list(#{searchUserid}), COM_DEPART_CODE) else 1 end) >0                
+             GROUP BY COM_DEPART_CODE , KUD_DEPART
+       )
+       ,V_DEPART_MST AS (
+            SELECT
+                d.dept_code COM_DEPART_CODE, d.dept_name KUD_DEPART, d.dept_uper_code, sd.gb_cnt, sd.bb_cnt, sd.mbb_cnt, sd.bbu_cnt
+            FROM
+                tb_depart_mst d
+                , SRC_DEPART sd
+            WHERE
+                d.dept_state_code <![CDATA[<>]]> 'D'
+                and d.dept_code=sd.com_depart_code(+)
+            START WITH
+                dept_code IN (
+                    SELECT com_depart_code FROM SRC_DEPART SD
+              <where>
+				<trim prefixOverrides="AND|OR">    
+                <if test="searchDepart != null and searchDepart != ''">
+					and INSTR(#{searchDepart}, com_depart_code) <![CDATA[>]]> 0
+				</if>
+				<if test="searchWorkPlace != null and searchWorkPlace != ''">
+					and exists (
+						select 1 
+						  from tb_user_mst
+						  where to_number(nvl(com_leader_no, '0'))=to_number(com_no)
+						  and com_depart_code=SD.com_depart_code
+						  and REGEXP_INSTR(com_no,'[^0-9]')=0
+						  and com_work_place=#{searchWorkPlace}
+                    )
+                </if>
+                </trim>
+              </where>
+                    GROUP BY com_depart_code
+                )
+            CONNECT BY
+                PRIOR dept_uper_code = dept_code
+            GROUP BY
+                d.dept_code, d.dept_name, d.dept_uper_code, sd.gb_cnt, sd.bb_cnt, sd.mbb_cnt, sd.bbu_cnt
+	   )
+		SELECT
+		   KUD.COM_DEPART_CODE DEPT_CODE
+		   ,KUD.KUD_DEPART DEPT_NAME
+		   ,KUD.DEPT_UPER_CODE
+		      
+		   ,NVL(KM.KM_GB_USER_CNT,0) AS KM_GB_USER_CNT 
+		   ,NVL(KUD.GB_CNT,0) AS GB_CNT
+		   ,ROUND(NVL(KM.KM_GB_USER_CNT / NULLIF(KUD.GB_CNT,0),0) * 100) AS GB_RAT
+		   ,NVL(KM.KM_BB_USER_CNT,0) AS KM_BB_USER_CNT
+		   ,NVL(KUD.BB_CNT,0) AS BB_CNT
+		   ,ROUND(NVL(KM.KM_BB_USER_CNT / NULLIF(KUD.BB_CNT,0),0) * 100) AS BB_RAT
+		   ,NVL(KM.KM_MBB_USER_CNT,0) AS KM_MBB_USER_CNT
+		   ,NVL(KUD.MBB_CNT,0) AS MBB_CNT
+		   ,ROUND(NVL(KM.KM_MBB_USER_CNT / NULLIF(KUD.MBB_CNT,0),0) * 100) AS MBB_RAT
+		   ,NVL(KM.KM_BBU_USER_CNT,0) AS KM_BBU_USER_CNT
+		   ,NVL(KUD.BBU_CNT,0) AS BBU_CNT
+		   ,ROUND(NVL(KM.KM_BBU_USER_CNT / NULLIF(KUD.BBU_CNT,0),0) * 100) AS BBU_RAT
+		   
+		   ,NVL(SD.GB_CERT_CNT,0) AS GB_CERT_CNT
+		   ,ROUND(NVL(SD.GB_CERT_CNT / KM.KM_GB_USER_CNT,0) * 100) AS GB_CERT_RAT
+		   ,NVL(SD.BB_CERT_CNT,0) AS BB_CERT_CNT
+		   ,ROUND(NVL(SD.BB_CERT_CNT / KM.KM_BB_USER_CNT,0) * 100) AS BB_CERT_RAT
+		   ,NVL(SD.MBB_CERT_CNT,0) AS MBB_CERT_CNT
+		   ,ROUND(NVL(SD.MBB_CERT_CNT / KM.KM_MBB_USER_CNT,0) * 100) AS MBB_CERT_RAT
+		   ,NVL(SD.BBU_CERT_CNT,0) AS BBU_CERT_CNT
+		   ,ROUND(NVL(SD.BBU_CERT_CNT / KM.KM_BBU_USER_CNT,0) * 100) AS BBU_CERT_RAT
+		   ,NVL((GB_CNT + BB_CNT + MBB_CNT + BBU_CNT),0) AS TOT_CNT
+		   
+		FROM 
+		   V_DEPART_MST KUD
+		   LEFT OUTER JOIN
+		   (
+		      SELECT 
+		        DEPT_CODE
+		        ,DEPT_NAME
+		        ,NVL(KM_GB_USER_CNT,0) AS KM_GB_USER_CNT
+		        ,NVL(KM_BB_USER_CNT,0) AS KM_BB_USER_CNT
+		        ,NVL(KM_MBB_USER_CNT,0) AS KM_MBB_USER_CNT
+		        ,NVL(KM_BBU_USER_CNT,0) AS KM_BBU_USER_CNT
+		      FROM 
+		         TB_KPI_MASTER 
+		      WHERE 
+		         KUD_IDX = #{kudIdx}
+		         AND KM_YEAR = #{searchYear}
+		   ) KM  ON KM.DEPT_CODE = KUD.COM_DEPART_CODE
+		   LEFT OUTER JOIN 
+		   (
+		      SELECT
+		      STD_DEPART
+		      ,sum(CASE WHEN STD_BELT_CODE IS NULL THEN to_char(1) ELSE to_char(0) END) AS GB_CERT_CNT
+		      ,sum(CASE WHEN STD_BELT_CODE = 'D000' THEN to_char(1) ELSE to_char(0) END) AS BB_CERT_CNT
+		      ,sum(CASE WHEN STD_BELT_CODE = 'D001' THEN to_char(1) ELSE to_char(0) END) AS MBB_CERT_CNT
+		      ,sum(CASE WHEN STD_BELT_CODE NOT IN ('D000','D001','D002') THEN to_char(1) ELSE to_char(0) END) AS BBU_CERT_CNT
+		      FROM 
+		         TB_STUDENT_DETAIL SD
+		      WHERE 
+		         STD_CLASS_DIVISION IN ('07','08','09')
+		         AND STD_CERT_CODE = 'Y'
+		         AND STD_CERT_DATE BETWEEN TRUNC (SYSDATE, 'YEAR') AND TO_CHAR(sysdate, 'yyyy-mm-dd hh24:mi:ss')
+		      GROUP BY STD_DEPART
+		   ) SD ON KUD.COM_DEPART_CODE = SD.STD_DEPART  
+		
+	</select>
+	
+	<select id="selectMgrMBBPlan" resultType="egovMap">
+ 
+	  WITH V_DEPART_MST AS (
+        select 
+        		DEPT_CODE, DEPT_NAME, DEPT_UPER_CODE, DEPT_STATE_CODE
+         from 
+         		tb_depart_mst
+         where 
+			DEPT_STATE_CODE <![CDATA[<>]]> 'D'
+				<if test="searchDepart != null and searchDepart != ''">
+					AND INSTR(#{searchDepart}, DEPT_CODE) <![CDATA[>]]> 0
+				</if>
+    START WITH
+           	dept_code in (select com_depart_code from tb_kpi_user_detail 
+               	           where kud_idx=#{kudIdx}
+                   	       group by com_depart_code)
+	CONNECT BY PRIOR
+			dept_uper_code = dept_code
+	group by 
+			DEPT_CODE, DEPT_NAME, DEPT_UPER_CODE, DEPT_STATE_CODE
+	  )
+ 		,V_DEPART_MST2 as (
+        select level, a.*
+          from v_depart_mst a
+          start with dept_code='50000000'
+          connect by prior dept_code=dept_uper_code
+      )
+      SELECT 
+		   DEPT_CODE,DEPT_NAME,DEPT_UPER_CODE
+		   ,GB_CNT_1,KUD_GB_CNT_1,NVL(KUD_GB_CNT_1 / DECODE(GB_CNT_1,0,NULL,GB_CNT_1),0) * 100 AS GB_RAT_1
+		   ,BB_CNT_1,KUD_BB_CNT_1,NVL(KUD_BB_CNT_1 / DECODE(BB_CNT_1,0,NULL,BB_CNT_1),0) * 100 AS BB_RAT_1
+		   ,MBB_CNT_1,KUD_MBB_CNT_1,NVL(KUD_MBB_CNT_1 / DECODE(MBB_CNT_1,0,NULL,MBB_CNT_1),0) * 100  AS MBB_RAT_1
+		   ,BBU_CNT_1,KUD_BBU_CNT_1,NVL(KUD_BBU_CNT_1 / DECODE(BBU_CNT_1,0,NULL,BBU_CNT_1),0) * 100  AS BBU_RAT_1
+		   
+		   ,GB_CNT_2,KUD_GB_CNT_2,NVL(KUD_GB_CNT_2 / DECODE(GB_CNT_2,0,NULL,GB_CNT_2),0) * 100 AS GB_RAT_2
+		   ,BB_CNT_2,KUD_BB_CNT_2,NVL(KUD_BB_CNT_2 / DECODE(BB_CNT_2,0,NULL,BB_CNT_2),0) * 100 AS BB_RAT_2
+		   ,MBB_CNT_2,KUD_MBB_CNT_2,NVL(KUD_MBB_CNT_2 / DECODE(MBB_CNT_2,0,NULL,MBB_CNT_2),0) * 100  AS MBB_RAT_2
+		   ,BBU_CNT_2,KUD_BBU_CNT_2,NVL(KUD_BBU_CNT_2 / DECODE(BBU_CNT_2,0,NULL,BBU_CNT_2),0) * 100  AS BBU_RAT_2
+		   ,nvl(MBB_MANAGE_CNT_2, 0) as MBB_MANAGE_CNT_2
+		   
+		   ,GB_CNT_3,KUD_GB_CNT_3,NVL(KUD_GB_CNT_3 / DECODE(GB_CNT_3,0,NULL,GB_CNT_3),0) * 100 AS GB_RAT_3
+		   ,BB_CNT_3,KUD_BB_CNT_3,NVL(KUD_BB_CNT_3 / DECODE(BB_CNT_3,0,NULL,BB_CNT_3),0) * 100 AS BB_RAT_3
+		   ,MBB_CNT_3,KUD_MBB_CNT_3,NVL(KUD_MBB_CNT_3 / DECODE(MBB_CNT_3,0,NULL,MBB_CNT_3),0) * 100  AS MBB_RAT_3
+		   ,BBU_CNT_3,KUD_BBU_CNT_3,NVL(KUD_BBU_CNT_3 / DECODE(BBU_CNT_3,0,NULL,BBU_CNT_3),0) * 100  AS BBU_RAT_3
+		   
+		FROM
+		   (
+		   SELECT 
+		    DM.DEPT_CODE  
+		    ,DM.DEPT_NAME
+		    ,DM.DEPT_UPER_CODE
+		    ,(CASE  WHEN KM.KM_GB_USER_CNT IS NOT NULL THEN TO_CHAR(KM.KM_GB_USER_CNT) ELSE TO_CHAR(0) END) AS GB_CNT_1
+		    ,(SELECT COUNT(*) FROM TB_KPI_USER_DETAIL KUD WHERE KUD.COM_DEPART_CODE = DM.DEPT_CODE AND KUD.KUD_YEAR = '2022' AND KUD.KUD_CERT_BELT = 'D000') AS KUD_GB_CNT_1
+		    ,(CASE  WHEN KM.KM_BB_USER_CNT IS NOT NULL THEN TO_CHAR(KM.KM_BB_USER_CNT) ELSE TO_CHAR(0) END) AS BB_CNT_1
+		    ,(SELECT COUNT(*) FROM TB_KPI_USER_DETAIL KUD WHERE KUD.COM_DEPART_CODE = DM.DEPT_CODE AND KUD.KUD_YEAR = '2022' AND KUD.KUD_CERT_BELT = 'D001') AS KUD_BB_CNT_1
+		    ,(CASE  WHEN KM.KM_MBB_USER_CNT IS NOT NULL THEN TO_CHAR(KM.KM_MBB_USER_CNT) ELSE TO_CHAR(0) END) AS MBB_CNT_1
+		    ,(SELECT COUNT(*) FROM TB_KPI_USER_DETAIL KUD WHERE KUD.COM_DEPART_CODE = DM.DEPT_CODE AND KUD.KUD_YEAR = '2022' AND KUD.KUD_CERT_BELT = 'D002') AS KUD_MBB_CNT_1
+		    ,(CASE  WHEN KM.KM_BBU_USER_CNT IS NOT NULL THEN TO_CHAR(KM.KM_BBU_USER_CNT) ELSE TO_CHAR(0) END) AS BBU_CNT_1
+		    ,(SELECT COUNT(*) FROM TB_KPI_USER_DETAIL KUD WHERE KUD.COM_DEPART_CODE = DM.DEPT_CODE AND KUD.KUD_YEAR = '2022' AND KUD.KUD_CERT_BELT NOT IN ('D000','D001','D002')) AS KUD_BBU_CNT_1
+		    
+		    ,(CASE  WHEN KM.KM_GB_USER_CNT IS NOT NULL THEN TO_CHAR(KM.KM_GB_USER_CNT) ELSE TO_CHAR(0) END) AS GB_CNT_2
+		    ,(SELECT COUNT(*) FROM TB_KPI_USER_DETAIL KUD WHERE KUD.COM_DEPART_CODE = DM.DEPT_CODE AND KUD.KUD_YEAR = '2023' AND KUD.KUD_CERT_BELT = 'D000') AS KUD_GB_CNT_2
+		    ,(CASE  WHEN KM.KM_BB_USER_CNT IS NOT NULL THEN TO_CHAR(KM.KM_BB_USER_CNT) ELSE TO_CHAR(0) END) AS BB_CNT_2
+		    ,(SELECT COUNT(*) FROM TB_KPI_USER_DETAIL KUD WHERE KUD.COM_DEPART_CODE = DM.DEPT_CODE AND KUD.KUD_YEAR = '2023' AND KUD.KUD_CERT_BELT = 'D001') AS KUD_BB_CNT_2
+		    ,(CASE  WHEN KM.KM_MBB_USER_CNT IS NOT NULL THEN TO_CHAR(KM.KM_MBB_USER_CNT) ELSE TO_CHAR(0) END) AS MBB_CNT_2
+		    ,(SELECT COUNT(*) FROM TB_KPI_USER_DETAIL KUD WHERE KUD.COM_DEPART_CODE = DM.DEPT_CODE AND KUD.KUD_YEAR = '2023' AND KUD.KUD_CERT_BELT = 'D002') AS KUD_MBB_CNT_2
+		    ,(CASE  WHEN KM.KM_BBU_USER_CNT IS NOT NULL THEN TO_CHAR(KM.KM_BBU_USER_CNT) ELSE TO_CHAR(0) END) AS BBU_CNT_2
+		    ,(SELECT COUNT(*) FROM TB_KPI_USER_DETAIL KUD WHERE KUD.COM_DEPART_CODE = DM.DEPT_CODE AND KUD.KUD_YEAR = '2023' AND KUD.KUD_CERT_BELT NOT IN ('D000','D001','D002')) AS KUD_BBU_CNT_2
+		    ,(CASE  WHEN KM.KM_MBB_MANAGE_CNT IS NOT NULL THEN TO_CHAR(KM.KM_MBB_MANAGE_CNT) ELSE TO_CHAR(0) END) AS MBB_MANAGE_CNT_2
+		    
+		    ,(CASE  WHEN KM.KM_GB_USER_CNT IS NOT NULL THEN TO_CHAR(KM.KM_GB_USER_CNT) ELSE TO_CHAR(0) END) AS GB_CNT_3
+		    ,(
+		       SELECT  COUNT(*) 
+		       FROM    TB_KPI_USER_DETAIL KUD 
+		       WHERE  KUD.COM_DEPART_CODE = DM.DEPT_CODE AND KUD.KUD_YEAR = #{searchYear} AND KUD.KUD_CERT_BELT = 'D000' AND KUD.KUD_IDX = '6SIG'
+		              AND KUD_REG_DATE BETWEEN TRUNC (SYSDATE, 'YEAR') AND TO_CHAR(sysdate, 'yyyy-mm-dd hh24:mi:ss')
+		    ) AS KUD_GB_CNT_3
+		    ,(CASE WHEN KM.KM_BB_USER_CNT IS NOT NULL THEN TO_CHAR(KM.KM_BB_USER_CNT) ELSE TO_CHAR(0) END) AS BB_CNT_3
+		    ,(
+		       SELECT   COUNT(*) 
+		       FROM     TB_KPI_USER_DETAIL KUD 
+		       WHERE    KUD.COM_DEPART_CODE = DM.DEPT_CODE AND KUD.KUD_YEAR = #{searchYear} AND KUD.KUD_CERT_BELT = 'D001' AND KUD.KUD_IDX = '6SIG'
+		                AND KUD_REG_DATE BETWEEN TRUNC (SYSDATE, 'YEAR') AND TO_CHAR(sysdate, 'yyyy-mm-dd hh24:mi:ss')
+		    ) AS KUD_BB_CNT_3
+		    ,(CASE  WHEN KM.KM_MBB_USER_CNT IS NOT NULL THEN TO_CHAR(KM.KM_MBB_USER_CNT) ELSE TO_CHAR(0) END) AS MBB_CNT_3
+		    ,(
+		       SELECT  COUNT(*) 
+		       FROM    TB_KPI_USER_DETAIL KUD 
+		       WHERE   KUD.COM_DEPART_CODE = DM.DEPT_CODE AND KUD.KUD_YEAR = #{searchYear} AND KUD.KUD_CERT_BELT = 'D002' AND KUD.KUD_IDX = '6SIG'
+		               AND KUD_REG_DATE BETWEEN TRUNC (SYSDATE, 'YEAR') AND TO_CHAR(sysdate, 'yyyy-mm-dd hh24:mi:ss')
+		       ) AS KUD_MBB_CNT_3          
+		    ,(CASE WHEN KM.KM_BBU_USER_CNT IS NOT NULL THEN TO_CHAR(KM.KM_BBU_USER_CNT) ELSE TO_CHAR(0) END) AS BBU_CNT_3
+		    ,(
+		       SELECT  COUNT(*) 
+		       FROM    TB_KPI_USER_DETAIL KUD 
+		       WHERE   KUD.COM_DEPART_CODE = DM.DEPT_CODE AND KUD.KUD_YEAR = #{searchYear} AND KUD.KUD_CERT_BELT NOT IN ('D000','D001','D002') AND KUD.KUD_IDX = '6SIG'
+		               AND KUD_REG_DATE BETWEEN TRUNC (SYSDATE, 'YEAR') AND TO_CHAR(sysdate, 'yyyy-mm-dd hh24:mi:ss')
+		    ) AS KUD_BBU_CNT_3
+		   FROM 
+		    V_DEPART_MST2 DM,
+		    TB_KPI_MASTER KM
+		   WHERE  
+		    DM.DEPT_CODE = KM.DEPT_CODE(+)
+
+		) 
+		
+	</select>
+	
+	<update id="updateKpiMaster">
+	UPDATE TB_KPI_MASTER SET
+	    	update_date=sysdate
+	    	,dept_name=get_depart_nm(#{deptCode})
+	    <if test="kmGbUserCnt != null and kmGbUserCnt != ''">,KM_GB_USER_CNT=#{kmGbUserCnt}</if>
+	    <if test="kmBbuUserCnt != null and kmBbuUserCnt != ''">,KM_BBU_USER_CNT=#{kmBbuUserCnt}</if>
+	    <if test="kmMbbManageCnt != null and kmMbbManageCnt != ''">,KM_MBB_MANAGE_CNT=#{kmMbbManageCnt}</if>
+	    <if test="kmMbbUserCnt != null and kmMbbUserCnt != ''">,KM_MBB_USER_CNT=#{kmMbbUserCnt}</if>
+	    <if test="kmBbUserCnt != null and kmBbUserCnt != ''">,km_bb_user_cnt=#{kmBbUserCnt}</if>
+	    where dept_code=#{deptCode}
+	    and kud_idx = #{kudIdx}
+	    and km_year=#{kmYear}
+	</update>
+	
+	<insert id="insertKpiMaster">
+		insert into TB_KPI_MASTER 
+		(dept_code, dept_name, km_year, kud_idx, reg_date
+		<if test="kmGbUserCnt != null and kmGbUserCnt != ''">,KM_GB_USER_CNT</if>
+	    <if test="kmBbuUserCnt != null and kmBbuUserCnt != ''">,KM_BBU_USER_CNT</if>
+	    <if test="kmMbbManageCnt != null and kmMbbManageCnt != ''">,KM_MBB_MANAGE_CNT</if>
+	    <if test="kmMbbUserCnt != null and kmMbbUserCnt != ''">,KM_MBB_USER_CNT</if>
+	    <if test="kmBbUserCnt != null and kmBbUserCnt != ''">,km_BB_user_cnt</if>
+		)
+		values
+		(#{deptCode}, get_depart_nm(#{deptCode}), #{kmYear}, #{kudIdx}, sysdate
+		<if test="kmGbUserCnt != null and kmGbUserCnt != ''">,#{kmGbUserCnt}</if>
+	    <if test="kmBbuUserCnt != null and kmBbuUserCnt != ''">,#{kmBbuUserCnt}</if>
+	    <if test="kmMbbManageCnt != null and kmMbbManageCnt != ''">,#{kmMbbManageCnt}</if>
+	    <if test="kmMbbUserCnt != null and kmMbbUserCnt != ''">,#{mMbbUserCnt}</if>
+	    <if test="kmBbUserCnt != null and kmBbUserCnt != ''">,#{kmBbUserCnt}</if>
+		)
+	</insert>
+		
+	<select id="getDeptStatus" resultType="java.util.HashMap">
+SELECT 
+ COM_NO 
+ ,get_depart_nm(STD_DEPART) as STD_DEPART
+ ,get_code_nm('JOBX', STD_JOBX) STD_JOBX
+ ,get_code_nm('POSITION', STD_POSITION) STD_POSITION
+ ,STD_NAME
+ 
+ ,MAX(GB_EDU_TXT) AS GB_EDU_TXT
+ ,MAX(GB_EDU_DATE) AS GB_EDU_DATE
+ ,MAX(GB_TEST_TXT) AS GB_TEST_TXT
+ ,MAX(GB_TEST_DATE) AS GB_TEST_DATE
+ ,MAX(GB_CERT_TXT) AS GB_CERT_TXT
+ ,MAX(GB_CERT_DATE) AS GB_CERT_DATE
+ 
+ ,MAX(MGB_EDU_TXT) AS MGB_EDU_TXT
+ ,MAX(MGB_EDU_DATE) AS MGB_EDU_DATE
+ ,MAX(MGB_TEST07_TXT) AS MGB_TEST07_TXT
+ ,MAX(MGB_TEST07_DATE) AS MGB_TEST07_DATE
+ ,MAX(MGB_REP_TXT) AS MGB_REP_TXT
+ ,MAX(MGB_TEST08_TXT) AS MGB_TEST08_TXT
+ ,MAX(MGB_TEST08_DATE) AS MGB_TEST08_DATE
+ ,MAX(MGB_CERT_TXT) AS MGB_CERT_TXT
+ ,MAX(MGB_CERT_DATE) AS MGB_CERT_DATE
+ 
+ ,MAX(BB_EDU_TXT) AS BB_EDU_TXT
+ ,MAX(BB_EDU_DATE) AS BB_EDU_DATE
+ ,MAX(BB_TEST07_TXT) AS BB_TEST07_TXT
+ ,MAX(BB_TEST07_DATE) AS BB_TEST07_DATE
+ ,MAX(BB_REP_TXT) AS BB_REP_TXT
+ ,MAX(BB_TEST08_TXT) AS BB_TEST08_TXT
+ ,MAX(BB_TEST08_DATE) AS BB_TEST08_DATE 
+ ,MAX(BB_CERT_TXT) AS BB_CERT_TXT
+ ,MAX(BB_CERT_DATE) AS BB_CERT_DATE
+ 
+ ,MAX(MBB_EDU_TXT) AS MBB_EDU_TXT
+ ,MAX(MBB_EDU_DATE) AS MBB_EDU_DATE
+ ,MAX(MBB_TEST07_TXT) AS MBB_TEST07_TXT
+ ,MAX(MBB_TEST07_DATE) AS MBB_TEST07_DATE
+ ,MAX(MBB_TEST08_TXT) AS MBB_TEST08_TXT
+ ,MAX(MBB_TEST08_DATE) AS MBB_TEST08_DATE
+ ,MAX(MBB_REP_TXT) as MBB_REP_TXT
+ ,MAX(MBB_TEST09_TXT) AS MBB_TEST09_TXT
+ ,MAX(MBB_TEST09_DATE) AS MBB_TEST09_DATE
+ ,MAX(MBB_CERT_TXT) AS MBB_CERT_TXT
+ ,MAX(MBB_CERT_DATE) AS MBB_CERT_DATE
+FROM 
+(
+   SELECT
+      D.STD_DEPART,
+      D.COM_NO AS COM_NO,
+      M.EDU_BELTCODE AS EDU_BELTCODE,
+      D.STD_BELT_CODE AS STD_BELT_CODE,
+      D.STD_NAME AS STD_NAME,
+      D.STD_JOBX AS STD_JOBX,
+      D.STD_POSITION AS STD_POSITION,
+       CASE 
+         WHEN M.EDU_CLASS_DIVISION IN ('01','02') AND D.STD_COMPLETE_YN = 'Y' AND M.EDU_BELTCODE = 'D000' THEN '이수완료'
+      END  AS GB_EDU_TXT,
+      CASE 
+         WHEN M.EDU_CLASS_DIVISION IN ('01','02') AND D.STD_COMPLETE_YN = 'Y' AND M.EDU_BELTCODE = 'D000' THEN D.STD_COMPLETE_DATE
+      END  AS GB_EDU_DATE,
+      CASE 
+         WHEN M.EDU_CLASS_DIVISION IN ('07') AND D.STD_COMPLETE_YN = 'Y' AND M.EDU_BELTCODE = 'D000' THEN '합격'
+      END  AS GB_TEST_TXT,
+      CASE 
+         WHEN M.EDU_CLASS_DIVISION IN ('07') AND D.STD_COMPLETE_YN = 'Y' AND M.EDU_BELTCODE = 'D000' THEN D.STD_COMPLETE_DATE
+      END  AS GB_TEST_DATE,
+      CASE 
+         WHEN C.CUD_BEFORE_BELT_CODE IS NULL AND C.CUD_CERT_STATUS = 'Y' THEN '인증'
+      END  AS GB_CERT_TXT,
+      CASE 
+         WHEN C.CUD_BEFORE_BELT_CODE IS NULL AND C.CUD_CERT_STATUS = 'Y' THEN C.CUD_CERT_DATE 
+      END  AS GB_CERT_DATE,
+      CASE 
+         WHEN M.EDU_CLASS_DIVISION IN ('01','02') AND D.STD_COMPLETE_YN = 'Y' AND M.EDU_BELTCODE = 'D003' THEN '이수완료'
+      END  AS MGB_EDU_TXT,
+      CASE 
+         WHEN M.EDU_CLASS_DIVISION IN ('01','02') AND D.STD_COMPLETE_YN = 'Y' AND M.EDU_BELTCODE = 'D003' THEN D.STD_COMPLETE_DATE
+      END  AS MGB_EDU_DATE,
+      CASE 
+         WHEN M.EDU_CLASS_DIVISION IN ('07') AND D.STD_COMPLETE_YN = 'Y' AND M.EDU_BELTCODE = 'D003' THEN '합격'
+      END  AS MGB_TEST07_TXT,
+      CASE 
+         WHEN M.EDU_CLASS_DIVISION IN ('07') AND D.STD_COMPLETE_YN = 'Y' AND M.EDU_BELTCODE = 'D003' THEN D.STD_COMPLETE_DATE
+      END  AS MGB_TEST07_DATE,
+      CASE 
+         WHEN M.EDU_CLASS_DIVISION IN ('08') AND D.STD_COMPLETE_YN = 'Y' AND M.EDU_BELTCODE = 'D003' THEN '합격'
+      END  AS MGB_TEST08_TXT,
+      CASE 
+         WHEN M.EDU_CLASS_DIVISION IN ('08') AND D.STD_COMPLETE_YN = 'Y' AND M.EDU_BELTCODE = 'D003' THEN D.STD_COMPLETE_DATE
+      END  AS MGB_TEST08_DATE,
+      CASE 
+         WHEN C.CUD_BEFORE_BELT_CODE = 'D000' AND C.CUD_CERT_STATUS = 'Y' THEN '인증'
+      END  AS MGB_CERT_TXT,
+      CASE 
+         WHEN C.CUD_BEFORE_BELT_CODE = 'D000' AND C.CUD_CERT_STATUS = 'Y' THEN C.CUD_CERT_DATE 
+      END  AS MGB_CERT_DATE,
+      CASE 
+         WHEN R.REP_CNT > 0 AND R.BELT_CODE = 'D003' THEN R.REP_CNT || '건 과제수행' ELSE '-'
+      END  AS MGB_REP_TXT,
+      CASE 
+         WHEN R.REP_CNT > 0 AND R.BELT_CODE = 'D003' THEN R.REP_DATE
+      END  AS MGB_REP_DATE,
+      CASE 
+         WHEN M.EDU_CLASS_DIVISION IN ('01','02') AND D.STD_COMPLETE_YN = 'Y' AND M.EDU_BELTCODE = 'D001' THEN '이수완료'
+      END  AS BB_EDU_TXT,
+      CASE 
+         WHEN M.EDU_CLASS_DIVISION IN ('01','02') AND D.STD_COMPLETE_YN = 'Y' AND M.EDU_BELTCODE = 'D001' THEN D.STD_COMPLETE_DATE
+      END  AS BB_EDU_DATE,
+      CASE 
+         WHEN M.EDU_CLASS_DIVISION IN ('07') AND D.STD_COMPLETE_YN = 'Y' AND M.EDU_BELTCODE = 'D001' THEN '합격'
+      END  AS BB_TEST07_TXT,
+      CASE 
+         WHEN M.EDU_CLASS_DIVISION IN ('07') AND D.STD_COMPLETE_YN = 'Y' AND M.EDU_BELTCODE = 'D001' THEN D.STD_COMPLETE_DATE
+      END  AS BB_TEST07_DATE,
+      CASE 
+         WHEN M.EDU_CLASS_DIVISION IN ('08') AND D.STD_COMPLETE_YN = 'Y' AND M.EDU_BELTCODE = 'D001' THEN '합격'
+      END  AS BB_TEST08_TXT,
+      CASE 
+         WHEN M.EDU_CLASS_DIVISION IN ('08') AND D.STD_COMPLETE_YN = 'Y' AND M.EDU_BELTCODE = 'D001' THEN D.STD_COMPLETE_DATE
+      END  AS BB_TEST08_DATE,
+      CASE 
+         WHEN C.CUD_BEFORE_BELT_CODE = 'D003' AND C.CUD_CERT_STATUS = 'Y' THEN '인증'
+      END  AS BB_CERT_TXT,
+      CASE 
+         WHEN C.CUD_BEFORE_BELT_CODE = 'D003' AND C.CUD_CERT_STATUS = 'Y' THEN C.CUD_CERT_DATE 
+      END  AS BB_CERT_DATE,
+      CASE 
+         WHEN R.REP_CNT > 0 AND R.BELT_CODE = 'D003' THEN R.REP_CNT || '건 과제수행' ELSE '-'
+      END  AS BB_REP_TXT,
+      CASE 
+         WHEN R.REP_CNT > 0 AND R.BELT_CODE = 'D003' THEN R.REP_DATE
+      END  AS BB_REP_DATE,
+      CASE 
+         WHEN M.EDU_CLASS_DIVISION IN ('03','04','05','06') AND D.STD_COMPLETE_YN = 'Y' AND M.EDU_BELTCODE = 'D002' THEN '이수완료'
+      END  AS MBB_EDU_TXT,
+      CASE 
+         WHEN M.EDU_CLASS_DIVISION IN ('03','04','05','06') AND D.STD_COMPLETE_YN = 'Y' AND M.EDU_BELTCODE = 'D002' THEN D.STD_COMPLETE_DATE
+      END  AS MBB_EDU_DATE,
+      CASE 
+         WHEN M.EDU_CLASS_DIVISION IN ('07') AND D.STD_COMPLETE_YN = 'Y' AND M.EDU_BELTCODE = 'D002' THEN '합격'
+      END  AS MBB_TEST07_TXT,
+      CASE 
+         WHEN M.EDU_CLASS_DIVISION IN ('07') AND D.STD_COMPLETE_YN = 'Y' AND M.EDU_BELTCODE = 'D002' THEN D.STD_COMPLETE_DATE
+      END  AS MBB_TEST07_DATE,
+      CASE 
+         WHEN M.EDU_CLASS_DIVISION IN ('08') AND D.STD_COMPLETE_YN = 'Y' AND M.EDU_BELTCODE = 'D002' THEN '합격'
+      END  AS MBB_TEST08_TXT,
+      CASE 
+         WHEN M.EDU_CLASS_DIVISION IN ('08') AND D.STD_COMPLETE_YN = 'Y' AND M.EDU_BELTCODE = 'D002' THEN D.STD_COMPLETE_DATE
+      END  AS MBB_TEST08_DATE,
+      CASE 
+         WHEN M.EDU_CLASS_DIVISION IN ('09') AND D.STD_COMPLETE_YN = 'Y' AND M.EDU_BELTCODE = 'D002' THEN '합격'
+      END  AS MBB_TEST09_TXT,
+      CASE 
+         WHEN M.EDU_CLASS_DIVISION IN ('09') AND D.STD_COMPLETE_YN = 'Y' AND M.EDU_BELTCODE = 'D002' THEN D.STD_COMPLETE_DATE
+      END  AS MBB_TEST09_DATE,
+      CASE 
+         WHEN C.CUD_BEFORE_BELT_CODE = 'D001' AND C.CUD_CERT_STATUS = 'Y' THEN '인증'
+      END  AS MBB_CERT_TXT,
+      CASE 
+         WHEN C.CUD_BEFORE_BELT_CODE = 'D001' AND C.CUD_CERT_STATUS = 'Y' THEN C.CUD_CERT_DATE 
+      END  AS MBB_CERT_DATE,
+      CASE 
+         WHEN R.REP_CNT > 0 AND R.BELT_CODE = 'D001' THEN R.REP_CNT || '건 과제수행' ELSE '-'
+      END  AS MBB_REP_TXT,
+      CASE 
+         WHEN R.REP_CNT > 0 AND R.BELT_CODE = 'D001' THEN R.REP_DATE
+      END  AS MBB_REP_DATE
+   FROM 
+      TB_EDUCATION_MST M
+      LEFT OUTER JOIN TB_STUDENT_DETAIL D ON M.EDU_CODE = D.EDU_CODE 
+      LEFT OUTER JOIN TB_CERT_USER_DETAIL C ON C.COM_NO =D.COM_NO AND D.EDU_CODE = C.CUD_EDU_CODE 
+      LEFT OUTER JOIN (
+         SELECT 
+            RT.COM_NO AS REP_COM_NO,
+            RT.BELT_CODE AS BELT_CODE,
+            COUNT(RM.REP_CODE) AS REP_CNT,
+            MAX(RM.REP_FINISH_DATE) AS REP_DATE
+         FROM 
+            TB_REPORT_MST RM
+            LEFT OUTER JOIN TB_REPORT_TEAM RT ON RM.REP_CODE = RT.REP_CODE 
+         WHERE 
+            RM.REP_STATUS_CODE = '7'
+         GROUP BY RT.COM_NO , RT.BELT_CODE
+      ) R ON C.COM_NO = R.REP_COM_NO
+      LEFT OUTER JOIN 
+      (
+         SELECT
+            COM_DEPART_CODE,
+            KUD_USER_NAME,
+            COM_NO,
+            KUD_IDX
+         FROM 
+            TB_KPI_USER_DETAIL 
+      )UM ON UM.COM_NO = D.COM_NO AND UM.COM_DEPART_CODE = D.STD_DEPART  
+   WHERE 
+      D.STD_NAME IS NOT NULL
+      AND M.EDU_YEAR=#{eduYear}
+      AND D.STD_STATUS = 'Y'
+      AND UM.KUD_IDX = #{kudIdx}
+      ORDER BY D.STD_DEPART ASC 
+) UST 
+WHERE 
+   UST.STD_DEPART = #{deptCode}
+GROUP BY UST.COM_NO, UST.STD_DEPART, UST.STD_NAME, UST.STD_JOBX, UST.STD_POSITION 
+	</select>
+	
+	<select id="selectDepartName"  resultType="String">
+		select get_depart_nm(#{deptCode}) from dual
+	</select>
+	
+</mapper>

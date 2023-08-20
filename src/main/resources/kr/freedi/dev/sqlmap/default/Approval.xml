@@ -1,0 +1,371 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Approval">
+
+	<resultMap id="approveMap" type="kr.freedi.dev.qapprove.domain.ApproveVO">		
+		<result property="aprovalCode" column="APROVAL_CODE" />
+		<result property="actRegNo" column="ACT_REG_NO" />
+		<result property="actAprovalNo" column="ACT_APROVAL_NO" />
+		<result property="aprovalType" column="APROVAL_TYPE" />
+		<result property="aprovalState" column="APROVAL_STATE" />
+		<result property="aprovalSubject" column="APROVAL_SUBJECT" />
+		<result property="userId" column="USER_ID" />
+		<result property="draftingDate" column="DRAFTING_DATE" />
+		<result property="draftingComment" column="DRAFTING_COMMENT" />
+		<result property="idx" column="IDX" />
+		<result property="aprovalTypeNm" column="APROVAL_TYPE_NM" />
+		<result property="aprovalDate" column="APROVAL_DATE" />
+		<result property="aprovalStateNm" column="APROVAL_STATE_NM" />
+
+		<result property="userNm" column="USER_NAME" />
+		<result property="refBusType" column="REF_BUS_TYPE" />
+		<result property="refBusTypeNm" column="REF_BUS_TYPE_NM" />
+		<result property="refBusCode" column="REF_BUS_CODE" />
+		<result property="refBusType" column="REF_BUS_TYPE" />
+		<result property="refBusSubCode" column="REF_BUS_SUB_CODE" />
+	</resultMap>
+
+	<sql id="defCond">
+		<if test="searchName != null and searchName != ''">
+			AND T.APROVAL_SUBJECT like '%' || #{searchName} || '%'
+		</if>
+		<if test="searchType != null and searchType != ''">
+			AND T.APROVAL_TYPE = #{searchType}
+		</if>
+		<if test="searchStatus != null and searchStatus != ''">
+			AND T.APROVAL_STATE = #{searchStatus}
+		</if>
+		
+		<if test="searchReqEmpNm != null and searchReqEmpNm != ''">
+			AND U.USER_NAME  like '%'|| #{searchReqEmpNm} ||'%' 
+		</if>
+		
+		<if test="searchUserId != null and searchUserId != ''">
+			AND EXISTS (select 1 from tb_approval_detail where aproval_code=T.aproval_code and com_no=#{searchUserId})
+			/* 이전 결재자 미결건 있거나 반려건 있으면 리스트에서 제외 (2023-07-20) */
+			AND NOT EXISTS (select 1 from tb_approval_detail sd where sd.aproval_code=T.aproval_code and sd.aproval_seq <![CDATA[<]]> d.aproval_seq and aproval_stat_code in ('2','3'))    
+		</if>
+		
+		<if test="searchRegUserId != null and searchRegUserId != ''">
+			AND T.USER_ID=#{searchRegUserId}) 
+		</if>
+		
+		
+		<if test="searchReqComNo != null and searchReqComNo != ''">
+			AND T.user_id=#{searchReqComNo}
+		</if>
+		
+		<if test="searchFromDt != null and searchFromDt != ''">
+			AND T.drafting_date <![CDATA[>=]]> to_date(#{searchFromDt}, 'YYYY-MM-DD')
+		</if>
+		<if test="searchToDt != null and searchToDt != ''">
+			AND T.drafting_date <![CDATA[<=]]> to_date(#{searchToDt}, 'YYYY-MM-DD')
+		</if>
+	</sql>
+
+	<sql id="defCond2">
+		<trim prefixOverrides="AND|OR">
+		<if test="aprovalCode != null and aprovalCode != ''">
+			AND APROVAL_CODE = #{aprovalCode}
+		</if>
+		<if test="aprovalType != null and aprovalType != ''">
+			AND APROVAL_TYPE = #{aprovalType}
+		</if>
+		<if test="refBusCode != null and refBusCode != ''">
+			AND REF_BUS_CODE = #{refBusCode}
+		</if>
+		<if test="refBusType != null and refBusType != ''">
+			AND REF_BUS_TYPE = #{refBusType}
+		</if>
+		<if test="refBusSubCode != null and refBusSubCode != ''">
+			AND REF_BUS_SUB_CODE = #{refBusSubCode}
+		</if>
+		</trim>
+	</sql> 
+
+	<sql id="selectListBasic">
+	    WITH v_approval_mst AS (
+            SELECT ROW_NUMBER() OVER( ORDER BY TO_NUMBER(T.aproval_code) ASC ) idx,
+                ROW_NUMBER() OVER( ORDER BY TO_NUMBER(T.aproval_code) DESC ) rowidx,
+                T.*,
+                u.USER_NAME,
+                d.aproval_seq as my_seq
+            FROM  tb_approval_mst T,
+		          tb_user_mst     u,
+		          tb_approval_detail d
+            WHERE 
+                   T.user_id = u.com_no (+)
+                   <if test="searchUserId != null and searchUserId != ''">
+                   AND T.aproval_code=D.aproval_code and D.com_no=#{searchUserId} 
+                   </if>
+            <include refid="defCond"></include>
+	    )
+	 	SELECT
+	 	    T.idx,
+		    T.aproval_code,
+		    T.aproval_type,
+		    case when T.ref_bus_type in ('1', '2') then get_code_nm('BUS_TYPE', T.ref_bus_type) || ' > ' else '' end || get_code_nm('APR_TYPE', T.aproval_type) || case TO_CHAR(aproval_type) when '3' then to_char(GET_6SIGMA_STEP_NM(T.ref_bus_code, T.ref_bus_sub_code)) else '' end aproval_type_nm,
+		    /*T.aproval_state,
+		    get_code_nm('APR_STAT', T.aproval_state) aproval_state_nm,*/
+		    D.aproval_stat_code aproval_state,
+		    get_code_nm('APR_STAT', D.aproval_stat_code) aproval_state_nm,
+		    T.aproval_subject,
+		    T.user_id,
+		    T.user_name,
+		    T.drafting_date,
+            /*(case when T.aproval_state='4' then (select max(aproval_complt_date) from tb_approval_detail where aproval_code=T.aproval_code ) else null end) as APROVAL_DATE,*/
+            D.aproval_complt_date as aproval_date,
+		    T.drafting_comment,
+		    T.ref_bus_type,
+            get_code_nm('BUS_TYPE', T.ref_bus_type) ref_bus_type_name,
+		    T.ref_bus_code
+		FROM
+		    v_approval_mst T, tb_approval_detail d
+		WHERE
+		    t.aproval_code=d.aproval_code and d.com_no=#{searchUserId} 
+	</sql>
+
+	<select id="selectList" resultMap="approveMap">
+		<include refid="selectListBasic"></include>
+		  and rowidx between (#{currentPageNo}*#{recordCountPerPage}+1-#{recordCountPerPage}) and (#{currentPageNo}*#{recordCountPerPage})
+		  order by idx desc
+	</select>
+
+	<select id="selectListCount" resultType="egovMap">
+          SELECT
+			    c.code_id     aproval_state,
+			    c.code_nm     aproval_state_nm,
+			    nvl(m.cnt, 0) AS cnt
+			FROM
+			    tb_code c,
+			    (
+			        SELECT
+			            aproval_state,
+			            COUNT(1) cnt
+			        FROM
+			            (
+			            <include refid="selectListBasic"></include>
+			            ) a
+			        GROUP BY
+			            a.aproval_state
+			    )       m
+			WHERE
+			        c.code_id = m.aproval_state (+)
+			    AND c.code_grp_id = 'APR_STAT'
+			    AND c.act_flg = 'Y'
+			ORDER BY
+			    c.code_id desc	 	
+	
+		
+	 </select>
+
+	 <select id="selectListTotalCount" resultType="int">
+           SELECT COUNT(1) cnt
+			 FROM
+			      (
+			        <include refid="selectListBasic"></include>
+			      ) a
+	 </select>
+
+	 <sql id="selectReqList">
+		WITH v_approval_mst AS (
+            SELECT ROW_NUMBER() OVER( ORDER BY TO_NUMBER(aproval_code) ASC ) idx,
+                ROW_NUMBER() OVER( ORDER BY TO_NUMBER(aproval_code) DESC ) rowidx,
+                m.*,
+                (case when m.aproval_state='4' then (select max(aproval_complt_date) from tb_approval_detail where aproval_code=m.aproval_code ) else null end) as APROVAL_DATE
+            FROM  tb_approval_mst m	    
+            
+            <where>
+				<trim prefixOverrides="AND|OR">
+					<if test="searchRegUserId != null and searchRegUserId != ''">
+						AND m.USER_ID=#{searchRegUserId} 
+					</if>
+		            <if test="searchName != null and searchName != ''">
+						AND m.APROVAL_SUBJECT like '%' || #{searchName} || '%'
+					</if>
+					<if test="searchType != null and searchType != ''">
+						AND m.APROVAL_TYPE = #{searchType}
+					</if>
+					<if test="searchStatus != null and searchStatus != ''">
+						AND m.APROVAL_STATE = #{searchStatus}
+					</if>
+	            </trim>
+            </where>
+	    )
+	 	SELECT
+	 	    T.idx,
+		    T.aproval_code,
+		    T.aproval_type,
+		    --get_code_nm('APR_TYPE', T.aproval_type) || case TO_CHAR(aproval_type) when '3' then to_char(GET_6SIGMA_STEP_NM(T.ref_bus_code, T.ref_bus_sub_code)) else '' end aproval_type_nm,
+		    case when T.ref_bus_type in ('1', '2') then get_code_nm('BUS_TYPE', T.ref_bus_type) || ' > ' else '' end || get_code_nm('APR_TYPE', T.aproval_type) || case TO_CHAR(aproval_type) when '3' then to_char(GET_6SIGMA_STEP_NM(T.ref_bus_code, T.ref_bus_sub_code)) else '' end aproval_type_nm,
+		    T.aproval_state,
+		    get_code_nm('APR_STAT', T.aproval_state) aproval_state_nm,
+		    T.aproval_subject,
+		    T.user_id,
+		    u.user_name,
+		    T.drafting_date,
+            T.APROVAL_DATE,
+		    T.drafting_comment,
+		    T.ref_bus_type,
+            get_code_nm('BUS_TYPE', T.ref_bus_type) ref_bus_type_name,
+		    T.ref_bus_code
+		FROM
+		    v_approval_mst T,
+		    tb_user_mst     u
+		WHERE
+		    T.user_id = u.com_no (+)
+			<if test="searchFromDt != null and searchFromDt != ''">
+				 <choose>
+					<when test="searchGubun == 'aproval_date'">
+						AND T.APROVAL_DATE <![CDATA[>=]]> to_date(#{searchFromDt}, 'YYYY-MM-DD')
+					</when>
+					<otherwise>
+					    AND T.drafting_date <![CDATA[>=]]> to_date(#{searchFromDt}, 'YYYY-MM-DD')
+					</otherwise>
+				 </choose> 
+			</if>
+			<if test="searchToDt != null and searchToDt != ''">
+				<choose>
+					<when test="searchGubun == 'aproval_date'">
+						AND T.APROVAL_DATE <![CDATA[<=]]> to_date(#{searchToDt}, 'YYYY-MM-DD')
+					</when>
+					<otherwise>
+					    AND T.drafting_date <![CDATA[<=]]> to_date(#{searchToDt}, 'YYYY-MM-DD')
+					</otherwise>
+				 </choose> 
+			</if>
+	 </sql>
+
+	 <select id="selectMyRequestList" resultMap="approveMap">
+		<include refid="selectReqList"></include>
+		    and rowidx between (#{currentPageNo}*#{recordCountPerPage}+1-#{recordCountPerPage}) and (#{currentPageNo}*#{recordCountPerPage})
+		  order by idx desc
+	 </select>
+
+	 <select id="selectMyRequestListCount" resultType="egovMap">
+			SELECT
+			    c.code_id     aproval_state,
+			    c.code_nm     aproval_state_nm,
+			    nvl(m.cnt, 0) AS cnt
+			FROM
+			    tb_code c,
+			    (
+			        SELECT
+			            aproval_state,
+			            COUNT(1) cnt
+			        FROM
+			            (
+			            <include refid="selectReqList"></include>
+			            ) a
+			        GROUP BY
+			            a.aproval_state
+			    )       m
+			WHERE
+			        c.code_id = m.aproval_state (+)
+			    AND c.code_grp_id = 'APR_STAT'
+			    AND c.act_flg = 'Y'
+			ORDER BY
+			    c.code_id desc	 
+		
+	</select>
+
+	<select id="selectNextFkey" resultType="string">
+		select get_new_aproval_key() from dual
+	</select>
+
+	<insert id="insert">
+		INSERT INTO TB_APPROVAL_MST (
+			APROVAL_CODE
+            , ACT_REG_NO
+            , ACT_APROVAL_NO
+            , APROVAL_TYPE
+            , APROVAL_STATE
+            , APROVAL_SUBJECT
+            , USER_ID
+            , DRAFTING_DATE
+            , DRAFTING_COMMENT
+            , REF_BUS_CODE
+            , REF_BUS_TYPE
+            , REF_BUS_SUB_CODE
+		) VALUES (
+            #{aprovalCode}
+            , #{actRegNo}
+            , #{actAprovalNo}
+            , #{aprovalType}
+            , #{aprovalState}
+            , #{aprovalSubject}
+            , #{userId}
+            , sysdate
+            , #{draftingComment}
+            , #{refBusCode}
+            , #{refBusType}
+            , #{refBusSubCode}
+		)
+	</insert>
+
+	<update id="update">
+	<!-- UPDATE TB_REPORT_MST SET 
+			REP_NAME = #{repName} 
+			, REP_DEVISION_CODE = #{repDivisionCode} 
+			, REP_TYPE_CODE = #{repTypeCode} 
+			, REP_SECTOR_CODE = #{repSectorCode} 
+			, REP_PRODUCT_CLASS = #{repProductClass} 
+			, REP_LEADER_BELT_CODE = #{repLeaderBeltCode} 
+			, REP_ACTION_TYPE_CODE = #{repActionTypeCode} 
+			, REP_MBB_USE_RATE_CODE = #{repMbbUseRateCode}
+			, REP_USE_REF_DATE = #{repUseRefDate} 
+			, REP_STATUS_CODE = #{repStatusCode} 
+ 
+			, REP_KEYWORD = #{repKeyword} 
+			, REP_UPDATE_USER = #{repRegUser} 
+			, REP_UPDATE_DATE = sysdate
+			, REP_APPROVAL_CODE = #{repApprovalCode} 
+			, REP_USE_YN = #{repUseYn} 
+			, REP_MAIL_SEND_YN = #{repMailSendYn} 
+			, REP_MAIL_SEND_DATE = #{repMailSendDate} 
+			, REP_PLACE_CODE = #{repPlaceCode} 
+			, REP_LEADER_CODE = #{repLeaderCode} 
+			, REP_FILE_YN = #{repFileYn} 
+		WHERE
+		REP_CODE = #{repCode} -->
+	</update>
+	
+	<select id="select" resultMap="approveMap">
+		 select APROVAL_CODE
+	            , ACT_REG_NO
+	            , ACT_APROVAL_NO
+	            , APROVAL_TYPE
+	            , get_code_nm('APR_TYPE', APROVAL_TYPE) APROVAL_TYPE_NM
+	            , APROVAL_STATE
+	            , APROVAL_SUBJECT
+	            , USER_ID
+	            , DRAFTING_DATE
+	            , DRAFTING_COMMENT
+	            , REF_BUS_CODE
+	            , REF_BUS_TYPE
+	            , REF_BUS_SUB_CODE
+	     from tb_approval_mst
+	    where 
+	    <include refid="defCond2"></include>
+	</select>
+	
+	<delete id="delete">
+		DELETE FROM TB_APPROVAL_MST 
+		WHERE 
+		<include refid="defCond2"></include>
+	</delete> 
+	
+	<update id="updateStatus">
+		UPDATE TB_APPROVAL_MST
+		SET
+			APROVAL_STATE = #{aprovalState}
+		WHERE
+	        APROVAL_CODE = #{aprovalCode}
+	</update>	
+	
+	<update id="updateActNo">
+		UPDATE TB_APPROVAL_MST SET ACT_APROVAL_NO = #{actAprovalNo} WHERE APROVAL_CODE = #{aprovalCode}
+	</update>
+	
+</mapper>
+

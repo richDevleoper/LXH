@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ReportTeam">
+
+	<resultMap id="reportTeamMap" type="kr.freedi.dev.qreport.domain.ReportTeamVO">		
+		<result property="repTeamCode" column="REP_TEAM_CODE" />
+		<result property="repCode" column="REP_CODE" />
+		<result property="comNo" column="COM_NO" />
+		<result property="deptCode" column="DEPT_CODE" />
+		<result property="cirCode" column="CIR_CODE" /> 
+		<result property="deptName" column="DEPT_NAME" />		
+		<result property="comJobxCode" column="COM_JOBX_CODE" />		
+		<result property="comPositionCode" column="COM_POSITION_CODE" />	
+		<result property="beltCode" column="BELT_CODE" /> 		
+		<result property="repTeamMemName" column="REP_TEAM_MEM_NAME" />
+		<result property="repTeamMemEduCode" column="REP_TEAM_MEM_EDU_CODE" />	
+		<result property="repTeamMemRole" column="REP_TEAM_MEM_ROLE" />		
+		<result property="repTeamRegUser" column="REP_TEAM_REG_USER" />
+		<result property="repTeamRegDate" column="REP_TEAM_REG_DATE" />
+		<result property="repTeamUpdateUser" column="REP_TEAM_UPDATE_USER" />
+		<result property="repTeamUpdateDate" column="REP_TEAM_UPDATE_DATE" />
+		<result property="repTeamMemStatus" column="REP_TEAM_MEM_STATUS" />
+		
+		<result property="repTeamMemRoleNm" column="REP_TEAM_MEM_ROLE_NM" />
+		<result property="comJobxNm" 		column="COM_JOBX_NM" />
+		<result property="comPositionNm" 	column="COM_POSITION_NM" />
+		<result property="repTeamMemEduNm" 	column="REP_TEAM_MEM_EDU_NM" />
+		<result property="beltNm" 			column="BELT_NM" />
+		
+		<result property="cirMemCode" 		column="CIR_MEM_CODE" />
+	</resultMap>
+	
+	<sql id="defCond">
+		<where>
+			<trim prefixOverrides="AND|OR">
+				<if test="repTeamCode != null and repTeamCode != ''">
+					AND M.REP_TEAM_CODE = #{repCode}
+			  	</if>
+			  	<if test="repCode != null and repCode != ''">
+					AND M.REP_CODE = #{repCode}
+			  	</if>
+			  	<if test="cirCode != null and cirCode  != ''">
+					AND CIR_CODE = #{cirCode}
+			  	</if>
+			</trim>
+		</where>	
+	</sql> 
+		
+	<select id="selectFullList" resultMap="reportTeamMap">
+		SELECT
+			M.REP_TEAM_CODE
+			, M.REP_CODE
+			, M.COM_NO
+			, M.DEPT_CODE
+			, get_depart_nm(M.DEPT_CODE) dept_name
+			, M.CIR_CODE
+			, M.DEPT_NAME
+			, M.COM_JOBX_CODE
+			, M.COM_POSITION_CODE
+			, M.BELT_CODE
+			, REP_TEAM_MEM_NAME
+			, REP_TEAM_MEM_EDU_CODE
+			, REP_TEAM_MEM_ROLE
+			, REP_TEAM_REG_USER
+			, REP_TEAM_REG_DATE
+			, REP_TEAM_UPDATE_USER
+			, REP_TEAM_UPDATE_DATE
+			, REP_TEAM_MEM_STATUS
+			
+			, (case when R.REP_MENU_CODE='TEAM' and M.REP_TEAM_MEM_ROLE='2' then '분임조원' else CD_ROLE.CODE_NM end) AS REP_TEAM_MEM_ROLE_NM
+            , CD_JOB.CODE_NM AS COM_JOBX_NM
+            , CD_POS.CODE_NM AS COM_POSITION_NM
+            , '' as REP_TEAM_MEM_EDU_NM
+            , CD_BT.CODE_NM as BELT_NM
+		FROM TB_REPORT_TEAM M
+		     LEFT OUTER JOIN  TB_REPORT_MST R ON R.rep_code=m.rep_code
+			 LEFT OUTER JOIN  TB_USER_MST U ON U.COM_NO=M.COM_NO
+		     LEFT OUTER JOIN  TB_CODE CD_ROLE ON CD_ROLE.CODE_ID=M.REP_TEAM_MEM_ROLE AND CD_ROLE.CODE_GRP_ID='REP_ROLE'
+             LEFT OUTER JOIN  TB_CODE CD_JOB ON CD_JOB.CODE_ID=M.COM_JOBX_CODE AND CD_JOB.CODE_GRP_ID='JOBX'
+		     LEFT OUTER JOIN  TB_CODE CD_POS ON CD_POS.CODE_ID=M.COM_POSITION_CODE AND CD_POS.CODE_GRP_ID='POSITION'
+		     LEFT OUTER JOIN  TB_CODE CD_BT ON CD_BT.CODE_ID=M.BELT_CODE AND CD_BT.CODE_GRP_ID='LDRBELT'
+		     
+		<include refid="defCond"></include>
+		
+		ORDER BY REP_TEAM_MEM_ROLE ASC, REP_TEAM_REG_DATE ASC
+		
+	</select>
+	
+	
+		<select id="selectCircleFullList" resultMap="reportTeamMap">
+		SELECT
+			CIR_MEM_CODE
+			, CIR_CODE
+			, M.COM_NO
+			, DEPT_CODE
+			, GET_DEPART_NM(DEPT_CODE) DEPT_NAME
+			, COM_JOBX_CODE
+			, GET_CODE_NM('JOBX', COM_JOBX_CODE) COM_JOBX_NM
+			, COM_POSITION_CODE
+			, GET_CODE_NM('POSITION', COM_POSITION_CODE) COM_POSITION_NM
+			, BELT_CODE
+			, GET_CODE_NM('LDRBELT', BELT_CODE) BELT_NM
+			, CIR_MEM_NAME as REP_TEAM_MEM_NAME
+			, CIR_MEM_EDU_CODE as REP_TEAM_MEM_EDU_CODE
+			, CIR_MEM_ROLE as REP_TEAM_MEM_ROLE
+			, CASE WHEN CIR_MEM_ROLE='LEADER' THEN '조장' ELSE '조원' END AS REP_TEAM_MEM_ROLE_NM
+			, CIR_REG_USER as REP_TEAM_REG_USER
+			, CIR_REG_DATE as REP_TEAM_REG_DATE
+			, CIR_UPDATE_USER as REP_TEAM_UPDATE_USER
+			, CIR_UPDATE_DATE as REP_TEAM_UPDATE_DATE
+			, CIR_MEM_STATUS as REP_TEAM_MEM_STATUS
+		FROM TB_CIRCLE_DETAIL M
+			 LEFT OUTER JOIN  TB_USER_MST U ON U.COM_NO=M.COM_NO
+		     LEFT OUTER JOIN  TB_CODE CD_ROLE ON CD_ROLE.CODE_ID=M.CIR_MEM_ROLE AND CD_ROLE.CODE_GRP_ID='REP_ROLE'
+             --LEFT OUTER JOIN  TB_CODE CD_JOB ON CD_JOB.CODE_ID=M.COM_JOBX_CODE AND CD_JOB.CODE_GRP_ID='JOBX'
+		     --LEFT OUTER JOIN  TB_CODE CD_POS ON CD_POS.CODE_ID=M.COM_POSITION_CODE AND CD_POS.CODE_GRP_ID='POSITION'
+		     --LEFT OUTER JOIN  TB_CODE CD_BT ON CD_BT.CODE_ID=M.BELT_CODE AND CD_BT.CODE_GRP_ID='LDRBELT'
+		     
+		<include refid="defCond"></include>
+		
+		ORDER BY CIR_MEM_ROLE ASC, CIR_REG_DATE ASC
+		
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO tb_report_team 
+			(REP_TEAM_CODE
+			, REP_CODE
+			, COM_NO
+			, DEPT_CODE
+			, CIR_CODE
+			, DEPT_NAME
+			, COM_JOBX_CODE
+			, COM_POSITION_CODE
+			, BELT_CODE
+			, REP_TEAM_MEM_NAME
+			, REP_TEAM_MEM_EDU_CODE
+			, REP_TEAM_MEM_ROLE
+			, REP_TEAM_REG_USER
+			, REP_TEAM_REG_DATE
+			, REP_TEAM_MEM_STATUS) 
+		values 
+			(
+			#{repTeamCode}
+			,#{repCode}
+			,#{comNo}
+			,#{deptCode}
+			,#{cirCode}
+			,#{deptName}
+			,#{comJobxCode}
+			,#{comPositionCode}
+			,#{beltCode}
+			,#{repTeamMemName}
+			,#{repTeamMemEduCode}
+			,#{repTeamMemRole}
+			,#{repTeamRegUser}
+			,sysdate
+			,#{repTeamMemStatus}
+			)
+	</insert>
+	
+	<update id="update">
+		UPDATE TB_REPORT_TEAM 
+		   SET  REP_CODE = #{repCode}
+			    , COM_NO = #{comNo}
+			    , DEPT_CODE = #{deptCode}
+			    , CIR_CODE = #{cirCode}
+			    , DEPT_NAME = #{deptName}
+			    , COM_JOBX_CODE = #{comJobxCode}
+			    , COM_POSITION_CODE = #{comPositionCode}
+			    , BELT_CODE = #{beltCode}
+			    , REP_TEAM_MEM_NAME = #{repTeamMemName}
+			    , REP_TEAM_MEM_EDU_CODE = #{repTeamMemEduCode}
+			    , REP_TEAM_MEM_ROLE = #{repTeamMemRole}
+			    , REP_TEAM_UPDATE_USER = #{repTeamRegUser}
+			    , REP_TEAM_UPDATE_DATE = sysdate
+		  WHERE REP_TEAM_CODE = #{repTeamCode}
+	</update>
+	
+	<select id="selectListCount" resultType="int">
+		SELECT COUNT(*) FROM TB_REPORT_TEAM T 
+		<include refid="defCond"></include>
+	</select>
+	
+	<select id="selectNextFkey" resultType="int">
+		SELECT NVL(MAX(TO_NUMBER(REP_TEAM_CODE)), 0) + 1 REP_TEAM_CODE FROM TB_REPORT_TEAM
+	</select>
+	
+	<delete id="delete">
+		DELETE FROM TB_REPORT_TEAM M
+		<include refid="defCond"></include>
+	</delete>
+	
+	
+</mapper>
+

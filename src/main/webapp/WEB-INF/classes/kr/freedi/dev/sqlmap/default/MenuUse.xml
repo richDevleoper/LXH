@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="MenuUse">
+
+	<sql id="fullCond">
+		<where>
+			<trim prefixOverrides="AND|OR">
+				<if test="authId != null and authId != ''">
+					AND T.AUTH_ID = #{authId}	
+				</if>
+				<if test="menuKey != null and menuKey != ''">
+					AND T.MENU_KEY = #{menuKey}	
+				</if>
+				<if test="useTyp != null and useTyp != ''">
+					AND T.USE_TYP = #{useTyp}	
+				</if>
+				<if test="menuTyp != null and menuTyp != ''">
+					AND T.MENU_TYP = #{menuTyp}	
+				</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<select id="selectFullList" resultType="int">
+		SELECT
+			T.MENU_KEY
+		FROM TB_MENU_USE T
+		<include refid="fullCond"></include>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO TB_MENU_USE (
+			AUTH_ID
+			,MENU_KEY
+			,USE_TYP
+			,MENU_TYP
+		) VALUES (
+			#{authId}
+			,#{menuKey}
+			,#{useTyp}
+			,#{menuTyp}
+		)
+	</insert>
+
+	<delete id="deleteByAuthIdAndUseTypAndMenuTyp">
+		DELETE FROM TB_MENU_USE
+		WHERE AUTH_ID = #{authId}
+		AND USE_TYP = #{useTyp}
+		AND MENU_TYP = #{menuTyp}
+	</delete>
+	
+	<delete id="deleteByAuthId">
+		DELETE FROM TB_MENU_USE
+		WHERE AUTH_ID = #{authId}
+	</delete>
+	
+	<delete id="deleteByMenuKey">
+		DELETE FROM TB_MENU_USE
+		WHERE MENU_KEY = #{menuKey}
+	</delete>
+</mapper>
+

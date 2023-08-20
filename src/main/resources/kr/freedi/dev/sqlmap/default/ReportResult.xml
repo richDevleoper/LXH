@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ReportResult">
+
+	<resultMap id="reportResultMap" type="kr.freedi.dev.qreport.domain.ReportResultVO">		
+		
+		<result property="repResultCode" column="REP_RESULT_CODE" />
+		<result property="repCode" column="REP_CODE" />
+		<result property="repResultTypeCode" column="REP_RESULT_TYPE_CODE" />
+		<result property="repResultWithinYear" column="REP_RESULT_WITHIN_YEAR" />
+		<result property="repResultYear" column="REP_RESULT_YEAR" />
+		<result property="repResultCalLogic" column="REP_RESULT_CAL_LOGIC" /> 
+
+		<result property="repResultRegUser" column="REP_RESULT_REG_USER" />
+		<result property="repResultRegDate" column="REP_RESULT_REG_DATE" />
+		<result property="repResultUpdateUser" column="REP_RESULT_UPDATE_USER" />
+		<result property="repResultUpdateDate" column="REP_RESULT_UPDATE_DATE" />
+		
+	</resultMap>
+	
+	<sql id="defCond">
+		
+		<where>
+			<trim prefixOverrides="AND|OR">
+				<if test="repResultCode != null and repResultCode != ''">
+					AND REP_RESULT_CODE = #{repResultCode}
+			  	</if>
+			  	<if test="repCode != null and repCode != ''">
+					AND REP_CODE = #{repCode}
+			  	</if>
+			</trim>
+		</where>
+		
+	</sql> 
+	
+
+	
+	<select id="selectFullList" resultMap="reportResultMap">
+		SELECT
+			REP_RESULT_CODE
+			, REP_CODE
+			, REP_RESULT_TYPE_CODE
+			, CD_RTY.CODE_NM AS REP_RESULT_TYPE
+			, REP_RESULT_WITHIN_YEAR
+			, REP_RESULT_YEAR
+			, REP_RESULT_CAL_LOGIC
+			
+			, REP_RESULT_REG_USER
+			, REP_RESULT_REG_DATE
+			, REP_RESULT_UPDATE_USER
+			, REP_RESULT_UPDATE_DATE
+		FROM TB_REPORT_RESULT M
+		     LEFT OUTER JOIN  TB_CODE CD_RTY ON CD_RTY.CODE_ID=M.REP_RESULT_TYPE_CODE AND CD_RTY.CODE_GRP_ID='RESULTTY'
+		     
+		<include refid="defCond"></include>
+		
+		ORDER BY REP_RESULT_REG_DATE ASC
+		
+	</select>
+	
+
+	
+	<select id="selectListCount" resultType="int">
+		SELECT COUNT(*) FROM TB_REPORT_RESULT T 
+		<include refid="defCond"></include>
+	</select>
+	
+	<select id="selectNextFkey" resultType="int">
+		SELECT NVL(MAX(TO_NUMBER(rep_result_code)), 0) + 1 FROM TB_REPORT_RESULT
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO TB_REPORT_RESULT (
+			REP_RESULT_CODE
+			, REP_CODE
+			, REP_RESULT_TYPE_CODE
+			, REP_RESULT_WITHIN_YEAR
+			, REP_RESULT_YEAR
+			, REP_RESULT_CAL_LOGIC
+			, REP_RESULT_REG_USER
+			, REP_RESULT_REG_DATE
+		) VALUES (
+			#{repResultCode}
+			, #{repCode}
+			, #{repResultTypeCode}
+			, #{repResultWithinYear}
+			, #{repResultYear}
+			, #{repResultCalLogic}
+			, #{repResultRegUser}
+			, sysdate
+		)
+	</insert>
+	
+	<update id="update">
+	
+		UPDATE TB_REPORT_RESULT SET 
+			   REP_CODE = #{repCode}
+		        , REP_RESULT_TYPE_CODE=#{repResultTypeCode}
+		        , REP_RESULT_WITHIN_YEAR=#{repResultWithinYear}
+		        , REP_RESULT_YEAR=#{repResultYear}
+		        , REP_RESULT_CAL_LOGIC=#{repResultCalLogic}
+		        , REP_RESULT_REG_USER=#{repResultRegUser}
+		        , REP_RESULT_REG_DATE=#{repResultRegDate}
+		        , REP_RESULT_UPDATE_USER=#{repResultUpdateUser}
+		        , REP_RESULT_UPDATE_DATE=#{repResultUpdateDate}
+		WHERE REP_RESULT_CODE = #{repResultCode}
+	</update>
+	
+	<select id="select" resultMap="reportResultMap">
+		SELECT REP_CODE
+			, REP_RESULT_TYPE_CODE
+			, REP_RESULT_WITHIN_YEAR
+			, REP_RESULT_YEAR
+			, REP_RESULT_CAL_LOGIC
+			, REP_RESULT_REG_USER
+			, REP_RESULT_REG_DATE
+			, REP_RESULT_UPDATE_USER
+			, REP_RESULT_UPDATE_DATE
+		FROM TB_REPORT_RESULT T  
+		WHERE T.REP_RESULT_CODE = #{repResultCode}
+	</select>
+	
+	<delete id="delete">
+		DELETE FROM TB_REPORT_RESULT
+		<include refid="defCond"></include>
+	</delete>
+	
+</mapper>
+

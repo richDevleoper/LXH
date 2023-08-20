@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ReportDetail">
+
+	<resultMap id="reportDetailMap" type="kr.freedi.dev.qreport.domain.ReportDetailVO">		
+		
+		<result property="repSeq" column="REP_SEQ" />
+		<result property="repTeamCode" column="REP_TEAM_CODE" />
+		<result property="repCode" column="REP_CODE" />
+		<result property="repMenuCode" column="REP_MENU_CODE" />
+		<result property="repDivisionCode" column="REP_DEVISION_CODE" />
+		<result property="repStepCode" column="REP_STEP_CODE" />
+		<result property="repPlanStartDate" column="REP_PLAN_START_DATE" />
+		<result property="repPlanEndDate" column="REP_PLAN_END_DATE" />
+		<result property="repActStartDate" column="REP_ACT_START_DATE" />
+		<result property="repActEndDate" column="REP_ACT_END_DATE" />
+		<result property="repPropelBg" column="REP_PROPEL_BG" />
+		<result property="repActivity" column="REP_ACTIVITY" />
+		<result property="repFinishSummary" column="REP_FINISH_SUMMARY" />
+		<result property="repCtqCtp" column="REP_CTQ_CTP" />
+		<result property="repKpi" column="REP_KPI" />
+		<result property="repExpectationResult" column="REP_EXPECTATION_RESULT" />
+		<result property="repApprovalMemCode" column="REP_APPROVAL_MEM_CODE" />
+		<result property="repApprovalMemName" column="REP_APPROVAL_MEM_NAME" />
+		<result property="repApprovalMemDeptName" column="REP_APPROVAL_MEM_DEPT_NAME" />
+		<result property="repApprovalMemComJobx" column="REP_APPROVAL_MEM_COM_JOBX" />
+		<result property="repApprovalMemComPosition" column="REP_APPROVAL_MEM_COM_POSITION" />
+		<result property="repApprovalMemComCertBelt" column="REP_APPROVAL_MEM_COM_CERT_BELT" />
+		
+		<result property="repApprovalMemRole" column="REP_APPROVAL_MEM_ROLE" />
+		<result property="repApprovalMemRoleName" column="REP_APPROVAL_MEM_ROLE_NAME" />
+		
+		<result property="repStatus" column="REP_STATUS" />
+		<result property="repRegUser" column="REP_REG_USER" />
+		<result property="repRegDate" column="REP_REG_DATE" />
+		<result property="repUpdateUser" column="REP_UPDATE_USER" />
+		<result property="repUpdateDate" column="REP_UPDATE_DATE" />
+		
+	</resultMap>
+	
+	<sql id="defCond">
+		
+			
+				<if test="repSeq != null and repSeq != ''">
+					AND REP_SEQ = #{repSeq}
+			  	</if>
+			  	<if test="repCode != null and repCode != ''">
+					AND REP_CODE = #{repCode}
+			  	</if>
+			
+		
+	</sql> 
+
+	<select id="selectFullList" resultMap="reportDetailMap">
+		SELECT
+		        t.rep_seq,
+			    t.rep_team_code,
+			    t.rep_code,
+			    t.rep_menu_code,
+			    t.rep_devision_code,
+			    t.rep_step_code,
+			    t.rep_plan_start_date,
+			    t.rep_plan_end_date,
+			    t.rep_act_start_date,
+			    t.rep_act_end_date,
+			    t.rep_propel_bg,
+			    t.rep_activity,
+			    t.rep_finish_summary,
+			    t.rep_ctq_ctp,
+			    t.rep_kpi,
+			    t.rep_expectation_result,
+			    t.rep_approval_mem_code,
+			    u.user_name     AS REP_APPROVAL_MEM_NAME,
+			    t.rep_approval_mem_role,
+			    cd_role.code_nm AS REP_APPROVAL_MEM_ROLE_NAME,
+			    u.dept_name REP_APPROVAL_MEM_DEPT_NAME,
+			    u.com_jobx_nm as REP_APPROVAL_MEM_COM_JOBX,
+			    u.com_position_nm as REP_APPROVAL_MEM_COM_POSITION,
+			    u.com_cert_belt_nm as REP_APPROVAL_MEM_COM_CERT_BELT,
+			    u.dept_name as REP_APPROVAL_MEM_DEPT_NAME,
+			    t.rep_status,
+			    t.rep_reg_user,
+			    t.rep_reg_date,
+			    t.rep_update_user,
+			    t.rep_update_date
+		FROM
+		    tb_report_detail t,
+		    v_user_mst       u,
+		    tb_code          cd_role
+		WHERE t.rep_approval_mem_code = u.com_no (+)
+		  AND t.rep_approval_mem_role = cd_role.code_id (+)
+		  AND cd_role.code_grp_id(+) = 'REP_ROLE'
+		<include refid="defCond"></include>
+		
+		ORDER BY t.rep_step_code 
+		
+	</select>
+	
+	<select id="selectListCount" resultType="int">
+		SELECT COUNT(*) FROM tb_report_detail  T where 1=1 
+		<include refid="defCond"></include>
+	</select>
+	
+	<select id="selectNextFkey" resultType="int">
+		SELECT MAX(TO_NUMBER(NVL(REP_SEQ, 0))) + 1 tb_report_detail FROM tb_report_detail
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO tb_report_detail 
+		 (
+			REP_SEQ
+			, REP_TEAM_CODE
+			, REP_CODE
+			, REP_MENU_CODE
+			, REP_DEVISION_CODE
+			, REP_STEP_CODE
+			, REP_PLAN_START_DATE
+			, REP_PLAN_END_DATE
+			, REP_ACT_START_DATE
+			, REP_ACT_END_DATE
+			, REP_PROPEL_BG
+			, REP_ACTIVITY
+			, REP_FINISH_SUMMARY
+			, REP_CTQ_CTP
+			, REP_KPI
+			, REP_EXPECTATION_RESULT
+			, REP_APPROVAL_MEM_CODE
+			, REP_APPROVAL_MEM_ROLE
+			, REP_STATUS
+			, REP_REG_USER
+			, REP_REG_DATE
+		) VALUES (
+			#{repSeq}
+			, #{repTeamCode}
+			, #{repCode}
+			, #{repMenuCode}
+			, #{repDivisionCode}
+			, #{repStepCode}
+			, #{repPlanStartDate}
+			, #{repPlanEndDate}
+			, #{repActStartDate}
+			, #{repActEndDate}
+			, #{repPropelBg}
+			, #{repActivity}
+			, #{repFinishSummary}
+			, #{repCtqCtp}
+			, #{repKpi}
+			, #{repExpectationResult}
+			, #{repApprovalMemCode}
+			, #{repApprovalMemRole}
+			, #{repStatus}
+			, #{repRegUser}
+			, SYSDATE
+			
+		)
+	</insert>
+	
+	<update id="update">
+	
+		UPDATE TB_REPORT_DETAIL 
+		   SET REP_TEAM_CODE = #{repTeamCode}
+				, REP_CODE = #{repCode}
+				, REP_MENU_CODE = #{repMenuCode}
+				, REP_DEVISION_CODE = #{repDivisionCode}
+				, REP_STEP_CODE = #{repStepCode}
+				, REP_PLAN_START_DATE = #{repPlanStartDate}
+				, REP_PLAN_END_DATE = #{repPlanEndDate}
+				, REP_ACT_START_DATE = #{repActStartDate}
+				, REP_ACT_END_DATE = #{repActEndDate}
+				, REP_PROPEL_BG = #{repPropelBg}
+				, REP_ACTIVITY = #{repActivity}
+				, REP_FINISH_SUMMARY = #{repFinishSummary}
+				, REP_CTQ_CTP = #{repCtqCtp}
+				, REP_KPI = #{repKpi}
+				, REP_EXPECTATION_RESULT = #{repExpectationResult}
+				, REP_APPROVAL_MEM_CODE = #{repApprovalMemCode}
+				, REP_APPROVAL_MEM_ROLE = #{repApprovalMemRole}
+				, REP_STATUS = #{repStatus}
+				, REP_UPDATE_USER = #{repUpdateUser}
+				, REP_UPDATE_DATE = SYSDATE
+		WHERE REP_SEQ = #{repSeq}
+	</update>
+	
+	<update id="updateApprovalMemCode">
+		
+		UPDATE TB_REPORT_DETAIL
+		   SET rep_approval_mem_code = #{repApprovalMemCode}
+		       , REP_UPDATE_USER = #{repUpdateUser}
+			   , REP_UPDATE_DATE = SYSDATE
+		 WHERE REP_CODE=#{repCode}
+		   AND REP_STEP_CODE=#{repStepCode}
+	</update>
+	
+	<update id="updateStep">
+	UPDATE TB_REPORT_DETAIL 
+		   SET  REP_PLAN_START_DATE = #{repPlanStartDate}
+				, REP_PLAN_END_DATE = #{repPlanEndDate}
+				, REP_ACT_START_DATE = #{repActStartDate}
+				, REP_ACT_END_DATE = #{repActEndDate}
+				, REP_PROPEL_BG = #{repPropelBg}
+				, REP_ACTIVITY = #{repActivity}
+				, REP_FINISH_SUMMARY = #{repFinishSummary}
+				, REP_CTQ_CTP = #{repCtqCtp}
+				, REP_KPI = #{repKpi}
+				, REP_EXPECTATION_RESULT = #{repExpectationResult}
+				, REP_STATUS = #{repStatus}
+				, REP_UPDATE_USER = #{repUpdateUser}
+				, REP_UPDATE_DATE = SYSDATE
+		WHERE REP_SEQ = #{repSeq}
+	</update> 
+	
+	<update id="updateStepStatus">
+	UPDATE TB_REPORT_DETAIL 
+		   SET REP_STATUS = #{repStatus}
+				, REP_UPDATE_USER = #{repUpdateUser}
+				, REP_UPDATE_DATE = SYSDATE
+		WHERE REP_CODE = #{repCode} 
+		  and REP_STEP_CODE = #{repStepCode}
+	</update>
+	
+	<select id="select" resultMap="reportDetailMap">
+		
+	</select>
+	
+	<delete id="delete">
+		DELETE FROM TB_REPORT_DETAIL
+		<where>
+			<trim prefixOverrides="AND|OR">
+				<include refid="defCond"></include>
+			</trim>
+		</where>
+	</delete>
+	
+</mapper>
+

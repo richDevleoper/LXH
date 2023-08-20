@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="EngStat">
+
+	<insert id="insert">
+		<selectKey keyProperty="statKey" resultType="int"  order="BEFORE">
+			SELECT NVL(MAX(STAT_KEY), 0) + 1 statKey FROM TB_ENG_STAT
+		</selectKey>
+		INSERT INTO TB_ENG_STAT (
+			STAT_KEY
+			,YEAR
+			,MONTH
+			,DAY
+			,HOUR
+			,MINUTE
+			,SECOND
+			,STAT_TYP
+			,SESSION_ID
+			,URL
+			,LOCALE
+			,LANG
+			,CNTRY
+			,DSPLY_LANG
+			,DSPLY_CNTRY
+			,IP
+			,REFERER
+			,USER_AGENT
+			,CORP_ID
+		) VALUES (
+			#{statKey}
+			,#{year}
+			,#{month}
+			,#{day}
+			,#{hour}
+			,#{minute}
+			,#{second}
+			,#{statTyp}
+			,#{sessionId}
+			,#{url}
+			,#{locale}
+			,#{lang}
+			,#{cntry}
+			,#{dsplyLang}
+			,#{dsplyCntry}
+			,#{ip}
+			,#{referer}
+			,#{userAgent}
+			,#{corpId}
+		)
+	</insert>
+
+	<select id="statCorp" resultType="egovMap">
+		SELECT 
+			T2.CORP_NM
+			,T2.CORP_ID
+			,T2.STAT_DATA
+		FROM (
+			SELECT
+				U.CORP_NM
+				,T.CORP_ID
+				,T.CNT AS STAT_DATA
+			FROM (
+				SELECT
+					COUNT(*) CNT
+					,CORP_ID
+				FROM TB_ENG_STAT
+				WHERE STAT_TYP = #{statTyp}
+				<if test="searchStartOperYear != null and searchStartOperYear != ''">
+					AND YEAR <![CDATA[>=]]> #{searchStartOperYear}
+					<if test="searchStartOperMonth != null and searchStartOperMonth != ''">
+						AND MONTH <![CDATA[>=]]> #{searchStartOperMonth}
+						<if test="searchStartOperDate != null and searchStartOperDate != ''">
+							AND DAY <![CDATA[>=]]> #{searchStartOperDate}
+						</if>
+					</if>
+				</if>
+				<if test="searchEndOperYear != null and searchEndOperYear != ''">
+					AND YEAR <![CDATA[<=]]> #{searchEndOperYear}
+					<if test="searchEndOperMonth != null and searchEndOperMonth != ''">
+						AND MONTH <![CDATA[<=]]> #{searchEndOperMonth}
+						<if test="searchEndOperDate != null and searchEndOperDate != ''">
+							AND DAY <![CDATA[<=]]> #{searchEndOperDate}
+						</if>
+					</if>
+				</if>
+				GROUP BY CORP_ID
+			) T, TB_CORP_USER U
+			WHERE T.CORP_ID = U.CORP_ID
+			ORDER BY STAT_DATA DESC
+		) T2
+		<if test="searchStatCnt != null and searchStatCnt > 0">
+			where rownum <![CDATA[<=]]> #{searchStatCnt}
+		</if>
+	</select>
+
+
+	<select id="selectCountAll" resultType="int">
+		SELECT	COUNT(*)
+		FROM	TB_ENG_STAT
+		WHERE	STAT_TYP = #{statTyp}
+		AND CORP_ID = #{corpId}
+	</select>
+
+	<select id="selectCountByY" resultType="int">
+		SELECT COUNT(*)
+		FROM TB_ENG_STAT
+		WHERE YEAR = #{year}
+		AND	STAT_TYP = #{statTyp}
+		AND CORP_ID = #{corpId}
+	</select>
+	
+	<select id="selectCountByYM" resultType="int">
+		SELECT COUNT(*)
+		FROM TB_ENG_STAT
+		WHERE YEAR = #{year}
+		AND	MONTH = #{month}
+		AND	STAT_TYP = #{statTyp}
+		AND CORP_ID = #{corpId}
+	</select>
+	
+	<select id="selectCountByYMD" resultType="int">
+		SELECT COUNT(*)
+		FROM TB_ENG_STAT
+		WHERE YEAR = #{year}
+		AND	MONTH = #{month}
+		AND	DAY = #{date}
+		AND	STAT_TYP = #{statTyp}
+		AND CORP_ID = #{corpId}
+	</select>
+
+</mapper>
+

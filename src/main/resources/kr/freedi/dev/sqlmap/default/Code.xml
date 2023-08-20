@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Code">
+
+	<sql id="fullCond">
+		<where>
+			<trim prefixOverrides="AND|OR">
+				<if test="codeGrpId != null and codeGrpId != ''">
+					AND T.CODE_GRP_ID = #{codeGrpId}
+				</if>	
+				<if test="actFlg != null and actFlg != ''">
+					AND T.ACT_FLG = #{actFlg}	
+				</if>
+				<if test="codeGrpIdList != null and codeGrpIdList.length>0">
+					AND T.CODE_GRP_ID in (
+			        <foreach collection="codeGrpIdList" item="item" index="index" separator=",">
+			            '${item}'
+			        </foreach>
+		        	) 
+				</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<select id="selectFullList" resultType="egovMap">
+		SELECT
+			T.CODE_GRP_ID
+			,T.CODE_ID
+			,T.CODE_NM
+			,T.ATTR1
+			,T.ATTR2
+			,T.ATTR3
+			,T.VIEW_ORD
+			,T.ACT_FLG
+			,T.FRST_OPER_ID
+			,T.FRST_OPER_DT
+			,T.LAST_OPER_ID
+			,T.LAST_OPER_DT
+		FROM TB_CODE T
+		<include refid="fullCond"></include>
+		ORDER BY T.CODE_GRP_ID, T.VIEW_ORD ASC, T.CODE_ID ASC, T.CODE_NM ASC
+	</select>
+	
+	<select id="select" resultType="kr.freedi.dev.code.domain.CodeVO">
+		SELECT 
+			T.CODE_GRP_ID codeGrpId
+			,T.CODE_ID codeId
+			,T.CODE_NM codeNm
+			,T.ATTR1 attr1
+			,T.ATTR2 attr2
+			,T.ATTR3 attr3
+			,T.VIEW_ORD viewOrd
+			,T.ACT_FLG actFlg
+			,T.FRST_OPER_ID frstOperId
+			,T.FRST_OPER_DT frstOperDt
+			,T.LAST_OPER_ID lastOperId
+			,T.LAST_OPER_DT lastOperDt
+		FROM TB_CODE T 
+		WHERE T.CODE_GRP_ID = #{codeGrpId} 
+		AND T.CODE_ID = #{codeId}
+	</select>
+	
+	<select id="selectRuleNo" resultType="java.lang.String">
+		SELECT 
+			CASE WHEN count(*) > 0 THEN
+				max(ROLE_NO) 
+			ELSE 
+				'0'
+			END 
+		FROM 
+			TB_ROLE_USER
+		WHERE 
+			COM_NO = #{comNo}
+	</select>
+
+	<insert id="insert">
+		INSERT INTO TB_CODE (
+			CODE_GRP_ID
+			,CODE_ID
+			,CODE_NM
+			,ATTR1
+			,ATTR2
+			,ATTR3
+			,VIEW_ORD
+			,ACT_FLG
+			,FRST_OPER_ID
+			,FRST_OPER_DT
+			,LAST_OPER_ID
+			,LAST_OPER_DT
+		) VALUES (
+			#{codeGrpId}
+			,#{codeId}
+			,#{codeNm}
+			,#{attr1}
+			,#{attr2}
+			,#{attr3}
+			,#{viewOrd}
+			,#{actFlg}
+			,#{frstOperId}
+			,SYSDATE
+			,NULL
+			,NULL
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE TB_CODE	
+		SET 
+			CODE_NM = #{codeNm}
+			,ATTR1 = #{attr1}
+			,ATTR2 = #{attr2}
+			,ATTR3 = #{attr3}
+			,VIEW_ORD = #{viewOrd}
+			,ACT_FLG = #{actFlg}
+			,LAST_OPER_ID = #{lastOperId}
+			,LAST_OPER_DT = SYSDATE
+		WHERE CODE_GRP_ID = #{codeGrpId} 
+		AND CODE_ID = #{codeId}
+	</update>
+
+	<delete id="delete">
+		DELETE FROM TB_CODE
+		WHERE CODE_GRP_ID = #{codeGrpId} 
+		AND CODE_ID = #{codeId}
+	</delete>
+	
+	<delete id="deleteByCodeGrpId">
+		DELETE FROM TB_CODE	WHERE CODE_GRP_ID = #{codeGrpId}
+	</delete>
+</mapper>
+
