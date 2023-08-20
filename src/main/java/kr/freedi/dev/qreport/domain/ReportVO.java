@@ -21,6 +21,7 @@ public class ReportVO {
 	private String repMbbUseRateCode;
 	private String repUseRefDate;
 	private String repStatusCode;
+	private String repSeq;
 //	private Date repSixMeasureDate;
 //	private Date repSixExploreDate;
 //	private Date repSixDevelopDate;
@@ -517,26 +518,35 @@ public class ReportVO {
 	}
 	
 
+	public String getRepSeq() {
+		return repSeq;
+	}
+
+	public void setRepSeq(String repSeq) {
+		this.repSeq = repSeq;
+	}
+
 	@Override
 	public String toString() {
 		return "ReportVO [repCode=" + repCode + ", repName=" + repName + ", repMenuCode=" + repMenuCode
 				+ ", repDivisionCode=" + repDivisionCode + ", repTypeCode=" + repTypeCode + ", repSectorCode="
 				+ repSectorCode + ", repProductClass=" + repProductClass + ", repLeaderBeltCode=" + repLeaderBeltCode
 				+ ", repActionTypeCode=" + repActionTypeCode + ", repMbbUseRateCode=" + repMbbUseRateCode
-				+ ", repUseRefDate=" + repUseRefDate + ", repStatusCode=" + repStatusCode + ", repStartDate="
-				+ repStartDate + ", repFinishDate=" + repFinishDate + ", repKeyword=" + repKeyword + ", repRegUser="
-				+ repRegUser + ", repRegDate=" + repRegDate + ", repUpdateUser=" + repUpdateUser + ", repUpdateDate="
-				+ repUpdateDate + ", repApprovalCode=" + repApprovalCode + ", repUseYn=" + repUseYn + ", repMailSendYn="
-				+ repMailSendYn + ", repMailSendDate=" + repMailSendDate + ", repPlaceCode=" + repPlaceCode
-				+ ", repLeaderCode=" + repLeaderCode + ", repFileYn=" + repFileYn + ", mode=" + mode + ", idx=" + idx
-				+ ", repDivision=" + repDivision + ", repType=" + repType + ", repStatus=" + repStatus + ", repPlace="
-				+ repPlace + ", repSector=" + repSector + ", repLeaderBelt=" + repLeaderBelt + ", repMbbUseRate="
-				+ repMbbUseRate + ", repActionType=" + repActionType + ", repDetailList=" + repDetailList
-				+ ", repCurrStepCode=" + repCurrStepCode + ", repTeamMemberList=" + repTeamMemberList
+				+ ", repUseRefDate=" + repUseRefDate + ", repStatusCode=" + repStatusCode + ", repSeq=" + repSeq
+				+ ", repStartDate=" + repStartDate + ", repFinishDate=" + repFinishDate + ", repKeyword=" + repKeyword
+				+ ", repRegUser=" + repRegUser + ", repRegDate=" + repRegDate + ", repUpdateUser=" + repUpdateUser
+				+ ", repUpdateDate=" + repUpdateDate + ", repApprovalCode=" + repApprovalCode + ", repUseYn=" + repUseYn
+				+ ", repMailSendYn=" + repMailSendYn + ", repMailSendDate=" + repMailSendDate + ", repPlaceCode="
+				+ repPlaceCode + ", repLeaderCode=" + repLeaderCode + ", repFileYn=" + repFileYn + ", mode=" + mode
+				+ ", idx=" + idx + ", repDivision=" + repDivision + ", repType=" + repType + ", repStatus=" + repStatus
+				+ ", repPlace=" + repPlace + ", repSector=" + repSector + ", repLeaderBelt=" + repLeaderBelt
+				+ ", repMbbUseRate=" + repMbbUseRate + ", repActionType=" + repActionType + ", repDetailList="
+				+ repDetailList + ", repCurrStepCode=" + repCurrStepCode + ", repTeamMemberList=" + repTeamMemberList
 				+ ", repResultList=" + repResultList + ", repIndicatorList=" + repIndicatorList + ", repFileList="
 				+ repFileList + ", fileList=" + fileList + ", repTeamLeaderName=" + repTeamLeaderName
 				+ ", repTeamMemberName=" + repTeamMemberName + ", repTeamProcessOwnerName=" + repTeamProcessOwnerName
-				+ ", repTeamChapionName=" + repTeamChapionName + ", repLeaderName=" + repLeaderName + "]";
+				+ ", repTeamChapionName=" + repTeamChapionName + ", repLeaderName=" + repLeaderName
+				+ ", repProductClassName=" + repProductClassName + ", repCurrApproveState=" + repCurrApproveState + "]";
 	}
 	
 }

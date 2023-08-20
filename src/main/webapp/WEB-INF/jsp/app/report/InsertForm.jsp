@@ -194,7 +194,7 @@
 									<tr>
 										<th style="height: 20px;">분임조</th>
 										<td>${circleVO.deptName} <input type="hidden" name="repCirCode"></td>
-										<th>분임조장</th>
+										<th>분임조장ㅋㅋ</th>
 										<td>${circleVO.cirLeaderName}</td>
 									</tr>
 								</c:otherwise>
@@ -1067,7 +1067,7 @@ function onchange_resultType(obj){
 	let cdRepType2 = [];
 	let cdRepType3 = [];
 	let cdBusGrp = [];
-	
+	let noneVal = [{key:1,value:'해당없음'}];
 	let codes = [
 		<c:forEach var="item" items="${allCodes}">{index:"${item.codeGrpId}",key:"${item.codeId}",value:"${item.codeNm}"},
 		</c:forEach>
@@ -1117,6 +1117,7 @@ function onchange_resultType(obj){
 		//onchange_ddlRepLeaderBeltCode();
 		
 		setDropDown("repActionTypeCode", cdActionType, true);//활동분야
+		
 		$("#repActionTypeCode").val("${reportVO.repActionTypeCode}")
 		
 		setDropDown("ddlRepMbbUseRateCode", cdMbbUseRate, false);//MBB활용율
@@ -1466,6 +1467,7 @@ function onchange_resultType(obj){
 	}
 
 	function onchange_ddlRepSectorCode(e){
+		
 		// 부문 선택시 해당하는 제품군만 리스트에 보여준다.
 		let sectorCode = $("#repSectorCode").val();		//부문
 		let cdBusGrpFiltered = cdBusGrp.filter(function(code){
@@ -1485,6 +1487,16 @@ function onchange_resultType(obj){
 			$("label[for=repProductClass]").parent().find("span").show();
 			$("#repProductClass").addClass("validate[required]");
 		}
+		
+		if(sectorCode === '11' || sectorCode === '12' || sectorCode === '13'){
+			setDropDown("repActionTypeCode", [], true, "(해당없음)");
+		}else{
+			setDropDown("repActionTypeCode", cdListSector, true);
+		}
+		
+		//생산기술(제조혁신) - 11
+		//환경안전 - 12
+		//기타 - 13
 	}
 	
 	function onchange_ddlRepTypeCode(e){

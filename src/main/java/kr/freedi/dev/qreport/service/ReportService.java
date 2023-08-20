@@ -151,8 +151,9 @@ public class ReportService {
 			vo.setRepApprovalMemCode(apprMemCode);
 			vo.setRepApprovalMemRole(apprMemRoleCode);
 			
-			if(vo.getRepPlanStartDate()!=null || vo.getRepActStartDate()!=null)
+			if(vo.getRepPlanStartDate()!=null || vo.getRepActStartDate()!=null) {
 				reportDetailService.insert(vo);
+			}
 		}
 		
 		// 3. 성과 tb_report_result 저장
@@ -264,10 +265,12 @@ public class ReportService {
 		// 각 항목 키가 있으면 저장, 없으면 update
 		// 서비스에 해당 기능 만들어서 vo 던지기.
 		
-		
+		List<ReportDetailVO> returnVO = dao.selectList("ReportDetail.selectFullList", reportVO);
+		returnVO.get(0).getRepSeq();
 		dao.update("Report.update", reportVO);
-		
 		for (ReportDetailVO vo : reportVO.getRepDetailList()) {
+			vo.setRepSeq(returnVO.get(0).getRepSeq());
+			vo.setRepCode(reportVO.getRepCode());
 			reportDetailService.save(vo);
 		}
 		
@@ -565,15 +568,18 @@ public class ReportService {
 		 * 변경 체크 대상은 과제정보에 국한함. (확인. 천진석 책임)
 		 * ****/
 		
-		if(originVO.getRepProductClass()==null)
+		if(originVO.getRepProductClass()==null) {
 			originVO.setRepProductClass("");
-		
-		if(originVO.getRepLeaderBeltCode()==null)
+		}
+		log.debug("#########compareReportBaseInfo11111111111######");
+		if(originVO.getRepLeaderBeltCode()==null) {
 			originVO.setRepLeaderBeltCode("");
-		
-		if(originVO.getRepActionTypeCode()==null)
+		}
+		log.debug("#########compareReportBaseInfo22222222222######");
+		if(originVO.getRepActionTypeCode()==null) {
 			originVO.setRepActionTypeCode("");
-		 
+		}
+		log.debug("#########compareReportBaseInfo33333333333######"); 
 		if(		
 			originVO.getRepName().equals(newVO.getRepName())
 			&& originVO.getRepDivisionCode().equals(newVO.getRepDivisionCode())
@@ -581,8 +587,43 @@ public class ReportService {
 			&& originVO.getRepSectorCode().equals(newVO.getRepSectorCode())
 			&& originVO.getRepProductClass().equals(newVO.getRepProductClass())	
 			&& originVO.getRepKeyword().equals(newVO.getRepKeyword())   ) {
-			
+			log.debug("#########compareReportBaseInfo44444444######");
+			log.debug("##originVO.getRepMenuCode()##"+originVO.getRepMenuCode());
 			if(originVO.getRepMenuCode().equals("REPORT")) {
+				log.debug("originVO.getRepLeaderBeltCode() : " + originVO.getRepLeaderBeltCode());
+				log.debug("newVO.getRepLeaderBeltCode() : " + newVO.getRepLeaderBeltCode());
+				log.debug("originVO.getRepActionTypeCode() : " + originVO.getRepActionTypeCode());
+				log.debug("newVO.getRepActionTypeCode() : " + newVO.getRepActionTypeCode());
+				log.debug("originVO.getRepMbbUseRateCode() : " + originVO.getRepMbbUseRateCode());
+				log.debug("newVO.getRepMbbUseRateCode() : " + newVO.getRepMbbUseRateCode());
+				log.debug("originVO.getRepUseRefDate() : " + originVO.getRepUseRefDate());
+				log.debug("newVO.getRepUseRefDate() : " + newVO.getRepUseRefDate());
+				
+				if(originVO.getRepLeaderBeltCode() == null) {
+					originVO.setRepLeaderBeltCode("NULLVALUE");
+				}
+				if(newVO.getRepLeaderBeltCode() == null) {
+					newVO.setRepLeaderBeltCode("NULLVALUE");
+				}
+				if(originVO.getRepActionTypeCode() == null) {
+					originVO.setRepActionTypeCode("NULLVALUE");
+				}
+				if(newVO.getRepActionTypeCode() == null) {
+					newVO.setRepActionTypeCode("NULLVALUE");
+				}
+				if(originVO.getRepMbbUseRateCode() == null) {
+					originVO.setRepMbbUseRateCode("NULLVALUE");
+				}
+				if(newVO.getRepMbbUseRateCode() == null) {
+					newVO.setRepMbbUseRateCode("NULLVALUE");
+				}
+				if(originVO.getRepUseRefDate() == null) {
+					originVO.setRepUseRefDate("NULLVALUE");
+				}
+				if(newVO.getRepUseRefDate() == null) {
+					newVO.setRepUseRefDate("NULLVALUE");
+				}
+				
 				if( originVO.getRepLeaderBeltCode().equals(newVO.getRepLeaderBeltCode())
 					&& originVO.getRepActionTypeCode().equals(newVO.getRepActionTypeCode())
 					&& originVO.getRepMbbUseRateCode().equals(newVO.getRepMbbUseRateCode())
