@@ -162,14 +162,13 @@ public class SendMailUtil {
 	      msg.addHeader("format", "flowed");
 	      msg.addHeader("Content-Transfer-Encoding", "8bit");
 	
-	      
+	      msg.setFrom(new InternetAddress(sender, "품질혁신지원 시스템"));
+	      msg.setReplyTo(InternetAddress.parse(sender, false));
+	      msg.setSubject("품질혁신지원시스템에서 메일이 도착하였습니다.", "UTF-8");
 	      if(type.equals("request")) {
-	          msg.setFrom(new InternetAddress(sender, "품질혁신지원 시스템"));
-		      msg.setReplyTo(InternetAddress.parse(sender, false));
-		      msg.setSubject("품질혁신지원시스템에서 메일이 도착하였습니다.", "UTF-8");
 	    	  msg.setText("[전자결재] 결재요청(Approval Request) 되었습니다. 결재문서 링크 : http://6sigma2.lxhausys.com/intf/login.do?com_no="+comno, "UTF-8");
 	      }else {
-	    	  msg.setText("[전자결재] 결재완료(Approval Complete) 되었습니다. 결재문서 링크 : http://6sigma2.lxhausys.com/intf/login.do?com_no="+comno, "UTF-8");
+		      msg.setText("[전자결재] 결재완료(Approval Complete) 되었습니다. 결재문서 링크 : http://6sigma2.lxhausys.com/intf/login.do?com_no="+comno, "UTF-8");
 	      }
 	      msg.setSentDate(new Date());
 	      msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(receiver, false));

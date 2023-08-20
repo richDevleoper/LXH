@@ -41,6 +41,7 @@ import kr.freedi.dev.code.domain.CodeVO;
 import kr.freedi.dev.code.service.CodeService;
 import kr.freedi.dev.common.util.EncriptUtil;
 import kr.freedi.dev.common.util.MapUtil;
+import kr.freedi.dev.common.util.SendMailUtil;
 import kr.freedi.dev.qapprove.domain.ApproveDetailVO;
 import kr.freedi.dev.qapprove.domain.ApproveSearchVO;
 import kr.freedi.dev.qapprove.domain.ApproveVO;
@@ -243,7 +244,7 @@ public class ApproveController {
 		//approveVO.setDetailList(savedVO.getDetailList());  //form에 없는 detailList 조회
 		
 		ApproveVO dbApproveVO = service.select(approveVO);
-		
+		System.out.println(approveVO.toString());
 		// 결재자별 상태 저장(approvalDetail) 아직 결재하지 않은 결재자가 있는지 체크 (있으면 업무상태 변경하지 않음)
 		Boolean apprComplete = service.updateStatus(approveVO, userSession);
 		
@@ -353,6 +354,20 @@ public class ApproveController {
 				}else {
 					proposalVO.setPropPropStatCode("PRG_6");		
 				}
+				
+				
+				//PROP_APPROVER_CODE --> 승인권자
+				//PROP_USER--> 요청권자
+				
+				String sender = "";
+				sender = proposalService.selectProposalEmail(proposalVO.getPropApproverCode());
+				System.out.println("proposalVO.getPropApproverCode() >>"+proposalVO.getPropApproverCode());
+				System.out.println("sender >>"+sender);
+				String receiver = "";
+				receiver = proposalService.selectProposalEmail(proposalVO.getPropUser());
+				System.out.println("proposalVO.getPropUser() >>"+proposalVO.getPropUser());
+				System.out.println("receiver >>"+receiver);
+				SendMailUtil.CustomSendMail(sender, receiver, proposalVO.getPropUser(), "request2");
 				proposalService.updateProposalInfo(proposalVO);
 			}
 		}
