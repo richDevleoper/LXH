@@ -239,9 +239,8 @@ public class TeamController {
 			reportVO.setRepRegUser(userId);
 			reportService.insert(reportVO);
 			if(reportVO.getRepTeamMemberList().size()>0) {
-				
 				String sender = "";
-				sender = proposalService.selectProposalEmail(userSession.getIntfUserVO().getComCode());
+				sender = proposalService.selectProposalEmail(userId);
 				String receiver = "";
 				receiver = proposalService.selectProposalEmail(reportVO.getRepTeamMemberList().get(0).getComNo());
 				SendMailUtil.CustomSendMail(sender, receiver, reportVO.getRepTeamMemberList().get(0).getComNo(), "request");

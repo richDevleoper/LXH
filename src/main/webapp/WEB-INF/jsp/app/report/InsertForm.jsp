@@ -159,7 +159,7 @@
 												<jsp:useBean id="now" class="java.util.Date" />
 									            <fmt:formatDate value="${now}" pattern="yyyy" var="yearNow"/>
 									            <form:select path="repUseRefDate" class="limit" cssClass="only-first validate[required]" >
-													<option value="none">해당없음</option>
+													<option value="1900">해당없음</option>
 													<option value="${yearNow}">${yearNow}년</option>
 													<option value="${yearNow+1}">${yearNow+1}년</option>
 													<option value="${yearNow+2}">${yearNow+2}년</option>
