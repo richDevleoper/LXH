@@ -296,7 +296,7 @@
 	    	            		$("input[name="+ selectObjId +"]:eq(0)").prop("checked", true);
 	    	            	},
 	    	            	onSubmit: function(){
-	    	            		
+	    	            		console.log("여기서 문젠가?")
 	    	            		let retData = {
 	    	            				deptCodes: "",
 	    	            				deptNames: "",

@@ -445,12 +445,14 @@
     		
     		// 부서검색
     		$(".btn-search-dept").off("click").on("click", function(){
+    			console.log(this);
     			callPopup_searchDepartment(this);
     		});
     		
     	}
     	
     	function initFooterDeptPopup(){
+    		console.log(objDeptTreeData);
     		$('#objDeptTree').jstree({
 		    	"core": {
 		    	      "data": objDeptTreeData	// controller에서 데이터 바인딩.
@@ -477,7 +479,6 @@
     	
     	// 조직 조회 호출부
     	function callPopup_searchDepartment(obj){
-
     		popMDept.init();
     		popMDept.returnObjId = "searchDepart";
     		popMDept.returnFunc = callback_popMDept;

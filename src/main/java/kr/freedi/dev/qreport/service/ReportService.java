@@ -525,6 +525,7 @@ public class ReportService {
 			attachFileVO.setDeleteFlg("N");
 			resultVO.setFileList(attachFileService.selectFullList(attachFileVO));
 		}
+		
 		return resultVO;
 	}
 	

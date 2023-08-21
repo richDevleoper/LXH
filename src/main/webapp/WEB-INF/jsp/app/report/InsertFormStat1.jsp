@@ -140,9 +140,19 @@
 									<div class="row">
 										<div class="col s12 select-group">
 											<%-- <form:input type="text" path="repProductClass" title="제품군을 입력해주세요." cssClass="validate[required]" /> --%>
-											<form:select path="repProductClass" title="제품군을 선택하세요."
+											<c:choose>
+												<c:when test="${reportVO.repSectorCode eq '9' }">
+													<form:select path="repProductClass" title="제품군을 선택하세요.">
+												</form:select>
+												</c:when>
+												<c:otherwise>
+													<form:select path="repProductClass" title="제품군을 선택하세요."
 												cssClass="validate[required]">
-											</form:select>
+													</form:select>
+												</c:otherwise>
+											</c:choose>
+												
+											
 										</div>
 									</div>
 								</td>
@@ -1120,7 +1130,10 @@ function onchange_resultType(obj){
 		$("#repSectorCode").val("${reportVO.repSectorCode}")
 		onchange_ddlRepSectorCode();
 		$("#repProductClass").val("${reportVO.repProductClass}");
+		console.log("################");
+		console.log($("#ddlRepTypeCode").val());
 		
+		console.log("================");
 		setDropDown("repLeaderBeltCode", cdLeaderBelt, true);//리더벨트
 		$("#repLeaderBeltCode").val("${reportVO.repLeaderBeltCode}")
 		

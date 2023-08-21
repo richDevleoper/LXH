@@ -54,16 +54,16 @@
 	</resultMap>
 	
 	<sql id="defCond">
-			<if test="searchRepName != null and searchRepName != ''">
+			<if test="searchRepName != null and searchRepName != ''"> <!-- 과제명 -->
 				AND T.REP_NAME||T.REP_KEYWORD like '%' || #{searchRepName} || '%'
 			</if>
-			<if test="searchDivision != null and searchDivision != ''">
+			<if test="searchDivision != null and searchDivision != ''"> <!-- 6시그마 Full Process 여부 -->
 				AND T.REP_DEVISION_CODE = #{searchDivision}
 			</if>
-			<if test="searchType != null and searchType != ''">
+			<if test="searchType != null and searchType != ''"> <!-- 부문 -->
 				AND T.REP_TYPE_CODE = #{searchType}
 			</if>
-			<if test="searchStatus != null and searchStatus != ''">
+			<if test="searchStatus != null and searchStatus != ''"> <!-- 진행구분 -->
 				AND T.REP_STATUS_CODE = #{searchStatus}
 			</if>
 			<if test="menuCode != null and menuCode != ''">

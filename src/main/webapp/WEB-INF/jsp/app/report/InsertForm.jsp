@@ -194,7 +194,7 @@
 									<tr>
 										<th style="height: 20px;">분임조</th>
 										<td>${circleVO.deptName} <input type="hidden" name="repCirCode"></td>
-										<th>분임조장ㅋㅋ</th>
+										<th>분임조장</th>
 										<td>${circleVO.cirLeaderName}</td>
 									</tr>
 								</c:otherwise>
@@ -1217,6 +1217,8 @@ function onchange_resultType(obj){
 		
 		//결재버튼
 		$("#btnReqApproval").off("click").on("click", function(){
+			console.log("############")
+			console.log($("#defaultForm")[0])
 			if($("#defaultForm").validationEngine('validate')){
 				$("#repStatusCode").val("2"); // 상태 임시저장 으로 저장
 				$("#defaultForm")[0].submit();	
@@ -1491,7 +1493,7 @@ function onchange_resultType(obj){
 		if(sectorCode === '11' || sectorCode === '12' || sectorCode === '13'){
 			setDropDown("repActionTypeCode", [], true, "(해당없음)");
 		}else{
-			setDropDown("repActionTypeCode", cdListSector, true);
+			setDropDown("repActionTypeCode", cdActionType, true);
 		}
 		
 		//생산기술(제조혁신) - 11

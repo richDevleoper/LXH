@@ -191,6 +191,8 @@ public class TeamController {
 
 		// 페이지 바인딩
 		ReportVO retVO = reportService.proc_reportFormHandler(req, model, searchVO, reportVO, userSession);
+		log.debug("분임조 활동의 reportVO##11 ==>"+reportVO.getRepLeaderBeltCode());
+		log.debug("분임조 활동의 retVO##11 ==>"+retVO.getRepLeaderBeltCode());
 		model.addAttribute("action", "/team/insert.do");
 
 		// (시작) 분임조 과제 작성 -> 작성 화면 진입시 분임조 정보 가져오기
@@ -237,6 +239,7 @@ public class TeamController {
 		} else {
 			// 신규입력 결재의뢰/임시저장
 			reportVO.setRepRegUser(userId);
+			reportVO.setRepLeaderBeltCode(reportVO.getRepTeamMemberList().get(0).getBeltCode());
 			reportService.insert(reportVO);
 			if(reportVO.getRepTeamMemberList().size()>0) {
 				String sender = "";

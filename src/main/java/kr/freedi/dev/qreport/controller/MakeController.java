@@ -73,8 +73,11 @@ public class MakeController {
 		searchVO.setTotalRecordCount(countList);
 		
 		List<MakeVO> selectCirclList = makeService.selectFullList(searchVO);
+		List<DepartVO> dbList = qPopupService.selectTreeList();
+		JsonArray deptList = makeService.convertTreeJson(dbList);
 		model.addAttribute("selectCirclList", selectCirclList);
 		model.addAttribute("totalCount", countList);
+		model.addAttribute("deptFullList", deptList);
 		
 		return "app/make/MakeList";
 		

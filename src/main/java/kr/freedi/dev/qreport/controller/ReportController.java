@@ -156,10 +156,11 @@ public class ReportController {
 		
 		//Integer paramRepCode = reportVO.getRepCode();
 		ReportVO tReportVO = new ReportVO();
-		tReportVO = reportService.select(reportVO);
 		
+		tReportVO = reportService.select(reportVO);
 		if(("1,2,8").indexOf(tReportVO.getRepStatusCode())>-1) {
 			// 임시저장, 선정중일 경우
+			
 			return "redirect:./insertForm.do?menuKey="+searchVO.getMenuKey()+"&repCode="+reportVO.getRepCode();
 		} else {	
 			// 그 외(승인 이후)
@@ -193,6 +194,8 @@ public class ReportController {
 
 		// 페이지 바인딩
 		ReportVO retVO = reportService.proc_reportFormHandler(req, model, searchVO, reportVO, userSession);
+		log.debug("분임조 활동의 reportVO##11 ==>"+reportVO.getRepLeaderBeltCode());
+		log.debug("분임조 활동의 retVO##11 ==>"+retVO.getRepLeaderBeltCode());
 		model.addAttribute("action", "/report/insert.do");
 		if(retVO.getRepCode() != null 
 				&& retVO.getRepDivisionCode() !=null 
@@ -227,6 +230,7 @@ public class ReportController {
 		} else {
 			// 신규입력 결재의뢰/임시저장
 			reportVO.setRepRegUser(userId);
+			log.debug("분임조 활동의 reportVO##22 ==>"+reportVO.getRepLeaderBeltCode());
 			reportService.insert(reportVO);
 			if(reportVO.getRepTeamMemberList().size()>0) {
 				String sender = "";
@@ -263,9 +267,7 @@ public class ReportController {
 				memLeader = memberVO;	// 지도사원(3)
 			}
 		}
-		log.debug("1111111111111111");
 		reportVO.setRepUpdateUser(userId);
-		log.debug("MODE ==>"+reportVO.getMode());
 		if(reportVO.getMode().equals("CANCEL")) {  // 결재취소
 
 			// 마지막 단계 결재상신건 취소하기			
@@ -280,21 +282,17 @@ public class ReportController {
 			reportService.dropApprove(reportVO, approveMemberList);
 			
 		} else {
-			log.debug("2222222222");
 			//1. 단계저장 - 6시그마  ---------------------------------
 			if(reportVO.getRepDivisionCode().equals("1")) {
 				
 				reportService.updateStep6Sigma(reportVO);
 			} 
-			log.debug("3333333333");
 			// 2. 과제마스터 변경사항 체크하기  ---------------------------------
 			ReportVO originReportVO = reportService.select(reportVO);
-			log.debug("4444444444");
 			// Finish 결재인 경우 챔피언 결재선 추가
 			if(repCurrStep.equals("6")) {
 				approveMemberList.add(memChamp);
 			}
-			log.debug("5555555555");
 			// 그 외 중간 진행사항은 지도사원 결재선 추가
 			if("1,2,3,4,5".indexOf(repCurrStep)>-1) {
 				log.debug("여기 타긴 타나요?");
@@ -312,10 +310,8 @@ public class ReportController {
 			}
 
 			// 3. 결재올리기 ---------------------------------
-			log.debug("userId ==>" + userId);
 			reportVO.setRepUpdateUser(userId);
 			//reportService.regApproveType3(reportVO, approveMemberList);
-			log.debug("6666666666666");
 			reportService.regApproveReport(reportVO, approveMemberList, "3");
 
 			// TODO 4. 이메일 전송   ---------------------------------
