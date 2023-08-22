@@ -142,8 +142,22 @@
             nvl(c_ty.code_nm, '-')  AS rep_type,
             t.rep_status_code,
             c_st.code_nm  AS rep_status,
-            (select min(REP_PLAN_START_DATE) from tb_report_detail m where m.rep_code=t.rep_code) rep_start_date,
-            (select case when rep_devision_code='1' then max(REP_PLAN_START_DATE) else max(REP_PLAN_END_DATE) end as rep_finish_date from tb_report_detail m where m.rep_code=T.rep_code group by rep_code, m.rep_devision_code) rep_finish_date
+            -- (select min(REP_PLAN_START_DATE) from tb_report_detail m where m.rep_code=t.rep_code) rep_start_date,
+            -- (select case when rep_devision_code='1' then max(REP_PLAN_START_DATE) else max(REP_PLAN_END_DATE) end as rep_finish_date from tb_report_detail m where m.rep_code=T.rep_code group by rep_code, m.rep_devision_code) rep_finish_date
+			CASE 
+                WHEN REP_DEVISION_CODE = '1' THEN
+                    (select min(REP_PLAN_START_DATE) from tb_report_detail m where m.rep_code=t.rep_code) 
+                ELSE
+                    (select min(REP_ACT_START_DATE) from tb_report_detail m where m.rep_code=t.rep_code) 
+            END AS
+            rep_start_date,
+            CASE 
+                WHEN REP_DEVISION_CODE = '1' THEN
+                    (select case when rep_devision_code='1' then max(REP_PLAN_START_DATE) else max(REP_PLAN_END_DATE) end as rep_finish_date from tb_report_detail m where m.rep_code=T.rep_code group by rep_code, m.rep_devision_code) 
+                ELSE
+                    (select case when rep_devision_code='2' then max(REP_ACT_END_DATE) else max(REP_PLAN_END_DATE) end as rep_finish_date from tb_report_detail m where m.rep_code=T.rep_code group by rep_code, m.rep_devision_code) 
+            END AS
+            rep_finish_date
             
         FROM
             report_mst T, 

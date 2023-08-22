@@ -319,12 +319,15 @@
 																	<td class="pd3" colspan="2">
 																		<div class="row">
 																			<div class="col s12 input-text input-date"
-																				style="float: none; width: 120px; margin: 0 auto !important">
-																				<input type="text"
+																				style="float: none; width: 120px; margin: 0 auto !important" id="date1div">
+																				<!-- <input type="text"
 																					id="repDetailList0_1.repActStartDate"
 																					name="repDetailList[0].repActStartDate"
-																					class="datepicker act-date" /> <i
-																					class="ico calendar"></i>
+																					class="datepicker act-date" />  -->
+																					<form:input type="text"
+																							path="repDetailList[0].repActStartDate"
+																							cssClass="datepicker validate[required] act-date" />
+																					<i class="ico calendar"></i>
 																			</div>
 																		</div>
 																	</td>
@@ -332,11 +335,10 @@
 																		<div class="row">
 																			<div class="col s12 input-text input-date"
 																				style="float: none; width: 120px; margin: 0 auto !important">
-																				<input type="text"
-																					id="repDetailList0_1.repActEndDate"
-																					name="repDetailList[0].repActEndDate"
-																					class="datepicker act-date" /> <i
-																					class="ico calendar"></i>
+																				<form:input type="text"
+																						path="repDetailList[0].repActEndDate"
+																						cssClass="datepicker validate[required] act-date" /> 
+																					<i class="ico calendar"></i>
 																			</div>
 																		</div>
 																	</td>
@@ -1153,12 +1155,21 @@ function onchange_resultType(obj){
 			$("#trRepDate2").remove();
 		}
 		
-		//키워드 세팅
+		//키워드 세팅@@
 		if($("#repKeyword").val()){
 			let arrKeyword = $("#repKeyword").val().split(",");
 			$(arrKeyword).each(function(i,o){
 				$(".obj-rep-keyword:eq("+i+")").val(o);
 			});
+		}
+		
+		let sectorCode = $("#repSectorCode").val();		//부문
+		console.log(sectorCode);
+		if(sectorCode === '11' || sectorCode === '12' || sectorCode === '13'){
+			setDropDown("repActionTypeCode", [], true, "(해당없음)");
+			$("#repActionTypeCode").removeClass("validate[required]");
+		}else{
+			setDropDown("repActionTypeCode", cdActionType, true);
 		}
 		
 		// 브라우저 자동완성 취소
@@ -1217,12 +1228,13 @@ function onchange_resultType(obj){
 		
 		//결재버튼
 		$("#btnReqApproval").off("click").on("click", function(){
-			console.log("############")
-			console.log($("#defaultForm")[0])
+			let repDevCd = $("#repDivisionCode").val(); //이벤트 트리거 객체의 값
 			if($("#defaultForm").validationEngine('validate')){
 				$("#repStatusCode").val("2"); // 상태 임시저장 으로 저장
 				$("#defaultForm")[0].submit();	
-			};
+			};	
+			
+			
 		});
 		
 		// 결재취소버튼
@@ -1492,6 +1504,7 @@ function onchange_resultType(obj){
 		
 		if(sectorCode === '11' || sectorCode === '12' || sectorCode === '13'){
 			setDropDown("repActionTypeCode", [], true, "(해당없음)");
+			$("#repActionTypeCode").removeClass("validate[required]");
 		}else{
 			setDropDown("repActionTypeCode", cdActionType, true);
 		}
