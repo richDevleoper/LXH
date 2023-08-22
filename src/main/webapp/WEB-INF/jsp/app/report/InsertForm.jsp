@@ -1228,8 +1228,10 @@ function onchange_resultType(obj){
 		
 		//결재버튼
 		$("#btnReqApproval").off("click").on("click", function(){
-			if($("#repLeaderName").val() === null || $("#repLeaderName").val() === '' || $("#repLeaderName").val() === undefined){
-				return alert("Leader를 선택해주세요.\n*필수항목을 선택하세요.");
+			if(vMenuType === 'TEAM'){
+				if($("#repLeaderName").val() === null || $("#repLeaderName").val() === '' || $("#repLeaderName").val() === undefined){
+					return alert("Leader를 선택해주세요.\n*필수항목을 선택하세요.");
+				}				
 			}
 			let repDevCd = $("#repDivisionCode").val(); //이벤트 트리거 객체의 값
 			if($("#defaultForm").validationEngine('validate')){

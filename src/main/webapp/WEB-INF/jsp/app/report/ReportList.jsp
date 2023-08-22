@@ -511,7 +511,11 @@
 				arrRepType = [];
 				break;
 			}
-			setDropDown(targetObjId, arrRepType, true, '전체');
+			if(repDevCd==="2"){
+				setDropDown(targetObjId, [], true, '(해당없음)');
+			} else {
+				setDropDown(targetObjId, arrRepType, true, '전체');
+			}
 		}
     	
     	function onclick_search(){

@@ -413,6 +413,7 @@ ${item.repDivision} ${item.cnt}건
 			break;
 		case "2": //일반
 			arrRepType = cdRepType2;
+			arrRepType = [];
 			break;
 		case "3": // 10+No.
 			arrRepType = cdRepType3;
@@ -421,9 +422,7 @@ ${item.repDivision} ${item.cnt}건
 			arrRepType = [];
 			break;
 		}
-		
-		
-		if(vMenuType==="TEAM" && repDevCd==="2"){
+		if(repDevCd==="2"){
 			setDropDown(targetObjId, [], true, '(해당없음)');
 		} else {
 			setDropDown(targetObjId, arrRepType, true, '전체');
@@ -482,6 +481,8 @@ ${item.repDivision} ${item.cnt}건
 			$('#defaultForm').attr("action","reportExcelbuild.do");
 			$('#defaultForm')[0].submit();
 		});		
+		
+		
 	}
 	
 	function onclick_search(){
