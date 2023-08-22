@@ -149,17 +149,18 @@
 	
 	// onchange_ddlRepDevisionCode : 과제유형, 일정계획 입력창 변경
 	function onchange_ddlRepDevisionCode(e){
-	
 		let repDevCd = $("#searchDivision").val(); //이벤트 트리거 객체의 값
+		
 		let targetObjId = "searchType";	//바뀔 대상 객체 ID
 		let arrRepType = [];
 		$(".tr-rep-date").hide();
+		
 		switch(repDevCd){
 		case "1": //6sigma
 			arrRepType = cdRepType1;
 			break;
 		case "2": //일반
-			arrRepType = cdRepType2;
+			arrRepType = [];
 			break;
 		case "3": // 10+No.
 			arrRepType = cdRepType3;
@@ -168,7 +169,12 @@
 			arrRepType = [];
 			break;
 		}
-		setDropDown(targetObjId, arrRepType, true, '전체');
+		
+		if(repDevCd === '2'){
+			setDropDown(targetObjId, arrRepType, true, '(해당없음)');		
+		}else{
+			setDropDown(targetObjId, arrRepType, true, '전체');
+		}
 	}
 	
 	function onclick_search(){
