@@ -200,12 +200,6 @@
 																    </c:when>
 																    <c:when test="${educationResult.eduBeltCode eq 'D002'}">
 																      <c:if test="${educationResult.eduClassType eq '01'}">
-				                                                	  	<c:if test="${educationResult.eduClassDivision eq '01'}">
-					                                                		온라인 동영상 교육
-					                                                	</c:if>
-					                                                	<c:if test="${educationResult.eduClassDivision eq '02'}">
-					                                                		온라인 실시간 교육
-					                                                	</c:if>
 					                                                	<c:if test="${educationResult.eduClassDivision eq '03'}">
 					                                                		6σ Process 과정
 					                                                	</c:if>
@@ -217,6 +211,12 @@
 					                                                	</c:if>
 					                                                	<c:if test="${educationResult.eduClassDivision eq '06'}">
 					                                                		Summary
+					                                                	</c:if>
+					                                                	<c:if test="${educationResult.eduClassDivision eq '10'}">
+					                                                		빅데이터 기초과정
+					                                                	</c:if>
+					                                                	<c:if test="${educationResult.eduClassDivision eq '11'}">
+					                                                		AI 비전검사
 					                                                	</c:if>
 				                                                	  </c:if>
 				                                                	  <c:if test="${educationResult.eduClassType eq '02' }">
@@ -389,12 +389,12 @@
 		}else if(eduBeltCode == "D002"){
 			if(eduClassType == "01"){
 				vHtml.push("<option value=''>전체</option>");
-				vHtml.push("<option value='01'>온라인 동영상 교육</option>");
-				vHtml.push("<option value='02'>온라인 실시간 교육</option>");
 				vHtml.push("<option value='03'>6σ Process 과정</option>");
 				vHtml.push("<option value='04'>통계적 사고 과정</option>");
 				vHtml.push("<option value='05'>고급 통계 과정</option>");
 				vHtml.push("<option value='06'>Summary</option>");
+				vHtml.push("<option value='10'>빅데이터 기초과정</option>");
+				vHtml.push("<option value='11'>AI 비전검사</option>");
 			}else if(eduClassType == "02"){
 				vHtml.push("<option value=''>전체</option>");
 				vHtml.push("<option value='07'>통계Test</option>");

@@ -85,6 +85,7 @@ public class StudentService {
 		dao.insert("Student.updateStdDetail", studentVO);
 	}
 	
+	// 교육 및 테스트  신청가능여부 체크 프로시저
 	public Map<String, Object> checkReqbtn(Map<String, Object> paramMap){
 		//List<HashMap<String, Object>> resultMap = dao.selectList("Student.checkReqbtnPROC", paramMap);
 		//System.out.println(paramMap);
@@ -92,7 +93,7 @@ public class StudentService {
 		return paramMap;
 	}
 	
-	
+	// 인증결과를 등록하는 쿼리
 	public void insertCertDetail(StudentVO studentVO) throws Exception {
 		int cudSeq = idGnrService.getNextIntegerId();
 		studentVO.setSeq(Integer.toString(cudSeq));
@@ -110,5 +111,10 @@ public class StudentService {
 	public void updateCertStateUpdate(Map<String, Object> paramMap) {
 		//dao.insert("Student.updateCertMem", paramMap);
 		dao.insert("Student.updateCertStatusUpdate", paramMap);
+	}
+	
+	// 과제 및 테스트 이수 결과 로그 저장 
+	public void insertEduComplateLog(Map<String, Object> paramMap) throws Exception {
+		dao.insert("Student.insertEduComplateLog", paramMap);
 	}
 }

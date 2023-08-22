@@ -455,14 +455,12 @@ function selectBeltCode(){
 	}else if(eduBeltCode == "D002"){
 		if(eduClassType == "01"){
 			vHtml.push("<option value=''>전체</option>");
-//			vHtml.push("<option value='01'>온라인 동영상 교육</option>");
-//			vHtml.push("<option value='02'>온라인 실시간 교육</option>");
 			vHtml.push("<option value='03'>6σ Process 과정</option>");
 			vHtml.push("<option value='04'>통계적 사고 과정</option>");
 			vHtml.push("<option value='05'>고급 통계 과정</option>");
 			vHtml.push("<option value='06'>Summary</option>");
-			vHtml.push("<option value='07'>빅데이터 기초과정</option>");
-			vHtml.push("<option value='08'>AI 비전검사</option>");
+			vHtml.push("<option value='10'>빅데이터 기초과정</option>");
+			vHtml.push("<option value='11'>AI 비전검사</option>");
 		}else if(eduClassType == "02"){
 			vHtml.push("<option value=''>전체</option>");
 			vHtml.push("<option value='07'>통계Test</option>");
@@ -539,12 +537,12 @@ function initCode(){
 		}else if(eduBeltCode == "D002"){
 			if(eduClassType == "01"){
 				vHtml.push("<option value=''>전체</option>");
-//				vHtml.push("<option value='01'>온라인 동영상 교육</option>");
-//				vHtml.push("<option value='02'>온라인 실시간 교육</option>");
 				vHtml.push("<option value='03'>6σ Process 과정</option>");
 				vHtml.push("<option value='04'>통계적 사고 과정</option>");
 				vHtml.push("<option value='05'>고급 통계 과정</option>");
 				vHtml.push("<option value='06'>Summary</option>");
+				vHtml.push("<option value='10'>빅데이터 기초과정</option>");
+				vHtml.push("<option value='11'>AI 비전검사</option>");
 			}else if(eduClassType == "02"){
 				vHtml.push("<option value=''>전체</option>");
 				vHtml.push("<option value='07'>통계Test</option>");

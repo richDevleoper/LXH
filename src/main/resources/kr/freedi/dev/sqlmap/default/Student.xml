@@ -432,4 +432,16 @@
 		 		SEQ = #{RQ_STD_NO}
 	</update>
 	
+	<!-- 교육/테스트 이수 로그저장 -->
+	<select id="insertEduComplateLog" statementType="CALLABLE" parameterType="HashMap" resultType="HashMap"> 
+	    <!-- { -->
+	    CALL PROC_EDU_INSERT_LOG(
+	            #{RE_EDU_SEQ, mode=IN, jdbcType=VARCHAR},
+	            #{RQ_EDU_VAL, mode=IN, jdbcType=VARCHAR},
+	            #{RQ_EDU_TYPE, mode=IN, jdbcType=VARCHAR},
+	            #{RQ_REG_ID, mode=IN, jdbcType=VARCHAR}
+	        )
+	    <!-- } -->
+	</select>
+	
 </mapper>

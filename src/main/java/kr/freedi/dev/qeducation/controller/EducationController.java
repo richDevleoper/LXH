@@ -219,9 +219,20 @@ public class EducationController {
 		// 이수 및 합격 업데이트 처리
 		if(!arrSeq.equals("")){
 			for(int j=0; j<anArrSeq.length; j++){
+				
+				// 이수결과 업데이트 처리 부분
 				studentVO.setStdSeq(anArrSeq[j].trim());
 				studentVO.setStdCompleteYn(anArrVal[j].trim());
-				studentService.updateStdDetail(studentVO);
+				studentService.updateStdDetail(studentVO); // 이수결과 업데이트 쿼리
+				
+				// 이수결과 로그 저장부분
+				Map<String, Object> paramMap = new HashMap<String, Object>();
+				paramMap.put("RE_EDU_SEQ", anArrSeq[j].trim());				// 과정번호
+				paramMap.put("RQ_EDU_VAL", anArrVal[j].trim());				// 인증여부
+				paramMap.put("RQ_EDU_TYPE", "1");							// 과정구분 (1. 교육/테스트 , 2.과제)
+				paramMap.put("RQ_REG_ID", studentVO.getStdUpdateUser()); 	// 등록아이디
+				
+				studentService.insertEduComplateLog(paramMap); 			// 이수결과 로그 저장 (교육/테스트/과제)
 			}
 		}
 		

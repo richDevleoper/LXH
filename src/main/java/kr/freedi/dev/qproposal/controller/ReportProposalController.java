@@ -93,10 +93,6 @@ public class ReportProposalController {
 		// 사번을 이용해서 사용자 권한 번호를 String 형태로 받아 온다.
 		ruleCode = codeService.selectRule(userSession.getUserId());
 		
-		System.out.println("###############################");
-		System.out.println(ruleCode);
-		System.out.println(userSession.getUserId());
-		System.out.println("###############################");
 		
 		// 전사 권한이 아닌경우 사용자의 소속만 보여준다.
 		if(ruleCode.equals("0") || ruleCode.equals("2") || ruleCode.equals("3") || ruleCode.equals("4")) {
@@ -108,8 +104,8 @@ public class ReportProposalController {
 		
 		//구분별 통계
 		List<EgovMap> resultItemsCount = reportProposalService.selectProposalTypeByCount(searchVO);
+		
 		//등급별 통계
-//		List<EgovMap> progressCount = reportProposalService.selectProposalStateByCount(searchVO);
 		EgovMap summary = new EgovMap();
 		int total = 0;         // Total Count
 		
@@ -122,7 +118,6 @@ public class ReportProposalController {
 				summary.put(item.get("propTypeCode"), item.get("total"));
 			}
 		}
-		
 		
 		total += Integer.parseInt(summary.get("ppsTyp1").toString());
 		total += Integer.parseInt(summary.get("ppsTyp2").toString());

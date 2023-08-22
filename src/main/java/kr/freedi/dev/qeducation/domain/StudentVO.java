@@ -27,6 +27,7 @@ public class StudentVO extends CommonVO {
 	private String stdTestCode;
 	private String stdTestDate;
 	private String stdClassDivision;
+	private String stdEduType;				// 로그 등록 시 사용되는 과정 구분 값 (교육/테스트와 과제를 구분하기 위해서 사용)
 	
 	private String stdDepartNm;
 	private String stdJobxNm;
@@ -68,6 +69,7 @@ public class StudentVO extends CommonVO {
 	private String cudUpdateUser;  
 	private String cudUpdateDate;  
 	private String cudEduCode;      
+	
 	
 	private String commonResVal;
 	
@@ -511,6 +513,14 @@ public class StudentVO extends CommonVO {
 
 	public void setCommonResVal(String commonResVal) {
 		this.commonResVal = commonResVal;
+	}
+
+	public String getStdEduType() {
+		return stdEduType;
+	}
+
+	public void setStdEduType(String stdEduType) {
+		this.stdEduType = stdEduType;
 	}
 	
 	

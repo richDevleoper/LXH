@@ -568,11 +568,7 @@
 											ELSE 'err' END
 							     		WHEN EDU_BELTCODE = 'D002' THEN
 									     	CASE WHEN EDU_CLASS_TYPE = '01' THEN
-													CASE WHEN EDU_CLASS_DIVISION = '01' THEN
-															'온라인 동영상 교육'
-														 WHEN EDU_CLASS_DIVISION = '02' THEN
-													    	'온라인 실시간 교육' 
-														 WHEN EDU_CLASS_DIVISION = '03' THEN
+													CASE WHEN EDU_CLASS_DIVISION = '03' THEN
 													    	'6σ Process 과정' 
 														 WHEN EDU_CLASS_DIVISION = '04' THEN
 													    	'통계적 사고 과정' 
@@ -580,6 +576,10 @@
 													    	'고급 통계 과정' 
 														 WHEN EDU_CLASS_DIVISION = '06' THEN
 													    	'Summary' 
+													    WHEN EDU_CLASS_DIVISION = '10' THEN
+													    	'빅데이터 기초과정' 
+														 WHEN EDU_CLASS_DIVISION = '11' THEN
+													    	'AI 비전검사'
 													ELSE 'err' END
 												 WHEN EDU_CLASS_TYPE = '02' THEN
 												 	CASE WHEN EDU_CLASS_DIVISION = '07' THEN
