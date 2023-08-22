@@ -1277,7 +1277,7 @@ function onchange_resultType(obj){
 						return false;
 					}
 					
-					
+				
 					// 일정 순차 입력여부 확인 (6시그마:date-6sigma, 그 외  act-date)
 					let repDevCd = $("#repDivisionCode").val();
 					if("2,3".indexOf(repDevCd)>-1){		// 일반과제, 10+과제일 경우
@@ -1303,6 +1303,13 @@ function onchange_resultType(obj){
 							return false;
 						}
 					}
+					if(repDevCd === '2'){
+						if($("#fileUploadWrap_7").find(".files tr.template-download").length===0){
+							alert("과제등록서 첨부파일이 등록되지 않았습니다. \n파일 선택 후 '전체첨부' 혹은 '첨부' 버튼을 클릭하시고 진행해주세요.");
+							return false;
+						}	
+					}
+					
 					
 					
 					//리더벨트 체크
