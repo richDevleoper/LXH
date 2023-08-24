@@ -34,6 +34,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
+import com.itextpdf.text.log.SysoCounter;
+
 import egovframework.rte.fdl.idgnr.EgovIdGnrService;
 import egovframework.rte.psl.dataaccess.util.EgovMap;
 
@@ -202,7 +204,6 @@ public class ReportService {
 		List<ApproveDetailVO> newList = new ArrayList<>();
 		newList.add(newDetail);		
 		newApprVO.setDetailList(newList);								// 결재선 등록
-		
 		approveService.insert(newApprVO);
 	}
 
@@ -223,7 +224,6 @@ public class ReportService {
 //			System.out.println("이미 존재하는 결재건임.");
 //			return;
 //		}
-		
 		ApproveVO newApprVO = new ApproveVO();
 		newApprVO.setAprovalType(aprovalType); 		// 결재 종류 (1-과제신청, 2-드랍신청, 3-6시그마프로세스, 6-실시제안, 7-쪽지제안) (code_grp_id='APR_TYPE')
 		
@@ -239,6 +239,7 @@ public class ReportService {
 		
 		// 결재선 추가
 		List<ApproveDetailVO> newList = new ArrayList<>();
+		//int i = 0;
 		for (ReportTeamVO approveMember : approveMemberList) {
 			ApproveDetailVO newDetail = new ApproveDetailVO();
 			// aprovalCode는  approveService.insert에서 처리
@@ -249,6 +250,21 @@ public class ReportService {
 			newDetail.setAprovalReqComNo(reportVO.getRepRegUser());			// 결재상신자 사번
 			newDetail.setAprovalStatCode("2");
 			newList.add(newDetail);
+			/*if(reportVO.getRepCurrStepCode().equals("1") || 
+				reportVO.getRepCurrStepCode().equals("2") || 
+				reportVO.getRepCurrStepCode().equals("3") || 
+				reportVO.getRepCurrStepCode().equals("4") || 
+				reportVO.getRepCurrStepCode().equals("5")) {
+				if(i == 0) {
+					newList.add(newDetail);
+				}
+			}else {
+				if(i != 0) {
+					newList.add(newDetail);
+				}
+			}
+			
+			i = i + 1;*/
 		}	
 		newApprVO.setDetailList(newList);	
 		
@@ -269,8 +285,8 @@ public class ReportService {
 		returnVO.get(0).getRepSeq();
 		dao.update("Report.update", reportVO);
 		for (ReportDetailVO vo : reportVO.getRepDetailList()) {
-			vo.setRepSeq(returnVO.get(0).getRepSeq());
-			vo.setRepCode(reportVO.getRepCode());
+//			vo.setRepSeq(returnVO.get(0).getRepSeq());
+//			vo.setRepCode(reportVO.getRepCode());
 			reportDetailService.save(vo);
 		}
 		
@@ -499,7 +515,11 @@ public class ReportService {
 	}
 	
 	public ReportVO select(ReportVO reportVO) {
+		System.out.println("******************************************1");
 		ReportVO resultVO = (ReportVO)dao.selectOne("Report.select", reportVO);
+		System.out.println(resultVO.toString());
+		System.out.println("******************************************2");
+		
 		// 과제 팀원
 		if(resultVO != null){
 			
@@ -525,7 +545,7 @@ public class ReportService {
 			attachFileVO.setDeleteFlg("N");
 			resultVO.setFileList(attachFileService.selectFullList(attachFileVO));
 		}
-		
+		System.out.println("???? =>" + resultVO.getRepCurrStepCode());
 		return resultVO;
 	}
 	
@@ -817,12 +837,15 @@ public class ReportService {
 		ReportVO savedVO = this.select(reportVO);
 		String statusCode = savedVO.getRepStatusCode();
 		String currStepCode = savedVO.getRepCurrStepCode();
-		
+		System.out.println("????????????????? => "+ currStepCode);
+		System.out.println("6시그마 과제 확인, 진행중 여부 확인");
+		System.out.println("6시그마 과제 여부 ==> "+savedVO.getRepDivisionCode());
+		System.out.println("진행중 여부(3,4,5,10 이여야함) ==> "+statusCode);
 		//1. 6sigma 과제 확인, 진행중 여부 확인
 		if(savedVO.getRepDivisionCode().equals("1") && "3,4,5,10".indexOf(statusCode)>-1) {
 			
 			Integer currStepNum = Integer.parseInt(currStepCode);
-			
+			System.out.println("현재 스텝은 ===> "+currStepNum);
 			// 현재 단계 완료 처리
 			ReportDetailVO detailVO = savedVO.getRepDetailList().get(currStepNum-1);
 			detailVO.setRepStatus("2"); // 승인한 단계 완료 처리

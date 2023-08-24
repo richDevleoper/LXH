@@ -243,11 +243,10 @@ public class ApproveController {
 		//approveVO.setDetailList(savedVO.getDetailList());  //form에 없는 detailList 조회
 		
 		ApproveVO dbApproveVO = service.select(approveVO);
-		
 		// 결재자별 상태 저장(approvalDetail) 아직 결재하지 않은 결재자가 있는지 체크 (있으면 업무상태 변경하지 않음)
 		Boolean apprComplete = service.updateStatus(approveVO, userSession);
-		
 		if(apprComplete) {  // 모든 결재자가 결재가 완료되었으면
+			
 		
 
 			/**************
@@ -264,7 +263,10 @@ public class ApproveController {
 				9	DROP결재중
 			 **************/
 			// 과제/분임조 
-			if("1,2".indexOf(approveVO.getRefBusType())>-1) {
+			
+			
+			System.out.println("approveVO.getRefBusType()" + approveVO.getRefBusType());
+			if("1,2".indexOf(approveVO.getRefBusType())>-1) {  //과제등록시
 				
 				// 상태 업데이트를위한 reportvo 파라메터 셋팅
 				ReportVO reportVO = new ReportVO();
@@ -291,7 +293,10 @@ public class ApproveController {
 				} else if (approveVO.getAprovalType().equals("3")) {  // 6시그마 단계별 승인
 				
 					if(approveVO.getAprovalState().equals("4")) {	//승인
+						//일단 여기 타는게 맞고
 						reportService.update6SigmaStepNext(reportVO);
+						ReportDetailVO detailVO = new ReportDetailVO();
+						detailVO.setRepCode(reportVO.getRepCode());
 					}else if(approveVO.getAprovalState().equals("3")) { // 반려
 						//reportService.update6SigmaStepBefore(reportVO);
 						reportVO.setRepStatusCode("10"); // 반려(6SIG)

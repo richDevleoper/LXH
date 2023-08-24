@@ -145,6 +145,8 @@
 		onchange_ddlRepDevisionCode();
 		
 		$("#searchType").val(paramSearchType);	
+		
+		$("#searchDivision option[value='3']").remove();
 	}
 	
 	// onchange_ddlRepDevisionCode : 과제유형, 일정계획 입력창 변경

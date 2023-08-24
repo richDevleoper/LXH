@@ -398,6 +398,7 @@ ${item.repDivision} ${item.cnt}건
 		});
 		
 		$("#searchDivision").off("change").on("change", onchange_ddlRepDevisionCode); // 6σ Full Process여부
+		$("#searchDivision option[value='3']").remove();
 	}
 	
 	// onchange_ddlRepDevisionCode : 과제유형, 일정계획 입력창 변경

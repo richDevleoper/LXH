@@ -379,11 +379,10 @@
     		
     		// 코드 데이터 초기화
     		initCode();
-    		
     		// 컨트롤 세팅
     		setControl();
-    		
-    		initFooterDeptPopup()
+    		initFooterDeptPopup();
+    		$("#searchDivision option[value='3']").remove();
     	}
     	
     	function initCode(){

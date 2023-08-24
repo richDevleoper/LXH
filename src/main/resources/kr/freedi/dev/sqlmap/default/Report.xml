@@ -48,6 +48,7 @@
 		<result property="repLeaderName" column="REP_LEADER_NAME" />
 		
 		<result property="repCurrStepCode" column="REP_CURR_STEP_CODE" />
+		<result property="testStepCode" column="TEST_STEP_CODE" />
 		<result property="repCurrApproveState" column="CURR_APR_STATE" />
 		<result property="repProductClassName" column="REP_PRODUCT_CLASS_NAME" />
 		
@@ -407,6 +408,51 @@
 			, (select user_name from tb_user_mst where com_no=T.REP_LEADER_CODE) REP_LEADER_NAME
 			, T.REP_FILE_YN
 			, nvl((select max(rep_step_code) from tb_report_detail where rep_code=T.REP_CODE and rep_status>0), 1) REP_CURR_STEP_CODE
+			, (select max(rep_step_code) AS rep_step_code from tb_report_detail where rep_code=T.REP_CODE and rep_status>0) AS TEST_STEP_CODE
+			, (select aproval_state from (select * from tb_approval_mst where ref_bus_code=#{repCode} order by aproval_code desc) a where rownum=1) CURR_APR_STATE
+		FROM TB_REPORT_MST T,
+            tb_code    c_ty
+        WHERE    
+                T.rep_type_code = c_ty.code_id(+) 			AND c_ty.code_grp_id(+) IN ('RP_TY1', 'RP_TY2', 'RP_TY3')
+            AND T.REP_CODE = #{repCode}
+	</select>
+	
+	<select id="select2" resultMap="reportMap">
+		SELECT 
+			T.REP_CODE
+			, T.REP_NAME
+			, T.REP_MENU_CODE
+			, T.REP_DEVISION_CODE
+			, get_code_nm('6SIG_YN', T.rep_devision_code) as REP_DIVISION
+			, T.REP_TYPE_CODE
+			, c_ty.code_nm as REP_TYPE
+			, T.REP_SECTOR_CODE
+			, get_code_nm('SECTOR', T.REP_SECTOR_CODE) rep_sector
+			, nvl(T.REP_PRODUCT_CLASS, '') REP_PRODUCT_CLASS
+			, nvl(get_code_nm('BUSGRP', T.REP_PRODUCT_CLASS), '-') REP_PRODUCT_CLASS_NAME
+			, T.REP_LEADER_BELT_CODE
+            , get_code_nm('LDRBELT', T.REP_LEADER_BELT_CODE) REP_LEADER_BELT
+			, T.REP_ACTION_TYPE_CODE
+            , get_code_nm('ACTTYPE', T.REP_ACTION_TYPE_CODE) REP_ACTION_TYPE
+			, T.REP_MBB_USE_RATE_CODE
+            , get_code_nm('MBBUSERT', T.REP_MBB_USE_RATE_CODE) REP_MBB_USE_RATE
+			, to_char(T.REP_USE_REF_DATE, 'YYYY') REP_USE_REF_DATE
+			, T.REP_STATUS_CODE
+			, T.REP_KEYWORD
+			, T.REP_REG_USER
+			, T.REP_REG_DATE
+			, T.REP_UPDATE_USER
+			, T.REP_UPDATE_DATE
+			, T.REP_APPROVAL_CODE
+			, T.REP_USE_YN
+			, T.REP_MAIL_SEND_YN
+			, T.REP_MAIL_SEND_DATE
+			, T.REP_PLACE_CODE
+			, T.REP_LEADER_CODE
+			, (select user_name from tb_user_mst where com_no=T.REP_LEADER_CODE) REP_LEADER_NAME
+			, T.REP_FILE_YN
+			, nvl((select max(rep_step_code) from tb_report_detail where rep_code=T.REP_CODE and rep_status>0), 1) REP_CURR_STEP_CODE
+			, (select max(rep_step_code) from tb_report_detail where rep_code=T.REP_CODE and rep_status>0) TEST_STEP_CODE
 			, (select aproval_state from (select * from tb_approval_mst where ref_bus_code=#{repCode} order by aproval_code desc) a where rownum=1) CURR_APR_STATE
 		FROM TB_REPORT_MST T,
             tb_code    c_ty
