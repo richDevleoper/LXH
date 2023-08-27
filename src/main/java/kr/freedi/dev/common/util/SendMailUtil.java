@@ -167,10 +167,10 @@ public class SendMailUtil {
 	      msg.setSubject("품질혁신지원시스템에서 메일이 도착하였습니다.", "UTF-8");
 	      if(type.equals("request")) {
 	    	  //msg.setText("[전자결재] 결재요청(Approval Request) 되었습니다. 결재문서 링크 : http://6sigma2.lxhausys.com/intf/login.do?com_no="+comno, "UTF-8");
-	    	  msg.setContent("[전자결재] 결재요청(Approval Request) 되었습니다. 결재문서 링크 : <a href='http://6sigma2.lxhausys.com/intf/login.do?com_no="+comno+"'>", "text/html; charset=utf-8");
+	    	  msg.setContent("[전자결재] 결재요청(Approval Request) 되었습니다. <br><br> <a href='http://6sigma2.lxhausys.com/intf/login.do?com_no="+comno+"'>결제 내용을 보려면 링크를 클릭하세요</a>", "text/html; charset=utf-8");
 	      }else {
 		      //msg.setText("[전자결재] 결재완료(Approval Complete) 되었습니다. 결재문서 링크 : http://6sigma2.lxhausys.com/intf/login.do?com_no="+comno, "UTF-8");
-	    	  msg.setContent("[전자결재] 결재완료(Approval Complete) 되었습니다. 결재문서 링크 : <a href='http://6sigma2.lxhausys.com/intf/login.do?com_no="+comno+"'>", "text/html; charset=utf-8");
+	    	  msg.setContent("[전자결재] 결재완료(Approval Complete) 되었습니다. <br><br> <a href='http://6sigma2.lxhausys.com/intf/login.do?com_no="+comno+"'>결제 내용을 보려면 링크를 클릭하세요</a>", "text/html; charset=utf-8");
 	      }
 	      msg.setSentDate(new Date());
 	      msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(receiver, false));

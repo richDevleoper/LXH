@@ -231,8 +231,8 @@ public class ReportController {
 				String sender = "";
 				sender = proposalService.selectProposalEmail(userId);
 				String receiver = "";
-				receiver = proposalService.selectProposalEmail(reportVO.getRepTeamMemberList().get(0).getComNo());
-				SendMailUtil.CustomSendMail(sender, receiver, reportVO.getRepTeamMemberList().get(0).getComNo(), "request");
+				receiver = proposalService.selectProposalEmail(reportVO.getRepTeamMemberList().get(reportVO.getRepTeamMemberList().size()-1).getComNo());
+				SendMailUtil.CustomSendMail(sender, receiver, reportVO.getRepTeamMemberList().get(reportVO.getRepTeamMemberList().size()-1).getComNo(), "request");
 			}
 		}
 		
