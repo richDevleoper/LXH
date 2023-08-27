@@ -70,7 +70,6 @@ public class ReportVO {
 	private String repLeaderName;
 	private String repProductClassName;	
 	private String repCurrApproveState;
-	private String testStepCode;
 
 
 	public Integer getRepCode() {
@@ -526,15 +525,6 @@ public class ReportVO {
 	public void setRepSeq(String repSeq) {
 		this.repSeq = repSeq;
 	}
-	
-
-	public String getTestStepCode() {
-		return testStepCode;
-	}
-
-	public void setTestStepCode(String testStepCode) {
-		this.testStepCode = testStepCode;
-	}
 
 	@Override
 	public String toString() {
@@ -556,10 +546,7 @@ public class ReportVO {
 				+ repFileList + ", fileList=" + fileList + ", repTeamLeaderName=" + repTeamLeaderName
 				+ ", repTeamMemberName=" + repTeamMemberName + ", repTeamProcessOwnerName=" + repTeamProcessOwnerName
 				+ ", repTeamChapionName=" + repTeamChapionName + ", repLeaderName=" + repLeaderName
-				+ ", repProductClassName=" + repProductClassName + ", repCurrApproveState=" + repCurrApproveState
-				+ ", testStepCode=" + testStepCode + "]";
+				+ ", repProductClassName=" + repProductClassName + ", repCurrApproveState=" + repCurrApproveState + "]";
 	}
-
-
 	
 }

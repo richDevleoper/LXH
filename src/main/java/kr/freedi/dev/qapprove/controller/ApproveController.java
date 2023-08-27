@@ -41,6 +41,7 @@ import kr.freedi.dev.code.domain.CodeVO;
 import kr.freedi.dev.code.service.CodeService;
 import kr.freedi.dev.common.util.EncriptUtil;
 import kr.freedi.dev.common.util.MapUtil;
+import kr.freedi.dev.common.util.SendMailUtil;
 import kr.freedi.dev.qapprove.domain.ApproveDetailVO;
 import kr.freedi.dev.qapprove.domain.ApproveSearchVO;
 import kr.freedi.dev.qapprove.domain.ApproveVO;
@@ -243,10 +244,11 @@ public class ApproveController {
 		//approveVO.setDetailList(savedVO.getDetailList());  //form에 없는 detailList 조회
 		
 		ApproveVO dbApproveVO = service.select(approveVO);
+		System.out.println(approveVO.toString());
 		// 결재자별 상태 저장(approvalDetail) 아직 결재하지 않은 결재자가 있는지 체크 (있으면 업무상태 변경하지 않음)
 		Boolean apprComplete = service.updateStatus(approveVO, userSession);
+		
 		if(apprComplete) {  // 모든 결재자가 결재가 완료되었으면
-			
 		
 
 			/**************
@@ -263,10 +265,7 @@ public class ApproveController {
 				9	DROP결재중
 			 **************/
 			// 과제/분임조 
-			
-			
-			System.out.println("approveVO.getRefBusType()" + approveVO.getRefBusType());
-			if("1,2".indexOf(approveVO.getRefBusType())>-1) {  //과제등록시
+			if("1,2".indexOf(approveVO.getRefBusType())>-1) {
 				
 				// 상태 업데이트를위한 reportvo 파라메터 셋팅
 				ReportVO reportVO = new ReportVO();
@@ -293,10 +292,7 @@ public class ApproveController {
 				} else if (approveVO.getAprovalType().equals("3")) {  // 6시그마 단계별 승인
 				
 					if(approveVO.getAprovalState().equals("4")) {	//승인
-						//일단 여기 타는게 맞고
 						reportService.update6SigmaStepNext(reportVO);
-						ReportDetailVO detailVO = new ReportDetailVO();
-						detailVO.setRepCode(reportVO.getRepCode());
 					}else if(approveVO.getAprovalState().equals("3")) { // 반려
 						//reportService.update6SigmaStepBefore(reportVO);
 						reportVO.setRepStatusCode("10"); // 반려(6SIG)
@@ -356,8 +352,32 @@ public class ApproveController {
 					}			
 					proposalVO.setPropRegUser(userSession.getUserId());						
 				}else {
-					proposalVO.setPropPropStatCode("PRG_6");		
+					//쪽지 제안 승인,반려 시 처리 
+					if(approveVO.getAprovalState().equals("3")) {
+						proposalVO.setPropPropStatCode("PRG_6");
+					}else{
+						proposalVO.setPropPropStatCode("PRG_5");
+					}
 				}
+				
+				
+				System.out.println("#####################");
+				System.out.println(approveVO.getAprovalState());
+				System.out.println("#####################");
+				
+				
+				//PROP_APPROVER_CODE --> 승인권자
+				//PROP_USER--> 요청권자
+				
+				String sender = "";
+				sender = proposalService.selectProposalEmail(proposalVO.getPropApproverCode());
+				System.out.println("proposalVO.getPropApproverCode() >>"+proposalVO.getPropApproverCode());
+				System.out.println("sender111111 >>"+sender);
+				String receiver = "";
+				receiver = proposalService.selectProposalEmail(proposalVO.getPropUser());
+				System.out.println("proposalVO.getPropUser() >>"+proposalVO.getPropUser());
+				System.out.println("receiver >>"+receiver);
+				SendMailUtil.CustomSendMail(sender, receiver, proposalVO.getPropUser(), "request2");
 				proposalService.updateProposalInfo(proposalVO);
 			}
 		}

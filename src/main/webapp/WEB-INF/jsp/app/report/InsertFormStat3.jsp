@@ -156,7 +156,7 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <th><form:label path="repMbbUseRateCode"><span class="asterisk">*</span>MBB활용율</form:label></th>
+                                                <%-- <th><form:label path="repMbbUseRateCode"><span class="asterisk">*</span>MBB활용율</form:label></th>
                                                 <td>
                                                     <div class="row">
                                                         <div class="col s12 select-group">
@@ -164,33 +164,51 @@
 															<form:hidden path="repMbbUseRateCode"></form:hidden>
                                                         </div>
                                                     </div>
+                                                </td> --%>
+                                                <th>
+	                                                MBB활용율 반영년도
+	                                                <i class="ico tip" onclick="popAdvice.open('mbbyear')"><em>tip.</em></i>
+                                                </th>
+                                                <td colspan="3">
+                                                <%-- <span id="lblUseRefDt">-</span>년 <form:input type="hidden" path="repUseRefDate" /> --%>
+                                                <div class="row">											
+													<div class="col s12 select-group">
+														<jsp:useBean id="now" class="java.util.Date" />
+											            <fmt:formatDate value="${now}" pattern="yyyy" var="yearNow"/>
+											            <form:select path="repUseRefDate" class="limit" cssClass="only-first validate[required]" >
+															<option value="1900">해당없음</option>
+															<option value="${yearNow}">${yearNow}년</option>
+															<option value="${yearNow+1}">${yearNow+1}년</option>
+															<option value="${yearNow+2}">${yearNow+2}년</option>
+														</form:select>
+													</div>
+												</div>
                                                 </td>
-                                                <th>활용율 반영년도</th>
-                                                <td><span id="lblUseRefDt">-</span>년 <form:input type="hidden" path="repUseRefDate" /></td>
                                             </tr>
 	</c:when>
 	<c:otherwise>
-                                            			<tr>
-										<th><form:label path="repLeaderBeltCode"><span class="asterisk">* </span>Leader</form:label></th>
-										<td>
-											<div class="row">
-												<div class="col s12 input-text search">
-													<form:input type="hidden" path="repLeaderCode" />
-													<form:input type="text" path="repLeaderName"
-														readonly="true" />
-													<button type="button" class="btn-search-leader">검색</button>
-												</div>
-											</div>
-										</td>
-										<th><form:label path="repActionTypeCode"><span class="asterisk">*</span>활동분야</form:label></th>
-										<td>
-											<div class="row">
-												<div class="col s12 select-group">
-													<form:select path="repActionTypeCode" title="활동분야를 선택하세요." cssClass="validate[required]"></form:select>
-												</div>
-											</div>
-										</td>
-									</tr>
+                                            <tr>
+                                                <th><form:label path="repLeaderBeltCode"><span class="asterisk">* </span>Leader</form:label>
+                                                </th>
+                                                <td>
+                                                    <div class="row">
+                                                        <div class="col s12 input-text search">
+                                                            <form:input type="hidden" path="repLeaderCode"/>
+                                                            <form:input type="text" path="repLeaderName" readonly="true"/>
+                                                            <button type="button" class="btn-search-leader">검색</button>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <th><form:label path="repActionTypeCode"><span class="asterisk">*</span>활동분야</form:label></th>
+                                                <td>
+                                                    <div class="row">
+                                                        <div class="col s12 select-group">
+                                                            <form:select path="repActionTypeCode" title="활동분야를 선택하세요." cssClass="validate[required]">
+                                                            </form:select>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
                                             <tr>
                                                 <th style="height: 20px;">분임조</th>
                                                 <td>
@@ -266,6 +284,7 @@
 		                                                                                        	$(document).ready(function(){
 		                                                                                        		let objNm = "#toggleBox_${status.count}";
 		                                                                                            	$(objNm).find("input, textarea").prop("disabled", true); // 완료된 항목 disable 시키기
+		                                                                                            	$(objNm).find("i.ico").prop("disabled", true);
 		                                                                                            	<c:if test="${reportVO.repStatusCode eq '6' || reportVO.repStatusCode eq '7'}">
 		                                                                                            	$("#toggleBox_${status.count}").show();
 		                                                                                            	</c:if>
@@ -516,27 +535,27 @@
                                                                                 <col style="width:60px">
                                                                                 <col style="width:80px">
                                                                                 <col>                                                                                
+                                                                                <%-- <col style="width:70px">
                                                                                 <col style="width:70px">
                                                                                 <col style="width:70px">
-                                                                                <col style="width:70px">
-                                                                                <col style="width:70px">
+                                                                                <col style="width:70px"> --%>
                                                                             </colgroup>
                                                                             <tbody>
                                                                                 <tr>
                                                                                     <th colspan="4">Finish 요약</th>                                                                                    
-                                                                                    <th colspan="3">활동결과(실적)</th>
+                                                                                    <!-- <th colspan="3">활동결과(실적)</th> -->
                                                                                 </tr>
                                                                                 <tr>
-                                                                                    <td rowspan="2" colspan="4">
+                                                                                    <td colspan="4">
                                                                                         <div class="input-text">
                                                                                             <form:textarea path="repDetailList[0].repFinishSummary" style="height: 65px;"/>
                                                                                         </div>
                                                                                     </td>                                                                                    
-                                                                                    <td>CTQ/CTP</td>
+                                                                                    <!-- <td>CTQ/CTP</td>
                                                                                     <td>KPI</td>
-                                                                                    <td>예상성과</td>                                                                                        
+                                                                                    <td>예상성과</td> -->                                                                                        
                                                                                 </tr>
-                                                                                <tr>              
+                                                                                <%-- <tr>              
                                                                                     <td><div class="col s2 input-text pd3">
 	<form:input type="text" path="repDetailList[0].repCtqCtp" />
                                                                                     </div></td>
@@ -546,10 +565,10 @@
                                                                                     <td><div class="col s2 input-text pd-r10" style="width:100%">
 	<form:input type="text" path="repDetailList[0].repExpectationResult" />
                                                                                     </div></td>                                 
-                                                                                </tr>
+                                                                                </tr> --%>
                                                                                 <tr>
                                                                                     <th colspan="2" class="pd-r10 align-right"> <span class="asterisk">*</span> 첨부파일<br> (Up to 10) </th>
-                                                                                    <td colspan="5" style="text-align: left;">
+                                                                                    <td colspan="2" style="text-align: left;">
                                                                                     	<div class="col s12 input-text file">
 								                                                            <attachfile:fileuploader
 																							objectId="fileUpload_report_sub_07"
@@ -988,7 +1007,7 @@ function onchange_resultType(obj){
                                         </colgroup>
                                         <tbody>
                                             <tr>
-                                                <th><span class="asterisk">*</span> 첨부파일 (신규/수정) ${reportVO.repCurrApproveState}</th>
+                                                <th><span class="asterisk">*</span> 첨부파일 (신규/수정)</th>
                                                 <td>
                                                     <div class="row">
                                                         <div class="col s12 input-text file">
@@ -1136,12 +1155,14 @@ function onchange_resultType(obj){
 		setDropDown("repSectorCode", cdListSector, true);//부문코드
 		$("#repSectorCode").val("${reportVO.repSectorCode}")
 		onchange_ddlRepSectorCode();
-		$("#repProductClass").val("${reportVO.repProductClass}");
+		if($("#repProductClass").html().indexOf("해당없음")===-1){
+			$("#repProductClass").val("${reportVO.repProductClass}");	
+		}
 		
 		setDropDown("repLeaderBeltCode", cdLeaderBelt, true);//리더벨트
 		$("#repLeaderBeltCode").val("${reportVO.repLeaderBeltCode}")
 		
-		setDropDown("repActionTypeCode", cdActionType, true);//활동분야
+		//setDropDown("repActionTypeCode", cdActionType, true);//활동분야
 		$("#repActionTypeCode").val("${reportVO.repActionTypeCode}")
 		
 		setDropDown("ddlRepMbbUseRateCode", cdMbbUseRate, false);//MBB활용율
@@ -1154,8 +1175,9 @@ function onchange_resultType(obj){
 		*/
 		
 		//setDropDown(".ddl-rep-result-type", cdRepResultType, true);//성과항목
-		const currYear = new Date().getFullYear();
-		$("#lblUseRefDt").text(currYear); $("#repUseRefDate").val(currYear);	//활용율 반영년도
+		//const currYear = new Date().getFullYear();
+		//$("#lblUseRefDt").text(currYear); 
+		$("#repUseRefDate").val(${reportVO.repUseRefDate});	//활용율 반영년도
 
 		onchange_ddlRepDevisionCode();	// 과제유형
 		$("#repTypeCode").val("${reportVO.repTypeCode}");
@@ -1455,7 +1477,12 @@ if($("#fileUploadWrap_${reportVO.repCurrStepCode}").find(".files tr.template-dow
 			setDropDown("repProductClass", [], true, "부문을 선택하세요");
 			$("label[for=repProductClass]").parent().find("span").show();
 			$("#repProductClass").addClass("validate[required]");
-		} else if (cdBusGrpFiltered.length===0){
+		} else if (cdBusGrpFiltered.length===0 || sectorCode=="11" || sectorCode=="12" || sectorCode=="13"){
+			/* 8/23 천진석 책임 요청사항
+			부문이 생산기술(제조혁신) / 환경안전 / 기타로 선정한 경우 제품군은 해당없음으로 표기
+			(품질/연구소와 동일하게)
+			분임조활동 뿐 아니라 6σ / 과제 활동에도 동일하게 적용
+			*/
 			setDropDown("repProductClass", [], true, "(해당없음)");
 			$("label[for=repProductClass]").parent().find("span").hide();
 			$("#repProductClass").removeClass("validate[required]");
@@ -1464,6 +1491,25 @@ if($("#fileUploadWrap_${reportVO.repCurrStepCode}").find(".files tr.template-dow
 			$("label[for=repProductClass]").parent().find("span").show();
 			$("#repProductClass").addClass("validate[required]");
 		}
+		
+		/* 8/1
+		분임조 과제에서 과제 등록 시 
+		부문 : '생산기술(제조혁신) / 환경안전 / 기타'의 경우도 선택 시 
+		'활동분야'는 '해당없음'으로 표기 (다른 항목은 없고 해당없음만 표기)
+		*/
+		if(sectorCode=="11" || sectorCode=="12" || sectorCode=="13"){
+			setDropDown("repActionTypeCode", [], true, "(해당없음)");
+			$("label[for=repActionTypeCode]").parent().find("span").hide();
+			$("#repActionTypeCode").removeClass("validate[required]");
+		}else{
+			setDropDown("repActionTypeCode", cdActionType, true);	
+			$("label[for=repActionTypeCode]").parent().find("span").show();
+			$("#repActionTypeCode").addClass("validate[required]");
+		}
+		
+		//생산기술(제조혁신) - 11
+		//환경안전 - 12
+		//기타 - 13
 	}
 	
 	function onchange_ddlRepTypeCode(e){

@@ -86,10 +86,13 @@
                                                 <td>${reportVO.repActionType}</td>
                                             </tr>
                                             <tr>
-                                                <th>MBB활용율</th>
-                                                <td>${reportVO.repMbbUseRate}</td>
-                                                <th>활용율 반영년도</th>
-                                                <td>${reportVO.repUseRefDate}년</td>
+                                                <th>MBB 활용율 반영년도</th>
+                                                <td colspan="3">
+                                                <c:choose>
+	                                                <c:when test="${reportVO.repUseRefDate eq '1900'}">해당없음</c:when>
+	                                                <c:otherwise>${reportVO.repUseRefDate}년</c:otherwise>
+                                                </c:choose>
+                                                </td>
                                             </tr>
 	</c:when>
 	<c:otherwise>
@@ -141,12 +144,12 @@
                                                                             </colgroup>
                                                                             <thead>
                                                                                 <tr>
-                                                                                    <th str1="Define" str2="Define">Define</th>
+                                                                                    <th str1="Define" str2="Define" class="dt-6sig">Define</th>
 				                                                                    <th str1="Measure" str2="Measure" class="dt-6sig">Measure</th>
 				                                                                    <th str1="Analyze" str2="Explore" class="dt-6sig">Analyze</th>
 				                                                                    <th str1="Improve" str2="Develop" class="dt-6sig">Improve</th>
 				                                                                    <th str1="Control" str2="Implement" class="dt-6sig">Control</th>
-				                                                                    <th str1="Finish" str2="Finish">Finish</th>
+				                                                                    <th str1="Finish" str2="Finish" class="dt-6sig">Finish</th>
                                                                                 </tr>
                                                                             </thead>
                                                                             <tbody>
@@ -489,6 +492,7 @@
 															$("#divKeyword").html(keyCont);
 															
 															let arrTypeCodeNm;
+															
 															if("${reportVO.repDivisionCode}"==="1"){
 																if("${reportVO.repTypeCode}"==="11"){
 																	// DMAIC : Define, Measure, Analyze, Improve, Control, Finish
@@ -499,6 +503,7 @@
 																}
 																for ( var i in arrTypeCodeNm) {
 																	$("#lbl6sigmaStepNm_"+(Number(i)+1)).text(arrTypeCodeNm[i]);
+																	$("th.dt-6sig:eq("+i+")").text(arrTypeCodeNm[i]);
 																}
 															}
 														}

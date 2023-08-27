@@ -41,13 +41,13 @@
 										<tbody>										
 										    <c:forEach var="item" items="${approveVO.detailHistory}">
 												<tr>
-												<td>${item.aprovalStat}
+												<td class="align-center">${item.aprovalStat}
 													<c:if test="${not empty item.aprovalCompltDate}">
 														(<fmt:formatDate pattern="yyyy.MM.dd" value="${item.aprovalCompltDate}" />)
 													</c:if>
 												</td>
-												<td>${item.userName}</td>
-												<td class="align-left">${item.aprovalType}</td>
+												<td class="align-center">${item.userName}</td>
+												<td class="align-center">${item.aprovalType}</td>
 												<td class="align-left">${item.aprovalComment}</td>
 											</tr>
 											</c:forEach>
@@ -93,10 +93,15 @@
                                                 <td>${reportVO.repActionType}</td>
                                             </tr>
                                             <tr>
-                                                <th>MBB활용율</th>
-                                                <td>${reportVO.repMbbUseRate}</td>
-                                                <th>활용율 반영년도</th>
-                                                <td>${reportVO.repUseRefDate}년</td>
+                                                <%-- <th>MBB활용율</th>
+                                                <td>${reportVO.repMbbUseRate}</td> --%>
+                                                <th>MBB 활용율 반영년도</th>
+                                                <td colspan="3">
+                                                <c:choose>
+	                                                <c:when test="${reportVO.repUseRefDate eq '1900'}">해당없음</c:when>
+	                                                <c:otherwise>${reportVO.repUseRefDate}년</c:otherwise>
+                                                </c:choose>                                                
+                                                </td>
                                             </tr>
                                             <tr>
 												<th>일정계획 및 수행</th>

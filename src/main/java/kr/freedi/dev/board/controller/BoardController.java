@@ -90,6 +90,7 @@ public class BoardController {
 	public String insertFormHandler(HttpServletRequest request, ModelMap model,
 			@ModelAttribute("boardSearchVO") BoardSearchVO searchVO) throws Exception {
 		
+		
 		BoardVO boardVO = new BoardVO();
 
 		//기본세팅

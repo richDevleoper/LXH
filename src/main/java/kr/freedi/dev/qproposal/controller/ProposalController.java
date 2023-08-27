@@ -318,7 +318,7 @@ public class ProposalController {
 			approveList.add(approveDetailVO);
 			approveVO.setDetailList(approveList);
 			
-			approveVO = approveService.insertSelectApprovalInfo(approveVO); // 결재선 등록
+			approveVO = approveService.insertSelectApprovalInfo(approveVO); // 결재선 등록			
 			proposalVO.setPropApproverCode(proposalVO.getPropApprovalUser()); // 결재자 사번으로 저장 - 의뢰시
 			
 			String actAprovalNo = approveService.selectApprovalActNo(approveVO);
@@ -412,7 +412,7 @@ public class ProposalController {
 			approveList.add(approveDetailVO);
 			approveVO.setDetailList(approveList);
 			
-			approveVO = approveService.insertSelectApprovalInfo(approveVO); // 결재선 등록
+			approveVO = approveService.insertSelectApprovalInfo(approveVO); // 결재선 등록			
 			proposalVO.setPropApproverCode(proposalVO.getPropApprovalUser()); // 결재자 사번으로 저장 - 의뢰시
 			
 			String actAprovalNo = approveService.selectApprovalActNo(approveVO);

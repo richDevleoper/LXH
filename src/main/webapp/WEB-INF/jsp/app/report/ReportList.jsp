@@ -379,10 +379,11 @@
     		
     		// 코드 데이터 초기화
     		initCode();
+    		
     		// 컨트롤 세팅
     		setControl();
-    		initFooterDeptPopup();
-    		$("#searchDivision option[value='3']").remove();
+    		
+    		initFooterDeptPopup()
     	}
     	
     	function initCode(){
@@ -394,7 +395,11 @@
 			WPLACE - 사업장
 			REP_STAT - 과제현황
     		****/
-    		cd6SigYn = codes.filter(function(code){ return code.index==="6SIG_YN"; });
+    		if(vMenuType==="TEAM"){ // 분임조
+    			cd6SigYn = [{key:"1",value:"6σ Full Process"},{key:"2",value:"일반과제"}];
+    		} else {
+    			cd6SigYn = codes.filter(function(code){ return code.index==="6SIG_YN"; });	
+    		}
     		cdLeaderBelt = codes.filter(function(code){ return code.index==="LDRBELT"; });
     		cdActionType = codes.filter(function(code){ return code.index==="ACTTYPE"; });
     		if(vMenuType==="REPORT"){
@@ -444,14 +449,12 @@
     		
     		// 부서검색
     		$(".btn-search-dept").off("click").on("click", function(){
-    			console.log(this);
     			callPopup_searchDepartment(this);
     		});
     		
     	}
     	
     	function initFooterDeptPopup(){
-    		console.log(objDeptTreeData);
     		$('#objDeptTree').jstree({
 		    	"core": {
 		    	      "data": objDeptTreeData	// controller에서 데이터 바인딩.
@@ -478,6 +481,7 @@
     	
     	// 조직 조회 호출부
     	function callPopup_searchDepartment(obj){
+
     		popMDept.init();
     		popMDept.returnObjId = "searchDepart";
     		popMDept.returnFunc = callback_popMDept;
@@ -501,7 +505,13 @@
 				arrRepType = cdRepType1;
 				break;
 			case "2": //일반
-				arrRepType = cdRepType2;
+				if(repMenuCode==="TEAM"){
+					arrRepType = [{key:"",value:"(해당없음)"}];
+					setDropDown(targetObjId, arrRepType, false);
+					return;
+				} else {
+					arrRepType = cdRepType2;	
+				}
 				break;
 			case "3": // 10+No.
 				arrRepType = cdRepType3;
@@ -510,11 +520,7 @@
 				arrRepType = [];
 				break;
 			}
-			if(repDevCd==="2"){
-				setDropDown(targetObjId, [], true, '(해당없음)');
-			} else {
-				setDropDown(targetObjId, arrRepType, true, '전체');
-			}
+			setDropDown(targetObjId, arrRepType, true, '전체');
 		}
     	
     	function onclick_search(){

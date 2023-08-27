@@ -47,9 +47,9 @@
 
 					<div class="form-inline form-select">
 						<label>조직</label>
-            				<form:input type="hidden" path="searchDepart"/>
-	                        <form:input type="text" path="searchDepartName" readonly="true" />
-	                        <button type="button" class="btn-org btn-search-dept">검색</button>
+						<form:input type="hidden" path="searchDepart"/>
+                        <form:input type="text" path="searchDepartName" readonly="true" />
+                        <button type="button" class="btn-org btn-search-dept">검색</button>
 					</div>
 					<button type="button" class="btn-submit" onclick="onclick_search()">조회</button>
 				</div>
@@ -141,7 +141,16 @@
 	
 
 <script type="text/javascript">
-$(document).ready(init);
+$(document).ready(function(){
+	init();
+	initCode();
+	
+ 	$("#btnRegMake").on("click", function(){
+		location.href="./makeinsert.do?menuKey=70";
+	});
+ 	
+ 	
+});
 
 function init(){	
 	$("#defaultForm input").off("keyup").on("keyup", function(e){
@@ -152,17 +161,27 @@ function init(){
 	
 	// 부서검색
 	$(".btn-search-dept").off("click").on("click", function(){
-		console.log(this);
 		callPopup_searchDepartment(this);
 	});
-	initCode();
-	initFooterDeptPopup();
-	
- 	$("#btnRegMake").on("click", function(){
-		location.href="./makeinsert.do?menuKey=70";
-	});
- 	
 }
+
+// 조직 조회 호출부
+function callPopup_searchDepartment(obj){
+
+	popDept.init();
+	// footer.jsp 내 영역 호출
+	popDept.returnObjId = "searchDepart";
+	popDept.returnFunc = callback_popDept;
+	popDept.open();
+}
+
+// 조직 조회 콜백부
+function callback_popDept(objId, data){
+	
+	$("#"+objId).val(data.deptCode);
+	$("#searchDepartName").val(data.deptName);
+}
+
 function initCode(){
 	let codes = [
 		<c:forEach var="item" items="${allCodes}">{index:"${item.codeGrpId}",key:"${item.codeId}",value:"${item.codeNm}"},
@@ -174,52 +193,6 @@ function initCode(){
 	setDropDownCustom("searchPlaceCode", cdWPlace, true, "전체");
 	$("#searchPlaceCode").val("${MakeSearchVO.searchPlaceCode}")
 }
-
-
-// 조직 조회 호출부
-function callPopup_searchDepartment(obj){
-	popMDept.init();
-	// footer.jsp 내 영역 호출
-	popMDept.returnObjId = "searchDepart";
-	popMDept.returnFunc = callback_popDept;
-	popMDept.open();
-}
-
-
-function callback_popDept(objId, data){
-	$("#"+objId).val(data.deptCodes);
-	$("#searchDepartName").val(data.deptNames);
-}
-
-//부서검색 팝업 트리 데이터
-const objDeptTreeData = ${deptFullList};
-
-//부서검색 팝업 트리 초기화
-function initFooterDeptPopup(){
-	$('#objDeptTree').jstree({
-    	"core": {
-    	      "data": objDeptTreeData	// controller에서 데이터 바인딩.
-    	    },
-        "plugins" : ['checkbox','search'],
-        "search" : {
-            "show_only_matches" : true,
-        	"show_only_matches_children" : true,
-		},
-    })
-    .on("check_node.jstree uncheck_node.jstree", function (e, data) {
-
-        if (e.type == "uncheck_node") {
-        	debugger;
-            $("#orgSelAllDept").prop( "checked", false );                
-        }
-	    else if (e.type == "check_node") {
-	    	debugger;
-            if ($(this).jstree().get_json('#', {flat:true}).length === $(this).jstree().get_checked(true).length)
-                $("#orgSelAllDept").prop( "checked", true ); 					
-        }
-    });
-}
-
 
 function onclick_search(){
 	$("#defaultForm")[0].submit();

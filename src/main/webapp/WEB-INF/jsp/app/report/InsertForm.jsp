@@ -152,7 +152,10 @@
 												</div>
 											</div>
 										</th> --%>
-										<th>MBB활용율 반영년도</th>
+										<th> 
+											MBB활용율 반영년도
+										 	<i class="ico tip" onclick="popAdvice.open('mbbyear')"><em>tip.</em></i>
+										</th>
 										<td colspan="3"><%-- <span id="lblUseRefDt">-</span>년 <form:input type="hidden" path="repUseRefDate" /> --%>
 										<div class="row">											
 											<div class="col s12 select-group">
@@ -297,7 +300,8 @@
 																				<input type="text"
 																					id="repDetailList0_1.repPlanStartDate"
 																					name="repDetailList[0].repPlanStartDate"
-																					class="datepicker" /> <i class="ico calendar"></i>
+																					title="착수(예정)일-계획일자를 입력하세요."
+																					class="datepicker validate[required]" /> <i class="ico calendar"></i>
 																			</div>
 																		</div>
 																	</td>
@@ -308,7 +312,8 @@
 																				<input type="text"
 																					id="repDetailList0_1.repPlanEndDate"
 																					name="repDetailList[0].repPlanEndDate"
-																					class="datepicker" /> <i class="ico calendar"></i>
+																					title="완료(예정)일-계획일자를 입력하세요."
+																					class="datepicker validate[required]" /> <i class="ico calendar"></i>
 																			</div>
 																		</div>
 																	</td>
@@ -319,14 +324,12 @@
 																	<td class="pd3" colspan="2">
 																		<div class="row">
 																			<div class="col s12 input-text input-date"
-																				style="float: none; width: 120px; margin: 0 auto !important" id="date1div">
-																				<!-- <input type="text"
+																				style="float: none; width: 120px; margin: 0 auto !important">
+																				<input type="text"
 																					id="repDetailList0_1.repActStartDate"
 																					name="repDetailList[0].repActStartDate"
-																					class="datepicker act-date" />  -->
-																					<form:input type="text"
-																							path="repDetailList[0].repActStartDate"
-																							cssClass="datepicker validate[required] act-date" />
+																					title="착수(예정)일-실시일자를 입력하세요."
+																					class="datepicker validate[required] act-date" />
 																					<i class="ico calendar"></i>
 																			</div>
 																		</div>
@@ -335,9 +338,11 @@
 																		<div class="row">
 																			<div class="col s12 input-text input-date"
 																				style="float: none; width: 120px; margin: 0 auto !important">
-																				<form:input type="text"
-																						path="repDetailList[0].repActEndDate"
-																						cssClass="datepicker validate[required] act-date" /> 
+																				<input type="text"
+																					id="repDetailList0_1.repActEndDate"
+																					name="repDetailList[0].repActEndDate"
+																					title="완료(예정)일-실시일자를 입력하세요."
+																					class="datepicker validate[required] act-date" />
 																					<i class="ico calendar"></i>
 																			</div>
 																		</div>
@@ -1112,13 +1117,13 @@ function onchange_resultType(obj){
 		setDropDown("repSectorCode", cdListSector, true);//부문코드
 		$("#repSectorCode").val("${reportVO.repSectorCode}")
 		onchange_ddlRepSectorCode();
-		$("#repProductClass").val("${reportVO.repProductClass}");
+		if($("#repProductClass").html().indexOf("해당없음")===-1){
+			$("#repProductClass").val("${reportVO.repProductClass}");	
+		}
 		
 		setDropDown("repLeaderBeltCode", cdLeaderBelt, true);//리더벨트
 		$("#repLeaderBeltCode").val("${reportVO.repLeaderBeltCode}")
 		//onchange_ddlRepLeaderBeltCode();
-		
-		setDropDown("repActionTypeCode", cdActionType, true);//활동분야
 		
 		$("#repActionTypeCode").val("${reportVO.repActionTypeCode}")
 		
@@ -1132,12 +1137,13 @@ function onchange_resultType(obj){
 		*/
 		
 		//setDropDown(".ddl-rep-result-type", cdRepResultType, true);//성과항목
-		const currYear = new Date().getFullYear();
-		$("#lblUseRefDt").text(currYear); 
-		//$("#repUseRefDate").val(currYear);	//활용율 반영년도
+		//const currYear = new Date().getFullYear();
+		//$("#lblUseRefDt").text(currYear);
+		$("#repUseRefDate").val(${reportVO.repUseRefDate});	//활용율 반영년도
 
 		onchange_ddlRepDevisionCode();	// 과제유형
 		$("#repTypeCode").val("${reportVO.repTypeCode}");
+		onchange_ddlRepTypeCode();
 		
 		//setDropDown("repProductClass", [], true);
 		
@@ -1155,21 +1161,12 @@ function onchange_resultType(obj){
 			$("#trRepDate2").remove();
 		}
 		
-		//키워드 세팅@@
+		//키워드 세팅
 		if($("#repKeyword").val()){
 			let arrKeyword = $("#repKeyword").val().split(",");
 			$(arrKeyword).each(function(i,o){
 				$(".obj-rep-keyword:eq("+i+")").val(o);
 			});
-		}
-		
-		let sectorCode = $("#repSectorCode").val();		//부문
-		console.log(sectorCode);
-		if(sectorCode === '11' || sectorCode === '12' || sectorCode === '13'){
-			setDropDown("repActionTypeCode", [], true, "(해당없음)");
-			$("#repActionTypeCode").removeClass("validate[required]");
-		}else{
-			setDropDown("repActionTypeCode", cdActionType, true);
 		}
 		
 		// 브라우저 자동완성 취소
@@ -1228,18 +1225,10 @@ function onchange_resultType(obj){
 		
 		//결재버튼
 		$("#btnReqApproval").off("click").on("click", function(){
-			if(vMenuType === 'TEAM'){
-				if($("#repLeaderName").val() === null || $("#repLeaderName").val() === '' || $("#repLeaderName").val() === undefined){
-					return alert("Leader를 선택해주세요.\n*필수항목을 선택하세요.");
-				}				
-			}
-			let repDevCd = $("#repDivisionCode").val(); //이벤트 트리거 객체의 값
 			if($("#defaultForm").validationEngine('validate')){
 				$("#repStatusCode").val("2"); // 상태 임시저장 으로 저장
 				$("#defaultForm")[0].submit();	
-			};	
-			
-			
+			};
 		});
 		
 		// 결재취소버튼
@@ -1282,7 +1271,22 @@ function onchange_resultType(obj){
 						return false;
 					}
 					
-				
+					if($("#fileUploadWrap_7:visible").length){
+						if($("#fileUploadWrap_7").find(".files tr.template-download").length===0){
+							alert("과제등록서 첨부파일이 등록되지 않았습니다. \n파일 선택 후 '전체첨부' 혹은 '첨부' 버튼을 클릭하시고 진행해주세요.");
+							$("#fileUploadWrap_7").find("input[type=file]").focus();
+							return false;
+						}
+					}
+					
+					if($("#repLeaderName:visible").length){
+						if(!$("#repLeaderName").val()){
+							alert("Leader가 지정되지 않았습니다.")
+							return false;
+						}
+					}
+					
+					
 					// 일정 순차 입력여부 확인 (6시그마:date-6sigma, 그 외  act-date)
 					let repDevCd = $("#repDivisionCode").val();
 					if("2,3".indexOf(repDevCd)>-1){		// 일반과제, 10+과제일 경우
@@ -1308,13 +1312,6 @@ function onchange_resultType(obj){
 							return false;
 						}
 					}
-					if(repDevCd === '2'){
-						if($("#fileUploadWrap_7").find(".files tr.template-download").length===0){
-							alert("과제등록서 첨부파일이 등록되지 않았습니다. \n파일 선택 후 '전체첨부' 혹은 '첨부' 버튼을 클릭하시고 진행해주세요.");
-							return false;
-						}	
-					}
-					
 					
 					
 					//리더벨트 체크
@@ -1504,7 +1501,12 @@ function onchange_resultType(obj){
 			setDropDown("repProductClass", [], true, "부문을 선택하세요");
 			$("label[for=repProductClass]").parent().find("span").show();
 			$("#repProductClass").addClass("validate[required]");
-		} else if (cdBusGrpFiltered.length===0){
+		} else if (cdBusGrpFiltered.length===0 || sectorCode=="11" || sectorCode=="12" || sectorCode=="13"){
+			/* 8/23 천진석 책임 요청사항
+			부문이 생산기술(제조혁신) / 환경안전 / 기타로 선정한 경우 제품군은 해당없음으로 표기
+			(품질/연구소와 동일하게)
+			분임조활동 뿐 아니라 6σ / 과제 활동에도 동일하게 적용
+			*/
 			setDropDown("repProductClass", [], true, "(해당없음)");
 			$("label[for=repProductClass]").parent().find("span").hide();
 			$("#repProductClass").removeClass("validate[required]");
@@ -1514,11 +1516,19 @@ function onchange_resultType(obj){
 			$("#repProductClass").addClass("validate[required]");
 		}
 		
-		if(sectorCode === '11' || sectorCode === '12' || sectorCode === '13'){
+		/* 8/1
+		분임조 과제에서 과제 등록 시 
+		부문 : '생산기술(제조혁신) / 환경안전 / 기타'의 경우도 선택 시 
+		'활동분야'는 '해당없음'으로 표기 (다른 항목은 없고 해당없음만 표기)
+		*/
+		if(sectorCode=="11" || sectorCode=="12" || sectorCode=="13"){
 			setDropDown("repActionTypeCode", [], true, "(해당없음)");
+			$("label[for=repActionTypeCode]").parent().find("span").hide();
 			$("#repActionTypeCode").removeClass("validate[required]");
 		}else{
-			setDropDown("repActionTypeCode", cdActionType, true);
+			setDropDown("repActionTypeCode", cdActionType, true);	
+			$("label[for=repActionTypeCode]").parent().find("span").show();
+			$("#repActionTypeCode").addClass("validate[required]");
 		}
 		
 		//생산기술(제조혁신) - 11

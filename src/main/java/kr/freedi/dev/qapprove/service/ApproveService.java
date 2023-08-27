@@ -92,7 +92,7 @@ public class ApproveService {
 	}
 	
 	public void insert(ApproveVO masterVO) throws Exception {
-		
+
 		String aprovalCode = dao.selectOne("Approval.selectNextFkey");
 		masterVO.setAprovalCode(aprovalCode);	
 		masterVO.setAprovalState("2");
@@ -123,22 +123,18 @@ public class ApproveService {
 		
 		List<ApproveDetailVO> detail = inputVO.getDetailList();
 		
-		
 		// check 하고 다 결재 되었으면 결재마스터 상태 업데이트
 		Boolean apprComplete = true;  // 전원 결재여부 체크, 미결된 사람이 있으면 false, 미결 없거나(=결재 전원 완료되거나) 반려건이 있으면  true
 		Boolean isRejected = false;   // 반려건 있는지 체크하고 있으면 결재완료처리하여 진행
 		
 		
-		if(detail != null) {
+		if(detail!=null) {
 			Iterator<ApproveDetailVO> itrDetail = detail.iterator();
 			ApproveDetailVO apprMember = null;
-			int z = 0;
 			while(itrDetail.hasNext()) {
-				z = z + + 1;
 				ApproveDetailVO tmpDetail = itrDetail.next();
 				if(tmpDetail.getAprovalCode()!=null) {
 					if(tmpDetail.getComNo().equals(userSession.getUserId())) {
-						System.out.println("결재 리스트 정보랑 로그인 정보가 같아서 업데이트 침");
 						dao.update("ApprovalDetail.updateStatus", tmpDetail);	
 					}
 				}
@@ -148,7 +144,6 @@ public class ApproveService {
 			
 			List<ApproveDetailVO> approvalList = dbVO.getDetailList();
 			for(int i=0; i<approvalList.size(); i++) {
-				System.out.println("i ===>" + i);
 				ApproveDetailVO tmpItem = approvalList.get(i);
 				if(tmpItem.getAprovalStatCode() != null) {
 					if(tmpItem.getAprovalStatCode().equals("2"))
@@ -159,12 +154,11 @@ public class ApproveService {
 			}
 			
 			if(isRejected) {
-				System.out.println("반려건 체크, 반려건이라면 true return!");
 				apprComplete = true; // 반려시 이후 결재 안되도록 상태 변경
 			}
 			
 			if(apprComplete) {
-				System.out.println("전원 결재 여부, 전원이 결재했다면! -- ▽");
+				
 				dao.update("Approval.updateStatus", inputVO);
 			}
 		}
@@ -192,6 +186,7 @@ public class ApproveService {
 	}
 	
 	public ApproveVO insertSelectApprovalInfo(ApproveVO masterVO) throws Exception {
+
 		String aprovalCode = dao.selectOne("Approval.selectNextFkey");
 		masterVO.setAprovalCode(aprovalCode);	
 		masterVO.setAprovalState("2");

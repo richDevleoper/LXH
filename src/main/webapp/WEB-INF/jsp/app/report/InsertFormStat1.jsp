@@ -140,19 +140,9 @@
 									<div class="row">
 										<div class="col s12 select-group">
 											<%-- <form:input type="text" path="repProductClass" title="제품군을 입력해주세요." cssClass="validate[required]" /> --%>
-											<c:choose>
-												<c:when test="${reportVO.repSectorCode eq '9' }">
-													<form:select path="repProductClass" title="제품군을 선택하세요.">
-												</form:select>
-												</c:when>
-												<c:otherwise>
-													<form:select path="repProductClass" title="제품군을 선택하세요."
+											<form:select path="repProductClass" title="제품군을 선택하세요."
 												cssClass="validate[required]">
-													</form:select>
-												</c:otherwise>
-											</c:choose>
-												
-											
+											</form:select>
 										</div>
 									</div>
 								</td>
@@ -186,7 +176,7 @@
 										</td>
 									</tr>
 									<tr>
-										<th><form:label path="repMbbUseRateCode">
+										<%-- <th><form:label path="repMbbUseRateCode">
 												<span class="asterisk">*</span>MBB활용율</form:label></th>
 										<td>
 											<div class="row">
@@ -196,18 +186,35 @@
 													</form:select>
 												</div>
 											</div>
+										</td> --%>
+										<th>
+											MBB활용율 반영년도
+											<i class="ico tip" onclick="popAdvice.open('mbbyear')"><em>tip.</em></i>
+										</th>
+										<td colspan="3">
+										<%-- <span id="lblUseRefDt">-</span>년 <form:input type="hidden" path="repUseRefDate" /> --%>
+											<div class="row">											
+												<div class="col s12 select-group">
+													<jsp:useBean id="now" class="java.util.Date" />
+										            <fmt:formatDate value="${now}" pattern="yyyy" var="yearNow"/>
+										            <form:select path="repUseRefDate" class="limit" cssClass="only-first validate[required]" >
+														<option value="1900">해당없음</option>
+														<option value="${yearNow}">${yearNow}년</option>
+														<option value="${yearNow+1}">${yearNow+1}년</option>
+														<option value="${yearNow+2}">${yearNow+2}년</option>
+													</form:select>
+												</div>
+											</div>		
 										</td>
-										<th>활용율 반영년도</th>
-										<td><span id="lblUseRefDt">-</span>년 <form:input
-												type="hidden" path="repUseRefDate" /></td>
 									</tr>
 								</c:when>
 								<c:otherwise>
 									<tr>
-										<th><form:label path="repLeaderBeltCode"><span class="asterisk">* </span>Leader</form:label></th>
-										<td>
+										<th><form:label path="repLeaderBeltCode">
+												<span class="asterisk">* </span>Leader</form:label></th>
+										<td colspan="3">
 											<div class="row">
-												<div class="col s12 input-text search">
+												<div class="col s4 input-text search">
 													<form:input type="hidden" path="repLeaderCode" />
 													<form:input type="text" path="repLeaderName"
 														readonly="true" />
@@ -215,18 +222,13 @@
 												</div>
 											</div>
 										</td>
-										<th><form:label path="repActionTypeCode"><span class="asterisk">*</span>활동분야</form:label></th>
-										<td>
-											<div class="row">
-												<div class="col s12 select-group">
-													<form:select path="repActionTypeCode" title="활동분야를 선택하세요." cssClass="validate[required]"></form:select>
-												</div>
-											</div>
-										</td>
+
 									</tr>
 									<tr>
 										<th style="height: 20px;">분임조</th>
-										<td>${circleVO.deptName} <input type="hidden" name="repCirCode"></td>
+										<td>${circleVO.deptName}<input type="hidden"
+											name="repCirCode">
+										</td>
 										<th>분임조장</th>
 										<td>${circleVO.cirLeaderName}</td>
 									</tr>
@@ -389,8 +391,9 @@
 														<!-- [D] 열린상태일 경우 active 클래스를 추가해주세요. -->
 														<div class="list-content">
 															<div class="list-table list">
-																<input type="hidden" name="repDetailList[0].repStepCode"
-																	value="7" />
+																<input type="hidden" name="repDetailList[0].repStepCode" value="7" />
+																<form:input type="hidden" path="repDetailList[0].repSeq" />
+																<form:input type="hidden" path="repDetailList[0].repCode" />
 																<table>
 																	<caption>일정계획 및 수행 테이블</caption>
 																	<colgroup>
@@ -416,8 +419,8 @@
 																				<div class="row">
 																					<div class="col s12 input-text input-date"
 																						style="float: none; width: 120px; margin: 0 auto !important">
-																						<form:input type="text"
-																							path="repDetailList[0].repPlanStartDate"
+																						<form:input type="text" path="repDetailList[0].repPlanStartDate"
+																							title="착수(예정)일-계획일자를 입력하세요."
 																							cssClass="datepicker validate[required] plan-date" />
 																						<i class="ico calendar"></i>
 																					</div>
@@ -427,8 +430,8 @@
 																				<div class="row">
 																					<div class="col s12 input-text input-date"
 																						style="float: none; width: 120px; margin: 0 auto !important">
-																						<form:input type="text"
-																							path="repDetailList[0].repPlanEndDate"
+																						<form:input type="text" path="repDetailList[0].repPlanEndDate"
+																							title="완료(예정)일-계획일자를 입력하세요."
 																							cssClass="datepicker validate[required] plan-date" />
 																						<i class="ico calendar"></i>
 																					</div>
@@ -442,8 +445,8 @@
 																				<div class="row">
 																					<div class="col s12 input-text input-date"
 																						style="float: none; width: 120px; margin: 0 auto !important">
-																						<form:input type="text"
-																							path="repDetailList[0].repActStartDate"
+																						<form:input type="text" path="repDetailList[0].repActStartDate"
+																							title="착수(예정)일-실시일자를 입력하세요."
 																							cssClass="datepicker validate[required] act-date" />
 																						<i class="ico calendar"></i>
 																					</div>
@@ -453,8 +456,8 @@
 																				<div class="row">
 																					<div class="col s12 input-text input-date"
 																						style="float: none; width: 120px; margin: 0 auto !important">
-																						<form:input type="text"
-																							path="repDetailList[0].repActEndDate"
+																						<form:input type="text" path="repDetailList[0].repActEndDate"
+																							title="착수(예정)일-실시일자를 입력하세요."
 																							cssClass="datepicker validate[required] act-date" />
 																						<i class="ico calendar"></i>
 																					</div>
@@ -1134,10 +1137,7 @@ function onchange_resultType(obj){
 		$("#repSectorCode").val("${reportVO.repSectorCode}")
 		onchange_ddlRepSectorCode();
 		$("#repProductClass").val("${reportVO.repProductClass}");
-		console.log("################");
-		console.log($("#ddlRepTypeCode").val());
 		
-		console.log("================");
 		setDropDown("repLeaderBeltCode", cdLeaderBelt, true);//리더벨트
 		$("#repLeaderBeltCode").val("${reportVO.repLeaderBeltCode}")
 		
@@ -1151,8 +1151,9 @@ function onchange_resultType(obj){
 		}
 		
 		//setDropDown(".ddl-rep-result-type", cdRepResultType, true);//성과항목
-		const currYear = new Date().getFullYear();
-		$("#lblUseRefDt").text(currYear); $("#repUseRefDate").val(currYear);	//활용율 반영년도
+		//const currYear = new Date().getFullYear();
+		//$("#lblUseRefDt").text(currYear); $("#repUseRefDate").val(currYear);	//활용율 반영년도
+		$("#repUseRefDate").val(${reportVO.repUseRefDate});	//활용율 반영년도
 
 		onchange_ddlRepDevisionCode();	// 과제유형
 		$("#repTypeCode").val("${reportVO.repTypeCode}");
@@ -1238,14 +1239,14 @@ function onchange_resultType(obj){
 		//결재버튼
 		$("#btnReqApproval").off("click").on("click", function(){
 			if($("#defaultForm").validationEngine('validate')){
-				$("#repStatusCode").val("2"); // 상태 임시저장 으로 저장
+				$("#repStatusCode").val("2"); // 상태 선정중으로 저장
 				$("#defaultForm")[0].submit();	
 			};
 		});
 		
 		$("#btnCancelApproval").off("click").on("click", function(){
 			if($("#defaultForm").validationEngine('validate')){
-				//$("#repStatusCode").val("2"); // 상태 임시저장 으로 저장
+				//$("#repStatusCode").val("2");
 				$("#mode").val("CANCEL");
 				$("#defaultForm")[0].submit();	
 			};
@@ -1254,7 +1255,7 @@ function onchange_resultType(obj){
 		// 삭제버튼
 		$("#btnDelete").off("click").on("click", function(){
 			if(confirm("삭제하시겠습니까?")){
-				//$("#repStatusCode").val("2"); // 상태 임시저장 으로 저장
+				//$("#repStatusCode").val("2"); 
 				$("#mode").val("DELETE");
 				$("#defaultForm")[0].submit();	
 			};
@@ -1285,6 +1286,13 @@ function onchange_resultType(obj){
 						return false;
 					}
 					
+					if($("#fileUploadWrap_7:visible").length){
+						if($("#fileUploadWrap_7").find(".files tr.template-download").length===0){
+							alert("과제등록서 첨부파일이 등록되지 않았습니다. \n파일 선택 후 '전체첨부' 혹은 '첨부' 버튼을 클릭하시고 진행해주세요.");
+							$("#fileUploadWrap_7").find("input[type=file]").focus();
+							return false;
+						}
+					}
 					
 					// 일정 순차 입력여부 확인 (6시그마:date-6sigma, 그 외  act-date)
 					let repDevCd = $("#repDivisionCode").val();
@@ -1436,7 +1444,7 @@ function onchange_resultType(obj){
 		case "3": // 10+No.
 			arrRepType = cdRepType3;
 			$("#trRepDate2").show();
-			$("#trRepDate1 input").prop("disabled", true);
+			//$("#trRepDate1 input").prop("disabled", true);
 			//$("#trRepDate1 input.datepicker").prop("disabled", true);
 			//$("#trRepDate2 input.datepicker").prop("disabled", false);
 			break;

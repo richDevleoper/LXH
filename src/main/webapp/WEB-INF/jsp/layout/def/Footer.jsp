@@ -296,7 +296,7 @@
 	    	            		$("input[name="+ selectObjId +"]:eq(0)").prop("checked", true);
 	    	            	},
 	    	            	onSubmit: function(){
-	    	            		console.log("여기서 문젠가?")
+	    	            		
 	    	            		let retData = {
 	    	            				deptCodes: "",
 	    	            				deptNames: "",
@@ -1313,7 +1313,8 @@ let popReject = {
 				"  ㄱ. 10+ No Policy : 10+ No Policy 에 해당하는 과제 등록시 선택  <br>\r\n",
 			"rep-reader":"등록하려는 과제가 벨트 인증용(과제Test)으로 사용되는 경우는 BB후보 또는 MBB후보를 선택",
 			"keyword":"과제 내용에 부합하는 키워드를 등록하면, 과제 검색에 큰 도움이 됨",
-			"cal-logic":getCalLogicHtml()
+			"cal-logic":getCalLogicHtml(),
+			"mbbyear":getMbbYearHtml()
 		},
 		open : function(msgId){
 			$(".advide-content").html(this.message[msgId]);
@@ -1325,6 +1326,55 @@ let popReject = {
 		},
 	}
 	
+	function getMbbYearHtml(){
+		return '<h4 style="font-weight:700;">◆  MBB활용율 반영년도</h4>' +
+		'<br>'+
+		'<h5 style="font-weight:700;">MBB가 과제리더로 직접 수행 또는 지원활동(지원/팀멤버 활동) 또는 팀장MBB(팀내 6σ과제 발굴)로 활동하는 경우 MBB활용율 실적에 반영할 년도를 선택해 주시고, 없는 경우 해당 없음을 체크해 주시기 바랍니다.</h5>' +
+		'<h6>예1)  과제리더가 MBB이고 2023년도 수행하는 과제일 경우 2023년 체크</h6>' +
+		'<h6>예2)  과제 팀멤버가 MBB이고 2023년11월부터 활동을 시작하여 활용율 실적은 2024년에 반영하고 싶을때는 2024년 체크</h6>' +
+		'<h6>예3) 과제리더 또는 팀멤버/지원 또는 팀장이 모두 MBB가 아닌 경우는 “해당없음: 체크</h6>' +
+		'<br>'+
+		'<h5 style="font-weight:700;">MBB활용율 산출 기준</h5>'+
+		'<h6>- 과제 인정 영역 : 6σ과제 뿐만 아니라 Quick 6σ / DX / FMEA 과제, 초기유동관리 과제도 인정<br>(단, FMEA과제는 지원MBB/팀장MBB 활동을 인정하지 않음)</h6>'+
+		'<br>'+
+		'<h5 style="font-weight:700;">활동별 상세 기준</h5>'+
+		'<div class="list-table list" style="width: 700px;">'+
+		'<table class="table-border w100p">'+
+		'    <caption></caption>'+
+		'    <colgroup>'+
+		'        <col style="width: 19%;">'+
+		'        <col style="width: 27%">'+
+		'        <col style="width: 27%">'+
+		'        <col style="width: 27%">'+
+		'    </colgroup>    '+
+		'    <thead>'+
+		'      <tr>'+
+		'        <th>구분</th>'+
+		'        <th>직접수행</th>'+
+		'        <th>지원MBB활동</th>'+
+		'        <th>팀장MBB활동</th>'+
+		'      </tr>'+
+		'    </thead>'+
+		'    <tbody>'+
+		'      <tr>'+
+		'        <td>대상</td>'+
+		'        <td>全 MBB</td>'+
+		'        <td>全 MBB</td>'+
+		'        <td>팀장 및 연구소 PL</td>'+
+		'      </tr>'+
+		'      <tr>'+
+		'        <td>활동인정기준</td>'+
+		'        <td>과제를 직접 수행</td>'+
+		'        <td>과제 지원건수 2건/년 이상<br>- 품질개선회의 리뷰시  과제별 1회/년 이상 참여</td>'+
+		'        <td>팀내 6σ과제 2건/년 이상 발굴</td>'+
+		'      </tr>'+
+		'    </tbody>'+
+		'</table>'+
+		'</div>'+
+		'<h6>- 과제가 2개년에 걸쳐 활동이 진행 되는 경우, 활용율은 1회만 인정함<br>(예로, 과제 활동기간이 2022년10월 ~ 2023년3월인 경우 한 해만 인정함)</h6>'+
+		'<h6>- 과제가 Drop된 경우, Drop 시점에서 A단계 이상인 경우에만 활동을 인정함</h6>'+
+		'';
+	}
 	function getCalLogicHtml(){
 		return '<h4 style="font-weight:700;">◆ 산출 Logic - 공통 적용사항</h4> '+
 		'<h5>- 개선 활동에 따른 명백한 효과금액만 직접적인 효과로 인정, 따라서 환경적요인(환율,유가,원재료 단가변동 등)의 효과는 제외함.</h5> '+

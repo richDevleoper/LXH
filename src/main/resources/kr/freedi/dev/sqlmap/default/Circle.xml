@@ -79,8 +79,7 @@
 		    , m.CIR_WORK_MEM_NO
 		    , (select user_name from tb_user_mst where com_no=m.CIR_WORK_MEM_NO) as CIR_WORK_NAME
 		    , m.CIR_TEAM_LEADER_NO    
-			-- , (select user_name from tb_user_mst where com_no=m.CIR_TEAM_LEADER_NO) as CIR_LEADER_NAME
-			, m.CIR_LEADER_NAME
+			, (select user_name from tb_user_mst where com_no=m.CIR_TEAM_LEADER_NO) as CIR_LEADER_NAME
 		FROM
 		    tb_circle_detail t
 		    , tb_circle_mst m

@@ -72,7 +72,7 @@
 			AND C.CIR_CODE = #{cirCode}
 		</if>
 		<if test="searchPlaceCode != null and searchPlaceCode != ''">
-			AND get_code_nm('WPLACE', U.COM_WORK_PLACE) = #{searchPlaceCode}
+			AND U.COM_WORK_PLACE = #{searchPlaceCode}
 		</if>
 		<if test="searchDepart != null and searchDepart != ''">
 			AND T.DEPT_CODE = #{searchDepart}

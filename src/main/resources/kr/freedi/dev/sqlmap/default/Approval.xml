@@ -331,7 +331,7 @@
 	</update>
 	
 	<select id="select" resultMap="approveMap">
-	SELECT * FROM (
+	select * from (
 		 select APROVAL_CODE
 	            , ACT_REG_NO
 	            , ACT_APROVAL_NO
@@ -347,10 +347,9 @@
 	            , REF_BUS_SUB_CODE
 	     from tb_approval_mst
 	    where 
-	    	<include refid="defCond2"></include>
-	    	ORDER BY APROVAL_CODE DESC
-	)
-	WHERE ROWNUM <![CDATA[<=]]> 1
+	    <include refid="defCond2"></include>
+	    )
+	    where rownum=1
 	</select>
 	
 	<delete id="delete">
