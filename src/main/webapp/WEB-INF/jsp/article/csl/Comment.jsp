@@ -384,8 +384,8 @@ function cmntDisableCancel(o){
 }
 
 function cmntRecovery(articleCommentKey, pkey){
-	if($('[id^=cmnt_'+pkey+'_]').find('.btnDisableForm').length > 0){
-		alert('상위글이 비활성 상태에서는 하위글을 복원할 수 없습니다');
+	if($('[id^=cmnt_'+pkey+'_]').find('.btnRecovery').css("display") === 'inline'){
+		alert('상위글이 비활성 상태에서는 하위글을 복원할 수 없습니다.');
 		return;
 	}	
 	
@@ -543,7 +543,7 @@ function checkContent(o){
 				<div class="cmnt_write">
 					<fieldset>
 						<div style="padding-bottom:10px;">
-							<label>작성자</label> <input type="text" id="cmntWriter" name="cmntWriter" value="${userSession.userNm}" maxlength="20" style="width:120px;"/>
+							<label>작성자</label> <input type="text" id="cmntWriter" name="cmntWriter" value="${userSession.userNm}" maxlength="20" style="width:120px;" disabled="true"/>
 							<c:if test="${!userSession.loginUser}">
 								<label>비밀번호</label> <input type="password" id="cmntWriterPwd" name="cmntWriterPwd" maxlength="20" style="width:120px;"/>
 							</c:if>

@@ -55,7 +55,7 @@ function disable() {
 }
 //활성
 function recovery() {
-	if (confirm("비활성으로 변경하시겠습니까?")) {
+	if (confirm("활성으로 변경하시겠습니까?")) {
 		$("#defaultForm").validationEngine('detach');
 		$("#defaultForm").attr('action', 'recovery.do');
 		$("#defaultForm").submit();

@@ -665,13 +665,17 @@ public class ArticleController {
 				
 			//로그인해서 쓴글
 			}else{
-				if(userSession.isLoginUser()){
-					if(!StringUtils.equals(userSession.getUserId(), tArticleVO.getFrstOperId())){
-						return getPath(request, "ExcpIncorrectUser", "exception");
+				if(userSession.getUserTyp().equals("MNGR_USER")) {
+					log.debug("관리자라면 아래 로직을 타지 않고 다음으로");
+				}else {
+					if(userSession.isLoginUser()){
+						if(!StringUtils.equals(userSession.getUserId(), tArticleVO.getFrstOperId())){
+							return getPath(request, "ExcpIncorrectUser", "exception");
+						}
+					}else{
+						request.getSession().setAttribute("destinationAfterLogin", request.getHeader("referer"));
+						return getPath(request, "ExcpNotLoginUser", "exception");
 					}
-				}else{
-					request.getSession().setAttribute("destinationAfterLogin", request.getHeader("referer"));
-					return getPath(request, "ExcpNotLoginUser", "exception");
 				}
 			}
 		}

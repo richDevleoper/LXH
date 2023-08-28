@@ -168,7 +168,7 @@ ${articleSearchVO.hiddenTag }
 		
 		<tr>
 			<th><label for="writer">작성자</label></th>
-			<td><form:input path="writer" cssClass="validate[required,maxSize[20]] tb_ipty" style="width:240px;" maxlength="20" title="작성자"/></td>
+			<td><form:input path="writer" cssClass="validate[required,maxSize[20]] tb_ipty" style="width:240px;" maxlength="20" title="작성자" disabled="true"/></td>
 		</tr>
 		<tr>
 			<th><label for="title">제목</label></th>
