@@ -135,12 +135,13 @@ ${articleSearchVO.hiddenTag }
 		</c:if>
 		<tr>
 			<th><label for="writer">작성자</label></th>
-			<td colspan="3"><form:input path="writer" cssClass="validate[required,maxSize[20]] tb_ipty" style="width:240px;" maxlength="20" title="작성자"/></td>
+			<td colspan="3">
+				<form:input path="writer" cssClass="validate[required,maxSize[20]] tb_ipty" style="width:240px;" maxlength="20" title="작성자" disabled="true"/></td>
 		</tr>
 		<tr>
 			<th><label for="title">제목</label></th>
 			<td colspan="3">
-				<input type="text" id="title" name="title" value="[답변]${parentVO.title }" class="validate[required,maxSize[255]] tb_ipty" maxlength="255" title="제목" />
+				<input type="text" id="title" name="title" value="[답변]${parentVO.title }" class="validate[required,maxSize[255]] tb_ipty" maxlength="255" title="제목"/>
 			</td>
 		</tr>
 		<tr>

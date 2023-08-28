@@ -404,37 +404,38 @@ public class ArticleController {
 		tArticleVO = articleService.select(articleVO);
 		model.addAttribute("articleVO", tArticleVO);
 		
-		log.debug("@@@@@@@@@@@@@@@@@@@@@@@@@@");
-		log.debug(userSession.toString());
-		log.debug("@@@@@@@@@@@@@@@@@@@@@@@@@@");
-		if(!(tArticleVO.getFrstOperId().equals(userSession.getIntfUserVO().getComNo()))) {
-			if(!isMngr){
-				//로그인없이 쓴 글
-				if(StringUtils.isEmpty(tArticleVO.getFrstOperId())){
-					if(StringUtils.isEmpty(searchVO.getSearchWriterPwd())){
-						model.addAttribute("cmd", "update");
-						model.addAttribute("cause", "empty");
-						model.addAttribute("action", "updateForm.do");
-						return getPath(request, "PwdCheckForm", boardVO.getBoardTyp());
-						
-					}else{
-						if(!StringUtils.equals(EncriptUtil.encript(searchVO.getSearchWriterPwd()), tArticleVO.getWriterPwd())){
+		if(userSession.getUserTyp().equals("MNGR_USER")) {
+			log.debug("관리자라면 아래 로직을 타지 않고 다음으로");
+		}else {
+			if(!(tArticleVO.getFrstOperId().equals(userSession.getIntfUserVO().getComNo()))) {
+				if(!isMngr){
+					//로그인없이 쓴 글
+					if(StringUtils.isEmpty(tArticleVO.getFrstOperId())){
+						if(StringUtils.isEmpty(searchVO.getSearchWriterPwd())){
 							model.addAttribute("cmd", "update");
-							model.addAttribute("cause", "wrong");
+							model.addAttribute("cause", "empty");
 							model.addAttribute("action", "updateForm.do");
 							return getPath(request, "PwdCheckForm", boardVO.getBoardTyp());
+							
+						}else{
+							if(!StringUtils.equals(EncriptUtil.encript(searchVO.getSearchWriterPwd()), tArticleVO.getWriterPwd())){
+								model.addAttribute("cmd", "update");
+								model.addAttribute("cause", "wrong");
+								model.addAttribute("action", "updateForm.do");
+								return getPath(request, "PwdCheckForm", boardVO.getBoardTyp());
+							}
 						}
-					}
-					
-				//로그인해서 쓴글
-				}else{
-					if(userSession.isLoginUser()){
-						if(!StringUtils.equals(userSession.getUserId(), tArticleVO.getFrstOperId())){
-							return getPath(request, "ExcpIncorrectUser", "exception");
-						}
+						
+					//로그인해서 쓴글
 					}else{
-						request.getSession().setAttribute("destinationAfterLogin", request.getHeader("referer"));
-						return getPath(request, "ExcpNotLoginUser", "exception");
+						if(userSession.isLoginUser()){
+							if(!StringUtils.equals(userSession.getUserId(), tArticleVO.getFrstOperId())){
+								return getPath(request, "ExcpIncorrectUser", "exception");
+							}
+						}else{
+							request.getSession().setAttribute("destinationAfterLogin", request.getHeader("referer"));
+							return getPath(request, "ExcpNotLoginUser", "exception");
+						}
 					}
 				}
 			}

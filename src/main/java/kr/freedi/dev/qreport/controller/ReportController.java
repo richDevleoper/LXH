@@ -262,9 +262,7 @@ public class ReportController {
 				memLeader = memberVO;	// 지도사원(3)
 			}
 		}
-		log.debug("1111111111111111");
 		reportVO.setRepUpdateUser(userId);
-		log.debug("MODE ==>"+reportVO.getMode());
 		if(reportVO.getMode().equals("CANCEL")) {  // 결재취소
 
 			// 마지막 단계 결재상신건 취소하기			
